@@ -1,5 +1,239 @@
 ﻿[
   {
+    "npc_skill_id": 900001,
+    "npc_skill_group_id": 900001,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900002,
+    "npc_skill_group_id": 900002,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500001
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900003,
+    "npc_skill_group_id": 900003,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      50,
+      50
+    ],
+    "onetime_effect_ids": [
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900004,
+    "npc_skill_group_id": 900004,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900005,
+    "npc_skill_group_id": 900004,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500001
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900006,
+    "npc_skill_group_id": 900005,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900007,
+    "npc_skill_group_id": 900006,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100002
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900008,
+    "npc_skill_group_id": 900006,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500002
+    ],
+    "event_name": "debuff",
+    "effect_duration": 0.0
+  },
+  {
+    "npc_skill_id": 900009,
+    "npc_skill_group_id": 900007,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 2,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
+    "effect_duration": 0.3
+  },
+  {
+    "npc_skill_id": 900010,
+    "npc_skill_group_id": 900008,
+    "target_type": 0,
+    "target_rule_type": 4,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 2,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100002
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "buff",
+    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
+    "effect_duration": 1.0
+  },
+  {
+    "npc_skill_id": 900011,
+    "npc_skill_group_id": 900008,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500001
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
+  },
+  {
     "npc_skill_id": 200001,
     "npc_skill_group_id": 200001,
     "target_type": 1,
@@ -23,8 +257,8 @@
   {
     "npc_skill_id": 200002,
     "npc_skill_group_id": 200002,
-    "target_type": 0,
-    "target_rule_type": 1,
+    "target_type": 1,
+    "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
     "projectile_type": 0,
@@ -33,12 +267,12 @@
       100
     ],
     "onetime_effect_ids": [
-      0
+      100001
     ],
     "duration_effect_ids": [
-      500001
+      0
     ],
-    "event_name": "buff",
+    "event_name": "hit",
     "effect_duration": 0.0
   },
   {
@@ -51,8 +285,7 @@
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "effect_weight": [
-      50,
-      50
+      100
     ],
     "onetime_effect_ids": [
       100001
@@ -86,27 +319,6 @@
   },
   {
     "npc_skill_id": 200005,
-    "npc_skill_group_id": 200004,
-    "target_type": 0,
-    "target_rule_type": 1,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500001
-    ],
-    "event_name": "buff",
-    "effect_duration": 0.0
-  },
-  {
-    "npc_skill_id": 200006,
     "npc_skill_group_id": 200005,
     "target_type": 1,
     "target_rule_type": 6,
@@ -127,52 +339,10 @@
     "effect_duration": 0.0
   },
   {
-    "npc_skill_id": 200007,
-    "npc_skill_group_id": 200006,
-    "target_type": 0,
-    "target_rule_type": 1,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      100002
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "event_name": "buff",
-    "effect_duration": 0.0
-  },
-  {
-    "npc_skill_id": 200008,
+    "npc_skill_id": 200006,
     "npc_skill_group_id": 200006,
     "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500002
-    ],
-    "event_name": "debuff",
-    "effect_duration": 0.0
-  },
-  {
-    "npc_skill_id": 200009,
-    "npc_skill_group_id": 200007,
-    "target_type": 1,
-    "target_rule_type": 6,
+    "target_rule_type": 7,
     "target_order": 0,
     "target_count": 1,
     "projectile_type": 2,
@@ -190,47 +360,9 @@
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
-  {
-    "npc_skill_id": 200010,
-    "npc_skill_group_id": 200008,
-    "target_type": 0,
-    "target_rule_type": 4,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 2,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      100002
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "event_name": "buff",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 1.0
-  },
-  {
-    "npc_skill_id": 200011,
-    "npc_skill_group_id": 200008,
-    "target_type": 0,
-    "target_rule_type": 1,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500001
-    ],
-    "event_name": "buff",
-    "effect_duration": 0.0
-  }
+  {},
+  {},
+  {},
+  {},
+  {}
 ]

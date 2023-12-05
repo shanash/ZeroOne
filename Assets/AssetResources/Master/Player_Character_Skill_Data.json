@@ -12,7 +12,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100008
+      100001
     ],
     "duration_effect_ids": [
       0
@@ -23,8 +23,8 @@
   {
     "pc_skill_id": 200002,
     "pc_skill_group_id": 200002,
-    "target_type": 0,
-    "target_rule_type": 1,
+    "target_type": 1,
+    "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
     "projectile_type": 0,
@@ -33,12 +33,12 @@
       100
     ],
     "onetime_effect_ids": [
-      0
+      100001
     ],
     "duration_effect_ids": [
-      500001
+      0
     ],
-    "event_name": "buff",
+    "event_name": "hit",
     "effect_duration": 0.0
   },
   {
@@ -55,7 +55,7 @@
       50
     ],
     "onetime_effect_ids": [
-      100008
+      100001
     ],
     "duration_effect_ids": [
       0
@@ -76,7 +76,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100008
+      100001
     ],
     "duration_effect_ids": [
       0
@@ -86,27 +86,6 @@
   },
   {
     "pc_skill_id": 200005,
-    "pc_skill_group_id": 200004,
-    "target_type": 0,
-    "target_rule_type": 1,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500001
-    ],
-    "event_name": "buff",
-    "effect_duration": 0.0
-  },
-  {
-    "pc_skill_id": 200006,
     "pc_skill_group_id": 200005,
     "target_type": 1,
     "target_rule_type": 6,
@@ -118,7 +97,28 @@
       100
     ],
     "onetime_effect_ids": [
-      100008
+      100001
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "pc_skill_id": 200006,
+    "pc_skill_group_id": 200006,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100001
     ],
     "duration_effect_ids": [
       0
@@ -128,7 +128,7 @@
   },
   {
     "pc_skill_id": 200007,
-    "pc_skill_group_id": 200006,
+    "pc_skill_group_id": 200007,
     "target_type": 0,
     "target_rule_type": 1,
     "target_order": 0,
@@ -149,7 +149,7 @@
   },
   {
     "pc_skill_id": 200008,
-    "pc_skill_group_id": 200006,
+    "pc_skill_group_id": 200007,
     "target_type": 1,
     "target_rule_type": 6,
     "target_order": 0,
