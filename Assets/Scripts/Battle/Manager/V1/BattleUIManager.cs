@@ -138,8 +138,9 @@ public class BattleUIManager : MonoBehaviour
         var pool = GameObjectPoolManager.Instance;
         var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/LifeBarNode", HP_Bar_Container);
         var life = obj.GetComponent<LifeBarNode>();
-        life.SetTargetTransform(t);
         life.SetBarColor(ttype);
+        life.SetTargetTransform(t);
+        
 
         Used_Life_Bar_List.Add(life);
         return life;

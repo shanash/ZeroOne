@@ -42,6 +42,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
+        list.Add("Assets/AssetResources/Prefabs/Units/SkeletonCaptureRenderTexture");
         
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBarNode");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");

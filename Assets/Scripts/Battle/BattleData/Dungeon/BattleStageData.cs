@@ -110,10 +110,17 @@ public class BattleStageData : BattleDungeonData
                 }
                 //  skill list
                 m.Get_NpcSkillDataListBySkillGroup(skill_group.npc_skill_group_id, ref skill_list);
+
                 int skill_cnt = skill_list.Count;
                 for (int s = 0; s < skill_cnt; s++)
                 {
                     var npc_skill = skill_list[s];
+                    //  npc skill effect
+                    if (!string.IsNullOrEmpty(npc_skill.effect_path) && !list.Contains(npc_skill.effect_path))
+                    {
+                        list.Add(npc_skill.effect_path);
+                    }
+
                     //  onetime skill list
                     for (int o = 0; o < npc_skill.onetime_effect_ids.Length; o++)
                     {

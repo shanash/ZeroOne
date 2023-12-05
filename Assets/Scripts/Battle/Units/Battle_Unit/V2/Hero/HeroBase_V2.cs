@@ -27,10 +27,10 @@ public enum SD_BODY_TYPE
 /// 전투 캐릭의 기본이 되는 여러 가지 기능은 본 클래스에 담아둔다.<br/>
 /// </summary>
 [RequireComponent(typeof(SkeletonUtility))]
-[RequireComponent(typeof(SkeletonRenderTexture))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
-
+[RequireComponent(typeof(RendererSortingZ))]
+[RequireComponent(typeof(SortingGroup))]
 public class HeroBase_V2 : UnitBase_V2
 {
     [SerializeField, Tooltip("Skeleton")]
@@ -42,9 +42,11 @@ public class HeroBase_V2 : UnitBase_V2
     [SerializeField, Tooltip("Body Pos Type")]
     protected List<SD_Body_Pos_Data> Sd_Body_Transforms;
 
-    protected SkeletonRenderTexture Render_Texture;
-
     protected RendererSortingZ ZOrder;
+
+    protected SkeletonUtility Utility;
+
+    protected SkeletonCaptureRenderTexture Capture_Render_Texture;
 
     protected bool Is_Reposition;
 
@@ -278,8 +280,10 @@ public class HeroBase_V2 : UnitBase_V2
         FSM.AddTransition(new UnitStateEnd_V2());
 
         SetSkeletonEventListener();
+
     }
 
+    
     /// <summary>
     /// 스켈레톤(스파인) 이벤트 리스너 등록
     /// </summary>
@@ -467,14 +471,14 @@ public class HeroBase_V2 : UnitBase_V2
     /// 스켈레톤 알파값 수정
     /// </summary>
     /// <param name="alpha"></param>
-    public void SetAlpha(float alpha)
-    {
-        if (Render_Texture == null)
-        {
-            Render_Texture = GetComponent<SkeletonRenderTexture>();
-        }
-        Render_Texture.color.a = alpha;
-    }
+    //public void SetAlpha(float alpha)
+    //{
+    //    if (Render_Texture == null)
+    //    {
+    //        Render_Texture = GetComponent<SkeletonRenderTexture>();
+    //    }
+    //    Render_Texture.color.a = alpha;
+    //}
 
     /// <summary>
     /// 스파인 플립 설정
@@ -775,10 +779,7 @@ public class HeroBase_V2 : UnitBase_V2
                     for (int d = 0; d < dur_cnt; d++)
                     {
                         var duration = duration_list[d];
-                        if (duration.GetDurationEffectType() == DURATION_EFFECT_TYPE.POISON)
-                        {
-                            bool a = false;
-                        }
+                        
                         string effect_path = duration.GetEffectPrefab();
                         if (string.IsNullOrEmpty(effect_path))
                         {
@@ -811,10 +812,7 @@ public class HeroBase_V2 : UnitBase_V2
                 {
                     PROJECTILE_TYPE ptype = skill.GetProjectileType();
                     var target_trans = target.GetBodyPositionByProjectileType(ptype);
-                    if (target_trans == null)
-                    {
-                        bool a = false;
-                    }
+                    
                     var target_pos = target_trans.position;
                     if (skill.IsThrowingNode())
                     {
@@ -891,24 +889,32 @@ public class HeroBase_V2 : UnitBase_V2
     {
         base.Spawned();
 
-        if (Render_Texture == null)
-        {
-            Render_Texture = GetComponent<SkeletonRenderTexture>();
-        }
         if (ZOrder == null)
         {
-            ZOrder = Render_Texture.quad.AddComponent<RendererSortingZ>();
-            ZOrder.SetZorderIndex(ZORDER_INDEX.HERO);
-
-            Render_Texture.quad.AddComponent<SortingGroup>();
+            ZOrder = GetComponent<RendererSortingZ>();
         }
-        
+        if (Utility == null)
+        {
+            Utility = GetComponent<SkeletonUtility>();
+        }
+        if (Capture_Render_Texture == null)
+        {
+            var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/SkeletonCaptureRenderTexture", this.transform.parent);
+            Capture_Render_Texture = obj.GetComponent<SkeletonCaptureRenderTexture>();
+            //Capture_Render_Texture.SetCaptureCamera(Battle_Mng.GetVirtualCineManager().GetCaptureCamera());
+            //Capture_Render_Texture.SetTargetTransform(this.transform);
+        }
     }
     public override void Despawned()
     {
         base.Despawned();
 
         Team_Mng = null;
+        if (Capture_Render_Texture != null)
+        {
+            GameObjectPoolManager.Instance.UnusedGameObject(Capture_Render_Texture.gameObject);
+            Capture_Render_Texture = null;
+        }
     }
 
     /// <summary>
@@ -1542,5 +1548,6 @@ public class HeroBase_V2 : UnitBase_V2
     public void ToStringHeroBase()
     {
         Debug.Log(ToString());
+
     }
 }

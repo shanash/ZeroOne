@@ -67,7 +67,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
             await Task.Yield();
         }
 
-        var op = SceneManager.LoadSceneAsync(Start_Scene_Name, LoadSceneMode.Single);
+        var op = SceneManager.LoadSceneAsync("home", LoadSceneMode.Single);
         op.allowSceneActivation = false;
         float timer = 0.0f;
         while (!op.isDone)

@@ -24,6 +24,7 @@ public class Hero_100001 : HeroBase_V2
         {
             MoveRightTeam();
         }
+        
     }
 
     public override void UnitStateMoveBegin()
@@ -34,11 +35,13 @@ public class Hero_100001 : HeroBase_V2
     {
         MoveLeftTeam();
         base.UnitStateMove();
+        
     }
     
     public override void UnitStateAttackReady01Begin()
     {
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
+        Capture_Render_Texture.CaptureObject(this.gameObject);
     }
     public override void UnitStateAttackReady01()
     {

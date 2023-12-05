@@ -24,12 +24,20 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     [SerializeField, Tooltip("Target Group Camera")]
     CinemachineVirtualCamera Target_Group_Cam;
 
+    [SerializeField, Tooltip("Capture Camera")]
+    CinemachineVirtualCamera Capture_Cam;
+
    
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
 
     void Start()
     {
         ResetPos();
+    }
+
+    public CinemachineVirtualCamera GetCaptureCamera()
+    {
+        return Capture_Cam;
     }
 
     /// <summary>

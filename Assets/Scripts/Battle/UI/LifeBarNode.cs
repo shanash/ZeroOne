@@ -48,6 +48,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     public void SetTargetTransform(Transform t)
     {
         Target_Transform = t;
+        UpdatePosition();
     }
 
     // Update is called once per frame
