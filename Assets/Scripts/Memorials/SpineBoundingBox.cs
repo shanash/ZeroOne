@@ -4,6 +4,13 @@ using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TOUCH_BODY_DIRECTION
+{
+    NONE = 0,
+    L = 1,
+    R = 2,
+    BOTH = 4,
+}
 
 public class SpineBoundingBox : MonoBehaviour, ICursorInteractable
 {
@@ -15,6 +22,9 @@ public class SpineBoundingBox : MonoBehaviour, ICursorInteractable
 
     [SerializeField, Tooltip("Touch Body Type")]
     TOUCH_BODY_TYPE Body_Type = TOUCH_BODY_TYPE.NONE;
+
+    [SerializeField, Tooltip("Touch Body Type")]
+    TOUCH_BODY_DIRECTION Body_Direction = TOUCH_BODY_DIRECTION.NONE;
 
     /// <summary>
     /// 터치 가능한 부위 폴리곤
@@ -45,8 +55,10 @@ public class SpineBoundingBox : MonoBehaviour, ICursorInteractable
 
     Camera Main_Cam;
 
-    public void SetTouchBodyType(TOUCH_BODY_TYPE btype) { Body_Type = btype; }
+    public void SetTouchBodyType(TOUCH_BODY_TYPE btype, TOUCH_BODY_DIRECTION direction) { Body_Type = btype; Body_Direction = direction; }
     public TOUCH_BODY_TYPE GetTouchBodyType() { return Body_Type; }
+    public TOUCH_BODY_DIRECTION GetTouchBodyDirection() { return Body_Direction; }
+    public string AttachName { get { return Attach_Name; } }
 
     private void Start()
     {

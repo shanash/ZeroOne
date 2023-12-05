@@ -31,7 +31,7 @@ public class MemorialManager : MonoBehaviour
 
         // TODO: 로딩 시간이 잠깐이라도 있을수 있기 때문에 로딩UI가 필요할 수 있다.
         // TODO: 물론 캐릭터 id와 order 값도 어딘가에서 받아와야 한다
-        await SpawnMemorialSetNode(100001, 0);
+        await SpawnMemorialSetNode(100002, 0);
 
         InputCanvas.Instance.Enable = true;
     }

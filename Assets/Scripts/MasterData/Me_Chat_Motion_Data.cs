@@ -10,13 +10,13 @@ public class Me_Chat_Motion_Data : System.IDisposable
 	///	</summary>
 	public int chat_motion_id {get; set;}
 	///	<summary>
-	///	캐릭터 고유 인덱스
+	///	캐릭터 고유 아이디
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	애니메이션 이름
 	///	</summary>
-	public string animation_name {get; set;}
+	public string[] animation_name {get; set;}
 	///	<summary>
 	///	대사 id
 	///	</summary>
@@ -28,7 +28,6 @@ public class Me_Chat_Motion_Data : System.IDisposable
 	{
 		chat_motion_id = 0;
 		player_character_id = 0;
-		animation_name = string.Empty;
 	}
 
 	public void Dispose()
@@ -53,7 +52,13 @@ public class Me_Chat_Motion_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[chat_motion_id] = <color=yellow>{0}</color>", chat_motion_id).AppendLine();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
-		sb.AppendFormat("[animation_name] = <color=yellow>{0}</color>", animation_name).AppendLine();
+		sb.AppendLine("[animation_name]");
+		cnt = animation_name.Length;
+		for(int i = 0; i< cnt; i++)
+		{
+			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", animation_name[i]).AppendLine();
+		}
+
 		sb.AppendLine("[serifu_ids]");
 		cnt = serifu_ids.Length;
 		for(int i = 0; i< cnt; i++)

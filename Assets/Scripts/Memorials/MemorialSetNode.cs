@@ -96,6 +96,11 @@ public class MemorialSetNode : MonoBehaviour, IPoolableComponent
     {
         SetMemorialType(type);
         Actress.Init(data.player_character_id, data.state_id);
+        if (string.IsNullOrEmpty(data.intro_key))
+        {
+            Actress.PlayIdleAnimation();
+            return;
+        }
         var intro_ta = await CommonUtils.GetResourceFromAddressableAsset<TimelineAsset>(data.intro_key);
         var intro_tracks = intro_ta.GetOutputTracks();
         Playable_Director.playableAsset = intro_ta;

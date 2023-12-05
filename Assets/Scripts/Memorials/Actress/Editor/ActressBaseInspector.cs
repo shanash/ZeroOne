@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Spine;
 using Spine.Unity;
 using Spine.Unity.Editor;
@@ -131,11 +132,32 @@ public class ActressBaseInspector : Editor
 
                                 spine_bounding_box.Set(_Actress, name);
 
-                                Debug.Log($"box.Name : {box.Name}");
+                                int length = name.Length;
+                                TOUCH_BODY_DIRECTION dir = TOUCH_BODY_DIRECTION.NONE;
+
+                                if (name[length - 2] == '_')
+                                {
+                                    if (name[length - 1].Equals('R'))
+                                    {
+                                        dir = TOUCH_BODY_DIRECTION.R;
+                                    }
+                                    else if (name[length - 1].Equals('L'))
+                                    {
+                                        dir = TOUCH_BODY_DIRECTION.L;
+                                    }
+                                    Debug.Assert(dir != TOUCH_BODY_DIRECTION.NONE, $"뼈의 방향 입력이 잘못되었습니다 : box.Name : {box.Name}");
+
+                                    name = name.Substring(0, length - 2);
+                                }
+                                else
+                                {
+                                    dir = TOUCH_BODY_DIRECTION.NONE;
+                                }
+
                                 string enum_name = name.ToUpper();
                                 if (Enum.TryParse(enum_name, out TOUCH_BODY_TYPE result))
                                 {
-                                    spine_bounding_box.SetTouchBodyType(result);
+                                    spine_bounding_box.SetTouchBodyType(result, dir);
                                 }
                                 break;
                             case PointAttachment pt:

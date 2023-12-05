@@ -14,6 +14,8 @@ public class GestureManager : Singleton<GestureManager>
     const float LONGPRESS_THRESHOLD = 0.7f; // 롱프레스로 인정할 최소 시간
     const float DRAG_THRESHOLD = 0.01f; // 드래그로 인정할 최소 이동 거리의 제곱
 
+    int Drag_Id = 0;
+
     float Last_TouchTime = 0f;
     float TouchDown_Time = 0f;
     bool IsDragging = false;
@@ -23,7 +25,7 @@ public class GestureManager : Singleton<GestureManager>
 
     Vector2 Last_TouchPosition = Vector2.zero;
 
-    public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2> OnGestureDetected;
+    public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2, int> OnGestureDetected;
 
     protected override void Init()
     {
@@ -66,7 +68,7 @@ public class GestureManager : Singleton<GestureManager>
         // 터치 다운 이벤트 발생
         foreach (var component in components)
         {
-            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOWN, component, position);
+            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOWN, component, position, 0);
         }
     }
 
@@ -101,7 +103,7 @@ public class GestureManager : Singleton<GestureManager>
 
             for (int i = 0; i < cnt; ++i)
             {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, matchedComponents[i], position);
+                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, matchedComponents[i], position, 0);
             }
         }
         else
@@ -124,10 +126,11 @@ public class GestureManager : Singleton<GestureManager>
         // 터치 업 이벤트 발생
         foreach (var component in components)
         {
-            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.UP, component, position);
+            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.UP, component, position, 0);
         }
         
         Last_TouchPosition = position;
+        IsDragging = false;
     }
 
     /// <summary>
@@ -141,6 +144,7 @@ public class GestureManager : Singleton<GestureManager>
         // 드래그 시작 감지 및 드래그 중 상태 업데이트
         if (!IsDragging && dragDelta.sqrMagnitude > DRAG_THRESHOLD)
         {
+            Drag_Id ++;
             IsDragging = true;
         }
 
@@ -150,7 +154,7 @@ public class GestureManager : Singleton<GestureManager>
             int cnt = TouchDown_Components.Count;
             for (int i = 0; i < cnt; ++i)
             {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DRAG, TouchDown_Components[i], dragDelta);
+                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DRAG, TouchDown_Components[i], dragDelta, Drag_Id);
             }
         }
     }
@@ -164,7 +168,7 @@ public class GestureManager : Singleton<GestureManager>
             waitingForDoubleTouch = false;
             foreach (var component in matched_components)
             {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position);
+                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position, 0);
             }
         }
     }

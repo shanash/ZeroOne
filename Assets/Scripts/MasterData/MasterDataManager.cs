@@ -295,27 +295,25 @@ public class MasterDataManager : BaseMasterDataManager
         return _Me_Resource_Data.Find(x => x.player_character_id == player_character_id && x.order == order);
     }
 
-    public List<Me_Interaction_Data>[] Get_MemorialInteraction(int player_character_id)
+    public List<Me_Interaction_Data>[,] Get_MemorialInteraction(int player_character_id)
     {
-        // 필터링 및 그룹화
-        var groupedInteractions = _Me_Interaction_Data
-            .Where(x => x.player_character_id == player_character_id)
-            .GroupBy(x => x.touch_body_type)
-            .ToDictionary(g => g.Key, g => g.OrderBy(x => x.order).ToList());
-
-        // TOUCH_BODY_TYPE의 모든 값에 대해 배열 초기화
-        var type_interactions = new List<Me_Interaction_Data>[Enum.GetValues(typeof(TOUCH_BODY_TYPE)).Length];
-
-        // 각 touch_type의 인덱스에 해당하는 그룹을 배열에 할당
-        foreach (var touchType in Enum.GetValues(typeof(TOUCH_BODY_TYPE)))
+        List<Me_Interaction_Data>[,] result = new List<Me_Interaction_Data>[Enum.GetValues(typeof(TOUCH_BODY_TYPE)).Length, Enum.GetValues(typeof(TOUCH_GESTURE_TYPE)).Length];
+        foreach (var data in _Me_Interaction_Data)
         {
-            int index = (int)touchType;
-            type_interactions[index] = groupedInteractions.ContainsKey((TOUCH_BODY_TYPE)touchType)
-                ? groupedInteractions[(TOUCH_BODY_TYPE)touchType]
-                : new List<Me_Interaction_Data>();
+            if (data.player_character_id != player_character_id)
+                continue;
+
+            int body = (int)data.touch_body_type;
+            int gesture = (int)data.touch_gesture_type;
+
+            if (result[body,gesture] == null)
+            {
+                result[body, gesture] = new List<Me_Interaction_Data>();
+            }
+            result[body, gesture].Add(data);
         }
 
-        return type_interactions;
+        return result;
     }
 
     public Dictionary<int, Me_Chat_Motion_Data> Get_MemorialChatMotion(int player_character_id)
@@ -332,11 +330,11 @@ public class MasterDataManager : BaseMasterDataManager
             .ToDictionary(x => x.serifu_id, x => x);
     }
 
-    public Dictionary<int, string> Get_MemorialStateAnimation(int player_character_id)
+    public Dictionary<int, (string, string[])> Get_MemorialStateAnimation(int player_character_id)
     {
         return _Me_State_Data
             .Where(x => x.player_character_id == player_character_id)
-            .ToDictionary(x => x.state_id, x => x.idle_animation_name);
+            .ToDictionary(x => x.state_id, x => (x.idle_animation_name, x.sub_idle_animation_names));
     }
     #endregion
 }

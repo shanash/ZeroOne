@@ -10,7 +10,7 @@ public class Me_Serifu_Data : System.IDisposable
 	///	</summary>
 	public int serifu_id {get; set;}
 	///	<summary>
-	///	캐릭터 고유 인덱스
+	///	캐릭터 고유 아이디
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>

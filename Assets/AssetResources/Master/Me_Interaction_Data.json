@@ -1,125 +1,309 @@
 ﻿[
   {
-    "interaction_id": 1300001001,
-    "player_character_id": 100001,
-    "touch_body_type": 10,
-    "touch_gesture_type": 3,
-    "touch_condition_inequality": 0,
-    "chat_motion_id": 1200001001,
-    "order": 1
-  },
-  {
-    "interaction_id": 1300001002,
-    "player_character_id": 100001,
-    "touch_body_type": 10,
-    "touch_gesture_type": 3,
-    "touch_condition_inequality": 0,
-    "chat_motion_id": 1200001002,
-    "order": 2
-  },
-  {
-    "interaction_id": 1300001003,
-    "player_character_id": 100001,
-    "touch_body_type": 4,
-    "touch_gesture_type": 3,
-    "touch_condition_inequality": 0,
-    "chat_motion_id": 1200001003,
-    "order": 1,
-    "condition_state_ids": [
-      50000001
-    ]
-  },
-  {
-    "interaction_id": 1300001004,
-    "player_character_id": 100001,
-    "touch_body_type": 4,
-    "touch_gesture_type": 3,
-    "touch_condition_inequality": 0,
-    "chat_motion_id": 1200001004,
-    "order": 2,
-    "condition_state_ids": [
-      50000002
-    ]
-  },
-  {
-    "interaction_id": 1300001005,
-    "player_character_id": 100001,
+    "interaction_id": 1300002001,
+    "player_character_id": 100002,
     "touch_body_type": 2,
     "touch_gesture_type": 3,
-    "touch_condition_inequality": 1,
-    "touch_condition_count": 1,
-    "chat_motion_id": 1200001005,
-    "order": 1,
+    "touch_condition_inequality": 0,
+    "chat_motion_ids": [
+      1200002004,
+      1200002005
+    ],
     "condition_state_ids": [
-      50000001
+      50000003
     ]
   },
   {
-    "interaction_id": 1300001006,
-    "player_character_id": 100001,
-    "touch_body_type": 2,
-    "touch_gesture_type": 3,
-    "touch_condition_inequality": 1,
-    "touch_condition_count": 2,
-    "chat_motion_id": 1200001006,
-    "order": 2,
-    "condition_state_ids": [
-      50000001
-    ]
-  },
-  {
-    "interaction_id": 1300001007,
-    "player_character_id": 100001,
+    "interaction_id": 1300002003,
+    "player_character_id": 100002,
     "touch_body_type": 2,
     "touch_gesture_type": 3,
     "touch_condition_inequality": 1,
     "touch_condition_count": 3,
-    "chat_motion_id": 1200001007,
-    "order": 3,
-    "condition_state_ids": [
-      50000001
+    "chat_motion_ids": [
+      1200002006
     ],
-    "change_state_id": 50000002
+    "condition_state_ids": [
+      50000003
+    ],
+    "change_state_id": 50000004
   },
   {
-    "interaction_id": 1300001008,
-    "player_character_id": 100001,
+    "interaction_id": 1300002004,
+    "player_character_id": 100002,
     "touch_body_type": 2,
     "touch_gesture_type": 4,
     "touch_condition_inequality": 0,
-    "chat_motion_id": 1200001007,
-    "order": 4,
-    "condition_state_ids": [
-      50000001
+    "chat_motion_ids": [
+      1200002006
     ],
-    "change_state_id": 50000002
+    "condition_state_ids": [
+      50000003
+    ],
+    "change_state_id": 50000004
   },
   {
-    "interaction_id": 300001001,
-    "player_character_id": 100001,
-    "touch_body_type": 0,
-    "touch_gesture_type": 3,
+    "interaction_id": 1300002005,
+    "player_character_id": 100002,
+    "touch_body_type": 8,
+    "touch_body_direction": "L",
+    "touch_gesture_type": 5,
     "touch_condition_inequality": 0,
-    "chat_motion_id": 200001001,
-    "order": 1
+    "chat_motion_ids": [
+      1200002007
+    ],
+    "condition_state_ids": [
+      50000003
+    ],
+    "parameters": [
+      "01_drag_bra_L_01"
+    ]
   },
   {
-    "interaction_id": 300001002,
-    "player_character_id": 100001,
-    "touch_body_type": 0,
-    "touch_gesture_type": 3,
+    "interaction_id": 1300002006,
+    "player_character_id": 100002,
+    "touch_body_type": 8,
+    "touch_body_direction": "R",
+    "touch_gesture_type": 5,
     "touch_condition_inequality": 0,
-    "chat_motion_id": 200001002,
-    "order": 2
+    "chat_motion_ids": [
+      1200002008
+    ],
+    "condition_state_ids": [
+      50000003
+    ],
+    "parameters": [
+      "01_drag_bra_R_01"
+    ]
   },
   {
-    "interaction_id": 300001003,
-    "player_character_id": 100001,
-    "touch_body_type": 0,
+    "interaction_id": 1300002007,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 1,
+    "touch_condition_count": 1,
+    "chat_motion_ids": [
+      1200002009
+    ],
+    "condition_state_ids": [
+      50000003,
+      50000004,
+      50000005
+    ],
+    "parameters": [
+      "01_drag_Leg_01"
+    ]
+  },
+  {
+    "interaction_id": 1300002008,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 4,
+    "touch_condition_count": 5,
+    "chat_motion_ids": [
+      1200002010
+    ],
+    "condition_state_ids": [
+      50000003,
+      50000004,
+      50000005
+    ],
+    "parameters": [
+      "01_drag_Leg_01"
+    ]
+  },
+  {
+    "interaction_id": 1300002009,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 5,
+    "touch_condition_count": 5,
+    "chat_motion_ids": [
+      1200002011
+    ],
+    "condition_state_ids": [
+      50000003,
+      50000004,
+      50000005
+    ],
+    "parameters": [
+      "01_drag_Leg_01"
+    ]
+  },
+  {
+    "interaction_id": 1300002010,
+    "player_character_id": 100002,
+    "touch_body_type": 9,
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000003,
+      50000004
+    ],
+    "parameters": [
+      "01_drag_panty"
+    ]
+  },
+  {
+    "interaction_id": 1300002011,
+    "player_character_id": 100002,
+    "touch_body_type": 2,
     "touch_gesture_type": 3,
     "touch_condition_inequality": 0,
-    "chat_motion_id": 200001004,
-    "order": 3
+    "chat_motion_ids": [
+      1200002013,
+      1200002014
+    ],
+    "condition_state_ids": [
+      50000004,
+      50000005,
+      50000006
+    ]
   },
+  {
+    "interaction_id": 1300002012,
+    "player_character_id": 100002,
+    "touch_body_type": 8,
+    "touch_body_direction": "L",
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000004
+    ],
+    "change_state_id": 50000005,
+    "parameters": [
+      "01_drag_bra_L_02"
+    ]
+  },
+  {
+    "interaction_id": 1300002013,
+    "player_character_id": 100002,
+    "touch_body_type": 8,
+    "touch_body_direction": "R",
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000004,
+      50000005
+    ],
+    "parameters": [
+      "01_drag_bra_R_02",
+      "22_bra_R_off"
+    ]
+  },
+  {
+    "interaction_id": 1300002014,
+    "player_character_id": 100002,
+    "touch_body_type": 9,
+    "touch_gesture_type": 5,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000005
+    ],
+    "change_state_id": 50000006,
+    "parameters": [
+      "01_drag_panty"
+    ]
+  },
+  {
+    "interaction_id": 1300002015,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002016,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002017,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002018,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002019,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002020,
+    "player_character_id": 100002,
+    "touch_body_type": 6,
+    "touch_gesture_type": 3,
+    "touch_condition_inequality": 0,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002021,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 6,
+    "touch_condition_inequality": 1,
+    "touch_condition_count": 1,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002022,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 6,
+    "touch_condition_inequality": 1,
+    "touch_condition_count": 2,
+    "condition_state_ids": [
+      50000006
+    ]
+  },
+  {
+    "interaction_id": 1300002023,
+    "player_character_id": 100002,
+    "touch_body_type": 3,
+    "touch_gesture_type": 6,
+    "touch_condition_inequality": 1,
+    "touch_condition_count": 3,
+    "condition_state_ids": [
+      50000006
+    ],
+    "change_state_id": 50000003
+  },
+  {},
+  {},
+  {},
   {}
 ]
