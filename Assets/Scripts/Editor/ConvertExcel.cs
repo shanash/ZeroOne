@@ -23,11 +23,5 @@ public static class ConvertExcel
 
         UnityEngine.Debug.Log(output); // 유니티 콘솔에 출력
     }
-
-    [MenuItem("FluffyDuck/Test")]
-    static void Test()
-    {
-
-    }
 }
 #endif
