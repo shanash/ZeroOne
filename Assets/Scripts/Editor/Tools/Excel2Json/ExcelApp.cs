@@ -41,7 +41,7 @@ namespace Excel2Json
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                UnityEngine.Debug.Log(ex.Message);
             }
         }
 

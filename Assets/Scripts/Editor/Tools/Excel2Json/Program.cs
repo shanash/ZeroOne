@@ -27,7 +27,7 @@ namespace Excel2Json
 
             if (args.Length == 0)
             {
-                Console.WriteLine("== Please enter parameters. ==");
+                UnityEngine.Debug.Log("== Please enter parameters. ==");
                 Usage();
                 Console.ReadKey();
                 return;
@@ -64,11 +64,11 @@ namespace Excel2Json
                         input_type = PARAM_TYPE.DIRECTORY;
                         if (!Directory.Exists(input_path))
                         {
-                            Console.WriteLine("===== Error =====");
-                            Console.WriteLine("The directory to change does not exist.");
-                            Console.WriteLine(args[idx]);
-                            Console.WriteLine(input_path);
-                            Console.WriteLine("=================");
+                            UnityEngine.Debug.Log("===== Error =====");
+                            UnityEngine.Debug.Log("The directory to change does not exist.");
+                            UnityEngine.Debug.Log(args[idx]);
+                            UnityEngine.Debug.Log(input_path);
+                            UnityEngine.Debug.Log("=================");
                             Usage();
                             Console.ReadKey();
                             return;
@@ -84,9 +84,9 @@ namespace Excel2Json
                 //        input_type = PARAM_TYPE.FILE;
                 //        if (!File.Exists(input_path))
                 //        {
-                //            Console.WriteLine("");
-                //            Console.WriteLine("The Excel file to change does not exist.");
-                //            Console.WriteLine("");
+                //            UnityEngine.Debug.Log("");
+                //            UnityEngine.Debug.Log("The Excel file to change does not exist.");
+                //            UnityEngine.Debug.Log("");
                 //            Usage();
                 //            return;
                 //        }
@@ -101,10 +101,10 @@ namespace Excel2Json
                         output_type = PARAM_TYPE.OUTPUT_DIR;
                         if (!Directory.Exists(output_path))
                         {
-                            Console.WriteLine("===== Error =====");
-                            Console.WriteLine("The directory where the Json file will be saved does not exist.");
-                            Console.WriteLine(output_path);
-                            Console.WriteLine("=================");
+                            UnityEngine.Debug.Log("===== Error =====");
+                            UnityEngine.Debug.Log("The directory where the Json file will be saved does not exist.");
+                            UnityEngine.Debug.Log(output_path);
+                            UnityEngine.Debug.Log("=================");
                             Usage();
                             Console.ReadKey();
                             return;
@@ -124,10 +124,10 @@ namespace Excel2Json
                         }
                         else
                         {
-                            Console.WriteLine("===== Error =====");
-                            Console.WriteLine("The directory where the C#(Csharp) file will be saved does not exist.");
-                            Console.WriteLine(csharp_output_dir);
-                            Console.WriteLine("=================");
+                            UnityEngine.Debug.Log("===== Error =====");
+                            UnityEngine.Debug.Log("The directory where the C#(Csharp) file will be saved does not exist.");
+                            UnityEngine.Debug.Log(csharp_output_dir);
+                            UnityEngine.Debug.Log("=================");
                             Console.ReadKey();
                             return;
                         }
@@ -147,9 +147,9 @@ namespace Excel2Json
 
             if (output_type != PARAM_TYPE.OUTPUT_DIR)
             {
-                Console.WriteLine("===== Error =====");
-                Console.WriteLine("The directory path where the Json file will be saved is not specified.");
-                Console.WriteLine("=================");
+                UnityEngine.Debug.Log("===== Error =====");
+                UnityEngine.Debug.Log("The directory path where the Json file will be saved is not specified.");
+                UnityEngine.Debug.Log("=================");
                 Usage();
                 Console.ReadKey();
                 return;
@@ -169,7 +169,7 @@ namespace Excel2Json
                 if (Directory.Exists(input_path))
                 {
                     string[] files = Directory.GetFiles(input_path);
-                    Console.WriteLine("\n");
+                    UnityEngine.Debug.Log("\n");
 
                     foreach (string fname in files)
                     {
@@ -177,7 +177,7 @@ namespace Excel2Json
                         bool is_backup_file = fname.IndexOf("$") == -1 ? false : true;
                         if (ext == ".xlsx" && !is_backup_file)
                         {
-                            Console.WriteLine("Convert => {0}", fname);
+                            UnityEngine.Debug.Log($"Convert => {fname}");
                             ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, ref master_table_columns, ref master_enum_data_list);
                         }
                     }
@@ -185,9 +185,9 @@ namespace Excel2Json
                 }
                 else
                 {
-                    Console.WriteLine("");
-                    Console.WriteLine(string.Format("Directory Is Not Exist!! [{0}]", args[1]));
-                    Console.WriteLine("");
+                    UnityEngine.Debug.Log("");
+                    UnityEngine.Debug.Log(string.Format("Directory Is Not Exist!! [{0}]", args[1]));
+                    UnityEngine.Debug.Log("");
                     Console.ReadKey();
                     return;
                 }
@@ -200,9 +200,9 @@ namespace Excel2Json
             //    }
             //    else
             //    {
-            //        Console.WriteLine("");
-            //        Console.WriteLine(string.Format("File Is Not Exist!! [{0}]", input_path));
-            //        Console.WriteLine("");
+            //        UnityEngine.Debug.Log("");
+            //        UnityEngine.Debug.Log(string.Format("File Is Not Exist!! [{0}]", input_path));
+            //        UnityEngine.Debug.Log("");
             //        return;
             //    }
             //}
@@ -228,36 +228,36 @@ namespace Excel2Json
 
         private static void Usage()
         {
-            Console.WriteLine("==================================================");
-            Console.WriteLine("");
-            Console.WriteLine(VERSION);
-            Console.WriteLine("");
-            Console.WriteLine("Programming by ForestJ");
-            Console.WriteLine("");
-            //Console.WriteLine("How to Use : File to Json");
-            //Console.WriteLine("Excel2Json -f <input file> -o <output folder>");
-            //Console.WriteLine("");
-            Console.WriteLine("How to Use : Directory to Json");
-            Console.WriteLine("Excel2Json -d <input folder> -o <output folder>");
-            Console.WriteLine("");
-            Console.WriteLine("==================================================");
+            UnityEngine.Debug.Log("==================================================");
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log(VERSION);
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("Programming by ForestJ");
+            UnityEngine.Debug.Log("");
+            //UnityEngine.Debug.Log("How to Use : File to Json");
+            //UnityEngine.Debug.Log("Excel2Json -f <input file> -o <output folder>");
+            //UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("How to Use : Directory to Json");
+            UnityEngine.Debug.Log("Excel2Json -d <input folder> -o <output folder>");
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("==================================================");
         }
 
         private static void UsageHelp()
         {
-            Console.WriteLine("==================================================");
-            Console.WriteLine("");
-            Console.WriteLine(VERSION);
-            Console.WriteLine("");
-            Console.WriteLine("Programming by ForestJ");
-            Console.WriteLine("");
-            Console.WriteLine("-d : The directory that contains the Excel file.(*.xlsx only)");
-            //Console.WriteLine("-f : The path of the Excel file.(*.xlsx only)");
-            Console.WriteLine("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
-            Console.WriteLine("-cs : Generate C#(Csharp) file with key, data type of Json file.");
-            Console.WriteLine("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
-            Console.WriteLine("-h/-help : Help Menual");
-            Console.WriteLine("==================================================");
+            UnityEngine.Debug.Log("==================================================");
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log(VERSION);
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("Programming by ForestJ");
+            UnityEngine.Debug.Log("");
+            UnityEngine.Debug.Log("-d : The directory that contains the Excel file.(*.xlsx only)");
+            //UnityEngine.Debug.Log("-f : The path of the Excel file.(*.xlsx only)");
+            UnityEngine.Debug.Log("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
+            UnityEngine.Debug.Log("-cs : Generate C#(Csharp) file with key, data type of Json file.");
+            UnityEngine.Debug.Log("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
+            UnityEngine.Debug.Log("-h/-help : Help Menual");
+            UnityEngine.Debug.Log("==================================================");
         }
     }
 }
