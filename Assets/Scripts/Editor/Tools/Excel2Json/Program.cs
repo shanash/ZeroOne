@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 
 namespace Excel2Json
 {
@@ -15,11 +16,11 @@ namespace Excel2Json
         CSHARP_OUTOUT_DIR,
         ENCRYPT_ENABLE,
     }
-    class Program
+    public static class Program
     {
         static string VERSION = "Excel2Json Ver.1.5.0";
 
-
+        [MenuItem("FluffyDuck/Test")]
         static void Main()
         {
             string[] args = { "-d", "Android\\ExcelData", "-o", "Assets\\AssetResources\\Master", "-cs", "Assets\\Scripts\\MasterData" };

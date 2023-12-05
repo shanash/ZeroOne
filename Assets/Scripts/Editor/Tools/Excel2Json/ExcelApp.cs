@@ -13,7 +13,6 @@ namespace Excel2Json
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
 
-        [MenuItem("FluffyDuck/Test")]
         public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
         {
             try
