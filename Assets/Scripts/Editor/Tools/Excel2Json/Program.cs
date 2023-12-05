@@ -20,7 +20,7 @@ namespace Excel2Json
     {
         static string VERSION = "Excel2Json Ver.1.5.0";
 
-        [MenuItem("FluffyDuck/Test")]
+        [MenuItem("FluffyDuck/Convert Excel To Json")]
         static void Main()
         {
             string[] args = { "-d", "Android\\ExcelData", "-o", "Assets\\AssetResources\\Master", "-cs", "Assets\\Scripts\\MasterData" };
