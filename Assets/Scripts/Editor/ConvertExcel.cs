@@ -1,10 +1,11 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using System.Diagnostics;
 
-public class ConvertExcel
+public static class ConvertExcel
 {
     [MenuItem("FluffyDuck/Run Covert Excel To Json")]
-    private static void RunConsoleProgram()
+    static void RunConsoleProgram()
     {
         string fullpath = "Android\\Excel2Json\\Excel2Json.exe"; // 폴더 경로
         string arguments = "-d Android\\ExcelData -o Assets\\AssetResources\\Master -cs Assets\\Scripts\\MasterData"; // 전달할 파라미터들
@@ -22,4 +23,11 @@ public class ConvertExcel
 
         UnityEngine.Debug.Log(output); // 유니티 콘솔에 출력
     }
+
+    [MenuItem("FluffyDuck/Test")]
+    static void Test()
+    {
+
+    }
 }
+#endif
