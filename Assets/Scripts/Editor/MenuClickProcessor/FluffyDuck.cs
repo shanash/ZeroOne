@@ -1,0 +1,56 @@
+#if UNITY_EDITOR
+using UnityEditor;
+
+namespace FluffyDuck.EditorUtil.UpperMenu
+{
+    public static class FluffyDuck
+    {
+        [MenuItem("FluffyDuck/Convert Excel To Json")]
+        static void ConvertExcelToJson()
+        {
+            Excel2Json.Program.Main(
+                "-d", "Android/ExcelData",
+                "-o", "Assets/AssetResources/Master",
+                "-cs", "Assets/Scripts/MasterData");
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor", false, 0)]
+        static void BuildLauncher_BuildAssetForLocalEditor()
+        {
+            BuildLauncher.BuildAddressablesAndPlayer();
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 1)]
+        static void BuildLauncher_ShowWindow()
+        {
+            BuildLauncher.ShowWindow();
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete All", false, 101)]
+        static void BuildLauncher_Delete_DeleteAll()
+        {
+            BuildLauncher_Delete_DeleteAddressableBuildData();
+            BuildLauncher_Delete_DeleteAddressableBuildInfo();
+            BuildLauncher_Delete_DeleteAddressableBuildCache();
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Data", false, 102)]
+        static void BuildLauncher_Delete_DeleteAddressableBuildData()
+        {
+            BuildLauncher.DeleteAddressableBuildFolder();
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Info", false, 103)]
+        static void BuildLauncher_Delete_DeleteAddressableBuildInfo()
+        {
+            BuildLauncher.DeleteAddressableBuildInfo();
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressables Cache", false, 104)]
+        static void BuildLauncher_Delete_DeleteAddressableBuildCache()
+        {
+            BuildLauncher.DeleteAddressableCache();
+        }
+    }
+}
+#endif

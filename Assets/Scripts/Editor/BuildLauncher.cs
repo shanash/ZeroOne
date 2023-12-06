@@ -123,8 +123,7 @@ namespace FluffyDuck.EditorUtil
         }
         string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
-        [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor", false, 0)]
-        static void BuildAddressablesAndPlayer()
+        public static void BuildAddressablesAndPlayer()
         {
             IsRemotePath = false;
             IsAddressablesBuild = true;
@@ -134,8 +133,8 @@ namespace FluffyDuck.EditorUtil
         }
 
 
-        [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 1)]
-        static void ShowWindow()
+        
+        public static void ShowWindow()
         {
             GetWindow<BuildLauncher>("Build Launcher");
         }
@@ -428,20 +427,10 @@ namespace FluffyDuck.EditorUtil
             return false;
         }
 
-
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete All", false, 101)]
-        static void DeleteAddressableAll()
-        {
-            DeleteAddressableBuildFolder();
-            DeleteAddressableBuildInfo();
-            DeleteAddressableCache();
-        }
-
         /// <summary>
         /// 빌드 결과물 폴더 자체를 삭제합니다
         /// </summary>
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Data", false, 102)]
-        static void DeleteAddressableBuildFolder()
+        public static void DeleteAddressableBuildFolder()
         {
             RefreshRemoteBuildAndLoadPath();
 
@@ -466,8 +455,7 @@ namespace FluffyDuck.EditorUtil
         /// <summary>
         /// 빌드를 위해 가지고 있던 정보를 날립니다.
         /// </summary>
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Info", false, 103)]
-        static void DeleteAddressableBuildInfo()
+        public static void DeleteAddressableBuildInfo()
         {
             Debug.Log("Clear PlayerPrefs Hashes!");
 
@@ -521,8 +509,7 @@ namespace FluffyDuck.EditorUtil
         /// 어드레서블로 다운로드 받아서 사용중이었던 캐시에 쌓여있는 데이터를 날립니다
         /// PlayerPrefs에 저장된 버전도 날립니다
         /// </summary>
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressables Cache", false, 104)]
-        static void DeleteAddressableCache()
+        public static void DeleteAddressableCache()
         {
             foreach (var group in s_Settings.groups)
             {

@@ -2,7 +2,6 @@ using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Excel2Json
 {
@@ -55,7 +54,7 @@ namespace Excel2Json
                 string enum_name = GetEnumName(ws);
                 string enum_comment = GetEnumComment(ws);
 
-                UnityEngine.Debug.Log($"Enum Sheet Name => [{ws.Name}], Enum Name => [{enum_name}], Comment => [{enum_comment}]");
+                Logger.Log($"Enum Sheet Name => [{ws.Name}], Enum Name => [{enum_name}], Comment => [{enum_comment}]");
 
                 // type, value, comment 가져오기
                 var enum_data = GetSheetEnumData(ws);
@@ -66,7 +65,6 @@ namespace Excel2Json
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log(e.ToString());
                 throw e;
             }
         }
@@ -133,7 +131,7 @@ namespace Excel2Json
             var commentCell = ws.Cell((int)ENUM_ROW_TYPE_INDEX.COMMENT, 1);
             if (commentCell.IsEmpty())
             {
-                UnityEngine.Debug.Log("Comment is required in column (2,1).");
+                Logger.Log("Comment is required in column (2,1).");
                 return string.Empty;
             }
             return commentCell.GetValue<string>();
@@ -149,7 +147,7 @@ namespace Excel2Json
             var nameCell = ws.Cell(1, 1);
             if (nameCell.IsEmpty())
             {
-                UnityEngine.Debug.Log("Enum name is required in column (1,1).");
+                Logger.Log("Enum name is required in column (1,1).");
                 return string.Empty;
             }
             return nameCell.GetValue<string>();

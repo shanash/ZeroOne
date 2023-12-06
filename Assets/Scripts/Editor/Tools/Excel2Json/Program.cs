@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 
 namespace Excel2Json
 {
@@ -18,16 +17,13 @@ namespace Excel2Json
     }
     public static class Program
     {
-        static string VERSION = "Excel2Json Ver.1.5.0";
+        const string VERSION = "Excel2Json Ver.1.5.0";
 
-        [MenuItem("FluffyDuck/Convert Excel To Json")]
-        static void Main()
+        public static void Main(params string[] args)
         {
-            string[] args = { "-d", "Android\\ExcelData", "-o", "Assets\\AssetResources\\Master", "-cs", "Assets\\Scripts\\MasterData" };
-
             if (args.Length == 0)
             {
-                UnityEngine.Debug.Log("== Please enter parameters. ==");
+                Logger.Log("== Please enter parameters. ==");
                 Usage();
                 Console.ReadKey();
                 return;
@@ -64,11 +60,11 @@ namespace Excel2Json
                         input_type = PARAM_TYPE.DIRECTORY;
                         if (!Directory.Exists(input_path))
                         {
-                            UnityEngine.Debug.Log("===== Error =====");
-                            UnityEngine.Debug.Log("The directory to change does not exist.");
-                            UnityEngine.Debug.Log(args[idx]);
-                            UnityEngine.Debug.Log(input_path);
-                            UnityEngine.Debug.Log("=================");
+                            Logger.Log("===== Error =====");
+                            Logger.Log("The directory to change does not exist.");
+                            Logger.Log(args[idx]);
+                            Logger.Log(input_path);
+                            Logger.Log("=================");
                             Usage();
                             Console.ReadKey();
                             return;
@@ -84,9 +80,9 @@ namespace Excel2Json
                 //        input_type = PARAM_TYPE.FILE;
                 //        if (!File.Exists(input_path))
                 //        {
-                //            UnityEngine.Debug.Log("");
-                //            UnityEngine.Debug.Log("The Excel file to change does not exist.");
-                //            UnityEngine.Debug.Log("");
+                //            Logger.Log("");
+                //            Logger.Log("The Excel file to change does not exist.");
+                //            Logger.Log("");
                 //            Usage();
                 //            return;
                 //        }
@@ -101,10 +97,10 @@ namespace Excel2Json
                         output_type = PARAM_TYPE.OUTPUT_DIR;
                         if (!Directory.Exists(output_path))
                         {
-                            UnityEngine.Debug.Log("===== Error =====");
-                            UnityEngine.Debug.Log("The directory where the Json file will be saved does not exist.");
-                            UnityEngine.Debug.Log(output_path);
-                            UnityEngine.Debug.Log("=================");
+                            Logger.Log("===== Error =====");
+                            Logger.Log("The directory where the Json file will be saved does not exist.");
+                            Logger.Log(output_path);
+                            Logger.Log("=================");
                             Usage();
                             Console.ReadKey();
                             return;
@@ -124,10 +120,10 @@ namespace Excel2Json
                         }
                         else
                         {
-                            UnityEngine.Debug.Log("===== Error =====");
-                            UnityEngine.Debug.Log("The directory where the C#(Csharp) file will be saved does not exist.");
-                            UnityEngine.Debug.Log(csharp_output_dir);
-                            UnityEngine.Debug.Log("=================");
+                            Logger.Log("===== Error =====");
+                            Logger.Log("The directory where the C#(Csharp) file will be saved does not exist.");
+                            Logger.Log(csharp_output_dir);
+                            Logger.Log("=================");
                             Console.ReadKey();
                             return;
                         }
@@ -147,9 +143,9 @@ namespace Excel2Json
 
             if (output_type != PARAM_TYPE.OUTPUT_DIR)
             {
-                UnityEngine.Debug.Log("===== Error =====");
-                UnityEngine.Debug.Log("The directory path where the Json file will be saved is not specified.");
-                UnityEngine.Debug.Log("=================");
+                Logger.Log("===== Error =====");
+                Logger.Log("The directory path where the Json file will be saved is not specified.");
+                Logger.Log("=================");
                 Usage();
                 Console.ReadKey();
                 return;
@@ -169,7 +165,7 @@ namespace Excel2Json
                 if (Directory.Exists(input_path))
                 {
                     string[] files = Directory.GetFiles(input_path);
-                    UnityEngine.Debug.Log("\n");
+                    Logger.Log("\n");
 
                     foreach (string fname in files)
                     {
@@ -177,7 +173,7 @@ namespace Excel2Json
                         bool is_backup_file = fname.IndexOf("$") == -1 ? false : true;
                         if (ext == ".xlsx" && !is_backup_file)
                         {
-                            UnityEngine.Debug.Log($"Convert => {fname}");
+                            Logger.Log($"Convert => {fname}");
                             ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, ref master_table_columns, ref master_enum_data_list);
                         }
                     }
@@ -185,9 +181,9 @@ namespace Excel2Json
                 }
                 else
                 {
-                    UnityEngine.Debug.Log("");
-                    UnityEngine.Debug.Log(string.Format("Directory Is Not Exist!! [{0}]", args[1]));
-                    UnityEngine.Debug.Log("");
+                    Logger.Log("");
+                    Logger.Log(string.Format("Directory Is Not Exist!! [{0}]", args[1]));
+                    Logger.Log("");
                     Console.ReadKey();
                     return;
                 }
@@ -200,9 +196,9 @@ namespace Excel2Json
             //    }
             //    else
             //    {
-            //        UnityEngine.Debug.Log("");
-            //        UnityEngine.Debug.Log(string.Format("File Is Not Exist!! [{0}]", input_path));
-            //        UnityEngine.Debug.Log("");
+            //        Logger.Log("");
+            //        Logger.Log(string.Format("File Is Not Exist!! [{0}]", input_path));
+            //        Logger.Log("");
             //        return;
             //    }
             //}
@@ -228,36 +224,36 @@ namespace Excel2Json
 
         private static void Usage()
         {
-            UnityEngine.Debug.Log("==================================================");
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log(VERSION);
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("Programming by ForestJ");
-            UnityEngine.Debug.Log("");
-            //UnityEngine.Debug.Log("How to Use : File to Json");
-            //UnityEngine.Debug.Log("Excel2Json -f <input file> -o <output folder>");
-            //UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("How to Use : Directory to Json");
-            UnityEngine.Debug.Log("Excel2Json -d <input folder> -o <output folder>");
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("==================================================");
+            Logger.Log("==================================================");
+            Logger.Log("");
+            Logger.Log(VERSION);
+            Logger.Log("");
+            Logger.Log("Programming by ForestJ");
+            Logger.Log("");
+            //Logger.Log("How to Use : File to Json");
+            //Logger.Log("Excel2Json -f <input file> -o <output folder>");
+            //Logger.Log("");
+            Logger.Log("How to Use : Directory to Json");
+            Logger.Log("Excel2Json -d <input folder> -o <output folder>");
+            Logger.Log("");
+            Logger.Log("==================================================");
         }
 
         private static void UsageHelp()
         {
-            UnityEngine.Debug.Log("==================================================");
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log(VERSION);
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("Programming by ForestJ");
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("-d : The directory that contains the Excel file.(*.xlsx only)");
-            //UnityEngine.Debug.Log("-f : The path of the Excel file.(*.xlsx only)");
-            UnityEngine.Debug.Log("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
-            UnityEngine.Debug.Log("-cs : Generate C#(Csharp) file with key, data type of Json file.");
-            UnityEngine.Debug.Log("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
-            UnityEngine.Debug.Log("-h/-help : Help Menual");
-            UnityEngine.Debug.Log("==================================================");
+            Logger.Log("==================================================");
+            Logger.Log("");
+            Logger.Log(VERSION);
+            Logger.Log("");
+            Logger.Log("Programming by ForestJ");
+            Logger.Log("");
+            Logger.Log("-d : The directory that contains the Excel file.(*.xlsx only)");
+            //Logger.Log("-f : The path of the Excel file.(*.xlsx only)");
+            Logger.Log("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
+            Logger.Log("-cs : Generate C#(Csharp) file with key, data type of Json file.");
+            Logger.Log("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
+            Logger.Log("-h/-help : Help Menual");
+            Logger.Log("==================================================");
         }
     }
 }

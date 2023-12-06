@@ -1,14 +1,11 @@
-#if UNITY_EDITOR
 using System;
 using System.Text;
 using System.IO;
 using ClosedXML.Excel;
 using System.Collections.Generic;
-using UnityEditor;
 
 namespace Excel2Json
 {
-
     class ExcelApp
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
@@ -39,9 +36,9 @@ namespace Excel2Json
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                UnityEngine.Debug.Log(ex.Message);
+                Logger.LogError($"Ex : {e}");
             }
         }
 
@@ -315,4 +312,3 @@ namespace Excel2Json
 
     }
 }
-#endif

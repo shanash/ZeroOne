@@ -55,7 +55,7 @@ namespace Excel2Json
                 List<ColumnInfo> col_info = new List<ColumnInfo>();
                 string table_name = GetTableName(ws);
 
-                UnityEngine.Debug.Log($"Data Sheet Name => [{ws.Name}], Json Name => [{table_name}]");
+                Logger.Log($"Data Sheet Name => [{ws.Name}], Json Name => [{table_name}]");
 
                 GetColumnInfo(ws, ref col_info);
                 JArray newton_sheet_arr = GetSheetData(ws, col_info);
@@ -95,7 +95,7 @@ namespace Excel2Json
             var nameCell = ws.Cell(1, 1);
             if (nameCell.IsEmpty())
             {
-                UnityEngine.Debug.Log("Table name is required in column (1,1).");
+                Logger.Log("Table name is required in column (1,1).");
                 return string.Empty;
             }
             return nameCell.GetValue<string>();
