@@ -463,7 +463,7 @@ namespace Excel2Json
 
             string filename = string.Format("{0}.cs", data_table_name);
             string path = Path.Combine(output_dir, filename);
-            //File.WriteAllText(path, sb.ToString(), Encoding.Unicode);
+            //File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
     }

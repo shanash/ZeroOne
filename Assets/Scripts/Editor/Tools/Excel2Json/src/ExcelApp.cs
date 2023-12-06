@@ -16,24 +16,27 @@ namespace Excel2Json
         {
             try
             {
-                using (var workbook = new XLWorkbook(path))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    foreach (IXLWorksheet ws in workbook.Worksheets)
+                    using (var workbook = new XLWorkbook(fileStream))
                     {
-                        // 참조 시트는 건너뛴다
-                        if (ws.Name.Contains("!"))
+                        foreach (IXLWorksheet ws in workbook.Worksheets)
                         {
-                            continue;
-                        }
+                            // 참조 시트는 건너뛴다
+                            if (ws.Name.Contains("!"))
+                            {
+                                continue;
+                            }
 
-                        // ENUM 시트와 데이터 시트로 구분 필요
-                        if (ws.Name.Contains("@"))
-                        {
-                            ConvertEnumSheet.ConvertSheet(ws, ref result_enum_list);
-                        }
-                        else
-                        {
-                            ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns);
+                            // ENUM 시트와 데이터 시트로 구분 필요
+                            if (ws.Name.Contains("@"))
+                            {
+                                ConvertEnumSheet.ConvertSheet(ws, ref result_enum_list);
+                            }
+                            else
+                            {
+                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns);
+                            }
                         }
                     }
                 }
@@ -132,7 +135,7 @@ namespace Excel2Json
 
             string filename = string.Format("{0}.cs", master_define_name);
             string path = Path.Combine(output_dir, filename);
-            File.WriteAllText(path, sb.ToString(), Encoding.Unicode);
+            File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
 
         /// <summary>
@@ -305,7 +308,7 @@ namespace Excel2Json
 
             string filename = string.Format("{0}.cs", mng_name);
             string path = Path.Combine(output_dir, filename);
-            File.WriteAllText(path, sb.ToString(), Encoding.Unicode);
+            File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
 
         
