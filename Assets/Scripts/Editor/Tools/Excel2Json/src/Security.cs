@@ -1,7 +1,9 @@
-using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+#if UNITY_5_3_OR_NEWER
+using System;
+using System.IO;
+#endif
 
 namespace Excel2Json
 {

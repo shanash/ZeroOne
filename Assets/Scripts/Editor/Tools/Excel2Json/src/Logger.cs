@@ -1,7 +1,5 @@
 #if UNITY_5_3_OR_NEWER
 using UnityEngine;
-#else
-using System;
 #endif
 
 namespace Excel2Json

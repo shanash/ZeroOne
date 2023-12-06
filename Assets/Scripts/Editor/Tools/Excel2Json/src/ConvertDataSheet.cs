@@ -2,9 +2,11 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
+#if UNITY_5_3_OR_NEWER
 using System.Collections.Generic;
 using System;
 using System.IO;
+#endif
 
 namespace Excel2Json
 {

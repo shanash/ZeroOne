@@ -1,8 +1,10 @@
-using System;
 using System.Text;
-using System.IO;
 using ClosedXML.Excel;
+#if UNITY_5_3_OR_NEWER
+using System;
+using System.IO;
 using System.Collections.Generic;
+#endif
 
 namespace Excel2Json
 {
