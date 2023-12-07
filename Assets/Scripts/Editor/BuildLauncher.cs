@@ -19,7 +19,6 @@ namespace FluffyDuck.EditorUtil
 {
     public class BuildLauncher : EditorWindow
     {
-        //TODO: 상수 string 정리 필요
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
         static readonly string IS_PLAYER_BUILD_KEY = "IsPlayerBuild";
@@ -32,10 +31,11 @@ namespace FluffyDuck.EditorUtil
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
         static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
 
-        static readonly string ANDROID_SDK_EDITOR_PATH = "PlaybackEngines/AndroidPlayer/SDK";
-        static readonly string ANDROID_SDK_EDITOR_PATH_AT_WINDOWS = $"Data/{ANDROID_SDK_EDITOR_PATH}";
-        static readonly string ADB_PATH_AT_ANDROID_SDK = "platform-tools/adb";
         static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
+
+        //static readonly string ANDROID_SDK_EDITOR_PATH = "PlaybackEngines/AndroidPlayer/SDK";
+        //static readonly string ANDROID_SDK_EDITOR_PATH_AT_WINDOWS = $"Data/{ANDROID_SDK_EDITOR_PATH}";
+        //static readonly string ADB_PATH_AT_ANDROID_SDK = "platform-tools/adb";
 
         //static List<DeviceInfo> Device_Infos = new List<DeviceInfo>();
         //static string _Adb_Path = string.Empty;
