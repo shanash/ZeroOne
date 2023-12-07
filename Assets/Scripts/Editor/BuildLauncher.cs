@@ -19,6 +19,11 @@ namespace FluffyDuck.EditorUtil
 {
     public class BuildLauncher : EditorWindow
     {
+        const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
+        const string ADDRESSABLE_GROUP = "AddressableGroup";
+        static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
+        static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
+
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
         static readonly string IS_PLAYER_BUILD_KEY = "IsPlayerBuild";
@@ -27,10 +32,6 @@ namespace FluffyDuck.EditorUtil
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
         static readonly string DEFAULT_GROUP_NAME = "Default";
 
-        static readonly string ADDRESSABLE_GROUP = "AddressableGroup";
-        static readonly string ADDRESSABLE_GROUP_TEXT_PATH = $"AssetResources/Addressables";
-        static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
-        static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
 
         static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
@@ -396,7 +397,7 @@ namespace FluffyDuck.EditorUtil
                 }
 
                 string override_player_version = $"{current_data_version.ToString("D3")}";
-                CreateVersionText(override_player_version);
+                AddAdressableVersionText(override_player_version);
 
                 if (groups.Count > 0)
                 {
@@ -626,9 +627,30 @@ namespace FluffyDuck.EditorUtil
             Debug.Log($"Set {(is_remote_path ? "Remote" : "Local")} Path");
         }
 
-        static void CreateVersionText(string override_player_version)
+        public static void CreateVersionText()
         {
             Directory.CreateDirectory(ADDRESSABLE_GROUP_ROOT_TEXT_PATH);
+
+            if (!File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
+            {
+                using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.Create, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine("000");
+                    }
+                }
+            }
+        }
+
+        static void AddAdressableVersionText(string override_player_version)
+        {
+            if (File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
+            {
+                CreateVersionText();
+                return;
+            }
+
             bool asset_exist = AssetDatabase.GetMainAssetTypeAtPath(ADDRESSABLE_VERSION_FILE_PATH) != null;
 
             string version_text = string.Empty;
@@ -687,25 +709,6 @@ namespace FluffyDuck.EditorUtil
 
             s_Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entries, true);
             AssetDatabase.SaveAssets();
-
-            /*
-                         Debug.Assert(!string.IsNullOrEmpty(guid), $"{ADDRESSABLE_VERSION_FILE_PATH} AssetDatabase.Refresh()를 했는데 왜 없을까?");
-
-            var connected_entry = s_Settings.FindAssetEntry(guid);
-
-            if (s_Settings.FindAssetEntry(guid) != null)
-            {
-                var connected_entry = s_Settings.FindAssetEntry(guid);
-                
-                if (connected_entry != null)
-                {
-                    return;
-                }
-                else
-                {
-                    AddressableAssetEntry entra = s_Settings.CreateOrMoveEntry(guid, default_group);
-                }
-            }*/
         }
 
         /// <summary>
