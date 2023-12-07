@@ -36,12 +36,15 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor", false, 0)]
         static void BuildLauncher_BuildAssetForLocalEditor()
         {
-            BuildLauncher.BuildAddressablesAndPlayer();
+            BuildLauncher.BuildAssetForLocalEditor();
         }
 
         [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 1)]
         static void BuildLauncher_ShowWindow()
         {
+            // Unity의 Build Settings 윈도우를 엽니다.
+            EditorWindow.GetWindow(typeof(BuildPlayerWindow), true, "Build Settings");
+
             BuildLauncher.ShowWindow();
         }
 
