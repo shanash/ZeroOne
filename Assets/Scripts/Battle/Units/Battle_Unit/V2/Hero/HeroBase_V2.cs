@@ -29,8 +29,8 @@ public enum SD_BODY_TYPE
 [RequireComponent(typeof(SkeletonUtility))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(RendererSortingZ))]
-[RequireComponent(typeof(SortingGroup))]
+[RequireComponent(typeof(UnitRenderTexture))]
+
 public class HeroBase_V2 : UnitBase_V2
 {
     [SerializeField, Tooltip("Skeleton")]
@@ -43,10 +43,11 @@ public class HeroBase_V2 : UnitBase_V2
     protected List<SD_Body_Pos_Data> Sd_Body_Transforms;
 
     protected RendererSortingZ ZOrder;
+    protected SortingGroup Sort_Group;
+
+    protected UnitRenderTexture Render_Texture;
 
     protected SkeletonUtility Utility;
-
-    protected SkeletonCaptureRenderTexture Capture_Render_Texture;
 
     protected bool Is_Reposition;
 
@@ -471,14 +472,14 @@ public class HeroBase_V2 : UnitBase_V2
     /// 스켈레톤 알파값 수정
     /// </summary>
     /// <param name="alpha"></param>
-    //public void SetAlpha(float alpha)
-    //{
-    //    if (Render_Texture == null)
-    //    {
-    //        Render_Texture = GetComponent<SkeletonRenderTexture>();
-    //    }
-    //    Render_Texture.color.a = alpha;
-    //}
+    public void SetAlpha(float alpha)
+    {
+        if (Render_Texture == null)
+        {
+            Render_Texture = GetComponent<UnitRenderTexture>();
+        }
+        Render_Texture.color.a = alpha;
+    }
 
     /// <summary>
     /// 스파인 플립 설정
@@ -597,18 +598,24 @@ public class HeroBase_V2 : UnitBase_V2
         }
     }
 
-
+    protected virtual float GetApproachDistance()
+    {
+        return User_Hero_Data.GetApproachDistance();
+    }
     protected virtual float GetDistance()
     {
         return User_Hero_Data.GetDistance();
     }
 
-
-    protected virtual void FindTargets() 
+    /// <summary>
+    /// 가장 가까운 적을 찾는다.
+    /// 공격하기 위함이 아닌, 단지 사거리를 유지하기 위해서
+    /// </summary>
+    protected virtual void FindFirstTargets() 
     {
-        float distance = GetDistance();
+        float distance = GetApproachDistance();
         var first_skill = GetSkillManager().GetCurrentSkillGroup().GetFirstSkillData();
-        Team_Mng.FindTargetInRange(this, first_skill.GetTargetType(), first_skill.GetTargetRuleType(), distance, first_skill.GetTargetOrder(), first_skill.GetTargetCount(), ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRangeAtFirst(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
     }
     protected virtual void FindTargets(BattleSkillData skill) 
     {
@@ -889,32 +896,40 @@ public class HeroBase_V2 : UnitBase_V2
     {
         base.Spawned();
 
-        if (ZOrder == null)
+        if (Render_Texture == null)
         {
-            ZOrder = GetComponent<RendererSortingZ>();
+            Render_Texture = GetComponent<UnitRenderTexture>();
         }
+        if (Render_Texture.quad != null)
+        {
+            if (ZOrder == null)
+            {
+                ZOrder = Render_Texture.quad.AddComponent<RendererSortingZ>();
+                ZOrder.SetZorderIndex(ZORDER_INDEX.HERO);
+            }
+            if (Sort_Group == null)
+            {
+                Sort_Group = Render_Texture.quad.AddComponent<SortingGroup>();
+            }
+        }
+        
         if (Utility == null)
         {
             Utility = GetComponent<SkeletonUtility>();
         }
-        if (Capture_Render_Texture == null)
-        {
-            var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/SkeletonCaptureRenderTexture", this.transform.parent);
-            Capture_Render_Texture = obj.GetComponent<SkeletonCaptureRenderTexture>();
-            //Capture_Render_Texture.SetCaptureCamera(Battle_Mng.GetVirtualCineManager().GetCaptureCamera());
-            //Capture_Render_Texture.SetTargetTransform(this.transform);
-        }
+        
+        
     }
     public override void Despawned()
     {
         base.Despawned();
 
         Team_Mng = null;
-        if (Capture_Render_Texture != null)
-        {
-            GameObjectPoolManager.Instance.UnusedGameObject(Capture_Render_Texture.gameObject);
-            Capture_Render_Texture = null;
-        }
+        //if (Capture_Render_Texture != null)
+        //{
+        //    GameObjectPoolManager.Instance.UnusedGameObject(Capture_Render_Texture.gameObject);
+        //    Capture_Render_Texture = null;
+        //}
     }
 
     /// <summary>
@@ -969,7 +984,7 @@ public class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-
+        Render_Texture.SetHitColor(Color.red, Color.clear, 0.2f);
         Life -= damage;
         if (Life <= 0)
         {
@@ -1455,7 +1470,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveLeftTeam()
     {
-        FindTargets();
+        FindFirstTargets();
         if (Normal_Attack_Target.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);
@@ -1478,7 +1493,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveRightTeam()
     {
-        FindTargets();
+        FindFirstTargets();
         if (Normal_Attack_Target.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);

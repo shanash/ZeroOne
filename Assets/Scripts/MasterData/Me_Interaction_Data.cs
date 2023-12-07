@@ -7,46 +7,57 @@ public class Me_Interaction_Data : System.IDisposable
 {
 	///	<summary>
 	///	인터렉션 아이디
+	///	
 	///	</summary>
 	public int interaction_id {get; set;}
 	///	<summary>
 	///	캐릭터 고유 아이디
+	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	터치가능한 신체부위
+	///	
 	///	</summary>
 	public TOUCH_BODY_TYPE touch_body_type {get; set;}
 	///	<summary>
 	///	좌우(L or R)
+	///	
 	///	</summary>
 	public string touch_body_direction {get; set;}
 	///	<summary>
 	///	제스쳐 종류
+	///	
 	///	</summary>
 	public TOUCH_GESTURE_TYPE touch_gesture_type {get; set;}
 	///	<summary>
 	///	부등호
+	///	
 	///	</summary>
 	public INEQUALITY_TYPE touch_condition_inequality {get; set;}
 	///	<summary>
 	///	제스쳐 횟수
+	///	
 	///	</summary>
 	public int touch_condition_count {get; set;}
 	///	<summary>
 	///	챗모션 인덱스
+	///	
 	///	</summary>
 	public int[] chat_motion_ids {get; set;}
 	///	<summary>
 	///	특정 상태 조건 고유 인덱스
+	///	
 	///	</summary>
 	public int[] condition_state_ids {get; set;}
 	///	<summary>
 	///	특정 상태 변환
+	///	
 	///	</summary>
 	public int change_state_id {get; set;}
 	///	<summary>
 	///	기타 파라메터
+	///	
 	///	</summary>
 	public string[] parameters {get; set;}
 

@@ -8,6 +8,38 @@ using UnityEngine;
 public partial class TeamManager_V2
 {
     /// <summary>
+    /// 지정한 거리내에 가장 가까운 적이 있는지 지정 숫자만큼 찾아준다
+    /// 이 함수의 사용용도는 처음 맵에 진입할 시 타겟 룰에 상관없이
+    /// 일정 지역안에 들어와야 하기 때문에 각각의 사거리에 맞춰 가장 가까운 적을 기준으로 맵 진입을 위한 검색임
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_type"></param>
+    /// <param name="distance"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    public void FindTargetInRangeAtFirst(HeroBase_V2 self, TARGET_TYPE target_type, float distance, ref List<HeroBase_V2> targets)
+    {
+        int count = 1;  //  무조건 1명만 찾는다
+
+        targets.Clear();
+        if (target_type == TARGET_TYPE.MY_TEAM)
+        {
+            FindTargetRuleExec(self, TARGET_RULE_TYPE.NEAREST, distance, count, ref targets);
+        }
+        else
+        {
+            var enemy_team = GetEnemyTeam();
+            enemy_team.FindTargetRuleExec(self, TARGET_RULE_TYPE.NEAREST, distance, count, ref targets);
+        }
+
+        //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
+        if (targets.Count > 0)
+        {
+            targets.RemoveRange(count, targets.Count - count);
+        }
+    }
+
+    /// <summary>
     /// 지정한 거리내에 있는 적을 찾아 지정한 숫자만큼 찾아준다.
     /// </summary>
     /// <param name="self"></param>
@@ -208,7 +240,17 @@ public partial class TeamManager_V2
     /// <param name="targets"></param>
     void FindTargetRuleFurthest(HeroBase_V2 self, float distance, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetInRangeMembersDesc(self, distance);
+        var temp_list = GetAliveMembers();
+
+        temp_list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
+        {
+            if (a.GetDistanceFromCenter(self) < b.GetDistanceFromCenter(self))
+            {
+                return 1;
+            }
+            return -1;
+        });
+
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 

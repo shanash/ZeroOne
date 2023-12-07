@@ -7,18 +7,22 @@ public class Me_State_Data : System.IDisposable
 {
 	///	<summary>
 	///	상태 고유 아이디
+	///	
 	///	</summary>
 	public int state_id {get; set;}
 	///	<summary>
 	///	캐릭터 고유 아이디
+	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	아이들 애니메이션 이름
+	///	
 	///	</summary>
 	public string idle_animation_name {get; set;}
 	///	<summary>
 	///	서브 애니메이션 이름
+	///	
 	///	</summary>
 	public string[] sub_idle_animation_names {get; set;}
 

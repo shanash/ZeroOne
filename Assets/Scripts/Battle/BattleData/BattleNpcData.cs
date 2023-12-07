@@ -42,6 +42,15 @@ public class BattleNpcData : BattleDataBase
         return 0;
     }
 
+    public float GetApproachDistance()
+    {
+        if (Battle_Data != null)
+        {
+            return (float)Battle_Data.approach;
+        }
+        return 0;
+    }
+
     public int[] GetSkillPattern()
     {
         if (Battle_Data != null)

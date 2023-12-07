@@ -7,18 +7,22 @@ public class Stage_Data : System.IDisposable
 {
 	///	<summary>
 	///	스테이지 인덱스
+	///	
 	///	</summary>
 	public int stage_id {get; set;}
 	///	<summary>
 	///	스테이지 별 개수
+	///	
 	///	</summary>
 	public int stage_star_count {get; set;}
 	///	<summary>
 	///	스테이지 웨이브 개수
+	///	
 	///	</summary>
 	public int stage_wave_count {get; set;}
 	///	<summary>
 	///	웨이브 연결 ID
+	///	
 	///	</summary>
 	public int wave_group_id {get; set;}
 

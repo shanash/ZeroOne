@@ -7,26 +7,32 @@ public class Me_Resource_Data : System.IDisposable
 {
 	///	<summary>
 	///	메모리얼 인덱스
+	///	
 	///	</summary>
 	public int memorial_id {get; set;}
 	///	<summary>
 	///	캐릭터 고유 인덱스
+	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	프리팹 키
+	///	
 	///	</summary>
 	public string prefab_key {get; set;}
 	///	<summary>
 	///	인트로 키
+	///	
 	///	</summary>
 	public string intro_key {get; set;}
 	///	<summary>
 	///	시작 상태
+	///	
 	///	</summary>
 	public int state_id {get; set;}
 	///	<summary>
 	///	순서
+	///	
 	///	</summary>
 	public int order {get; set;}
 

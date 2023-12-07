@@ -39,4 +39,6 @@ public class HomeManager : MonoBehaviour
     {
         SceneManager.LoadScene("memorial");
     }
+
+
 }

@@ -41,14 +41,13 @@ public class Hero_100001 : HeroBase_V2
     public override void UnitStateAttackReady01Begin()
     {
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
-        Capture_Render_Texture.CaptureObject(this.gameObject);
     }
     public override void UnitStateAttackReady01()
     {
         bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(Time.deltaTime);
         if (is_delay_finish)
         {
-            FindTargets();
+            FindFirstTargets();
             if (Normal_Attack_Target.Count == 0)
             {
                 ChangeState(UNIT_STATES.MOVE);
@@ -96,7 +95,7 @@ public class Hero_100001 : HeroBase_V2
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
                 GetSkillManager().SetNextSkillPattern();
-                FindTargets();
+                FindFirstTargets();
                 if (Normal_Attack_Target.Count == 0)
                 {
                     ChangeState(UNIT_STATES.MOVE);

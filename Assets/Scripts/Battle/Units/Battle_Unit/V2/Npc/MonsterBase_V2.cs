@@ -28,6 +28,11 @@ public class MonsterBase_V2 : HeroBase_V2
         return Npc.GetDistance();
     }
 
+    protected override float GetApproachDistance()
+    {
+        return Npc.GetApproachDistance();
+    }
+
 
     #region Cal Ability Point
     protected override void CalcMaxLife()

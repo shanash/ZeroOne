@@ -7,54 +7,67 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 {
 	///	<summary>
 	///	지속성 스킬 효과 인덱스
+	///	
 	///	</summary>
 	public int npc_skill_duration_id {get; set;}
 	///	<summary>
 	///	지속성 효과 타입
+	///	
 	///	</summary>
 	public DURATION_EFFECT_TYPE duration_effect_type {get; set;}
 	///	<summary>
 	///	지속성 방식 타입
+	///	
 	///	</summary>
 	public PERSISTENCE_TYPE persistence_type {get; set;}
 	///	<summary>
 	///	지속 시간
+	///	
 	///	</summary>
 	public double time {get; set;}
 	///	<summary>
 	///	지속 횟수
+	///	
 	///	</summary>
 	public int count {get; set;}
 	///	<summary>
 	///	반복 일회성 효과
+	///	
 	///	</summary>
 	public int[] repeat_npc_onetime_ids {get; set;}
 	///	<summary>
 	///	반복 주기
+	///	
 	///	</summary>
 	public double repeat_interval {get; set;}
 	///	<summary>
 	///	종료 일회성 효과
+	///	
 	///	</summary>
 	public int[] finish_npc_onetime_ids {get; set;}
 	///	<summary>
 	///	발사체 타입
+	///	
 	///	</summary>
 	public PROJECTILE_TYPE projectile_type {get; set;}
 	///	<summary>
 	///	발사체 속도
+	///	
 	///	</summary>
 	public double projectile_speed {get; set;}
 	///	<summary>
 	///	스탯 멀티플 타입
+	///	
 	///	</summary>
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
 	///	<summary>
 	///	절대값
+	///	
 	///	</summary>
 	public int value {get; set;}
 	///	<summary>
 	///	배율
+	///	
 	///	</summary>
 	public double multiple {get; set;}
 	///	<summary>
@@ -65,6 +78,7 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 	public double rate {get; set;}
 	///	<summary>
 	///	이펙트 프리팹
+	///	
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>
@@ -76,6 +90,7 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 	public double effect_duration {get; set;}
 	///	<summary>
 	///	중첩 가능
+	///	
 	///	</summary>
 	public bool is_overlapable {get; set;}
 

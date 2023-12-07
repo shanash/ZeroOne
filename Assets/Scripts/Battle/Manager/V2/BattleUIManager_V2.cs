@@ -25,19 +25,6 @@ public class BattleUIManager_V2 : MonoBehaviour
         Battle_Mng?.ChangeState(GAME_STATES.PAUSE);
     }
 
-    public void OnClickCaptureTest()
-    {
-        var capture_cam = Battle_Mng.GetVirtualCineManager().GetCaptureCamera();
-        var left_team = Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
-        var members = left_team.GetAliveMembers();
-        if (members.Count > 0)
-        {
-            var mem = members[0];
-            capture_cam.Follow = mem.transform;
-            //ScreenCapture.CaptureScreenshotIntoRenderTexture
-        }
-        
-    }
 
     private void Update()
     {

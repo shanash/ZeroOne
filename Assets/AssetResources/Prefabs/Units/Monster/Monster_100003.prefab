@@ -1126,8 +1126,7 @@ GameObject:
   - component: {fileID: 3541046340067273753}
   - component: {fileID: 6670964254628656788}
   - component: {fileID: 2438911936281291197}
-  - component: {fileID: 1377941252241460849}
-  - component: {fileID: 5136444873587427555}
+  - component: {fileID: 4601296933662640640}
   m_Layer: 12
   m_Name: Monster_100003
   m_TagString: Monster
@@ -1342,7 +1341,7 @@ MonoBehaviour:
     Trans: {fileID: 1029547663233933760}
   - Body_Type: 1
     Trans: {fileID: 3609808463975282801}
---- !u!114 &1377941252241460849
+--- !u!114 &4601296933662640640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1351,22 +1350,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1954482972008189184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Script: {fileID: 11500000, guid: b21e2e12419a6f7429924af166fa2a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZOrder: 50
---- !u!210 &5136444873587427555
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954482972008189184}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+  maxRenderTextureSize: 1024
+  quad: {fileID: 0}
+  renderTexture: {fileID: 0}
+  targetCamera: {fileID: 0}
+  quadMaterial: {fileID: 2100000, guid: 4c507f887c6274a44a603d96e0eabf2a, type: 2}
 --- !u!1 &2003562307983567719
 GameObject:
   m_ObjectHideFlags: 0

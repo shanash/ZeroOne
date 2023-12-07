@@ -62,6 +62,14 @@ public class UserHeroData : UserDataBase
     {
         return (float)Battle_Data.distance;
     }
+    /// <summary>
+    /// 접근 거리
+    /// </summary>
+    /// <returns></returns>
+    public float GetApproachDistance()
+    {
+        return (float)Battle_Data.approach;
+    }
     
     public bool IsEquals(UserHeroData ud)
     {
