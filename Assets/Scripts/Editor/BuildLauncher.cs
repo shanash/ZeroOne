@@ -19,6 +19,7 @@ namespace FluffyDuck.EditorUtil
 {
     public class BuildLauncher : EditorWindow
     {
+        const string VERSION_TEXT_GUID = "aa5ec36119d9e49a795ca758b8137a7d";
         const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
         const string ADDRESSABLE_GROUP = "AddressableGroup";
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
@@ -627,18 +628,72 @@ namespace FluffyDuck.EditorUtil
             Debug.Log($"Set {(is_remote_path ? "Remote" : "Local")} Path");
         }
 
+        public static async Task ModifyVersionTextMeta()
+        {
+            string find_word = "guid: ";
+            string guid = string.Empty;
+
+            while (!File.Exists($"{ADDRESSABLE_VERSION_FILE_PATH}.meta"))
+            {
+                await Task.Delay(1000);
+            }
+
+            using (FileStream fs = new FileStream($"{ADDRESSABLE_VERSION_FILE_PATH}.meta", FileMode.Open, FileAccess.ReadWrite))
+            {
+                List<string> lines = new List<string>();
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    string line = sr.ReadLine();
+                    lines.Add(line);
+                    while (!line.Contains(find_word))
+                    {
+                        line = sr.ReadLine();
+                        if (string.IsNullOrEmpty(line))
+                        {
+                            Debug.Assert(false, $"{ADDRESSABLE_VERSION_FILE_PATH} 메타 파일의 guid가 없습니다?");
+                            return;
+                        }
+                        lines.Add(line);
+                    }
+
+                    guid = line.Replace(find_word, "");
+
+                    if (!guid.Equals(VERSION_TEXT_GUID))
+                    {
+                        lines[lines.Count - 1] = $"{find_word}{VERSION_TEXT_GUID}";
+                        while(!string.IsNullOrEmpty(line = sr.ReadLine()))
+                        {
+                            lines.Add(line);
+                        }
+
+                        using (StreamWriter sw = new StreamWriter(fs))
+                        {
+                            foreach (var l in lines)
+                            {
+                                sw.WriteLine(l);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        public static bool ExistVersionText()
+        {
+            return File.Exists(ADDRESSABLE_VERSION_FILE_PATH);
+        }
+
         public static void CreateVersionText()
         {
             Directory.CreateDirectory(ADDRESSABLE_GROUP_ROOT_TEXT_PATH);
 
-            if (!File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
+            using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.Create, FileAccess.Write))
+                using (StreamWriter sw = new StreamWriter(fs))
                 {
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    {
-                        sw.WriteLine("000");
-                    }
+                    sw.WriteLine("000");
                 }
             }
         }

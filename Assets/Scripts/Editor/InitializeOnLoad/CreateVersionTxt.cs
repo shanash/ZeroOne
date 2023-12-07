@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +11,11 @@ namespace FluffyDuck.EditorUtil
     {
         static CreateVersionTxt()
         {
-            BuildLauncher.CreateVersionText();
+            if (!BuildLauncher.ExistVersionText())
+            {
+                BuildLauncher.CreateVersionText();
+                _ = BuildLauncher.ModifyVersionTextMeta();
+            }
         }
     }
 }
