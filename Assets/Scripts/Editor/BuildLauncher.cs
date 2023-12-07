@@ -1,9 +1,12 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
@@ -21,7 +24,6 @@ namespace FluffyDuck.EditorUtil
         static readonly string IS_BUILD_AND_RUN_KEY = "IsBuildAndRun";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
         static readonly string IS_PLAYER_BUILD_KEY = "IsPlayerBuild";
-        //static readonly string IS_ANDROID_APP_BUNDLE_KEY = "IsAndroidAppBundle";
 
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
         static readonly string DEFAULT_GROUP_NAME = "Default";
@@ -30,6 +32,14 @@ namespace FluffyDuck.EditorUtil
         static readonly string ADDRESSABLE_GROUP_TEXT_PATH = $"AssetResources/Addressables";
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
         static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
+
+        static readonly string ANDROID_SDK_EDITOR_PATH = "PlaybackEngines/AndroidPlayer/SDK";
+        static readonly string ANDROID_SDK_EDITOR_PATH_AT_WINDOWS = $"Data/{ANDROID_SDK_EDITOR_PATH}";
+        static readonly string ADB_PATH_AT_ANDROID_SDK = "platform-tools/adb";
+        static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
+
+        static List<DeviceInfo> Device_Infos = new List<DeviceInfo>();
+        static int Device_Infos_Index = 0;
 
         static string BUILD_PATH
         {
@@ -99,17 +109,92 @@ namespace FluffyDuck.EditorUtil
         {
             get
             {
-                //TODO:
-                return false;
-                //return EditorPrefs.GetBool(IS_ANDROID_APP_BUNDLE_KEY, false);
+                return EditorUserBuildSettings.buildAppBundle;
             }
             set
             {
-                //EditorPrefs.SetBool(IS_ANDROID_APP_BUNDLE_KEY, value);
+                EditorUserBuildSettings.buildAppBundle = true;
             }
         }
 
-        int Dropdown_Index
+        static void RefreshDeviceInfosIndex()
+        {
+            if (Device_Infos_Index >= Device_Infos.Count)
+            {
+                Device_Infos_Index = -1;
+            }
+        }
+
+        static int Run_Device_Index
+        {
+            get
+            {
+                RefreshDeviceInfosIndex();
+                return Device_Infos_Index + 1;
+            }
+            set
+            {
+                Device_Infos_Index = value - 1;
+            }
+        }
+
+        static string Selected_Device_ID
+        {
+            get
+            {
+                RefreshDeviceInfosIndex();
+                return (Device_Infos_Index == -1) ? string.Empty : Device_Infos[Device_Infos_Index].ID;
+            }
+        }
+
+        static string Adb_Path
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_Adb_Path))
+                {
+                    return _Adb_Path;
+                }
+                string sdkPath = EditorPrefs.GetString("AndroidSdkRoot");
+
+                // 사용자가 설정한 SDK 경로가 없는 경우 Unity의 내장된 SDK 경로를 사용
+                if (string.IsNullOrEmpty(sdkPath))
+                {
+                    string unityEditorFolder = Path.GetDirectoryName(EditorApplication.applicationPath);
+                    string android_sdk_path = ANDROID_SDK_EDITOR_PATH;
+                    if (Application.platform == RuntimePlatform.WindowsEditor)
+                    {
+                        android_sdk_path = ANDROID_SDK_EDITOR_PATH_AT_WINDOWS;
+                    }
+
+                    sdkPath = Path.Combine(unityEditorFolder, android_sdk_path);
+                }
+
+                Debug.Log("Android SDK 경로: " + sdkPath);
+
+                // ADB 경로 구성
+                string adbPath = Path.Combine(sdkPath, ADB_PATH_AT_ANDROID_SDK);
+
+                // Windows 시스템인 경우 .exe 확장자 추가
+                if (Application.platform == RuntimePlatform.WindowsEditor)
+                {
+                    adbPath += ".exe";
+                }
+
+                // ADB 경로 유효성 확인
+                if (!File.Exists(adbPath))
+                {
+                    ErrorDialog($"ADB 경로를 찾을 수 없습니다. Android SDK 경로를 확인해주세요. : {adbPath}");
+                    return string.Empty;
+                }
+
+                _Adb_Path = adbPath;
+                return _Adb_Path;
+            }
+        }
+        static string _Adb_Path = string.Empty;
+
+        int Select_Asset_Location_Index
         {
             set
             {
@@ -121,7 +206,6 @@ namespace FluffyDuck.EditorUtil
                 return IsRemotePath ? 1 : 0;
             }
         }
-        string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
         public static void BuildAddressablesAndPlayer()
         {
@@ -131,8 +215,6 @@ namespace FluffyDuck.EditorUtil
             IsBuildAndRun = false;
             Build(false);
         }
-
-
         
         public static void ShowWindow()
         {
@@ -141,41 +223,42 @@ namespace FluffyDuck.EditorUtil
 
         void OnGUI()
         {
-            /*
             #region Default Build Options
+
             GUILayout.Label("Default Build Options", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
-            dropdownIndex = EditorGUILayout.Popup("Texture Compression", dropdownIndex, dropdownOptions);
-            dropdownIndex = EditorGUILayout.Popup("ETC2 fallback", dropdownIndex, dropdownOptions);
-            checkBox1 = EditorGUILayout.Toggle("Export Project", checkBox1);
-            checkBox1 = EditorGUILayout.Toggle("Symlink Sources", checkBox1);
-            checkBox1 = EditorGUILayout.Toggle("Build App Bundle(Google Play)", checkBox1);
-            dropdownIndex = EditorGUILayout.Popup("Create symbols.zip", dropdownIndex, dropdownOptions);
-            
+            /*
+            int_value = EditorGUILayout.Popup("Texture Compression", int_value, Dropdown_Options);
+            int_value = EditorGUILayout.Popup("ETC2 fallback", int_value, Dropdown_Options);
+            bool_value = EditorGUILayout.Toggle("Export Project", bool_value);
+            bool_value = EditorGUILayout.Toggle("Symlink Sources", bool_value);
+            bool_value = EditorGUILayout.Toggle("Build App Bundle(Google Play)", bool_value);
+            int_value = EditorGUILayout.Popup("Create symbols.zip", int_value, Dropdown_Options);
+            */
             GUILayout.BeginHorizontal();
-            dropdownIndex = EditorGUILayout.Popup("Run Device", dropdownIndex, dropdownOptions);
-            if (GUILayout.Button("Go", GUILayout.Width(40)))
+            Run_Device_Index = EditorGUILayout.Popup("Run Device", Run_Device_Index, Device_Infos.ConvertToPopupArray("None"));
+            if (GUILayout.Button("Refresh", GUILayout.Width(100)))
             {
-                // 작은 버튼 로직
-                Debug.Log("Button next to Dropdown clicked");
+                _ = RefreshADB();
             }
             GUILayout.EndHorizontal();
-
-            checkBox1 = EditorGUILayout.Toggle("Development Build", checkBox1);
-            checkBox2 = EditorGUILayout.Toggle("Autoconnect Profiler", checkBox2);
-            checkBox3 = EditorGUILayout.Toggle("Deep Profiing Support", checkBox3);
-            checkBox3 = EditorGUILayout.Toggle("Script Debugging", checkBox3);
-            checkBox3 = EditorGUILayout.Toggle("Wait For Managed Debugger", checkBox3);
-            dropdownIndex = EditorGUILayout.Popup("Compression Method", dropdownIndex, dropdownOptions);
+            /*
+            bool_value = EditorGUILayout.Toggle("Development Build", bool_value);
+            bool_value = EditorGUILayout.Toggle("Autoconnect Profiler", bool_value);
+            bool_value = EditorGUILayout.Toggle("Deep Profiing Support", bool_value);
+            bool_value = EditorGUILayout.Toggle("Script Debugging", bool_value);
+            bool_value = EditorGUILayout.Toggle("Wait For Managed Debugger", bool_value);
+            int_value = EditorGUILayout.Popup("Compression Method", int_value, Dropdown_Options);
+            */
             EditorGUILayout.EndVertical();
+
             #endregion
 
             GUILayout.Space(10);
-            */
-
+            
             GUILayout.Label("Addressables Build Options", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
-            Dropdown_Index = EditorGUILayout.Popup("Select Asset Location", Dropdown_Index, Dropdown_Options);
+            Select_Asset_Location_Index = EditorGUILayout.Popup("Select Asset Location", Select_Asset_Location_Index, Dropdown_Options);
 
             GUILayout.Space(10);
 
@@ -194,41 +277,149 @@ namespace FluffyDuck.EditorUtil
             // 고정된 크기로 버튼 추가
             if (GUILayout.Button("Build", GUILayout.Width(100), GUILayout.Height(30)))
             {
-                if (Build(false))
-                {
-                    Close();
-                }
+                Build(false);
             }
 
             if (GUILayout.Button("Build And Run", GUILayout.Width(100), GUILayout.Height(30)))
             {
-                if (Build(true))
-                {
-                    Close();
-                }
+                Build(true);
             }
             GUILayout.EndHorizontal();
         }
 
-        static bool Build(bool is_build_and_run)
+        private static async Task<string> ExecuteCommand(string fullpath_filename, string arguments)
         {
+            System.Diagnostics.Process process = new System.Diagnostics.Process
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = fullpath_filename,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            await WaitForExitAsync(process);
+
+            return output.Trim();
+        }
+
+        static async Task RefreshADB()
+        {
+            // ADB를 사용하여 연결된 디바이스 목록을 가져옵니다.
+            string output = await ExecuteCommand(Adb_Path, "devices");
+            
+            var device_ids = ParseDeviceId(output);
+
+            for (int i = Device_Infos.Count - 1; i >= 0; i--)
+            {
+                if (!device_ids.Contains(Device_Infos[i].ID))
+                {
+                    Device_Infos.RemoveAt(i);
+                }
+            }
+
+            string result = string.Empty;
+
+            List<DeviceInfo> devices = new List<DeviceInfo>();
+
+            foreach (var deviceId in device_ids)
+            {
+                // 이미 저장중인 ID는 넘깁니다.
+                if (Device_Infos.Exists(x => x.ID == deviceId))
+                {
+                    continue;
+                }
+
+                // 새로운 ID는 추가합니다.
+                var model_datas = (await ExecuteCommand(Adb_Path, $"-s {deviceId} shell getprop ro.product.manufacturer; getprop ro.product.model")).Split('\n');
+                var info = new DeviceInfo();
+                info.ID = deviceId;
+                info.Manufacturer = model_datas[0];
+                info.Model = model_datas[1];
+
+                Device_Infos.Add(info);
+            }
+
+            RefreshDeviceInfosIndex();
+        }
+
+        private static List<string> ParseDeviceId(string adbOutput)
+        {
+            List<string> deviceIds = new List<string>();
+
+            // ADB 출력을 줄 단위로 분리
+            string[] lines = adbOutput.Split('\n');
+
+            foreach (var line in lines)
+            {
+                // 각 줄이 'device'를 포함하고 있으면, 디바이스 ID를 추출합니다.
+                if (line.Contains("device") && !line.Contains("List of devices"))
+                {
+                    string deviceId = line.Split('\t')[0];
+                    deviceIds.Add(deviceId);
+                }
+            }
+
+            return deviceIds;
+        }
+
+        public static Task WaitForExitAsync(System.Diagnostics.Process process, CancellationToken cancellationToken = default)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => tcs.TrySetResult(null);
+            if (cancellationToken != default)
+                cancellationToken.Register(() => tcs.SetCanceled());
+
+            return tcs.Task;
+        }
+
+        static void LogDialog(string message)
+        {
+            EditorUtility.DisplayDialog("Notice", $"{message}", "OK");
+        }
+
+        static void ErrorDialog(string message)
+        {
+            EditorUtility.DisplayDialog("Error", $"{message}", "OK");
+        }
+
+        static async Task Build(bool is_build_and_run)
+        {
+            if (is_build_and_run && string.IsNullOrEmpty(Selected_Device_ID))
+            {
+                ErrorDialog($"선택한 기기가 없습니다. : {Selected_Device_ID}");
+                return;
+            }
+
             if (!IsAddressablesBuild && !IsPlayerBuild)
             {
                 // 사용자가 최소한 하나의 체크박스를 선택하지 않았을 때의 경고
-                EditorUtility.DisplayDialog("Selection Error", "You must select at least one item at Asset & Player Build Options", "OK");
-                return false;
+                ErrorDialog("You must select at least one item at Asset & Player Build Options");
             }
 
             IsBuildAndRun = is_build_and_run;
+
+            await Task.Yield();
+
             BuildAddressablesAndPlayer(default, default, default);
-            return true;
         }
 
         public static void BuildAddressablesAndPlayer(string keystore_pw, string key_alias_name, string key_alias_pw)
         {
+            _ = BuildAddressablesAndPlayerAsync(keystore_pw, key_alias_name, key_alias_pw);
+        }
+
+        public static async Task BuildAddressablesAndPlayerAsync(string keystore_pw, string key_alias_name, string key_alias_pw)
+        {
             if (!IsAddressablesBuild && !IsPlayerBuild)
             {
-                EditorUtility.DisplayDialog("에러", "어드레서블이든 플레이어든 하나는 빌드해야 합니다\nSet Addressables Build 혹은 Set Player Build를 켜주세요", "확인");
+                ErrorDialog("어드레서블이든 플레이어든 하나는 빌드해야 합니다\nSet Addressables Build 혹은 Set Player Build를 켜주세요");
                 return;
             }
 
@@ -243,7 +434,7 @@ namespace FluffyDuck.EditorUtil
             {
                 if (!addressable_build_succeeded)
                 {
-                    EditorUtility.DisplayDialog("에러", "어드레서블 빌드가 실패해서 플레이어를 빌드할 수 없습니다", "확인");
+                    ErrorDialog("어드레서블 빌드가 실패해서 플레이어를 빌드할 수 없습니다");
                     return;
                 }
 
@@ -272,8 +463,6 @@ namespace FluffyDuck.EditorUtil
                 PlayerSettings.Android.keyaliasName = _key_alias_name;
                 PlayerSettings.Android.keyaliasPass = _key_alias_pw;
 
-                EditorUserBuildSettings.buildAppBundle = IsAppBundleBuild;
-
                 if (!Directory.Exists(EditorUserBuildSettings.activeBuildTarget.ToString()))
                 {
                     Directory.CreateDirectory(EditorUserBuildSettings.activeBuildTarget.ToString());
@@ -297,7 +486,26 @@ namespace FluffyDuck.EditorUtil
                 };
 
                 BuildPipeline.BuildPlayer(buildPlayerOptions);
+
                 Debug.Log("Build completed: " + buildPath);
+
+                /*
+                if (IsBuildAndRun)
+                {
+                    if (string.IsNullOrEmpty(Selected_Device_ID))
+                    {
+                        ErrorDialog($"선택한 기기가 없습니다. : {Selected_Device_ID}");
+                        return;
+                    }
+
+                    await ExecuteCommand(Adb_Path, $"-s {Selected_Device_ID} install -r {buildPlayerOptions.locationPathName}");
+
+                    string package_name = PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.Android);
+
+                    // 게임 실행
+                    await ExecuteCommand(Adb_Path, $"-s {Selected_Device_ID} shell am start -n {package_name}/com.unity3d.player.UnityPlayerActivity");
+                }
+                */
             }
         }
 

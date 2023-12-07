@@ -341,7 +341,7 @@ namespace Excel2Json
                 sb.AppendLine("\t///\t<summary>");
                 if (!string.IsNullOrEmpty(info.key_name))
                 {
-                    string[] knames = info.key_name.Split('\n');
+                    string[] knames = info.key_name.Trim().Split('\n');
                     for (int k = 0; k < knames.Length; k++)
                     {
                         sb.AppendLine($"\t///\t{knames[k]}");
@@ -351,9 +351,13 @@ namespace Excel2Json
                 //sb.AppendLine($"\t///\t[{info.key_name}]");
                 if (info.comment != null)
                 {
-                    string[] comments = info.comment.Split('\n');
+                    string[] comments = info.comment.Trim().Split('\n');
                     for (int n = 0; n < comments.Length; n++)
                     {
+                        if (string.IsNullOrEmpty(comments[n]))
+                        {
+                            continue;
+                        }
                         sb.AppendLine($"\t///\t{comments[n]}");
                     }
                 }
