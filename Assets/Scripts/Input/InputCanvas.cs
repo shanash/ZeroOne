@@ -79,10 +79,12 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public void OnMoveCursor(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         Vector2 pos;
-        switch (context.control.device.name)
+        InputDevice device = InputSystem.GetDevice(context.control.device.name);
+
+        switch (device)
         {
-            case "Mouse":
-            case "Touchscreen":
+            case Mouse:
+            case Touchscreen:
                 pos = context.ReadValue<Vector2>();
                 if (pos == Vector2.zero)
                 {
