@@ -9,28 +9,10 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         [MenuItem("FluffyDuck/Convert Excel To Json")]
         static void ConvertExcelToJson()
         {
-#if UNITY_EDITOR_WINDOWS || UNITY_STANDALONE_WINDOWS
-            string fullpath = "Android/Excel2Json/Excel2Json.exe"; // 폴더 경로
-            string arguments = "-d Android/ExcelData -o Assets/AssetResources/Master -cs Assets/Scripts/MasterData"; // 전달할 파라미터들
-
-            Process process = new Process();
-            process.StartInfo.FileName = fullpath;
-            process.StartInfo.Arguments = arguments; // 파라미터 전달
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding("EUC-KR");
-            process.Start();
-
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-
-            UnityEngine.Debug.Log(output); // 유니티 콘솔에 출력
-#elif UNITY_EDITOR_OSX
             Excel2Json.Program.Main(
                 "-d", "Android/ExcelData",
                 "-o", "Assets/AssetResources/Master",
                 "-cs", "Assets/Scripts/MasterData");
-#endif
         }
 
         [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor", false, 0)]

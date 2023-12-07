@@ -7,22 +7,18 @@ public class Me_Serifu_Data : System.IDisposable
 {
 	///	<summary>
 	///	대사 인덱스
-	///	
 	///	</summary>
 	public int serifu_id {get; set;}
 	///	<summary>
 	///	캐릭터 고유 아이디
-	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	말풍선 텍스트
-	///	
 	///	</summary>
 	public string text_kr {get; set;}
 	///	<summary>
 	///	오디오 클립 키
-	///	
 	///	</summary>
 	public string audio_clip_key {get; set;}
 

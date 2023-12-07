@@ -17,7 +17,7 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    public void FindTargetInRangeAtFirst(HeroBase_V2 self, TARGET_TYPE target_type, float distance, ref List<HeroBase_V2> targets)
+    public void FindTargetInRangeAtApproach(HeroBase_V2 self, TARGET_TYPE target_type, float distance, ref List<HeroBase_V2> targets)
     {
         int count = 1;  //  무조건 1명만 찾는다
 

@@ -7,12 +7,10 @@ public class Npc_Skill_Data : System.IDisposable
 {
 	///	<summary>
 	///	스킬 인덱스
-	///	
 	///	</summary>
 	public int npc_skill_id {get; set;}
 	///	<summary>
 	///	스킬 그룹 ID
-	///	
 	///	</summary>
 	public int npc_skill_group_id {get; set;}
 	///	<summary>
@@ -23,7 +21,6 @@ public class Npc_Skill_Data : System.IDisposable
 	public TARGET_TYPE target_type {get; set;}
 	///	<summary>
 	///	타겟룰
-	///	
 	///	</summary>
 	public TARGET_RULE_TYPE target_rule_type {get; set;}
 	///	<summary>
@@ -34,17 +31,14 @@ public class Npc_Skill_Data : System.IDisposable
 	public int target_order {get; set;}
 	///	<summary>
 	///	타겟수
-	///	
 	///	</summary>
 	public int target_count {get; set;}
 	///	<summary>
 	///	발사체 타입
-	///	
 	///	</summary>
 	public PROJECTILE_TYPE projectile_type {get; set;}
 	///	<summary>
 	///	발사체 속도
-	///	
 	///	</summary>
 	public double projectile_speed {get; set;}
 	///	<summary>
@@ -56,27 +50,22 @@ public class Npc_Skill_Data : System.IDisposable
 	public int[] effect_weight {get; set;}
 	///	<summary>
 	///	일회성 효과
-	///	
 	///	</summary>
 	public int[] onetime_effect_ids {get; set;}
 	///	<summary>
 	///	지속성 효과
-	///	
 	///	</summary>
 	public int[] duration_effect_ids {get; set;}
 	///	<summary>
 	///	이벤트 이름
-	///	
 	///	</summary>
 	public string event_name {get; set;}
 	///	<summary>
 	///	이펙트 프리팹
-	///	
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>
 	///	이펙트 지속시간
-	///	
 	///	</summary>
 	public double effect_duration {get; set;}
 

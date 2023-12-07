@@ -7,32 +7,26 @@ public class Npc_Data : System.IDisposable
 {
 	///	<summary>
 	///	npc id
-	///	
 	///	</summary>
 	public int npc_data_id {get; set;}
 	///	<summary>
 	///	이름
-	///	
 	///	</summary>
 	public string name_kr {get; set;}
 	///	<summary>
 	///	종족
-	///	
 	///	</summary>
 	public TRIBE_TYPE tribe_type {get; set;}
 	///	<summary>
 	///	npc 타입
-	///	
 	///	</summary>
 	public NPC_TYPE npc_type {get; set;}
 	///	<summary>
 	///	프리팹
-	///	
 	///	</summary>
 	public string prefab_path {get; set;}
 	///	<summary>
 	///	전투 정보 인덱스
-	///	
 	///	</summary>
 	public int npc_battle_id {get; set;}
 

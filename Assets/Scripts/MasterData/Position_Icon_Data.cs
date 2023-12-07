@@ -7,17 +7,14 @@ public class Position_Icon_Data : System.IDisposable
 {
 	///	<summary>
 	///	포지션 타입
-	///	
 	///	</summary>
 	public POSITION_TYPE position_type {get; set;}
 	///	<summary>
 	///	이름
-	///	
 	///	</summary>
 	public string name_kr {get; set;}
 	///	<summary>
 	///	아이콘
-	///	
 	///	</summary>
 	public string icon {get; set;}
 

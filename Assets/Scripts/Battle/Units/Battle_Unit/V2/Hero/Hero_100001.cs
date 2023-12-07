@@ -47,7 +47,7 @@ public class Hero_100001 : HeroBase_V2
         bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(Time.deltaTime);
         if (is_delay_finish)
         {
-            FindFirstTargets();
+            FindApproachTargets();
             if (Normal_Attack_Target.Count == 0)
             {
                 ChangeState(UNIT_STATES.MOVE);
@@ -95,7 +95,7 @@ public class Hero_100001 : HeroBase_V2
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
                 GetSkillManager().SetNextSkillPattern();
-                FindFirstTargets();
+                FindApproachTargets();
                 if (Normal_Attack_Target.Count == 0)
                 {
                     ChangeState(UNIT_STATES.MOVE);

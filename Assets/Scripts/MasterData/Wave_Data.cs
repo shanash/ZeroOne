@@ -7,28 +7,23 @@ public class Wave_Data : System.IDisposable
 {
 	///	<summary>
 	///	웨이브 그룹 ID
-	///	
 	///	</summary>
 	public int wave_group_id {get; set;}
 	///	<summary>
 	///	웨이브 순서
-	///	
 	///	</summary>
 	public int wave_sequence {get; set;}
 	///	<summary>
 	///	웨이브에 출현하는
 	///	적 최대 마리 수 
-	///	
 	///	</summary>
 	public int enemy_appearance_count {get; set;}
 	///	<summary>
 	///	출현 적 정보
-	///	
 	///	</summary>
 	public int[] enemy_appearance_info {get; set;}
 	///	<summary>
 	///	웨이브 제한 시간
-	///	
 	///	</summary>
 	public int wave_time {get; set;}
 

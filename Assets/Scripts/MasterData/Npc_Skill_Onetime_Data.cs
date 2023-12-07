@@ -7,47 +7,38 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 {
 	///	<summary>
 	///	일회성 스킬 효과 인덱스
-	///	
 	///	</summary>
 	public int npc_skill_onetime_id {get; set;}
 	///	<summary>
 	///	일회성 효과 타입
-	///	
 	///	</summary>
 	public ONETIME_EFFECT_TYPE onetime_effect_type {get; set;}
 	///	<summary>
 	///	발사체 타입
-	///	
 	///	</summary>
 	public PROJECTILE_TYPE projectile_type {get; set;}
 	///	<summary>
 	///	발사체 속도
-	///	
 	///	</summary>
 	public double projectile_speed {get; set;}
 	///	<summary>
 	///	스탯 멀티플 타입
-	///	
 	///	</summary>
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
 	///	<summary>
 	///	절대값
-	///	
 	///	</summary>
 	public int value {get; set;}
 	///	<summary>
 	///	배율
-	///	
 	///	</summary>
 	public double multiple {get; set;}
 	///	<summary>
 	///	이펙트 프리팹
-	///	
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>
 	///	이펙트 지속시간
-	///	
 	///	</summary>
 	public double effect_duration {get; set;}
 

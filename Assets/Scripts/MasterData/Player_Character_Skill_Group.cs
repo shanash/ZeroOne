@@ -7,33 +7,27 @@ public class Player_Character_Skill_Group : System.IDisposable
 {
 	///	<summary>
 	///	스킬 그룹 인덱스
-	///	
 	///	</summary>
 	public int pc_skill_group_id {get; set;}
 	///	<summary>
 	///	스킬 이름
-	///	
 	///	</summary>
 	public string name_kr {get; set;}
 	///	<summary>
 	///	다음 스킬 사용 
 	///	가능 쿨타임
-	///	
 	///	</summary>
 	public double skill_use_delay {get; set;}
 	///	<summary>
 	///	스킬 설명
-	///	
 	///	</summary>
 	public string script {get; set;}
 	///	<summary>
 	///	스킬 아이콘
-	///	
 	///	</summary>
 	public string icon {get; set;}
 	///	<summary>
 	///	액션
-	///	
 	///	</summary>
 	public string action_name {get; set;}
 

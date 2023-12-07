@@ -7,37 +7,30 @@ public class Player_Character_Data : System.IDisposable
 {
 	///	<summary>
 	///	캐릭터 고유 인덱스
-	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	캐릭터 명칭
-	///	
 	///	</summary>
 	public string name_kr {get; set;}
 	///	<summary>
 	///	캐릭터가 속한 종족
-	///	
 	///	</summary>
 	public TRIBE_TYPE tribe_type {get; set;}
 	///	<summary>
 	///	전투 정보 인덱스
-	///	
 	///	</summary>
 	public int battle_info_id {get; set;}
 	///	<summary>
 	///	프리팹
-	///	
 	///	</summary>
 	public string prefab_path {get; set;}
 	///	<summary>
 	///	캐릭터 아이콘
-	///	
 	///	</summary>
 	public string icon_path {get; set;}
 	///	<summary>
 	///	캐릭터 설명
-	///	
 	///	</summary>
 	public string script {get; set;}
 

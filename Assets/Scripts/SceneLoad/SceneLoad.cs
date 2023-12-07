@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 /// <summary>
 /// Addressable 예시를 위해 만든 에셋 다운로드 스크립트
@@ -66,8 +67,21 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
         {
             await Task.Yield();
         }
+        string first_scene = "home";
+#if UNITY_EDITOR
+        List<string> scene_list = new List<string>();
+        scene_list.Add("load");
+        scene_list.Add("home");
+        scene_list.Add("battlev2");
+        scene_list.Add("memorial");
 
-        var op = SceneManager.LoadSceneAsync("home", LoadSceneMode.Single);
+        if (!scene_list.Contains(Start_Scene_Name))
+        {
+            first_scene = Start_Scene_Name;
+        }
+#endif
+
+        var op = SceneManager.LoadSceneAsync(first_scene, LoadSceneMode.Single);
         op.allowSceneActivation = false;
         float timer = 0.0f;
         while (!op.isDone)

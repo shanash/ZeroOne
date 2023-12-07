@@ -7,22 +7,18 @@ public class Npc_Skill_Group : System.IDisposable
 {
 	///	<summary>
 	///	npc 스킬 그룹 인덱스
-	///	
 	///	</summary>
 	public int npc_skill_group_id {get; set;}
 	///	<summary>
 	///	스킬 이름
-	///	
 	///	</summary>
 	public string name_kr {get; set;}
 	///	<summary>
 	///	쿨타임
-	///	
 	///	</summary>
 	public double skill_use_delay {get; set;}
 	///	<summary>
 	///	액션
-	///	
 	///	</summary>
 	public string action_name {get; set;}
 

@@ -6,56 +6,55 @@ using UnityEngine;
 
 public class MonsterBase_V2 : HeroBase_V2
 {
-    protected BattleNpcData Npc;
-    
-
-    public void SetBattleNpcData(BattleNpcData npc)
+    public override void SetBattleUnitDataID(params int[] unit_ids)
     {
-        this.Npc = npc;
+        if (unit_ids.Length != 1)
+        {
+            return;
+        }
+        int npc_id = unit_ids[0];
+        Unit_Data = new BattleNpcData();
+        Unit_Data.SetUnitID(npc_id);
 
         Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetNpcSkillGroups(Npc.GetSkillPattern());
+        Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
     }
 
-    
-    public BattleNpcData GetNpcData()
+
+    public BattleUnitData GetNpcData()
     {
-        return Npc;
+        return Unit_Data;
     }
 
     protected override float GetDistance()
     {
-        return Npc.GetDistance();
+        return Unit_Data.GetDistance();
     }
 
     protected override float GetApproachDistance()
     {
-        return Npc.GetApproachDistance();
+        return Unit_Data.GetApproachDistance();
     }
 
 
     #region Cal Ability Point
     protected override void CalcMaxLife()
     {
-        var bdata = Npc.GetNpcBattleData();
-        Max_Life = bdata.hp;
+        Max_Life = Unit_Data.GetLifePoint();
         Life = Max_Life;
     }
 
     protected override void CalcAttackPoint()
     {
-        var bdata = Npc.GetNpcBattleData();
-        Attack = bdata.attack;
+        Attack = Unit_Data.GetAttackPoint();
     }
     protected override void CalcDefensePoint()
     {
-        var bdata = Npc.GetNpcBattleData();
-        Defense = bdata.defend;
+        Defense = Unit_Data.GetDefensePoint();
     }
     protected override void CalcMoveSpeed()
     {
-        var bdata = Npc.GetNpcBattleData();
-        Move_Speed = bdata.move_speed;
+        Move_Speed = Unit_Data.GetMoveSpeed();
     }
 
     #endregion

@@ -103,8 +103,6 @@ public partial class TeamManager_V2 : IDisposable
         
         int cnt = hero_list.Count;
 
-        
-
         float offset_z = 0f;
         float offset_x = -size;
         float interval = 12f;
@@ -121,7 +119,8 @@ public partial class TeamManager_V2 : IDisposable
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
             hero.SetTeamManager(this);
-            hero.SetUserHeroData(user_data);
+            //hero.SetUserHeroData(user_data);
+            hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
             hero.SetDeckOrder(i);
             hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
@@ -166,18 +165,18 @@ public partial class TeamManager_V2 : IDisposable
 
         var wdata = (Wave_Data)Stage.GetWaveData();
 
-        List<BattleNpcData> battle_npc_list = new List<BattleNpcData>();
+        List<BattleUnitData> battle_npc_list = new List<BattleUnitData>();
 
         int len = wdata.enemy_appearance_info.Length;
         //  battle npc data
         for (int i = 0; i < len; i++)
         {
             var npc = new BattleNpcData();
-            npc.SetNpcDataID(wdata.enemy_appearance_info[i]);
+            npc.SetUnitID(wdata.enemy_appearance_info[i]);
             battle_npc_list.Add(npc);
         }
         //  사거리가 짧은 순으로 정렬
-        battle_npc_list.Sort(delegate(BattleNpcData a, BattleNpcData b) 
+        battle_npc_list.Sort(delegate(BattleUnitData a, BattleUnitData b) 
         {
             if (a.GetDistance() > b.GetDistance())
             {
@@ -192,16 +191,17 @@ public partial class TeamManager_V2 : IDisposable
             var npc = battle_npc_list[i];
             position_offset = (int)npc.GetPositionType() * interval;
 
-            var obj = pool.GetGameObject(npc.GetNpcData().prefab_path, Unit_Container);
+            var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 
-            monster.SetBattleNpcData(npc);
+            monster.SetBattleUnitDataID(npc.GetUnitID());
+            
             monster.SetFlipX(true);
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
-            List<BattleNpcData> same_positions = battle_npc_list.FindAll(x => x.GetPositionType() == npc.GetPositionType());
+            List<BattleUnitData> same_positions = battle_npc_list.FindAll(x => x.GetPositionType() == npc.GetPositionType());
             same_positions = same_positions.OrderBy(x => x.GetDistance()).ToList();
             Debug.Assert(same_positions.Count > 0);
 

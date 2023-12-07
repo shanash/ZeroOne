@@ -7,22 +7,18 @@ public class Me_Chat_Motion_Data : System.IDisposable
 {
 	///	<summary>
 	///	챗모션 id
-	///	
 	///	</summary>
 	public int chat_motion_id {get; set;}
 	///	<summary>
 	///	캐릭터 고유 아이디
-	///	
 	///	</summary>
 	public int player_character_id {get; set;}
 	///	<summary>
 	///	애니메이션 이름
-	///	
 	///	</summary>
 	public string[] animation_name {get; set;}
 	///	<summary>
 	///	대사 id
-	///	
 	///	</summary>
 	public int[] serifu_ids {get; set;}
 

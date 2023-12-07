@@ -1,48 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class BattleNpcData : BattleUnitData
+
+public class BattlePcData : BattleUnitData
 {
-    Npc_Data Npc;
+    Player_Character_Data Data;
+    Player_Character_Battle_Data Battle_Data;
 
-    Npc_Battle_Data Battle_Data;
+    UserHeroData User_Data;
 
+    public void SetPcDataID(int pc_id, int pc_num)
+    {
+        var m = MasterDataManager.Instance;
+        Data = m.Get_PlayerCharacterData(pc_id);
+        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
+
+        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
+    }
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {
-        if (unit_ids.Length != 1)
+        if (unit_ids.Length < 2)
         {
             return null;
         }
-        int npc_id = unit_ids[0];
-        var m = MasterDataManager.Instance;
-        Npc = m.Get_NpcData(npc_id);
+        int pc_id = unit_ids[0];
+        int pc_num = unit_ids[1];
 
-        Battle_Data = m.Get_NpcBattleData(Npc.npc_battle_id);
+        var m = MasterDataManager.Instance;
+        Data = m.Get_PlayerCharacterData(pc_id);
+        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
+
+        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
 
         return this;
     }
 
-    public override object GetUnitData()
+    public override int GetUnitID()
     {
-        return Npc;
+        if (Data != null)
+        {
+            return Data.player_character_id;
+        }
+        return 0;
+    }
+    public override int GetUnitNum()
+    {
+        if (User_Data != null)
+            return User_Data.Player_Character_Num;
+        return 0;
     }
 
+    public override object GetUnitData()
+    {
+        return Data;
+    }
     public override object GetBattleData()
     {
         return Battle_Data;
     }
 
-    public override int GetUnitID()
+    public override object GetUserUnitData()
     {
-        if (Npc != null)
-        {
-            return Npc.npc_data_id;
-        }
-        return 0;
+        return User_Data;
     }
-
 
     public override float GetMoveSpeed()
     {
@@ -52,6 +71,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+
     public override double GetAttackPoint()
     {
         if (Battle_Data != null)
@@ -107,15 +127,17 @@ public class BattleNpcData : BattleUnitData
     public override POSITION_TYPE GetPositionType()
     {
         if (Battle_Data != null)
+        {
             return Battle_Data.position_type;
+        }
         return POSITION_TYPE.NONE;
     }
 
     public override string GetPrefabPath()
     {
-        if (Npc != null)
+        if (Data != null)
         {
-            return Npc.prefab_path;
+            return Data.prefab_path;
         }
         return null;
     }

@@ -38,7 +38,6 @@ public class UnitRenderTexture : SkeletonRenderTexture
         quadMeshRenderer.SetPropertyBlock(Property_Block);
 
 
-        SkeletonRenderSeparator seperator;
     }
 
 

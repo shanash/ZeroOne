@@ -167,6 +167,8 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected UserHeroData User_Hero_Data;
 
+    protected BattleUnitData Unit_Data;
+
     /// <summary>
     /// 스킬 매니져
     /// </summary>
@@ -196,6 +198,27 @@ public class HeroBase_V2 : UnitBase_V2
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(bdata.skill_pattern);
     }
+
+    public virtual void SetBattleUnitDataID(params int[] unit_ids)
+    {
+        if (unit_ids.Length != 2)
+        {
+            Debug.Assert(false);
+        }
+        int pc_id = unit_ids[0];
+        int pc_num = unit_ids[1];
+
+        Unit_Data = new BattlePcData();
+        Unit_Data.SetUnitID(pc_id, pc_num);
+
+        User_Hero_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
+
+        Skill_Mng = new BattleSkillManager();
+        Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+    }
+
+    
+
     public void SetDeckOrder(int order)
     {
         Deck_Order = order;
@@ -597,11 +620,18 @@ public class HeroBase_V2 : UnitBase_V2
                 break;
         }
     }
-
+    /// <summary>
+    /// 접근 사거리 정보 반환
+    /// </summary>
+    /// <returns></returns>
     protected virtual float GetApproachDistance()
     {
         return User_Hero_Data.GetApproachDistance();
     }
+    /// <summary>
+    /// 공격 사거리 반환
+    /// </summary>
+    /// <returns></returns>
     protected virtual float GetDistance()
     {
         return User_Hero_Data.GetDistance();
@@ -611,11 +641,11 @@ public class HeroBase_V2 : UnitBase_V2
     /// 가장 가까운 적을 찾는다.
     /// 공격하기 위함이 아닌, 단지 사거리를 유지하기 위해서
     /// </summary>
-    protected virtual void FindFirstTargets() 
+    protected virtual void FindApproachTargets() 
     {
         float distance = GetApproachDistance();
         var first_skill = GetSkillManager().GetCurrentSkillGroup().GetFirstSkillData();
-        Team_Mng.FindTargetInRangeAtFirst(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
     }
     protected virtual void FindTargets(BattleSkillData skill) 
     {
@@ -1470,7 +1500,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveLeftTeam()
     {
-        FindFirstTargets();
+        FindApproachTargets();
         if (Normal_Attack_Target.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);
@@ -1493,7 +1523,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveRightTeam()
     {
-        FindFirstTargets();
+        FindApproachTargets();
         if (Normal_Attack_Target.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);
