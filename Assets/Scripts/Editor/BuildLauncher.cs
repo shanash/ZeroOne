@@ -22,6 +22,7 @@ namespace FluffyDuck.EditorUtil
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
         static readonly string IS_PLAYER_BUILD_KEY = "IsPlayerBuild";
+        static readonly string IS_CLEAN_BUILD_KEY = "IsCleanBuild";
 
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
         static readonly string DEFAULT_GROUP_NAME = "Default";
@@ -60,38 +61,26 @@ namespace FluffyDuck.EditorUtil
 
         static bool IsRemotePath
         {
-            get
-            {
-                return EditorPrefs.GetBool(IS_REMOTE_PATH_KEY, false);
-            }
-            set
-            {
-                EditorPrefs.SetBool(IS_REMOTE_PATH_KEY, value);
-            }
+            get => EditorPrefs.GetBool(IS_REMOTE_PATH_KEY, false);
+            set => EditorPrefs.SetBool(IS_REMOTE_PATH_KEY, value);
         }
 
         static bool IsAddressablesBuild
         {
-            get
-            {
-                return EditorPrefs.GetBool(IS_ADDRESSABLES_BUILD_KEY, true);
-            }
-            set
-            {
-                EditorPrefs.SetBool(IS_ADDRESSABLES_BUILD_KEY, value);
-            }
+            get => EditorPrefs.GetBool(IS_ADDRESSABLES_BUILD_KEY, true);
+            set => EditorPrefs.SetBool(IS_ADDRESSABLES_BUILD_KEY, value);
         }
 
         static bool IsPlayerBuild
         {
-            get
-            {
-                return EditorPrefs.GetBool(IS_PLAYER_BUILD_KEY, false);
-            }
-            set
-            {
-                EditorPrefs.SetBool(IS_PLAYER_BUILD_KEY, value);
-            }
+            get => EditorPrefs.GetBool(IS_PLAYER_BUILD_KEY, false);
+            set => EditorPrefs.SetBool(IS_PLAYER_BUILD_KEY, value);
+        }
+
+        static bool IsCleanBuild
+        {
+            get => EditorPrefs.GetBool(IS_CLEAN_BUILD_KEY, false);
+            set => EditorPrefs.SetBool(IS_CLEAN_BUILD_KEY, value);
         }
 
         int Select_Asset_Location_Index
@@ -173,6 +162,7 @@ namespace FluffyDuck.EditorUtil
             GUILayout.Label("Addressables Build Options", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
             Select_Asset_Location_Index = EditorGUILayout.Popup("Select Asset Location", Select_Asset_Location_Index, Dropdown_Options);
+            IsCleanBuild = EditorGUILayout.Toggle("Clean Asset Build", IsCleanBuild);
 
             GUILayout.Space(10);
 
@@ -338,12 +328,45 @@ namespace FluffyDuck.EditorUtil
             }
         }
 
+        static void RemoveMissingFiles()
+        {
+            List<AddressableAssetEntry> entriesToRemove = new List<AddressableAssetEntry>();
+
+            foreach (AddressableAssetGroup group in s_Settings.groups)
+            {
+                foreach (AddressableAssetEntry entry in group.entries)
+                {
+                    string assetPath = AssetDatabase.GUIDToAssetPath(entry.guid);
+                    if (string.IsNullOrEmpty(assetPath) || !File.Exists(assetPath))
+                    {
+                        entriesToRemove.Add(entry);
+                    }
+                }
+            }
+
+            foreach (AddressableAssetEntry entry in entriesToRemove)
+            {
+                s_Settings.RemoveAssetEntry(entry.guid, false);
+                Debug.Log("Removed missing file from Addressables: " + entry.guid);
+            }
+
+            EditorUtility.SetDirty(s_Settings);
+            AssetDatabase.SaveAssets();
+        }
+
         /// <summary>
         /// 어드레서블로 에셋번들 파일들 빌드
         /// </summary>
         /// <returns>성공여부</returns>
         static bool BuildAddressables()
         {
+            if (IsCleanBuild)
+            {
+                DeleteAddressableBuildFolder();
+                DeleteAddressableBuildInfo();
+                DeleteAddressableCache();
+            }
+
             RefreshRemoteBuildAndLoadPath();
 
             if (!ValidateSemVerBundleVersion())
@@ -352,6 +375,13 @@ namespace FluffyDuck.EditorUtil
             }
             try
             {
+                RemoveMissingFiles();
+
+                foreach (var group in s_Settings.groups)
+                {
+                    CreateGroupDummyText(group);
+                }
+
                 HashStorage.Reload();
                 
                 var groups = CheckForChangedAssets();
@@ -650,11 +680,32 @@ namespace FluffyDuck.EditorUtil
 
             AddressableAssetEntry entry = s_Settings.CreateOrMoveEntry(guid, default_group);
             entry.address = ADDRESSABLE_VERSION_FILE_PATH;
-            List<AddressableAssetEntry> entries = new List<AddressableAssetEntry>();
-            entries.Add(entry);
+            List<AddressableAssetEntry> entries = new List<AddressableAssetEntry>
+            {
+                entry
+            };
 
             s_Settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entries, true);
             AssetDatabase.SaveAssets();
+
+            /*
+                         Debug.Assert(!string.IsNullOrEmpty(guid), $"{ADDRESSABLE_VERSION_FILE_PATH} AssetDatabase.Refresh()를 했는데 왜 없을까?");
+
+            var connected_entry = s_Settings.FindAssetEntry(guid);
+
+            if (s_Settings.FindAssetEntry(guid) != null)
+            {
+                var connected_entry = s_Settings.FindAssetEntry(guid);
+                
+                if (connected_entry != null)
+                {
+                    return;
+                }
+                else
+                {
+                    AddressableAssetEntry entra = s_Settings.CreateOrMoveEntry(guid, default_group);
+                }
+            }*/
         }
 
         /// <summary>
