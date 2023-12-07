@@ -71,12 +71,61 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     }
 
     #region Input System Methods
+    public void OnListenTap(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Debug.Log($"OnListenTap : {context.phase}");
+
+        InputDevice device = InputSystem.GetDevice(context.control.device.name);
+        switch (device)
+        {
+            case Mouse mouse:
+                Debug.Log($"{context.phase} : mouse.position.value : {mouse.position.value}");
+                break;
+            case Touchscreen touchscreen:
+                for (int i = 0; i < 2; i++)
+                {
+                    Debug.Log($"touchscreen.touches[{i}] : {touchscreen.touches[i].position.value}");
+                }
+                break;
+        }
+
+        ICursorInteractable[] components;
+        int cnt;
+        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        {
+            List<ICursorInteractable> clicked_components = new List<ICursorInteractable>();
+
+            components = GetRayCastHittedCursorInteractable();
+            // OnInputUp 처리
+            cnt = components.Length;
+            for (int i = 0; i < cnt; ++i)
+            {
+                if (!_Focus_Components.Contains(components[i]))
+                {
+                    continue;
+                }
+                clicked_components.Add(components[i]);
+            }
+
+            cnt = clicked_components.Count;
+            if (cnt == 0)
+            {
+                OnTap?.Invoke(null);
+            }
+
+            for (int i = 0; i < cnt; ++i)
+            {
+                OnTap?.Invoke(clicked_components[i]);
+            }
+        }
+    }
+
     /// <summary>
     /// 일반적인 커서 움직임으로 호출
     /// 마우스가 움직인다던지 터치패드 위치라던지
     /// </summary>
     /// <param name="context"></param>
-    public void OnMoveCursor(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    public void OnMove(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         Vector2 pos;
         InputDevice device = InputSystem.GetDevice(context.control.device.name);
@@ -102,7 +151,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     /// 유니티 Input System 버그가 있어서 별도로 구현
     /// </summary>
     /// <param name="context"></param>
-    public void OnMoveCursorByKeyPress(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    public void OnMoveByKeyPress(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         _queue.Enqueue(new InputData(context.control.device.name, context.phase, context.ReadValue<Vector2>()));
         if (_CoMoveCursorByKeyPress == null)
@@ -128,18 +177,34 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     /// 터치 및 결정 버튼 눌렀을때 호출됩니다
     /// </summary>
     /// <param name="context"></param>
-    public void OnInput(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    public void OnPress(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (!Enable)
         {
             return;
         }
 
+        InputDevice device = InputSystem.GetDevice(context.control.device.name);
+        switch (device)
+        {
+            case Mouse mouse:
+                Debug.LogWarning($"{context.phase} : mouse.position.value : {mouse.position.value}");
+                break;
+            case Touchscreen touchscreen:
+                for (int i = 0; i < 2; i++)
+                {
+                    Debug.LogWarning($"{context.phase} : touchscreen.touches[{i}] : {touchscreen.touches[i].position.value}");
+                }
+                break;
+        }
+
+
         ICursorInteractable[] components;
         int cnt;
-        switch (context.phase)
+        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
         {
-            case UnityEngine.InputSystem.InputActionPhase.Started:
+            if (context.ReadValueAsButton())
+            {
                 _Cursor.Show();
 
                 //OnInputDown 처리
@@ -154,11 +219,10 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 
                 // OnInputDown 처리
                 OnInputDown?.Invoke(_Cursor.Position, _Focus_Components);
-                break;
-            case UnityEngine.InputSystem.InputActionPhase.Performed:
                 _Is_Pressed = context.ReadValueAsButton();
-                break;
-            case UnityEngine.InputSystem.InputActionPhase.Canceled:
+            }
+            else
+            {
                 _Is_Pressed = context.ReadValueAsButton();
 
                 // OnDrag 처리
@@ -168,46 +232,23 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                     _Drag_Start_Position = Vector2.zero;
                 }
 
-                List<ICursorInteractable> clicked_components = new List<ICursorInteractable>();
-
                 // OnInputUp
                 components = GetRayCastHittedCursorInteractable();
                 OnInputUp?.Invoke(_Cursor.Position, new ReadOnlyCollection<ICursorInteractable>(components));
-                
+
                 // OnInputUp 처리
                 cnt = components.Length;
                 for (int i = 0; i < cnt; ++i)
                 {
                     ICursorInteractable iCursor = components[i];
                     iCursor?.OnInputUp(_Cursor.Position);
-                    if (_Is_Dragged || !_Focus_Components.Contains(components[i]))
-                    {
-                        continue;
-                    }
-                    clicked_components.Add(components[i]);
-                }
-
-                // OnTap 처리
-                if (!_Is_Dragged)
-                {
-                    cnt = clicked_components.Count;
-                    if (cnt == 0)
-                    {
-                        OnTap?.Invoke(null);
-                    }
-
-                    for (int i = 0; i < cnt; ++i)
-                    {
-                        OnTap?.Invoke(clicked_components[i]);
-                    }
                 }
 
                 _Is_Dragged = false;
 
                 _Focus_Components = null;
                 _Cursor.Hide();
-
-                break;
+            }
         }
     }
     #endregion

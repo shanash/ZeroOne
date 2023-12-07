@@ -1,5 +1,5 @@
 {
-    "name": "CursorInputActions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Input",
@@ -15,15 +15,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Touch",
-                    "type": "Button",
-                    "id": "c0a2f2a5-012a-42cd-aa3a-d5bdfd3f72ad",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "MoveByKeyPress",
                     "type": "Value",
                     "id": "67570ecd-c9de-449b-a169-05996cb61fd1",
@@ -31,6 +22,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "9bf28c12-faeb-4868-89a9-68f3e5a68933",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Press",
+                    "type": "Button",
+                    "id": "c0a2f2a5-012a-42cd-aa3a-d5bdfd3f72ad",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -58,12 +67,45 @@
                 },
                 {
                     "name": "",
-                    "id": "d9c06595-0c13-4c07-974b-30c9d4383906",
-                    "path": "<Mouse>/leftButton",
+                    "id": "8a4d9f06-c633-4e30-8575-7b69759a3aa4",
+                    "path": "<Touchscreen>/touch1/tap",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b672a8ca-2232-4daf-9e85-3c042b44d715",
+                    "path": "<Touchscreen>/touch2/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "16c05852-58e8-43f0-be4d-b81160548e20",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d9c06595-0c13-4c07-974b-30c9d4383906",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -71,10 +113,10 @@
                     "name": "",
                     "id": "7f9175cf-dc5a-4cc5-99d6-7e18e4def182",
                     "path": "<Keyboard>/enter",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch",
+                    "action": "Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -82,10 +124,10 @@
                     "name": "",
                     "id": "0bd18169-ca34-495c-a488-62ac540b83d6",
                     "path": "<Touchscreen>/Press",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "Touch",
+                    "action": "Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
