@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +32,6 @@ namespace FluffyDuck.EditorUtil
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
         static readonly string DEFAULT_GROUP_NAME = "Default";
 
-
         static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
         //static readonly string ANDROID_SDK_EDITOR_PATH = "PlaybackEngines/AndroidPlayer/SDK";
@@ -43,7 +41,6 @@ namespace FluffyDuck.EditorUtil
         //static List<DeviceInfo> Device_Infos = new List<DeviceInfo>();
         //static string _Adb_Path = string.Empty;
         static bool IsBuildAndRun { get; set; }
-
 
         static string BUILD_PATH
         {
@@ -85,7 +82,7 @@ namespace FluffyDuck.EditorUtil
             set => EditorPrefs.SetBool(IS_CLEAN_BUILD_KEY, value);
         }
 
-        int Select_Asset_Location_Index
+        static int Select_Asset_Location_Index
         {
             set
             {
@@ -96,6 +93,24 @@ namespace FluffyDuck.EditorUtil
             {
                 return IsRemotePath ? 1 : 0;
             }
+        }
+
+        static string Keystore_Password
+        {
+            get => PlayerSettings.Android.keystorePass;
+            set => PlayerSettings.Android.keystorePass = value;
+        }
+
+        static string Key_Alias_Name
+        {
+            get => PlayerSettings.Android.keyaliasName;
+            set => PlayerSettings.Android.keyaliasName = value;
+        }
+
+        static string Key_Alias_Password
+        {
+            get => PlayerSettings.Android.keyaliasPass;
+            set => PlayerSettings.Android.keyaliasPass = value;
         }
 
         /*
@@ -173,6 +188,11 @@ namespace FluffyDuck.EditorUtil
             IsAddressablesBuild = EditorGUILayout.Toggle("Asset", IsAddressablesBuild);
             IsPlayerBuild = EditorGUILayout.Toggle("Player", IsPlayerBuild);
             EditorGUILayout.EndVertical();
+
+            Keystore_Password = EditorGUILayout.PasswordField("Keystore Password", Keystore_Password);
+            Key_Alias_Name = EditorGUILayout.TextField("Key Alias Name", Key_Alias_Name);
+            Key_Alias_Password = EditorGUILayout.PasswordField("Key Alias Password", Key_Alias_Password);
+
             EditorGUILayout.EndVertical();
 
             GUILayout.FlexibleSpace(); // 버튼들을 아래로 밀어내기
@@ -236,6 +256,7 @@ namespace FluffyDuck.EditorUtil
             {
                 // 사용자가 최소한 하나의 체크박스를 선택하지 않았을 때의 경고
                 ErrorDialog("You must select at least one item at Asset & Player Build Options");
+                return;
             }
 
             IsBuildAndRun = is_build_and_run;
@@ -262,63 +283,46 @@ namespace FluffyDuck.EditorUtil
 
             if (IsPlayerBuild)
             {
+                if (string.IsNullOrEmpty(Keystore_Password) || string.IsNullOrEmpty(Key_Alias_Name) || string.IsNullOrEmpty(Key_Alias_Password))
+                {
+                    // 사용자가 최소한 하나의 체크박스를 선택하지 않았을 때의 경고
+                    ErrorDialog($"다음 값이 비어 있습니다.\n{(string.IsNullOrEmpty(Keystore_Password) ? "\nKeystore Password" : "")}{(string.IsNullOrEmpty(Key_Alias_Name) ? "\nKey Alias Name" : "")}{(string.IsNullOrEmpty(Key_Alias_Password) ? "\nKey Alias Password" : "")}");
+                    return;
+                }
+
                 if (!addressable_build_succeeded)
                 {
                     ErrorDialog("어드레서블 빌드가 실패해서 플레이어를 빌드할 수 없습니다");
                     return;
                 }
 
-                // 현재 에디터의 씬 설정을 가져옵니다.
-                string[] scenes = EditorBuildSettings.scenes
-                    .Where(scene => scene.enabled)
-                    .Select(scene => scene.path)
-                    .ToArray();
-
-                // 현재 선택된 빌드 대상과 옵션을 가져옵니다.
-                BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
-                BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-                BuildOptions buildOptions = (EditorUserBuildSettings.development ? BuildOptions.Development|BuildOptions.AllowDebugging|BuildOptions.WaitForPlayerConnection : BuildOptions.None)|(IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None);
-
-                string _keystore_pw = (string.IsNullOrEmpty(keystore_pw)) ? PlayerSettings.Android.keystorePass : keystore_pw;
-                string _key_alias_name = (string.IsNullOrEmpty(key_alias_name)) ? PlayerSettings.Android.keyaliasName : key_alias_name;
-                string _key_alias_pw = (string.IsNullOrEmpty(key_alias_pw)) ? PlayerSettings.Android.keyaliasPass : key_alias_pw;
-
-                if (string.IsNullOrEmpty(_keystore_pw) || string.IsNullOrEmpty(_key_alias_name) || string.IsNullOrEmpty(_key_alias_pw))
-                {
-                    KeystoreInputWindow.ShowWindow(_keystore_pw, _key_alias_name, _key_alias_pw, BuildAddressablesAndPlayer);
-                    return;
-                }
-
-                PlayerSettings.Android.keystorePass = _keystore_pw;
-                PlayerSettings.Android.keyaliasName = _key_alias_name;
-                PlayerSettings.Android.keyaliasPass = _key_alias_pw;
-
                 if (!Directory.Exists(EditorUserBuildSettings.activeBuildTarget.ToString()))
                 {
                     Directory.CreateDirectory(EditorUserBuildSettings.activeBuildTarget.ToString());
                 }
 
-                string buildPath = BUILD_PATH;
-
-                Debug.Log($"Build Target: {EditorUserBuildSettings.activeBuildTarget}");
-                Debug.Log($"Build Target Group : {EditorUserBuildSettings.selectedBuildTargetGroup}");
-                Debug.Log($"Is Development Build : {EditorUserBuildSettings.development}");
-                Debug.Log($"Build App Bundle: {EditorUserBuildSettings.buildAppBundle}");
-
                 // BuildPlayerOptions 구성
-                BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
-                {
-                    scenes = scenes,
-                    locationPathName = BUILD_PATH, // 파일 이름과 확장자는 필요에 따라 변경
-                    targetGroup = buildTargetGroup,
-                    target = buildTarget,
-                    options = buildOptions
-                };
+                BuildPlayerOptions buildPlayerOptions = GetBuildPlayerOptions();
+                buildPlayerOptions.locationPathName = BUILD_PATH;
+                buildPlayerOptions.options |= IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None;
 
                 BuildPipeline.BuildPlayer(buildPlayerOptions);
 
-                Debug.Log("Build completed: " + buildPath);
+                Debug.Log("Build completed: " + BUILD_PATH);
             }
+        }
+
+        static BuildPlayerOptions GetBuildPlayerOptions(bool askForLocation = false, BuildPlayerOptions defaultOptions = new BuildPlayerOptions())
+        {
+            // Get static internal "GetBuildPlayerOptionsInternal" method
+            MethodInfo method = typeof(BuildPlayerWindow.DefaultBuildMethods).GetMethod(
+                "GetBuildPlayerOptionsInternal",
+                BindingFlags.NonPublic | BindingFlags.Static);
+
+            // invoke internal method
+            return (BuildPlayerOptions)method.Invoke(
+                null,
+                new object[] { askForLocation, defaultOptions });
         }
 
         public static void PrintStaticProperties(Type type)
@@ -535,7 +539,6 @@ namespace FluffyDuck.EditorUtil
                 Directory.Delete(item, true);
             }
 
-
             if (File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
             {
                 File.Delete(ADDRESSABLE_VERSION_FILE_PATH);
@@ -547,7 +550,6 @@ namespace FluffyDuck.EditorUtil
 
             AssetDatabase.Refresh();
             AssetDatabase.SaveAssets();
-
         }
 
         /// <summary>
