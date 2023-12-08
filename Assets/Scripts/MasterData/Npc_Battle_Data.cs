@@ -14,10 +14,6 @@ public class Npc_Battle_Data : System.IDisposable
 	///	</summary>
 	public double approach {get; set;}
 	///	<summary>
-	///	사거리
-	///	</summary>
-	public double distance {get; set;}
-	///	<summary>
 	///	배치 위치
 	///	</summary>
 	public POSITION_TYPE position_type {get; set;}
@@ -29,6 +25,10 @@ public class Npc_Battle_Data : System.IDisposable
 	///	패시브
 	///	</summary>
 	public int passive_skill_group_id {get; set;}
+	///	<summary>
+	///	레벨
+	///	</summary>
+	public int npc_level {get; set;}
 	///	<summary>
 	///	체력
 	///	</summary>
@@ -42,6 +42,14 @@ public class Npc_Battle_Data : System.IDisposable
 	///	</summary>
 	public double defend {get; set;}
 	///	<summary>
+	///	회피
+	///	</summary>
+	public double evasion {get; set;}
+	///	<summary>
+	///	명중
+	///	</summary>
+	public double hit {get; set;}
+	///	<summary>
 	///	전투 이동 속도
 	///	</summary>
 	public double move_speed {get; set;}
@@ -49,10 +57,6 @@ public class Npc_Battle_Data : System.IDisposable
 	///	전투 대사 인덱스
 	///	</summary>
 	public string attack_script {get; set;}
-	///	<summary>
-	///	아이콘
-	///	</summary>
-	public string icon {get; set;}
 
 	private bool disposed = false;
 
@@ -61,8 +65,8 @@ public class Npc_Battle_Data : System.IDisposable
 		npc_battle_id = 0;
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
+		npc_level = 0;
 		attack_script = string.Empty;
-		icon = string.Empty;
 	}
 
 	public void Dispose()
@@ -87,22 +91,26 @@ public class Npc_Battle_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
 		sb.AppendFormat("[approach] = <color=yellow>{0}</color>", approach).AppendLine();
-		sb.AppendFormat("[distance] = <color=yellow>{0}</color>", distance).AppendLine();
 		sb.AppendFormat("[position_type] = <color=yellow>{0}</color>", position_type).AppendLine();
 		sb.AppendLine("[skill_pattern]");
-		cnt = skill_pattern.Length;
-		for(int i = 0; i< cnt; i++)
+		if(skill_pattern != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", skill_pattern[i]).AppendLine();
+			cnt = skill_pattern.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", skill_pattern[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[passive_skill_group_id] = <color=yellow>{0}</color>", passive_skill_group_id).AppendLine();
+		sb.AppendFormat("[npc_level] = <color=yellow>{0}</color>", npc_level).AppendLine();
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
+		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
+		sb.AppendFormat("[hit] = <color=yellow>{0}</color>", hit).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();
-		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		return sb.ToString();
 	}
 }

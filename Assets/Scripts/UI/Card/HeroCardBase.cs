@@ -55,7 +55,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         });
 
         //  distance
-        Distance_Text.text = Battle_Data.distance.ToString();
+        Distance_Text.text = Battle_Data.approach.ToString();
 
     }
 

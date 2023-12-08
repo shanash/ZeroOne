@@ -51,11 +51,7 @@ public class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual float GetMoveSpeed() { return 0f; }
-    /// <summary>
-    /// 거리 - 사용하지 않을 예정
-    /// </summary>
-    /// <returns></returns>
-    public virtual float GetDistance() {  return 0f; }
+    
     /// <summary>
     /// 접근 거리
     /// </summary>

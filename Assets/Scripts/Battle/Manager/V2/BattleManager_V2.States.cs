@@ -119,64 +119,72 @@ public partial class BattleManager_V2 : MonoBehaviour
                     {
                         list.Add(pc_skill.effect_path);
                     }
-
-                    //  onetime skill iist
-                    for (int o = 0; o < pc_skill.onetime_effect_ids.Length; o++)
+                    if (pc_skill.onetime_effect_ids != null)
                     {
-                        int onetime_skill_id = pc_skill.onetime_effect_ids[o];
-                        if (onetime_skill_id == 0)
+                        //  onetime skill iist
+                        for (int o = 0; o < pc_skill.onetime_effect_ids.Length; o++)
                         {
-                            continue;
+                            int onetime_skill_id = pc_skill.onetime_effect_ids[o];
+                            if (onetime_skill_id == 0)
+                            {
+                                continue;
+                            }
+                            var onetime_data = m.Get_PlayerCharacterSkillOnetimeData(onetime_skill_id);
+                            Debug.Assert(onetime_data != null);
+                            if (!string.IsNullOrEmpty(onetime_data.effect_path) && !list.Contains(onetime_data.effect_path))
+                            {
+                                list.Add(onetime_data.effect_path);
+                            }
                         }
-                        var onetime_data = m.Get_PlayerCharacterSkillOnetimeData(onetime_skill_id);
-                        if (!string.IsNullOrEmpty(onetime_data.effect_path) && !list.Contains(onetime_data.effect_path))
-                        {
-                            list.Add(onetime_data.effect_path);
-                        }
-                        
                     }
+
 
                     //  duration skill list
-                    for (int d = 0; d < pc_skill.duration_effect_ids.Length; d++)
+                    if (pc_skill.duration_effect_ids != null)
                     {
-                        int duration_skill_id = pc_skill.duration_effect_ids[d];
-                        if (duration_skill_id == 0)
+                        for (int d = 0; d < pc_skill.duration_effect_ids.Length; d++)
                         {
-                            continue;
-                        }
-                        var duration_data = m.Get_PlayerCharacterSkillDurationData(duration_skill_id);
-                        if (!string.IsNullOrEmpty(duration_data.effect_path) && !list.Contains(duration_data.effect_path))
-                        {
-                            list.Add(duration_data.effect_path);
-                        }
-                        //  반복 효과용 일회성 스킬 이펙트
-                        int repeat_len = duration_data.repeat_pc_onetime_ids.Length;
-                        for (int r = 0; r < repeat_len; r++)
-                        {
-                            int repeat_id = duration_data.repeat_pc_onetime_ids[r];
-                            if (repeat_id == 0)
-                                continue;
-                            var repeat_onetime = m.Get_PlayerCharacterSkillOnetimeData(repeat_id);
-                            if (!string.IsNullOrEmpty(repeat_onetime.effect_path) && !list.Contains(repeat_onetime.effect_path))
+                            int duration_skill_id = pc_skill.duration_effect_ids[d];
+                            if (duration_skill_id == 0)
                             {
-                                list.Add(repeat_onetime.effect_path);
+                                continue;
                             }
-                        }
-
-                        //  종료 효과용 일회성 스킬 이펙트
-                        int finish_len = duration_data.finish_pc_onetime_ids.Length;
-                        for (int f = 0; f < finish_len; f++)
-                        {
-                            int finish_id = duration_data.finish_pc_onetime_ids[f];
-                            if (finish_id == 0)
-                                continue;
-                            var finish_onetime = m.Get_PlayerCharacterSkillOnetimeData(finish_id);
-                            if (!string.IsNullOrEmpty(finish_onetime.effect_path) && !list.Contains(finish_onetime.effect_path))
+                            var duration_data = m.Get_PlayerCharacterSkillDurationData(duration_skill_id);
+                            Debug.Assert(duration_data != null);
+                            if (!string.IsNullOrEmpty(duration_data.effect_path) && !list.Contains(duration_data.effect_path))
                             {
-                                list.Add(finish_onetime.effect_path);
+                                list.Add(duration_data.effect_path);
+                            }
+                            //  반복 효과용 일회성 스킬 이펙트
+                            int repeat_len = duration_data.repeat_pc_onetime_ids.Length;
+                            for (int r = 0; r < repeat_len; r++)
+                            {
+                                int repeat_id = duration_data.repeat_pc_onetime_ids[r];
+                                if (repeat_id == 0)
+                                    continue;
+                                var repeat_onetime = m.Get_PlayerCharacterSkillOnetimeData(repeat_id);
+                                if (!string.IsNullOrEmpty(repeat_onetime.effect_path) && !list.Contains(repeat_onetime.effect_path))
+                                {
+                                    list.Add(repeat_onetime.effect_path);
+                                }
+                            }
+
+                            //  종료 효과용 일회성 스킬 이펙트
+                            int finish_len = duration_data.finish_pc_onetime_ids.Length;
+                            for (int f = 0; f < finish_len; f++)
+                            {
+                                int finish_id = duration_data.finish_pc_onetime_ids[f];
+                                if (finish_id == 0)
+                                    continue;
+                                var finish_onetime = m.Get_PlayerCharacterSkillOnetimeData(finish_id);
+                                if (!string.IsNullOrEmpty(finish_onetime.effect_path) && !list.Contains(finish_onetime.effect_path))
+                                {
+                                    list.Add(finish_onetime.effect_path);
+                                }
                             }
                         }
                     }
+                    
 
                 }
             }

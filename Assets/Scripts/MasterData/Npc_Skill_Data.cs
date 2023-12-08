@@ -113,24 +113,33 @@ public class Npc_Skill_Data : System.IDisposable
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendLine("[effect_weight]");
-		cnt = effect_weight.Length;
-		for(int i = 0; i< cnt; i++)
+		if(effect_weight != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", effect_weight[i]).AppendLine();
+			cnt = effect_weight.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", effect_weight[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[onetime_effect_ids]");
-		cnt = onetime_effect_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(onetime_effect_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", onetime_effect_ids[i]).AppendLine();
+			cnt = onetime_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", onetime_effect_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[duration_effect_ids]");
-		cnt = duration_effect_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(duration_effect_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", duration_effect_ids[i]).AppendLine();
+			cnt = duration_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", duration_effect_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();

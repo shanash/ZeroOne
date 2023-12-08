@@ -22,7 +22,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         return 0;
     }
-
+    /// <summary>
+    /// 체력 쉴드를 포함한 최대 체력
+    /// 사용할지는 모르겠음
+    /// </summary>
+    /// <returns></returns>
     protected double GetMaxLifeWithShield()
     {
         double shield = GetLifeShieldPoint();
@@ -32,6 +36,16 @@ public partial class HeroBase_V2 : UnitBase_V2
             return shield + cur_life;
         }
         return Max_Life;
+    }
+
+    /// <summary>
+    /// 체력 비율 반환
+    /// </summary>
+    /// <returns>0~1사이값 반환</returns>
+    public float GetLifePercentage()
+    {
+        double per = Life / Max_Life;
+        return (float)per;
     }
 
     /// <summary>

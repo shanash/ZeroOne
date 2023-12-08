@@ -65,7 +65,6 @@ public class Player_Character_Skill_Data : System.IDisposable
 	///	스킬의 이펙트는 트리거 역할을 해줘야 함
 	///	이펙트 패스 정보가 없는 경우는 즉시 스킬을 시전/적용하는 방식이고
 	///	이펙트 패스 정보가 있는 경우 해당 이펙트를 이용하여 트리거를 발생하는 방식을 적용한다.
-	///	
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>
@@ -117,24 +116,33 @@ public class Player_Character_Skill_Data : System.IDisposable
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendLine("[effect_weight]");
-		cnt = effect_weight.Length;
-		for(int i = 0; i< cnt; i++)
+		if(effect_weight != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", effect_weight[i]).AppendLine();
+			cnt = effect_weight.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", effect_weight[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[onetime_effect_ids]");
-		cnt = onetime_effect_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(onetime_effect_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", onetime_effect_ids[i]).AppendLine();
+			cnt = onetime_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", onetime_effect_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[duration_effect_ids]");
-		cnt = duration_effect_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(duration_effect_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", duration_effect_ids[i]).AppendLine();
+			cnt = duration_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", duration_effect_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();

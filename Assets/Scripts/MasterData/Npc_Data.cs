@@ -29,6 +29,10 @@ public class Npc_Data : System.IDisposable
 	///	전투 정보 인덱스
 	///	</summary>
 	public int npc_battle_id {get; set;}
+	///	<summary>
+	///	아이콘
+	///	</summary>
+	public string icon {get; set;}
 
 	private bool disposed = false;
 
@@ -40,6 +44,7 @@ public class Npc_Data : System.IDisposable
 		npc_type = NPC_TYPE.NONE;
 		prefab_path = string.Empty;
 		npc_battle_id = 0;
+		icon = string.Empty;
 	}
 
 	public void Dispose()
@@ -67,6 +72,7 @@ public class Npc_Data : System.IDisposable
 		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
+		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		return sb.ToString();
 	}
 }

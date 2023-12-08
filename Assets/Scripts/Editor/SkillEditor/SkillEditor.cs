@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -9,11 +8,15 @@ using UnityEngine;
 public class SkillEditor : EditorWindow
 {
 
-    [MenuItem("FluffyDuck/Skill/Editor", false, 1)]
-    static void ShowWindow()
+    
+    public static void ShowWindow()
     {
         if (!IsSkillEditorScene())
         {
+            if (EditorApplication.isPlaying)
+            {
+                return;
+            }
             if (EditorUtility.DisplayDialog("Scene Error", "skill_editor 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "이동", "취소"))
             {
                 EditorSceneManager.OpenScene("Assets/Scenes/skill_editor.unity");

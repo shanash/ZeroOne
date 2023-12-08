@@ -75,14 +75,7 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
 
-    public override float GetDistance()
-    {
-        if (Battle_Data != null)
-        {
-            return (float)Battle_Data.distance;
-        }
-        return 0;
-    }
+
 
     public override float GetApproachDistance()
     {

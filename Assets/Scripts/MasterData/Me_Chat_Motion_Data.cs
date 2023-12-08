@@ -53,17 +53,23 @@ public class Me_Chat_Motion_Data : System.IDisposable
 		sb.AppendFormat("[chat_motion_id] = <color=yellow>{0}</color>", chat_motion_id).AppendLine();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendLine("[animation_name]");
-		cnt = animation_name.Length;
-		for(int i = 0; i< cnt; i++)
+		if(animation_name != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", animation_name[i]).AppendLine();
+			cnt = animation_name.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", animation_name[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[serifu_ids]");
-		cnt = serifu_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(serifu_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", serifu_ids[i]).AppendLine();
+			cnt = serifu_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", serifu_ids[i]).AppendLine();
+			}
 		}
 
 		return sb.ToString();

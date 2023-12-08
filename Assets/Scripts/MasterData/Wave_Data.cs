@@ -15,7 +15,7 @@ public class Wave_Data : System.IDisposable
 	public int wave_sequence {get; set;}
 	///	<summary>
 	///	웨이브에 출현하는
-	///	적 최대 마리 수 
+	///	적 최대 마리 수
 	///	</summary>
 	public int enemy_appearance_count {get; set;}
 	///	<summary>
@@ -61,10 +61,13 @@ public class Wave_Data : System.IDisposable
 		sb.AppendFormat("[wave_sequence] = <color=yellow>{0}</color>", wave_sequence).AppendLine();
 		sb.AppendFormat("[enemy_appearance_count] = <color=yellow>{0}</color>", enemy_appearance_count).AppendLine();
 		sb.AppendLine("[enemy_appearance_info]");
-		cnt = enemy_appearance_info.Length;
-		for(int i = 0; i< cnt; i++)
+		if(enemy_appearance_info != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", enemy_appearance_info[i]).AppendLine();
+			cnt = enemy_appearance_info.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", enemy_appearance_info[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[wave_time] = <color=yellow>{0}</color>", wave_time).AppendLine();

@@ -58,10 +58,6 @@ public class UserHeroData : UserDataBase
     {
         return Battle_Data;
     }
-    public float GetDistance()
-    {
-        return (float)Battle_Data.distance;
-    }
     /// <summary>
     /// 접근 거리
     /// </summary>

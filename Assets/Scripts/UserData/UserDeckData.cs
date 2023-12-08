@@ -184,9 +184,9 @@ public class UserDeckData : UserDataBase
     public List<UserHeroDeckMountData> GetDeckHeroes()
     {
         //  사거리에 따라 정렬(사거리가 가까운 영웅부터)
-        Deck_Heroes.Sort(delegate (UserHeroDeckMountData a, UserHeroDeckMountData b)
+        Deck_Heroes.Sort((System.Comparison<UserHeroDeckMountData>)delegate (UserHeroDeckMountData a, UserHeroDeckMountData b)
         {
-            if (a.GetUserHeroData().GetDistance() > b.GetUserHeroData().GetDistance())
+            if (a.GetUserHeroData().GetApproachDistance() > b.GetUserHeroData().GetApproachDistance())
             {
                 return 1;
             }

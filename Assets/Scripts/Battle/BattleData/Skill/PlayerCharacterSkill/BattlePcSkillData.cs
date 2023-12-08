@@ -13,35 +13,44 @@ public class BattlePcSkillData : BattleSkillData
         Data = m.Get_PlayerCharacterSkillData(skill_id);
 
         //  pc onetime skill
-        int len = Data.onetime_effect_ids.Length;
-        for (int i = 0; i < len; i++)
+        int len = 0;
+        if (Data.onetime_effect_ids != null)
         {
-            int onetime_skill_id = Data.onetime_effect_ids[i];
-            if (onetime_skill_id == 0)
+            len = Data.onetime_effect_ids.Length;
+            for (int i = 0; i < len; i++)
             {
-                continue;
-            }
-            var battle_onetime = BattleSkillDataFactory.CreatePcBattleOnetimeSkillData(onetime_skill_id);
-            if (battle_onetime != null)
-            {
-                AddOnetimeSkillData(battle_onetime);
+                int onetime_skill_id = Data.onetime_effect_ids[i];
+                if (onetime_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_onetime = BattleSkillDataFactory.CreatePcBattleOnetimeSkillData(onetime_skill_id);
+                if (battle_onetime != null)
+                {
+                    AddOnetimeSkillData(battle_onetime);
+                }
             }
         }
+
         //  pc duration skill
-        len = Data.duration_effect_ids.Length;
-        for (int i = 0; i < len; i++)
+        if (Data.duration_effect_ids != null)
         {
-            int duration_skill_id = Data.duration_effect_ids[i];
-            if (duration_skill_id == 0)
+            len = Data.duration_effect_ids.Length;
+            for (int i = 0; i < len; i++)
             {
-                continue;
-            }
-            var battle_duration = BattleSkillDataFactory.CreatePcBattleDurationSkillData(duration_skill_id);
-            if (battle_duration != null)
-            {
-                AddDurationSkillData(battle_duration);
+                int duration_skill_id = Data.duration_effect_ids[i];
+                if (duration_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_duration = BattleSkillDataFactory.CreatePcBattleDurationSkillData(duration_skill_id);
+                if (battle_duration != null)
+                {
+                    AddDurationSkillData(battle_duration);
+                }
             }
         }
+        
         //  스킬 효과 비중 횟수
         Max_Effect_Count = Data.effect_weight.Length;
         Effect_Weight_Index = 0;

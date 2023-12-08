@@ -44,11 +44,15 @@ public class SkillPreview : EditorWindow
 
 
 
-    [MenuItem("FluffyDuck/Skill/Preview", false, 0)]
-    static void ShowWindow()
+    
+    public static void ShowWindow()
     {
         if (!IsSkillPreviewScene())
         {
+            if (EditorApplication.isPlaying)
+            {
+                return;
+            }
             if (EditorUtility.DisplayDialog("Scene Error", "skill_preview 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "이동", "취소"))
             {
                 EditorSceneManager.OpenScene("Assets/Scenes/skill_preview.unity");

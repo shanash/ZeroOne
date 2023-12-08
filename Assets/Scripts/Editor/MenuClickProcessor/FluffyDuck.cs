@@ -55,6 +55,20 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         {
             BuildLauncher.DeleteAddressableCache();
         }
+
+
+        [MenuItem("FluffyDuck/Skill/Preview", false, 11)]
+        static void SkillPreviewOpen()
+        {
+            SkillPreview.ShowWindow();
+        }
+
+        [MenuItem("FluffyDuck/Skill/Editor", false, 12)]
+        static void SkillEditorOpen()
+        {
+            SkillEditor.ShowWindow();
+        }
+
     }
 }
 #endif

@@ -115,7 +115,7 @@ public partial class TeamManager_V2 : IDisposable
 
             position_offset = (int)user_data.GetPositionType() * interval;
 
-            float distance = user_data.GetDistance();
+            float distance = user_data.GetApproachDistance();
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
             hero.SetTeamManager(this);
@@ -125,7 +125,7 @@ public partial class TeamManager_V2 : IDisposable
             hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
             List<UserHeroDeckMountData> same_positions = hero_list.FindAll(x => x.GetUserHeroData().GetPositionType() == user_data.GetPositionType());
-            same_positions = same_positions.OrderBy(x => x.GetUserHeroData().GetDistance()).ToList();
+            same_positions = same_positions.OrderBy(x => x.GetUserHeroData().GetApproachDistance()).ToList();
             Debug.Assert(same_positions.Count > 0);
 
             int find_index = same_positions.IndexOf(user_deck_hero);
@@ -178,7 +178,7 @@ public partial class TeamManager_V2 : IDisposable
         //  사거리가 짧은 순으로 정렬
         battle_npc_list.Sort(delegate (BattleUnitData a, BattleUnitData b)
         {
-            if (a.GetDistance() > b.GetDistance())
+            if (a.GetApproachDistance() > b.GetApproachDistance())
             {
                 return 1;
             }
@@ -202,7 +202,7 @@ public partial class TeamManager_V2 : IDisposable
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
             List<BattleUnitData> same_positions = battle_npc_list.FindAll(x => x.GetPositionType() == npc.GetPositionType());
-            same_positions = same_positions.OrderBy(x => x.GetDistance()).ToList();
+            same_positions = same_positions.OrderBy(x => x.GetApproachDistance()).ToList();
             Debug.Assert(same_positions.Count > 0);
 
             int find_index = same_positions.IndexOf(npc);
@@ -255,14 +255,8 @@ public partial class TeamManager_V2 : IDisposable
     public List<HeroBase_V2> GetInRangeMembersAsc(HeroBase_V2 center, float approach_distance)
     {
         var list = Used_Members.FindAll(x => x.IsAlive() && x.InRange(center, approach_distance));
-        list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        {
-            if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
-            {
-                return 1;
-            }
-            return -1;
-        });
+        //  내림 차순
+        list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
         return list;
     }
 
@@ -275,14 +269,17 @@ public partial class TeamManager_V2 : IDisposable
     public List<HeroBase_V2> GetAliveMembersDistanceAsc(HeroBase_V2 center)
     {
         var list = GetAliveMembers();
-        list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        {
-            if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
-            {
-                return 1;
-            }
-            return -1;
-        });
+        //list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
+        //{
+        //    if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
+        //    {
+        //        return 1;
+        //    }
+        //    return -1;
+        //});
+
+        //  오름 차순
+        list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
         return list;
     }
 
@@ -296,14 +293,16 @@ public partial class TeamManager_V2 : IDisposable
     public List<HeroBase_V2> GetAliveMembersDistanceDesc(HeroBase_V2 center)
     {
         var list = GetAliveMembers();
-        list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        {
-            if (a.GetDistanceFromCenter(center) < b.GetDistanceFromCenter(center))
-            {
-                return 1;
-            }
-            return -1;
-        });
+        //list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
+        //{
+        //    if (a.GetDistanceFromCenter(center) < b.GetDistanceFromCenter(center))
+        //    {
+        //        return 1;
+        //    }
+        //    return -1;
+        //});
+        //  내림 차순
+        list.Sort((a, b) => b.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
         return list;
     }
     

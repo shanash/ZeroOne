@@ -66,7 +66,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double Attack { get; protected set; }
 
     /// <summary>
-    /// 물리 방어력
+    /// 방어력<br/>
+    /// 최종 데미지 = 적 데미지 / (1 + 방어력 / 100)
     /// </summary>
     public double Defense { get; protected set; }
 
@@ -78,16 +79,26 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 물리 명중률<br/>
     /// 명중 기본값 및 민첩 수치에 따라 결정<br/>
-    /// 명중 레벨 테이블의 값을 참조한다.
+    /// 명중 레벨 테이블의 값을 참조한다.<br/>
+    /// 명중 확률  = 1 / (1 + 100 / (회피값 - 적의 명중값))
+    /// 명중 실패시 데미지 감소(빗나감 데미지)
     /// </summary>
     public double Accuracy_Rate { get; protected set; }
 
     /// <summary>
     /// 물리 회피율<br/>
     /// 회피 기본값 및 민첩 수치에 따라 결정<br/>
-    /// 회피 레벨 테이블의 값을 참조한다.
+    /// 회피 레벨 테이블의 값을 참조한다.<br/>
+    /// 회피 확률 = 1 / (1 + 100 / 회피값)
     /// </summary>
     public double Evasion_Rate { get; protected set; }
+
+    /// <summary>
+    /// 자동 회복<br/>
+    /// 한 웨이브를 클리어 했을 때 회복되는 수치<br/>
+    /// 자동 회복량 = 최대 체력 * 자오 회복 값(배율)
+    /// </summary>
+    public double Auto_Recovery_Life { get; protected set; }
 
     /// <summary>
     /// 내성 수치<br/>
@@ -95,14 +106,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// '통찰' - '내성' = 결과. 결과가 0보다 클 경우, 1포인트마다 2%의 제어 확률 감소
     /// </summary>
     public double Resistance { get; protected set; }
+    
     /// <summary>
-    /// 반격 확률<br/>
-    /// 반격 레벨 테이블 값을 참조한다.
-    /// </summary>
-    public double Counter_Rate { get; protected set; }
-
-    /// <summary>
-    /// 치명타 확률
+    /// 치명타 확률<br/>
+    /// 크리티컬 발생 확률 = 크리티컬 값 * 0.05 * 0.01 * 레벨 / 적 레벨
     /// </summary>
     public double Critical_Rate { get; protected set; }
     /// <summary>
@@ -114,21 +121,13 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 흡혈 등급
     /// </summary>
     public double Vampire_Rate { get; protected set; }
+
     /// <summary>
     /// 보유 에너지
     /// </summary>
     public int Energy_Value { get; protected set; }
-    /// <summary>
-    /// 협공 확률
-    /// </summary>
-    public double Cooperative_Attack_Rate { get; protected set; }
-
-
-    /// <summary>
-    /// 행운 포인트 - 전투 시작시 공속 포인트에 영향, 기타 다른 부분에 영향을 준다.
-    /// </summary>
-    public int Lucky_Point { get; protected set; }
-
+    
+    
     /// <summary>
     /// 리더/보스 여부
     /// </summary>
@@ -195,9 +194,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
     }
-
-    
-
     
 
     public void SetDeckOrder(int order)
@@ -472,52 +468,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return null;
     }
-    #region Calc Stats
-    /// <summary>
-    /// 영웅의 능력치를 계산한다. 
-    /// 기본 능력 + 레벨에 따른 능력 등 개별 개산
-    /// </summary>
-    protected void CalcHeroAbility()
-    {
-        CalcMaxLife();
-
-        CalcAttackPoint();
-        CalcDefensePoint();
-        CalcMoveSpeed();
-
-    }
-    /// <summary>
-    /// 최대 체력 계산
-    /// </summary>
-    protected virtual void CalcMaxLife()
-    {
-        Max_Life = Unit_Data.GetLifePoint();
-
-        Life = Max_Life;
-    }
-    /// <summary>
-    /// 공격력 계산
-    /// </summary>
-    protected virtual void CalcAttackPoint()
-    {
-        Attack = Unit_Data.GetAttackPoint();
-    }
-    /// <summary>
-    /// 방어력 계산
-    /// </summary>
-    protected virtual void CalcDefensePoint()
-    {
-        Defense = Unit_Data.GetDefensePoint();
-    }
-    /// <summary>
-    /// 이동속도 계산
-    /// </summary>
-    protected virtual void CalcMoveSpeed()
-    {
-        Move_Speed = Unit_Data.GetMoveSpeed();
-    }
-
-    #endregion
 
     /// <summary>
     /// 스킬 구현 V2<br/>

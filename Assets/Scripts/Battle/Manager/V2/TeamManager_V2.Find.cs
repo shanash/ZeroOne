@@ -163,7 +163,14 @@ public partial class TeamManager_V2
             }
         }
     }
-
+    /// <summary>
+    /// 각 룰타입에 따라 분기해주는 함수
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="rule_type"></param>
+    /// <param name="approach_distance"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
    void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int count, ref List<HeroBase_V2> targets)
     {
         switch (rule_type)
@@ -171,14 +178,17 @@ public partial class TeamManager_V2
             case TARGET_RULE_TYPE.RANDOM:   //  임의의 타겟을 선택
                 FindTargetRuleRandom(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.SELF:
+            case TARGET_RULE_TYPE.SELF:                     //  자기 자신 선택
                 FindTargetRuleSelf(self, ref targets);
                 break;
-            case TARGET_RULE_TYPE.ALL:
+            case TARGET_RULE_TYPE.ALL:                      //  전체 선택
                 FindTargetRuleAll(self, ref targets);
                 break;
-            case TARGET_RULE_TYPE.ALLY_WITHOUT_ME_NEAREST:
-                FindTargetRuleAllyWithouSelfNearest(self, count, ref targets);
+            case TARGET_RULE_TYPE.ALL_WITHOUT_ME:                       //  자신을 뺀 전체 선택(아군일 경우)
+                FindTargetRuleAllWithoutMe(self, ref targets);
+                break;
+            case TARGET_RULE_TYPE.ALLY_WITHOUT_ME_NEAREST:                          //  자신을 뺀 가까운 타겟 선택
+                FindTargetRuleAllyWithoutSelfNearest(self, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.ALLY_WITHOUT_ME_FURTHEST:
                 FindTargetRuleAllyWithoutSelfFurthest(self, count, ref targets);
@@ -193,8 +203,28 @@ public partial class TeamManager_V2
                 FindTargetRuleApproach(self, approach_distance, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.HIGHEST_LIFE_VALUE:
+                FindTargetRuleHighestLifeValue(self, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.HIGHEST_LIFE_RATE:
+                FindTargetRuleHighestLifeRate(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOWEST_LIFE_VALUE:
+                FindTargetRuleLowestLifeValue(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOWEST_LIFE_RATE:
+                FindTargetRuleLowestLifeRate(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOWEST_ATTACK:
+                FindTargetRuleLowestAttack(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOWEST_DEFENSE:
+                FindTargetRuleLowestDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGHEST_ATTACK:
+                FindTargetRuleHighestAttack(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGHEST_DEFENSE: 
+                FindTargetRuleHighestDefense(self, count, ref targets);
                 break;
         }
     }
@@ -220,10 +250,20 @@ public partial class TeamManager_V2
     {
         targets.Add(self);
     }
-
+    /// <summary>
+    /// 모든 타겟
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="targets"></param>
     void FindTargetRuleAll(HeroBase_V2 self, ref List<HeroBase_V2> targets)
     {
         targets.AddRange(GetAliveMembers());
+    }
+
+    void FindTargetRuleAllWithoutMe(HeroBase_V2 self, ref List<HeroBase_V2> targets)
+    {
+        targets.AddRange(GetAliveMembers());
+        targets.Remove(self);
     }
 
     /// <summary>
@@ -235,7 +275,10 @@ public partial class TeamManager_V2
     /// <param name="targets"></param>
     void FindTargetRuleNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetAliveMembersDistanceAsc(self);
+        var temp_list = GetAliveMembers();
+        //  오름 차순
+        temp_list.Sort((a, b) => a.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -246,10 +289,13 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleAllyWithouSelfNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleAllyWithoutSelfNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetAliveMembersDistanceAsc(self);
+        var temp_list = GetAliveMembers();
         temp_list.Remove(self);
+
+        //  오름 차순
+        temp_list.Sort((a, b) => a.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -261,8 +307,11 @@ public partial class TeamManager_V2
     /// <param name="targets"></param>
     void FindTargetRuleAllyWithoutSelfFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetAliveMembersDistanceDesc(self);
+        var temp_list = GetAliveMembers();
         temp_list.Remove(self);
+
+        //  내림 차순
+        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -275,7 +324,9 @@ public partial class TeamManager_V2
     /// <param name="targets"></param>
     void FindTargetRuleFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetAliveMembersDistanceDesc(self);
+        var temp_list = GetAliveMembers();
+        //  내림 차순
+        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -290,6 +341,115 @@ public partial class TeamManager_V2
     {
         var temp_list = GetInRangeMembersAsc(self, approach_distance);
         temp_list.Remove(self);
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 체력 수치가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  내림 차순
+        temp_list.Sort((a, b) => b.Life.CompareTo(a.Life));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 체력 비율이 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  내림 차순
+        temp_list.Sort((a, b) => b.GetLifePercentage().CompareTo(a.GetLifePercentage()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 체력이 가장 적게 남아있는 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  오름 차순
+        temp_list.Sort((a, b) => a.Life.CompareTo(b.Life));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 체력 비율이 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+       
+        //  오름 차순
+        temp_list.Sort((a, b) => a.GetLifePercentage().CompareTo(b.GetLifePercentage()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 공격력 수치가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  오름 차순
+        temp_list.Sort((a, b) => a.Attack.CompareTo(b.Attack));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 공격력 수치가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets) 
+    {
+        var temp_list = GetAliveMembers();
+        //  내림 차순
+        temp_list.Sort((a, b) => b.Attack.CompareTo(a.Attack));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 방어력 수치가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  오름 차순
+        temp_list.Sort((a, b) => a.Defense.CompareTo(b.Defense));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+
+    }
+    /// <summary>
+    /// 방어력 수치가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  내림 차순
+        temp_list.Sort((a, b) => b.Defense.CompareTo(a.Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 

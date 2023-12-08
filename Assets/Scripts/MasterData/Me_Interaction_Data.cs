@@ -92,25 +92,34 @@ public class Me_Interaction_Data : System.IDisposable
 		sb.AppendFormat("[touch_condition_inequality] = <color=yellow>{0}</color>", touch_condition_inequality).AppendLine();
 		sb.AppendFormat("[touch_condition_count] = <color=yellow>{0}</color>", touch_condition_count).AppendLine();
 		sb.AppendLine("[chat_motion_ids]");
-		cnt = chat_motion_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(chat_motion_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", chat_motion_ids[i]).AppendLine();
+			cnt = chat_motion_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", chat_motion_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendLine("[condition_state_ids]");
-		cnt = condition_state_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(condition_state_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", condition_state_ids[i]).AppendLine();
+			cnt = condition_state_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", condition_state_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[change_state_id] = <color=yellow>{0}</color>", change_state_id).AppendLine();
 		sb.AppendLine("[parameters]");
-		cnt = parameters.Length;
-		for(int i = 0; i< cnt; i++)
+		if(parameters != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", parameters[i]).AppendLine();
+			cnt = parameters.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", parameters[i]).AppendLine();
+			}
 		}
 
 		return sb.ToString();

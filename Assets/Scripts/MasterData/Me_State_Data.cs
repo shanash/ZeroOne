@@ -55,10 +55,13 @@ public class Me_State_Data : System.IDisposable
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[idle_animation_name] = <color=yellow>{0}</color>", idle_animation_name).AppendLine();
 		sb.AppendLine("[sub_idle_animation_names]");
-		cnt = sub_idle_animation_names.Length;
-		for(int i = 0; i< cnt; i++)
+		if(sub_idle_animation_names != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", sub_idle_animation_names[i]).AppendLine();
+			cnt = sub_idle_animation_names.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", sub_idle_animation_names[i]).AppendLine();
+			}
 		}
 
 		return sb.ToString();

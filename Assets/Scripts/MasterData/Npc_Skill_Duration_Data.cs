@@ -120,18 +120,24 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 		sb.AppendFormat("[time] = <color=yellow>{0}</color>", time).AppendLine();
 		sb.AppendFormat("[count] = <color=yellow>{0}</color>", count).AppendLine();
 		sb.AppendLine("[repeat_npc_onetime_ids]");
-		cnt = repeat_npc_onetime_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(repeat_npc_onetime_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", repeat_npc_onetime_ids[i]).AppendLine();
+			cnt = repeat_npc_onetime_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", repeat_npc_onetime_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[repeat_interval] = <color=yellow>{0}</color>", repeat_interval).AppendLine();
 		sb.AppendLine("[finish_npc_onetime_ids]");
-		cnt = finish_npc_onetime_ids.Length;
-		for(int i = 0; i< cnt; i++)
+		if(finish_npc_onetime_ids != null)
 		{
-			sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", finish_npc_onetime_ids[i]).AppendLine();
+			cnt = finish_npc_onetime_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", finish_npc_onetime_ids[i]).AppendLine();
+			}
 		}
 
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
