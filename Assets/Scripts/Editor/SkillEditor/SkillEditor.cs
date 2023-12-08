@@ -14,7 +14,7 @@ public class SkillEditor : EditorWindow
     {
         if (!IsSkillEditorScene())
         {
-            if (EditorUtility.DisplayDialog("Scene Error", "skill_editor 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "Ok", "Cancel"))
+            if (EditorUtility.DisplayDialog("Scene Error", "skill_editor 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "이동", "취소"))
             {
                 EditorSceneManager.OpenScene("Assets/Scenes/skill_editor.unity");
                 GetWindow<SkillEditor>("Skill Editor").minSize = new Vector2(400, 600);

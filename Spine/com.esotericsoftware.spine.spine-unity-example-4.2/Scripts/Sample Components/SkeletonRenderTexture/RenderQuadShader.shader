@@ -7,6 +7,10 @@ Shader "Spine/RenderQuad" {
 		_Cutoff("Shadow alpha cutoff", Range(0,1)) = 0.1
 		[HideInInspector] _StencilRef("Stencil Reference", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp("Stencil Comparison", Float) = 8 // Set to Always as default
+		//	피격시 등 tint 효과가 아닌, 전체 모습이 단일 색상으로 보여지도록 하기 위한 변수
+		[HideInInspector] _AllChangeColor("All Change Color", Color) = (0,0,0,1)	//	추가 [2023-12-07] by forestj
+		[HideInInspector] _IsChange("Is Change", Float) = 0	//	추가 [2023-12-07] by forestj
+
 	}
 	SubShader{
 		Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "PreviewType" = "Plane" }
@@ -31,6 +35,10 @@ Shader "Spine/RenderQuad" {
 			sampler2D _MainTex;
 			float4 _Color;
 
+			float _IsChange;			//	추가 [2023-12-07] by forestj
+			float4 _AllChangeColor;		//	추가 [2023-12-07] by forestj
+
+
 			struct VertexInput {
 				float4 vertex : POSITION;
 				float2 uv : TEXCOORD0;
@@ -53,8 +61,27 @@ Shader "Spine/RenderQuad" {
 
 			float4 frag(VertexOutput i) : SV_Target {
 				float4 texColor = tex2D(_MainTex,i.uv);
-				_Color.rgb *= _Color.a;
-				return texColor * _Color;
+				//_Color.rgb *= _Color.a;			//	수정 [2023-12-07] by forestj
+				//return texColor * _Color;			//	수정 [2023-12-07] by forestj
+
+
+				//	추가 [2023-12-07] by forestj Begin
+				if(_IsChange == 0){
+					_Color.rgb *= _Color.a;
+					return texColor * _Color;
+				}
+				else{
+					if(texColor.a > 0){
+						return _AllChangeColor;
+					}
+					else{
+						_AllChangeColor.rgb *= _Color.a;
+						return texColor * _AllChangeColor;
+					}
+					
+				}
+				//	추가 [2023-12-07] by forestj Finish
+				
 			}
 			ENDCG
 		}

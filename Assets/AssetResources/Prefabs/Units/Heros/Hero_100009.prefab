@@ -176,6 +176,8 @@ GameObject:
   - component: {fileID: 8970886838205079806}
   - component: {fileID: 6345633518274464352}
   - component: {fileID: 8618463139137666423}
+  - component: {fileID: 8329741781727984459}
+  - component: {fileID: 8235040365260922503}
   m_Layer: 12
   m_Name: Hero_100009
   m_TagString: Hero
@@ -408,6 +410,31 @@ MonoBehaviour:
   renderTexture: {fileID: 0}
   targetCamera: {fileID: 0}
   quadMaterial: {fileID: 2100000, guid: 4c507f887c6274a44a603d96e0eabf2a, type: 2}
+--- !u!114 &8329741781727984459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184115678057327915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 50
+--- !u!210 &8235040365260922503
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184115678057327915}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &226672179394510352
 GameObject:
   m_ObjectHideFlags: 0

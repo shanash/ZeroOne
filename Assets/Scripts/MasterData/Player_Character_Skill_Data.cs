@@ -65,7 +65,6 @@ public class Player_Character_Skill_Data : System.IDisposable
 	///	스킬의 이펙트는 트리거 역할을 해줘야 함
 	///	이펙트 패스 정보가 없는 경우는 즉시 스킬을 시전/적용하는 방식이고
 	///	이펙트 패스 정보가 있는 경우 해당 이펙트를 이용하여 트리거를 발생하는 방식을 적용한다.
-	///	
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>

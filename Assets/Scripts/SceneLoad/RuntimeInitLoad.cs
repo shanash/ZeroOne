@@ -8,13 +8,13 @@ public static class RuntimeInitLoad
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void BeforeSetup() 
     {
-        List<string> scene_list = new List<string>();
-        scene_list.Add("load");
-        scene_list.Add("home");
-        scene_list.Add("battlev2");
-        scene_list.Add("memorial");
+        //List<string> scene_list = new List<string>();
+        //scene_list.Add("load");
+        //scene_list.Add("home");
+        //scene_list.Add("battlev2");
+        //scene_list.Add("memorial");
 
-        string scene_name = SceneManager.GetActiveScene().name;
+        //string scene_name = SceneManager.GetActiveScene().name;
         SceneLoad.Start_Scene_Name = SceneManager.GetActiveScene().name;
         SceneManager.LoadSceneAsync(GameDefine.SCENE_LOAD);
 

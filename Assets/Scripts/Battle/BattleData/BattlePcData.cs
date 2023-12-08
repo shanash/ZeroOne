@@ -7,15 +7,6 @@ public class BattlePcData : BattleUnitData
 
     UserHeroData User_Data;
 
-    public void SetPcDataID(int pc_id, int pc_num)
-    {
-        var m = MasterDataManager.Instance;
-        Data = m.Get_PlayerCharacterData(pc_id);
-        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
-
-        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
-    }
-
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {
         if (unit_ids.Length < 2)
@@ -138,6 +129,15 @@ public class BattlePcData : BattleUnitData
         if (Data != null)
         {
             return Data.prefab_path;
+        }
+        return null;
+    }
+
+    public override string GetThumbnailPath()
+    {
+        if (Data != null)
+        {
+            return Data.icon_path;
         }
         return null;
     }

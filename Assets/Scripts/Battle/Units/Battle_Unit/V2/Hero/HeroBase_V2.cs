@@ -1,15 +1,11 @@
 using Spine.Unity;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity.Examples;
 using Cysharp.Text;
 using Spine;
 using System;
 using FluffyDuck.Util;
 using UnityEngine.Rendering;
-using Microsoft.Win32.SafeHandles;
-using TMPro;
 
 public enum SD_BODY_TYPE
 {
@@ -30,6 +26,9 @@ public enum SD_BODY_TYPE
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(UnitRenderTexture))]
+[RequireComponent(typeof(RendererSortingZ))]
+[RequireComponent(typeof(SortingGroup))]
+
 
 public class HeroBase_V2 : UnitBase_V2
 {
@@ -41,9 +40,6 @@ public class HeroBase_V2 : UnitBase_V2
 
     [SerializeField, Tooltip("Body Pos Type")]
     protected List<SD_Body_Pos_Data> Sd_Body_Transforms;
-
-    protected RendererSortingZ ZOrder;
-    protected SortingGroup Sort_Group;
 
     protected UnitRenderTexture Render_Texture;
 
@@ -163,10 +159,8 @@ public class HeroBase_V2 : UnitBase_V2
     protected List<HeroBase_V2> Normal_Attack_Target = new List<HeroBase_V2>();
 
     /// <summary>
-    /// 사용자 영웅 데이터
+    /// 영웅 데이터
     /// </summary>
-    protected UserHeroData User_Hero_Data;
-
     protected BattleUnitData Unit_Data;
 
     /// <summary>
@@ -190,18 +184,11 @@ public class HeroBase_V2 : UnitBase_V2
     protected float Effect_Queue_Interval;
     protected List<Effect_Queue_Data> Effect_Queue_Data_List = new List<Effect_Queue_Data>();
 
-    public void SetUserHeroData(UserHeroData ud)
-    {
-        User_Hero_Data = ud;
-
-        var bdata = User_Hero_Data.GetPlayerCharacterBattleData();
-        Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetPlayerCharacterSkillGroups(bdata.skill_pattern);
-    }
+    
 
     public virtual void SetBattleUnitDataID(params int[] unit_ids)
     {
-        if (unit_ids.Length != 2)
+        if (unit_ids.Length < 2)
         {
             Debug.Assert(false);
         }
@@ -211,10 +198,14 @@ public class HeroBase_V2 : UnitBase_V2
         Unit_Data = new BattlePcData();
         Unit_Data.SetUnitID(pc_id, pc_num);
 
-        User_Hero_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+    }
+
+    public BattleUnitData GetBattleUnitData()
+    {
+        return Unit_Data;
     }
 
     
@@ -504,6 +495,11 @@ public class HeroBase_V2 : UnitBase_V2
         Render_Texture.color.a = alpha;
     }
 
+    public UnitRenderTexture GetSkeletonRenderTexture()
+    {
+        return Render_Texture;
+    }
+
     /// <summary>
     /// 스파인 플립 설정
     /// </summary>
@@ -626,7 +622,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected virtual float GetApproachDistance()
     {
-        return User_Hero_Data.GetApproachDistance();
+        return Unit_Data.GetApproachDistance();
     }
     /// <summary>
     /// 공격 사거리 반환
@@ -634,7 +630,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected virtual float GetDistance()
     {
-        return User_Hero_Data.GetDistance();
+        return Unit_Data.GetDistance();
     }
 
     /// <summary>
@@ -685,8 +681,7 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected virtual void CalcMaxLife()
     {
-        var bdata = User_Hero_Data.GetPlayerCharacterBattleData();
-        Max_Life = bdata.hp;
+        Max_Life = Unit_Data.GetLifePoint();
 
         Life = Max_Life;
     }
@@ -695,24 +690,21 @@ public class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected virtual void CalcAttackPoint()
     {
-        var bdata = User_Hero_Data.GetPlayerCharacterBattleData();
-        Attack = bdata.attack;
+        Attack = Unit_Data.GetAttackPoint();
     }
     /// <summary>
     /// 방어력 계산
     /// </summary>
     protected virtual void CalcDefensePoint()
     {
-        var bdata = User_Hero_Data.GetPlayerCharacterBattleData();
-        Defense = bdata.defend;
+        Defense = Unit_Data.GetDefensePoint();
     }
     /// <summary>
     /// 이동속도 계산
     /// </summary>
     protected virtual void CalcMoveSpeed()
     {
-        var bdata = User_Hero_Data.GetPlayerCharacterBattleData();
-        Move_Speed = bdata.move_speed;
+        Move_Speed = Unit_Data.GetMoveSpeed();
     }
 
     /// <summary>
@@ -932,34 +924,22 @@ public class HeroBase_V2 : UnitBase_V2
         }
         if (Render_Texture.quad != null)
         {
-            if (ZOrder == null)
-            {
-                ZOrder = Render_Texture.quad.AddComponent<RendererSortingZ>();
-                ZOrder.SetZorderIndex(ZORDER_INDEX.HERO);
-            }
-            if (Sort_Group == null)
-            {
-                Sort_Group = Render_Texture.quad.AddComponent<SortingGroup>();
-            }
+            
         }
         
         if (Utility == null)
         {
             Utility = GetComponent<SkeletonUtility>();
         }
+
         
-        
+
     }
     public override void Despawned()
     {
         base.Despawned();
 
         Team_Mng = null;
-        //if (Capture_Render_Texture != null)
-        //{
-        //    GameObjectPoolManager.Instance.UnusedGameObject(Capture_Render_Texture.gameObject);
-        //    Capture_Render_Texture = null;
-        //}
     }
 
     /// <summary>
@@ -1014,7 +994,8 @@ public class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        Render_Texture.SetHitColor(Color.red, Color.clear, 0.2f);
+        //Render_Texture.SetHitColor(Color.red, Color.clear, 0.2f);
+        Render_Texture.SetHitColorV2(Color.red, 0.3f);
         Life -= damage;
         if (Life <= 0)
         {

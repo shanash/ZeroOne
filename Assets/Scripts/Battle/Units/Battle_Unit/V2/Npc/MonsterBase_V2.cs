@@ -8,7 +8,7 @@ public class MonsterBase_V2 : HeroBase_V2
 {
     public override void SetBattleUnitDataID(params int[] unit_ids)
     {
-        if (unit_ids.Length != 1)
+        if (unit_ids.Length < 1)
         {
             return;
         }

@@ -40,5 +40,7 @@ public class BattleUnitData : BattleDataBase
     public virtual POSITION_TYPE GetPositionType() { return POSITION_TYPE.NONE; }
 
     public virtual string GetPrefabPath() { return null; }
+
+    public virtual string GetThumbnailPath() { return null; }
     
 }
