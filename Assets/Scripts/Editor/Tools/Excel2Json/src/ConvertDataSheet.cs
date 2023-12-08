@@ -450,10 +450,13 @@ namespace Excel2Json
                 else
                 {
                     sb.AppendLine($"\t\tsb.AppendLine(\"[{info.key}]\");");
-                    sb.AppendLine($"\t\tcnt = {info.key}.Length;");
-                    sb.AppendLine("\t\tfor(int i = 0; i< cnt; i++)");
+                    sb.AppendLine($"\t\tif({info.key} != null)");
                     sb.AppendLine("\t\t{");
-                    sb.AppendLine($"\t\t\tsb.Append(\"\\t\").AppendFormat(\"<color=yellow>{{0}}</color>\", {info.key}[i]).AppendLine();");
+                    sb.AppendLine($"\t\t\tcnt = {info.key}.Length;");
+                    sb.AppendLine("\t\t\tfor(int i = 0; i< cnt; i++)");
+                    sb.AppendLine("\t\t\t{");
+                    sb.AppendLine($"\t\t\t\tsb.Append(\"\\t\").AppendFormat(\"<color=yellow>{{0}}</color>\", {info.key}[i]).AppendLine();");
+                    sb.AppendLine("\t\t\t}");
                     sb.AppendLine("\t\t}").AppendLine();
                 }
             }

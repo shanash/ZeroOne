@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
@@ -14,22 +15,22 @@ public partial class TeamManager_V2
     /// </summary>
     /// <param name="self"></param>
     /// <param name="target_type"></param>
-    /// <param name="distance"></param>
+    /// <param name="approach_distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    public void FindTargetInRangeAtApproach(HeroBase_V2 self, TARGET_TYPE target_type, float distance, ref List<HeroBase_V2> targets)
+    public void FindTargetInRangeAtApproach(HeroBase_V2 self, TARGET_TYPE target_type, float approach_distance, ref List<HeroBase_V2> targets)
     {
         int count = 1;  //  무조건 1명만 찾는다
 
         targets.Clear();
         if (target_type == TARGET_TYPE.MY_TEAM)
         {
-            FindTargetRuleExec(self, TARGET_RULE_TYPE.NEAREST, distance, count, ref targets);
+            FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, count, ref targets);
         }
         else
         {
             var enemy_team = GetEnemyTeam();
-            enemy_team.FindTargetRuleExec(self, TARGET_RULE_TYPE.NEAREST, distance, count, ref targets);
+            enemy_team.FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, count, ref targets);
         }
 
         //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
@@ -44,22 +45,22 @@ public partial class TeamManager_V2
     /// </summary>
     /// <param name="self"></param>
     /// <param name="target_type"></param>
-    /// <param name="distance"></param>
+    /// <param name="approach_distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE rule_type, float distance, int target_order, int count, ref List<HeroBase_V2> targets)
+    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE rule_type, float approach_distance, int target_order, int count, ref List<HeroBase_V2> targets)
     {
         targets.Clear();
 
         //  아군에서 찾기
         if (target_type == TARGET_TYPE.MY_TEAM)
         {
-            FindTargetRuleExec(self, rule_type, distance, count, ref targets);
+            FindTargetRuleExec(self, rule_type, approach_distance, count, ref targets);
         }
         else // 적군에서 찾기
         {
             var enemy_team = GetEnemyTeam();
-            enemy_team.FindTargetRuleExec(self, rule_type, distance, count, ref targets);
+            enemy_team.FindTargetRuleExec(self, rule_type, approach_distance, count, ref targets);
         }
 
         //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
@@ -88,8 +89,18 @@ public partial class TeamManager_V2
         }
         
     }
-
-    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE[] rule_types, int target_order, float distance, int count, ref List<HeroBase_V2> targets)
+    /// <summary>
+    /// 지정한 거리내에 있는 적을 찾아 지정한 숫자만큼 찾아준다.
+    /// 타겟 룰을 배열로 요청할 경우, 우선순위 대로 타겟을 찾아서 반환
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_type"></param>
+    /// <param name="rule_types"></param>
+    /// <param name="target_order"></param>
+    /// <param name="approach_distance"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE[] rule_types, int target_order, float approach_distance, int count, ref List<HeroBase_V2> targets)
     {
         targets.Clear();
         int len = rule_types.Length;
@@ -101,7 +112,7 @@ public partial class TeamManager_V2
             for (int i = 0; i < len; i++)
             {
                 TARGET_RULE_TYPE rule = rule_types[i];
-                FindTargetRuleExec(self, rule, distance, count, ref targets);
+                FindTargetRuleExec(self, rule, approach_distance, count, ref targets);
                 cnt += targets.Count;
                 if (cnt >= count)
                 {
@@ -118,7 +129,7 @@ public partial class TeamManager_V2
             for (int i = 0;i < len; i++)
             {
                 TARGET_RULE_TYPE rule = rule_types[i];
-                enemy_team.FindTargetRuleExec(self, rule, distance, count, ref targets);
+                enemy_team.FindTargetRuleExec(self, rule, approach_distance, count, ref targets);
                 cnt += targets.Count;
                 if(cnt >= count)
                 {
@@ -153,12 +164,12 @@ public partial class TeamManager_V2
         }
     }
 
-   void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float distance, int count, ref List<HeroBase_V2> targets)
+   void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int count, ref List<HeroBase_V2> targets)
     {
         switch (rule_type)
         {
             case TARGET_RULE_TYPE.RANDOM:   //  임의의 타겟을 선택
-                FindTargetRuleRandom(self, distance, count, ref targets);
+                FindTargetRuleRandom(self, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.SELF:
                 FindTargetRuleSelf(self, ref targets);
@@ -167,13 +178,23 @@ public partial class TeamManager_V2
                 FindTargetRuleAll(self, ref targets);
                 break;
             case TARGET_RULE_TYPE.ALLY_WITHOUT_ME_NEAREST:
-                FindTargetRuleAllyWithouSelfNearest(self, distance, count, ref targets);
+                FindTargetRuleAllyWithouSelfNearest(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.ALLY_WITHOUT_ME_FURTHEST:
+                FindTargetRuleAllyWithoutSelfFurthest(self, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.NEAREST:
-                FindTargetRuleNearest(self, distance, count, ref targets);
+                FindTargetRuleNearest(self, count, ref targets);
                 break;
             case TARGET_RULE_TYPE.FURTHEST:
-                FindTargetRuleFurthest(self, distance, count, ref targets);
+                FindTargetRuleFurthest(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.APPROACH:
+                FindTargetRuleApproach(self, approach_distance, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGHEST_LIFE_VALUE:
+                break;
+            case TARGET_RULE_TYPE.HIGHEST_LIFE_RATE:
                 break;
         }
     }
@@ -185,9 +206,9 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleRandom(HeroBase_V2 self, float distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleRandom(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetInRangeMembersAsc(self, distance);
+        var temp_list = GetAliveMembers();
         GetTargetsRandomFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -212,9 +233,9 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleNearest(HeroBase_V2 self, float distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetInRangeMembersAsc(self, distance);
+        var temp_list = GetAliveMembersDistanceAsc(self);
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -225,12 +246,26 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleAllyWithouSelfNearest(HeroBase_V2 self, float distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleAllyWithouSelfNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetInRangeMembersAsc(self, distance);
+        var temp_list = GetAliveMembersDistanceAsc(self);
         temp_list.Remove(self);
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
+
+    /// <summary>
+    /// 나를 제외하고 아군 중 가장 먼 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleAllyWithoutSelfFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembersDistanceDesc(self);
+        temp_list.Remove(self);
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
     /// <summary>
     /// 기준으로부터 가장 먼 타겟 찾기
     /// </summary>
@@ -238,19 +273,23 @@ public partial class TeamManager_V2
     /// <param name="distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleFurthest(HeroBase_V2 self, float distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
-        var temp_list = GetAliveMembers();
+        var temp_list = GetAliveMembersDistanceDesc(self);
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
 
-        temp_list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        {
-            if (a.GetDistanceFromCenter(self) < b.GetDistanceFromCenter(self))
-            {
-                return 1;
-            }
-            return -1;
-        });
-
+    /// <summary>
+    /// 기준으로 부터 접근 거리내에 가장 가까운 타겟.
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="approach_distance"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleApproach(HeroBase_V2 self, float approach_distance, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetInRangeMembersAsc(self, approach_distance);
+        temp_list.Remove(self);
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 

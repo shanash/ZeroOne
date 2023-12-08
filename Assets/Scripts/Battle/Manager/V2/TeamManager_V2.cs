@@ -100,7 +100,7 @@ public partial class TeamManager_V2 : IDisposable
         var pool = GameObjectPoolManager.Instance;
         var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
-        
+
         int cnt = hero_list.Count;
 
         float offset_z = 0f;
@@ -114,7 +114,7 @@ public partial class TeamManager_V2 : IDisposable
             UserHeroData user_data = user_deck_hero.GetUserHeroData();
 
             position_offset = (int)user_data.GetPositionType() * interval;
-           
+
             float distance = user_data.GetDistance();
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
@@ -129,7 +129,7 @@ public partial class TeamManager_V2 : IDisposable
             Debug.Assert(same_positions.Count > 0);
 
             int find_index = same_positions.IndexOf(user_deck_hero);
-            
+
             hero.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 5));
 
             AddMember(hero);
@@ -176,7 +176,7 @@ public partial class TeamManager_V2 : IDisposable
             battle_npc_list.Add(npc);
         }
         //  사거리가 짧은 순으로 정렬
-        battle_npc_list.Sort(delegate(BattleUnitData a, BattleUnitData b) 
+        battle_npc_list.Sort(delegate (BattleUnitData a, BattleUnitData b)
         {
             if (a.GetDistance() > b.GetDistance())
             {
@@ -196,7 +196,7 @@ public partial class TeamManager_V2 : IDisposable
             monster.SetTeamManager(this);
 
             monster.SetBattleUnitDataID(npc.GetUnitID());
-            
+
             monster.SetFlipX(true);
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
@@ -250,11 +250,31 @@ public partial class TeamManager_V2 : IDisposable
     /// 거리에 따른 오름차순으로 정렬 (가장 가까운 유닛이 우선)
     /// </summary>
     /// <param name="center"></param>
-    /// <param name="distance"></param>
+    /// <param name="approach_distance"></param>
     /// <returns></returns>
-    public List<HeroBase_V2> GetInRangeMembersAsc(HeroBase_V2 center, float distance)
+    public List<HeroBase_V2> GetInRangeMembersAsc(HeroBase_V2 center, float approach_distance)
     {
-        var list = Used_Members.FindAll(x => x.IsAlive() && x.InRange(center, distance));
+        var list = Used_Members.FindAll(x => x.IsAlive() && x.InRange(center, approach_distance));
+        list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
+        {
+            if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
+            {
+                return 1;
+            }
+            return -1;
+        });
+        return list;
+    }
+
+
+    /// <summary>
+    /// 살아있는 멤버 중, 나를 중심으로 가까운 거리로 정렬
+    /// </summary>
+    /// <param name="center"></param>
+    /// <returns></returns>
+    public List<HeroBase_V2> GetAliveMembersDistanceAsc(HeroBase_V2 center)
+    {
+        var list = GetAliveMembers();
         list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
         {
             if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
@@ -273,9 +293,9 @@ public partial class TeamManager_V2 : IDisposable
     /// <param name="center"></param>
     /// <param name="distance"></param>
     /// <returns></returns>
-    public List<HeroBase_V2> GetInRangeMembersDesc(HeroBase_V2 center, float distance)
+    public List<HeroBase_V2> GetAliveMembersDistanceDesc(HeroBase_V2 center)
     {
-        var list = Used_Members.FindAll(x => x.IsAlive() && x.InRange(center, distance));
+        var list = GetAliveMembers();
         list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
         {
             if (a.GetDistanceFromCenter(center) < b.GetDistanceFromCenter(center))

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+
 
 public class BattleNpcData : BattleUnitData
 {
-    Npc_Data Npc;
+    Npc_Data Data;
 
     Npc_Battle_Data Battle_Data;
 
@@ -17,16 +15,16 @@ public class BattleNpcData : BattleUnitData
         }
         int npc_id = unit_ids[0];
         var m = MasterDataManager.Instance;
-        Npc = m.Get_NpcData(npc_id);
+        Data = m.Get_NpcData(npc_id);
 
-        Battle_Data = m.Get_NpcBattleData(Npc.npc_battle_id);
+        Battle_Data = m.Get_NpcBattleData(Data.npc_battle_id);
 
         return this;
     }
 
     public override object GetUnitData()
     {
-        return Npc;
+        return Data;
     }
 
     public override object GetBattleData()
@@ -36,9 +34,9 @@ public class BattleNpcData : BattleUnitData
 
     public override int GetUnitID()
     {
-        if (Npc != null)
+        if (Data != null)
         {
-            return Npc.npc_data_id;
+            return Data.npc_data_id;
         }
         return 0;
     }
@@ -113,10 +111,32 @@ public class BattleNpcData : BattleUnitData
 
     public override string GetPrefabPath()
     {
-        if (Npc != null)
+        if (Data != null)
         {
-            return Npc.prefab_path;
+            return Data.prefab_path;
         }
         return null;
     }
+
+    public override string GetUnitName()
+    {
+        if (Data != null)
+            return Data.name_kr;
+        return null;
+    }
+    public override TRIBE_TYPE GetTribeType()
+    {
+        if (Data != null)
+        {
+            return Data.tribe_type;
+        }
+        return TRIBE_TYPE.NONE;
+    }
+    public override NPC_TYPE GetNpctype()
+    {
+        if (Data != null)
+            return Data.npc_type;
+        return NPC_TYPE.NONE;
+    }
+
 }

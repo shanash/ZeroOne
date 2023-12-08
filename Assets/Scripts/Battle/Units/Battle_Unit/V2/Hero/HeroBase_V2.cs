@@ -30,7 +30,7 @@ public enum SD_BODY_TYPE
 [RequireComponent(typeof(SortingGroup))]
 
 
-public class HeroBase_V2 : UnitBase_V2
+public partial class HeroBase_V2 : UnitBase_V2
 {
     [SerializeField, Tooltip("Skeleton")]
     protected SkeletonAnimation Skeleton;
@@ -125,13 +125,6 @@ public class HeroBase_V2 : UnitBase_V2
 
 
     /// <summary>
-    /// 기본 공격 또는 스킬을 사용하면 급속값을 누적시킨다.<br/>
-    /// 누적된 급속 값을 이용하여 턴 관리를 할 수 있다.<br/>
-    /// 경우에 따라서 2회 연속 턴이 올 수도 있다.
-    /// </summary>
-    public double Accum_Rapidity_Value { get; protected set; }
-
-    /// <summary>
     /// 행운 포인트 - 전투 시작시 공속 포인트에 영향, 기타 다른 부분에 영향을 준다.
     /// </summary>
     public int Lucky_Point { get; protected set; }
@@ -203,10 +196,7 @@ public class HeroBase_V2 : UnitBase_V2
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
     }
 
-    public BattleUnitData GetBattleUnitData()
-    {
-        return Unit_Data;
-    }
+    
 
     
 
@@ -215,14 +205,7 @@ public class HeroBase_V2 : UnitBase_V2
         Deck_Order = order;
     }
 
-    /// <summary>
-    /// 스킬 매니저 반환
-    /// </summary>
-    /// <returns></returns>
-    protected BattleSkillManager GetSkillManager()
-    {
-        return Skill_Mng;
-    }
+    
     /// <summary>
     /// 체력 바 추가
     /// </summary>
@@ -353,135 +336,7 @@ public class HeroBase_V2 : UnitBase_V2
 
         Team_Type = Team_Mng.Team_Type;
     }
-
-    #region HeroBase States
-    public override void UnitStateInitBegin()
-    {
-        CalcHeroAbility();
-        AddLifeBar();
-    }
-
-    public override void UnitStateInit()
-    {
-        ChangeState(UNIT_STATES.READY);
-    
-    }
-    
-    public override void UnitStateReady()
-    {
-        ChangeState(UNIT_STATES.SPAWN);
-    }
-    public override void UnitStateIdle()
-    {
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateStunBegin()
-    {
-        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
-    }
-    public override void UnitStateStun()
-    {
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateSleepBegin()
-    {
-        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
-    }
-    public override void UnitStateSleep()
-    {
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateFreezeBegin()
-    {
-        //Skeleton.AnimationState.ClearTracks();
-        var tracks = FindAllTrakcs();
-        int len = tracks.Length;
-        for (int i = 0; i < len; i++)
-        {
-            tracks[i].TimeScale = 0f;
-        }
-    }
-    public override void UnitStateFreeze()
-    {
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateFreezeExit()
-    {
-        var tracks = FindAllTrakcs();
-        int len = tracks.Length;
-        for (int i = 0; i < len; i++)
-        {
-            tracks[i].TimeScale = 1f;
-        }
-    }
-
-    public override void UnitStateBindBegin()
-    {
-        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
-    }
-    public override void UnitStateBind()
-    {
-        //  attack check
-
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateAttack01()
-    {
-        CalcDurationSkillTime();
-    }
-
-    public override void UnitStateMove()
-    {
-        CalcDurationSkillTime();
-    }
-
-
-
-    public override void UnitStateDeathBegin()
-    {
-        RemoveLifeBar();
-        ClearDurationSkillDataList();
-        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.DEATH_01);
-    }
-
-    public override void UnitStateWinBegin()
-    {
-        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.WIN_01);
-    }
-
-    public override void UnitStateEndBegin()
-    {
-        //  team member remove
-        Team_Mng.RemoveDeathMember(this);
-    }
-    #endregion
-
-    /// <summary>
-    /// 스켈레톤 반환
-    /// </summary>
-    /// <returns></returns>
-    public Spine.Skeleton GetUnitSpineSkeleton()
-    {
-        if (Skeleton != null)
-        {
-            return Skeleton.skeleton;
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// 체력 게이지 위치 트랜스폼
-    /// </summary>
-    /// <returns></returns>
-    public Transform GetHPPositionTransform()
-    {
-        return Life_Bar_Pos;
-    }
+  
     /// <summary>
     /// 스켈레톤 알파값 수정
     /// </summary>
@@ -495,10 +350,6 @@ public class HeroBase_V2 : UnitBase_V2
         Render_Texture.color.a = alpha;
     }
 
-    public UnitRenderTexture GetSkeletonRenderTexture()
-    {
-        return Render_Texture;
-    }
 
     /// <summary>
     /// 스파인 플립 설정
@@ -516,36 +367,7 @@ public class HeroBase_V2 : UnitBase_V2
     {
         return Life > 0;
     }
-    
-    /// <summary>
-    /// 자신의 팀 매니저 반환
-    /// </summary>
-    /// <returns></returns>
-    public TeamManager_V2 GetTeamManager()
-    {
-        return Team_Mng;
-    }
 
-    /// <summary>
-    /// 일시적으로 영웅에게 체력 실드(보호막)가 생겼을 경우 반환.
-    /// 차후 스킬 등 현재 남아있는 보호막 값을 합하여 반환
-    /// </summary>
-    /// <returns></returns>
-    protected double GetLifeShieldPoint()
-    {
-        return 0;
-    }
-
-    protected double GetMaxLifeWithShield()
-    {
-        double shield = GetLifeShieldPoint();
-        double cur_life = Life;
-        if (shield + cur_life > Max_Life)
-        {
-            return shield + cur_life;
-        }
-        return Max_Life;
-    }
 
     protected void PlayAnimation(int track, string anim_name, bool loop)
     {
@@ -616,22 +438,8 @@ public class HeroBase_V2 : UnitBase_V2
                 break;
         }
     }
-    /// <summary>
-    /// 접근 사거리 정보 반환
-    /// </summary>
-    /// <returns></returns>
-    protected virtual float GetApproachDistance()
-    {
-        return Unit_Data.GetApproachDistance();
-    }
-    /// <summary>
-    /// 공격 사거리 반환
-    /// </summary>
-    /// <returns></returns>
-    protected virtual float GetDistance()
-    {
-        return Unit_Data.GetDistance();
-    }
+    
+    
 
     /// <summary>
     /// 가장 가까운 적을 찾는다.
@@ -640,13 +448,15 @@ public class HeroBase_V2 : UnitBase_V2
     protected virtual void FindApproachTargets() 
     {
         float distance = GetApproachDistance();
-        var first_skill = GetSkillManager().GetCurrentSkillGroup().GetFirstSkillData();
         Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
     }
+    /// <summary>
+    /// 각 스킬에 지정되어 있는 타겟 찾기
+    /// </summary>
+    /// <param name="skill"></param>
     protected virtual void FindTargets(BattleSkillData skill) 
     {
-        float distance = GetDistance();
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), distance, skill.GetTargetOrder(), skill.GetTargetCount(), ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), ref Normal_Attack_Target);
     }
     
 
@@ -662,7 +472,7 @@ public class HeroBase_V2 : UnitBase_V2
         }
         return null;
     }
-
+    #region Calc Stats
     /// <summary>
     /// 영웅의 능력치를 계산한다. 
     /// 기본 능력 + 레벨에 따른 능력 등 개별 개산
@@ -706,6 +516,8 @@ public class HeroBase_V2 : UnitBase_V2
     {
         Move_Speed = Unit_Data.GetMoveSpeed();
     }
+
+    #endregion
 
     /// <summary>
     /// 스킬 구현 V2<br/>
@@ -931,9 +743,6 @@ public class HeroBase_V2 : UnitBase_V2
         {
             Utility = GetComponent<SkeletonUtility>();
         }
-
-        
-
     }
     public override void Despawned()
     {
@@ -953,19 +762,7 @@ public class HeroBase_V2 : UnitBase_V2
         return GetDistanceFromCenter(center) <= distance;
     }
 
-    /// <summary>
-    /// 지정 유닛과 자신의 거리 반환
-    /// </summary>
-    /// <param name="center"></param>
-    /// <returns></returns>
-    public float GetDistanceFromCenter(UnitBase_V2 center)
-    {
-        Vector2 center_pos = center.transform.localPosition;
-        Vector2 this_pos = transform.localPosition;
-        float distance = Vector2.Distance(center_pos, this_pos);
-        return distance;
-    }
-
+   
     /// <summary>
     /// 적에게서 데미지를 받는다.
     /// </summary>
@@ -1000,7 +797,6 @@ public class HeroBase_V2 : UnitBase_V2
         if (Life <= 0)
         {
             Life = 0;
-            //SpawnDamageText(dmg);
             AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", Life_Bar_Pos, dmg, 1f);
             UpdateLifeBar();
             ChangeState(UNIT_STATES.DEATH);
@@ -1036,79 +832,7 @@ public class HeroBase_V2 : UnitBase_V2
         UpdateLifeBar();
     }
 
-    /// <summary>
-    /// 지속성 스킬 중 지정 타입의 스탯 타입 값 반환(배율 값)
-    /// </summary>
-    /// <param name="dtype"></param>
-    /// <returns></returns>
-    protected double GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE dtype)
-    {
-        double sum = 0;
-        int cnt = Used_Battle_Duration_Data_List.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var dur = Used_Battle_Duration_Data_List[i];
-            if (dur.GetDurationEffectType() == dtype)
-            {
-                sum += dur.GetMultipleTypeByMultiples();
-            }
-        }
-        return sum;
-    }
-    /// <summary>
-    /// 지속성 스킬 중 지정 타입의 스탯 타입 값 반환(절대 값)
-    /// </summary>
-    /// <param name="dtype"></param>
-    /// <returns></returns>
-    protected double GetDurationSkillTypesValues(DURATION_EFFECT_TYPE dtype)
-    {
-        double sum = 0;
-        int cnt = Used_Battle_Duration_Data_List.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var dur = Used_Battle_Duration_Data_List[i];
-            if (dur.GetDurationEffectType() == dtype)
-            {
-                sum += dur.GetMultipleTypeByValues();
-            }
-        }
-        return sum;
-    }
-
-    /// <summary>
-    /// body 타입에 따른 좌표 정보 반환
-    /// </summary>
-    /// <param name="btype"></param>
-    /// <returns></returns>
-    protected Transform GetBodyTypeTransform(SD_BODY_TYPE btype)
-    {
-        if (Sd_Body_Transforms.Exists(x => x.Body_Type == btype))
-        {
-            return Sd_Body_Transforms.Find(x => x.Body_Type == btype).Trans;
-        }
-        return null;
-    }
-    /// <summary>
-    /// 발사체 타입에 따른 타겟의 Transform 반환
-    /// </summary>
-    /// <param name="ptype"></param>
-    /// <returns></returns>
-    public Transform GetBodyPositionByProjectileType(PROJECTILE_TYPE ptype)
-    {
-        switch (ptype)
-        {
-            case PROJECTILE_TYPE.THROW_FOOT:
-            case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
-                return GetBodyTypeTransform(SD_BODY_TYPE.FOOT);
-            case PROJECTILE_TYPE.THROW_BODY:
-            case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
-                return GetBodyTypeTransform(SD_BODY_TYPE.BODY);
-            case PROJECTILE_TYPE.THROW_HEAD:
-            case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
-                return GetBodyTypeTransform(SD_BODY_TYPE.HEAD);
-        }
-        return null;
-    }
+   
 
     protected void AddSpawnEffectText(string path, Transform target, object data, float duration)
     {
@@ -1158,30 +882,7 @@ public class HeroBase_V2 : UnitBase_V2
         effect.StartParticle(edata.Duration);
     }
 
-    //protected void SpawnHealText(double recovery_hp)
-    //{
-    //    var heal_effect = (Heal_Normal_Effect_Text)Battle_Mng.GetEffectFactory().CreateEffect("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text", UI_Mng.GetDamageContainer());
-    //    heal_effect.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, Life_Bar_Pos.position);
-    //    heal_effect.SetData(Math.Truncate(recovery_hp));
-    //    heal_effect.StartParticle(1f);
-    //}
-
-    //protected void SpawnDamageText(BATTLE_SEND_DATA dmg)
-    //{
-    //    var dmg_effect = (Damage_Normal_Effect_Text)Battle_Mng.GetEffectFactory().CreateEffect("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", UI_Mng.GetDamageContainer());
-    //    dmg_effect.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, Life_Bar_Pos.position);
-    //    dmg_effect.SetData(dmg);
-    //    dmg_effect.StartParticle(1f);
-    //}
-
-    //protected void SpawnTransText(DURATION_EFFECT_TYPE etype)
-    //{
-    //    var trans_effect = (Trans_Effect_Text)Battle_Mng.GetEffectFactory().CreateEffect("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", UI_Mng.GetDamageContainer());
-    //    trans_effect.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, GetBodyPositionByProjectileType(PROJECTILE_TYPE.INSTANT_TARGET_BODY).position);
-    //    trans_effect.SetData(etype);
-    //    trans_effect.StartParticle(1f);
-    //}
-
+    
     /// <summary>
     /// 지속성 효과 추가(확률에 따라 적용됨)
     /// </summary>

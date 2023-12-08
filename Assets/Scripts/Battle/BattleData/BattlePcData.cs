@@ -141,4 +141,24 @@ public class BattlePcData : BattleUnitData
         }
         return null;
     }
+
+    public override string GetUnitName()
+    {
+        if (Data != null)
+            return Data.name_kr;
+        return null;
+    }
+    public override TRIBE_TYPE GetTribeType()
+    {
+        if (Data != null)
+        {
+            return Data.tribe_type;
+        }
+        return TRIBE_TYPE.NONE;
+    }
+    public override NPC_TYPE GetNpctype()
+    {
+        return NPC_TYPE.NONE;
+    }
+    
 }
