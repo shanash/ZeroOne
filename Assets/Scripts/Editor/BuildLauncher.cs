@@ -301,28 +301,46 @@ namespace FluffyDuck.EditorUtil
                     Directory.CreateDirectory(EditorUserBuildSettings.activeBuildTarget.ToString());
                 }
 
-                // BuildPlayerOptions 구성
-                BuildPlayerOptions buildPlayerOptions = GetBuildPlayerOptions();
-                buildPlayerOptions.locationPathName = BUILD_PATH;
-                buildPlayerOptions.options |= IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None;
+                try
+                {
+                    EditorUserBuildSettings.SetBuildLocation(BuildTarget.Android, BUILD_PATH);
+                    BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+                    buildPlayerOptions.locationPathName = BUILD_PATH;
+                    buildPlayerOptions.options |= IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None;
 
-                BuildPipeline.BuildPlayer(buildPlayerOptions);
+                    // BuildPlayerOptions 구성
+                    buildPlayerOptions = GetBuildPlayerOptions(false, buildPlayerOptions);
 
-                Debug.Log("Build completed: " + BUILD_PATH);
+                    BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+                    Debug.Log("Build completed: " + BUILD_PATH);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
             }
         }
 
         static BuildPlayerOptions GetBuildPlayerOptions(bool askForLocation = false, BuildPlayerOptions defaultOptions = new BuildPlayerOptions())
         {
-            // Get static internal "GetBuildPlayerOptionsInternal" method
-            MethodInfo method = typeof(BuildPlayerWindow.DefaultBuildMethods).GetMethod(
-                "GetBuildPlayerOptionsInternal",
-                BindingFlags.NonPublic | BindingFlags.Static);
+            try
+            {
+                // Get static internal "GetBuildPlayerOptionsInternal" method
+                MethodInfo method = typeof(BuildPlayerWindow.DefaultBuildMethods).GetMethod(
+                    "GetBuildPlayerOptionsInternal",
+                    BindingFlags.NonPublic | BindingFlags.Static);
 
-            // invoke internal method
-            return (BuildPlayerOptions)method.Invoke(
-                null,
-                new object[] { askForLocation, defaultOptions });
+                // invoke internal method
+                return (BuildPlayerOptions)method.Invoke(
+                    null,
+                    new object[] { askForLocation, defaultOptions });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                throw e;
+            }
         }
 
         public static void PrintStaticProperties(Type type)
