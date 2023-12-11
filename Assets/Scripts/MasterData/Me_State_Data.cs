@@ -17,10 +17,6 @@ public class Me_State_Data : System.IDisposable
 	///	아이들 애니메이션 이름
 	///	</summary>
 	public string idle_animation_name {get; set;}
-	///	<summary>
-	///	서브 애니메이션 이름
-	///	</summary>
-	public string[] sub_idle_animation_names {get; set;}
 
 	private bool disposed = false;
 
@@ -49,21 +45,10 @@ public class Me_State_Data : System.IDisposable
 	}
 	public override string ToString()
 	{
-		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[state_id] = <color=yellow>{0}</color>", state_id).AppendLine();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[idle_animation_name] = <color=yellow>{0}</color>", idle_animation_name).AppendLine();
-		sb.AppendLine("[sub_idle_animation_names]");
-		if(sub_idle_animation_names != null)
-		{
-			cnt = sub_idle_animation_names.Length;
-			for(int i = 0; i< cnt; i++)
-			{
-				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", sub_idle_animation_names[i]).AppendLine();
-			}
-		}
-
 		return sb.ToString();
 	}
 }

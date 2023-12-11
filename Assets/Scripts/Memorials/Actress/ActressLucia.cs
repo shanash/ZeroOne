@@ -100,7 +100,7 @@ public class ActressLucia : ActressBase
             (screen_pos.sqrMagnitude / drag_dest.sqrMagnitude) // 드래그한 길이가 얼마나 대상과 비슷한가
             * CommonUtils.Math.Cos(drag_dest, screen_pos); // 드래그한 방향이 얼마나 대상과 비슷한가
 
-        if (interaction_datas[index].parameters == null && interaction_datas[index].parameters.Length == 0)
+        if (string.IsNullOrEmpty(interaction_datas[index].drag_animation_name))
         {
             Debug.Log("Play");
             played_animation_drag_id = drag_id;
@@ -108,7 +108,7 @@ public class ActressLucia : ActressBase
             return index;
         }
 
-        string drag_anim_name = interaction_datas[index].parameters[0];
+        string drag_anim_name = interaction_datas[index].drag_animation_name;
         if (TryGetTrackNum(drag_anim_name, out int track_num))
         {
             if (close_value < 1)
@@ -119,7 +119,7 @@ public class ActressLucia : ActressBase
                     te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
                 }
 
-                if (!te.Animation.Name.Equals(interaction_datas[index].parameters[0]))
+                if (!te.Animation.Name.Equals(drag_anim_name))
                 {
                     te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
                 }
@@ -129,14 +129,6 @@ public class ActressLucia : ActressBase
             }
             else
             {
-                if (interaction_datas[index].parameters.Length == 2)
-                {
-                    string result_anim_name = interaction_datas[index].parameters[1];
-                    if (TryGetTrackNum(result_anim_name, out int track))
-                    {
-                        Skeleton.AnimationState.SetAnimation(track, result_anim_name, true);
-                    }
-                }
                 Skeleton.AnimationState.SetEmptyAnimation(track_num, 0.0f);
 
                 played_animation_drag_id = drag_id;

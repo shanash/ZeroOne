@@ -27,8 +27,7 @@ public class TouchEffectNode : MonoBehaviour, IPoolableComponent
                 Delta -= Time.deltaTime;
                 if (Delta < 0f)
                 {
-                    Is_Action = false;
-                    End_Callback?.Invoke(this);
+                    StopParticle();
                 }
             }
         }
@@ -53,8 +52,10 @@ public class TouchEffectNode : MonoBehaviour, IPoolableComponent
     {
         Is_Action = false;
         Is_Dragging = false;
-        Delta = -1f;
+        Delta = 0;
+        End_Callback?.Invoke(this);
     }
+
     /// <summary>
     /// 드래그 상태 설정
     /// </summary>
@@ -87,6 +88,4 @@ public class TouchEffectNode : MonoBehaviour, IPoolableComponent
         Is_Action = false;
         Is_Dragging = false;
     }
-
-
 }

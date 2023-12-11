@@ -190,7 +190,7 @@ public class TouchCanvas : MonoBehaviour
             int cnt = node_list.Count;
             for (int i = 0; i < cnt; i++)
             {
-                node_list[i].SetDragging(false);
+                node_list[i].StopParticle();
             }
         }
     }

@@ -26,13 +26,17 @@ public class Me_Interaction_Data : System.IDisposable
 	///	</summary>
 	public TOUCH_GESTURE_TYPE touch_gesture_type {get; set;}
 	///	<summary>
-	///	부등호
+	///	이상
 	///	</summary>
-	public INEQUALITY_TYPE touch_condition_inequality {get; set;}
+	public int condition_min_gesture_count {get; set;}
 	///	<summary>
-	///	제스쳐 횟수
+	///	이하
 	///	</summary>
-	public int touch_condition_count {get; set;}
+	public int condition_max_gesture_count {get; set;}
+	///	<summary>
+	///	드래그 애니메이션 이름
+	///	</summary>
+	public string drag_animation_name {get; set;}
 	///	<summary>
 	///	챗모션 인덱스
 	///	</summary>
@@ -59,8 +63,9 @@ public class Me_Interaction_Data : System.IDisposable
 		touch_body_type = TOUCH_BODY_TYPE.NONE;
 		touch_body_direction = string.Empty;
 		touch_gesture_type = TOUCH_GESTURE_TYPE.NONE;
-		touch_condition_inequality = INEQUALITY_TYPE.NONE;
-		touch_condition_count = 0;
+		condition_min_gesture_count = 0;
+		condition_max_gesture_count = 0;
+		drag_animation_name = string.Empty;
 		change_state_id = 0;
 	}
 
@@ -89,8 +94,9 @@ public class Me_Interaction_Data : System.IDisposable
 		sb.AppendFormat("[touch_body_type] = <color=yellow>{0}</color>", touch_body_type).AppendLine();
 		sb.AppendFormat("[touch_body_direction] = <color=yellow>{0}</color>", touch_body_direction).AppendLine();
 		sb.AppendFormat("[touch_gesture_type] = <color=yellow>{0}</color>", touch_gesture_type).AppendLine();
-		sb.AppendFormat("[touch_condition_inequality] = <color=yellow>{0}</color>", touch_condition_inequality).AppendLine();
-		sb.AppendFormat("[touch_condition_count] = <color=yellow>{0}</color>", touch_condition_count).AppendLine();
+		sb.AppendFormat("[condition_min_gesture_count] = <color=yellow>{0}</color>", condition_min_gesture_count).AppendLine();
+		sb.AppendFormat("[condition_max_gesture_count] = <color=yellow>{0}</color>", condition_max_gesture_count).AppendLine();
+		sb.AppendFormat("[drag_animation_name] = <color=yellow>{0}</color>", drag_animation_name).AppendLine();
 		sb.AppendLine("[chat_motion_ids]");
 		if(chat_motion_ids != null)
 		{

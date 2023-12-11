@@ -322,7 +322,7 @@ namespace FluffyDuck.EditorUtil
             }
         }
 
-        static BuildPlayerOptions GetBuildPlayerOptions(bool askForLocation = false, BuildPlayerOptions defaultOptions = new BuildPlayerOptions())
+        static BuildPlayerOptions GetBuildPlayerOptions(bool askForLocation = true, BuildPlayerOptions defaultOptions = new BuildPlayerOptions())
         {
             try
             {

@@ -27,7 +27,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     Bone Face; // 얼굴 위치를 가져오기 위한 본
     Bone Balloon; // 말풍선 위치 본
 
-    protected Dictionary<int, (string Base, string[] Subs)> State_Idle_Animation = null;
+    protected Dictionary<int, string> State_Idle_Animation = null;
     protected int Current_State_Id
     {
         get
@@ -39,31 +39,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         {
             if (_Current_State_Id != value)
             {
-                // 기존 서브 애니메이션 종료
-                if (Idle_Sub_Animations != null)
-                {
-                    foreach (var anim_name in Idle_Sub_Animations)
-                    {
-                        if (TryGetTrackNum(anim_name, out int track_index))
-                        {
-                            Skeleton.AnimationState.SetEmptyAnimation(track_index, 0);
-                        }
-                    }
-                }
-                var te = Skeleton.AnimationState.SetAnimation(INTERACTION_TRACK, State_Idle_Animation[value].Base, true);
+                var te = Skeleton.AnimationState.SetAnimation(INTERACTION_TRACK, State_Idle_Animation[value], true);
                 te.MixDuration = 0.2f;
-
-                if (State_Idle_Animation[value].Subs != null)
-                {
-                    foreach (var anim_name in State_Idle_Animation[value].Subs)
-                    {
-                        if (TryGetTrackNum(anim_name, out int track_index))
-                        {
-                            te = Skeleton.AnimationState.SetAnimation(track_index, anim_name, true);
-                            te.MixDuration = 0.0f;
-                        }
-                    }
-                }
             }
             _Current_State_Id = value;
         }
@@ -111,22 +88,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 return null;
             }
 
-            return State_Idle_Animation[Current_State_Id].Base;
-        }
-    }
-
-    protected string[] Idle_Sub_Animations
-    {
-        get
-        {
-            if (State_Idle_Animation == null
-    || State_Idle_Animation.Count == 0
-    || !State_Idle_Animation.ContainsKey(Current_State_Id))
-            {
-                return null;
-            }
-
-            return State_Idle_Animation[Current_State_Id].Subs;
+            return State_Idle_Animation[Current_State_Id];
         }
     }
 
@@ -603,8 +565,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
         catch (Exception e)
         {
-            Debug.Assert(false, $"body_type_id : {body_type_id}, chat_motion_id : {chat_motion_id}");
             Debug.LogError(e);
+            Debug.Assert(false, $"body_type_id : {body_type_id}, chat_motion_id : {chat_motion_id}");
         }
     }
 
@@ -648,7 +610,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 }
             }
 
-            if (interaction_datas[i].touch_condition_inequality == INEQUALITY_TYPE.NONE)
+            if (interaction_datas[i].condition_min_gesture_count == 0
+                && interaction_datas[i].condition_max_gesture_count == 0)
             {
                 result_index = i;
             }
@@ -663,47 +626,21 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                     }
                 }
 
-                switch (interaction_datas[i].touch_condition_inequality)
+                // 연속 제스쳐 최소 조건이 맞지 않는 경우를 확인
+                if (interaction_datas[i].condition_min_gesture_count != 0
+                    && interaction_datas[i].condition_min_gesture_count > count)
                 {
-                    case INEQUALITY_TYPE.EQUAL:
-                        if (count == interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    case INEQUALITY_TYPE.NOT_EQUAL:
-                        if (count != interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    case INEQUALITY_TYPE.GREATER:
-                        if (count > interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    case INEQUALITY_TYPE.GREATER_EQUAL:
-                        if (count >= interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    case INEQUALITY_TYPE.LESS:
-                        if (count < interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    case INEQUALITY_TYPE.LESS_EQUAL:
-                        if (count <= interaction_datas[i].touch_condition_count)
-                        {
-                            result_index = i;
-                        }
-                        break;
-                    default:
-                        break;
+                    continue;
                 }
+
+                // 연속 제스쳐 최대 조건이 맞지 않는 경우를 확인
+                if (interaction_datas[i].condition_max_gesture_count != 0
+                    && count > interaction_datas[i].condition_max_gesture_count)
+                {
+                    continue;
+                }
+
+                result_index = i;
             }
 
             if (result_index != -1)
@@ -807,7 +744,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             }
             else
             {
-                Skeleton.AnimationState.AddEmptyAnimation(track_num, 0.2f, 0);
+                //Skeleton.AnimationState.AddEmptyAnimation(track_num, 0.2f, 0);
             }
         }
 
@@ -819,17 +756,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     {
         var te = Skeleton.AnimationState.SetAnimation(0, Idle_Animation, true);
         te.MixDuration = 0.2f;
-
-        if (Idle_Sub_Animations != null)
-        {
-            foreach (var anim_name in Idle_Sub_Animations)
-            {
-                if (TryGetTrackNum(anim_name, out int track_num))
-                {
-                    Skeleton.AnimationState.SetAnimation(track_num, anim_name, true);
-                }
-            }
-        }
     }
 
     bool TryGetTrackCheckEqual(out int track_index, params string[] anim_names)
