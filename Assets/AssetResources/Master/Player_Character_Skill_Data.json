@@ -13,7 +13,12 @@
     ],
     "onetime_effect_ids": [
       100001
-    ]
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100002,
@@ -29,7 +34,12 @@
     ],
     "onetime_effect_ids": [
       100002
-    ]
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100003,
@@ -46,8 +56,11 @@
     "onetime_effect_ids": [
       100003
     ],
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 1.0
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100101,
@@ -59,14 +72,41 @@
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "effect_weight": [
-      100
+      50,
+      50
     ],
     "onetime_effect_ids": [
       100004
-    ]
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100102,
+    "pc_skill_group_id": 100102,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100005
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "pc_skill_id": 100103,
     "pc_skill_group_id": 100102,
     "target_type": 0,
     "target_rule_type": 1,
@@ -78,11 +118,16 @@
       100
     ],
     "onetime_effect_ids": [
-      100005
-    ]
+      0
+    ],
+    "duration_effect_ids": [
+      500002
+    ],
+    "event_name": "buff",
+    "effect_duration": 0.0
   },
   {
-    "pc_skill_id": 100103,
+    "pc_skill_id": 100104,
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -91,11 +136,17 @@
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "effect_weight": [
-      100
+      50,
+      50
     ],
     "onetime_effect_ids": [
       100006
-    ]
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100201,
@@ -112,6 +163,10 @@
     "onetime_effect_ids": [
       100007
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -130,6 +185,10 @@
     "onetime_effect_ids": [
       100008
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -146,8 +205,12 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      100009
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -164,8 +227,12 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      100010
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -173,19 +240,23 @@
     "pc_skill_id": 100302,
     "pc_skill_group_id": 100302,
     "target_type": 0,
-    "target_rule_type": 6,
+    "target_rule_type": 2,
     "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
+    "target_count": 5,
+    "projectile_type": 2,
     "projectile_speed": 0.0,
     "effect_weight": [
       100
     ],
     "onetime_effect_ids": [
-      100001
+      0
     ],
+    "duration_effect_ids": [
+      500003
+    ],
+    "event_name": "buff",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 1.0
+    "effect_duration": 0.5
   },
   {
     "pc_skill_id": 100303,
@@ -200,8 +271,12 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      100011
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -218,8 +293,12 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      100012
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },
@@ -227,19 +306,23 @@
     "pc_skill_id": 100402,
     "pc_skill_group_id": 100402,
     "target_type": 0,
-    "target_rule_type": 6,
+    "target_rule_type": 2,
     "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
+    "target_count": 5,
+    "projectile_type": 2,
     "projectile_speed": 0.0,
     "effect_weight": [
       100
     ],
     "onetime_effect_ids": [
-      100001
+      0
     ],
+    "duration_effect_ids": [
+      500004
+    ],
+    "event_name": "buff",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 1.0
+    "effect_duration": 0.5
   },
   {
     "pc_skill_id": 100403,
@@ -254,8 +337,78 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      100013
     ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
+    "effect_duration": 0.3
+  },
+  {
+    "pc_skill_id": 100501,
+    "pc_skill_group_id": 100501,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 2,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100014
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
+    "effect_duration": 0.3
+  },
+  {
+    "pc_skill_id": 100502,
+    "pc_skill_group_id": 100502,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 2,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100014
+    ],
+    "duration_effect_ids": [
+      500005
+    ],
+    "event_name": "shoot",
+    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
+    "effect_duration": 0.3
+  },
+  {
+    "pc_skill_id": 100503,
+    "pc_skill_group_id": 100503,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "projectile_type": 2,
+    "projectile_speed": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      100015
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
     "effect_duration": 0.3
   },

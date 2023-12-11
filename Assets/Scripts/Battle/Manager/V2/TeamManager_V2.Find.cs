@@ -1,9 +1,7 @@
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public partial class TeamManager_V2

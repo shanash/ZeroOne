@@ -185,4 +185,73 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         return Render_Texture;
     }
+
+
+    /// <summary>
+    /// 방어율
+    /// 방어율 = 방어력 / (상수 + 방어력)
+    /// 최종 데미지 = 적 데미지 * (1 - 방어율)
+    /// </summary>
+    /// <returns></returns>
+    protected double GetDefenseRate()
+    {
+        double def_pt = GetDefensePoint();
+        double defense_rate = def_pt / (100 + def_pt);
+        return defense_rate;
+    }
+    /// <summary>
+    /// 최종 데미지
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <returns></returns>
+    protected double GetCalcDamage(double damage)
+    {
+        double defense_rate = GetDefenseRate();
+        double result_dmg = damage * (1 - defense_rate);
+        return result_dmg;
+    }
+
+    /// <summary>
+    /// 실시간 버프 등이 적용된 공격력 가져오기
+    /// </summary>
+    /// <returns></returns>    
+    public double GetAttackPoint()
+    {
+        double attk_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.ATK_UP);
+        double attk_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.ATK_UP);
+
+        double attk_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.ATK_DOWN);
+        double attk_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.ATK_DOWN);
+
+        double pt = Attack + (attk_up_value - attk_down_value);
+        if (attk_up_rate > 0 || attk_down_rate > 0)
+        {
+            pt += pt * (attk_up_rate - attk_down_rate);
+        }
+
+        return pt;
+    }
+    /// <summary>
+    /// 실시간 버프 등이 적용된 방어력 가져오기
+    /// </summary>
+    /// <returns></returns>
+    public double GetDefensePoint()
+    {
+        double def_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DEF_UP);
+        double def_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.DEF_UP);
+
+        double def_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DEF_DOWN);
+        double def_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.DEF_DOWN);
+
+        double pt = Defense + (def_up_value - def_down_value);
+        if (def_up_rate > 0 || def_down_rate > 0)
+        {
+            pt += pt * (def_up_rate - def_down_rate);
+        }
+        return pt;
+    }
+
+
+
+
 }

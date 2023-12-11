@@ -370,6 +370,10 @@ public enum DURATION_EFFECT_TYPE
 	ATK_UP = 106,
 	/// <summary>방어력 증가</summary>
 	DEF_UP = 107,
+	/// <summary>공격력 감소</summary>
+	ATK_DOWN = 108,
+	/// <summary>방어력 감소</summary>
+	DEF_DOWN = 109,
 }
 
 ///	<summary>

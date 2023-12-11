@@ -27,14 +27,14 @@ public partial class HeroBase_V2 : UnitBase_V2
         Life = Max_Life;
     }
     /// <summary>
-    /// 공격력 계산
+    /// 공격력 계산, 패시브 공격력 등 계산
     /// </summary>
     protected virtual void CalcAttackPoint()
     {
         Attack = Unit_Data.GetAttackPoint();
     }
     /// <summary>
-    /// 방어력 계산
+    /// 방어력 계산. 패시브 방어력 등 계산
     /// </summary>
     protected virtual void CalcDefensePoint()
     {

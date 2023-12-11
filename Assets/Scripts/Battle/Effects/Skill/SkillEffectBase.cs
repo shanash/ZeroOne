@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 
 [RequireComponent(typeof(RendererSortingZ))]
 [RequireComponent (typeof(SortingGroup))]
+[RequireComponent(typeof(EffectFollowingComponent))]
 public class SkillEffectBase : EffectBase
 {
     [SerializeField, Tooltip("Mover")]

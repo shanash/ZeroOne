@@ -22,6 +22,7 @@ public class BattleSkillDataFactory
                     break;
                 default:
                     UnityEngine.Debug.Assert(false);
+                    onetime_skill = new BattlePcOnetimeSkillData();
                     break;
             }
             onetime_skill?.SetOnetimeSkillDataID(pc_onetime_skill_id);
@@ -49,7 +50,9 @@ public class BattleSkillDataFactory
                 case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                     onetime_skill = new BattleNpcOnetimeSkillData_LifeRecovery();
                     break;
+                    
                 default:
+                    onetime_skill = new BattleNpcOnetimeSkillData();
                     UnityEngine.Debug.Assert(false);
                     break;
             }
@@ -89,6 +92,18 @@ public class BattleSkillDataFactory
                     break;
                 case DURATION_EFFECT_TYPE.FREEZE:
                     duration_skill = new BattlePcDurationSkillData_Freeze();
+                    break;
+                case DURATION_EFFECT_TYPE.ATK_UP:
+                    duration_skill = new BattlePcDurationSkillData_AttackUp();
+                    break;
+                case DURATION_EFFECT_TYPE.DEF_UP:
+                    duration_skill = new BattlePcDurationSkillData_DefenseUp();
+                    break;
+                case DURATION_EFFECT_TYPE.ATK_DOWN:
+                    duration_skill = new BattlePcDurationSkillData_AttackDown();
+                    break;
+                case DURATION_EFFECT_TYPE.DEF_DOWN:
+                    duration_skill = new BattlePcDurationSkillData_DefenseDown();
                     break;
                 default:
                     UnityEngine.Debug.Assert(false);
@@ -131,6 +146,18 @@ public class BattleSkillDataFactory
                     break;
                 case DURATION_EFFECT_TYPE.FREEZE:
                     duration_skill = new BattleNpcDurationSkillData_Freeze();
+                    break;
+                case DURATION_EFFECT_TYPE.ATK_UP:
+                    duration_skill = new BattleNpcDurationSkillData_AttackUp();
+                    break;
+                case DURATION_EFFECT_TYPE.ATK_DOWN:
+                    duration_skill = new BattleNpcDurationSkillData_AttackDown();
+                    break;
+                case DURATION_EFFECT_TYPE.DEF_UP:
+                    duration_skill = new BattleNpcDurationSkillData_DefenseUp();
+                    break;
+                case DURATION_EFFECT_TYPE.DEF_DOWN:
+                    duration_skill = new BattleNpcDurationSkillData_DefenseDown();
                     break;
                 default:
                     UnityEngine.Debug.Assert(false);

@@ -37,11 +37,11 @@ public class Damage_Normal_Effect_Text : EffectBase
             {
                 if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.DAMAGE_REDUCE)
                 {
-                    Damage_Text.text = ZString.Format("<color=#{0}><size=30>피해감소</size></color>\n-{1}", txt_color, dmg);
+                    Damage_Text.text = ZString.Format("<color=#{0}><size=30>피해감소</size></color>\n-{1:0.##}", txt_color, dmg);
                 }
                 else
                 {
-                    Damage_Text.text = ZString.Format("<color=#{0}>-{1}</color>", txt_color, dmg);
+                    Damage_Text.text = ZString.Format("<color=#{0}>-{1:0.##}</color>", txt_color, dmg);
                 }
             }
             else

@@ -67,7 +67,8 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     /// <summary>
     /// 방어력<br/>
-    /// 최종 데미지 = 적 데미지 / (1 + 방어력 / 100)
+    /// 방어율 = 방어력 / (상수 + 방어력)
+    /// 최종 데미지 = 적 데미지 * (1 - 방어율)
     /// </summary>
     public double Defense { get; protected set; }
 
@@ -490,7 +491,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             dmg.Caster = this;
             dmg.AddTargets(Normal_Attack_Target);
             dmg.Skill = skill;
-            dmg.Damage = Attack;
+            dmg.Damage = GetAttackPoint();
             dmg.Effect_Weight_Index = effect_weight_index;
 
             string skill_effect_prefab = skill.GetEffectPrefabPath();
@@ -525,7 +526,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Caster = this;
                 dmg.AddTarget(target);
                 dmg.Skill = skill;
-                dmg.Damage = Attack;
+                dmg.Damage = GetAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 string skill_effect_prefab = skill.GetEffectPrefabPath();
@@ -736,11 +737,16 @@ public partial class HeroBase_V2 : UnitBase_V2
             CalcDurationCountUse(PERSISTENCE_TYPE.HITTED);
         }
 
-        damage = Math.Truncate(dmg.Damage);
+        //damage = Math.Truncate(dmg.Damage);
+        //  방어율 = 상수 + 방어력 / 100
+        //  최종 데미지 계산 (최종 데미지 = 적 데미지 * 방어율)
+        damage = GetCalcDamage(damage);
+
         if (damage <= 0)
         {
             return;
         }
+        dmg.Damage = damage;
         //Render_Texture.SetHitColor(Color.red, Color.clear, 0.2f);
         Render_Texture.SetHitColorV2(Color.red, 0.3f);
         Life -= damage;
@@ -753,7 +759,6 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        //SpawnDamageText(dmg);
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", Life_Bar_Pos, dmg, 1f);
         UpdateLifeBar();
     }
