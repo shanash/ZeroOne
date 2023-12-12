@@ -1,3 +1,5 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
+using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
@@ -75,6 +77,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     float Origin_Mouth_Alpha = 0; // 원래 입 크기
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
     float Elapsed_Time_For_Mouth_Open = 0; //
+    int Played_animation_drag_id = 0;
 
     protected string Idle_Animation
     {
@@ -646,6 +649,70 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             if (result_index != -1)
             {
                 break;
+            }
+        }
+
+        Debug.Log($"index : {result_index}");
+
+        if (result_index == -1
+            || gesture_type != TOUCH_GESTURE_TYPE.DRAG)
+        {
+            return result_index;
+        }
+
+        if (Played_animation_drag_id == drag_id)
+        {
+            return -1;
+        }
+
+        // 드래그 디테일 구현
+        Vector2 drag_dest = bounding_box.GetPtDirection();
+
+        if (drag_dest.Equals(Vector2.zero))
+        {
+            return -1;
+        }
+
+        if (screen_pos.sqrMagnitude.Equals(0.0f))
+        {
+            screen_pos = drag_dest * 0.001f;
+        }
+
+        float close_value = // 드래그한 정도가 얼만큼 drag_dest와 일치했는가 (0~1 이외의 값은 크게 의미 없다)
+            (screen_pos.sqrMagnitude / drag_dest.sqrMagnitude) // 드래그한 길이가 얼마나 대상과 비슷한가
+            * CommonUtils.Math.Cos(drag_dest, screen_pos); // 드래그한 방향이 얼마나 대상과 비슷한가
+
+        if (string.IsNullOrEmpty(interaction_datas[result_index].drag_animation_name))
+        {
+            Debug.Log("Play");
+            Played_animation_drag_id = drag_id;
+            return result_index;
+        }
+
+        string drag_anim_name = interaction_datas[result_index].drag_animation_name;
+        if (TryGetTrackNum(drag_anim_name, out int track_num))
+        {
+            if (close_value < 1)
+            {
+                var te = Skeleton.AnimationState.GetCurrent(track_num);
+                if (te == null)
+                {
+                    te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
+                }
+
+                if (!te.Animation.Name.Equals(drag_anim_name))
+                {
+                    te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
+                }
+
+                te.TimeScale = 0.0f;
+                te.TrackTime = close_value;
+            }
+            else
+            {
+                Skeleton.AnimationState.SetEmptyAnimation(track_num, 0.0f);
+
+                Played_animation_drag_id = drag_id;
             }
         }
 
