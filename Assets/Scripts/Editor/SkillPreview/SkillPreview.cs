@@ -1,6 +1,8 @@
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -10,8 +12,8 @@ public class SkillPreview : EditorWindow
     /// <summary>
     /// 영웅 또는 NPC 의 스킬을 선택할 것인지 여부 판단
     /// </summary>
-    int Choice_Char_Type_Index = (int)CHARACTER_TYPE.PC;
-    int Prev_Choice_Char_Type_Index = (int)CHARACTER_TYPE.PC;
+    CHARACTER_TYPE Choice_Character_Type = CHARACTER_TYPE.NONE;
+    CHARACTER_TYPE Prev_Choice_Character_Type = CHARACTER_TYPE.NONE;
 
     /// <summary>
     /// 영웅 데이터 리스트
@@ -33,15 +35,19 @@ public class SkillPreview : EditorWindow
     List<string> Unit_Choice_Drop_Down_Menu_List = new List<string>();
 
     /// <summary>
-    /// 현재 사용중인 유닛 리스트
+    /// 현재 사용중인 유닛
     /// </summary>
-    List<HeroBase_V2> Used_Unit_List = new List<HeroBase_V2>();
+    HeroBase_V2 Used_Unit;
 
     /// <summary>
     /// 유닛 썸네일
     /// </summary>
     Texture Unit_Thumbnail;
 
+
+    bool Show_Skill_Info;
+    SKILL_TYPE Skill_Type = SKILL_TYPE.NONE;
+    SKILL_TYPE Prev_Skill_Type = SKILL_TYPE.NONE;
 
 
     
@@ -63,14 +69,37 @@ public class SkillPreview : EditorWindow
         GetWindow<SkillPreview>("스킬 미리보기").minSize = new Vector2(400, 600);
     }
 
-    private void OnEnable()
+    void ResetData()
     {
-        
+        //  c type
+        Choice_Character_Type = CHARACTER_TYPE.NONE;
+        Prev_Choice_Character_Type = CHARACTER_TYPE.NONE;
+
+        //  hero datas
+        Hero_Unit_Data_List.ForEach(x => x.Dispose());
+        Hero_Unit_Data_List.Clear();
+        Hero_Index = 0;
+        Prev_Hero_Index = 0;
+
+        //  npc datas
+        Npc_Unit_Data_List.ForEach(x => x.Dispose());
+        Npc_Index = 0;
+        Prev_Npc_Index = 0;
+
+        //  Used_Unit
+        ClearBattleUnit();
+
+        //  clear thumbnail
+        ClearUnitThumnail();
+
+        Unit_Choice_Drop_Down_Menu_List.Clear();
+
+        //  skill info
+        Show_Skill_Info = false;
+        Skill_Type = SKILL_TYPE.NONE;
+        Prev_Skill_Type = SKILL_TYPE.NONE;
     }
-    private void OnDisable()
-    {
-        
-    }
+
 
     static bool IsSkillPreviewScene()
     {
@@ -123,6 +152,7 @@ public class SkillPreview : EditorWindow
                         }
                         return;
                     }
+                    ResetData();
                     EditorApplication.EnterPlaymode();
                 }
                 GUILayout.FlexibleSpace(); // 버튼들을 왼쪽으로 밀어내기
@@ -146,8 +176,8 @@ public class SkillPreview : EditorWindow
         GUILayout.Space(10);
         EditorGUILayout.BeginVertical("Skill Box");
         {
-            CHARACTER_TYPE char_type = (CHARACTER_TYPE)Array.IndexOf(Enum.GetNames(typeof(CHARACTER_TYPE)), ((CHARACTER_TYPE)Choice_Char_Type_Index).ToString());
-            if (char_type == CHARACTER_TYPE.PC)
+            //CHARACTER_TYPE char_type = (CHARACTER_TYPE)Array.IndexOf(Enum.GetNames(typeof(CHARACTER_TYPE)), ((CHARACTER_TYPE)Choice_Char_Type_Index).ToString());
+            if (Choice_Character_Type == CHARACTER_TYPE.PC)
             {
                 GUILayout.Label("플레이어 캐릭터 스킬", EditorStyles.boldLabel);
             }
@@ -160,13 +190,14 @@ public class SkillPreview : EditorWindow
 
             EditorGUILayout.BeginHorizontal();
             {
-                Choice_Char_Type_Index = EditorGUILayout.Popup("캐릭터 타입 선택", Choice_Char_Type_Index, Enum.GetNames(typeof(CHARACTER_TYPE)));
+                //Choice_Char_Type_Index = EditorGUILayout.Popup("캐릭터 타입 선택", Choice_Char_Type_Index, Enum.GetNames(typeof(CHARACTER_TYPE)));
+                Choice_Character_Type = (CHARACTER_TYPE)EditorGUILayout.EnumPopup("캐릭터 타입 선택", Choice_Character_Type);
                 GUILayout.Space(10);
             }
             EditorGUILayout.EndHorizontal();
 
 
-            if (char_type == CHARACTER_TYPE.PC)
+            if (Choice_Character_Type == CHARACTER_TYPE.PC)
             {
                 LayoutPcType();
             }
@@ -174,8 +205,9 @@ public class SkillPreview : EditorWindow
             {
                 LayoutNpcType();
             }
-        }
 
+            
+        }
             
         EditorGUILayout.EndVertical();
     }
@@ -202,7 +234,7 @@ public class SkillPreview : EditorWindow
             }
         }
 
-        ResetUnitChoiceDropDownMenuList(CHARACTER_TYPE.PC);
+        ResetUnitChoiceDropDownMenuList(Choice_Character_Type);
 
 
         EditorGUILayout.BeginHorizontal("Drop Box");
@@ -214,15 +246,6 @@ public class SkillPreview : EditorWindow
                 {
                     var unit = Hero_Unit_Data_List[Hero_Index - 1];
                     SpawnGameObject(unit);
-                    //Debug.Log($"불러오기 PC => {unit.GetUnitID()}");
-
-                    //var pool = GameObjectPoolManager.Instance;
-                    //pool.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
-                    //{
-                    //    var battle_unit = obj.GetComponent<HeroBase_V2>();
-                    //    battle_unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
-                    //    Used_Unit_List.Add(battle_unit);
-                    //});
                 }
                 
             }
@@ -230,7 +253,12 @@ public class SkillPreview : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
+        
+
         AddLayoutUnitThumbnail();
+
+        //  skill choice
+        AddSkillChoice();
 
         AddLayoutStopMode();
     }
@@ -254,7 +282,7 @@ public class SkillPreview : EditorWindow
                 Npc_Unit_Data_List.Add(unit);
             }
         }
-        ResetUnitChoiceDropDownMenuList(CHARACTER_TYPE.NPC);
+        ResetUnitChoiceDropDownMenuList(Choice_Character_Type);
 
         EditorGUILayout.BeginHorizontal("Drop Box");
         {
@@ -266,13 +294,6 @@ public class SkillPreview : EditorWindow
                 {
                     var unit = Npc_Unit_Data_List[Npc_Index - 1];
                     SpawnGameObject(unit);
-                    //var pool = GameObjectPoolManager.Instance;
-                    //pool.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
-                    //{
-                    //    var battle_unit = obj.GetComponent<HeroBase_V2>();
-                    //    battle_unit.SetBattleUnitDataID(unit.GetUnitID());
-                    //    Used_Unit_List.Add(battle_unit);
-                    //});
                 }
                 
             }
@@ -280,21 +301,40 @@ public class SkillPreview : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
-
         AddLayoutUnitThumbnail();
-
+        AddSkillChoice();
         AddLayoutStopMode();
     }
 
+    /// <summary>
+    /// 유닛 소환
+    /// </summary>
+    /// <param name="unit"></param>
     void SpawnGameObject(BattleUnitData unit)
     {
+        
         GameObjectPoolManager.Instance.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
         {
-            var battle_unit = obj.GetComponent<HeroBase_V2>();
-            battle_unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
-            battle_unit.GetSkeletonRenderTexture().enabled = false;
-            Used_Unit_List.Add(battle_unit);
+            ClearBattleUnit();
+            Used_Unit = obj.GetComponent<HeroBase_V2>();
+            Used_Unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
+            Used_Unit.GetSkeletonRenderTexture().enabled = false;
+            
         });
+    }
+
+    /// <summary>
+    /// 사용중인 유닛을 제거
+    /// </summary>
+    void ClearBattleUnit()
+    {
+        if (Used_Unit == null)
+        {
+            return;
+        }
+        var pool = GameObjectPoolManager.Instance;
+        pool.UnusedGameObject(Used_Unit.gameObject);
+        Used_Unit = null;
     }
 
     /// <summary>
@@ -314,7 +354,7 @@ public class SkillPreview : EditorWindow
                 Unit_Choice_Drop_Down_Menu_List.Add(unit.GetUnitID().ToString());
             }
         }
-        else
+        else if (ctype == CHARACTER_TYPE.NPC)
         {
             int cnt = Npc_Unit_Data_List.Count;
             for (int i = 0; i < cnt; i++)
@@ -323,6 +363,7 @@ public class SkillPreview : EditorWindow
                 Unit_Choice_Drop_Down_Menu_List.Add(unit.GetUnitID().ToString());
             }
         }
+        
     }
 
     #region Add Layout Funcs
@@ -346,9 +387,23 @@ public class SkillPreview : EditorWindow
 
         GUILayout.Space(10);
     }
-
+    /// <summary>
+    /// 썸네일 
+    /// </summary>
     void AddLayoutUnitThumbnail()
     {
+        if (Used_Unit == null)
+        {
+            return;
+        }
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("썸네일", EditorStyles.boldLabel);
+            GUILayout.FlexibleSpace();
+        }
+        EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.BeginHorizontal();
         {
             GUILayout.FlexibleSpace();
@@ -358,11 +413,40 @@ public class SkillPreview : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
+    /// <summary>
+    /// 스킬 선택 UI 추가
+    /// </summary>
+    void AddSkillChoice()
+    {
+        if (Used_Unit == null)
+        {
+            return;
+        }
+        Show_Skill_Info = EditorGUILayout.Foldout(Show_Skill_Info, "스킬", true);
+
+        if (Show_Skill_Info)
+        {
+            //  스킬 선택
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUILayout.Space(10);
+                Skill_Type = (SKILL_TYPE)EditorGUILayout.EnumPopup("스킬 선택", Skill_Type);
+            }
+            EditorGUILayout.EndHorizontal();
+
+
+        }
+
+
+    }
+
 
     #endregion
 
 
 
+    
+    #region Change Callback
     /// <summary>
     /// 캐릭터 타입이 변경되었을 때 호출되는 함수
     /// </summary>
@@ -371,29 +455,20 @@ public class SkillPreview : EditorWindow
         Hero_Index = 0;
         Npc_Index = 0;
 
+        Skill_Type = SKILL_TYPE.NONE;
+        ClearBattleUnit();
+        ClearUnitThumnail();
     }
 
-    /// <summary>
-    /// 캐릭터 타입이 변경되었는지 여부 판단
-    /// 만약 변경되었을 경우, 함수 호출 <see cref="ChangeCharacterTypeIndex"/>
-    /// </summary>
-    void CheckCharacterTypeIndex()
-    {
-        if (Prev_Choice_Char_Type_Index != Choice_Char_Type_Index)
-        {
-            Prev_Choice_Char_Type_Index = Choice_Char_Type_Index;
-            //  todo callback
-            ChangeCharacterTypeIndex();
-        }
-    }
 
     /// <summary>
     /// 영웅 또는 NPC의 선택 인덱스가 변경되었을 경우
     /// </summary>
     void ChangeUnitDataChoiceIndex()
     {
-        CHARACTER_TYPE ctype = GetCharacterType();
-        if (ctype == CHARACTER_TYPE.PC)
+        ClearUnitThumnail();
+        ClearBattleUnit();
+        if (Choice_Character_Type == CHARACTER_TYPE.PC)
         {
             if (Hero_Index == 0)
             {
@@ -401,7 +476,7 @@ public class SkillPreview : EditorWindow
                 return;
             }
         }
-        else
+        else if (Choice_Character_Type == CHARACTER_TYPE.NPC)
         {
             if (Npc_Index == 0)
             {
@@ -409,17 +484,42 @@ public class SkillPreview : EditorWindow
                 return;
             }
         }
-        
-        
     }
+
+    /// <summary>
+    /// 영웅 또는 NPC의 스킬 타입 값이 변경되었을 경우
+    /// </summary>
+    void ChangeUnitSkillType()
+    {
+
+    }
+    
+    #endregion
+
+
+    #region Check Each Index
+    /// <summary>
+    /// 캐릭터 타입이 변경되었는지 여부 판단
+    /// 만약 변경되었을 경우, 함수 호출 <see cref="ChangeCharacterTypeIndex"/>
+    /// </summary>
+    void CheckCharacterTypeIndex()
+    {
+        if (Prev_Choice_Character_Type != Choice_Character_Type)
+        {
+            Prev_Choice_Character_Type = Choice_Character_Type;
+            //  todo callback
+            ChangeCharacterTypeIndex();
+        }
+    }
+
+
     /// <summary>
     /// 영웅 또는 NPC의 선택 인덱스가 변경되었을 경우
     /// 만약 변경되었을 경우, 함수 호출 <see cref="ChangeUnitDataChoiceIndex"/>
     /// </summary>
     void CheckUnitChoiceIndex()
     {
-        CHARACTER_TYPE ctype = GetCharacterType();
-        if (ctype == CHARACTER_TYPE.PC)
+        if (Choice_Character_Type == CHARACTER_TYPE.PC)
         {
             if (Prev_Hero_Index != Hero_Index)
             {
@@ -437,10 +537,20 @@ public class SkillPreview : EditorWindow
         }
     }
 
-    CHARACTER_TYPE GetCharacterType()
+    void CheckSkillType()
     {
-        return (CHARACTER_TYPE)Choice_Char_Type_Index;
+        if (Choice_Character_Type != CHARACTER_TYPE.NONE)
+        {
+            if (Prev_Skill_Type != Skill_Type)
+            {
+                Prev_Skill_Type = Skill_Type;
+                ChangeUnitSkillType();
+            }
+        }
     }
+    #endregion
+
+
 
     void UpdateUnitThumbnail()
     {
@@ -448,16 +558,15 @@ public class SkillPreview : EditorWindow
         {
             return;
         }
-        if (Selection.activeGameObject == null)
+
+        if (Used_Unit == null)
         {
             return;
         }
-   
-
-        var unit = Selection.activeGameObject.GetComponent<HeroBase_V2>();
-        if (unit != null)
+       
+        if (Used_Unit != null)
         {
-            string path = unit.GetBattleUnitData().GetThumbnailPath();
+            string path = Used_Unit.GetBattleUnitData().GetThumbnailPath();
             if (!string.IsNullOrEmpty(path))
             {
                 CommonUtils.GetResourceFromAddressableAsset<Texture>(path, (obj) =>
@@ -487,7 +596,9 @@ public class SkillPreview : EditorWindow
 
         CheckUnitChoiceIndex();
 
-        if (Selection.activeGameObject != null)
+        CheckSkillType();
+
+        if (Used_Unit != null)
         {
             UpdateUnitThumbnail();
         }

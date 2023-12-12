@@ -22,17 +22,17 @@ public class Npc_Data : System.IDisposable
 	///	</summary>
 	public NPC_TYPE npc_type {get; set;}
 	///	<summary>
-	///	프리팹
-	///	</summary>
-	public string prefab_path {get; set;}
-	///	<summary>
 	///	전투 정보 인덱스
 	///	</summary>
 	public int npc_battle_id {get; set;}
 	///	<summary>
+	///	프리팹
+	///	</summary>
+	public string prefab_path {get; set;}
+	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon {get; set;}
+	public string icon_path {get; set;}
 
 	private bool disposed = false;
 
@@ -42,9 +42,9 @@ public class Npc_Data : System.IDisposable
 		name_kr = string.Empty;
 		tribe_type = TRIBE_TYPE.NONE;
 		npc_type = NPC_TYPE.NONE;
-		prefab_path = string.Empty;
 		npc_battle_id = 0;
-		icon = string.Empty;
+		prefab_path = string.Empty;
+		icon_path = string.Empty;
 	}
 
 	public void Dispose()
@@ -70,9 +70,9 @@ public class Npc_Data : System.IDisposable
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
 		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();
-		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
-		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
+		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
+		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		return sb.ToString();
 	}
 }

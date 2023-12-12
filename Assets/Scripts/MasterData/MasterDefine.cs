@@ -440,9 +440,28 @@ public enum INEQUALITY_TYPE
 ///	</summary>
 public enum CHARACTER_TYPE
 {
+	/// <summary>NONE</summary>
+	NONE = 0,
 	/// <summary>PLAYER CHARACTER</summary>
-	PC = 0,
+	PC = 1,
 	/// <summary>NPC</summary>
-	NPC = 1,
+	NPC = 2,
+}
+
+///	<summary>
+///	SKII TYPE
+///	</summary>
+public enum SKILL_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>일반 공격</summary>
+	NORMAL_ATTACK = 1,
+	/// <summary>스킬 공격 1</summary>
+	SKILL_01 = 2,
+	/// <summary>스킬 공격 2</summary>
+	SKILL_02 = 3,
+	/// <summary>궁극기</summary>
+	SPECIAL_SKILL = 4,
 }
 

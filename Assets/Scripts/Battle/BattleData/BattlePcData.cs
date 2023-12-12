@@ -1,5 +1,7 @@
 
 
+using Unity.VisualScripting;
+
 public class BattlePcData : BattleUnitData
 {
     Player_Character_Data Data;
@@ -88,7 +90,30 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    
+    public override double GetAccuracyPoint()
+    {
+        if (Battle_Data != null)
+            return Battle_Data.accuracy;
+        return 0;
+    }
+
+    public override double GetEvationPoint()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.evasion;
+        }
+        return 0;
+    }
+    public override double GetAutoRecoveryLife()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.auto_recovery;
+        }
+        return 0;
+    }
+
 
     public override float GetApproachDistance()
     {

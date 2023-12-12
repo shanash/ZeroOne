@@ -67,8 +67,8 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     /// <summary>
     /// 방어력<br/>
-    /// 방어율 = 방어력 / (상수 + 방어력)
-    /// 최종 데미지 = 적 데미지 * (1 - 방어율)
+    /// 방어율 = 1/(1+방어력/100)
+    /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
     public double Defense { get; protected set; }
 
@@ -81,10 +81,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 물리 명중률<br/>
     /// 명중 기본값 및 민첩 수치에 따라 결정<br/>
     /// 명중 레벨 테이블의 값을 참조한다.<br/>
-    /// 명중 확률  = 1 / (1 + 100 / (회피값 - 적의 명중값))
+    /// 명중 확률  = 1 - 회피 확률
     /// 명중 실패시 데미지 감소(빗나감 데미지)
     /// </summary>
-    public double Accuracy_Rate { get; protected set; }
+    public double Accuracy { get; protected set; }
 
     /// <summary>
     /// 물리 회피율<br/>
@@ -92,7 +92,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 회피 레벨 테이블의 값을 참조한다.<br/>
     /// 회피 확률 = 1 / (1 + 100 / 회피값)
     /// </summary>
-    public double Evasion_Rate { get; protected set; }
+    public double Evasion { get; protected set; }
 
     /// <summary>
     /// 자동 회복<br/>
@@ -726,6 +726,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
 
         double damage = dmg.Damage;
+
+        //  회피 여기서 계산할까? 회피하면 데미지가 줄어든다고 했는데, 그 로직은?
+        if (IsEvation(dmg.Caster.Accuracy))
+        {
+            damage = dmg.Damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
+        }
+        
         
 
         //  피해감소 체크

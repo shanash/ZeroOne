@@ -152,6 +152,8 @@ public class BattleSkillData : BattleDataBase, ICloneable
         Effect_Weight_Index = weight_index;
     }
 
+    
+
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋

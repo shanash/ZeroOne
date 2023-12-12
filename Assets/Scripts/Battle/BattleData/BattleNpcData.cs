@@ -74,7 +74,21 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+    public override double GetAccuracyPoint()
+    {
+        if (Battle_Data != null)
+            return Battle_Data.accuracy;
+        return 0;
+    }
 
+    public override double GetEvationPoint()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.evasion;
+        }
+        return 0;
+    }
 
 
     public override float GetApproachDistance()

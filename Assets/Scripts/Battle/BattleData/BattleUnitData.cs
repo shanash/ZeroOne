@@ -47,6 +47,34 @@ public class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual double GetLifePoint() {  return 0; }
     /// <summary>
+    /// 명중 포인트
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetAccuracyPoint() { return 0; }
+    /// <summary>
+    /// 회피 포인트
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetEvationPoint() { return 0; }
+    /// <summary>
+    /// 웨이브 이동시 자동 체력 회복
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetAutoRecoveryLife() {  return 0; }
+    /// <summary>
+    /// 치명타 확률<br/>
+    /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetCriticalChance() { return 0; }
+    /// <summary>
+    /// 치명타 데미지(파워)<br/>
+    /// 치명타 데미지 = 최종 데미지 * 2(or 크리티컬 데미지에 영향을 주는 스탯 값)
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetCriticalPower() {  return 2; }
+
+    /// <summary>
     /// 이동 속도
     /// </summary>
     /// <returns></returns>

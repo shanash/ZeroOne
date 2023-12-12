@@ -54,5 +54,14 @@ public class BattlePcSkillGroup : BattleSkillGroup
         return null;
     }
 
+    public override SKILL_TYPE GetSkillType()
+    {
+        if (Skill_Group != null)
+            return Skill_Group.Skill_Type;
+        return SKILL_TYPE.NONE;
+    }
+
+
+
 
 }

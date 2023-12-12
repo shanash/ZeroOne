@@ -89,4 +89,15 @@ public class BattleSkillManager : BattleDataBase
     {
         return GetCurrentSkillGroup().CalcDelayTime(delta_time);
     }
+
+    /// <summary>
+    /// 스킬 타입의 스킬 그룹 데이터 반환
+    /// </summary>
+    /// <param name="stype"></param>
+    /// <returns></returns>
+    public BattleSkillGroup FindSkillType(SKILL_TYPE stype)
+    {
+        return Skill_Groups.Find(x => x.GetSkillType() == stype);
+    }
+
 }

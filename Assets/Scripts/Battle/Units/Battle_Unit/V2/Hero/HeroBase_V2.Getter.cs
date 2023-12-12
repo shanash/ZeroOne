@@ -188,26 +188,27 @@ public partial class HeroBase_V2 : UnitBase_V2
 
 
     /// <summary>
-    /// 방어율
-    /// 방어율 = 방어력 / (상수 + 방어력)
-    /// 최종 데미지 = 적 데미지 * (1 - 방어율)
+    /// 방어율<br/>
+    /// 방어율 = 1 / (1 + 방어력 / 100)<br/>
+    /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
     /// <returns></returns>
     protected double GetDefenseRate()
     {
         double def_pt = GetDefensePoint();
-        double defense_rate = def_pt / (100 + def_pt);
+        double defense_rate = 1 / (1 + (def_pt / 100));
         return defense_rate;
     }
     /// <summary>
-    /// 최종 데미지
+    /// 최종 데미지<br/>
+    /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
     /// <param name="damage"></param>
     /// <returns></returns>
     protected double GetCalcDamage(double damage)
     {
         double defense_rate = GetDefenseRate();
-        double result_dmg = damage * (1 - defense_rate);
+        double result_dmg = damage * defense_rate;
         return result_dmg;
     }
 
@@ -250,6 +251,41 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return pt;
     }
+
+    /// <summary>
+    /// 회피율, 10000분율로 반환해준다.
+    /// 회피 확률 = 1 / (1 + 100 / (회피 값 - 적의 명중 값))
+    /// </summary>
+    /// <param name="caster_accuracy">캐스터의 명중 수치</param>
+    /// <returns></returns>
+    protected double GetEvationRate(double caster_accuracy)
+    {
+        //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
+
+        double evation_rate = 1 / (1 + 100 / (Evasion - caster_accuracy));
+
+        return evation_rate * 10000;
+    }
+
+    /// <summary>
+    /// 회피 여부 판단
+    /// </summary>
+    /// <param name="caster_accuracy">캐스터의 명중수치</param>
+    /// <returns></returns>
+    public bool IsEvation(double caster_accuracy)
+    {
+        //  명중이 회피보다 높은 경우, 명중(회피실패)
+        if (caster_accuracy >= Evasion)
+        {
+            return false;
+        }
+
+        double evation_rate = GetEvationRate(caster_accuracy);
+        int rand = UnityEngine.Random.Range(0, 10000);
+        return rand < evation_rate;
+    }
+
+
 
 
 

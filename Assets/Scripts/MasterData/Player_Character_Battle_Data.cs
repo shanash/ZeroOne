@@ -49,7 +49,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	<summary>
 	///	명중
 	///	</summary>
-	public double hit {get; set;}
+	public double accuracy {get; set;}
 	///	<summary>
 	///	자동 회복
 	///	</summary>
@@ -62,14 +62,6 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	전투 대사 인덱스
 	///	</summary>
 	public string attack_script {get; set;}
-	///	<summary>
-	///	아이콘
-	///	</summary>
-	public string icon {get; set;}
-	///	<summary>
-	///	캐릭터 설명
-	///	</summary>
-	public string script {get; set;}
 
 	private bool disposed = false;
 
@@ -80,8 +72,6 @@ public class Player_Character_Battle_Data : System.IDisposable
 		passive_skill_group_id = 0;
 		super_skill_group_id = 0;
 		attack_script = string.Empty;
-		icon = string.Empty;
-		script = string.Empty;
 	}
 
 	public void Dispose()
@@ -123,12 +113,10 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
-		sb.AppendFormat("[hit] = <color=yellow>{0}</color>", hit).AppendLine();
+		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();
-		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
-		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();
 		return sb.ToString();
 	}
 }

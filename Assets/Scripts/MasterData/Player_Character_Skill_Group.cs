@@ -19,6 +19,10 @@ public class Player_Character_Skill_Group : System.IDisposable
 	///	</summary>
 	public double skill_use_delay {get; set;}
 	///	<summary>
+	///	스킬 타입
+	///	</summary>
+	public SKILL_TYPE Skill_Type {get; set;}
+	///	<summary>
 	///	스킬 설명
 	///	</summary>
 	public string script {get; set;}
@@ -37,6 +41,7 @@ public class Player_Character_Skill_Group : System.IDisposable
 	{
 		pc_skill_group_id = 0;
 		name_kr = string.Empty;
+		Skill_Type = SKILL_TYPE.NONE;
 		script = string.Empty;
 		icon = string.Empty;
 		action_name = string.Empty;
@@ -64,6 +69,7 @@ public class Player_Character_Skill_Group : System.IDisposable
 		sb.AppendFormat("[pc_skill_group_id] = <color=yellow>{0}</color>", pc_skill_group_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[skill_use_delay] = <color=yellow>{0}</color>", skill_use_delay).AppendLine();
+		sb.AppendFormat("[Skill_Type] = <color=yellow>{0}</color>", Skill_Type).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[action_name] = <color=yellow>{0}</color>", action_name).AppendLine();

@@ -48,7 +48,7 @@ public class Npc_Battle_Data : System.IDisposable
 	///	<summary>
 	///	명중
 	///	</summary>
-	public double hit {get; set;}
+	public double accuracy {get; set;}
 	///	<summary>
 	///	전투 이동 속도
 	///	</summary>
@@ -108,7 +108,7 @@ public class Npc_Battle_Data : System.IDisposable
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
-		sb.AppendFormat("[hit] = <color=yellow>{0}</color>", hit).AppendLine();
+		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();
 		return sb.ToString();

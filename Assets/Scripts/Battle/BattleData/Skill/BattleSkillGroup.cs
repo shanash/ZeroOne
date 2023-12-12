@@ -168,7 +168,7 @@ public class BattleSkillGroup : BattleDataBase
 
         ResetDelayTime();
     }
-
+    public virtual SKILL_TYPE GetSkillType() { return SKILL_TYPE.NONE; }
 
     public override string ToString()
     {
