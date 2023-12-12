@@ -11,6 +11,7 @@ namespace FluffyDuck.Util
         GAME_TYPE,
 
         STORY_STAGE_ID,
+        EDITOR_STAGE_ID,
 
     }
 }

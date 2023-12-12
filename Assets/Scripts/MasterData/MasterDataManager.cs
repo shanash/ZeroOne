@@ -242,6 +242,26 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region Stage
+
+    /// <summary>
+    /// 에디터에서 사용할 스테이지 데이터 가져오기
+    /// </summary>
+    /// <param name="stage_id"></param>
+    /// <returns></returns>
+    public Editor_Stage_Data Get_EditorStageData(int stage_id)
+    {
+        Check_Editor_Stage_Data();
+        return _Editor_Stage_Data.Find(x => x.stage_id == stage_id);
+    }
+    public void Get_EditorWaveDataList(int wave_group_id, ref List<Editor_Wave_Data> list)
+    {
+        Check_Editor_Wave_Data();
+        list.Clear();
+        list.AddRange(_Editor_Wave_Data.FindAll(x => x.wave_group_id == wave_group_id));
+        //  asc 
+        list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
+    }
+
     /// <summary>
     /// 지정 스테이지 정보 가져오기
     /// </summary>
@@ -278,14 +298,16 @@ public class MasterDataManager : BaseMasterDataManager
         list.Clear();
         list.AddRange(_Wave_Data.FindAll(x => x.wave_group_id == wave_group_id));
         //  wave_sequence 오름 차순 정렬
-        list.Sort(delegate (Wave_Data a, Wave_Data b)
-        {
-            if (a.wave_sequence > b.wave_sequence)
-            {
-                return 1;
-            }
-            return -1;
-        });
+        list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
+        //list.Sort(delegate (Wave_Data a, Wave_Data b)
+        //{
+        //    if (a.wave_sequence > b.wave_sequence)
+        //    {
+        //        return 1;
+        //    }
+        //    return -1;
+        //});
+
     }
     #endregion
 

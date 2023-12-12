@@ -7,21 +7,21 @@ public partial class BattleManager_V2 : MonoBehaviour
 {
 
     [SerializeField, Tooltip("UI Manager")]
-    BattleUIManager_V2 UI_Mng;
+    protected BattleUIManager_V2 UI_Mng;
     [SerializeField, Tooltip("Virtual Cam Manager")]
-    VirtualCineManager Cine_Mng;
+    protected VirtualCineManager Cine_Mng;
 
     [SerializeField, Tooltip("Stage Proceeding Manager")]
-    StageProceedingManager Stage_Mng;
+    protected StageProceedingManager Stage_Mng;
 
-    List<TeamManager_V2> Used_Team_List = new List<TeamManager_V2>();
+    protected List<TeamManager_V2> Used_Team_List = new List<TeamManager_V2>();
 
-    BattleField Field;
+    protected BattleField Field;
 
-    GAME_TYPE Game_Type = GAME_TYPE.NONE;
+    protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
 
-    BattleDungeonData Dungeon_Data;
+    protected BattleDungeonData Dungeon_Data;
 
 
     public VirtualCineManager GetVirtualCineManager()
@@ -33,13 +33,13 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public EffectFactory GetEffectFactory() { return Field.GetEffectFactory(); }
 
-    void InitBattleField()
+    protected void InitBattleField()
     {
         CreateBattleField();
         CreateTeamManagers();
     }
 
-    void CreateBattleField()
+    protected void CreateBattleField()
     {
         var pool = GameObjectPoolManager.Instance;
         var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/Fields/Battle_Field_01", this.transform);
@@ -48,7 +48,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     }
 
-    void CreateTeamManagers()
+    protected void CreateTeamManagers()
     {
         var unit_container = GetBattleField().GetUnitContainer();
         var left_team = new TeamManager_V2(TEAM_TYPE.LEFT, unit_container);
@@ -67,7 +67,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     /// <summary>
     /// 양 팀의 유닛을 모두 스폰해준다.
     /// </summary>
-    void SpawnUnits()
+    protected void SpawnUnits()
     {
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)
@@ -77,13 +77,17 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
 
 
-    void StartStageProceeding()
+    protected void StartStageProceeding()
     {
+        if (Stage_Mng == null)
+        {
+            return;
+        }
         WAVE_POINT_TYPE[] points = new WAVE_POINT_TYPE[] { WAVE_POINT_TYPE.START_POINT, WAVE_POINT_TYPE.MID_POINT, WAVE_POINT_TYPE.MID_POINT, WAVE_POINT_TYPE.BOSS_POINT  };
         Stage_Mng.StartStageProceeding(points);
     }
 
-    void WaveInfoCloseCallback()
+    protected void WaveInfoCloseCallback()
     {
         ChangeState(GAME_STATES.PLAYING);
     }
@@ -110,7 +114,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     /// 각 팀에 공통적인 상태를 변경시키기 위한 함수
     /// </summary>
     /// <param name="trans"></param>
-    void TeamMembersChangeState(UNIT_STATES trans)
+    protected void TeamMembersChangeState(UNIT_STATES trans)
     {
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)
@@ -119,7 +123,10 @@ public partial class BattleManager_V2 : MonoBehaviour
         }
     }
 
-    void TeamMembersRevertState()
+    /// <summary>
+    /// 각 팀의 멤버들의 상태를 이전상태로 돌리기 위한 함수
+    /// </summary>
+    protected void TeamMembersRevertState()
     {
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)

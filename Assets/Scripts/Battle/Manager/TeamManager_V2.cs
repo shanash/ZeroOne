@@ -10,15 +10,15 @@ public partial class TeamManager_V2 : IDisposable
     public TEAM_TYPE Team_Type { get; private set; }
     public GAME_TYPE Game_Type { get; private set; }
 
-    BattleManager_V2 Battle_Mng;
-    BattleUIManager_V2 UI_Mng;
+    protected BattleManager_V2 Battle_Mng;
+    protected BattleUIManager_V2 UI_Mng;
 
-    Transform Unit_Container;
+    protected Transform Unit_Container;
 
 
-    List<HeroBase_V2> Used_Members = new List<HeroBase_V2>();
+    protected List<HeroBase_V2> Used_Members = new List<HeroBase_V2>();
 
-    BattleDungeonData Stage;
+    protected BattleDungeonData Stage;
 
     private bool disposed = false;
 
@@ -94,7 +94,7 @@ public partial class TeamManager_V2 : IDisposable
     /// 아군의 플레이어 캐릭터를 스폰한다.
     /// 0,0부터 시작하고, 가장 가까운 캐릭터를 기준으로 거리를 계산한다.
     /// </summary>
-    void MyTeamSpawn()
+    protected void MyTeamSpawn()
     {
         float size = Camera.main.fieldOfView;
         var pool = GameObjectPoolManager.Instance;
@@ -139,7 +139,7 @@ public partial class TeamManager_V2 : IDisposable
     /// 적군의 npc 캐릭터를 스폰한다.
     /// 0,0에 상대팀의 캐릭터가 있다는 전제하에 거리를 계산한다.
     /// </summary>
-    void EnemyTeamSpawn()
+    protected void EnemyTeamSpawn()
     {
         switch (Game_Type)
         {
@@ -217,7 +217,7 @@ public partial class TeamManager_V2 : IDisposable
     /// 멤버 추가
     /// </summary>
     /// <param name="hero"></param>
-    void AddMember(HeroBase_V2 hero)
+    protected void AddMember(HeroBase_V2 hero)
     {
         if (!Used_Members.Exists(x => object.ReferenceEquals(x, hero)))
         {

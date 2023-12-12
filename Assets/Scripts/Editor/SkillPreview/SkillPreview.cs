@@ -153,6 +153,8 @@ public class SkillPreview : EditorWindow
                         return;
                     }
                     ResetData();
+                    BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
+
                     EditorApplication.EnterPlaymode();
                 }
                 GUILayout.FlexibleSpace(); // 버튼들을 왼쪽으로 밀어내기

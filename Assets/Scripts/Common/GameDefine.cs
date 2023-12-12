@@ -3,7 +3,10 @@ using UnityEngine;
 public enum GAME_TYPE
 {
     NONE = 0,
-    STORY_MODE,
+    EDITOR_SKILL_PREVIEW_MODE,          //  에디터에서 스킬 프리뷰 모드
+    EDITOR_SKILL_EDIT_MODE,             //  에디터에서 스킬 에디트 모드(아직 미개발)
+
+    STORY_MODE,                         //  스토리 모드
 }
 
 public enum TEAM_POSITION_TYPE

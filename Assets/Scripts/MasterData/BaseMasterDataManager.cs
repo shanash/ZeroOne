@@ -8,6 +8,16 @@ using Newtonsoft.Json;
 public class BaseMasterDataManager
 {
 
+	protected List<Editor_Stage_Data> _Editor_Stage_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Editor_Wave_Data> _Editor_Wave_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Me_Resource_Data> _Me_Resource_Data
 	{
 		get;
@@ -123,6 +133,8 @@ public class BaseMasterDataManager
 
 	private async void InitLoadMasterData()
 	{
+		await LoadMaster_Editor_Stage_Data();
+		await LoadMaster_Editor_Wave_Data();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
 		await LoadMaster_Me_Interaction_Data();
@@ -154,6 +166,18 @@ public class BaseMasterDataManager
 		return txt_asset.text;
 	}
 
+
+	protected async Task LoadMaster_Editor_Stage_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Stage_Data");
+		_Editor_Stage_Data = JsonConvert.DeserializeObject<List<Editor_Stage_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Editor_Wave_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Wave_Data");
+		_Editor_Wave_Data = JsonConvert.DeserializeObject<List<Editor_Wave_Data>>(json);
+	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
 	{
@@ -273,6 +297,22 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Wave_Data");
 		_Wave_Data = JsonConvert.DeserializeObject<List<Wave_Data>>(json);
+	}
+
+	protected async void Check_Editor_Stage_Data()
+	{
+		if(_Editor_Stage_Data == null)
+		{
+			await LoadMaster_Editor_Stage_Data();
+		}
+	}
+
+	protected async void Check_Editor_Wave_Data()
+	{
+		if(_Editor_Wave_Data == null)
+		{
+			await LoadMaster_Editor_Wave_Data();
+		}
 	}
 
 	protected async void Check_Me_Resource_Data()

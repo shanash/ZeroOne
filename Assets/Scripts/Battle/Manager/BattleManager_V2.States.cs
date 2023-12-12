@@ -2,13 +2,12 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public partial class BattleManager_V2 : MonoBehaviour
 {
-    GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
+    protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 
     private void Awake()
     {
@@ -33,7 +32,16 @@ public partial class BattleManager_V2 : MonoBehaviour
                     int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.STORY_STAGE_ID, 100001);
                     board.RemoveBlackBoardData(BLACK_BOARD_KEY.STORY_STAGE_ID);     //  스테이지 id를 받은 후 해당 데이터를 삭제
 
-                    Dungeon_Data = new BattleStageData();
+                    Dungeon_Data = new BattleDungeon_StoryStageData();
+                    Dungeon_Data.SetDungeonID(stage_id);
+                }
+                break;
+            case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
+                {
+                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.EDITOR_STAGE_ID, 100001);
+                    board.RemoveBlackBoardData(BLACK_BOARD_KEY.EDITOR_STAGE_ID);    //  스테이지 id를 받은 후 해당 데이터 삭제
+
+                    Dungeon_Data = new BattleDungeon_SkillPreviewEditorData();
                     Dungeon_Data.SetDungeonID(stage_id);
                 }
                 break;
@@ -88,7 +96,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     /// </summary>
     /// <param name="pc_data"></param>
     /// <param name="list"></param>
-    void GetPcSkillEffectPrefabPath(Player_Character_Data pc_data, ref List<string> list)
+    protected void GetPcSkillEffectPrefabPath(Player_Character_Data pc_data, ref List<string> list)
     {
         var m = MasterDataManager.Instance;
         List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();
@@ -192,7 +200,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
 
 
-    void PreloadCallback(int load_cnt, int total_cnt)
+    protected void PreloadCallback(int load_cnt, int total_cnt)
     {
         if (total_cnt == 0)
         {
@@ -208,7 +216,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
 
     #region FSM
-    void InitStates()
+    protected void InitStates()
     {
         FSM = new GameStateSystem<BattleManager_V2, BattleUIManager_V2>();
 
@@ -267,38 +275,38 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     #region Game States
 
-    public void GameStateInitBegin() 
+    public virtual void GameStateInitBegin() 
     {
         InitBattleField();
     }
-    public void GameStateInit() 
+    public virtual void GameStateInit() 
     {
         ChangeState(GAME_STATES.READY);
     }
-    public void GameStateInitExit() { }
+    public virtual void GameStateInitExit() { }
 
-    public void GameStateReadyBegin() 
+    public virtual void GameStateReadyBegin() 
     {
         StartStageProceeding();
     }
-    public void GameStateReady() 
+    public virtual void GameStateReady() 
     {
         ChangeState(GAME_STATES.SPAWN);
     }
-    public void GameStateReadyExit() { }
+    public virtual void GameStateReadyExit() { }
 
-    public void GameStateSpawnBegin()
+    public virtual void GameStateSpawnBegin()
     {
         SpawnUnits();
     }
-    public void GameStateSpawn()
+    public virtual void GameStateSpawn()
     {
         ChangeState(GAME_STATES.WAVE_INFO);
     }
-    public void GameStateSpawnExit() { }
+    public virtual void GameStateSpawnExit() { }
 
 
-    public void GameStateWaveInfoBegin() 
+    public virtual void GameStateWaveInfoBegin() 
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Battle/WaveInfoUI", (popup) =>
         {
@@ -307,11 +315,11 @@ public partial class BattleManager_V2 : MonoBehaviour
             popup.ShowPopup(wdata, 1f);
         });
     }
-    public void GameStateWaveInfo() { }
-    public void GameStateWaveInfoExit() { }
+    public virtual void GameStateWaveInfo() { }
+    public virtual void GameStateWaveInfoExit() { }
 
 
-    public void GameStatePlayingBegin() 
+    public virtual void GameStatePlayingBegin() 
     {
         if (IsPrevPause())
         {
@@ -319,7 +327,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         }
         TeamMembersChangeState(UNIT_STATES.MOVE_IN);
     }
-    public void GameStatePlaying() 
+    public virtual void GameStatePlaying() 
     {
         var all_death_team = Used_Team_List.Find(x => !x.IsAliveMembers());
         if (all_death_team != null)
@@ -337,17 +345,17 @@ public partial class BattleManager_V2 : MonoBehaviour
             }
         }
     }
-    public void GameStatePlayingExit() { }
+    public virtual void GameStatePlayingExit() { }
 
-    public void GameStateNextWaveBegin() { }
-    public void GameStateNextWave() { }
-    public void GameStateNextWaveExit() { }
+    public virtual void GameStateNextWaveBegin() { }
+    public virtual void GameStateNextWave() { }
+    public virtual void GameStateNextWaveExit() { }
 
-    public void GameStateWaveRunBegin() { }
-    public void GameStateWaveRun() { }
-    public void GameStateWaveRunExit() { }
+    public virtual void GameStateWaveRunBegin() { }
+    public virtual void GameStateWaveRun() { }
+    public virtual void GameStateWaveRunExit() { }
 
-    public void GameStatePauseBegin() 
+    public virtual void GameStatePauseBegin() 
     {
         TeamMembersChangeState((UNIT_STATES.PAUSE));
         GetEffectFactory().OnPause();
@@ -363,36 +371,36 @@ public partial class BattleManager_V2 : MonoBehaviour
             popup.ShowPopup();
         });
     }
-    public void GameStatePause() { }
-    public void GameStatePauseExit() 
+    public virtual void GameStatePause() { }
+    public virtual void GameStatePauseExit() 
     {
         TeamMembersRevertState();
         GetEffectFactory().OnResume();
     }
 
-    public void GameStateGameOverWinBegin() 
+    public virtual void GameStateGameOverWinBegin() 
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameOverWinPopup", (popup) =>
         {
             popup.ShowPopup();
         });
     }
-    public void GameStateGameOverWin() { }
-    public void GameStateGameOverWinExit() { }
+    public virtual void GameStateGameOverWin() { }
+    public virtual void GameStateGameOverWinExit() { }
 
-    public void GameStateGameOverLoseBegin() 
+    public virtual void GameStateGameOverLoseBegin() 
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameOverLosePopup", (popup) =>
         {
             popup.ShowPopup();
         });
     }
-    public void GameStateGameOverLose() { }
-    public void GameStateGameOverLoseExit() { }
+    public virtual void GameStateGameOverLose() { }
+    public virtual void GameStateGameOverLoseExit() { }
 
-    public void GameStateEndBegin() { }
-    public void GameStateEnd() { }
-    public void GameStateEndExit() { }
+    public virtual void GameStateEndBegin() { }
+    public virtual void GameStateEnd() { }
+    public virtual void GameStateEndExit() { }
 
 
 
