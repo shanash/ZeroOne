@@ -17,7 +17,7 @@ public class SpeechBalloonManager : MonoBehaviourSingleton<SpeechBalloonManager>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()
     {
-        _Components_To_Attach = new System.Type[] { typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster) };
+        _Components_To_Attach = new Type[] { typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster) };
     }
 
     protected override void OnAwake()

@@ -12,17 +12,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 {
-    public enum InputActionPhase
-    {
-        Disabled = 0,
-        Waiting,
-        Started,
-        Performed,
-        Canceled
-    }
-
     #region Input Event
     public delegate void InputAction(Vector2 position, ICollection<ICursorInteractable> components);
+    public delegate void InputPhaseAction(InputActionPhase phase, Vector2 position, ICollection<ICursorInteractable> components);
     public delegate void InputDragAction(InputActionPhase phase, Vector2 drag_delta, Vector2 position);
     public delegate void InputTap(ICursorInteractable[] components);
    
@@ -30,15 +22,13 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public static event InputAction OnInputUp;
     public static event InputDragAction OnDrag;
     public static event InputAction OnTap;
-    public static event InputAction OnLongTap;
+    public static event InputPhaseAction OnLongTap;
     #endregion
 
     [SerializeField, Tooltip("Cursor")]
     Cursor _Cursor = null;
     [SerializeField]
     PlayerInput _PlayerInput = null;
-
-
 
     // 방향버튼 눌렀을때 실행된 코루틴을 여기 저장
     private Coroutine _CoMoveCursorByKeyPress = null;
@@ -164,8 +154,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     /// <param name="context"></param>
     public void OnPressListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Debug.LogWarning($"OnPress : {context.phase} : {context.ReadValueAsButton()} : {context.ReadValueAsObject()} : {context.interaction} : {context.control.name}");
-        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed)
         {
             Input_Down_Hold_Reference += context.ReadValueAsButton() ? 1 : -1;
         }
@@ -191,7 +180,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 
         ICursorInteractable[] components;
         int cnt;
-        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed)
         {
             if (context.ReadValueAsButton())
             {
@@ -250,13 +239,8 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 
     public void OnHoldListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Debug.LogWarning($"OnHold : {context.phase} : {context.ReadValueAsObject()}");
-
-        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
-        {
-            var components = GetRayCastHittedCursorInteractable();
-            OnLongTap?.Invoke(_Cursor.Position, components);
-        }
+        var components = GetRayCastHittedCursorInteractable();
+        OnLongTap?.Invoke(context.phase,  _Cursor.Position, components);
     }
     #endregion
 

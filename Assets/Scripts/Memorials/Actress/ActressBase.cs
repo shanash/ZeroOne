@@ -7,13 +7,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(SkeletonUtility))]
 public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 {
     const int INTERACTION_TRACK = 0;
-    const int FACE_HORIZON_TRACK = 10;
-    const int FACE_VERTICAL_TRACK = 11;
     const string IDLE_NAME = "idle";
     const string FACE_BONE_NAME = "touch_center";
     const string BALLOON_BONE_NAME = "balloon";
@@ -78,6 +77,10 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
     float Elapsed_Time_For_Mouth_Open = 0; //
     int Played_animation_drag_id = 0;
+
+    bool Is_Nade_State = false;
+    int[] Selected_Nade_ID = null;
+    float Nade_Point = 0;
 
     protected string Idle_Animation
     {
@@ -186,10 +189,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         if (Current_Chat_Motion_ID != -1)
         {
-            Current_Chat_Motion_ID = -1;
+            if (Chat_Motions[Current_Chat_Motion_ID].animation_name != null && Chat_Motions[Current_Chat_Motion_ID].animation_name.Contains(entry.Animation.Name))
+            {
+                DisappearBalloon();
+                Current_Chat_Motion_ID = -1;
+            }
         }
-
-        DisappearBalloon();
+        
         Debug.Log($"SpineAnimationEnd : {entry.Animation.Name}");
     }
     protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
@@ -454,7 +460,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
     protected virtual void OnUpdate() { }
 
-    private void OnGestureDetect(TOUCH_GESTURE_TYPE type, ICursorInteractable component, Vector2 vector, int drag_id)
+    private void OnGestureDetect(TOUCH_GESTURE_TYPE type, ICursorInteractable component, Vector2 vector, int param)
     {
         var bounding_box = component as SpineBoundingBox;
         if (bounding_box == null)
@@ -478,13 +484,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             return;
         }
 
-        // 현재 애니메이션이 진행중이면 이 이후로는 클릭해도 반응하지 않는다
-        if (IsAnimationRunning(INTERACTION_TRACK))
-        {
-            return;
-        }
-
-        HandleGesture(bounding_box, type, vector, drag_id);
+        HandleGesture(bounding_box, type, vector, param);
     }
 
     /// <summary>
@@ -492,7 +492,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// </summary>
     /// <param name="bounding_box"></param>
     /// <param name="gesture_type"></param>
-    protected virtual void HandleGesture(SpineBoundingBox bounding_box, TOUCH_GESTURE_TYPE gesture_type, Vector2 pos, int drag_id)
+    protected virtual void HandleGesture(SpineBoundingBox bounding_box, TOUCH_GESTURE_TYPE gesture_type, Vector2 pos, int param)
     {
         int body_type_id = (int)(bounding_box.GetTouchBodyType());
         int gesture_type_id = (int)gesture_type;
@@ -510,7 +510,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 Touch_Type_Interactions[body_type_id, gesture_type_id],
                 gesture_type,
                 pos,
-                drag_id);
+                param);
+
+            // 현재 애니메이션이 진행중이면 이 이후로는 클릭해도 반응하지 않는다
+            if (IsAnimationRunning(INTERACTION_TRACK))
+            {
+                return;
+            }
 
             if (index == -1)
             {
@@ -581,7 +587,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <param name="interaction_datas"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    protected virtual int GetInteractionIndex(SpineBoundingBox bounding_box, List<Me_Interaction_Data> interaction_datas, TOUCH_GESTURE_TYPE gesture_type, Vector2 screen_pos, int drag_id)
+    protected virtual int GetInteractionIndex(SpineBoundingBox bounding_box, List<Me_Interaction_Data> interaction_datas, TOUCH_GESTURE_TYPE gesture_type, Vector2 screen_pos, int param)
     {
         TOUCH_BODY_TYPE type = bounding_box.GetTouchBodyType();
         TOUCH_BODY_DIRECTION dir = bounding_box.GetTouchBodyDirection();
@@ -654,11 +660,78 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         Debug.Log($"index : {result_index}");
 
+        if (result_index > -1 && gesture_type == TOUCH_GESTURE_TYPE.NADE)
+        {
+            Vector2 delta = screen_pos;
+            if (param == 1)
+            {
+                if (CoMoveFace == null)
+                {
+                    Dragged_Canvas_Position = screen_pos;
+                    Is_Nade_State = true;
+                    Selected_Nade_ID = interaction_datas[result_index].chat_motion_ids;
+
+                    var te_in = Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false);
+                    te_in.MixDuration = 0.2f;
+                    Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
+                    CoMoveFace = StartCoroutine(CoMoveFaceToDirection("31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down", 0.1f));
+                }
+                else if (Selected_Nade_ID != null)
+                {
+                    float add_point = delta.magnitude * 0.01f;
+                    if ((int)Nade_Point < (int)(Nade_Point + add_point))
+                    {
+                        int last_available_index = Array.IndexOf(Selected_Nade_ID, LastPlayedInteractionIndices[(int)type]);
+
+                        int select_index = last_available_index + 1;
+
+                        if (Selected_Nade_ID.Length <= select_index)
+                        {
+                            select_index = 0;
+                        }
+
+                        PlayAnimationForChatMotion(Selected_Nade_ID[select_index]);
+
+                        LastPlayedInteractionIndices[(int)type] = Selected_Nade_ID[select_index];
+                        Selected_Nade_ID = null;
+                    }
+                    else
+                    {
+                        Nade_Point += add_point;
+                    }
+                }
+            }
+            else if (Is_Nade_State)
+            {
+                if (!Gesture_Touch_Counts.ContainsKey(gesture_type))
+                {
+                    Gesture_Touch_Counts.Add(gesture_type, (type, 0));
+                }
+
+                int before_count = 0;
+                if (Gesture_Touch_Counts[gesture_type].touch_body_type == type)
+                {
+                    before_count = Gesture_Touch_Counts[gesture_type].count;
+                }
+
+                Gesture_Touch_Counts[gesture_type] = (type, before_count + 1);
+
+                var te_out = Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false);
+                te_out.MixDuration = 0.2f;
+                Is_Nade_State = false;
+                Selected_Nade_ID = null;
+                Nade_Point = 0;
+            }
+            return -1;
+        }
+
         if (result_index == -1
             || gesture_type != TOUCH_GESTURE_TYPE.DRAG)
         {
             return result_index;
         }
+
+        int drag_id = param;
 
         if (Played_animation_drag_id == drag_id)
         {
@@ -719,7 +792,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         return result_index;
     }
 
-    protected virtual void OnDrag(InputCanvas.InputActionPhase phase, Vector2 delta, Vector2 position)
+    protected virtual void OnDrag(InputActionPhase phase, Vector2 delta, Vector2 position)
     {
         if (InputDowned_Components.Count == 0)
         {
@@ -735,41 +808,32 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             {
                 switch (phase)
                 {
-                    case InputCanvas.InputActionPhase.Started:
+                    case InputActionPhase.Started:
                         Dragged_Canvas_Position = position;
                         if (CoMoveFace == null)
                         {
                             CoMoveFace = StartCoroutine(CoMoveFaceToDirection("10_Right", "11_Up", "10_Left", "11_Down"));
                         }
                         break;
-                    case InputCanvas.InputActionPhase.Performed:
+                    case InputActionPhase.Performed:
                         Dragged_Canvas_Position = position;
                         break;
-                    case InputCanvas.InputActionPhase.Canceled:
+                    case InputActionPhase.Canceled:
                         Dragged_Canvas_Position = Vector2.zero;
                         break;
                 }
             }
-            else if (InputDowned_Components[0].GetTouchBodyType() == TOUCH_BODY_TYPE.HEAD)
+            else if (Is_Nade_State == true)
             {
                 switch (phase)
                 {
-                    case InputCanvas.InputActionPhase.Started:
-                        Dragged_Canvas_Position = position;
-                        if (CoMoveFace == null)
-                        {
-                            var te_in = Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false);
-                            te_in.MixDuration = 0.2f;
-                            Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
-                            CoMoveFace = StartCoroutine(CoMoveFaceToDirection("31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down"));
-                        }
-                        break;
-                    case InputCanvas.InputActionPhase.Performed:
+                    case InputActionPhase.Started:
                         Dragged_Canvas_Position = position;
                         break;
-                    case InputCanvas.InputActionPhase.Canceled:
-                        var te_out = Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false);
-                        te_out.MixDuration = 0.2f;
+                    case InputActionPhase.Performed:
+                        Dragged_Canvas_Position = position;
+                        break;
+                    case InputActionPhase.Canceled:
                         Dragged_Canvas_Position = Vector2.zero;
                         break;
                 }
@@ -851,7 +915,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// 손을 떼도 캐릭터가 다시 정면을 볼때까지 실행이 끝나지 않는다
     /// </summary>
     /// <returns></returns>
-    IEnumerator CoMoveFaceToDirection(string right, string up, string left, string down)
+    IEnumerator CoMoveFaceToDirection(string right, string up, string left, string down, float multiple_value = 1.0f)
     {
         if (!TryGetTrackCheckEqual(out int horizon_track_index, right, left)
             || !TryGetTrackCheckEqual(out int vertical_track_index, up, down))
@@ -864,12 +928,12 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         while (ShouldContinueMovingFace())
         {
-            UpdateFaceAnimationDirection(ref track1, ref track2, right, up, left, down);
+            UpdateFaceAnimationDirection(multiple_value, ref track1, ref track2, right, up, left, down);
             yield return null;
         }
 
-        Skeleton.AnimationState.ClearTrack(FACE_HORIZON_TRACK);
-        Skeleton.AnimationState.ClearTrack(FACE_VERTICAL_TRACK);
+        Skeleton.AnimationState.ClearTrack(horizon_track_index);
+        Skeleton.AnimationState.ClearTrack(vertical_track_index);
         CoMoveFace = null;
     }
 
@@ -883,17 +947,19 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <returns></returns>
     bool ShouldContinueMovingFace()
     {
-        return Vector2.Distance(Dragged_Canvas_Position, Vector2.zero) > 0.01f || Vector2.Distance(Current_Face_Direction, Vector2.zero) > 0.01f;
+        bool result = Vector2.Distance(Dragged_Canvas_Position, Vector2.zero) > 0.01f || Vector2.Distance(Current_Face_Direction, Vector2.zero) > 0.01f;
+        Debug.Log($"ShouldContinueMovingFace : {result}");
+        return result;
     }
 
     /// <summary>
     /// 현재 프레임의 얼굴 방향 업데이트
     /// </summary>
-    void UpdateFaceAnimationDirection(ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
+    void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
     {
         Vector3 face_world_pos = Face.GetWorldPosition(Skeleton.transform);
         Vector2 face_screen_pos = Main_Cam.WorldToScreenPoint(face_world_pos);
-        Vector2 dest_direction = CalculateDesiredDirection(face_screen_pos);
+        Vector2 dest_direction = CalculateDesiredDirection(face_screen_pos, multiple_value);
 
         Current_Face_Direction = Vector2.Lerp(Current_Face_Direction, dest_direction, Time.deltaTime * Look_At_Speed);
 
@@ -908,9 +974,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// </summary>
     /// <param name="face_screen_pos">얼굴 본 위치</param>
     /// <returns></returns>
-    Vector2 CalculateDesiredDirection(Vector2 face_screen_pos)
+    Vector2 CalculateDesiredDirection(Vector2 face_screen_pos, float multiple_value)
     {
         Vector2 dest_direction = Vector2.zero;
+
+        float face_move_max_distance = FACE_MOVE_MAX_DISTANCE * multiple_value;
 
         if (!Dragged_Canvas_Position.Equals(Vector2.zero))
         {
@@ -919,7 +987,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             dest_direction = Vector2.ClampMagnitude(Dragged_Canvas_Position - face_screen_pos, FACE_MOVE_MAX_DISTANCE);
             // dest_direction에 Mathf.Sqrt(2.0f) / FACE_MOVE_MAX_DISTANCE를 곱해서
             // 자연스럽게 축소시키고, 45도 각도의 벡터 최대값이 (1,1)이 되도록 맞춥니다
-            dest_direction *= Mathf.Sqrt(2.0f) / FACE_MOVE_MAX_DISTANCE;
+            dest_direction *= Mathf.Sqrt(2.0f) / face_move_max_distance;
 
             // 1 ~ -1 값 외엔 다 잘라냅니다
             dest_direction.x = Mathf.Clamp(dest_direction.x, -1f, 1f);
@@ -968,10 +1036,14 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
         Debug.Assert(Serifues.Count > 0 && chat_motion_id > -1, $"없는 대사를 불러오려합니다. 챗모션ID : {chat_motion_id}, 대사 인덱스 : {serifu_ids_index}");
         if (Serifues.Count == 0 || chat_motion_id == -1 || Chat_Motions[chat_motion_id].serifu_ids == null)
+        {
             return null;
+        }
 
         if (Chat_Motions[chat_motion_id].serifu_ids.Count() <= serifu_ids_index)
+        {
             return null;
+        }
 
         return Serifues[Chat_Motions[chat_motion_id].serifu_ids[serifu_ids_index]];
     }

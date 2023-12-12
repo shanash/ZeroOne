@@ -121,17 +121,17 @@ public class TouchCanvas : MonoBehaviour
     /// <param name="phase"></param>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnClickDragging(InputCanvas.InputActionPhase phase, Vector2 drag_delta, Vector2 position)
+    void OnClickDragging(InputActionPhase phase, Vector2 drag_delta, Vector2 position)
     {
         switch (phase)
         {
-            case InputCanvas.InputActionPhase.Started:      //  드래그 시작
+            case InputActionPhase.Started:      //  드래그 시작
                 OnDragBegin(drag_delta, position);
                 break;
-            case InputCanvas.InputActionPhase.Performed:    //  드래깅
+            case InputActionPhase.Performed:    //  드래깅
                 OnDragging(drag_delta, position);
                 break;
-            case InputCanvas.InputActionPhase.Canceled:     //  드래그 종료
+            case InputActionPhase.Canceled:     //  드래그 종료
                 OnDragEnd(drag_delta, position);
                 break;
             default:
@@ -139,6 +139,7 @@ public class TouchCanvas : MonoBehaviour
                 break;
         }
     }
+
     /// <summary>
     /// 드래그 시작시 호출되는 함수
     /// </summary>
