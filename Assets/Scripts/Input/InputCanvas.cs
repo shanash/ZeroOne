@@ -24,16 +24,21 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     #region Input Event
     public delegate void InputAction(Vector2 position, ICollection<ICursorInteractable> components);
     public delegate void InputDragAction(InputActionPhase phase, Vector2 drag_delta, Vector2 position);
-    public delegate void InputTap(ICursorInteractable component);
+    public delegate void InputTap(ICursorInteractable[] components);
    
     public static event InputAction OnInputDown;
     public static event InputAction OnInputUp;
     public static event InputDragAction OnDrag;
-    public static event InputTap OnTap;
+    public static event InputAction OnTap;
+    public static event InputAction OnLongTap;
     #endregion
 
     [SerializeField, Tooltip("Cursor")]
     Cursor _Cursor = null;
+    [SerializeField]
+    PlayerInput _PlayerInput = null;
+
+
 
     // 방향버튼 눌렀을때 실행된 코루틴을 여기 저장
     private Coroutine _CoMoveCursorByKeyPress = null;
@@ -64,11 +69,6 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     }
     int _Input_Down_Hold_Reference = 0;
 
-    //static InputCanvas()
-    //{
-    //    _Addressables_Key = "Assets/AssetResources/Prefabs/UI/InputCanvas";
-    //}
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()
     {
@@ -80,6 +80,15 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
         _ = InputCanvas.Instance;
     }
 
+    UnityEngine.InputSystem.InputAction Tap_Action = null;
+    UnityEngine.InputSystem.InputAction Hold_Action = null;
+
+    protected override void OnAwake()
+    {
+        Hold_Action = _PlayerInput.actions.FindAction("Hold");
+        Tap_Action = _PlayerInput.actions.FindAction("Tap");
+    }
+
     #region Input System Methods
     public void OnTapListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -87,48 +96,12 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
         Input_Down_Hold_Reference += (context.phase == UnityEngine.InputSystem.InputActionPhase.Started ? 1 : 0)
          + (context.phase == UnityEngine.InputSystem.InputActionPhase.Canceled ? -1 : 0);
 
-        InputDevice device = InputSystem.GetDevice(context.control.device.name);
-        switch (device)
-        {
-            case Mouse mouse:
-                Debug.Log($"{context.phase} : mouse.position.value : {mouse.position.value}");
-                break;
-            case Touchscreen touchscreen:
-                for (int i = 0; i < touchscreen.touches.Count; i++)
-                {
-                    Debug.Log($"touchscreen.touches[{i}] : {touchscreen.touches[i].position.value}");
-                }
-                break;
-        }
 
-        ICursorInteractable[] components;
-        int cnt;
         if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
         {
-            List<ICursorInteractable> clicked_components = new List<ICursorInteractable>();
-
-            components = GetRayCastHittedCursorInteractable();
+            var components = GetRayCastHittedCursorInteractable();
             // OnInputUp 처리
-            cnt = components.Length;
-            for (int i = 0; i < cnt; ++i)
-            {
-                if (!_Focus_Components.Contains(components[i]))
-                {
-                    continue;
-                }
-                clicked_components.Add(components[i]);
-            }
-
-            cnt = clicked_components.Count;
-            if (cnt == 0)
-            {
-                OnTap?.Invoke(null);
-            }
-
-            for (int i = 0; i < cnt; ++i)
-            {
-                OnTap?.Invoke(clicked_components[i]);
-            }
+            OnTap?.Invoke(_Cursor.Position, components);
         }
     }
 
@@ -139,10 +112,9 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     /// <param name="context"></param>
     public void OnMoveListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        //Debug.Log($"OnMove : {context.phase} : {context.ReadValue<Vector2>()}");
+        //Debug.LogWarning($"OnMove : {context.phase} : {context.ReadValue<Vector2>()}");
         Vector2 pos;
         InputDevice device = InputSystem.GetDevice(context.control.device.name);
-
         switch (device)
         {
             case Mouse:
@@ -192,7 +164,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     /// <param name="context"></param>
     public void OnPressListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Debug.Log($"OnPress : {context.phase} : {context.ReadValueAsButton()} : {context.ReadValueAsObject()} : {context.interaction} : {context.control.name}");
+        Debug.LogWarning($"OnPress : {context.phase} : {context.ReadValueAsButton()} : {context.ReadValueAsObject()} : {context.interaction} : {context.control.name}");
         if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
         {
             Input_Down_Hold_Reference += context.ReadValueAsButton() ? 1 : -1;
@@ -217,7 +189,6 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                 break;
         }
 
-
         ICursorInteractable[] components;
         int cnt;
         if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
@@ -226,7 +197,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
             {
                 _Cursor.Show();
 
-                //OnInputDown 처리
+                // OnInputDown 처리
                 components = GetRayCastHittedCursorInteractable();
                 cnt = components.Length;
                 for (int i = 0; i < cnt; ++i)
@@ -249,6 +220,8 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                 {
                     OnDrag?.Invoke(InputActionPhase.Canceled, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
                     _Drag_Start_Position = Vector2.zero;
+                    Hold_Action.Enable();
+                    Tap_Action.Enable();
                 }
 
                 // OnInputUp
@@ -272,6 +245,17 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 
                 _Cursor.Hide();
             }
+        }
+    }
+
+    public void OnHoldListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Debug.LogWarning($"OnHold : {context.phase} : {context.ReadValueAsObject()}");
+
+        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        {
+            var components = GetRayCastHittedCursorInteractable();
+            OnLongTap?.Invoke(_Cursor.Position, components);
         }
     }
     #endregion
@@ -402,11 +386,14 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     {
         if (_Is_Pressed)
         {
+
             InputActionPhase phase = _Is_Dragged ? InputActionPhase.Performed : InputActionPhase.Started;
             if (phase == InputActionPhase.Started)
             {
                 _Is_Dragged = true;
                 _Drag_Start_Position = _Cursor.Position;
+                Hold_Action.Disable();
+                Tap_Action.Disable();
             }
             else
             {

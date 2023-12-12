@@ -207,6 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Cursor: {fileID: 8512392859911875172}
+  _PlayerInput: {fileID: 6440173872473515000}
 --- !u!114 &6440173872473515000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +297,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9bf28c12-faeb-4868-89a9-68f3e5a68933
     m_ActionName: Input/Tap
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3208150139373754213}
+        m_TargetAssemblyTypeName: InputCanvas, Assembly-CSharp
+        m_MethodName: OnHoldListen
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 634eaae8-c73e-4920-8024-732e48e44c06
+    m_ActionName: Input/Hold[/Mouse/press]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Input

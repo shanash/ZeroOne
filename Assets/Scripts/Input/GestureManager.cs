@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using UnityEngine;
 
 
@@ -15,14 +16,10 @@ public class GestureManager : Singleton<GestureManager>
     const float DRAG_THRESHOLD = 0.01f; // 드래그로 인정할 최소 이동 거리의 제곱
 
     int Drag_Id = 0;
-
-    float Last_TouchTime = 0f;
-    float TouchDown_Time = 0f;
     bool IsDragging = false;
-    bool waitingForDoubleTouch = false;
 
     ReadOnlyCollection<ICursorInteractable> TouchDown_Components;
-
+    Coroutine Wait_For_Double_Touch = null;
     Vector2 Last_TouchPosition = Vector2.zero;
 
     public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2, int> OnGestureDetected;
@@ -33,6 +30,7 @@ public class GestureManager : Singleton<GestureManager>
         InputCanvas.OnInputDown += HandleInputDown;
         InputCanvas.OnInputUp += HandleInputUp;
         InputCanvas.OnDrag += HandleDrag;
+        InputCanvas.OnTap += HandleTap;
     }
 
     protected override void OnDispose()
@@ -41,6 +39,8 @@ public class GestureManager : Singleton<GestureManager>
         InputCanvas.OnInputDown -= HandleInputDown;
         InputCanvas.OnInputUp -= HandleInputUp;
         InputCanvas.OnDrag -= HandleDrag;
+        InputCanvas.OnTap -= HandleTap;
+
     }
 
     /// <summary>
@@ -50,18 +50,6 @@ public class GestureManager : Singleton<GestureManager>
     /// <param name="components">터치 다운 이벤트 위치에 있는 ICursorInteractable</param>
     private void HandleInputDown(Vector2 position, ICollection<ICursorInteractable> components)
     {
-        // 터치 다운 시간과 위치 기록
-        TouchDown_Time = Time.time;
-
-        bool isWithinDistance = Vector2.Distance(Last_TouchPosition, position) < TOUCH_DISTANCE_MAX;
-        
-        // 멀리 터치하면 마지막 터치타임을 초기화하여 더블터치가 안되도록 합니다.
-        if (!isWithinDistance)
-        {
-            Last_TouchTime = 0;
-        }
-
-        Last_TouchPosition = position;
         // 터치 다운 시점의 상호작용 가능한 객체들 저장
         TouchDown_Components = new ReadOnlyCollection<ICursorInteractable>((IList<ICursorInteractable>)components);
 
@@ -79,58 +67,39 @@ public class GestureManager : Singleton<GestureManager>
     /// <param name="components">터치 업 이벤트 위치에 있는 ICursorInteractable</param>
     private void HandleInputUp(Vector2 position, ICollection<ICursorInteractable> components)
     {
-        // 터치 지속 시간 및 마지막 터치 이후 시간 계산
-        float touchDuration = Time.time - TouchDown_Time;
-        float timeSinceLastTouch = Time.time - Last_TouchTime;
-        bool isWithinDistance = Vector2.Distance(Last_TouchPosition, position) < TOUCH_DISTANCE_MAX;
-
-        // 터치 다운 시점과 터치 업 시점에서 겹치는 상호작용 가능한 객체들 추출
-        List<ICursorInteractable> matchedComponents = new List<ICursorInteractable>();
-        foreach (var component in components)
-        {
-            if (TouchDown_Components.Contains(component))
-            {
-                matchedComponents.Add(component);
-            }
-        }
-
-        int cnt = matchedComponents.Count;
-
-        // 더블 터치 또는 롱 프레스 감지 및 해당 이벤트 발생
-        if (waitingForDoubleTouch && isWithinDistance)
-        {
-            waitingForDoubleTouch = false;
-
-            for (int i = 0; i < cnt; ++i)
-            {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, matchedComponents[i], position, 0);
-            }
-        }
-        else
-        {
-            if (isWithinDistance && touchDuration < LONGPRESS_THRESHOLD)
-            {
-                if (!waitingForDoubleTouch)
-                {
-                    waitingForDoubleTouch = true;
-                    CoroutineManager.Instance.StartCoroutine(WaitForPossibleDoubleTouch(matchedComponents, position));
-                }
-
-                if (cnt != 0)
-                {
-                    Last_TouchTime = Time.time;
-                }
-            }
-        }
-
         // 터치 업 이벤트 발생
         foreach (var component in components)
         {
             OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.UP, component, position, 0);
         }
-        
-        Last_TouchPosition = position;
         IsDragging = false;
+    }
+
+    private void HandleTap(Vector2 position, ICollection<ICursorInteractable> components)
+    {
+        bool isWithinDistance = Vector2.Distance(Last_TouchPosition, position) < TOUCH_DISTANCE_MAX;
+
+        if (Wait_For_Double_Touch == null)
+        {
+            Wait_For_Double_Touch = CoroutineManager.Instance.StartCoroutine(WaitForPossibleDoubleTouch(components.ToArray()));
+        }
+        else
+        {
+            CoroutineManager.Instance.StopCoroutine(Wait_For_Double_Touch);
+            if (isWithinDistance)
+            {
+                foreach (var component in components)
+                {
+                    OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, component, Vector2.zero, 0);
+                }
+            }
+            else
+            {
+                Wait_For_Double_Touch = CoroutineManager.Instance.StartCoroutine(WaitForPossibleDoubleTouch(components.ToArray()));
+            }
+        }
+
+        Last_TouchPosition = position;
     }
 
     /// <summary>
@@ -159,17 +128,15 @@ public class GestureManager : Singleton<GestureManager>
         }
     }
 
-    IEnumerator WaitForPossibleDoubleTouch(List<ICursorInteractable> matched_components, Vector2 position)
+    IEnumerator WaitForPossibleDoubleTouch(ICursorInteractable[] matched_components)
     {
         yield return new WaitForSeconds(DOUBLETOUCH_THRESHOLD);
 
-        if (waitingForDoubleTouch)  // 두 번째 터치가 발생하지 않은 경우
+        foreach (var component in matched_components)
         {
-            waitingForDoubleTouch = false;
-            foreach (var component in matched_components)
-            {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position, 0);
-            }
+            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, Vector2.zero, 0);
         }
+
+        Wait_For_Double_Touch = null;
     }
 }
