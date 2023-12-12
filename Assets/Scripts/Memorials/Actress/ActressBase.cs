@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Drawing.Charts;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
@@ -780,6 +779,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
                 te.TimeScale = 0.0f;
                 te.TrackTime = close_value;
+
+                result_index = -1;
             }
             else
             {
