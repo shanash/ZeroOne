@@ -1,6 +1,4 @@
-using FluffyDuck.Util;
 using Spine;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ActressLucia : ActressBase

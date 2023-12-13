@@ -33,7 +33,6 @@ public class MemorialSetNode : MonoBehaviour, IPoolableComponent
 
     protected MEMORIAL_TYPE Memorial_Type = MEMORIAL_TYPE.NONE;
 
-
     SkeletonAnimation Actress_Skeleton_Animation
     {
         get { return Actress.GetComponent<SkeletonAnimation>(); }

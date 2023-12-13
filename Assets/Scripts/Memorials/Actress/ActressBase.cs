@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.UI;
 
 [RequireComponent(typeof(SkeletonUtility))]
 public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
@@ -169,18 +170,23 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
-        Debug.Log($"SpineAnimationStart : {entry.Animation.Name}");
+        Debug.LogWarning($"SpineAnimationStart : {entry.Animation.Name}");
     }
+
     protected virtual void SpineAnimationInterrupt(TrackEntry entry)
     {
-        Debug.Log($"SpineAnimationInterrupt : {entry.Animation.Name}");
+        Debug.LogWarning($"SpineAnimationInterrupt : {entry.Animation.Name}");
     }
+
     protected virtual void SpineAnimationComplete(TrackEntry entry)
     {
-        Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}");
+        Debug.LogWarning($"SpineAnimationComplete : {entry.Animation.Name}");
     }
+
     protected virtual void SpineAnimationEnd(TrackEntry entry)
     {
+        Debug.LogWarning($"SpineAnimationEnd : {entry.Animation.Name}");
+
         if (entry.Animation.Name.Contains(IDLE_NAME))
         {
             return;
@@ -194,9 +200,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 Current_Chat_Motion_ID = -1;
             }
         }
-        
-        Debug.Log($"SpineAnimationEnd : {entry.Animation.Name}");
     }
+
     protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
     {
         Debug.Log($"SpineAnimationEvent : {evt.Data.Name} : {evt.String}");
@@ -493,7 +498,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <param name="gesture_type"></param>
     protected virtual void HandleGesture(SpineBoundingBox bounding_box, TOUCH_GESTURE_TYPE gesture_type, Vector2 pos, int param)
     {
-        int body_type_id = (int)(bounding_box.GetTouchBodyType());
+        int body_type_id = (int)bounding_box.GetTouchBodyType();
         int gesture_type_id = (int)gesture_type;
         int chat_motion_id = 0;
 
@@ -534,9 +539,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             }
 
             int[] available_indexes = Touch_Type_Interactions[body_type_id, gesture_type_id][index].chat_motion_ids;
-
             int last_available_index = Array.IndexOf(available_indexes, LastPlayedInteractionIndices[body_type_id]);
-
             int select_index = last_available_index + 1;
 
             if (available_indexes.Length <= select_index)
@@ -546,7 +549,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
             // 조건따라 골라줍니다
             chat_motion_id = available_indexes[select_index];
-
 
             if (chat_motion_id == -1)
             {
@@ -577,6 +579,10 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             Debug.Assert(false, $"body_type_id : {body_type_id}, chat_motion_id : {chat_motion_id}");
         }
     }
+
+    TrackEntry origin_te = null;
+    float origin_close_value = 0.0f;
+    int last_drag_id = 0;
 
     /// <summary>
     /// 인터렉션 조건에 맞는 인덱스들을 뽑아줍니다
@@ -737,6 +743,12 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             return -1;
         }
 
+        if (last_drag_id != drag_id)
+        {
+            last_drag_id = drag_id;
+            origin_te = null;
+        }
+
         // 드래그 디테일 구현
         Vector2 drag_dest = bounding_box.GetPtDirection();
 
@@ -761,35 +773,56 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             return result_index;
         }
 
+        Debug.Log("00");
         string drag_anim_name = interaction_datas[result_index].drag_animation_name;
         if (TryGetTrackNum(drag_anim_name, out int track_num))
         {
+            Debug.Log("01");
+            if (origin_te == null || origin_te.TrackIndex != track_num)
+            {
+                Debug.Log("02");
+                origin_te = Skeleton.AnimationState.GetCurrent(track_num);
+                if (origin_te != null && origin_te.Animation.Name.Equals(drag_anim_name))
+                {
+                    origin_close_value = origin_te.TrackTime;
+                    Debug.Log($"03 : {origin_close_value}");
+                }
+                else
+                {
+                    origin_close_value = 0.0f;
+                    origin_te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
+                    Debug.Log($"04 : {origin_close_value}");
+                }
+            }
+
+            Debug.Log("05");
+
+            if (origin_close_value > 0)
+            {
+                close_value = (1 - origin_close_value) * close_value + origin_close_value;
+            }
+
             if (close_value < 1)
             {
-                var te = Skeleton.AnimationState.GetCurrent(track_num);
-                if (te == null)
-                {
-                    te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
-                }
-
-                if (!te.Animation.Name.Equals(drag_anim_name))
-                {
-                    te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
-                }
-
-                te.TimeScale = 0.0f;
-                te.TrackTime = close_value;
+                Debug.Log("06");
+                origin_te.TimeScale = 0.0f;
+                origin_te.TrackTime = close_value;
 
                 result_index = -1;
             }
             else
             {
+                Debug.Log("07");
+
                 Skeleton.AnimationState.SetEmptyAnimation(track_num, 0.0f);
+                origin_te = null;
 
                 Played_animation_drag_id = drag_id;
             }
+            Debug.Log("08");
         }
 
+        Debug.Log("09");
         return result_index;
     }
 
