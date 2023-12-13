@@ -98,9 +98,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
-    Bone indicator = null;
-    PointAttachment pt = null;
-
     #region Monobehaviour Methods 
     void Awake()
     {
@@ -170,22 +167,22 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
-        Debug.LogWarning($"SpineAnimationStart : {entry.Animation.Name}");
+        Debug.Log($"SpineAnimationStart : {entry.Animation.Name}");
     }
 
     protected virtual void SpineAnimationInterrupt(TrackEntry entry)
     {
-        Debug.LogWarning($"SpineAnimationInterrupt : {entry.Animation.Name}");
+        Debug.Log($"SpineAnimationInterrupt : {entry.Animation.Name}");
     }
 
     protected virtual void SpineAnimationComplete(TrackEntry entry)
     {
-        Debug.LogWarning($"SpineAnimationComplete : {entry.Animation.Name}");
+        Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}");
     }
 
     protected virtual void SpineAnimationEnd(TrackEntry entry)
     {
-        Debug.LogWarning($"SpineAnimationEnd : {entry.Animation.Name}");
+        Debug.Log($"SpineAnimationEnd : {entry.Animation.Name}");
 
         if (entry.Animation.Name.Contains(IDLE_NAME))
         {
