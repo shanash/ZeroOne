@@ -7,35 +7,34 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.UI;
 
 [RequireComponent(typeof(SkeletonUtility))]
 public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 {
+    // 상수 및 정적 변수 선언
     const int INTERACTION_TRACK = 0;
     const string IDLE_NAME = "idle";
     const string FACE_BONE_NAME = "touch_center";
     const string BALLOON_BONE_NAME = "balloon";
     static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
 
-    protected SkeletonAnimation Skeleton;
+    // 필드 선언
+    protected SkeletonAnimationManager Animation_Manager;
     protected Camera Main_Cam;
     protected MemorialManager Memorial_Mng;
     protected MEMORIAL_TYPE Memorial_Type = MEMORIAL_TYPE.NONE;
     private List<SpineBoundingBox> InputDowned_Components = new List<SpineBoundingBox>();
 
-    // 참조할 본들
     Bone Face; // 얼굴 위치를 가져오기 위한 본
     Bone Balloon; // 말풍선 위치 본
     protected Dictionary<int, IdleAnimationData> State_Animation_Datas = new Dictionary<int, IdleAnimationData>();
 
-    // 리액션 데이터들
-    List<Me_Interaction_Data>[,] Touch_Type_Interactions = null; // 신체 타입별 반응 리스트
+    // 데이터 필드
+    List<Me_Interaction_Data>[,] Touch_Type_Interactions = null;
     int[] LastPlayedInteractionIndices = null;
     Dictionary<TOUCH_GESTURE_TYPE, (TOUCH_BODY_TYPE touch_body_type, int count)> Gesture_Touch_Counts = null;
-
-    Dictionary<int, Me_Chat_Motion_Data> Chat_Motions = null; // 챗모션 아이디, 챗모션(애니메이션 + 대사들)
-    Dictionary<int, Me_Serifu_Data> Serifues = null; // 대사 아이디, 대사
+    Dictionary<int, Me_Chat_Motion_Data> Chat_Motions = null;
+    Dictionary<int, Me_Serifu_Data> Serifues = null;
 
     // 얼굴 방향 움직임    
     [SerializeField, Tooltip("얼굴이 포인터를 따라가는 속도"), Range(1, 10)]
@@ -56,32 +55,38 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     string Current_Mouth_Anim_Name = string.Empty; // 이벤트로 받은 입모양 애니메이션 이름
     float Origin_Mouth_Alpha = 0; // 원래 입 크기
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
-    float Elapsed_Time_For_Mouth_Open = 0; //
-    int Played_animation_drag_id = 0;
+    float Elapsed_Time_For_Mouth_Open = 0;
 
-    bool Is_Nade_State = false;
-    int[] Selected_Nade_ID = null;
-    float Nade_Point = 0;
+    // 드래그 반응 애니메이션이 이미 출력되었다면 해당 드래그 아이디를 여기에 저장합니다
+    // 플레이어가 계속 드래그를 유지하고 있어도 반응 애니메이션을 다시 재출력하지 못하게 막으려는 의도
+    int Played_animation_drag_id = 0; 
 
+    // 쓰다듬기 모드 관련 필드
+    bool Is_Nade_State = false; // 머리같은곳을 움직이지 않고 길게 누르고 있으면 쓰다듬기 모드로 들어갑니다.
+    int[] Selected_Nade_Chatmotion_IDs = null; // 쓰다듬기 모드로 들어갔을때 쓰다듬 포인트가 쌓이면 플레이할 챗모션들을 여기에 저장합니다
+    float Nade_Point = 0; // 쓰다듬 포인트
+
+    // 반복
     int Idle_Animation_Played_Count = 0;
-    int _Current_State_Id = 0;
+    
+    int _Current_State_Id = 0; //상태 ID
 
+    // 상태 ID 속성
+    // 설정시에 변경된 State의 IdleAnimation으로 설정해줍니다
     protected int Current_State_Id
     {
         get => _Current_State_Id;
         set
         {
-            bool set_animation = _Current_State_Id != value;
-            _Current_State_Id = value;
-
-            if (set_animation)
+            if (_Current_State_Id != value)
             {
-                var te = Skeleton.AnimationState.SetAnimation(INTERACTION_TRACK, State_Animation_Datas[value].Animation_Idle_Name, true);
-                te.MixDuration = 0.2f;
+                _Current_State_Id = value;
+                Animation_Manager.SetAnimation(INTERACTION_TRACK, State_Animation_Datas[_Current_State_Id].Animation_Idle_Name, true, 0.2f);
             }
         }
     }
 
+    // 상태ID에 기반한 상태 데이터를 가져옵니다
     protected IdleAnimationData Current_State_Data
     {
         get
@@ -97,6 +102,9 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
+    // 현재 상태에서 대기시 나올 반응 애니메이션 이름들을 가져옵니다
+    // 반응 애니메이션은 여러개가 동시에 재생하게 되는 상황이라
+    // 반응 애니메이션을 재생해야 할 타이밍에 string[]를 전부 재생하게 됩니다
     protected List<string[]> Current_Bored_Animation_Names
     {
         get
@@ -119,11 +127,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Monobehaviour Methods 
     void Awake()
     {
-        Skeleton = GetComponent<SkeletonAnimation>();
+        Animation_Manager = SkeletonAnimationManager.Create(GetComponent<SkeletonAnimation>());
         Main_Cam = Camera.main;
-        Face = FindBone(FACE_BONE_NAME);
+        Face = Animation_Manager.FindBone(FACE_BONE_NAME);
         Debug.Assert(Face != null, $"얼굴 추적 기준 본이 없습니다 : {FACE_BONE_NAME}");
-        Balloon = FindBone(BALLOON_BONE_NAME);
+        Balloon = Animation_Manager.FindBone(BALLOON_BONE_NAME);
         Debug.Assert(Face != null, $"말풍선용 본이 없습니다 : {BALLOON_BONE_NAME}");
     }
 
@@ -153,25 +161,25 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         GestureManager.Instance.OnGestureDetected += OnGestureDetect;
         InputCanvas.OnDrag += OnDrag;
 
-        if (Skeleton != null)
+        if (Animation_Manager != null)
         {
-            Skeleton.AnimationState.Start += SpineAnimationStart;
-            Skeleton.AnimationState.Complete += SpineAnimationComplete;
-            Skeleton.AnimationState.Interrupt += SpineAnimationInterrupt;
-            Skeleton.AnimationState.End += SpineAnimationEnd;
-            Skeleton.AnimationState.Event += SpineAnimationEvent;
+            Animation_Manager.Animation_State.Start += SpineAnimationStart;
+            Animation_Manager.Animation_State.Complete += SpineAnimationComplete;
+            Animation_Manager.Animation_State.Interrupt += SpineAnimationInterrupt;
+            Animation_Manager.Animation_State.End += SpineAnimationEnd;
+            Animation_Manager.Animation_State.Event += SpineAnimationEvent;
         }
     }
 
     void OnDisable()
     {
-        if (Skeleton != null)
+        if (Animation_Manager != null)
         {
-            Skeleton.AnimationState.Start -= SpineAnimationStart;
-            Skeleton.AnimationState.Complete -= SpineAnimationComplete;
-            Skeleton.AnimationState.Interrupt += SpineAnimationInterrupt;
-            Skeleton.AnimationState.End -= SpineAnimationEnd;
-            Skeleton.AnimationState.Event -= SpineAnimationEvent;
+            Animation_Manager.Animation_State.Start -= SpineAnimationStart;
+            Animation_Manager.Animation_State.Complete -= SpineAnimationComplete;
+            Animation_Manager.Animation_State.Interrupt += SpineAnimationInterrupt;
+            Animation_Manager.Animation_State.End -= SpineAnimationEnd;
+            Animation_Manager.Animation_State.Event -= SpineAnimationEvent;
         }
 
         GestureManager.Instance.OnGestureDetected -= OnGestureDetect;
@@ -193,6 +201,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
+        Debug.LogWarning($"SpineAnimationStart : {entry.Animation.Name}");
+
         if (Current_State_Data.Bored_Count == 0)
         {
             return;
@@ -258,7 +268,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
     protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
     {
-        Debug.Log($"SpineAnimationEvent : {evt.Data.Name} : {evt.String}");
+        Debug.Log($"SpineAnimationEvent : {entry.Animation.Name} : {evt.Data.Name} : {evt.String}");
         MemorialDefine.TryParseEvent(evt.Data.Name.ToUpper(), out MemorialDefine.SPINE_EVENT eEvt);
         switch (eEvt)
         {
@@ -321,7 +331,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <returns>해당 월드 위치</returns>
     public Vector3 GetBalloonWorldPosition()
     {
-        return Balloon.GetWorldPosition(Skeleton.transform);
+        return Balloon.GetWorldPosition(Animation_Manager.Transform);
     }
 
     public void OnAudioStateAndVolumeChanged(string sound_key, AudioManager.AUDIO_STATES audio_state, float volume_rms)
@@ -336,15 +346,14 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                         return;
                     }
 
-                    var pre_played_te = Skeleton.AnimationState.GetCurrent(track_index);
+                    var pre_played_te = Animation_Manager.Animation_State.GetCurrent(track_index);
                     if (pre_played_te != null)
                     {
                         pre_played_te.Alpha = 0;
                     }
 
-                    _Playing_Mouth_Track_Entry = Skeleton.AnimationState.SetAnimation(track_index, Current_Mouth_Anim_Name, false);
+                    _Playing_Mouth_Track_Entry = Animation_Manager.SetAnimation(track_index, Current_Mouth_Anim_Name, false, 0.2f);
                     _Playing_Mouth_Track_Entry.Alpha = 0;
-                    _Playing_Mouth_Track_Entry.MixDuration = 0.2f;
                 }
                 Origin_Mouth_Alpha = 0;
                 Dest_Mouth_Alpha = 0;
@@ -373,13 +382,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                             return;
                         }
 
-                        var pre_played_te = Skeleton.AnimationState.GetCurrent(index);
+                        var pre_played_te = Animation_Manager.FindTrack(index);
                         if (pre_played_te != null)
                         {
                             pre_played_te.Alpha = 0;
                         }
 
-                        _Playing_Mouth_Track_Entry = Skeleton.AnimationState.SetAnimation(index, Current_Mouth_Anim_Name, false);
+                        _Playing_Mouth_Track_Entry = Animation_Manager.SetAnimation(index, Current_Mouth_Anim_Name, false);
                     }
                     _Playing_Mouth_Track_Entry.Alpha = before_alpha;
                     _Playing_Mouth_Track_Entry.MixDuration = 0.2f;
@@ -410,39 +419,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     }
 
     /// <summary>
-    /// Attachment 찾기
-    /// </summary>
-    /// <param name="slot_name"></param>
-    /// <param name="attachment_name"></param>
-    /// <returns></returns>
-    public Attachment FindAttachment(string slot_name, string attachment_name)
-    {
-        if (Skeleton != null)
-        {
-            var slot = Skeleton.Skeleton.FindSlot(slot_name);
-            if (slot != null)
-            {
-                return Skeleton.Skeleton.GetAttachment(slot_name, attachment_name);
-            }
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// 슬롯 찾기
-    /// </summary>
-    /// <param name="slot_name"></param>
-    /// <returns></returns>
-    public Slot FindSlot(string slot_name)
-    {
-        if (Skeleton != null)
-        {
-            return Skeleton.skeleton.FindSlot(slot_name);
-        }
-        return null;
-    }
-
-    /// <summary>
     /// 지정 트랙의 (지정)애니메이션이 플레이 중인지 여부 반환
     /// 하지만 아이들 애니메이션은 상시 돌아갈 것이기 때문에 예외로 처리한다
     /// </summary>
@@ -451,7 +427,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <returns></returns>
     protected bool IsAnimationRunning(int track, string anim_name = default)
     {
-        var entry = FindTrack(track);
+        var entry = Animation_Manager.FindTrack(track);
         if (entry == null) return false;
 
         if (entry.Animation.Name.Equals(anim_name) || (anim_name == default && !entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name)))
@@ -483,40 +459,14 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// <returns></returns>
     protected string GetRunningAnimationName(int track)
     {
-        var entry = FindTrack(track);
+        var entry = Animation_Manager.FindTrack(track);
         if (entry == null) return string.Empty;
         return entry.Animation.Name;
     }
 
-    /// <summary>
-    /// 트랙 찾기
-    /// </summary>
-    /// <param name="track">트랙 넘버</param>
-    /// <returns>찾은 트랙엔트리</returns>
-    protected TrackEntry FindTrack(int track)
+    protected virtual void OnUpdate()
     {
-        if (Skeleton != null)
-        {
-            return Skeleton.AnimationState.GetCurrent(track);
-        }
-        return null;
     }
-
-    /// <summary>
-    /// 본(뼈대) 찾기
-    /// </summary>
-    /// <param name="bone_name">본 이름</param>
-    /// <returns>찾은 본</returns>
-    protected Bone FindBone(string bone_name)
-    {
-        if (Skeleton != null)
-        {
-            return Skeleton.Skeleton.FindBone(bone_name);
-        }
-        return null;
-    }
-
-    protected virtual void OnUpdate() { }
 
     private void OnGestureDetect(TOUCH_GESTURE_TYPE type, ICursorInteractable component, Vector2 vector, int param)
     {
@@ -728,31 +678,30 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 {
                     Dragged_Canvas_Position = screen_pos;
                     Is_Nade_State = true;
-                    Selected_Nade_ID = interaction_datas[result_index].chat_motion_ids;
+                    Selected_Nade_Chatmotion_IDs = interaction_datas[result_index].chat_motion_ids;
 
-                    var te_in = Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false);
-                    te_in.MixDuration = 0.2f;
-                    Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
+                    Animation_Manager.SetAnimation(30, "30_nade_in", false, 0.2f);
+                    Animation_Manager.AddAnimation(30, "30_nade_idle", true, 0);
                     CoMoveFace = StartCoroutine(CoMoveFaceToDirection("31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down", 0.1f));
                 }
-                else if (Selected_Nade_ID != null)
+                else if (Selected_Nade_Chatmotion_IDs != null)
                 {
                     float add_point = delta.magnitude * 0.01f;
                     if ((int)Nade_Point < (int)(Nade_Point + add_point))
                     {
-                        int last_available_index = Array.IndexOf(Selected_Nade_ID, LastPlayedInteractionIndices[(int)type]);
+                        int last_available_index = Array.IndexOf(Selected_Nade_Chatmotion_IDs, LastPlayedInteractionIndices[(int)type]);
 
                         int select_index = last_available_index + 1;
 
-                        if (Selected_Nade_ID.Length <= select_index)
+                        if (Selected_Nade_Chatmotion_IDs.Length <= select_index)
                         {
                             select_index = 0;
                         }
 
-                        PlayAnimationForChatMotion(Selected_Nade_ID[select_index]);
+                        PlayAnimationForChatMotion(Selected_Nade_Chatmotion_IDs[select_index]);
 
-                        LastPlayedInteractionIndices[(int)type] = Selected_Nade_ID[select_index];
-                        Selected_Nade_ID = null;
+                        LastPlayedInteractionIndices[(int)type] = Selected_Nade_Chatmotion_IDs[select_index];
+                        Selected_Nade_Chatmotion_IDs = null;
                     }
                     else
                     {
@@ -775,10 +724,9 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
                 Gesture_Touch_Counts[gesture_type] = (type, before_count + 1);
 
-                var te_out = Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false);
-                te_out.MixDuration = 0.2f;
+                Animation_Manager.SetAnimation(30, "30_nade_out", false, 0.2f);
                 Is_Nade_State = false;
-                Selected_Nade_ID = null;
+                Selected_Nade_Chatmotion_IDs = null;
                 Nade_Point = 0;
             }
             return -1;
@@ -822,34 +770,26 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         if (string.IsNullOrEmpty(interaction_datas[result_index].drag_animation_name))
         {
-            Debug.Log("Play");
             Played_animation_drag_id = drag_id;
             return result_index;
         }
 
-        Debug.Log("00");
         string drag_anim_name = interaction_datas[result_index].drag_animation_name;
         if (TryGetTrackNum(drag_anim_name, out int track_num))
         {
-            Debug.Log("01");
             if (origin_te == null || origin_te.TrackIndex != track_num)
             {
-                Debug.Log("02");
-                origin_te = Skeleton.AnimationState.GetCurrent(track_num);
+                origin_te = Animation_Manager.FindTrack(track_num);
                 if (origin_te != null && origin_te.Animation.Name.Equals(drag_anim_name))
                 {
                     origin_close_value = origin_te.TrackTime;
-                    Debug.Log($"03 : {origin_close_value}");
                 }
                 else
                 {
                     origin_close_value = 0.0f;
-                    origin_te = Skeleton.AnimationState.SetAnimation(track_num, drag_anim_name, false);
-                    Debug.Log($"04 : {origin_close_value}");
+                    origin_te = Animation_Manager.SetAnimation(track_num, drag_anim_name, false);
                 }
             }
-
-            Debug.Log("05");
 
             if (origin_close_value > 0)
             {
@@ -858,7 +798,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
             if (close_value < 1)
             {
-                Debug.Log("06");
                 origin_te.TimeScale = 0.0f;
                 origin_te.TrackTime = close_value;
 
@@ -866,17 +805,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             }
             else
             {
-                Debug.Log("07");
-
-                Skeleton.AnimationState.SetEmptyAnimation(track_num, 0.0f);
+                Animation_Manager.Animation_State.SetEmptyAnimation(track_num, 0.0f);
                 origin_te = null;
 
                 Played_animation_drag_id = drag_id;
             }
-            Debug.Log("08");
         }
 
-        Debug.Log("09");
         return result_index;
     }
 
@@ -951,15 +886,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 throw new InvalidTrackException(track_num);
             }
 
-            var te = Skeleton.AnimationState.SetAnimation(track_num, anim_name, false);
-            te.MixDuration = mixDuration;
+            Animation_Manager.SetAnimation(track_num, anim_name, false, mixDuration);
 
             if (track_num == INTERACTION_TRACK)
             {
                 // 반응애니메이션 끝나고 아이들로 돌아가는 부분은 연결동작으로 맞춰져 있기 때문에
                 // 크로스페이드 블랜딩을 쓰면 더 부자연스러워 보인다
-                te = Skeleton.AnimationState.AddAnimation(track_num, Current_State_Data.Animation_Idle_Name, true, 0);
-                te.MixDuration = 0.0f;
+                Animation_Manager.AddAnimation(track_num, Current_State_Data.Animation_Idle_Name, true, 0, 0.0f);
             }
             else
             {
@@ -969,12 +902,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         Current_Chat_Motion_ID = chat_motion_id;
         Current_Serifu_Index = -1;
-    }
-
-    public void PlayIdleAnimation()
-    {
-        var te = Skeleton.AnimationState.SetAnimation(0, Current_State_Data.Animation_Idle_Name, true);
-        te.MixDuration = 0.2f;
     }
 
     bool TryGetTrackCheckEqual(out int track_index, params string[] anim_names)
@@ -1011,8 +938,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             yield break;
         }
 
-        TrackEntry track1 = FindTrack(horizon_track_index);
-        TrackEntry track2 = FindTrack(vertical_track_index);
+        TrackEntry track1 = Animation_Manager.FindTrack(horizon_track_index);
+        TrackEntry track2 = Animation_Manager.FindTrack(vertical_track_index);
 
         while (ShouldContinueMovingFace())
         {
@@ -1020,8 +947,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             yield return null;
         }
 
-        Skeleton.AnimationState.ClearTrack(horizon_track_index);
-        Skeleton.AnimationState.ClearTrack(vertical_track_index);
+        Animation_Manager.Animation_State.ClearTrack(horizon_track_index);
+        Animation_Manager.Animation_State.ClearTrack(vertical_track_index);
         CoMoveFace = null;
     }
 
@@ -1036,7 +963,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     bool ShouldContinueMovingFace()
     {
         bool result = Vector2.Distance(Dragged_Canvas_Position, Vector2.zero) > 0.01f || Vector2.Distance(Current_Face_Direction, Vector2.zero) > 0.01f;
-        Debug.Log($"ShouldContinueMovingFace : {result}");
         return result;
     }
 
@@ -1045,7 +971,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// </summary>
     void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
     {
-        Vector3 face_world_pos = Face.GetWorldPosition(Skeleton.transform);
+        Vector3 face_world_pos = Face.GetWorldPosition(Animation_Manager.Transform);
         Vector2 face_screen_pos = Main_Cam.WorldToScreenPoint(face_world_pos);
         Vector2 dest_direction = CalculateDesiredDirection(face_screen_pos, multiple_value);
 
@@ -1103,8 +1029,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                 track.Alpha = 0;
             }
             TryGetTrackNum(animation_name, out var num);
-            track = Skeleton.AnimationState.SetAnimation(num, animation_name, false);
-            track.MixDuration = 0;
+            track = Animation_Manager.SetAnimation(num, animation_name, false, 0);
         }
         track.TimeScale = 0;
         track.Alpha = Mathf.Abs(direction_value);
@@ -1122,6 +1047,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             Debug.Assert(false, "정상적으로 초기화가 되지 않았습니다.");
             return null;
         }
+
         Debug.Assert(Serifues.Count > 0 && chat_motion_id > -1, $"없는 대사를 불러오려합니다. 챗모션ID : {chat_motion_id}, 대사 인덱스 : {serifu_ids_index}");
         if (Serifues.Count == 0 || chat_motion_id == -1 || Chat_Motions[chat_motion_id].serifu_ids == null)
         {
@@ -1164,6 +1090,16 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         return audio_keys;
     }
 
+    public Attachment FindAttachment(string slot_name, string attachment_name)
+    {
+        return Animation_Manager.FindAttachment(slot_name, attachment_name);
+    }
+
+    public Slot FindSlot(string slot_name)
+    {
+        return Animation_Manager.FindSlot(slot_name);
+    }
+
     public record IdleAnimationData
     {
         public string Animation_Idle_Name;
@@ -1190,6 +1126,108 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             : base($"선택된 트랙이 올바르지 않습니다, Animation Track: {animation_track}")
         {
             Animation_Track = animation_track;
+        }
+    }
+
+    public class SkeletonAnimationManager
+    {
+        SkeletonAnimation _Skeleton_Animation;
+
+        public SkeletonAnimation Skeleton_Animation
+        {
+            get => _Skeleton_Animation;
+        }
+
+        public Spine.AnimationState Animation_State
+        {
+            get => _Skeleton_Animation.AnimationState;
+        }
+
+        public Transform Transform
+        {
+            get => _Skeleton_Animation.transform;
+        }
+
+        public static SkeletonAnimationManager Create(SkeletonAnimation skeleton_animation)
+        {
+            SkeletonAnimationManager result = new SkeletonAnimationManager();
+            if (skeleton_animation == null)
+            {
+                return null;
+            }
+            result._Skeleton_Animation = skeleton_animation;
+
+            return result;
+        }
+
+        private SkeletonAnimationManager(){}
+
+        public TrackEntry SetAnimation(int track_index, string animation_name, bool loop, float mix_duration = -1.0f)
+        {
+            var te = Skeleton_Animation.AnimationState.SetAnimation(track_index, animation_name, loop);
+            if (mix_duration >= 0.0f)
+            {
+                te.MixDuration = mix_duration;
+            }
+
+            return te;
+        }
+        public TrackEntry AddAnimation(int track_index, string animation_name, bool loop, float delay, float mix_duration = -1.0f)
+        {
+            var te = Skeleton_Animation.AnimationState.AddAnimation(track_index, animation_name, loop, delay);
+            if (mix_duration >= 0.0f)
+            {
+                te.MixDuration = mix_duration;
+            }
+
+            return te;
+        }
+
+
+        /// <summary>
+        /// Attachment 찾기
+        /// </summary>
+        /// <param name="slot_name"></param>
+        /// <param name="attachment_name"></param>
+        /// <returns></returns>
+        public Attachment FindAttachment(string slot_name, string attachment_name)
+        {
+            var slot = _Skeleton_Animation.Skeleton.FindSlot(slot_name);
+            if (slot != null)
+            {
+                return _Skeleton_Animation.Skeleton.GetAttachment(slot_name, attachment_name);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 슬롯 찾기
+        /// </summary>
+        /// <param name="slot_name"></param>
+        /// <returns></returns>
+        public Slot FindSlot(string slot_name)
+        {
+            return _Skeleton_Animation.Skeleton.FindSlot(slot_name);
+        }
+
+        /// <summary>
+        /// 트랙 찾기
+        /// </summary>
+        /// <param name="track">트랙 넘버</param>
+        /// <returns>찾은 트랙엔트리</returns>
+        public TrackEntry FindTrack(int track)
+        {
+            return Animation_State.GetCurrent(track);
+        }
+
+        /// <summary>
+        /// 본(뼈대) 찾기
+        /// </summary>
+        /// <param name="bone_name">본 이름</param>
+        /// <returns>찾은 본</returns>
+        public Bone FindBone(string bone_name)
+        {
+            return _Skeleton_Animation.Skeleton.FindBone(bone_name);
         }
     }
 }
