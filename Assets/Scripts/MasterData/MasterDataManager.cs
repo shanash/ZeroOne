@@ -352,11 +352,11 @@ public class MasterDataManager : BaseMasterDataManager
             .ToDictionary(x => x.serifu_id, x => x);
     }
 
-    public Dictionary<int, string> Get_MemorialStateAnimation(int player_character_id)
+    public Dictionary<int, (string Idle_Animation_Name, int[] Bored_Chatmotion_Ids, int Bored_Condition_Count)> Get_MemorialStateAnimation(int player_character_id)
     {
         return _Me_State_Data
             .Where(x => x.player_character_id == player_character_id)
-            .ToDictionary(x => x.state_id, x => x.idle_animation_name);
+            .ToDictionary(x => x.state_id, x => (x.idle_animation_name, x.bored_chatmotion_ids, x.bored_condition_count));
     }
     #endregion
 }

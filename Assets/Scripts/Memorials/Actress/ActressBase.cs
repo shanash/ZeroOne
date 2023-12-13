@@ -27,26 +27,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     // 참조할 본들
     Bone Face; // 얼굴 위치를 가져오기 위한 본
     Bone Balloon; // 말풍선 위치 본
-
-    protected Dictionary<int, string> State_Idle_Animation = null;
-    protected int Current_State_Id
-    {
-        get
-        {
-            return _Current_State_Id;
-        }
-
-        set
-        {
-            if (_Current_State_Id != value)
-            {
-                var te = Skeleton.AnimationState.SetAnimation(INTERACTION_TRACK, State_Idle_Animation[value], true);
-                te.MixDuration = 0.2f;
-            }
-            _Current_State_Id = value;
-        }
-    }
-    int _Current_State_Id = 0;
+    protected Dictionary<int, IdleAnimationData> State_Animation_Datas = new Dictionary<int, IdleAnimationData>();
 
     // 리액션 데이터들
     List<Me_Interaction_Data>[,] Touch_Type_Interactions = null; // 신체 타입별 반응 리스트
@@ -82,19 +63,56 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     int[] Selected_Nade_ID = null;
     float Nade_Point = 0;
 
-    protected string Idle_Animation
+    int Idle_Animation_Played_Count = 0;
+    int _Current_State_Id = 0;
+
+    protected int Current_State_Id
+    {
+        get => _Current_State_Id;
+        set
+        {
+            bool set_animation = _Current_State_Id != value;
+            _Current_State_Id = value;
+
+            if (set_animation)
+            {
+                var te = Skeleton.AnimationState.SetAnimation(INTERACTION_TRACK, State_Animation_Datas[value].Animation_Idle_Name, true);
+                te.MixDuration = 0.2f;
+            }
+        }
+    }
+
+    protected IdleAnimationData Current_State_Data
     {
         get
         {
-            if (State_Idle_Animation == null
-                || State_Idle_Animation.Count == 0
-                || !State_Idle_Animation.ContainsKey(Current_State_Id))
+            if (State_Animation_Datas.Count == 0
+                || !State_Animation_Datas.ContainsKey(Current_State_Id))
             {
-                Debug.Assert(false, "기본 아이들 애니메이션이 설정되지 않았습니다");
+                Debug.Assert(false, $"기본 아이들 애니메이션이 설정되지 않았습니다. State_Animation_Datas.Count: {State_Animation_Datas.Count}, State_Animation_Datas.ContainsKey(Current_State_Id): {State_Animation_Datas.ContainsKey(Current_State_Id)}");
                 return null;
             }
 
-            return State_Idle_Animation[Current_State_Id];
+            return State_Animation_Datas[Current_State_Id];
+        }
+    }
+
+    protected List<string[]> Current_Bored_Animation_Names
+    {
+        get
+        {
+            if (Current_State_Data == null)
+            {
+                return null;
+            }
+
+            List<string[]> result = new List<string[]>();
+            foreach (var chatmotion_id in Current_State_Data.Bored_Chatmotion_Ids)
+            {
+                result.Add(Chat_Motions[chatmotion_id].animation_name);
+            }
+
+            return result;
         }
     }
 
@@ -118,7 +136,15 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         Serifues = MasterDataManager.Instance.Get_MemorialSerifu(player_character_id);
         var audio_keys = GetMemorialAudioKeysFromSerifu(Serifues.Values.ToList());
         AudioManager.Instance.PreloadAudioClipsAsync(audio_keys, null);
-        State_Idle_Animation = MasterDataManager.Instance.Get_MemorialStateAnimation(player_character_id);
+        var state_animation_data = MasterDataManager.Instance.Get_MemorialStateAnimation(player_character_id);
+        foreach (var data in state_animation_data)
+        {
+            Debug.Log($"data.Key : {data.Key}");
+            State_Animation_Datas.Add(data.Key, new IdleAnimationData {
+                Animation_Idle_Name= data.Value.Idle_Animation_Name,
+                Bored_Chatmotion_Ids= data.Value.Bored_Chatmotion_Ids,
+                Bored_Count= data.Value.Bored_Condition_Count });
+        }
         Current_State_Id = state_id;
     }
 
@@ -167,7 +193,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
-        Debug.Log($"SpineAnimationStart : {entry.Animation.Name}");
+        if (!entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name) && !Current_Bored_Animation_Names.Any(array => array.Contains(entry.Animation.Name)))
+        {
+            Debug.Log("reset Idle_Animation_Played_Count");
+            Idle_Animation_Played_Count = 0;
+        }
     }
 
     protected virtual void SpineAnimationInterrupt(TrackEntry entry)
@@ -178,6 +208,23 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     protected virtual void SpineAnimationComplete(TrackEntry entry)
     {
         Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}");
+
+        if (entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name))
+        {
+            Idle_Animation_Played_Count++;
+            Debug.Log($"count : {Idle_Animation_Played_Count}");
+
+            if (Idle_Animation_Played_Count % Current_State_Data.Bored_Count == 0)
+            {
+                PlayAnimationForChatMotion(1200002000 + Idle_Animation_Played_Count / Current_State_Data.Bored_Count);
+
+                if (Idle_Animation_Played_Count == Current_State_Data.Bored_Count * Current_State_Data.Bored_Chatmotion_Ids.Length)
+                {
+                    Debug.Log("reset Idle_Animation_Played_Count");
+                    Idle_Animation_Played_Count = 0;
+                }
+            }
+        }
     }
 
     protected virtual void SpineAnimationEnd(TrackEntry entry)
@@ -397,7 +444,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         var entry = FindTrack(track);
         if (entry == null) return false;
 
-        if (entry.Animation.Name.Equals(anim_name) || (anim_name == default && !entry.Animation.Name.Equals(Idle_Animation)))
+        if (entry.Animation.Name.Equals(anim_name) || (anim_name == default && !entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name)))
         {
             return true;
         }
@@ -901,7 +948,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             {
                 // 반응애니메이션 끝나고 아이들로 돌아가는 부분은 연결동작으로 맞춰져 있기 때문에
                 // 크로스페이드 블랜딩을 쓰면 더 부자연스러워 보인다
-                te = Skeleton.AnimationState.AddAnimation(track_num, Idle_Animation, true, 0);
+                te = Skeleton.AnimationState.AddAnimation(track_num, Current_State_Data.Animation_Idle_Name, true, 0);
                 te.MixDuration = 0.0f;
             }
             else
@@ -916,7 +963,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
     public void PlayIdleAnimation()
     {
-        var te = Skeleton.AnimationState.SetAnimation(0, Idle_Animation, true);
+        var te = Skeleton.AnimationState.SetAnimation(0, Current_State_Data.Animation_Idle_Name, true);
         te.MixDuration = 0.2f;
     }
 
@@ -1105,6 +1152,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
 
         return audio_keys;
+    }
+
+    public record IdleAnimationData
+    {
+        public string Animation_Idle_Name;
+        public int[] Bored_Chatmotion_Ids;
+        public int Bored_Count;
     }
 
     public class ChatMotionNotFoundException : Exception
