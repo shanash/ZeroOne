@@ -139,11 +139,11 @@ public class BattlePcSkillData : BattleSkillData
         }
         return SECOND_TARGET_RULE_TYPE.NONE;
     }
-    public override int GetSecondTargetCount()
+    public override int GetMaxSecondTargetCount()
     {
         if (Data != null)
         {
-            return Data.second_target_count;
+            return Data.max_second_target_count;
         }
         return 0;
     }

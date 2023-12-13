@@ -1,5 +1,4 @@
 
-using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
 
@@ -161,7 +160,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 세컨 타겟 수
     /// </summary>
     /// <returns></returns>
-    public virtual int GetSecondTargetCount() { return 0; }
+    public virtual int GetMaxSecondTargetCount() { return 0; }
     /// <summary>
     /// 세컨 타겟의 반경
     /// </summary>

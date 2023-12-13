@@ -450,19 +450,6 @@ public enum INEQUALITY_TYPE
 }
 
 ///	<summary>
-///	PC or NPC TYPE
-///	</summary>
-public enum CHARACTER_TYPE
-{
-	/// <summary>NONE</summary>
-	NONE = 0,
-	/// <summary>PLAYER CHARACTER</summary>
-	PC = 1,
-	/// <summary>NPC</summary>
-	NPC = 2,
-}
-
-///	<summary>
 ///	SKII TYPE
 ///	</summary>
 public enum SKILL_TYPE
@@ -477,5 +464,18 @@ public enum SKILL_TYPE
 	SKILL_02 = 3,
 	/// <summary>궁극기</summary>
 	SPECIAL_SKILL = 4,
+}
+
+///	<summary>
+///	PC or NPC TYPE
+///	</summary>
+public enum CHARACTER_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>PLAYER CHARACTER</summary>
+	PC = 1,
+	/// <summary>NPC</summary>
+	NPC = 2,
 }
 

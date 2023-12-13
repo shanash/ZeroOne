@@ -6,11 +6,97 @@ using UnityEngine;
 
 public partial class TeamManager_V2
 {
-    public void FindSecondTargetInRange(HeroBase_V2 center, SECOND_TARGET_RULE_TYPE rule, float distance, ref List<HeroBase_V2> targets)
-    {
 
+    #region Second Find Target Rules
+    /// <summary>
+    /// 타겟을 중심으로 해당 타겟의 팀 매니저를 이용하여 주변의 다른 타켓을 추가로 찾아주는 함수
+    /// 룰 타입에 따라 주변 반경/후위 반경 등 조건에 의해 다양하게 검색한다.
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="rule"></param>
+    /// <param name="range"></param>
+    /// <param name="targets"></param>
+    public void FindSecondTargetInRange(HeroBase_V2 center, SECOND_TARGET_RULE_TYPE rule, float range, int max_count, ref List<HeroBase_V2> targets)
+    {
+        FindSecondTargetRuleExec(center, rule, range, max_count, ref targets);
+
+        //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
+        if (targets.Count > 0 && max_count > 0)
+        {
+            targets.RemoveRange(max_count, targets.Count - max_count);
+        }
     }
 
+    /// <summary>
+    /// 각 룰 타입에 따라 검색 분기
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="rule"></param>
+    /// <param name="range"></param>
+    /// <param name="targets"></param>
+    void FindSecondTargetRuleExec(HeroBase_V2 center, SECOND_TARGET_RULE_TYPE rule, float range, int max_count, ref List<HeroBase_V2> targets)
+    {
+        switch (rule)
+        {
+            case SECOND_TARGET_RULE_TYPE.AROUND_SPLASH:
+                FindSecondTargetRuleAroundSplash(center, range, max_count, ref targets);
+                break;
+            case SECOND_TARGET_RULE_TYPE.BACK_SPLASH:
+                FindSecondTargetRuleBackSplash(center, range, max_count, ref targets);
+                break;
+        }
+    }
+    /// <summary>
+    /// center를 중심으로 지정된 영역 내에 있는 모든 타겟 검출
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="range"></param>
+    /// <param name="targets"></param>
+    void FindSecondTargetRuleAroundSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets) 
+    {
+        var members = GetAliveMembers();
+        members.Remove(center); //  본인 제외
+        //  센터를 중심으로 
+        var temp_list = members.FindAll(x => x.GetDistanceFromCenter(center) <= range);
+
+        //  오름 차순
+        temp_list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
+
+        GetTargetsFromTempList(temp_list, max_count, ref targets);
+
+    }
+    /// <summary>
+    /// center를 중심으로 센터 뒷편의 영역에서 지정된 거리내에 있는 모든 타겟 검출
+    /// Left 팀인 경우 x가 center 보다 작다.
+    /// Right 팀인경우 x가 center 보다 크다
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="range"></param>
+    /// <param name="max_count"></param>
+    /// <param name="targets"></param>
+    void FindSecondTargetRuleBackSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets) 
+    {
+        List<HeroBase_V2> temp_list = new List<HeroBase_V2>();
+        var members = GetAliveMembers();
+        members.Remove(center); //  본인 제외
+        if (Team_Type == TEAM_TYPE.LEFT)
+        {
+            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x <= center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
+        }
+        else
+        {
+            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x >= center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
+        }
+        //  오름 차순
+        temp_list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
+
+        GetTargetsFromTempList(temp_list, max_count, ref targets);
+    }
+
+    #endregion
+
+
+    #region Find Target Rules
     /// <summary>
     /// 지정한 거리내에 가장 가까운 적이 있는지 지정 숫자만큼 찾아준다
     /// 이 함수의 사용용도는 처음 맵에 진입할 시 타겟 룰에 상관없이
@@ -90,8 +176,8 @@ public partial class TeamManager_V2
                 }
             }
         }
-        
     }
+
     /// <summary>
     /// 지정한 거리내에 있는 적을 찾아 지정한 숫자만큼 찾아준다.
     /// 타겟 룰을 배열로 요청할 경우, 우선순위 대로 타겟을 찾아서 반환
@@ -129,12 +215,12 @@ public partial class TeamManager_V2
             var enemy_team = GetEnemyTeam();
             int cnt = 0;
             //  타겟 룰 타입의 우선순위에 따라 순서대로 적 타겟을 찾아낸다.
-            for (int i = 0;i < len; i++)
+            for (int i = 0; i < len; i++)
             {
                 TARGET_RULE_TYPE rule = rule_types[i];
                 enemy_team.FindTargetRuleExec(self, rule, approach_distance, count, ref targets);
                 cnt += targets.Count;
-                if(cnt >= count)
+                if (cnt >= count)
                 {
                     break;
                 }
@@ -174,7 +260,7 @@ public partial class TeamManager_V2
     /// <param name="approach_distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-   void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int count, ref List<HeroBase_V2> targets)
     {
         switch (rule_type)
         {
@@ -226,7 +312,7 @@ public partial class TeamManager_V2
             case TARGET_RULE_TYPE.HIGHEST_ATTACK:
                 FindTargetRuleHighestAttack(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.HIGHEST_DEFENSE: 
+            case TARGET_RULE_TYPE.HIGHEST_DEFENSE:
                 FindTargetRuleHighestDefense(self, count, ref targets);
                 break;
         }
@@ -396,7 +482,7 @@ public partial class TeamManager_V2
     void FindTargetRuleLowestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-       
+
         //  오름 차순
         temp_list.Sort((a, b) => a.GetLifePercentage().CompareTo(b.GetLifePercentage()));
         GetTargetsFromTempList(temp_list, count, ref targets);
@@ -421,7 +507,7 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleHighestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets) 
+    void FindTargetRuleHighestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
         //  내림 차순
@@ -455,6 +541,10 @@ public partial class TeamManager_V2
         temp_list.Sort((a, b) => b.Defense.CompareTo(a.Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
+    #endregion
+
+
+
 
     /// <summary>
     /// 임의의 멤버들 중 랜덤한 멤버를 추출하기 위한 함수
