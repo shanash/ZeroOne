@@ -193,9 +193,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
+        if (Current_State_Data.Bored_Count == 0)
+        {
+            return;
+        }
+
         if (!entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name) && !Current_Bored_Animation_Names.Any(array => array.Contains(entry.Animation.Name)))
         {
-            Debug.Log("reset Idle_Animation_Played_Count");
             Idle_Animation_Played_Count = 0;
         }
     }
@@ -209,6 +213,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     {
         Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}");
 
+        if (Current_State_Data.Bored_Count == 0)
+        {
+            return;
+        }
+
         if (entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name))
         {
             Idle_Animation_Played_Count++;
@@ -216,7 +225,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
             if (Idle_Animation_Played_Count % Current_State_Data.Bored_Count == 0)
             {
-                PlayAnimationForChatMotion(1200002000 + Idle_Animation_Played_Count / Current_State_Data.Bored_Count);
+                int index = (Idle_Animation_Played_Count / Current_State_Data.Bored_Count) - 1;
+                PlayAnimationForChatMotion(Current_State_Data.Bored_Chatmotion_Ids[index]);
 
                 if (Idle_Animation_Played_Count == Current_State_Data.Bored_Count * Current_State_Data.Bored_Chatmotion_Ids.Length)
                 {
