@@ -36,7 +36,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     protected void InitBattleField()
     {
         CreateBattleField();
-        CreateTeamManagers();
+        //CreateTeamManagers();
     }
 
     protected void CreateBattleField()
@@ -46,18 +46,23 @@ public partial class BattleManager_V2 : MonoBehaviour
         Field = obj.GetComponent<BattleField>();
         Field.transform.localPosition = Vector3.zero;
 
+        int cnt = Used_Team_List.Count;
+        for ( int i = 0; i < cnt; i++ )
+        {
+            Used_Team_List[i].SetHeroContainer(Field.GetUnitContainer());
+        }
     }
 
     protected void CreateTeamManagers()
     {
-        var unit_container = GetBattleField().GetUnitContainer();
-        var left_team = new TeamManager_V2(TEAM_TYPE.LEFT, unit_container);
+        //var unit_container = GetBattleField().GetUnitContainer();
+        var left_team = new TeamManager_V2(TEAM_TYPE.LEFT);
         left_team.SetManagers(this, UI_Mng);
         left_team.SetGameType(Game_Type);
         left_team.SetBattleDungeonData(Dungeon_Data);
         Used_Team_List.Add(left_team);
 
-        var right_team = new TeamManager_V2(TEAM_TYPE.RIGHT, unit_container);
+        var right_team = new TeamManager_V2(TEAM_TYPE.RIGHT);
         right_team.SetManagers(this, UI_Mng);
         right_team.SetGameType(Game_Type);
         right_team.SetBattleDungeonData(Dungeon_Data);

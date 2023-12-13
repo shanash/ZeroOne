@@ -6,6 +6,11 @@ using UnityEngine;
 
 public partial class TeamManager_V2
 {
+    public void FindSecondTargetInRange(HeroBase_V2 center, SECOND_TARGET_RULE_TYPE rule, float distance, ref List<HeroBase_V2> targets)
+    {
+
+    }
+
     /// <summary>
     /// 지정한 거리내에 가장 가까운 적이 있는지 지정 숫자만큼 찾아준다
     /// 이 함수의 사용용도는 처음 맵에 진입할 시 타겟 룰에 상관없이

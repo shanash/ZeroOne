@@ -121,6 +121,23 @@ public class BattleNpcSkillData : BattleSkillData
     {
         Effect_Weight_Index = 0;
     }
+
+    public override SECOND_TARGET_RULE_TYPE GetSecondTargetRuleType()
+    {
+        if (Data != null)
+        {
+            return Data.second_target_rule;
+        }
+        return SECOND_TARGET_RULE_TYPE.NONE;
+    }
+    public override int GetSecondTargetCount()
+    {
+        if (Data != null)
+        {
+            return Data.second_target_count;
+        }
+        return 0;
+    }
     public override object Clone()
     {
         var clone = new BattleNpcSkillData();

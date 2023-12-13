@@ -210,6 +210,20 @@ public enum TARGET_RULE_TYPE
 }
 
 ///	<summary>
+///	두번째 타겟룰 타입
+///	처음 타겟팅 할때가 아닌, 이펙트 등이 타겟에 도달했을 때 추가적으로 타겟팅 해야할 경우에 사용
+///	</summary>
+public enum SECOND_TARGET_RULE_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>타겟을 중심으로 지정 반경내에 감지되는 타겟 검사</summary>
+	AROUND_SPLASH = 1,
+	/// <summary>타겟 뒤로 지정 반경내에 감지되는 타겟 검사</summary>
+	BACK_SPLASH = 2,
+}
+
+///	<summary>
 ///	스킬 효과 타입 (사용하지 않을 예정)
 ///	</summary>
 public enum EFFECT_TYPE

@@ -42,6 +42,18 @@ public class Npc_Skill_Data : System.IDisposable
 	///	</summary>
 	public double projectile_speed {get; set;}
 	///	<summary>
+	///	세컨 타겟 룰
+	///	</summary>
+	public SECOND_TARGET_RULE_TYPE second_target_rule {get; set;}
+	///	<summary>
+	///	세컨 타겟 카운트
+	///	</summary>
+	public int second_target_count {get; set;}
+	///	<summary>
+	///	세컨 타겟 반경
+	///	</summary>
+	public double second_target_radius {get; set;}
+	///	<summary>
 	///	효과 비중
 	///	힛 횟수에 따라 비중 조절
 	///	총 합이 100이 되어야 한다.
@@ -80,6 +92,8 @@ public class Npc_Skill_Data : System.IDisposable
 		target_order = 0;
 		target_count = 0;
 		projectile_type = PROJECTILE_TYPE.NONE;
+		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
+		second_target_count = 0;
 		event_name = string.Empty;
 		effect_path = string.Empty;
 	}
@@ -112,6 +126,9 @@ public class Npc_Skill_Data : System.IDisposable
 		sb.AppendFormat("[target_count] = <color=yellow>{0}</color>", target_count).AppendLine();
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
+		sb.AppendFormat("[second_target_rule] = <color=yellow>{0}</color>", second_target_rule).AppendLine();
+		sb.AppendFormat("[second_target_count] = <color=yellow>{0}</color>", second_target_count).AppendLine();
+		sb.AppendFormat("[second_target_radius] = <color=yellow>{0}</color>", second_target_radius).AppendLine();
 		sb.AppendLine("[effect_weight]");
 		if(effect_weight != null)
 		{

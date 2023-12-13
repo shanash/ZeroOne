@@ -18,13 +18,12 @@ public partial class TeamManager_V2 : IDisposable
 
     protected List<HeroBase_V2> Used_Members = new List<HeroBase_V2>();
 
-    protected BattleDungeonData Stage;
+    protected BattleDungeonData Dungeon;
 
     private bool disposed = false;
 
-    public TeamManager_V2(TEAM_TYPE ttype, Transform hero_parent)
+    public TeamManager_V2(TEAM_TYPE ttype)
     {
-        Unit_Container = hero_parent;
         SetTeamType(ttype);
     }
 
@@ -48,9 +47,14 @@ public partial class TeamManager_V2 : IDisposable
     }
     protected virtual void ResetTeamManager() { }
 
+    public void SetHeroContainer(Transform hero_parent)
+    {
+        Unit_Container = hero_parent;
+    }
+
     public void SetBattleDungeonData(BattleDungeonData stage)
     {
-        this.Stage = stage;
+        this.Dungeon = stage;
     }
 
     public void SetGameType(GAME_TYPE gameType)
@@ -146,7 +150,18 @@ public partial class TeamManager_V2 : IDisposable
             case GAME_TYPE.STORY_MODE:
                 StoryModeMonsterTeamSpawn();
                 break;
+            case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
+                EditorModeMonsterTeamSpawn();
+                break;
         }
+    }
+
+    /// <summary>
+    /// 에디터 모드 몬스터 스폰
+    /// </summary>
+    void EditorModeMonsterTeamSpawn()
+    {
+
     }
 
     /// <summary>
@@ -163,7 +178,7 @@ public partial class TeamManager_V2 : IDisposable
         float interval = 12f;
         float position_offset = 0f;
 
-        var wdata = (Wave_Data)Stage.GetWaveData();
+        var wdata = (Wave_Data)Dungeon.GetWaveData();
 
         List<BattleUnitData> battle_npc_list = new List<BattleUnitData>();
 
@@ -341,4 +356,154 @@ public partial class TeamManager_V2 : IDisposable
     {
         return !Used_Members.Exists(x => x.GetCurrentState() != trans);
     }
+
+    public void GetHeroPrefabsPath(ref List<string> list)
+    {
+        switch (Game_Type)
+        {
+            case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
+                break;
+            case GAME_TYPE.EDITOR_SKILL_EDIT_MODE:
+                break;
+            case GAME_TYPE.STORY_MODE:
+                GetStoryModeHeroPrefabs(ref list);
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+    }
+
+
+    protected void GetStoryModeHeroPrefabs(ref List<string> list)
+    {
+        var m = MasterDataManager.Instance;
+        var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
+        var deck_heroes = deck.GetDeckHeroes();
+        int cnt = deck_heroes.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            UserHeroDeckMountData hero = deck_heroes[i];
+            Player_Character_Data hdata = m.Get_PlayerCharacterData(hero.Hero_Data_ID);
+            if (hdata != null)
+            {
+                GetPcSkillEffectPrefabPath(hdata, ref list);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 플레이어 캐릭터의 스킬 이펙트 리스트 가져오기
+    /// </summary>
+    /// <param name="hero"></param>
+    /// <param name="list"></param>
+    protected void GetPcSkillEffectPrefabPath(Player_Character_Data pc_data, ref List<string> list)
+    {
+        var m = MasterDataManager.Instance;
+        List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();
+
+        //  영웅의 프리팹
+        if (!list.Contains(pc_data.prefab_path))
+        {
+            list.Add(pc_data.prefab_path);
+        }
+
+        //  battle data
+        var bdata = m.Get_PlayerCharacterBattleData(pc_data.battle_info_id);
+        if (bdata != null)
+        {
+            int grp_cnt = bdata.skill_pattern.Length;
+
+            for (int g = 0; g < grp_cnt; g++)
+            {
+                //  skill group
+                var skill_group = m.Get_PlayerCharacterSkillGroupData(bdata.skill_pattern[g]);
+                if (skill_group == null)
+                {
+                    Debug.Assert(false);
+                    continue;
+                }
+                //  skill list
+                m.Get_PlayerCharacterSkillDataListBySkillGroup(skill_group.pc_skill_group_id, ref skill_list);
+                int skill_cnt = skill_list.Count;
+                for (int s = 0; s < skill_cnt; s++)
+                {
+                    var pc_skill = skill_list[s];
+                    //  pc skill effect
+                    if (!string.IsNullOrEmpty(pc_skill.effect_path) && !list.Contains(pc_skill.effect_path))
+                    {
+                        list.Add(pc_skill.effect_path);
+                    }
+                    if (pc_skill.onetime_effect_ids != null)
+                    {
+                        //  onetime skill iist
+                        for (int o = 0; o < pc_skill.onetime_effect_ids.Length; o++)
+                        {
+                            int onetime_skill_id = pc_skill.onetime_effect_ids[o];
+                            if (onetime_skill_id == 0)
+                            {
+                                continue;
+                            }
+                            var onetime_data = m.Get_PlayerCharacterSkillOnetimeData(onetime_skill_id);
+                            Debug.Assert(onetime_data != null);
+                            if (!string.IsNullOrEmpty(onetime_data.effect_path) && !list.Contains(onetime_data.effect_path))
+                            {
+                                list.Add(onetime_data.effect_path);
+                            }
+                        }
+                    }
+
+
+                    //  duration skill list
+                    if (pc_skill.duration_effect_ids != null)
+                    {
+                        for (int d = 0; d < pc_skill.duration_effect_ids.Length; d++)
+                        {
+                            int duration_skill_id = pc_skill.duration_effect_ids[d];
+                            if (duration_skill_id == 0)
+                            {
+                                continue;
+                            }
+                            var duration_data = m.Get_PlayerCharacterSkillDurationData(duration_skill_id);
+                            Debug.Assert(duration_data != null);
+                            if (!string.IsNullOrEmpty(duration_data.effect_path) && !list.Contains(duration_data.effect_path))
+                            {
+                                list.Add(duration_data.effect_path);
+                            }
+                            //  반복 효과용 일회성 스킬 이펙트
+                            int repeat_len = duration_data.repeat_pc_onetime_ids.Length;
+                            for (int r = 0; r < repeat_len; r++)
+                            {
+                                int repeat_id = duration_data.repeat_pc_onetime_ids[r];
+                                if (repeat_id == 0)
+                                    continue;
+                                var repeat_onetime = m.Get_PlayerCharacterSkillOnetimeData(repeat_id);
+                                if (!string.IsNullOrEmpty(repeat_onetime.effect_path) && !list.Contains(repeat_onetime.effect_path))
+                                {
+                                    list.Add(repeat_onetime.effect_path);
+                                }
+                            }
+
+                            //  종료 효과용 일회성 스킬 이펙트
+                            int finish_len = duration_data.finish_pc_onetime_ids.Length;
+                            for (int f = 0; f < finish_len; f++)
+                            {
+                                int finish_id = duration_data.finish_pc_onetime_ids[f];
+                                if (finish_id == 0)
+                                    continue;
+                                var finish_onetime = m.Get_PlayerCharacterSkillOnetimeData(finish_id);
+                                if (!string.IsNullOrEmpty(finish_onetime.effect_path) && !list.Contains(finish_onetime.effect_path))
+                                {
+                                    list.Add(finish_onetime.effect_path);
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+    
 }

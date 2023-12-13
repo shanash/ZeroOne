@@ -1,4 +1,5 @@
 
+using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
 
@@ -151,9 +152,21 @@ public class BattleSkillData : BattleDataBase, ICloneable
     {
         Effect_Weight_Index = weight_index;
     }
-
-    
-
+    /// <summary>
+    /// 세컨 타겟 룰
+    /// </summary>
+    /// <returns></returns>
+    public virtual SECOND_TARGET_RULE_TYPE GetSecondTargetRuleType() { return SECOND_TARGET_RULE_TYPE.NONE; }
+    /// <summary>
+    /// 세컨 타겟 수
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetSecondTargetCount() { return 0; }
+    /// <summary>
+    /// 세컨 타겟의 반경
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetSecondTargetRadius() {  return 0; }
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋
