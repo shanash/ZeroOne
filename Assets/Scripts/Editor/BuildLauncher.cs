@@ -695,9 +695,7 @@ namespace FluffyDuck.EditorUtil
                         }
                     }
                 }
-
             }
-
         }
 
         public static bool ExistVersionText()
