@@ -1,4 +1,4 @@
-using System;
+using UnityEngine;
 
 /// <summary>
 /// 팩토리로 생성하기 위해서는 이 추상클래스를 받아야 합니다
@@ -10,6 +10,7 @@ public abstract class FactoryProductBase
     {
         if (!Factory.Is_Factory_Creating)
         {
+            Debug.Assert(false, "FactoryProductBase 클래스의 생성은 Factory 클래스에서 해야 합니다");
             return false;
         }
 
