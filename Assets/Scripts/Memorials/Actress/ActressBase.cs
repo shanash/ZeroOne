@@ -13,7 +13,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 {
     // 상수 및 정적 변수 선언
     const int INTERACTION_TRACK = 0;
-    const string IDLE_NAME = "idle";
     const string FACE_BONE_NAME = "touch_center";
     const string BALLOON_BONE_NAME = "balloon";
     static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
@@ -68,7 +67,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
     // 반복
     int Idle_Animation_Played_Count = 0;
-    
+
+    TrackEntry drag_track_entry = null;
+    float origin_close_value = 0.0f;
+    int last_drag_id = 0;
+
     int _Current_State_Id = 0; //상태 ID
 
     // 상태 ID 속성
@@ -212,6 +215,13 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         {
             Idle_Animation_Played_Count = 0;
         }
+
+        /*
+        if (entry.TrackIndex <= 1)
+        {
+            InputCanvas.Instance.Enable = false;
+        }
+        */
     }
 
     protected virtual void SpineAnimationInterrupt(TrackEntry entry)
@@ -438,7 +448,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     /// </summary>
     /// <param name="animation_name">애니메이션 이름</param>
     /// <returns>트랙 넘버</returns>
-    protected bool TryGetTrackNum(string animation_name, out int track_index)
+    protected static bool TryGetTrackNum(string animation_name, out int track_index)
     {
         string[] word = animation_name.Split('_');
         bool result = int.TryParse(word[0], out int num);
@@ -578,10 +588,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
-    TrackEntry origin_te = null;
-    float origin_close_value = 0.0f;
-    int last_drag_id = 0;
-
     /// <summary>
     /// 인터렉션 조건에 맞는 인덱스들을 뽑아줍니다
     /// 따로 만들고 싶은 조건이 있다면 상속받아 구현합니다.
@@ -674,8 +680,8 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
                     Is_Nade_State = true;
                     Selected_Nade_Chatmotion_IDs = interaction_datas[result_index].chat_motion_ids;
 
-                    Animation_Manager.SetAnimation(30, "30_nade_in", false, 0.2f);
-                    Animation_Manager.AddAnimation(30, "30_nade_idle", true, 0);
+                    Animation_Manager.SetAnimation("30_nade_in", false, 0.2f);
+                    Animation_Manager.AddAnimation("30_nade_idle", true, 0);
                     CoMoveFace = StartCoroutine(CoMoveFaceToDirection("31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down", 0.1f));
                 }
                 else if (Selected_Nade_Chatmotion_IDs != null)
@@ -718,7 +724,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
                 Gesture_Touch_Counts[gesture_type] = (type, before_count + 1);
 
-                Animation_Manager.SetAnimation(30, "30_nade_out", false, 0.2f);
+                Animation_Manager.SetAnimation("30_nade_out", false, 0.2f);
                 Is_Nade_State = false;
                 Selected_Nade_Chatmotion_IDs = null;
                 Nade_Point = 0;
@@ -742,7 +748,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         if (last_drag_id != drag_id)
         {
             last_drag_id = drag_id;
-            origin_te = null;
+            drag_track_entry = null;
         }
 
         // 드래그 디테일 구현
@@ -771,17 +777,17 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         string drag_anim_name = interaction_datas[result_index].drag_animation_name;
         if (TryGetTrackNum(drag_anim_name, out int track_num))
         {
-            if (origin_te == null || origin_te.TrackIndex != track_num)
+            if (drag_track_entry == null || drag_track_entry.TrackIndex != track_num)
             {
-                origin_te = Animation_Manager.FindTrack(track_num);
-                if (origin_te != null && origin_te.Animation.Name.Equals(drag_anim_name))
+                drag_track_entry = Animation_Manager.FindTrack(track_num);
+                if (drag_track_entry != null && drag_track_entry.Animation.Name.Equals(drag_anim_name))
                 {
-                    origin_close_value = origin_te.TrackTime;
+                    origin_close_value = drag_track_entry.TrackTime;
                 }
                 else
                 {
                     origin_close_value = 0.0f;
-                    origin_te = Animation_Manager.SetAnimation(track_num, drag_anim_name, false);
+                    drag_track_entry = Animation_Manager.SetAnimation(track_num, drag_anim_name, false);
                 }
             }
 
@@ -792,15 +798,15 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
             if (close_value < 1)
             {
-                origin_te.TimeScale = 0.0f;
-                origin_te.TrackTime = close_value;
+                drag_track_entry.TimeScale = 0.0f;
+                drag_track_entry.TrackTime = close_value;
 
                 result_index = -1;
             }
             else
             {
                 Animation_Manager.Animation_State.SetEmptyAnimation(track_num, 0.0f);
-                origin_te = null;
+                drag_track_entry = null;
 
                 Played_animation_drag_id = drag_id;
             }
@@ -1156,6 +1162,16 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
         private SkeletonAnimationManager(){}
 
+        public TrackEntry SetAnimation(string animation_name, bool loop, float mix_duration = -1.0f)
+        {
+            if (!TryGetTrackNum(animation_name, out var track_num))
+            {
+                return null;
+            }
+
+            return SetAnimation(track_num, animation_name, loop, mix_duration);
+        }
+
         public TrackEntry SetAnimation(int track_index, string animation_name, bool loop, float mix_duration = -1.0f)
         {
             var te = Skeleton_Animation.AnimationState.SetAnimation(track_index, animation_name, loop);
@@ -1166,6 +1182,17 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
             return te;
         }
+
+        public TrackEntry AddAnimation(string animation_name, bool loop, float delay, float mix_duration = -1.0f)
+        {
+            if (!TryGetTrackNum(animation_name, out var track_num))
+            {
+                return null;
+            }
+
+            return AddAnimation(track_num, animation_name, loop, delay, mix_duration);
+        }
+
         public TrackEntry AddAnimation(int track_index, string animation_name, bool loop, float delay, float mix_duration = -1.0f)
         {
             var te = Skeleton_Animation.AnimationState.AddAnimation(track_index, animation_name, loop, delay);
