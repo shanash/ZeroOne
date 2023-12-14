@@ -1,6 +1,5 @@
 using Spine;
 using System.Linq;
-using UnityEditor.Searcher;
 using UnityEngine;
 
 public class ActressLucia : ActressBase

@@ -23,6 +23,71 @@ public class MasterDataManager : BaseMasterDataManager
 
     public bool IsLoaded { get { return is_init_load; } }
 
+    #region Item
+    /// <summary>
+    /// 아이템 타입 데이터 반환
+    /// </summary>
+    /// <param name="itype"></param>
+    /// <returns></returns>
+    public Item_Type_Data Get_ItemTypeData(ITEM_TYPE itype)
+    {
+        Check_Item_Type_Data();
+        return _Item_Type_Data.Find(x => x.item_type == itype);
+    }
+    /// <summary>
+    /// 캐릭터 조각 데이터 반환
+    /// </summary>
+    /// <param name="character_piece_id"></param>
+    /// <returns></returns>
+    public Character_Piece_Data Get_CharacterPieceData(int character_piece_id)
+    {
+        Check_Character_Piece_Data();
+
+        return _Character_Piece_Data.Find(x => x.character_piece_id == character_piece_id);
+    }
+    /// <summary>
+    /// 경험치 물약 데이터 반환
+    /// </summary>
+    /// <param name="exp_potion_id"></param>
+    /// <returns></returns>
+    public Exp_Potion_Data Get_ExpPotionData(int exp_potion_id)
+    {
+        Check_Exp_Potion_Data();
+        return _Exp_Potion_Data.Find(x => x.exp_potion_id == exp_potion_id);
+    }
+    /// <summary>
+    /// 스태미너 물약 데이터 반환
+    /// </summary>
+    /// <param name="sta_potion_id"></param>
+    /// <returns></returns>
+    public Sta_Potion_Data Get_StaPotionData(int sta_potion_id)
+    {
+        Check_Sta_Potion_Data();
+        return _Sta_Potion_Data.Find(x => x.sta_potion_id == sta_potion_id);
+    }
+    /// <summary>
+    /// 메모리템(메모리얼에서 사용될 아이템) 데이터 반환
+    /// </summary>
+    /// <param name="memoritem_id"></param>
+    /// <returns></returns>
+    public Memoritem_Data Get_MemoritemData(int memoritem_id)
+    {
+        Check_Memoritem_Data();
+        return _Memoritem_Data.Find(x => x.memoritem_id == memoritem_id);
+    }
+    /// <summary>
+    /// 소비성 아이템 데이터 반환
+    /// </summary>
+    /// <param name="expendable_item_id"></param>
+    /// <returns></returns>
+    public Expendable_Item_Data Get_ExpendableItemData(int expendable_item_id)
+    {
+        Check_Expendable_Item_Data();
+        return _Expendable_Item_Data.Find(x => x.expendable_item_id == expendable_item_id);
+    }
+
+    #endregion
+
     #region Player Character
     /// <summary>
     /// 지정한 플레이어 캐릭터 데이터 가져오기

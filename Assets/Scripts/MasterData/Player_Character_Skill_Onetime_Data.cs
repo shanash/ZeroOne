@@ -22,6 +22,10 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 	///	</summary>
 	public double projectile_speed {get; set;}
 	///	<summary>
+	///	2차 효과 일회성 ID
+	///	</summary>
+	public int[] second_effect_onetime_ids {get; set;}
+	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
@@ -72,11 +76,22 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 	}
 	public override string ToString()
 	{
+		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[pc_skill_onetime_id] = <color=yellow>{0}</color>", pc_skill_onetime_id).AppendLine();
 		sb.AppendFormat("[onetime_effect_type] = <color=yellow>{0}</color>", onetime_effect_type).AppendLine();
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
+		sb.AppendLine("[second_effect_onetime_ids]");
+		if(second_effect_onetime_ids != null)
+		{
+			cnt = second_effect_onetime_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", second_effect_onetime_ids[i]).AppendLine();
+			}
+		}
+
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();

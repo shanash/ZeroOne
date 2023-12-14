@@ -18,6 +18,36 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Item_Type_Data> _Item_Type_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Character_Piece_Data> _Character_Piece_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Exp_Potion_Data> _Exp_Potion_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Sta_Potion_Data> _Sta_Potion_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Memoritem_Data> _Memoritem_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Expendable_Item_Data> _Expendable_Item_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Me_Resource_Data> _Me_Resource_Data
 	{
 		get;
@@ -135,6 +165,12 @@ public class BaseMasterDataManager
 	{
 		await LoadMaster_Editor_Stage_Data();
 		await LoadMaster_Editor_Wave_Data();
+		await LoadMaster_Item_Type_Data();
+		await LoadMaster_Character_Piece_Data();
+		await LoadMaster_Exp_Potion_Data();
+		await LoadMaster_Sta_Potion_Data();
+		await LoadMaster_Memoritem_Data();
+		await LoadMaster_Expendable_Item_Data();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
 		await LoadMaster_Me_Interaction_Data();
@@ -177,6 +213,42 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Wave_Data");
 		_Editor_Wave_Data = JsonConvert.DeserializeObject<List<Editor_Wave_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Item_Type_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Type_Data");
+		_Item_Type_Data = JsonConvert.DeserializeObject<List<Item_Type_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Character_Piece_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Character_Piece_Data");
+		_Character_Piece_Data = JsonConvert.DeserializeObject<List<Character_Piece_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Exp_Potion_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Exp_Potion_Data");
+		_Exp_Potion_Data = JsonConvert.DeserializeObject<List<Exp_Potion_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Sta_Potion_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Sta_Potion_Data");
+		_Sta_Potion_Data = JsonConvert.DeserializeObject<List<Sta_Potion_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Memoritem_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Memoritem_Data");
+		_Memoritem_Data = JsonConvert.DeserializeObject<List<Memoritem_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Expendable_Item_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
+		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
@@ -312,6 +384,54 @@ public class BaseMasterDataManager
 		if(_Editor_Wave_Data == null)
 		{
 			await LoadMaster_Editor_Wave_Data();
+		}
+	}
+
+	protected async void Check_Item_Type_Data()
+	{
+		if(_Item_Type_Data == null)
+		{
+			await LoadMaster_Item_Type_Data();
+		}
+	}
+
+	protected async void Check_Character_Piece_Data()
+	{
+		if(_Character_Piece_Data == null)
+		{
+			await LoadMaster_Character_Piece_Data();
+		}
+	}
+
+	protected async void Check_Exp_Potion_Data()
+	{
+		if(_Exp_Potion_Data == null)
+		{
+			await LoadMaster_Exp_Potion_Data();
+		}
+	}
+
+	protected async void Check_Sta_Potion_Data()
+	{
+		if(_Sta_Potion_Data == null)
+		{
+			await LoadMaster_Sta_Potion_Data();
+		}
+	}
+
+	protected async void Check_Memoritem_Data()
+	{
+		if(_Memoritem_Data == null)
+		{
+			await LoadMaster_Memoritem_Data();
+		}
+	}
+
+	protected async void Check_Expendable_Item_Data()
+	{
+		if(_Expendable_Item_Data == null)
+		{
+			await LoadMaster_Expendable_Item_Data();
 		}
 	}
 

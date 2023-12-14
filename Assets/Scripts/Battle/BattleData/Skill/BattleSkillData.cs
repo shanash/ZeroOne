@@ -165,7 +165,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 세컨 타겟의 반경
     /// </summary>
     /// <returns></returns>
-    public virtual double GetSecondTargetRadius() {  return 0; }
+    public virtual double GetSecondTargetRange() {  return 0; }
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋

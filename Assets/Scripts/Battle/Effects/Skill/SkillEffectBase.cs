@@ -1,6 +1,7 @@
 using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -34,19 +35,34 @@ public class SkillEffectBase : EffectBase
             return;
         }
 
-        ExecOnetimeSkills();
-        ExecDurationSkills();
+        List<HeroBase_V2> targets = new List<HeroBase_V2>();
+
+        var skill = Send_Data.Skill;
+
+        if (skill.GetSecondTargetRuleType() != SECOND_TARGET_RULE_TYPE.NONE)
+        {
+            var first_target = Send_Data.Targets.First();
+            TeamManager_V2 team_mng = first_target.GetTeamManager();
+            team_mng.FindSecondTargetInRange(first_target, skill.GetSecondTargetRuleType(), (float)skill.GetSecondTargetRange(), skill.GetMaxSecondTargetCount(), ref targets);
+        }
+        else
+        {
+            targets.AddRange(Send_Data.Targets);
+        }
+
+        ExecOnetimeSkills(targets);
+        ExecDurationSkills(targets);
     }
     /// <summary>
     /// 일회성 스킬 이펙트 구현
     /// </summary>
-    protected void ExecOnetimeSkills()
+    protected void ExecOnetimeSkills(List<HeroBase_V2> targets)
     {
         var onetime_list = Send_Data.Skill.GetOnetimeSkillDataList();
-        int t_cnt = Send_Data.Targets.Count;
+        int t_cnt = targets.Count;
         for (int t = 0; t < t_cnt; t++)
         {
-            var target = Send_Data.Targets[t];
+            var target = targets[t];
 
             int cnt = onetime_list.Count;
             for (int i = 0; i < cnt; i++)
@@ -79,13 +95,13 @@ public class SkillEffectBase : EffectBase
     /// <summary>
     /// 지속섣 스킬 이펙트 구현
     /// </summary>
-    protected void ExecDurationSkills()
+    protected void ExecDurationSkills(List<HeroBase_V2> targets)
     {
         var duration_list = Send_Data.Skill.GetDurationSkillDataList();
-        int t_cnt = Send_Data.Targets.Count;
+        int t_cnt = targets.Count;
         for (int t = 0; t < t_cnt; t++)
         {
-            var target = Send_Data.Targets[t];
+            var target = targets[t];
 
             int cnt = duration_list.Count;
             for (int i = 0; i < cnt; i++)
