@@ -403,19 +403,20 @@ namespace Spine.Unity {
 			if (UpdateLocal != null)
 				UpdateLocal(this);
 
-			UpdateWorldTransform();
-
-			if (UpdateWorld != null) {
+			if (UpdateWorld == null) {
+				UpdateWorldTransform(Skeleton.Physics.Update);
+			} else {
+				UpdateWorldTransform(Skeleton.Physics.Pose);
 				UpdateWorld(this);
-				UpdateWorldTransform();
+				UpdateWorldTransform(Skeleton.Physics.Update);
 			}
 
 			if (UpdateComplete != null)
 				UpdateComplete(this);
 		}
 
-		protected void UpdateWorldTransform () {
-			skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+		protected void UpdateWorldTransform (Skeleton.Physics physics) {
+			skeleton.UpdateWorldTransform(physics);
 		}
 
 		public void LateUpdate () {
@@ -1009,6 +1010,10 @@ namespace Spine.Unity {
 				SkeletonSubmeshGraphic submeshGraphic = go.AddComponent<SkeletonSubmeshGraphic>();
 				submeshGraphic.maskable = this.maskable;
 				submeshGraphic.raycastTarget = false;
+				submeshGraphic.rectTransform.pivot = rectTransform.pivot;
+				submeshGraphic.rectTransform.anchorMin = Vector2.zero;
+				submeshGraphic.rectTransform.anchorMax = Vector2.one;
+				submeshGraphic.rectTransform.sizeDelta = Vector2.zero;
 				submeshGraphics.Add(submeshGraphic);
 			}
 		}

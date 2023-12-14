@@ -10,7 +10,6 @@ Shader "Spine/RenderQuad" {
 		//	피격시 등 tint 효과가 아닌, 전체 모습이 단일 색상으로 보여지도록 하기 위한 변수
 		[HideInInspector] _AllChangeColor("All Change Color", Color) = (0,0,0,1)	//	추가 [2023-12-07] by forestj
 		[HideInInspector] _IsChange("Is Change", Float) = 0	//	추가 [2023-12-07] by forestj
-
 	}
 	SubShader{
 		Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "PreviewType" = "Plane" }
@@ -37,7 +36,6 @@ Shader "Spine/RenderQuad" {
 
 			float _IsChange;			//	추가 [2023-12-07] by forestj
 			float4 _AllChangeColor;		//	추가 [2023-12-07] by forestj
-
 
 			struct VertexInput {
 				float4 vertex : POSITION;
@@ -81,7 +79,6 @@ Shader "Spine/RenderQuad" {
 					
 				}
 				//	추가 [2023-12-07] by forestj Finish
-				
 			}
 			ENDCG
 		}
