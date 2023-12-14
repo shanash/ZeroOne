@@ -34,6 +34,10 @@ public class Player_Character_Skill_Data : System.IDisposable
 	///	</summary>
 	public int target_count {get; set;}
 	///	<summary>
+	///	타겟 범위
+	///	</summary>
+	public double target_range {get; set;}
+	///	<summary>
 	///	발사체 타입
 	///	</summary>
 	public PROJECTILE_TYPE projectile_type {get; set;}
@@ -128,6 +132,7 @@ public class Player_Character_Skill_Data : System.IDisposable
 		sb.AppendFormat("[target_rule_type] = <color=yellow>{0}</color>", target_rule_type).AppendLine();
 		sb.AppendFormat("[target_order] = <color=yellow>{0}</color>", target_order).AppendLine();
 		sb.AppendFormat("[target_count] = <color=yellow>{0}</color>", target_count).AppendLine();
+		sb.AppendFormat("[target_range] = <color=yellow>{0}</color>", target_range).AppendLine();
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendFormat("[second_target_rule] = <color=yellow>{0}</color>", second_target_rule).AppendLine();

@@ -42,6 +42,12 @@ public class BattleNpcData : BattleUnitData
     }
 
 
+    public override int GetLevel()
+    {
+        return 1;
+    }
+
+
     public override float GetMoveSpeed()
     {
         if (Battle_Data != null)

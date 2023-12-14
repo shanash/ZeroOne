@@ -108,18 +108,9 @@ public class BattleNpcSkillData : BattleSkillData
     {
         return Data.target_count;
     }
-
-
-    #endregion
-    public override string ToString()
+    public override float GetTargetRange()
     {
-        return Data.ToString();
-    }
-
-
-    public override void ResetSkill()
-    {
-        Effect_Weight_Index = 0;
+        return (float)Data.target_range;
     }
 
     public override SECOND_TARGET_RULE_TYPE GetSecondTargetRuleType()
@@ -138,6 +129,18 @@ public class BattleNpcSkillData : BattleSkillData
         }
         return 0;
     }
+    #endregion
+    public override string ToString()
+    {
+        return Data.ToString();
+    }
+
+
+    public override void ResetSkill()
+    {
+        Effect_Weight_Index = 0;
+    }
+
     public override object Clone()
     {
         var clone = new BattleNpcSkillData();

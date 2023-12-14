@@ -6,6 +6,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -26,34 +27,11 @@
   {
     "pc_skill_id": 100002,
     "pc_skill_group_id": 100002,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      100002
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "event_name": "hit",
-    "effect_duration": 0.0
-  },
-  {
-    "pc_skill_id": 100003,
-    "pc_skill_group_id": 100003,
     "target_type": 0,
     "target_rule_type": 1,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -72,20 +50,45 @@
     "effect_duration": 0.0
   },
   {
-    "pc_skill_id": 100101,
-    "pc_skill_group_id": 100101,
+    "pc_skill_id": 100003,
+    "pc_skill_group_id": 100003,
     "target_type": 1,
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      50,
-      50
+      100
+    ],
+    "onetime_effect_ids": [
+      100002
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit",
+    "effect_duration": 0.0
+  },
+  {
+    "pc_skill_id": 100101,
+    "pc_skill_group_id": 100101,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "projectile_type": 0,
+    "projectile_speed": 0.0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
     ],
     "onetime_effect_ids": [
       100004
@@ -99,34 +102,11 @@
   {
     "pc_skill_id": 100102,
     "pc_skill_group_id": 100102,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "projectile_type": 0,
-    "projectile_speed": 0.0,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      100005
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "event_name": "hit",
-    "effect_duration": 0.0
-  },
-  {
-    "pc_skill_id": 100103,
-    "pc_skill_group_id": 100102,
     "target_type": 0,
     "target_rule_type": 1,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -145,12 +125,13 @@
     "effect_duration": 0.0
   },
   {
-    "pc_skill_id": 100104,
+    "pc_skill_id": 100103,
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -176,7 +157,8 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
-    "projectile_type": 2,
+    "target_range": 0.0,
+    "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
@@ -191,8 +173,7 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100202,
@@ -201,7 +182,8 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
-    "projectile_type": 2,
+    "target_range": 0.0,
+    "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
@@ -216,23 +198,28 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100203,
     "pc_skill_group_id": 100203,
     "target_type": 1,
-    "target_rule_type": 6,
+    "target_rule_type": 10,
     "target_order": 0,
-    "target_count": 3,
-    "projectile_type": 2,
+    "target_count": 1,
+    "target_range": 5.0,
+    "projectile_type": 0,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      15,
+      15,
+      15,
+      15,
+      15,
+      25
     ],
     "onetime_effect_ids": [
       100009
@@ -241,8 +228,7 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100301,
@@ -251,6 +237,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -272,10 +259,11 @@
   {
     "pc_skill_id": 100302,
     "pc_skill_group_id": 100302,
-    "target_type": 0,
-    "target_rule_type": 2,
+    "target_type": 1,
+    "target_rule_type": 6,
     "target_order": 0,
-    "target_count": 5,
+    "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -288,7 +276,7 @@
       0
     ],
     "duration_effect_ids": [
-      500003
+      500006
     ],
     "event_name": "buff",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
@@ -301,13 +289,15 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      50,
+      50
     ],
     "onetime_effect_ids": [
       100011
@@ -326,6 +316,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -348,9 +339,10 @@
     "pc_skill_id": 100402,
     "pc_skill_group_id": 100402,
     "target_type": 0,
-    "target_rule_type": 2,
+    "target_rule_type": 3002,
     "target_order": 0,
-    "target_count": 5,
+    "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -360,10 +352,10 @@
       100
     ],
     "onetime_effect_ids": [
-      0
+      100013
     ],
     "duration_effect_ids": [
-      500004
+      0
     ],
     "event_name": "buff",
     "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
@@ -376,6 +368,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -385,7 +378,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100013
+      100014
     ],
     "duration_effect_ids": [
       0
@@ -401,6 +394,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -410,7 +404,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100014
+      100015
     ],
     "duration_effect_ids": [
       0
@@ -426,6 +420,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -435,7 +430,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100014
+      100016
     ],
     "duration_effect_ids": [
       500005
@@ -451,6 +446,7 @@
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
+    "target_range": 0.0,
     "projectile_type": 2,
     "projectile_speed": 0.0,
     "second_target_rule": 0,
@@ -460,7 +456,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100015
+      100017
     ],
     "duration_effect_ids": [
       0

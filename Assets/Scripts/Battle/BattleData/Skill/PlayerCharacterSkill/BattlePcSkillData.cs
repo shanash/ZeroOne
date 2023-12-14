@@ -109,6 +109,11 @@ public class BattlePcSkillData : BattleSkillData
         return Data.target_count;
     }
 
+    public override float GetTargetRange()
+    {
+        return (float)Data.target_range;
+    }
+
     public override int GetEffectWeightValue(int weight_index)
     {
         int weight = 100;
@@ -119,17 +124,6 @@ public class BattlePcSkillData : BattleSkillData
         return weight;
     }
 
-    #endregion
-
-    public override string ToString()
-    {
-        return Data.ToString();
-    }
-
-    public override void ResetSkill()
-    {
-        Effect_Weight_Index = 0;
-    }
 
     public override SECOND_TARGET_RULE_TYPE GetSecondTargetRuleType()
     {
@@ -147,6 +141,19 @@ public class BattlePcSkillData : BattleSkillData
         }
         return 0;
     }
+
+    #endregion
+
+    public override string ToString()
+    {
+        return Data.ToString();
+    }
+
+    public override void ResetSkill()
+    {
+        Effect_Weight_Index = 0;
+    }
+
     public override object Clone()
     {
         var clone = new BattlePcSkillData();

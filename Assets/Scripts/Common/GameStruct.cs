@@ -14,6 +14,7 @@ public struct BATTLE_SEND_DATA
     public DURATION_EFFECT_TYPE Duration_Effect_Type;
 
     public double Damage;
+    public bool Is_Critical;
 
 
     public void Reset()
@@ -23,6 +24,7 @@ public struct BATTLE_SEND_DATA
         Onetime = null;
         Duration = null;
         Damage = 0;
+        Is_Critical = false;
         Effect_Weight_Index = 0;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
         ClearTargets();

@@ -38,6 +38,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         return Max_Life;
     }
 
+    public int GetLevel()
+    {
+        return Unit_Data.GetLevel();
+    }
+
     /// <summary>
     /// 체력 비율 반환
     /// </summary>
@@ -208,8 +213,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected double GetCalcDamage(double damage)
     {
         double defense_rate = GetDefenseRate();
-        double result_dmg = damage * defense_rate;
-        return result_dmg;
+        double last_damage = damage * defense_rate;
+        return last_damage;
     }
 
     /// <summary>
@@ -253,18 +258,41 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
 
     /// <summary>
-    /// 회피율, 10000분율로 반환해준다.
-    /// 회피 확률 = 1 / (1 + 100 / (회피 값 - 적의 명중 값))
+    /// 실시간 버프 등이 적용된 크리티컬 찬스 포인트
+    /// </summary>
+    /// <returns></returns>
+    public double GetCriticalChancePoint()
+    {
+        //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
+        double pt = Critical_Rate;
+        return pt;
+    }
+
+    /// <summary>
+    /// 실시간 버프 등이 적용된 크리티컬 파워
+    /// </summary>
+    /// <returns></returns>
+    public double GetCriticalPowerPoint()
+    {
+        //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
+        double pt = Critical_Power;
+
+        return pt;
+    }
+
+    /// <summary>
+    /// 회피율<br/>
+    /// 회피 확률 = 1 / (1 + 100 / (회피 값 - 적의 명중 값))<br/>
     /// </summary>
     /// <param name="caster_accuracy">캐스터의 명중 수치</param>
-    /// <returns></returns>
+    /// <returns>백만분율로 변환</returns>
     protected double GetEvationRate(double caster_accuracy)
     {
         //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
 
         double evation_rate = 1 / (1 + 100 / (Evasion - caster_accuracy));
 
-        return evation_rate * 10000;
+        return evation_rate * 1000000;
     }
 
     /// <summary>
@@ -281,10 +309,24 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
 
         double evation_rate = GetEvationRate(caster_accuracy);
-        int rand = UnityEngine.Random.Range(0, 10000);
+        int rand = UnityEngine.Random.Range(0, 1000000);
         return rand < evation_rate;
     }
 
+    /// <summary>
+    /// 계산된 크리티컬 확률 계산<br/>
+    /// 치명타 발생 확률 = 공격자의 치명타 값 * 0.05 * 공격자의 레벨 / 피격 대상의 레벨 * 0.01 * 10000 <br/>
+    /// 백만분율로 변환. (1/1000000)
+    /// </summary>
+    /// <param name="caster_lv">공격자의 레벨</param>
+    /// <param name="target_lv">피격자의 레벨</param>
+    /// <returns>백만분율로 변환</returns>
+    protected double GetCriticalChanceRate(int caster_lv, int target_lv) 
+    {
+        
+        double chance = (GetCriticalChancePoint() * 0.05 * ((double)caster_lv/(double)target_lv) * 0.01) * 1000000;
+        return chance; 
+    }
 
 
 

@@ -73,6 +73,14 @@ public enum TARGET_RULE_TYPE
 	NEAREST = 6,
 	/// <summary>가장 거리가 먼 적 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로)</summary>
 	FURTHEST = 7,
+	/// <summary>가장 가까운 적 우선 선택(순번 컬럼 연동하여 순서대로) 후 일정 영역내의 뒤에있는 타겟의 추가 선택</summary>
+	NEAREST_ADD_BACK_RANGE = 8,
+	/// <summary>가장 거리가 먼 적 우선 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로) 후 일정 영역내의 앞에 있는 타겟 추가 선택</summary>
+	FURTHEST_ADD_FRONT_RANGE = 9,
+	/// <summary>가장 가까운 적 우선 선택(순번 컬럼 연동하여 순서대로) 후 일정 영역내의(주변) 타겟의 추가 선택</summary>
+	NEAREST_ADD_ARROUND_RANGE = 10,
+	/// <summary>가장 거리가 먼 적 우선 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로) 후 일정 영역내의 (주변) 타겟 추가 선택</summary>
+	FURTHEST_ADD_ARROUND_RANGE = 11,
 	/// <summary>남은 체력이 가장 낮은 타겟 선택</summary>
 	LOWEST_LIFE_VALUE = 3001,
 	/// <summary>공격력이 가장 낮은 타겟 선택</summary>

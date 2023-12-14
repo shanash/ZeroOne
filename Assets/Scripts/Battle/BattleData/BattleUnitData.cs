@@ -17,6 +17,12 @@ public class BattleUnitData : BattleDataBase
     public virtual int GetUnitNum() { return 0; }
 
     /// <summary>
+    /// 유닛의 레벨 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetLevel() {  return 0; }
+
+    /// <summary>
     /// 유닛의 기본 데이터 반환
     /// </summary>
     /// <returns></returns>

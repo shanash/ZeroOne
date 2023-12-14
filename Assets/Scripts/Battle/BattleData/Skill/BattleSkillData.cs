@@ -144,13 +144,8 @@ public class BattleSkillData : BattleDataBase, ICloneable
     public virtual int GetTargetOrder() {  return 0; }
     public virtual int GetTargetCount() { return 0; }
 
-    #endregion
+    public virtual float GetTargetRange() {  return 0; }
 
-
-    public void SetEffectWeightIndex(int weight_index)
-    {
-        Effect_Weight_Index = weight_index;
-    }
     /// <summary>
     /// 세컨 타겟 룰
     /// </summary>
@@ -165,7 +160,16 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 세컨 타겟의 반경
     /// </summary>
     /// <returns></returns>
-    public virtual double GetSecondTargetRange() {  return 0; }
+    public virtual double GetSecondTargetRange() { return 0; }
+
+    #endregion
+
+
+    public void SetEffectWeightIndex(int weight_index)
+    {
+        Effect_Weight_Index = weight_index;
+    }
+    
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋

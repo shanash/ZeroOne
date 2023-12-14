@@ -76,11 +76,7 @@ public class Hero_100001 : HeroBase_V2
 
     #endregion
 
-    #region Etc Funcs
-
    
-
-    #endregion
 
     #region Spine Func Callback
     protected override void SpineAnimationComplete(TrackEntry entry)

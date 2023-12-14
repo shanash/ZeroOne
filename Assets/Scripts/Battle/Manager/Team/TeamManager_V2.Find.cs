@@ -105,7 +105,6 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="target_type"></param>
     /// <param name="approach_distance"></param>
-    /// <param name="count"></param>
     /// <param name="targets"></param>
     public void FindTargetInRangeAtApproach(HeroBase_V2 self, TARGET_TYPE target_type, float approach_distance, ref List<HeroBase_V2> targets)
     {
@@ -132,12 +131,15 @@ public partial class TeamManager_V2
     /// <summary>
     /// 지정한 거리내에 있는 적을 찾아 지정한 숫자만큼 찾아준다.
     /// </summary>
-    /// <param name="self"></param>
-    /// <param name="target_type"></param>
-    /// <param name="approach_distance"></param>
-    /// <param name="count"></param>
-    /// <param name="targets"></param>
-    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE rule_type, float approach_distance, int target_order, int count, ref List<HeroBase_V2> targets)
+    /// <param name="self">타겟을 요청하는 요청자</param>
+    /// <param name="target_type">아군/적군 타입</param>
+    /// <param name="rule_type">타겟을 지정하는 타입</param>
+    /// <param name="approach_distance">접근 거리</param>
+    /// <param name="target_order">순번</param>
+    /// <param name="count">타겟수</param>
+    /// <param name="target_range">추가 타겟이 필요한 경우, 범위 정보</param>
+    /// <param name="targets">검색 결과</param>
+    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE rule_type, float approach_distance, int target_order, int count, float target_range, ref List<HeroBase_V2> targets)
     {
         targets.Clear();
 

@@ -51,6 +51,11 @@ public class BattlePcData : BattleUnitData
         return Battle_Data;
     }
 
+    public override int GetLevel()
+    {
+        return User_Data.GetLevel();
+    }
+
     public override object GetUserUnitData()
     {
         return User_Data;

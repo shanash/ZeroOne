@@ -57,7 +57,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     public double Max_Life { get; protected set; }
     /// <summary>
-    /// 추가 최대 체력. 스킬 및 장비 옵션 등으로 인하여 일시적으로 증가된 최대 체력
+    /// 추가 최대 체력. 스킬 및 장비 옵션 등으로 인하여 일시적으로 증가된 최대 체력 (사용 안할듯) 
     /// </summary>
     public double Added_Max_Life { get; protected set; }
     /// <summary>
@@ -101,13 +101,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     public double Auto_Recovery_Life { get; protected set; }
 
-    /// <summary>
-    /// 내성 수치<br/>
-    /// 제어 효과를 받을 시, 공격자의 '통찰' 보다 피격자의 '내성'이 높을 경우 1포인트 마다 2% 확률로 제어 효과를 저항함. 저항은 제어 효과를 받을 수 있는 확률을 줄이는 의미임)<br/>
-    /// '통찰' - '내성' = 결과. 결과가 0보다 클 경우, 1포인트마다 2%의 제어 확률 감소
-    /// </summary>
-    public double Resistance { get; protected set; }
-    
     /// <summary>
     /// 치명타 확률<br/>
     /// 크리티컬 발생 확률 = 크리티컬 값 * 0.05 * 0.01 * 레벨 / 적 레벨
@@ -453,7 +446,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="skill"></param>
     protected virtual void FindTargets(BattleSkillData skill) 
     {
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), 0, ref Normal_Attack_Target);
     }
     
 
@@ -713,6 +706,17 @@ public partial class HeroBase_V2 : UnitBase_V2
         return GetDistanceFromCenter(center) <= distance;
     }
 
+
+    /// <summary>
+    /// 피격자가 최종 데미지를 계산 후 데미지 적용이 되면, 해당 데미지를 캐스터(공격자)에게 전달해준다.
+    /// 공격자는 필요에 따라 최종 데미지를 이용하여 회복 등을 사용할 수 있다.
+    /// </summary>
+    /// <param name="damage"></param>
+    public void SendLastDamage(BATTLE_SEND_DATA data)
+    {
+        //  todo
+    }
+
    
     /// <summary>
     /// 적에게서 데미지를 받는다.
@@ -725,38 +729,48 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        double damage = dmg.Damage;
+        double last_damage = dmg.Damage;
 
         //  회피 여기서 계산할까? 회피하면 데미지가 줄어든다고 했는데, 그 로직은?
         if (IsEvation(dmg.Caster.Accuracy))
         {
-            damage = dmg.Damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
+            last_damage = dmg.Damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
         }
-        
-        
+
 
         //  피해감소 체크
         double damage_reduce = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DAMAGE_REDUCE);
         if (damage_reduce > 0)
         {
-            damage -= damage * damage_reduce;
+            last_damage -= last_damage * damage_reduce;
             dmg.Duration_Effect_Type = DURATION_EFFECT_TYPE.DAMAGE_REDUCE;
             CalcDurationCountUse(PERSISTENCE_TYPE.HITTED);
         }
 
-        //damage = Math.Truncate(dmg.Damage);
         //  방어율 = 상수 + 방어력 / 100
         //  최종 데미지 계산 (최종 데미지 = 적 데미지 * 방어율)
-        damage = GetCalcDamage(damage);
+        last_damage = GetCalcDamage(last_damage);
 
-        if (damage <= 0)
+        //  치명타 확률
+        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel());
+        int r = UnityEngine.Random.Range(0, 100000);
+        if (r < cri_chance)
+        {
+            dmg.Is_Critical = true;
+            last_damage *= GetCriticalPowerPoint();
+        }
+
+        if (last_damage <= 0)
         {
             return;
         }
-        dmg.Damage = damage;
-        //Render_Texture.SetHitColor(Color.red, Color.clear, 0.2f);
+        dmg.Damage = last_damage;
+
+        //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
+        SendLastDamage(dmg);
+
         Render_Texture.SetHitColorV2(Color.red, 0.3f);
-        Life -= damage;
+        Life -= last_damage;
         if (Life <= 0)
         {
             Life = 0;
@@ -1001,9 +1015,9 @@ public partial class HeroBase_V2 : UnitBase_V2
                                     int repeat_onetime_cnt = repeat_onetime_list.Count;
                                     for (int o = 0; o < repeat_onetime_cnt; o++)
                                     {
-                                        var send_data = duration.GetBattleSendData().Clone();
+                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
                                         //  todo execSkill
-                                        var onetime = repeat_onetime_list[o];
+                                        BattleOnetimeSkillData onetime = repeat_onetime_list[o];
                                         send_data.Onetime = onetime;
                                         //  일회성 효과 이펙트 
                                         SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
@@ -1021,8 +1035,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                                     int finish_onetime_cnt = finish_onetime_list.Count;
                                     for (int f = 0; f < finish_onetime_cnt; f++)
                                     {
-                                        var send_data = duration.GetBattleSendData().Clone();
-                                        var onetime = finish_onetime_list[f];
+                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+                                        BattleOnetimeSkillData onetime = finish_onetime_list[f];
                                         send_data.Onetime = onetime;
                                         //  일회성 효과 이펙트
                                         SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
@@ -1044,9 +1058,9 @@ public partial class HeroBase_V2 : UnitBase_V2
                                     int repeat_onetime_cnt = repeat_onetime_list.Count;
                                     for (int o = 0; o < repeat_onetime_cnt; o++)
                                     {
-                                        var send_data = duration.GetBattleSendData().Clone();
+                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
                                         //  todo execSkill
-                                        var onetime = repeat_onetime_list[o];
+                                        BattleOnetimeSkillData onetime = repeat_onetime_list[o];
                                         send_data.Onetime = onetime;
                                         //  일회성 효과 이펙트 
                                         SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
@@ -1059,8 +1073,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                                     int finish_onetime_cnt = finish_onetime_list.Count;
                                     for (int f = 0; f < finish_onetime_cnt; f++)
                                     {
-                                        var send_data = duration.GetBattleSendData().Clone();
-                                        var onetime = finish_onetime_list[f];
+                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+                                        BattleOnetimeSkillData onetime = finish_onetime_list[f];
                                         send_data.Onetime = onetime;
                                         //  일회성 효과 이펙트
                                         SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
