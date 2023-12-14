@@ -222,6 +222,14 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     protected virtual void SpineAnimationComplete(TrackEntry entry)
     {
         Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}");
+        if (Current_Chat_Motion_ID != -1)
+        {
+            if (Chat_Motions[Current_Chat_Motion_ID].animation_name != null && Chat_Motions[Current_Chat_Motion_ID].animation_name.Contains(entry.Animation.Name))
+            {
+                DisappearBalloon();
+                Current_Chat_Motion_ID = -1;
+            }
+        }
 
         if (Current_State_Data.Bored_Count == 0)
         {
@@ -250,20 +258,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     protected virtual void SpineAnimationEnd(TrackEntry entry)
     {
         Debug.Log($"SpineAnimationEnd : {entry.Animation.Name}");
-
-        if (entry.Animation.Name.Contains(IDLE_NAME))
-        {
-            return;
-        }
-
-        if (Current_Chat_Motion_ID != -1)
-        {
-            if (Chat_Motions[Current_Chat_Motion_ID].animation_name != null && Chat_Motions[Current_Chat_Motion_ID].animation_name.Contains(entry.Animation.Name))
-            {
-                DisappearBalloon();
-                Current_Chat_Motion_ID = -1;
-            }
-        }
     }
 
     protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
