@@ -89,7 +89,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
-    // 상태ID에 기반한 상태 데이터를 가져옵니다
+    // 상태 ID에 기반한 상태 데이터를 가져옵니다
     protected IdleAnimationData Current_State_Data
     {
         get
@@ -130,7 +130,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Monobehaviour Methods 
     void Awake()
     {
-        Animation_Manager = SkeletonAnimationManager.Create(GetComponent<SkeletonAnimation>());
+        Animation_Manager = Factory.Create<SkeletonAnimationManager>(GetComponent<SkeletonAnimation>());
         Main_Cam = Camera.main;
         Face = Animation_Manager.FindBone(FACE_BONE_NAME);
         Debug.Assert(Face != null, $"얼굴 추적 기준 본이 없습니다 : {FACE_BONE_NAME}");
@@ -204,8 +204,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Spine Animation Callbacks
     protected virtual void SpineAnimationStart(TrackEntry entry)
     {
-        Debug.LogWarning($"SpineAnimationStart : {entry.Animation.Name}");
-
         if (Current_State_Data.Bored_Count == 0)
         {
             return;
@@ -226,7 +224,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 
     protected virtual void SpineAnimationInterrupt(TrackEntry entry)
     {
-        Debug.Log($"SpineAnimationInterrupt : {entry.Animation.Name}");
     }
 
     protected virtual void SpineAnimationComplete(TrackEntry entry)
@@ -244,6 +241,28 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         if (Current_State_Data.Bored_Count == 0)
         {
             return;
+        }
+
+        // 반응 애니메이션이 있으면 Bored 애니메이션이 진행되지 않지만
+        // 0번 트랙 말고 다른 특정 트랙으로 반응 애니메이션이 진행되는 경우가 있습니다.
+        // 여기서 다른 반응트랙의 출력을 감시합니다
+        // 일단은 1번 트랙만 감시
+        if (Animation_Manager.Animation_State.Tracks.Count > 1)
+        {
+            if (null != Animation_Manager.Animation_State.Tracks.Items[1])
+            {
+                return;
+            }
+        }
+
+        // 쓰다듬 모드도 Bored 출력을 막습니다
+        // 30번트랙을 이용하니까 그때 막아둘게요
+        if (Animation_Manager.Animation_State.Tracks.Count > 30)
+        {
+            if (null != Animation_Manager.Animation_State.Tracks.Items[30])
+            {
+                return;
+            }
         }
 
         if (entry.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name))
@@ -1129,9 +1148,25 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
-    public class SkeletonAnimationManager
+    public class SkeletonAnimationManager : FactoryProductBase
     {
         SkeletonAnimation _Skeleton_Animation;
+
+        SkeletonAnimationManager() { }
+
+        protected override bool Initialize(params object[] args)
+        {
+            if (args.Length != 1 ||
+                args[0] == null ||
+                args[0] is not SkeletonAnimation)
+            {
+                return false;
+            }
+
+            _Skeleton_Animation = args[0] as SkeletonAnimation;
+
+            return true;
+        }
 
         public SkeletonAnimation Skeleton_Animation
         {
@@ -1147,20 +1182,6 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         {
             get => _Skeleton_Animation.transform;
         }
-
-        public static SkeletonAnimationManager Create(SkeletonAnimation skeleton_animation)
-        {
-            SkeletonAnimationManager result = new SkeletonAnimationManager();
-            if (skeleton_animation == null)
-            {
-                return null;
-            }
-            result._Skeleton_Animation = skeleton_animation;
-
-            return result;
-        }
-
-        private SkeletonAnimationManager(){}
 
         public TrackEntry SetAnimation(string animation_name, bool loop, float mix_duration = -1.0f)
         {
