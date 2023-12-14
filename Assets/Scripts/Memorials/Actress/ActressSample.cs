@@ -20,6 +20,7 @@ public class ActressSample : ActressBase
     protected override int GetInteractionIndex(SpineBoundingBox bounding_box, List<Me_Interaction_Data> interaction_datas, TOUCH_GESTURE_TYPE gesture_type, Vector2 screen_pos, int drag_id)
     {
         int available_index = base.GetInteractionIndex(bounding_box, interaction_datas, gesture_type, screen_pos, drag_id);
+        /*
 
         if (gesture_type != TOUCH_GESTURE_TYPE.DRAG)
         {
@@ -47,7 +48,7 @@ public class ActressSample : ActressBase
             // 낮은 수치에서는 오브젝트를 계속 움직여주겠지
             return -1;
         }
-
+        */
         return available_index;
     }
 }
