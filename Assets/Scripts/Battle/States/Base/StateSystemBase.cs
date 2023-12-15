@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class StateSystemBase<S>
     where S : Enum
 {
+    object[] Components;
+
     const bool STATE_SYSTEM_DEBUG_MODE = true;
 
     private Queue<S> Queue_States = new Queue<S>();
@@ -138,7 +140,7 @@ public abstract class StateSystemBase<S>
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.ExitState(BattleMng, UiMng);
+            curState.ExitStateAction?.Invoke(Components);
         }
 
 
@@ -146,24 +148,29 @@ public abstract class StateSystemBase<S>
         //  Finish 
         if (curState != null)
         {
-            curState.FinallyState(BattleMng, UiMng);
+            curState.FinallyStateAction?.Invoke(Components);
         }
 
 
         //  새로운 상태가 존재한다면
         if (newState != null)
         {
-            newState.EnterState(BattleMng, UiMng);
+            newState.EnterStateAction?.Invoke(Components);
         }
     }
 
+    public void Lazy_Init_Setting(S trans, params object[] components)
+    {
+        Components = components;
+        ChangeState(trans);
+    }
 
     public void UpdateState()
     {
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.UpdateState(BattleMng, UiMng);
+            curState.UpdateStateAction?.Invoke(Components);
         }
         if (Queue_States.Count > 0)
         {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum UNIT_STATES
@@ -52,6 +53,15 @@ public enum UNIT_STATES
 
 public abstract class UnitState<N, B, U> : StateBase<UNIT_STATES>
 {
+    public UnitState()
+    {
+        EnterStateAction = EnterState;
+    }
+
+    private void EnterState(object[] obj)
+    {
+    }
+
     public virtual void EnterState(N unit, B mng, U ui) { }
     public virtual void UpdateState(N unit, B mng, U ui) { }
     public virtual void ExitState(N unit, B mng, U ui) { }
