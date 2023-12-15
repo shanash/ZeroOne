@@ -50,21 +50,8 @@ public enum UNIT_STATES
     END,
 }
 
-public class UnitState<N, B, U>
+public abstract class UnitState<N, B, U> : StateBase<UNIT_STATES>
 {
-    private UNIT_STATES _transID = UNIT_STATES.NONE;
-
-    public UNIT_STATES TransID
-    {
-        get { return _transID; }
-        protected set { _transID = value; }
-    }
-    protected float Delta_Time;
-
-    public UnitState()
-    {
-    }
-
     public virtual void EnterState(N unit, B mng, U ui) { }
     public virtual void UpdateState(N unit, B mng, U ui) { }
     public virtual void ExitState(N unit, B mng, U ui) { }

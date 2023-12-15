@@ -22,19 +22,8 @@ public enum GAME_STATES
     END
 }
 
-public class GameState<B, U>
+public abstract class GameState<B, U> : StateBase<GAME_STATES>
 {
-    private GAME_STATES _transID = GAME_STATES.NONE;
-    public GAME_STATES TransID
-    {
-        get { return _transID; }
-        protected set { _transID = value; }
-    }
-    protected float Delta_Time;
-    public GameState()
-    {
-    }
-
     public virtual void EnterState(B mng, U ui) { }
     public virtual void UpdateState(B mng, U ui) { }
     public virtual void ExitState(B mng, U ui) { }
