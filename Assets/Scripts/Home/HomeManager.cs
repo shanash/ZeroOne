@@ -18,6 +18,10 @@ public class HomeManager : MonoBehaviour
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
+
+        double a = 12.020893;
+        Debug.LogFormat("{0:0.##}", a);
+
         
     }
 

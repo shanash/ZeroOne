@@ -2,6 +2,7 @@ using FluffyDuck.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public partial class TeamManager_V2
@@ -23,7 +24,11 @@ public partial class TeamManager_V2
         //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
         if (targets.Count > 0 && max_count > 0)
         {
-            targets.RemoveRange(max_count, targets.Count - max_count);
+            if (targets.Count >= max_count)
+            {
+                targets.RemoveRange(max_count, targets.Count - max_count);
+            }
+            
         }
     }
 
@@ -81,11 +86,11 @@ public partial class TeamManager_V2
         members.Remove(center); //  본인 제외
         if (Team_Type == TEAM_TYPE.LEFT)
         {
-            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x <= center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
+            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x < center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
         }
         else
         {
-            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x >= center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
+            temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x > center.transform.localPosition.x && x.GetDistanceFromCenter(center) <= range));
         }
         //  오름 차순
         temp_list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
@@ -113,12 +118,12 @@ public partial class TeamManager_V2
         targets.Clear();
         if (target_type == TARGET_TYPE.MY_TEAM)
         {
-            FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, count, ref targets);
+            FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, 0, count, 0, ref targets);
         }
         else
         {
             var enemy_team = GetEnemyTeam();
-            enemy_team.FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, count, ref targets);
+            enemy_team.FindTargetRuleExec(self, TARGET_RULE_TYPE.APPROACH, approach_distance, 0, count, 0, ref targets);
         }
 
         //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
@@ -146,12 +151,12 @@ public partial class TeamManager_V2
         //  아군에서 찾기
         if (target_type == TARGET_TYPE.MY_TEAM)
         {
-            FindTargetRuleExec(self, rule_type, approach_distance, count, ref targets);
+            FindTargetRuleExec(self, rule_type, approach_distance, target_order, count, target_range, ref targets);
         }
         else // 적군에서 찾기
         {
             var enemy_team = GetEnemyTeam();
-            enemy_team.FindTargetRuleExec(self, rule_type, approach_distance, count, ref targets);
+            enemy_team.FindTargetRuleExec(self, rule_type, approach_distance, target_order, count, target_range, ref targets);
         }
 
         //  요청 타겟수 보다 많을 경우 타겟수 만큼만 반환해준다.
@@ -191,7 +196,7 @@ public partial class TeamManager_V2
     /// <param name="approach_distance"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE[] rule_types, int target_order, float approach_distance, int count, ref List<HeroBase_V2> targets)
+    public void FindTargetInRange(HeroBase_V2 self, TARGET_TYPE target_type, TARGET_RULE_TYPE[] rule_types, int target_order, float approach_distance, int count, float target_range, ref List<HeroBase_V2> targets)
     {
         targets.Clear();
         int len = rule_types.Length;
@@ -203,7 +208,7 @@ public partial class TeamManager_V2
             for (int i = 0; i < len; i++)
             {
                 TARGET_RULE_TYPE rule = rule_types[i];
-                FindTargetRuleExec(self, rule, approach_distance, count, ref targets);
+                FindTargetRuleExec(self, rule, approach_distance, target_order, count, target_range, ref targets);
                 cnt += targets.Count;
                 if (cnt >= count)
                 {
@@ -220,7 +225,7 @@ public partial class TeamManager_V2
             for (int i = 0; i < len; i++)
             {
                 TARGET_RULE_TYPE rule = rule_types[i];
-                enemy_team.FindTargetRuleExec(self, rule, approach_distance, count, ref targets);
+                enemy_team.FindTargetRuleExec(self, rule, approach_distance, target_order, count, target_range, ref targets);
                 cnt += targets.Count;
                 if (cnt >= count)
                 {
@@ -260,9 +265,11 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="rule_type"></param>
     /// <param name="approach_distance"></param>
+    /// <param name="target_order"></param>
     /// <param name="count"></param>
+    /// <param name="target_range"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleExec(HeroBase_V2 self, TARGET_RULE_TYPE rule_type, float approach_distance, int target_order, int count, float target_range, ref List<HeroBase_V2> targets)
     {
         switch (rule_type)
         {
@@ -289,6 +296,18 @@ public partial class TeamManager_V2
                 break;
             case TARGET_RULE_TYPE.FURTHEST:
                 FindTargetRuleFurthest(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.NEAREST_ADD_BACK_RANGE:           //  가장 가까운 타겟 우선 찾고, 해당 타겟을 기준으로 후방 범위내에 있는 타겟 추가
+                FindTargetRuleNearestAddBackRange(self, target_order, target_range, ref targets);
+                break;
+            case TARGET_RULE_TYPE.FURTHEST_ADD_FRONT_RANGE:         //  가장 먼 타겟 우선 찾고, 해당 타겟을 기준으로 전방 범위내에 있는 타겟 추가
+                FindTargetRuleFurthestAddFrontRange(self, target_order, target_range, ref targets);
+                break;
+            case TARGET_RULE_TYPE.NEAREST_ADD_ARROUND_RANGE:        //  가장 가까운 타겟 우선 찾고, 해당 타겟을 기준으로 주변 범위내에 있는 타겟 추가
+                FindTargetRuleNearestAddArroundRange(self, target_order, target_range, ref targets);
+                break;
+            case TARGET_RULE_TYPE.FURTHEST_ADD_ARROUND_RANGE:       //  가장 먼 타겟 우선 찾고, 해당 타겟을 기준으로 주변 범위내에 있는 타겟 추가
+                FindTargetRuleFurthestAddArroundRange(self, target_order, target_range, ref targets);
                 break;
             case TARGET_RULE_TYPE.APPROACH:
                 FindTargetRuleApproach(self, approach_distance, count, ref targets);
@@ -543,6 +562,180 @@ public partial class TeamManager_V2
         temp_list.Sort((a, b) => b.Defense.CompareTo(a.Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
+
+    /// <summary>
+    /// 가장 가까운 적 우선 선택(순번 컬럼 연동하여 순서대로) 후 일정 영역내의 뒤에있는 타겟의 추가 선택
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_range"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleNearestAddBackRange(HeroBase_V2 self, int target_order, float target_range, ref List<HeroBase_V2> targets)
+    {
+        List<HeroBase_V2> temp_list = new List<HeroBase_V2>();
+        var members = GetAliveMembers();
+        if (members.Count > 0)
+        {
+            //  오름 차순
+            members.Sort((a, b) => a.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+
+            HeroBase_V2 target = null;
+            if (target_order < members.Count)
+            {
+                target = members[target_order];
+            }
+            else
+            {
+                target = members.First();
+                
+            }
+            if (target == null)
+            {
+                return;
+            }
+            members.Remove(target);
+            targets.Add(target);
+
+            if (Team_Type == TEAM_TYPE.LEFT)
+            {
+                temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x < target.transform.localPosition.x && x.GetDistanceFromCenter(target) <= target_range));
+            }
+            else
+            {
+                temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x > target.transform.localPosition.x && x.GetDistanceFromCenter(target) <= target_range));
+            }
+            temp_list.Sort((a, b) => a.GetDistanceFromCenter(target).CompareTo(b.GetDistanceFromCenter(target)));
+
+            GetTargetsFromTempList(temp_list, 5, ref targets);
+        }
+
+    }
+    /// <summary>
+    /// 가장 거리가 먼 적 우선 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로) 후 일정 영역내의 앞에 있는 타겟 추가 선택
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_range"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleFurthestAddFrontRange(HeroBase_V2 self, int target_order, float target_range, ref List<HeroBase_V2> targets)
+    {
+        List<HeroBase_V2> temp_list = new List<HeroBase_V2>();
+        var members = GetAliveMembers();
+        if (members.Count > 0)
+        {
+            //  내림 차순
+            members.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
+
+            HeroBase_V2 target = null;
+            if (target_order < members.Count)
+            {
+                target = members[target_order];
+            }
+            else
+            {
+                target = members.First();
+
+            }
+            if (target == null)
+            {
+                return;
+            }
+            members.Remove(target);
+            targets.Add(target);
+
+            if (Team_Type == TEAM_TYPE.LEFT)
+            {
+                temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x > target.transform.localPosition.x && x.GetDistanceFromCenter(target) <= target_range));
+            }
+            else
+            {
+                temp_list.AddRange(members.FindAll(x => x.transform.localPosition.x < target.transform.localPosition.x && x.GetDistanceFromCenter(target) <= target_range));
+            }
+            temp_list.Sort((a, b) => b.GetDistanceFromCenter(target).CompareTo(a.GetDistanceFromCenter(target)));
+
+            GetTargetsFromTempList(temp_list, 5, ref targets);
+        }
+
+    }
+
+    /// <summary>
+    /// 가장 가까운 적 우선 선택(순번 컬럼 연동하여 순서대로) 후 일정 영역내의(주변) 타겟의 추가 선택
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_range"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleNearestAddArroundRange(HeroBase_V2 self, int target_order, float target_range, ref List<HeroBase_V2> targets)
+    {
+        var members = GetAliveMembers();
+
+        if (members.Count > 0)
+        {
+            //  오름 차순
+            members.Sort((a, b) => a.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+
+            HeroBase_V2 target = null;
+            if (target_order < members.Count)
+            {
+                target = members[target_order];
+            }
+            else
+            {
+                target = members.First();
+
+            }
+            if (target == null)
+            {
+                return;
+            }
+            members.Remove(target);
+            targets.Add(target);
+
+            var temp_list = members.FindAll(x => x.GetDistanceFromCenter(target) <= target_range);
+            temp_list.Sort((a, b) => a.GetDistanceFromCenter(target).CompareTo(b.GetDistanceFromCenter(target)));
+
+            GetTargetsFromTempList(temp_list, 5, ref targets);
+
+        }
+    }
+    /// <summary>
+    /// 가장 거리가 먼 적 우선 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로) 후 일정 영역내의 (주변) 타겟 추가 선택
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="target_range"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleFurthestAddArroundRange(HeroBase_V2 self, int target_order, float target_range, ref List<HeroBase_V2> targets)
+    {
+        var members = GetAliveMembers();
+
+        if (members.Count > 0)
+        {
+            //  내림 차순
+            members.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
+
+            HeroBase_V2 target = null;
+            if (target_order < members.Count)
+            {
+                target = members[target_order];
+            }
+            else
+            {
+                target = members.First();
+
+            }
+            if (target == null)
+            {
+                return;
+            }
+            members.Remove(target);
+            targets.Add(target);
+
+            var temp_list = members.FindAll(x => x.GetDistanceFromCenter(target) <= target_range);
+            temp_list.Sort((a, b) => b.GetDistanceFromCenter(target).CompareTo(a.GetDistanceFromCenter(target)));
+
+            GetTargetsFromTempList(temp_list, 5, ref targets);
+
+        }
+    }
+
+
     #endregion
 
 

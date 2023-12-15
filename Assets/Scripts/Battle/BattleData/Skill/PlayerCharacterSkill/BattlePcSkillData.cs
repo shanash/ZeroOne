@@ -50,6 +50,44 @@ public class BattlePcSkillData : BattleSkillData
                 }
             }
         }
+
+        //  pc second target onetime skill
+        if (Data.second_target_onetime_effect_ids != null)
+        {
+            len = Data.second_target_onetime_effect_ids.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int onetime_skill_id = Data.second_target_onetime_effect_ids[i];
+                if (onetime_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_onetime = BattleSkillDataFactory.CreatePcBattleOnetimeSkillData(onetime_skill_id);
+                if (battle_onetime != null)
+                {
+                    AddSecondTargetOnetimeSkillData(battle_onetime);
+                }
+            }
+        }
+        //  pc second target duration skill
+        if (Data.second_target_duration_effect_ids != null)
+        {
+            len = Data.second_target_duration_effect_ids.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int duration_skill_id = Data.second_target_duration_effect_ids[i];
+                if (duration_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_duration = BattleSkillDataFactory.CreatePcBattleDurationSkillData(duration_skill_id);
+                if (battle_duration != null)
+                {
+                    AddSecondTargetDurationSkillData(battle_duration);
+                }
+            }
+        }
+        
         
         //  스킬 효과 비중 횟수
         Max_Effect_Count = Data.effect_weight.Length;
@@ -138,6 +176,15 @@ public class BattlePcSkillData : BattleSkillData
         if (Data != null)
         {
             return Data.max_second_target_count;
+        }
+        return 0;
+    }
+
+    public override double GetSecondTargetRange()
+    {
+        if (Data != null)
+        {
+            return Data.second_target_range;
         }
         return 0;
     }

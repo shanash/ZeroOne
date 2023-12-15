@@ -38,16 +38,50 @@ public class BattleNpcSkillData : BattleSkillData
             AddDurationSkillData(battle_duration);
         }
 
+        //  npc second target onetime skill
+        if (Data.second_target_onetime_effect_ids != null)
+        {
+            len = Data.second_target_onetime_effect_ids.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int onetime_skill_id = Data.second_target_onetime_effect_ids[i];
+                if (onetime_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_onetime = BattleSkillDataFactory.CreatePcBattleOnetimeSkillData(onetime_skill_id);
+                if (battle_onetime != null)
+                {
+                    AddSecondTargetOnetimeSkillData(battle_onetime);
+                }
+            }
+        }
+
+        //  npc second target duratio skill
+        if (Data.second_target_duration_effect_ids != null)
+        {
+            len = Data.second_target_duration_effect_ids.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int duration_skill_id = Data.second_target_duration_effect_ids[i];
+                if (duration_skill_id == 0)
+                {
+                    continue;
+                }
+                var battle_duration = BattleSkillDataFactory.CreatePcBattleDurationSkillData(duration_skill_id);
+                if (battle_duration != null)
+                {
+                    AddSecondTargetDurationSkillData(battle_duration);
+                }
+            }
+        }
+
         //  스킬 효과 비중 횟수
         Max_Effect_Count = Data.effect_weight.Length;
         Effect_Weight_Index = 0;
     }
 
   
-    public override void ExecSkill(BATTLE_SEND_DATA data)
-    {
-
-    }
     #region Getter
     public override BattleSkillData GetExecuableSkillData(string evt_name)
     {
@@ -129,6 +163,15 @@ public class BattleNpcSkillData : BattleSkillData
         }
         return 0;
     }
+    public override double GetSecondTargetRange()
+    {
+        if (Data != null)
+        {
+            return Data.second_target_range;
+        }
+        return 0;
+    }
+
     #endregion
     public override string ToString()
     {

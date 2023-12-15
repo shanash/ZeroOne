@@ -446,7 +446,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="skill"></param>
     protected virtual void FindTargets(BattleSkillData skill) 
     {
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), 0, ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Normal_Attack_Target);
     }
     
 
@@ -871,6 +871,8 @@ public partial class HeroBase_V2 : UnitBase_V2
             duration_skill = null;
             return;
         }
+
+        var caster = duration_skill.GetBattleSendData().Caster;
 
         int rate = UnityEngine.Random.Range(0, 10000);
         if (rate < duration_skill.GetRate())

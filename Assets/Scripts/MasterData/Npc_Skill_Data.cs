@@ -73,6 +73,14 @@ public class Npc_Skill_Data : System.IDisposable
 	///	</summary>
 	public int[] duration_effect_ids {get; set;}
 	///	<summary>
+	///	세컨 타겟용 일회성 효과
+	///	</summary>
+	public int[] second_target_onetime_effect_ids {get; set;}
+	///	<summary>
+	///	세컨 타겟용 지속성 효과
+	///	</summary>
+	public int[] second_target_duration_effect_ids {get; set;}
+	///	<summary>
 	///	이벤트 이름
 	///	</summary>
 	public string event_name {get; set;}
@@ -161,6 +169,26 @@ public class Npc_Skill_Data : System.IDisposable
 			for(int i = 0; i< cnt; i++)
 			{
 				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", duration_effect_ids[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[second_target_onetime_effect_ids]");
+		if(second_target_onetime_effect_ids != null)
+		{
+			cnt = second_target_onetime_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", second_target_onetime_effect_ids[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[second_target_duration_effect_ids]");
+		if(second_target_duration_effect_ids != null)
+		{
+			cnt = second_target_duration_effect_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", second_target_duration_effect_ids[i]).AppendLine();
 			}
 		}
 

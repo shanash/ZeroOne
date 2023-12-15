@@ -32,10 +32,21 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 1회성 스킬 효과 데이터 리스트
     /// </summary>
     protected List<BattleOnetimeSkillData> Onetime_Skill_List = new List<BattleOnetimeSkillData> ();
+
+    /// <summary>
+    /// 세컨 타겟용 1회성 스킬 효과 데이터 리스트
+    /// </summary>
+    protected List<BattleOnetimeSkillData> Second_Target_Onetime_Skill_List = new List<BattleOnetimeSkillData>();
+
     /// <summary>
     /// 지속성 스킬 효과 데이터 리스트
     /// </summary>
     protected List<BattleDurationSkillData> Duration_Skill_List = new List<BattleDurationSkillData>();
+
+    /// <summary>
+    /// 세컨 타겟용 지속성 스킬 효과 데이터 리스트
+    /// </summary>
+    protected List<BattleDurationSkillData> Second_Target_Duration_Skill_List = new List<BattleDurationSkillData>();
 
     public BattleSkillData(UNIT_SKILL_TYPE stype) {  Unit_Skill_Type = stype; }
 
@@ -94,9 +105,19 @@ public class BattleSkillData : BattleDataBase, ICloneable
         Onetime_Skill_List.Add(onetime);
     }
 
+    protected void AddSecondTargetOnetimeSkillData(BattleOnetimeSkillData onetime)
+    {
+        Second_Target_Onetime_Skill_List.Add(onetime);
+    }
+
     protected void AddDurationSkillData(BattleDurationSkillData duration)
     {
         Duration_Skill_List.Add(duration);
+    }
+
+    protected void AddSecondTargetDurationSkillData(BattleDurationSkillData duration)
+    {
+        Second_Target_Duration_Skill_List.Add(duration);
     }
 
     #region Getter
@@ -125,10 +146,22 @@ public class BattleSkillData : BattleDataBase, ICloneable
     {
         return Onetime_Skill_List;
     }
+
+    public List<BattleOnetimeSkillData> GetSecondTargetOnetimeSkillDataList()
+    {
+        return Second_Target_Onetime_Skill_List;
+    }
+
     public List<BattleDurationSkillData> GetDurationSkillDataList()
     {
         return Duration_Skill_List;
     }
+    public List<BattleDurationSkillData> GetSecondTargetDurationSkillDataList()
+    {
+        return Second_Target_Duration_Skill_List;
+    }
+
+
     public virtual object GetSkillData() { return null; }
 
     public virtual string GetEffectPrefabPath() { return null; }

@@ -24,11 +24,12 @@ public class Damage_Normal_Effect_Text : EffectBase
         
         BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)data[0];
 
-        double dmg = Math.Truncate(send_data.Damage);
+        //double dmg = Math.Truncate(send_data.Damage);
+        double dmg = send_data.Damage;
 
         if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)
         {
-            Damage_Text.text = dmg.ToString();
+            Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
         }
         else
         {
@@ -46,7 +47,7 @@ public class Damage_Normal_Effect_Text : EffectBase
             }
             else
             {
-                Damage_Text.text = dmg.ToString();
+                Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
             }
         }
     }

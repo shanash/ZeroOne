@@ -12,7 +12,15 @@ public class SkillEffect_Pierce_Splash : SkillEffectBase
     {
         base.StartParticle(duration, loop);
 
-        SkillExec();
+        if (Send_Data.Skill.GetSecondTargetRuleType() == SECOND_TARGET_RULE_TYPE.NONE)
+        {
+            SkillExec();
+        }
+        else
+        {
+            Send_Data.Onetime?.ExecSkill(Send_Data);
+            SecondTargetSkillExec();
+        }
     }
 
     private void Update()

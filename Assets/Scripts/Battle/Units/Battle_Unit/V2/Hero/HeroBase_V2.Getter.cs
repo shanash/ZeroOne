@@ -79,7 +79,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Vector2 center_pos = center.transform.localPosition;
         Vector2 this_pos = transform.localPosition;
-        float distance = Vector2.Distance(center_pos, this_pos);
+        //float distance = Vector2.Distance(center_pos, this_pos);
+        float distance = Mathf.Abs(center_pos.x - this_pos.x);
         return distance;
     }
 
@@ -311,6 +312,24 @@ public partial class HeroBase_V2 : UnitBase_V2
         double evation_rate = GetEvationRate(caster_accuracy);
         int rand = UnityEngine.Random.Range(0, 1000000);
         return rand < evation_rate;
+    }
+
+    /// <summary>
+    /// 상태이상 회피 여부 판단<br/>
+    /// 상태이상 명중 = 1 - (상대 레벨 - 내 레벨) / 100<br/>
+    /// 시전자의 레벨이 피격자의 레벨보다 100이상 많으면 100% 명중. 수치는 변경될 수 있음
+    /// </summary>
+    /// <param name="caster_lv">시전자 레벨</param>
+    /// <param name="caster_accuracy">시전자 명중값</param>
+    /// <returns></returns>
+    protected bool IsTransEvation(int caster_lv, double caster_accuracy)
+    {
+        if (caster_lv >= GetLevel() + 100)
+        {
+            return false;
+        }
+        //  아직 계산식이 정확하게 정의 되지 않음 [todo]
+        return true;
     }
 
     /// <summary>

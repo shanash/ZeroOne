@@ -119,6 +119,11 @@ public class Hero_100001 : HeroBase_V2
         if (state == UNIT_STATES.ATTACK_1)
         {
             var skill = GetSkillManager().GetCurrentSkillGroup();
+
+            if (evt_name.Equals("debuff"))
+            {
+                bool a = false;
+            }
             
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
