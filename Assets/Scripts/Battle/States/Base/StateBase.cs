@@ -1,7 +1,7 @@
 using System;
 
 public abstract class StateBase<S>
-    where S : System.Enum
+    where S : Enum
 {
     private S _transID = default;
 
