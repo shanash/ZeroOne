@@ -1,3 +1,6 @@
+using Cinemachine;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Spreadsheet;
 using FluffyDuck.Util;
 using Spine.Unity;
 using Spine.Unity.Playables;
@@ -13,6 +16,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayableDirector))]
 public class MemorialSetNode : MonoBehaviour, IPoolableComponent
 {
+    // 메모리얼 카메라 렌즈 설정
+    const float MEMORIAL_CAMERA_VERTICAL_FOV = 56.7f;
+    const float MEMORIAL_CAMERA_ORTHOGRAPHIC_SIZE = 10.0f;
+    const float MEMORIAL_CAMERA_NEAR_CLIP = 0.1f;
+    const float MEMORIAL_CAMERA_FAR_CLIP = 5000.0f;
+    const float MEMORIAL_CAMERA_DUTCH = 0.0f;
+
     [SerializeField, Tooltip("Memorial Timeline Animation")]
     protected PlayableDirector Playable_Director;
 
@@ -38,8 +48,19 @@ public class MemorialSetNode : MonoBehaviour, IPoolableComponent
         get { return Actress.GetComponent<SkeletonAnimation>(); }
     }
 
-    public static async Task<MemorialSetNode> Create(Me_Resource_Data data, Transform parent, MEMORIAL_TYPE type, Image cover, Animator virtual_camera)
+    public static async Task<MemorialSetNode> Create(int player_character_id, MEMORIAL_TYPE type, Transform parent, Image cover, CinemachineVirtualCamera virtual_camera)
     {
+        // TODO: 현재는 스토리모드가 구현이 되어 있지 않아서 메인로비말고는 없는데
+        // 일단 메인로비는 order = 0 으로 생각합시다...
+        int order = type == MEMORIAL_TYPE.MAIN_LOBBY ? 0 : 1;
+
+        Me_Resource_Data data = MasterDataManager.Instance.Get_MemorialData(player_character_id, order);
+        if (data == null)
+        {
+            Debug.Assert(false, $"해당 메모리얼 데이터가 존재하지 않습니다 : pcid {player_character_id}, order {order}");
+            return null;
+        }
+
         var obj = await GameObjectPoolManager.Instance.GetGameObjectAsync(data.prefab_key, parent);
         var node = obj.GetComponent<MemorialSetNode>();
         await node.Init(type, data, cover, virtual_camera);
@@ -91,14 +112,22 @@ public class MemorialSetNode : MonoBehaviour, IPoolableComponent
 
     }
 
-    async Task Init(MEMORIAL_TYPE type, Me_Resource_Data data, Image cover, Animator virtual_camera)
+    async Task Init(MEMORIAL_TYPE type, Me_Resource_Data data, Image cover, CinemachineVirtualCamera virtual_camera)
     {
         SetMemorialType(type);
         Actress.Init(data.player_character_id, data.state_id);
+
+        virtual_camera.m_Lens = new LensSettings(MEMORIAL_CAMERA_VERTICAL_FOV, MEMORIAL_CAMERA_ORTHOGRAPHIC_SIZE, MEMORIAL_CAMERA_NEAR_CLIP, MEMORIAL_CAMERA_FAR_CLIP, MEMORIAL_CAMERA_DUTCH);
+
+        transform.position = virtual_camera.State.CorrectedPosition + virtual_camera.State.CorrectedOrientation * Vector3.forward * 10;
+        transform.rotation = virtual_camera.State.FinalOrientation;
+
         if (string.IsNullOrEmpty(data.intro_key))
         {
             return;
         }
+
+        var virtual_camera_animator = virtual_camera.gameObject.AddComponent<Animator>();
 
         var intro_ta = await CommonUtils.GetResourceFromAddressableAsset<TimelineAsset>(data.intro_key);
         var intro_tracks = intro_ta.GetOutputTracks();
@@ -116,7 +145,7 @@ public class MemorialSetNode : MonoBehaviour, IPoolableComponent
             }
             else if (track is AnimationTrack)
             {
-                Playable_Director.SetGenericBinding(track, virtual_camera);
+                Playable_Director.SetGenericBinding(track, virtual_camera_animator);
             }
         }
         Playable_Director.Play();

@@ -38,7 +38,14 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     // 같은 오브젝트 안에서 버튼다운-> 버튼업이 되어 정상적으로 오브젝트를 클릭한 것
     private ReadOnlyCollection<ICursorInteractable> _Focus_Components = null;
 
-    public bool Enable { get; set; } = true;
+    public bool Enable { get => _Enable;
+        set
+        {
+            Debug.LogWarning($"Enable : {value}");
+            _Enable = value;
+        }
+    }
+    bool _Enable = true;
 
     // 버튼이 눌린 상황인지를 확인하여 드래그 체크하는데 쓴다
     bool _Is_Pressed { get; set; } = false;
@@ -83,15 +90,16 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public void OnTapListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         Debug.Log($"OnListenTap : {context.phase}");
-        Input_Down_Hold_Reference += (context.phase == UnityEngine.InputSystem.InputActionPhase.Started ? 1 : 0)
-         + (context.phase == UnityEngine.InputSystem.InputActionPhase.Canceled ? -1 : 0);
+        Input_Down_Hold_Reference += (context.phase == InputActionPhase.Started ? 1 : -1);
 
-
-        if (context.phase == UnityEngine.InputSystem.InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed)
         {
-            var components = GetRayCastHittedCursorInteractable();
             // OnInputUp 처리
-            OnTap?.Invoke(_Cursor.Position, components);
+            if (Enable)
+            {
+                var components = GetRayCastHittedCursorInteractable();
+                OnTap?.Invoke(_Cursor.Position, components);
+            }
         }
     }
 
@@ -159,11 +167,6 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
             Input_Down_Hold_Reference += context.ReadValueAsButton() ? 1 : -1;
         }
 
-        if (!Enable)
-        {
-            return;
-        }
-
         InputDevice device = InputSystem.GetDevice(context.control.device.name);
         switch (device)
         {
@@ -187,44 +190,49 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                 _Cursor.Show();
 
                 // OnInputDown 처리
-                components = GetRayCastHittedCursorInteractable();
-                cnt = components.Length;
-                for (int i = 0; i < cnt; ++i)
+                if (Enable)
                 {
-                    ICursorInteractable iCursor = components[i];
-                    iCursor?.OnInputDown(_Cursor.Position);
-                }
-                _Focus_Components = new ReadOnlyCollection<ICursorInteractable>(components);
+                    components = GetRayCastHittedCursorInteractable();
+                    cnt = components.Length;
+                    for (int i = 0; i < cnt; ++i)
+                    {
+                        ICursorInteractable iCursor = components[i];
+                        iCursor?.OnInputDown(_Cursor.Position);
+                    }
+                    _Focus_Components = new ReadOnlyCollection<ICursorInteractable>(components);
 
-                // OnInputDown 처리
-                OnInputDown?.Invoke(_Cursor.Position, _Focus_Components);
+                    // OnInputDown 처리
+                    OnInputDown?.Invoke(_Cursor.Position, _Focus_Components);
+                }
                 _Is_Pressed = context.ReadValueAsButton();
             }
             else
             {
                 _Is_Pressed = context.ReadValueAsButton();
-
-                // OnDrag 처리
-                if (_Is_Dragged)
-                {
-                    OnDrag?.Invoke(InputActionPhase.Canceled, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
-                    _Drag_Start_Position = Vector2.zero;
-                    Hold_Action.Enable();
-                    Tap_Action.Enable();
-                }
-
                 // OnInputUp
-                components = GetRayCastHittedCursorInteractable();
-                OnInputUp?.Invoke(_Cursor.Position, new ReadOnlyCollection<ICursorInteractable>(components));
-
-                // OnInputUp 처리
-                cnt = components.Length;
-                for (int i = 0; i < cnt; ++i)
+                if (Enable)
                 {
-                    ICursorInteractable iCursor = components[i];
-                    iCursor?.OnInputUp(_Cursor.Position);
+                    // OnDrag 처리
+                    if (_Is_Dragged)
+                    {
+                        OnDrag?.Invoke(InputActionPhase.Canceled, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
+                    }
+
+                    components = GetRayCastHittedCursorInteractable();
+                    OnInputUp?.Invoke(_Cursor.Position, new ReadOnlyCollection<ICursorInteractable>(components));
+
+                    // OnInputUp 처리
+                    cnt = components.Length;
+                    for (int i = 0; i < cnt; ++i)
+                    {
+                        ICursorInteractable iCursor = components[i];
+                        iCursor?.OnInputUp(_Cursor.Position);
+                    }
                 }
 
+                _Drag_Start_Position = Vector2.zero;
+                Hold_Action.Enable();
+                Tap_Action.Enable();
                 _Is_Dragged = false;
 
                 if (Input_Down_Hold_Reference <= 0)
@@ -239,8 +247,11 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
 
     public void OnHoldListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        var components = GetRayCastHittedCursorInteractable();
-        OnLongTap?.Invoke(context.phase,  _Cursor.Position, components);
+        if (Enable)
+        {
+            var components = GetRayCastHittedCursorInteractable();
+            OnLongTap?.Invoke(context.phase, _Cursor.Position, components);
+        }
     }
     #endregion
 
@@ -397,8 +408,10 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                     }
                 }
             }
-
-            OnDrag?.Invoke(phase, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
+            if (Enable)
+            {
+                OnDrag?.Invoke(phase, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
+            }
         }
     }
     #endregion

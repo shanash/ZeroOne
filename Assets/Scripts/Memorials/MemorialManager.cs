@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class MemorialManager : MonoBehaviour
     Image Cover = null;
 
     [SerializeField]
-    Animator VirtualCamera = null;
+    CinemachineVirtualCamera VirtualCamera = null;
 
     List<MemorialSetNode> Used_Memorial_Set_Nodes = new List<MemorialSetNode>();
 
@@ -38,8 +39,7 @@ public class MemorialManager : MonoBehaviour
 
     async Task SpawnMemorialSetNode(int player_character_id, int order)
     {
-        Me_Resource_Data data = MasterDataManager.Instance.Get_MemorialData(player_character_id, order);
-        var node = await MemorialSetNode.Create(data, Memorial_Container, MEMORIAL_TYPE.MEMORIAL, Cover, VirtualCamera);
+        var node = await MemorialSetNode.Create(player_character_id, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Container, Cover, VirtualCamera);
         Used_Memorial_Set_Nodes.Add(node);
     }
 

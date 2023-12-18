@@ -130,7 +130,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
     #region Monobehaviour Methods 
     void Awake()
     {
-        Animation_Manager = Factory.Create<SkeletonAnimationManager>(GetComponent<SkeletonAnimation>());
+        Animation_Manager = SkeletonAnimationManager.Create(GetComponent<SkeletonAnimation>());
         Main_Cam = Camera.main;
         Face = Animation_Manager.FindBone(FACE_BONE_NAME);
         Debug.Assert(Face != null, $"얼굴 추적 기준 본이 없습니다 : {FACE_BONE_NAME}");
@@ -1153,6 +1153,11 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         SkeletonAnimation _Skeleton_Animation;
 
         SkeletonAnimationManager() { }
+
+        public static SkeletonAnimationManager Create(SkeletonAnimation anim)
+        {
+            return Factory.Create<SkeletonAnimationManager>(anim);
+        }
 
         protected override bool Initialize(params object[] args)
         {

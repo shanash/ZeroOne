@@ -6,8 +6,8 @@ using UnityEngine.Rendering.Universal.Internal;
 public enum MEMORIAL_TYPE
 {
     NONE = 0,
-    MEMORIAL,           //  메모리얼 페이지에서 사용
     MAIN_LOBBY,         //  메인 로비에서 사용 - 기능이 다름
+    MEMORIAL,           //  메모리얼 페이지에서 사용
 }
 
 public class MemorialDefine

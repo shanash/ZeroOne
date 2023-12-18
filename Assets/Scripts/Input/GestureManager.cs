@@ -22,7 +22,12 @@ public class GestureManager : Singleton<GestureManager>
     Coroutine Wait_For_Double_Touch = null;
     Vector2 Last_TouchPosition = Vector2.zero;
 
+    bool Is_Nade_State = false;
+    ICollection<ICursorInteractable> Nade_Components = null;
+
     public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2, int> OnGestureDetected;
+
+    public bool Enable { get; set; } = true;
 
     protected override void Init()
     {
@@ -113,9 +118,6 @@ public class GestureManager : Singleton<GestureManager>
 
         Last_TouchPosition = position;
     }
-
-    bool Is_Nade_State = false;
-    ICollection<ICursorInteractable> Nade_Components = null;
 
     private void HandleLongTap(InputActionPhase phase, Vector2 position, ICollection<ICursorInteractable> components)
     {
