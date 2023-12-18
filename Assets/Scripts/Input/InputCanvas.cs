@@ -41,7 +41,6 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public bool Enable { get => _Enable;
         set
         {
-            Debug.LogWarning($"Enable : {value}");
             _Enable = value;
         }
     }
