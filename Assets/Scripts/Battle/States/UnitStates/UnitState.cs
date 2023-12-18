@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum UNIT_STATES
@@ -50,19 +51,37 @@ public enum UNIT_STATES
     END,
 }
 
-public class UnitState<N, B, U>
+public abstract class UnitState<N, B, U> : StateBase<UNIT_STATES>
+    where N : class
+    where B : class
+    where U : class
 {
-    private UNIT_STATES _transID = UNIT_STATES.NONE;
-
-    public UNIT_STATES TransID
-    {
-        get { return _transID; }
-        protected set { _transID = value; }
-    }
-    protected float Delta_Time;
-
     public UnitState()
     {
+        EnterStateAction = EnterState;
+        ExitStateAction = ExitState;
+        UpdateStateAction = UpdateState;
+        FinallyStateAction = FinallyState;
+    }
+
+    private void EnterState(object[] obj)
+    {
+        EnterState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void ExitState(object[] obj)
+    {
+        ExitState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void UpdateState(object[] obj)
+    {
+        UpdateState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void FinallyState(object[] obj)
+    {
+        FinallyState(obj[0] as N, obj[1] as B, obj[2] as U);
     }
 
     public virtual void EnterState(N unit, B mng, U ui) { }
