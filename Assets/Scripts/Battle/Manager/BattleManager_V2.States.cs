@@ -79,8 +79,6 @@ public partial class BattleManager_V2 : MonoBehaviour
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(list, PreloadCallback);
     }
 
-    
-
 
     protected void PreloadCallback(int load_cnt, int total_cnt)
     {

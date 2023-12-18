@@ -9,8 +9,6 @@ public class HomeManager : MonoBehaviour
 {
     private void Start()
     {
-        //_ = MasterDataManager.Instance;
-
         var audio = AudioManager.Instance;
 
         List<string> audio_clip_list = new List<string>();
@@ -18,9 +16,8 @@ public class HomeManager : MonoBehaviour
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
-
-        double a = 12.020893;
-        Debug.LogFormat("{0:0.##}", a);
+        //double a = 12.020893;
+        //Debug.LogFormat("{0:0.##}", a);
 
         
     }
