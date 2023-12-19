@@ -19,7 +19,7 @@ public class Heal_Normal_Effect_Text : EffectBase
             return;
         }
         double recovery_hp = (double)data[0];
-        Heal_Text.text = ZString.Format("+{0}", recovery_hp);
+        Heal_Text.text = ZString.Format("+{0:0.##}", recovery_hp);
     }
 
     private void Update()

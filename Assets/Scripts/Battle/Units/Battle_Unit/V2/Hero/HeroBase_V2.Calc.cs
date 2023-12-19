@@ -20,6 +20,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         CalcEvationPoint();
         CalcAccuracyPoint();
         CalcAutoRecoveryLife();
+        CalcVampirePoint();
 
     }
     /// <summary>
@@ -88,6 +89,14 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected virtual void CalcAutoRecoveryLife()
     {
         Auto_Recovery_Life = Unit_Data.GetAutoRecoveryLife();
+    }
+
+    /// <summary>
+    /// 체력 흡수(피빨기) 포인트
+    /// </summary>
+    protected virtual void CalcVampirePoint()
+    {
+        Vampire_Point = Unit_Data.GetVampirePoint();
     }
     
 }

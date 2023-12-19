@@ -138,6 +138,11 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Role_Icon_Data> _Role_Icon_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Stage_Data> _Stage_Data
 	{
 		get;
@@ -189,6 +194,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Data();
 		await LoadMaster_Player_Character_Battle_Data();
 		await LoadMaster_Position_Icon_Data();
+		await LoadMaster_Role_Icon_Data();
 		await LoadMaster_Stage_Data();
 		await LoadMaster_Wave_Data();
 		is_init_load = true;
@@ -357,6 +363,12 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Position_Icon_Data");
 		_Position_Icon_Data = JsonConvert.DeserializeObject<List<Position_Icon_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Role_Icon_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Role_Icon_Data");
+		_Role_Icon_Data = JsonConvert.DeserializeObject<List<Role_Icon_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Stage_Data()
@@ -576,6 +588,14 @@ public class BaseMasterDataManager
 		if(_Position_Icon_Data == null)
 		{
 			await LoadMaster_Position_Icon_Data();
+		}
+	}
+
+	protected async void Check_Role_Icon_Data()
+	{
+		if(_Role_Icon_Data == null)
+		{
+			await LoadMaster_Role_Icon_Data();
 		}
 	}
 

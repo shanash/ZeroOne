@@ -35,6 +35,23 @@ public enum POSITION_TYPE
 }
 
 ///	<summary>
+///	역할군 표현
+///	</summary>
+public enum ROLE_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>탱커</summary>
+	TANKER = 1,
+	/// <summary>딜러</summary>
+	DEARLER = 2,
+	/// <summary>서포터</summary>
+	SUPPORTER = 3,
+	/// <summary>힐러</summary>
+	HEALER = 4,
+}
+
+///	<summary>
 ///	npc 타입 
 ///	</summary>
 public enum NPC_TYPE
@@ -215,6 +232,44 @@ public enum TARGET_RULE_TYPE
 	GAIN_DEBUFF_DURATION_FATAL_WOUNDS = 6009,
 	/// <summary>디버프 효과 중 명중률 감소 효과가 있는 타겟 선택</summary>
 	GAIN_DEBUFF_DURATION_ACCURACY_DEC = 6010,
+}
+
+///	<summary>
+///	캐릭터 정렬 
+///	</summary>
+public enum Character_Sort
+{
+	/// <summary>캐릭터 이름</summary>
+	NAME = 0,
+	/// <summary>캐릭터 레벨</summary>
+	LEVEL_CHARACTER = 1,
+	/// <summary>성급</summary>
+	STAR = 2,
+	/// <summary>인연 랭크</summary>
+	DESTINY = 3,
+	/// <summary>스킬 레벨</summary>
+	SKILL_LEVEL = 4,
+	/// <summary>궁극기 스킬 레벨</summary>
+	EX_SKILL_LEVEL = 5,
+	/// <summary>공격력</summary>
+	ATTACK = 6,
+	/// <summary>방어력</summary>
+	DEFEND = 7,
+	/// <summary>사거리</summary>
+	RANGE = 8,
+	/// <summary>호감도</summary>
+	LIKEABILITY = 9,
+}
+
+///	<summary>
+///	스테이지 공통 정보
+///	</summary>
+public enum Stage_Common_Data
+{
+	/// <summary>스테이지 달성률</summary>
+	stage_clear = 3,
+	/// <summary>스테이지 웨이브</summary>
+	stage_wave = 3,
 }
 
 ///	<summary>

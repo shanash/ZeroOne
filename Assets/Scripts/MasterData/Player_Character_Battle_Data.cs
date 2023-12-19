@@ -10,6 +10,10 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public int battle_info_id {get; set;}
 	///	<summary>
+	///	캐릭터 최대 레벨
+	///	</summary>
+	public int max_level {get; set;}
+	///	<summary>
 	///	접근 사거리
 	///	</summary>
 	public double approach {get; set;}
@@ -43,6 +47,10 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public double defend {get; set;}
 	///	<summary>
+	///	회복량
+	///	</summary>
+	public double attack_recovery {get; set;}
+	///	<summary>
 	///	회피
 	///	</summary>
 	public double evasion {get; set;}
@@ -59,6 +67,10 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public double move_speed {get; set;}
 	///	<summary>
+	///	경험치
+	///	</summary>
+	public double max_exp {get; set;}
+	///	<summary>
 	///	전투 대사 인덱스
 	///	</summary>
 	public string attack_script {get; set;}
@@ -68,6 +80,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 	public Player_Character_Battle_Data()
 	{
 		battle_info_id = 0;
+		max_level = 0;
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
 		super_skill_group_id = 0;
@@ -95,6 +108,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[battle_info_id] = <color=yellow>{0}</color>", battle_info_id).AppendLine();
+		sb.AppendFormat("[max_level] = <color=yellow>{0}</color>", max_level).AppendLine();
 		sb.AppendFormat("[approach] = <color=yellow>{0}</color>", approach).AppendLine();
 		sb.AppendFormat("[position_type] = <color=yellow>{0}</color>", position_type).AppendLine();
 		sb.AppendLine("[skill_pattern]");
@@ -112,10 +126,12 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
+		sb.AppendFormat("[attack_recovery] = <color=yellow>{0}</color>", attack_recovery).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
+		sb.AppendFormat("[max_exp] = <color=yellow>{0}</color>", max_exp).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();
 		return sb.ToString();
 	}

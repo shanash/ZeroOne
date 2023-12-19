@@ -112,9 +112,9 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double Critical_Power { get; protected set; }
 
     /// <summary>
-    /// 흡혈 등급
+    /// 흡혈 
     /// </summary>
-    public double Vampire_Rate { get; protected set; }
+    public double Vampire_Point { get; protected set; }
 
     /// <summary>
     /// 보유 에너지
@@ -708,13 +708,26 @@ public partial class HeroBase_V2 : UnitBase_V2
 
 
     /// <summary>
-    /// 피격자가 최종 데미지를 계산 후 데미지 적용이 되면, 해당 데미지를 캐스터(공격자)에게 전달해준다.
-    /// 공격자는 필요에 따라 최종 데미지를 이용하여 회복 등을 사용할 수 있다.
+    /// 피격자가 최종 데미지를 계산 후 데미지 적용이 되면, 해당 데미지를 캐스터(공격자)에게 전달해준다.<br/>
+    /// 공격자는 필요에 따라 최종 데미지를 이용하여 회복 등을 사용할 수 있다.<br/>
+    /// 체력 회복량 = 준 데미지 * HP 흡수 포인트 / (HP 흡수 포인트 + 상대 레벨 + 100)
     /// </summary>
     /// <param name="damage"></param>
     public void SendLastDamage(BATTLE_SEND_DATA data)
     {
+        if (data.Targets.Count == 0)
+        {
+            return;
+        }
         //  todo
+        double last_damage = data.Damage;
+        var target = data.Targets[0];
+        double vampire_hp = last_damage * Vampire_Point / (Vampire_Point + target.GetLevel() + 100);
+        if (vampire_hp > 0)
+        {
+            AddLifeRecovery(vampire_hp);
+        }
+        
     }
 
    
@@ -797,13 +810,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        recovery_hp = Math.Truncate(recovery_hp);
+
         Life += recovery_hp;
         if (Life > Max_Life)
         {
             Life = Max_Life;
         }
-        //SpawnHealText(recovery_hp);
+
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text", Life_Bar_Pos, recovery_hp, 1f);
         UpdateLifeBar();
     }

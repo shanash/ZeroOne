@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using ProtocolShared.Proto.Base;
 
+#nullable enable
+
+
 namespace ProtocolShared.FDHttpClient
 {
     public enum HttpMethod

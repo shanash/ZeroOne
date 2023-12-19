@@ -119,6 +119,25 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
+    public override double GetVampirePoint()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.attack_recovery;
+        }
+        return 0;
+    }
+
+    public override double GetCriticalChance()
+    {
+        return 0;
+    }
+
+    public override double GetCriticalPower()
+    {
+        return 0;
+    }
+
 
     public override float GetApproachDistance()
     {

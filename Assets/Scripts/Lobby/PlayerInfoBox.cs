@@ -19,10 +19,7 @@ public class PlayerInfoBox : MonoBehaviour
     [SerializeField, Tooltip("Exp Bar")]
     Image Exp_Bar;
 
-    [SerializeField, Tooltip("Exp Current Text")]
-    TMP_Text Exp_Current;
-    [SerializeField, Tooltip("Exp Max Text")]
-    TMP_Text Exp_Max;
-
-
+    [SerializeField, Tooltip("Exp Current Text. Current Color #80BCFF")]
+    TMP_Text Exp_Point;
+    
 }

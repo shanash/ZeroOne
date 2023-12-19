@@ -1,4 +1,6 @@
-﻿namespace ProtocolShared.Proto.Base
+#nullable enable
+
+namespace ProtocolShared.Proto.Base
 {
     [System.Serializable]
     public class ResponseBase

@@ -85,6 +85,13 @@ public class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual float GetMoveSpeed() { return 0f; }
+    /// <summary>
+    /// HP 흡수 포인트<br/>
+    /// 회복량 = 내가 준 최종 데미지(적에게 최종적으로 가해진 데미지) * HP 흡수 포인트 / (HP 흡수 포인트 + 상대 레벨 + 100)<br/>
+    /// 무조건 회복이지?
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetVampirePoint() {  return 0; }
     
     /// <summary>
     /// 접근 거리
