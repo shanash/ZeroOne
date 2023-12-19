@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FluffyDuck.UI
 {
-    public class PopupEaseScale : PopupEaseBase
+    public class UIEaseScale : UIEaseBase
     {
         [SerializeField, Tooltip("등장시 최종 스케일")]
         Vector2 In_End_Scale;

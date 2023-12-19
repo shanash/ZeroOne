@@ -31,7 +31,7 @@ namespace FluffyDuck.UI
         protected POPUP_TYPE Popup_Type = POPUP_TYPE.NONE;
 
         [SerializeField, Tooltip("팝업 애니메이션 컴포넌트")]
-        protected PopupEaseBase Ease_Base;
+        protected UIEaseBase Ease_Base;
 
 
         protected bool Is_Enable_Key_Event;

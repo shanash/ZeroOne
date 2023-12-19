@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FluffyDuck.UI
 {
-    public class PopupEaseBase : EasingFade
+    public class UIEaseBase : EasingFade
     {
         protected enum MOVE_TYPE
         {
@@ -18,10 +18,10 @@ namespace FluffyDuck.UI
         /// </summary>
         protected RectTransform This_Rect;
 
-        [SerializeField, Tooltip("팝업 등장시 Ease Type")]
+        [SerializeField, Tooltip("UI 등장시 Ease Type")]
         protected EasingFunction.Ease Move_In_Ease_Type = EasingFunction.Ease.NotUse;
 
-        [SerializeField, Tooltip("팝업 사라질 때 Ease Type")]
+        [SerializeField, Tooltip("UI 사라질 때 Ease Type")]
         protected EasingFunction.Ease Move_Out_Ease_Type = EasingFunction.Ease.NotUse;
 
         [SerializeField, Tooltip("지속시간")]

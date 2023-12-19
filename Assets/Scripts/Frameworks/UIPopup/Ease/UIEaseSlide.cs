@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FluffyDuck.UI
 {
-    public class PopupEaseSlide : PopupEaseBase
+    public class UIEaseSlide : UIEaseBase
     {
         [SerializeField, Tooltip("등장시 도착 위치")]
         Vector2 In_End_Position;
