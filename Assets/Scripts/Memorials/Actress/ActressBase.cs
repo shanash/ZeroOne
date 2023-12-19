@@ -11,6 +11,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(SkeletonUtility))]
 public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
 {
+    public static ActressBase Create(Producer pd, Me_Resource_Data data, Transform tf)
+    {
+        return null;
+    }
+
     // 상수 및 정적 변수 선언
     const int INTERACTION_TRACK = 0;
     const string FACE_BONE_NAME = "touch_center";
