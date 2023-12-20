@@ -8,11 +8,6 @@ namespace FluffyDuck.UI
 {
     public class UIEaseScale : UIEaseBase
     {
-        [SerializeField, Tooltip("등장시 최종 스케일")]
-        Vector2 In_End_Scale;
-        [SerializeField, Tooltip("숨김시 최종 스케일")]
-        Vector2 Out_End_Scale;
-
         /// <summary>
         /// 시작전 스케일
         /// </summary>
@@ -24,14 +19,22 @@ namespace FluffyDuck.UI
 
         public override void StartMoveIn(Action cb = null)
         {
+            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            if (found == null)
+            {
+                return;
+            }
             Start_Scale = This_Rect.localScale;
-            Diff_Scale = In_End_Scale - Start_Scale;
+            Diff_Scale = found.Ease_Vector - Start_Scale;
             base.StartMoveIn(cb);
         }
         public override void StartMoveOut(Action cb = null)
         {
+            var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
+            if (found == null)
+                return;
             Start_Scale = This_Rect.localScale;
-            Diff_Scale = Out_End_Scale - Start_Scale;
+            Diff_Scale = found.Ease_Vector - Start_Scale;
             base.StartMoveOut(cb);
         }
 
@@ -49,13 +52,24 @@ namespace FluffyDuck.UI
         /// </summary>
         protected override void UpdatePostDelayEnd()
         {
-            if (Move_Type == MOVE_TYPE.MOVE_IN)
+            var found = FindEaseData(Move_Type);
+            if (found != null)
             {
-                This_Rect.localScale = In_End_Scale;
+                This_Rect.localScale = found.Ease_Vector;
             }
-            else
+            
+        }
+
+        public override void ResetEase(params object[] data)
+        {
+            if (data.Length != 1)
             {
-                This_Rect.localScale = Out_End_Scale;
+                return;
+            }
+            if (This_Rect != null)
+            {
+                Vector2 scale = (Vector2)data[0];
+                This_Rect.localScale = scale;
             }
         }
     }

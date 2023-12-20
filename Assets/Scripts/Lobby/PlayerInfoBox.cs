@@ -1,3 +1,4 @@
+using FluffyDuck.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,5 +22,18 @@ public class PlayerInfoBox : MonoBehaviour
 
     [SerializeField, Tooltip("Exp Current Text. Current Color #80BCFF")]
     TMP_Text Exp_Point;
-    
+
+    public void OnClickTestBattleResult()
+    {
+        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
+        //{
+        //    popup.ShowPopup();
+        //});
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
+        {
+            popup.ShowPopup();
+        });
+    }
+
 }

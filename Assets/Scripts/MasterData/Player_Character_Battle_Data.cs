@@ -67,10 +67,6 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public double move_speed {get; set;}
 	///	<summary>
-	///	경험치
-	///	</summary>
-	public double max_exp {get; set;}
-	///	<summary>
 	///	전투 대사 인덱스
 	///	</summary>
 	public string attack_script {get; set;}
@@ -131,7 +127,6 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
-		sb.AppendFormat("[max_exp] = <color=yellow>{0}</color>", max_exp).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();
 		return sb.ToString();
 	}

@@ -5,13 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UIEaseCanvasGroupAlpha : UIEaseBase
 {
-    [SerializeField, Tooltip("Move In 최종 Alpha 값")]
-    float In_End_Alpha;
-    [SerializeField, Tooltip("Move Out 최종 Alpha 값 ")]
-    float Out_End_Alpha;
-
     /// <summary>
     /// 시작시 Alpha
     /// </summary>
@@ -23,28 +19,35 @@ public class UIEaseCanvasGroupAlpha : UIEaseBase
 
     protected CanvasGroup Canvas_Grp;
 
-    private void Awake()
-    {
-        CheckCanvasGroup();
-    }
 
-    void CheckCanvasGroup()
+    protected override void InitCheckComponent()
     {
         if (Canvas_Grp == null)
             Canvas_Grp = GetComponent<CanvasGroup>();
+
     }
 
     public override void StartMoveIn(Action cb = null)
     {
+        var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+        if (found == null)
+        {
+            return;
+        }
         Start_Alpha = Canvas_Grp.alpha;
-        Diff_Alpha = In_End_Alpha - Start_Alpha;
+        Diff_Alpha = found.Ease_Float - Start_Alpha;
         base.StartMoveIn(cb);
     }
 
     public override void StartMoveOut(Action cb = null)
     {
+        var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
+        if (found == null)
+        {
+            return;
+        }
         Start_Alpha = Canvas_Grp.alpha;
-        Diff_Alpha = Out_End_Alpha - Start_Alpha;
+        Diff_Alpha = found.Ease_Float - Start_Alpha;
         base.StartMoveOut(cb);
     }
 
@@ -66,13 +69,23 @@ public class UIEaseCanvasGroupAlpha : UIEaseBase
 
     protected override void UpdatePostDelayEnd()
     {
-        if (Move_Type == MOVE_TYPE.MOVE_IN)
+        var found = FindEaseData(Move_Type);
+        if (found != null)
         {
-            Canvas_Grp.alpha = In_End_Alpha;
+            Canvas_Grp.alpha = found.Ease_Float;
         }
-        else
+    }
+
+    public override void ResetEase(params object[] data)
+    {
+        if (data.Length != 1)
         {
-            Canvas_Grp.alpha = Out_End_Alpha;
+            return;
+        }
+        if (Canvas_Grp != null)
+        {
+            float alpha = (float)data[0];
+            Canvas_Grp.alpha = alpha;
         }
     }
 }

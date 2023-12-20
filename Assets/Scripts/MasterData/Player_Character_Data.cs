@@ -50,6 +50,10 @@ public class Player_Character_Data : System.IDisposable
 	///	</summary>
 	public string prefab_path {get; set;}
 	///	<summary>
+	///	UI 프리팹
+	///	</summary>
+	public string sd_prefab_path {get; set;}
+	///	<summary>
 	///	캐릭터 아이콘
 	///	</summary>
 	public string icon_path {get; set;}
@@ -76,6 +80,7 @@ public class Player_Character_Data : System.IDisposable
 		profile_habby = string.Empty;
 		battle_info_id = 0;
 		prefab_path = string.Empty;
+		sd_prefab_path = string.Empty;
 		icon_path = string.Empty;
 		Illustration_path = string.Empty;
 		script = string.Empty;
@@ -121,6 +126,7 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[profile_habby] = <color=yellow>{0}</color>", profile_habby).AppendLine();
 		sb.AppendFormat("[battle_info_id] = <color=yellow>{0}</color>", battle_info_id).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
+		sb.AppendFormat("[sd_prefab_path] = <color=yellow>{0}</color>", sd_prefab_path).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();

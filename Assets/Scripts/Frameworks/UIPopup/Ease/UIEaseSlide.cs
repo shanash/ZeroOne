@@ -6,11 +6,6 @@ namespace FluffyDuck.UI
 {
     public class UIEaseSlide : UIEaseBase
     {
-        [SerializeField, Tooltip("등장시 도착 위치")]
-        Vector2 In_End_Position;
-        [SerializeField, Tooltip("숨김시 도착 위치")]
-        Vector2 Out_End_Position;
-
         /// <summary>
         /// 이동전 시작 좌표
         /// </summary>
@@ -22,15 +17,25 @@ namespace FluffyDuck.UI
 
         public override void StartMoveIn(System.Action cb = null)
         {
+            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            if (found == null)
+            {
+                return;
+            }
             Start_Position = This_Rect.localPosition;
-            Distance = In_End_Position - Start_Position;
+            Distance = found.Ease_Vector - Start_Position;
             base.StartMoveIn(cb);
         }
 
         public override void StartMoveOut(Action cb = null)
         {
+            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            if (found == null)
+            {
+                return;
+            }
             Start_Position = This_Rect.localPosition;
-            Distance = Out_End_Position - Start_Position;
+            Distance = found.Ease_Vector - Start_Position;
             base.StartMoveOut(cb);
         }
 
@@ -47,15 +52,26 @@ namespace FluffyDuck.UI
         /// </summary>
         protected override void UpdatePostDelayEnd()
         {
-            if (Move_Type == MOVE_TYPE.MOVE_IN)
+            var found = FindEaseData(Move_Type);
+            if (found != null)
             {
-                This_Rect.localPosition = In_End_Position;
-            }
-            else
-            {
-                This_Rect.localPosition = Out_End_Position;
+                This_Rect.localPosition = found.Ease_Vector;
             }
         }
+
+        public override void ResetEase(params object[] data)
+        {
+            if (data.Length != 1)
+            {
+                return;
+            }
+            if (This_Rect != null)
+            {
+                Vector2 pos = (Vector2)data[0];
+                This_Rect.localPosition = pos;
+            }
+        }
+
     }
 
 }

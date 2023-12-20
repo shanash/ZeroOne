@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,57 +9,87 @@ namespace FluffyDuck.UI
 {
     public class UIEaseBase : EasingFade
     {
-        protected enum MOVE_TYPE
+        public enum MOVE_TYPE
         {
-            MOVE_IN = 0,
+            NONE = 0,
+            MOVE_IN,
             MOVE_OUT
         }
+
+        [Serializable]
+        public class UIEaseData
+        {
+            /// <summary>
+            /// Move Type
+            /// </summary>
+            public MOVE_TYPE Move_Type;
+            public EasingFunction.Ease Ease_Type = EasingFunction.Ease.NotUse;
+            /// <summary>
+            /// 좌표/스케일 등으로 사용 가능
+            /// </summary>
+            public Vector2 Ease_Vector;
+            /// <summary>
+            /// 알파값 등으로 사용 가능
+            /// </summary>
+            public float Ease_Float;
+            /// <summary>
+            /// 지속시간
+            /// </summary>
+            public float Ease_Duration;
+        }
+
         /// <summary>
         /// 컨테이너의 RectTransform
         /// </summary>
         protected RectTransform This_Rect;
 
-        [SerializeField, Tooltip("UI 등장시 Ease Type")]
-        protected EasingFunction.Ease Move_In_Ease_Type = EasingFunction.Ease.NotUse;
-
-        [SerializeField, Tooltip("UI 사라질 때 Ease Type")]
-        protected EasingFunction.Ease Move_Out_Ease_Type = EasingFunction.Ease.NotUse;
-
-        [SerializeField, Tooltip("지속시간")]
-        protected float Ease_Duration;
+        [SerializeField, Tooltip("Ease Data List")]
+        protected List<UIEaseData> Ease_Data_List;
+        
 
         /// <summary>
         /// 기본 지속시간
         /// </summary>
         protected const float DEFAULT_DURATION = 0.2f;
 
-        protected MOVE_TYPE Move_Type = MOVE_TYPE.MOVE_IN;
+        protected MOVE_TYPE Move_Type = MOVE_TYPE.NONE;
 
         private void Awake()
         {
-            CheckThisRect();
+            InitCheckComponent();
         }
-
-        protected void CheckThisRect()
+        protected virtual void InitCheckComponent()
         {
             if (This_Rect == null)
             {
                 This_Rect = GetComponent<RectTransform>();
             }
         }
+
+        protected UIEaseData FindEaseData(MOVE_TYPE mtype)
+        {
+            return Ease_Data_List.Find(x => x.Move_Type == mtype);
+        }
+
+        
         /// <summary>
         /// 등장 애니메이션 요청
         /// </summary>
         /// <param name="cb"></param>
         public virtual void StartMoveIn(System.Action cb = null) 
         {
-            Move_Type = MOVE_TYPE.MOVE_IN;
-            if (Ease_Duration == 0f)
+            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            if (found != null)
             {
-                Ease_Duration = DEFAULT_DURATION;
+                Move_Type = found.Move_Type;
+                float duration = found.Ease_Duration;
+                if (duration == 0f)
+                {
+                    duration = DEFAULT_DURATION;
+                }
+                SetEasing(found.Ease_Type, 0, duration);
+                StartEasing(cb);
             }
-            SetEasing(Move_In_Ease_Type, 0, Ease_Duration);
-            StartEasing(cb);
         }
 
         /// <summary>
@@ -67,13 +98,18 @@ namespace FluffyDuck.UI
         /// <param name="cb"></param>
         public virtual void StartMoveOut(System.Action cb = null) 
         {
-            Move_Type = MOVE_TYPE.MOVE_OUT;
-            if (Ease_Duration == 0f)
+            var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
+            if (found != null)
             {
-                Ease_Duration = DEFAULT_DURATION;
+                Move_Type = found.Move_Type;
+                float duration = found.Ease_Duration;
+                if (duration == 0f)
+                {
+                    duration = DEFAULT_DURATION;
+                }
+                SetEasing(found.Ease_Type, 0, duration);
+                StartEasing(cb);
             }
-            SetEasing(Move_Out_Ease_Type, 0, Ease_Duration);
-            StartEasing(cb);
         }
 
         protected override void OnFadeUpdate(float weight)
@@ -95,6 +131,13 @@ namespace FluffyDuck.UI
         /// Easing Update 종료 후 후방 Delay 시간 종료되면 호출되는 함수.
         /// </summary>
         protected override void UpdatePostDelayEnd() { }
+
+        /// <summary>
+        /// 상태를 초기화 시키기 위한 함수<br/>
+        /// 값을 받아서 각각의 상황에 맞는 데이터를 사용한다.
+        /// </summary>
+        /// <param name="data"></param>
+        public virtual void ResetEase(params object[] data) { }
     }
 
 }
