@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
+using System;
 
 namespace FluffyDuck.Util
 {
@@ -78,7 +79,7 @@ namespace FluffyDuck.Util
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < length; i++)
             {
-                sb.Append(str_pool[Random.Range(0, str_pool.Length)]);
+                sb.Append(str_pool[UnityEngine.Random.Range(0, str_pool.Length)]);
             }
             return sb.ToString();
         }
@@ -188,19 +189,39 @@ namespace FluffyDuck.Util
 #endif
         }
 
+        public static string WithColorTag(this string message, Color c)
+        {
+            return message.WithColorTag(c.ToRGBHex());
+        }
 
-        public static string ToRGBHex(Color c)
+        public static string WithColorTag(this string message, string color_code)
+        {
+            return $"<color={color_code}>{message}</color>";
+        }
+
+        public static string ToRGBHex(this Color c)
         {
             return string.Format("#{0:X2}{1:X2}{2:X2}", ToByte(c.r), ToByte(c.g), ToByte(c.b));
         }
 
-        private static byte ToByte(float f)
+        private static byte ToByte(this float f)
         {
             f = Mathf.Clamp01(f);
             return (byte)(f * 255);
         }
-        public static Color ToRGBFromHex(string hex)
+
+        public static Color ToRGBFromHex(this string hex)
         {
+            if (hex.StartsWith("#"))
+            {
+                hex = hex.Substring(1); // "#" 문자 제거
+            }
+
+            if (hex.Length != 6)
+            {
+                throw new ArgumentException("Hex color code must be 6 characters long.", nameof(hex));
+            }
+
             Color c = Color.white;
             string r = hex.Substring(0, 2);
             string g = hex.Substring(2, 2);
