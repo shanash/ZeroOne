@@ -7,7 +7,7 @@ using UnityEngine;
 /// 리플렉션을 사용하여 매 프레임마다 쓰면 느리기에 로딩 및 초기화시에만 사용합시다.
 /// 생성자를 private로 선언해야 합니다
 /// </summary>
-public static class Factory
+public static class Factory_V2
 {
     public static T Create<T>(params object[] args) where T : class, IFactoryComponent
     {
