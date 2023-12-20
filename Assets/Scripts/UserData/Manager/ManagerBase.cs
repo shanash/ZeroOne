@@ -1,5 +1,10 @@
+using FluffyDuck.Util;
+using LitJson;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
-
+using System.Text;
+using UnityEngine;
 
 public enum USER_DATA_MANAGER_TYPE
 {
@@ -63,6 +68,86 @@ public class ManagerBase : IDisposable
 
     public virtual void InitDataManager() { }
 
+    protected string GetFilePath()
+    {
+        string path = $"{Application.persistentDataPath}/{Manager_Type}";
+        return path;
+    }
+
     public USER_DATA_MANAGER_TYPE GetManagerType() { return Manager_Type; }
+
+    public virtual LitJson.JsonData Serialized() { return null; }
+    public virtual bool Deserialized(LitJson.JsonData json) {  return false; }
+
+
+    public virtual void Save() 
+    {
+        JsonData json = Serialized();
+        if (json == null)
+        {
+            return;
+        }
+        LitJson.JsonWriter writer = new LitJson.JsonWriter();
+        writer.PrettyPrint = true;
+
+        LitJson.JsonMapper.ToJson(json, writer);
+        string json_data = writer.TextWriter.ToString();
+        
+        FileUtils.SaveFileData(json_data, GetFilePath());
+    }
+
+    public virtual bool Load() 
+    {
+        string path = GetFilePath();
+        if (!FileUtils.IsExistFile(path))
+        {
+            return false;
+        }
+        string json_data = System.IO.File.ReadAllText(path, Encoding.UTF8);
+        if (string.IsNullOrEmpty(json_data))
+        {
+            return false;
+        }
+        
+        JsonData json = JsonMapper.ToObject(json_data);
+        return Deserialized(json);
+        
+    }
+
+    #region Json Parse
+    protected int ParseInt(LitJson.JsonData json, string key)
+    {
+        int ret = 0;
+        if (int.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
+    protected double ParseDouble(LitJson.JsonData json, string key)
+    {
+        double ret = 0;
+        if (double.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
+    public string ParseString(LitJson.JsonData json, string key)
+    {
+        return json[key].ToString();
+    }
+    public bool ParseBool(LitJson.JsonData json, string key)
+    {
+        bool ret = false;
+        if (bool.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
+    #endregion
+
+
 
 }

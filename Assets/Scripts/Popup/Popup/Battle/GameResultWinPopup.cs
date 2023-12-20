@@ -55,17 +55,17 @@ public class GameResultWinPopup : PopupBase
     protected override void FixedUpdatePopup()
     {
         //  backlight 밝아지기
-        Backlight_Ease.StartMoveIn();
+        Backlight_Ease.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         //  승리 텍스트 등장
-        WinText_Ease.StartMoveIn(WinTextEaseComplete);
+        WinText_Ease.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, WinTextEaseComplete);
     }
     /// <summary>
     /// Win 텍스트 등장 완료 후, 별등급/플레이어 정보 박스 등장
     /// </summary>
     void WinTextEaseComplete()
     {
-        Stars_Container_Ease_Slide.StartMoveIn(StarContainerEaseComplete);
-        Star_Container_Ease_Alpha.StartMoveIn();
+        Stars_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, StarContainerEaseComplete);
+        Star_Container_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     void StarContainerEaseComplete()
@@ -75,16 +75,16 @@ public class GameResultWinPopup : PopupBase
 
     void ShowStarComplete()
     {
-        Player_Info_Ease_Slide.StartMoveIn();
-        Player_Info_Ease_Alpha.StartMoveIn();
-        Character_Info_Ease_Alpha.StartMoveIn(CharacterInfoEaseComplete);
-        Character_Info_Ease_Slide.StartMoveIn();
+        Player_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        Player_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        Character_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, CharacterInfoEaseComplete);
+        Character_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     void CharacterInfoEaseComplete()
     {
-        Next_Btn_Ease_Slide.StartMoveIn();
-        Next_Btn_Ease_Alpha.StartMoveIn();
+        Next_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        Next_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     IEnumerator ShowStars(int cnt)
@@ -96,9 +96,9 @@ public class GameResultWinPopup : PopupBase
         for (int i = 0; i < cnt; i++)
         {
             var scale = Complete_Mission_Star_Ease_Scale_List[i];
-            scale.StartMoveIn();
+            scale.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
             var alpha = Complete_Mission_Star_Ease_Alpha_List[i];
-            alpha.StartMoveIn();
+            alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
             yield return new WaitForSeconds(0.2f);
         }
         ShowStarComplete();

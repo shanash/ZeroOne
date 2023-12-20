@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using LitJson;
 
 public class UserHeroData : UserDataBase
 {
@@ -92,5 +93,61 @@ public class UserHeroData : UserDataBase
     {
         return Battle_Data.position_type;
     }
+
+    public override LitJson.JsonData Serialized()
+    {
+        var json = new LitJson.JsonData();
+        
+        json[NODE_PLAYER_CHARACTER_ID] = GetPlayerCharacterID();
+        json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
+        json[NODE_LEVEL] = GetLevel();
+        json[NODE_EXP] = GetExp();
+        
+        return json;
+    }
+
+    public override bool Deserialized(LitJson.JsonData json)
+    {
+        if (json == null)
+        {
+            return false;
+        }
+
+        InitSecureVars();
+
+        {
+            if (json.ContainsKey(NODE_PLAYER_CHARACTER_ID))
+            {
+                Player_Character_ID.Set(ParseInt(json, NODE_PLAYER_CHARACTER_ID));
+            }
+            if (json.ContainsKey(NODE_PLAYER_CHARACTER_NUM))
+            {
+                Player_Character_Num = ParseInt(json, NODE_PLAYER_CHARACTER_NUM);
+            }
+            if (json.ContainsKey(NODE_LEVEL))
+            {
+                Level.Set(ParseInt(json, NODE_LEVEL));
+            }
+            if (json.ContainsKey(NODE_EXP))
+            {
+                Exp.Set(ParseInt(json, NODE_EXP));
+            }
+            
+        }
+
+        InitMasterData();
+
+
+        return true;
+    }
+
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_PLAYER_CHARACTER_ID = "pid";
+    protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
+    protected const string NODE_LEVEL = "lv";
+    protected const string NODE_EXP = "xp";
 
 }

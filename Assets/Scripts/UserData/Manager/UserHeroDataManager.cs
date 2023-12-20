@@ -1,6 +1,8 @@
+using FluffyDuck.Util;
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.AccessControl;
+using System.Linq;
 using UnityEngine;
 
 public class UserHeroDataManager : ManagerBase
@@ -26,6 +28,10 @@ public class UserHeroDataManager : ManagerBase
 
     public override void InitDataManager()
     {
+        if (User_Hero_Data_List.Count > 0)
+        {
+            return;
+        }
         DummyDataSettting();
     }
 
@@ -42,8 +48,8 @@ public class UserHeroDataManager : ManagerBase
             AddUserHeroData(pdata.player_character_id, hero_data_num++);
         }
 
+        Save();
     }
-
 
     public void GetUserHeroDataList(ref List<UserHeroData> list)
     {
@@ -79,4 +85,75 @@ public class UserHeroDataManager : ManagerBase
         return hero;
     }
 
+
+    public override LitJson.JsonData Serialized()
+    {
+        var json = new LitJson.JsonData();
+
+        var arr = new LitJson.JsonData();
+
+        int cnt = User_Hero_Data_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var item = User_Hero_Data_List[i];
+            var jdata = item.Serialized();
+            if (jdata == null)
+            {
+                continue;
+            }
+            arr.Add(jdata);
+        }
+        json[NODE_HERO_DATA_LIST] = arr;
+
+        return json;
+    }
+
+    public override bool Deserialized(JsonData json)
+    {
+        if (json == null)
+        {
+            return false;
+        }
+        if (json.ContainsKey(NODE_HERO_DATA_LIST))
+        {
+            var arr = json[NODE_HERO_DATA_LIST];
+            if (arr.GetJsonType() == JsonType.Array)
+            {
+                int cnt = arr.Count;
+                for (int i = 0; i < cnt; i++)
+                {
+                    var jdata = arr[i];
+                    
+                    int player_character_id = 0;
+                    int player_character_num = 0;
+                    if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num))
+                    {
+                        UserHeroData item = FindUserHeroData(player_character_id, player_character_num);
+                        if (item != null)
+                        {
+                            item.Deserialized(jdata);
+                        }
+                        else
+                        {
+                            item = AddUserHeroData(player_character_id, player_character_num);
+                            item?.Deserialized(jdata);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return true;
+    }
+
+
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_HERO_DATA_LIST = "hlist";
+
+    protected const string NODE_PLAYER_CHARACTER_ID = "pid";
+    protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
 }

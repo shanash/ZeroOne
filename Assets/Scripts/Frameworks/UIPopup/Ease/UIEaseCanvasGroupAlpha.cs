@@ -27,30 +27,19 @@ public class UIEaseCanvasGroupAlpha : UIEaseBase
 
     }
 
-    public override void StartMoveIn(Action cb = null)
+    public override void StartMove(MOVE_TYPE mtype, Action cb = null)
     {
-        var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+        var found = FindEaseData(mtype);
         if (found == null)
         {
             return;
         }
         Start_Alpha = Canvas_Grp.alpha;
         Diff_Alpha = found.Ease_Float - Start_Alpha;
-        base.StartMoveIn(cb);
+        base.StartMove(mtype, cb);
     }
 
-    public override void StartMoveOut(Action cb = null)
-    {
-        var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
-        if (found == null)
-        {
-            return;
-        }
-        Start_Alpha = Canvas_Grp.alpha;
-        Diff_Alpha = found.Ease_Float - Start_Alpha;
-        base.StartMoveOut(cb);
-    }
-
+ 
     protected override void OnFadeUpdate(float weight)
     {
         if (EaseFade == EasingFunction.Ease.NotUse)

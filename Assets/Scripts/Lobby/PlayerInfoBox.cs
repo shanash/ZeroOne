@@ -25,15 +25,23 @@ public class PlayerInfoBox : MonoBehaviour
 
     public void OnClickTestBattleResult()
     {
-        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
-        //{
-        //    popup.ShowPopup();
-        //});
-
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
+        bool test_win = true;
+        if (test_win)
         {
-            popup.ShowPopup();
-        });
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
+            {
+                popup.ShowPopup();
+            });
+        }
+        else
+        {
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
+            {
+                popup.ShowPopup();
+            });
+        }
+
+        
     }
 
 }

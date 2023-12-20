@@ -17,26 +17,18 @@ namespace FluffyDuck.UI
         /// </summary>
         Vector2 Diff_Scale;
 
-        public override void StartMoveIn(Action cb = null)
+        public override void StartMove(MOVE_TYPE mtype, Action cb = null)
         {
-            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            var found = FindEaseData(mtype);
             if (found == null)
             {
                 return;
             }
             Start_Scale = This_Rect.localScale;
             Diff_Scale = found.Ease_Vector - Start_Scale;
-            base.StartMoveIn(cb);
+            base.StartMove(mtype, cb);
         }
-        public override void StartMoveOut(Action cb = null)
-        {
-            var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
-            if (found == null)
-                return;
-            Start_Scale = This_Rect.localScale;
-            Diff_Scale = found.Ease_Vector - Start_Scale;
-            base.StartMoveOut(cb);
-        }
+       
 
         protected override void UpdateEase(EasingFunction.Function func, float weight)
         {

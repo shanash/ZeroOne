@@ -36,22 +36,22 @@ public class GameResultLosePopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        Lose_Text_Ease.StartMoveIn(LoseTextEaseComplete);
+        Lose_Text_Ease.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, LoseTextEaseComplete);
     }
 
     void LoseTextEaseComplete()
     {
-        Player_Info_Ease_Alpha.StartMoveIn(PlayerInfoEaseComplete);
-        Player_Info_Ease_Slide.StartMoveIn();
+        Player_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, PlayerInfoEaseComplete);
+        Player_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
 
-        Character_Info_Ease_Alpha.StartMoveIn();
-        Character_Info_Ease_Slide.StartMoveIn();
+        Character_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        Character_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     void PlayerInfoEaseComplete()
     {
-        Home_Btn_Ease_Alpha.StartMoveIn();
-        Home_Btn_Ease_Slide.StartMoveIn();
+        Home_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        Home_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     public override void Despawned()

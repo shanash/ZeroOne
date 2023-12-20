@@ -17,7 +17,7 @@ namespace FluffyDuck.UI
         }
 
         [Serializable]
-        public class UIEaseData
+        protected class UIEaseData
         {
             /// <summary>
             /// Move Type
@@ -71,34 +71,14 @@ namespace FluffyDuck.UI
             return Ease_Data_List.Find(x => x.Move_Type == mtype);
         }
 
-        
         /// <summary>
-        /// 등장 애니메이션 요청
+        /// 애니메이션 시작
         /// </summary>
+        /// <param name="mtype"></param>
         /// <param name="cb"></param>
-        public virtual void StartMoveIn(System.Action cb = null) 
+        public virtual void StartMove(MOVE_TYPE mtype, System.Action cb = null)
         {
-            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
-            if (found != null)
-            {
-                Move_Type = found.Move_Type;
-                float duration = found.Ease_Duration;
-                if (duration == 0f)
-                {
-                    duration = DEFAULT_DURATION;
-                }
-                SetEasing(found.Ease_Type, 0, duration);
-                StartEasing(cb);
-            }
-        }
-
-        /// <summary>
-        /// 숨김 애니메이션 요청
-        /// </summary>
-        /// <param name="cb"></param>
-        public virtual void StartMoveOut(System.Action cb = null) 
-        {
-            var found = FindEaseData(MOVE_TYPE.MOVE_OUT);
+            var found = FindEaseData(mtype);
             if (found != null)
             {
                 Move_Type = found.Move_Type;

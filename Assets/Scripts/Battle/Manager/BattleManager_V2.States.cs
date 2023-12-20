@@ -260,7 +260,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateGameOverWinBegin() 
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameOverWinPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
         {
             popup.ShowPopup();
         });
@@ -270,7 +270,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateGameOverLoseBegin() 
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameOverLosePopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
         {
             popup.ShowPopup();
         });

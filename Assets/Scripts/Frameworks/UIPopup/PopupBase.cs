@@ -85,7 +85,7 @@ namespace FluffyDuck.UI
             Popup_Hide_End_Callback = cb;
             if (Ease_Base != null)
             {
-                Ease_Base?.StartMoveOut(HidePopupAniEndCallback);
+                Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, HidePopupAniEndCallback);
             }
             else
             {
@@ -114,7 +114,7 @@ namespace FluffyDuck.UI
         {
             Is_Enable_Key_Event = true;
             Box_Rect?.gameObject.SetActive(true);
-            Ease_Base?.StartMoveIn(ShowPopupAniEndCallback);
+            Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);
         }
 
         /// <summary>

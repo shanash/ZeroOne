@@ -45,4 +45,39 @@ public class UserDataBase : IDisposable
     public virtual bool IsUpdateData() { return Is_Update_Data; }
     public virtual void InitUpdateData() { Is_Update_Data = false; }
     public void SetUpdateData(bool is_update) { Is_Update_Data = is_update; }
+
+    public virtual LitJson.JsonData Serialized() { return null; }
+    public virtual bool Deserialized(LitJson.JsonData json) { return false; }
+
+    protected int ParseInt(LitJson.JsonData json, string key)
+    {
+        int ret = 0;
+        if (int.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
+    protected double ParseDouble(LitJson.JsonData json, string key)
+    {
+        double ret = 0;
+        if (double.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
+    public string ParseString(LitJson.JsonData json, string key)
+    {
+        return json[key].ToString();
+    }
+    public bool ParseBool(LitJson.JsonData json, string key)
+    {
+        bool ret = false;
+        if (bool.TryParse(json[key].ToString(), out ret))
+        {
+            return ret;
+        }
+        return ret;
+    }
 }

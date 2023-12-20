@@ -15,29 +15,18 @@ namespace FluffyDuck.UI
         /// </summary>
         Vector2 Distance;
 
-        public override void StartMoveIn(System.Action cb = null)
+        public override void StartMove(MOVE_TYPE mtype, Action cb = null)
         {
-            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
+            var found = FindEaseData(mtype);
             if (found == null)
             {
                 return;
             }
             Start_Position = This_Rect.localPosition;
             Distance = found.Ease_Vector - Start_Position;
-            base.StartMoveIn(cb);
+            base.StartMove(mtype, cb);
         }
-
-        public override void StartMoveOut(Action cb = null)
-        {
-            var found = FindEaseData(MOVE_TYPE.MOVE_IN);
-            if (found == null)
-            {
-                return;
-            }
-            Start_Position = This_Rect.localPosition;
-            Distance = found.Ease_Vector - Start_Position;
-            base.StartMoveOut(cb);
-        }
+        
 
         protected override void UpdateEase(EasingFunction.Function func, float weight)
         {

@@ -61,7 +61,10 @@ public class GameData : IDisposable
             //  hero data
             {
                 var mng = new UserHeroDataManager(USER_DATA_MANAGER_TYPE.USER_HERO_DATA_MANAGER);
-                mng.InitDataManager();
+                if (!mng.Load())
+                {
+                    mng.InitDataManager();
+                }
                 User_Data_Manager_List.Add(mng);
             }
 
