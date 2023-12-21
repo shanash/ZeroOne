@@ -4,10 +4,23 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine;
 
+/*
+// 사용 방법
+public class TestClass : MonoBehaviour
+{
+    bool Initialize(int a, float b, string c)
+    {
+        // false를 리턴하면 실패하고 null 이 결과값으로 전달된다
+        return true;
+    }
+}
+
+// 생성
+MBFactory.Create<TestClass>("Assets/프리팹키", Transform, (TestClass t) => { }, 0, 1.2f, "");
+*/
 
 /// <summary>
 /// FactoryCore의 MonoBehaviour 버전
-/// Start 예약 메소드를 사용하려면 override하고 base.Start(); 를 호출하여 사용해야 합니다
 /// </summary>
 public abstract class MBFactory
 {
@@ -26,12 +39,21 @@ public abstract class MBFactory
             return null;
         }
 
-        if ((bool)initializeMethod.Invoke(instance, args) == false)
+        try
         {
-            Debug.Assert(false, $"MBFactoryCore::Create<{typeof(T)}> 생성 실패!!");
-            GameObject.Destroy(instance);
-            return null;
+            if ((bool)initializeMethod.Invoke(instance, args) == false)
+            {
+                Debug.Assert(false, $"MBFactoryCore::Create<{typeof(T)}> 생성 실패!!");
+                GameObject.Destroy(instance);
+                return null;
+            }
         }
+        catch (TargetException e)
+        {
+            Debug.Assert(false, $"생성한 프리팹에 {typeof(T)} 컴포넌트가 붙어 있는지 확인해보세요.");
+            Debug.LogException(e);
+        }
+        catch (Exception e) { Debug.LogException(e); }
 
         return instance;
     }
