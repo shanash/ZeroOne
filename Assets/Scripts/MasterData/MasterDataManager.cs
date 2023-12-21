@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -379,8 +380,30 @@ public class MasterDataManager : BaseMasterDataManager
     #region Memorial
     public Me_Resource_Data Get_MemorialData(int player_character_id, int order)
     {
+        Check_Me_Resource_Data();
         return _Me_Resource_Data.Find(x => x.player_character_id == player_character_id && x.order == order);
     }
+
+    public Me_Resource_Data Get_MemorialResourceData(int memorial_id, int player_character_id)
+    {
+        Check_Me_Resource_Data();
+        return _Me_Resource_Data.Find(x => x.player_character_id == player_character_id && x.memorial_id == memorial_id);
+    }
+
+    public void Get_MemorialResourceDataList(ref List<Me_Resource_Data> list)
+    {
+        Check_Me_Resource_Data();
+        list.Clear();
+        list.AddRange(_Me_Resource_Data);
+    }
+
+    public void Get_MemorialResourceDataListByPlayerID(int player_character_id, ref List<Me_Resource_Data> list)
+    {
+        Check_Me_Resource_Data();
+        list.Clear();
+        list.AddRange(_Me_Resource_Data.FindAll(x => x.player_character_id == player_character_id));
+    }
+
 
     public List<Me_Interaction_Data>[,] Get_MemorialInteraction(int player_character_id)
     {
