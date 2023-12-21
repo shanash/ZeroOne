@@ -85,7 +85,6 @@ public class UserHeroDataManager : ManagerBase
         return hero;
     }
 
-
     public override LitJson.JsonData Serialized()
     {
         var json = new LitJson.JsonData();
@@ -143,6 +142,7 @@ public class UserHeroDataManager : ManagerBase
             }
         }
 
+        InitUpdateData();
 
         return true;
     }

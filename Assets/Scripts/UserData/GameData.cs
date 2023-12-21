@@ -54,7 +54,10 @@ public class GameData : IDisposable
             //  player data
             {
                 var mng = new UserGameInfoDataManager(USER_DATA_MANAGER_TYPE.USER_GAME_INFO_DATA_MANAGER);
-                mng.InitDataManager();
+                if (!mng.Load())
+                {
+                    mng.InitDataManager();
+                }
                 User_Data_Manager_List.Add(mng);
             }
 
@@ -71,7 +74,20 @@ public class GameData : IDisposable
             //  hero deck mount data
             {
                 var mng = new UserDeckDataManager(USER_DATA_MANAGER_TYPE.USER_DECK_DATA_MANAGER);
-                mng.InitDataManager();
+                if (!mng.Load())
+                {
+                    mng.InitDataManager();
+                }
+                User_Data_Manager_List.Add(mng);
+            }
+
+            //  memorial data
+            {
+                var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
+                if (!mng.Load())
+                {
+                    mng.InitDataManager();
+                }
                 User_Data_Manager_List.Add(mng);
             }
 
@@ -96,5 +112,10 @@ public class GameData : IDisposable
     public UserDeckDataManager GetUserHeroDeckMountDataManager()
     {
         return FindUserDataManager<UserDeckDataManager>(USER_DATA_MANAGER_TYPE.USER_DECK_DATA_MANAGER);
+    }
+
+    public UserMemorialDataManager GetUserMemorialDataManager()
+    {
+        return FindUserDataManager<UserMemorialDataManager>(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
     }
 }

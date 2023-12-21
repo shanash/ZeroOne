@@ -80,6 +80,8 @@ public class UserMemorialData : UserDataBase
         var json = new LitJson.JsonData();
         json[NODE_MEMORIAL_ID] = Memorial_ID;
         json[NODE_PLAYER_CHARACTER_ID] = Player_Character_ID;
+        json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Number;
+        json[NODE_IS_LOBBY_CHOICE] = Is_Choice_Lobby;
 
         return json;
     }
@@ -98,6 +100,14 @@ public class UserMemorialData : UserDataBase
         {
             Player_Character_ID = ParseInt(json, NODE_PLAYER_CHARACTER_ID);
         }
+        if (json.ContainsKey(NODE_LOBBY_CHOICE_NUMBER))
+        {
+            Lobby_Choice_Number = ParseInt(json, NODE_LOBBY_CHOICE_NUMBER);
+        }
+        if (json.ContainsKey(NODE_IS_LOBBY_CHOICE))
+        {
+            Is_Choice_Lobby = ParseBool(json, NODE_IS_LOBBY_CHOICE);
+        }
 
         InitMasterData();
         return true;
@@ -108,4 +118,6 @@ public class UserMemorialData : UserDataBase
     //-------------------------------------------------------------------------
     protected const string NODE_MEMORIAL_ID = "mid";
     protected const string NODE_PLAYER_CHARACTER_ID = "pid";
+    protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
+    protected const string NODE_IS_LOBBY_CHOICE = "choice";
 }
