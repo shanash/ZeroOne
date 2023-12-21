@@ -1159,7 +1159,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             return Factory.Create<SkeletonAnimationManager>(anim);
         }
 
-        private bool Initialize(SkeletonAnimation skelanim)
+        bool Initialize(SkeletonAnimation skelanim)
         {
             _Skeleton_Animation = skelanim;
 
