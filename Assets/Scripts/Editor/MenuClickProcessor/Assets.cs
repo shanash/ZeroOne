@@ -9,7 +9,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         private static void Create_CsharpFactoryScript()
         {
             // 사용자 정의 스크립트 템플릿 경로
-            string templatePath = "Assets/Scripts/Editor/FactoryInstance.txt";
+            string templatePath = "Assets/Scripts/Editor/MenuClickProcessor/FactoryInstance.txt";
 
             // 새 스크립트 파일 경로 및 이름 설정
             string targetPath = AssetDatabase.GetAssetPath(Selection.activeObject) + "/FactoryInstance.cs";
@@ -23,7 +23,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         private static void Create_CsharpMonobehaviourFactoryScript()
         {
             // 사용자 정의 스크립트 템플릿 경로
-            string templatePath = "Assets/Scripts/Editor/MBFactoryInstance.txt";
+            string templatePath = "Assets/Scripts/Editor/MenuClickProcessor/MBFactoryInstance.txt";
 
             // 새 스크립트 파일 경로 및 이름 설정
             string targetPath = AssetDatabase.GetAssetPath(Selection.activeObject) + "/MBFactoryInstance.cs";
