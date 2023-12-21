@@ -7,18 +7,27 @@ using UnityEngine;
 /// 리플렉션을 사용하여 매 프레임마다 쓰면 느리기에 로딩 및 초기화시에만 사용합시다.
 /// 생성자를 private로 선언해야 합니다
 /// </summary>
-public static class Factory_V2
+public static class Factory
 {
-    public static T Create<T>(params object[] args) where T : class, IFactoryComponent
+    public static T Create<T>(params object[] args) where T : class
     {
         T instance = null;
         try
         {
             instance = (T)Activator.CreateInstance(typeof(T), BindingFlags.Instance | BindingFlags.NonPublic, null, null, null);
 
+            // 매개변수 타입 배열 생성
+            Type[] argTypes = Array.ConvertAll(args, arg => arg.GetType());
+
             // Initialize 메소드 호출
-            MethodInfo initializeMethod = typeof(T).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public);
-            if ((bool)initializeMethod.Invoke(instance, new object[] { args }) == false)
+            MethodInfo initializeMethod = typeof(T).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.NonPublic, null, argTypes, null);
+            if (initializeMethod == null)
+            {
+                Debug.Assert(false, $"Initialize 메소드를 찾을 수 없습니다: {typeof(T)}");
+                return null;
+            }
+
+            if ((bool)initializeMethod.Invoke(instance, args) == false)
             {
                 Debug.Assert(false, $"Factory::Create<{typeof(T)}> 생성실패!!");
                 return null;
@@ -32,7 +41,6 @@ public static class Factory_V2
         {
             Debug.LogException(ex);
         }
-
 
         return instance; // 객체 생성 성공
     }

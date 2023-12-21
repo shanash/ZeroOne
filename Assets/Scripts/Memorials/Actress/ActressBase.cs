@@ -1148,7 +1148,7 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
         }
     }
 
-    public class SkeletonAnimationManager : FactoryProductBase
+    public class SkeletonAnimationManager
     {
         SkeletonAnimation _Skeleton_Animation;
 
@@ -1159,16 +1159,9 @@ public abstract class ActressBase : MonoBehaviour, IActressPositionProvider
             return Factory.Create<SkeletonAnimationManager>(anim);
         }
 
-        protected override bool Initialize(params object[] args)
+        private bool Initialize(SkeletonAnimation skelanim)
         {
-            if (args.Length != 1 ||
-                args[0] == null ||
-                args[0] is not SkeletonAnimation)
-            {
-                return false;
-            }
-
-            _Skeleton_Animation = args[0] as SkeletonAnimation;
+            _Skeleton_Animation = skelanim;
 
             return true;
         }

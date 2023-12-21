@@ -11,12 +11,22 @@ using UnityEngine;
 /// </summary>
 public abstract class MBFactory
 {
-    static T CreateInstance<T>(GameObject obj, params object[] args) where T : MonoBehaviour, IFactoryComponent
+    static T CreateInstance<T>(GameObject obj, params object[] args) where T : MonoBehaviour
     {
         T instance = obj.GetComponent<T>();
 
-        MethodInfo initializeMethod = typeof(T).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public);
-        if ((bool)initializeMethod.Invoke(instance, new object[] { args }) == false)
+        // 매개변수 타입 배열 생성
+        Type[] argTypes = Array.ConvertAll(args, arg => arg.GetType());
+
+        // Initialize 메소드 호출
+        MethodInfo initializeMethod = typeof(T).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.NonPublic, null, argTypes, null);
+        if (initializeMethod == null)
+        {
+            Debug.Assert(false, $"Initialize 메소드를 찾을 수 없습니다: {typeof(T)}");
+            return null;
+        }
+
+        if ((bool)initializeMethod.Invoke(instance, args) == false)
         {
             Debug.Assert(false, $"MBFactoryCore::Create<{typeof(T)}> 생성 실패!!");
             GameObject.Destroy(instance);
@@ -26,7 +36,7 @@ public abstract class MBFactory
         return instance;
     }
 
-    public static void Create<T>(string path, Transform parent, Action<T> cb, params object[] args) where T : MonoBehaviour, IFactoryComponent
+    public static void Create<T>(string path, Transform parent, Action<T> cb, params object[] args) where T : MonoBehaviour
     {
         try
         {
@@ -43,7 +53,7 @@ public abstract class MBFactory
         }
     }
 
-    public async static Task<T> CreateAsync<T>(string path, Transform parent, params object[] args) where T : MonoBehaviour, IFactoryComponent
+    public async static Task<T> CreateAsync<T>(string path, Transform parent, params object[] args) where T : MonoBehaviour
     {
         try
         {
