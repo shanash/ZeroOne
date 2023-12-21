@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6077780524275626151}
   - component: {fileID: 7262062044870840976}
   - component: {fileID: 4142963598103160241}
-  - component: {fileID: 1373949616766843244}
+  - component: {fileID: 1911624914354836873}
   m_Layer: 20
   m_Name: ConfirmBtn
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1373949616766843244
+--- !u!114 &1911624914354836873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 180808951528139311}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 46430f7c7320cf041ba01055126bd78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -118,9 +118,23 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4142963598103160241}
-  m_OnClick:
+  Scale_Rect: {fileID: 6077780524275626151}
+  Press_Scale: {x: 0.96, y: 0.96}
+  OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5274037918893739742}
+        m_TargetAssemblyTypeName: SelectLobbyCharacterPopup, Assembly-CSharp
+        m_MethodName: OnClickConfirm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &552038861845712506
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,6 +355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1761124407389281655}
   - component: {fileID: 4377928036256354854}
+  - component: {fileID: 900525893950479962}
   m_Layer: 20
   m_Name: Content
   m_TagString: Untagged
@@ -380,7 +395,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 730}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4377928036256354854
 MonoBehaviour:
@@ -406,6 +421,20 @@ MonoBehaviour:
   m_Spacing: {x: 30, y: 50}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &900525893950479962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200371620834694245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1802383003088652577
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,9 +580,9 @@ GameObject:
   - component: {fileID: 7366576863532268953}
   - component: {fileID: 2883750496268379426}
   - component: {fileID: 1359022801657774270}
-  - component: {fileID: 873014799234529767}
+  - component: {fileID: 5483085359023914190}
   m_Layer: 20
-  m_Name: GoHomeBtn
+  m_Name: CancelBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -617,7 +646,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &873014799234529767
+--- !u!114 &5483085359023914190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -626,7 +655,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2257363924483522128}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 46430f7c7320cf041ba01055126bd78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -658,9 +687,23 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1359022801657774270}
-  m_OnClick:
+  Scale_Rect: {fileID: 7366576863532268953}
+  Press_Scale: {x: 0.96, y: 0.96}
+  OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5274037918893739742}
+        m_TargetAssemblyTypeName: FluffyDuck.UI.PopupBase, Assembly-CSharp
+        m_MethodName: OnClickClosePopup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2807708371977117561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,6 +1249,7 @@ GameObject:
   - component: {fileID: 5973437923432173025}
   - component: {fileID: 6079871473987082401}
   - component: {fileID: 7119827825284236946}
+  - component: {fileID: 2768154446071209450}
   m_Layer: 20
   m_Name: Scroll View
   m_TagString: Untagged
@@ -1271,6 +1315,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2768154446071209450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6760023336396889277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 1761124407389281655}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 1
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7325535854662444482
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,11 +1648,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963d15e4b35f7804b80683b7ecdfc746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Move_In_Ease_Type: 22
-  Move_Out_Ease_Type: 26
-  Ease_Duration: 0.5
-  In_End_Scale: {x: 1, y: 1}
-  Out_End_Scale: {x: 0, y: 0}
+  Ease_Data_List:
+  - Move_Type: 1
+    Ease_Type: 27
+    Ease_Vector: {x: 1, y: 1}
+    Ease_Float: 0
+    Ease_Duration: 0.5
+  - Move_Type: 2
+    Ease_Type: 26
+    Ease_Vector: {x: 0, y: 0}
+    Ease_Float: 0
+    Ease_Duration: 0.5
 --- !u!1 &9045117207071307002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,6 +1668,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6739821933863312440}
+  - component: {fileID: 5274037918893739742}
   m_Layer: 20
   m_Name: SelectLobbyCharacterPopup
   m_TagString: Untagged
@@ -1615,6 +1696,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5274037918893739742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9045117207071307002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b2e61ab2966bb49a2fbffe64563bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Box_Rect: {fileID: 3519496807120039263}
+  Popup_Type: 2
+  Ease_Base: {fileID: 2719367321518455563}
 --- !u!1 &9176315234212207507
 GameObject:
   m_ObjectHideFlags: 0

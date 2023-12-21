@@ -28,9 +28,10 @@ public class LobbyManager : MonoBehaviour
     public void OnClickChangeCharacter()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("로비 캐릭터 변경", TOAST_BOX_LENGTH.SHORT);
-
-        SceneManager.LoadScene("memorial");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", (popup) =>
+        {
+            popup.ShowPopup();
+        });
     }
 
     public void OnClickUIHide()

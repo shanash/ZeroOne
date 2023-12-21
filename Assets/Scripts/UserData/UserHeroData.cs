@@ -8,6 +8,10 @@ public class UserHeroData : UserDataBase
     public SecureVar<int> Level { get; protected set; } = null;
     public SecureVar<int> Exp { get; protected set; } = null;
 
+    public int Lobby_Choice_Num { get; protected set; } = 0;
+
+    public bool Is_Choice_Lobby { get; protected set; } = false;
+
     Player_Character_Data Hero_Data;
     Player_Character_Battle_Data Battle_Data;
 
@@ -20,6 +24,8 @@ public class UserHeroData : UserDataBase
         Player_Character_ID.Set(0);
         Level.Set(1);
         Exp.Set(0);
+        Lobby_Choice_Num = 0;
+        Is_Choice_Lobby = false;
     }
     protected override void InitSecureVars()
     {
@@ -94,6 +100,16 @@ public class UserHeroData : UserDataBase
         return Battle_Data.position_type;
     }
 
+    public void SetLobbyChoiceNumber(int num)
+    {
+        Lobby_Choice_Num = num;
+        Is_Choice_Lobby = Lobby_Choice_Num > 0;
+    }
+    public void ReleaseLobbyChoice()
+    {
+        SetLobbyChoiceNumber(0);
+    }
+
     public override LitJson.JsonData Serialized()
     {
         var json = new LitJson.JsonData();
@@ -102,6 +118,8 @@ public class UserHeroData : UserDataBase
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
         json[NODE_LEVEL] = GetLevel();
         json[NODE_EXP] = GetExp();
+        json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
+        json[NODE_IS_CHOICE] = Is_Choice_Lobby;
         
         return json;
     }
@@ -132,7 +150,14 @@ public class UserHeroData : UserDataBase
             {
                 Exp.Set(ParseInt(json, NODE_EXP));
             }
-            
+            if (json.ContainsKey(NODE_LOBBY_CHOICE_NUMBER))
+            {
+                Lobby_Choice_Num = ParseInt(json, NODE_LOBBY_CHOICE_NUMBER);
+            }
+            if (json.ContainsKey(NODE_IS_CHOICE))
+            {
+                Is_Choice_Lobby = ParseBool(json, NODE_IS_CHOICE);
+            }
         }
 
         InitMasterData();
@@ -149,5 +174,7 @@ public class UserHeroData : UserDataBase
     protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
     protected const string NODE_LEVEL = "lv";
     protected const string NODE_EXP = "xp";
+    protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
+    protected const string NODE_IS_CHOICE = "choice";
 
 }
