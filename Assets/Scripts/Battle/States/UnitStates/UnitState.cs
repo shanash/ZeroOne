@@ -58,12 +58,32 @@ public abstract class UnitState<N, B, U> : StateBase<UNIT_STATES>
 {
     public UnitState(UNIT_STATES trans)
     {
-        EnterStateAction = new Action<N, B, U>(EnterState);
-        UpdateStateAction = new Action<N, B, U>(UpdateState);
-        ExitStateAction = new Action<N, B, U>(ExitState);
-        FinallyStateAction = new Action<N, B, U>(FinallyState);
+        EnterStateAction = EnterState;
+        ExitStateAction = ExitState;
+        UpdateStateAction = UpdateState;
+        FinallyStateAction = FinallyState;
 
         TransID = trans;
+    }
+
+    private void EnterState(object[] obj)
+    {
+        EnterState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void ExitState(object[] obj)
+    {
+        ExitState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void UpdateState(object[] obj)
+    {
+        UpdateState(obj[0] as N, obj[1] as B, obj[2] as U);
+    }
+
+    private void FinallyState(object[] obj)
+    {
+        FinallyState(obj[0] as N, obj[1] as B, obj[2] as U);
     }
 
     public virtual void EnterState(N unit, B mng, U ui) { }

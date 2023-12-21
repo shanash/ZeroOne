@@ -140,7 +140,7 @@ public class StateSystemBase<S>
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.ExitStateAction?.DynamicInvoke(Components);
+            curState.ExitStateAction?.Invoke(Components);
         }
 
 
@@ -148,14 +148,14 @@ public class StateSystemBase<S>
         //  Finish 
         if (curState != null)
         {
-            curState.FinallyStateAction?.DynamicInvoke(Components);
+            curState.FinallyStateAction?.Invoke(Components);
         }
 
 
         //  새로운 상태가 존재한다면
         if (newState != null)
         {
-            newState.EnterStateAction?.DynamicInvoke(Components);
+            newState.EnterStateAction?.Invoke(Components);
         }
     }
 
@@ -170,7 +170,7 @@ public class StateSystemBase<S>
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.UpdateStateAction?.DynamicInvoke(Components);
+            curState.UpdateStateAction?.Invoke(Components);
         }
         if (Queue_States.Count > 0)
         {
