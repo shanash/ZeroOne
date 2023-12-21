@@ -2,22 +2,6 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-/*
-//사용 방법
-public class TestClass
-{
-    // Factory를 이용하려면 생성자는 nonpublic이어야 한다.
-    TestClass() { }    
-    bool Initialize(int a, float b, string c)
-    {
-        // false를 리턴하면 실패하고 null 이 결과값으로 전달된다
-        return true;
-    }
-}
-//생성
-TestClass t = Factory.Create<TestClass>(0, 1.2f, "");
-*/
-
 /// <summary>
 /// 매개변수의 유효성을 검사하고 유효하지 않으면 인스턴스를 생성시키지 않기 위해서 정적 팩토리 메소드를 사용한다.
 /// 리플렉션을 사용하여 매 프레임마다 쓰면 느리기에 로딩 및 초기화시에만 사용합시다.
@@ -61,3 +45,5 @@ public static class Factory
         return instance; // 객체 생성 성공
     }
 }
+
+
