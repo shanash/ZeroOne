@@ -5,11 +5,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectLobbyCharacterPopup : PopupBase
 {
     [SerializeField, Tooltip("Popup Title")]
     TMP_Text Popup_Title;
+
+    [SerializeField, Tooltip("Memorial Own Check")]
+    Toggle Memorial_Own_Check;
 
     [SerializeField, Tooltip("Select Count")]
     TMP_Text Select_Count;
@@ -21,14 +25,17 @@ public class SelectLobbyCharacterPopup : PopupBase
     {
         base.ShowPopup(data);
 
-        //List<string> prefab_list = new List<string>();
-        //prefab_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/LobbyCharacterCell");
-        //GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(prefab_list, null);
     }
 
     protected override void ShowPopupAniEndCallback()
     {
         FixedUpdatePopup();
+    }
+
+    protected override void HidePopupAniEndCallback()
+    {
+        Character_List_View.Clear();
+        base.HidePopupAniEndCallback();
     }
 
     protected override void FixedUpdatePopup()
@@ -75,18 +82,45 @@ public class SelectLobbyCharacterPopup : PopupBase
         Debug.Log(ud.ToString());
     }
 
+    public override void HidePopup(System.Action cb = null)
+    {
+        if (cb == null)
+        {
+            base.HidePopup(RollbackChoiceData);
+        }
+        else
+        {
+            base.HidePopup(cb);
+        }
+        
+    }
+
+    void RollbackChoiceData()
+    {
+        Debug.Log("RollbackChoiceData");
+    }
+    void ConfirmChoiceData()
+    {
+        Debug.Log("ConfirmChoiceData");
+    }
+
 
     public void OnClickCancel()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         //  rollback todo
-        HidePopup();
+        HidePopup(RollbackChoiceData);
     }
 
     public void OnClickConfirm()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         //  confirm todo
-        HidePopup();
+        HidePopup(ConfirmChoiceData);
+    }
+
+    public void OnClickToggleCheck()
+    {
+        
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class LobbyCharacterCellItem : MonoBehaviour
@@ -47,7 +48,15 @@ public class LobbyCharacterCellItem : MonoBehaviour
         {
             Box.gameObject.SetActive(true);
         }
+        //  character base
         Character_Base.SetPlayerCharacterID(User_Data.GetPlayerCharacterID());
+
+
+
+
+        //  select frame
+        Memorial_Select_Frame.gameObject.SetActive(User_Data.Is_Choice_Lobby);
+
     }
 
     public void SetClickCallback(System.Action<UserHeroData> cb)
@@ -55,4 +64,13 @@ public class LobbyCharacterCellItem : MonoBehaviour
         Click_Callback = cb;
     }
 
+    public void OnClickCharacterItem()
+    {
+        if (User_Data == null)
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Click_Callback?.Invoke(User_Data);
+    }
 }

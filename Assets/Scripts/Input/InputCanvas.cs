@@ -58,7 +58,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     int Input_Down_Hold_Reference { get => _Input_Down_Hold_Reference;
         set
         {
-            Debug.Log($"Input_Down_Hold_Reference : {value}");
+            //Debug.Log($"Input_Down_Hold_Reference : {value}");
             Debug.Assert(value >= 0, "레퍼런스 값은 마이너스가 되면 안됩니다.");
             _Input_Down_Hold_Reference = value;
         }
@@ -88,7 +88,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     #region Input System Methods
     public void OnTapListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        Debug.Log($"OnListenTap : {context.phase}");
+        //Debug.Log($"OnListenTap : {context.phase}");
         Input_Down_Hold_Reference += (context.phase == InputActionPhase.Started ? 1 : -1);
 
         if (context.phase == InputActionPhase.Performed)
