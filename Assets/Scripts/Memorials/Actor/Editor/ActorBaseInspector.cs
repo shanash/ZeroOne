@@ -12,22 +12,22 @@ using static UnityEngine.Rendering.DebugUI;
 
 namespace FluffyDuck.Memorial
 {
-    [CustomEditor(typeof(ActressBase), true)]
+    [CustomEditor(typeof(ActorBase), true)]
     [CanEditMultipleObjects]
-    public class ActressBaseInspector : Editor
+    public class ActorBaseInspector : Editor
     {
         readonly GUIContent SpawnHierarchyButtonLabel = new GUIContent("Add BoundingBoxes", Spine.Unity.Editor.SpineEditorUtilities.Icons.skeleton);
 
-        ActressBase _Actress;
+        ActorBase _Actor;
         SkeletonUtility _Skeleton_Utility;
         Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>> _Bone_Bounding_Box_Table = new Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>>();
 
         void OnEnable()
         {
-            _Actress = (ActressBase)target;
-            _Skeleton_Utility = _Actress.gameObject.GetComponent<SkeletonUtility>();
+            _Actor = (ActorBase)target;
+            _Skeleton_Utility = _Actor.gameObject.GetComponent<SkeletonUtility>();
 
-            var bones = _Actress.GetComponentsInChildren<SkeletonUtilityBone>();
+            var bones = _Actor.GetComponentsInChildren<SkeletonUtilityBone>();
             _Bone_Bounding_Box_Table.Clear();
 
             foreach (var utilityBone in bones)
@@ -92,7 +92,7 @@ namespace FluffyDuck.Memorial
 
             if (SpineInspectorUtility.LargeCenteredButton(SpawnHierarchyButtonLabel))
             {
-                SkeletonAnimation skel = _Actress.GetComponent<SkeletonAnimation>();
+                SkeletonAnimation skel = _Actor.GetComponent<SkeletonAnimation>();
 
                 foreach (var bounding_box_table in _Bone_Bounding_Box_Table)
                 {
@@ -132,7 +132,7 @@ namespace FluffyDuck.Memorial
 
                                     string name = box.Name.Replace("bd_", "");
 
-                                    spine_bounding_box.Set(_Actress, name);
+                                    spine_bounding_box.Set(_Actor, name);
 
                                     int length = name.Length;
                                     TOUCH_BODY_DIRECTION dir = TOUCH_BODY_DIRECTION.NONE;
@@ -170,7 +170,7 @@ namespace FluffyDuck.Memorial
                                         PointFollower pf = ptTransform.GetComponent<PointFollower>();
                                         pf.slotName = pt.Name;
                                         pf.pointAttachmentName = pt.Name;
-                                        pf.skeletonRenderer = _Actress.GetComponent<SkeletonRenderer>();
+                                        pf.skeletonRenderer = _Actor.GetComponent<SkeletonRenderer>();
                                     }
                                     else
                                     {

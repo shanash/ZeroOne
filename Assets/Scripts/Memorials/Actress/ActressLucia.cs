@@ -1,26 +1,27 @@
 using Spine;
-using System.Linq;
-using UnityEngine;
 
-public class ActressLucia : ActressBase
+namespace FluffyDuck.Memorial
 {
-    protected override void SpineAnimationStart(TrackEntry entry)
+    public class ActressLucia : ActressBase
     {
-        base.SpineAnimationStart(entry);
-    }
+        protected override void SpineAnimationStart(TrackEntry entry)
+        {
+            base.SpineAnimationStart(entry);
+        }
 
-    protected override void SpineAnimationInterrupt(TrackEntry entry)
-    {
-        base.SpineAnimationInterrupt(entry);
-    }
+        protected override void SpineAnimationInterrupt(TrackEntry entry)
+        {
+            base.SpineAnimationInterrupt(entry);
+        }
 
-    protected override void SpineAnimationComplete(TrackEntry entry)
-    {
-        base.SpineAnimationComplete(entry);
-    }
+        protected override void SpineAnimationComplete(TrackEntry entry)
+        {
+            base.SpineAnimationComplete(entry);
+        }
 
-    protected override void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
-    {
-        base.SpineAnimationEvent(entry, evt);
+        protected override void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
+        {
+            base.SpineAnimationEvent(entry, evt);
+        }
     }
 }

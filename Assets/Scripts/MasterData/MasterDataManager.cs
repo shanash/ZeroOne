@@ -378,6 +378,11 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region Memorial
+    public Me_Resource_Data Get_MemorialData(int memorial_id)
+    {
+        return _Me_Resource_Data.Find(x => x.memorial_id == memorial_id);
+    }
+
     public Me_Resource_Data Get_MemorialData(int player_character_id, int order)
     {
         Check_Me_Resource_Data();

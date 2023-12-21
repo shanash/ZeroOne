@@ -5,7 +5,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
 {
     public static class Assets
     {
-        [MenuItem("Assets/Create/C# Factory Script", false, 19)]
+        [MenuItem("Assets/Create/C# Factory Script", priority = 19)]
         private static void Create_CsharpFactoryScript()
         {
             // 사용자 정의 스크립트 템플릿 경로
@@ -19,7 +19,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("Assets/Create/C# MonoBehaviour Factory Script", false, 20)]
+        [MenuItem("Assets/Create/C# MonoBehaviour Factory Script", priority = 19)]
         private static void Create_CsharpMonobehaviourFactoryScript()
         {
             // 사용자 정의 스크립트 템플릿 경로

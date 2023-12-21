@@ -1,9 +1,11 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using FluffyDuck.Memorial;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 public class LobbyManager : MonoBehaviour
 {
@@ -23,6 +25,8 @@ public class LobbyManager : MonoBehaviour
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
+
+        Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, this.transform);
     }
 
     public void OnClickChangeCharacter()

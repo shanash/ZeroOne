@@ -44,7 +44,7 @@ public abstract class MBFactory
             if ((bool)initializeMethod.Invoke(instance, args) == false)
             {
                 Debug.Assert(false, $"MBFactoryCore::Create<{typeof(T)}> 생성 실패!!");
-                GameObject.Destroy(instance);
+                GameObject.Destroy(obj);
                 return null;
             }
         }

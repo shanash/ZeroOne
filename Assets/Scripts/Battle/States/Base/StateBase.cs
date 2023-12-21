@@ -13,8 +13,8 @@ public abstract class StateBase<S>
     protected float Delta_Time;
 
     // Action 또는 Func 대리자를 멤버로 선언
-    public Action<object[]> EnterStateAction;
-    public Action<object[]> ExitStateAction;
-    public Action<object[]> FinallyStateAction;
-    public Action<object[]> UpdateStateAction;
+    public Delegate EnterStateAction;
+    public Delegate ExitStateAction;
+    public Delegate FinallyStateAction;
+    public Delegate UpdateStateAction;
 }

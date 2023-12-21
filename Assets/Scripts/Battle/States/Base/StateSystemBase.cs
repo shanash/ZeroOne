@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class StateSystemBase<S>
+public class StateSystemBase<S>
     where S : Enum
 {
     protected object[] Components;
@@ -140,7 +140,7 @@ public abstract class StateSystemBase<S>
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.ExitStateAction?.Invoke(Components);
+            curState.ExitStateAction?.DynamicInvoke(Components);
         }
 
 
@@ -148,18 +148,18 @@ public abstract class StateSystemBase<S>
         //  Finish 
         if (curState != null)
         {
-            curState.FinallyStateAction?.Invoke(Components);
+            curState.FinallyStateAction?.DynamicInvoke(Components);
         }
 
 
         //  새로운 상태가 존재한다면
         if (newState != null)
         {
-            newState.EnterStateAction?.Invoke(Components);
+            newState.EnterStateAction?.DynamicInvoke(Components);
         }
     }
 
-    protected void Lazy_Init_Setting(S trans, params object[] components)
+    public void Lazy_Init_Setting(S trans, params object[] components)
     {
         Components = components;
         ChangeState(trans);
@@ -170,7 +170,7 @@ public abstract class StateSystemBase<S>
         var curState = GetFindStateByTrans(_CurrentTransitionID);
         if (curState != null)
         {
-            curState.UpdateStateAction?.Invoke(Components);
+            curState.UpdateStateAction?.DynamicInvoke(Components);
         }
         if (Queue_States.Count > 0)
         {
