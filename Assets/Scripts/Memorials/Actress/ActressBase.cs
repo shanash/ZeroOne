@@ -839,7 +839,7 @@ namespace FluffyDuck.Memorial
             return result_index;
         }
 
-        protected virtual void OnDrag(InputActionPhase phase, Vector2 delta, Vector2 position)
+        protected virtual void OnDrag(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position)
         {
             if (InputDowned_Components.Count == 0)
             {

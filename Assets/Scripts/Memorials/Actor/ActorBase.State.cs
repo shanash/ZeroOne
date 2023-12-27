@@ -1,4 +1,5 @@
 using Spine;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FluffyDuck.Memorial
@@ -7,12 +8,9 @@ namespace FluffyDuck.Memorial
     {
         protected StateSystemBase<ACTOR_STATES> FSM = null;
 
-        private void Awake()
-        {
-            OnAwake();
-            InitStates();
-        }
-        protected virtual void OnAwake() { }
+        // 플레이되는 리액션 애니메이션 트랙들이 모두 종료되고서야 IDLE로 돌아가도록 하기 위해 체크할 트랙을 담아놓는다
+        protected List<TrackEntry> react_track_entries = new List<TrackEntry>();
+
         protected virtual void InitStates()
         {
             FSM = new StateSystemBase<ACTOR_STATES>();
@@ -63,5 +61,121 @@ namespace FluffyDuck.Memorial
         {
             FSM?.UpdateState();
         }
+
+        public virtual void ActorStateIdleBegin()
+        {
+            var te = FindTrack(IDLE_BASE_TRACK);
+
+            bool need_set_anim = false;
+            float mix_duration = 0.0f;
+            
+            if (te == null || te.IsComplete || te.IsEmptyAnimation)
+            {
+                need_set_anim = true;
+            }
+            else if (!te.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name))
+            {
+                need_set_anim = true;
+                mix_duration = 0.2f;
+            }
+
+            if (need_set_anim)
+            {
+                Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
+            }
+        }
+
+        public virtual void ActorStateReactBegin()
+        {
+            // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
+            var chat_motion_data = Chat_Motions[Selected_Chat_Motion_Id];
+            foreach (string anim_name in chat_motion_data.animation_name)
+            {
+                if (!TryGetTrackNum(anim_name, out int track_num))
+                {
+                    throw new ActressBase.InvalidTrackException(track_num);
+                }
+
+                var te = Skeleton.AnimationState.SetAnimation(track_num, anim_name, false);
+
+                // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
+                if (IDLE_BASE_TRACK == track_num)
+                {
+                    te.MixDuration = 0.2f;
+                }
+
+                // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
+                react_track_entries.Add(te);
+            }
+
+            // 연속 제스쳐 카운트 갯수 하나 증가
+            var key = (Selected_Interaction.touch_gesture_type, Selected_Interaction.touch_body_type);
+            if (!Gesture_Touch_Counts.Key.Equals(key))
+            {
+                Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, 1);
+            }
+            else
+            {
+                Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, Gesture_Touch_Counts.Value + 1);
+            }
+        }
+
+        public virtual void ActorStateReactUpdate()
+        {
+
+        }
+
+        public virtual void ActorStateReactExit()
+        {
+            if (Selected_Interaction != null && Selected_Interaction.change_state_id != 0)
+            {
+                Current_State_Id = Selected_Interaction.change_state_id;
+            }
+
+            foreach (var track in react_track_entries)
+            {
+
+            }
+
+            react_track_entries.Clear();
+        }
+
+        public virtual void ActorStateDragBegin()
+        {
+            if (!TryGetTrackNum(Selected_Interaction.drag_animation_name, out int track_num))
+            {
+                throw new ActressBase.InvalidTrackException(track_num);
+            }
+
+            Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Selected_Interaction.drag_animation_name, false);
+            Drag_Track_Entry.MixDuration = 0.0f;
+            Drag_Track_Entry.TimeScale = 0.0f;
+        }
+
+        public virtual void ActorStateDragEnd()
+        {
+            Skeleton.AnimationState.SetEmptyAnimation(Drag_Track_Entry.TrackIndex, 0.0f);
+        }
+
+        public virtual void ActorStateNadeBegin()
+        {
+            Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false).MixDuration = 0.2f;
+            Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
+
+            Nade_Point = 0;
+        }
+
+        public virtual void ActorStateNadeEnd()
+        {
+            float mix_duration = 0.0f;
+            var te = FindTrack(30);
+            if (te.Animation.Name.Equals("30_nade_in"))
+            {
+                mix_duration = 0.2f;
+            }
+
+            Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false).MixDuration = mix_duration;
+        }
+
     }
 }

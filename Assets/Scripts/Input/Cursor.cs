@@ -16,12 +16,22 @@ public class Cursor : MonoBehaviour
 
     Image _Icon = null;
 
+    Vector2 _Last_Position;
+
     public bool Visible { get; set; }
 
     void Awake()
     {
         _Icon = GetComponent<Image>();
         Debug.Assert(_Icon != null, CANNOT_FIND_CURSOR_ICON_MSG);
+    }
+
+    public Vector2 Delta
+    {
+        get
+        {
+            return Position - _Last_Position;
+        }
     }
 
     public Vector2 Position
@@ -32,6 +42,7 @@ public class Cursor : MonoBehaviour
         }
         set
         {
+            _Last_Position = _Rect_Transform.anchoredPosition;
             _Rect_Transform.anchoredPosition = value;
         }
     }

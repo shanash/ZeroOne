@@ -59,8 +59,8 @@ public abstract class UnitState<N, B, U> : StateBase<UNIT_STATES>
     public UnitState(UNIT_STATES trans)
     {
         EnterStateAction = EnterState;
-        ExitStateAction = ExitState;
         UpdateStateAction = UpdateState;
+        ExitStateAction = ExitState;
         FinallyStateAction = FinallyState;
 
         TransID = trans;

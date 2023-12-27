@@ -11,6 +11,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField, Tooltip("Lobby Anim")]
     Animator Lobby_Anim;
 
+    [SerializeField, Tooltip("Memorial Parent")]
+    Transform Memorial_Parent;
+
     [SerializeField, Tooltip("Fade in Box")]
     RectTransform Fade_In_Box;
 
@@ -25,7 +28,7 @@ public class LobbyManager : MonoBehaviour
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
-        Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, this.transform);
+        Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
     }
 
     public void OnClickChangeCharacter()
@@ -56,6 +59,7 @@ public class LobbyManager : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         CommonUtils.ShowToast("캐릭터 리스트", TOAST_BOX_LENGTH.SHORT);
     }
+
     public void OnClickDeck()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -65,11 +69,13 @@ public class LobbyManager : MonoBehaviour
             popup.ShowPopup();
         });
     }
+
     public void OnClickHouse()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
     }
+
     public void OnClickSearch()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -114,5 +120,4 @@ public class LobbyManager : MonoBehaviour
         Fade_In_Box.gameObject.SetActive(false);
     }
     #endregion
-
 }

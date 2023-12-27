@@ -73,6 +73,11 @@ namespace FluffyDuck.Memorial
             {
                 Point = Actress.FindAttachment($"pt_{Attach_Name}", $"pt_{Attach_Name}") as PointAttachment;
             }
+
+            if (Actor != null)
+            {
+                Point = Actor.FindAttachment($"pt_{Attach_Name}", $"pt_{Attach_Name}") as PointAttachment;
+            }
         }
 
         public Vector2 GetPtDirection()

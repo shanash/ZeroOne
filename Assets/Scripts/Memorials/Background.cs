@@ -6,8 +6,6 @@ namespace FluffyDuck.Memorial
     {
         bool Initialize(Me_Resource_Data data)
         {
-            Debug.Log("Background::Initialize");
-
             return true;
         }
     }

@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -56,7 +55,6 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         {
             BuildLauncher.DeleteAddressableCache();
         }
-
 
         [MenuItem("FluffyDuck/Skill/Preview", false, 11)]
         static void SkillPreviewOpen()

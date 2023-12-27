@@ -14,7 +14,6 @@ public class StageBase : MonoBehaviour
 
     bool Initialize()
     {
-        Debug.Log("StageBase::Initialize");
         return true;
     }
 }

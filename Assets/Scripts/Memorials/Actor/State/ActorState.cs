@@ -16,11 +16,32 @@ namespace FluffyDuck.Memorial
     {
         public ActorState(ACTOR_STATES trans)
         {
-            //EnterStateAction = new Action<ActorBase>(EnterState);
-            //UpdateStateAction = new Action<ActorBase>(UpdateState);
-            //ExitStateAction = new Action<ActorBase>(ExitState);
-            //FinallyStateAction = new Action<ActorBase>(FinallyState);
+            EnterStateAction = EnterState;
+            UpdateStateAction = UpdateState;
+            ExitStateAction = ExitState;
+            FinallyStateAction = FinallyState;
+
             TransID = trans;
+        }
+
+        private void EnterState(object[] obj)
+        {
+            EnterState(obj[0] as ActorBase);
+        }
+
+        private void ExitState(object[] obj)
+        {
+            ExitState(obj[0] as ActorBase);
+        }
+
+        private void UpdateState(object[] obj)
+        {
+            UpdateState(obj[0] as ActorBase);
+        }
+
+        private void FinallyState(object[] obj)
+        {
+            FinallyState(obj[0] as ActorBase);
         }
 
         public virtual void EnterState(ActorBase actor) { }

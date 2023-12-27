@@ -93,6 +93,7 @@ public class StateSystemBase<S>
 
     public void ChangeState(S trans)
     {
+        Debug.LogWarning($"ChangeState : {trans}");
         if (CurrentTransitionID.Equals(default(S)))
         {
             RealChangeState(trans);

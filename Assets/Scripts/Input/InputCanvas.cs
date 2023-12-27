@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,7 +14,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     #region Input Event
     public delegate void InputAction(Vector2 position, ICollection<ICursorInteractable> components);
     public delegate void InputPhaseAction(InputActionPhase phase, Vector2 position, ICollection<ICursorInteractable> components);
-    public delegate void InputDragAction(InputActionPhase phase, Vector2 drag_delta, Vector2 position);
+    public delegate void InputDragAction(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position);
     public delegate void InputTap(ICursorInteractable[] components);
    
     public static event InputAction OnInputDown;
@@ -110,22 +109,26 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public void OnMoveListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         //Debug.LogWarning($"OnMove : {context.phase} : {context.ReadValue<Vector2>()}");
-        Vector2 pos;
+
+        //Vector2 delta;
         InputDevice device = InputSystem.GetDevice(context.control.device.name);
-        switch (device)
+        if (device is Pointer/* pointer_device*/)
         {
-            case Mouse:
-            case Touchscreen:
-                pos = context.ReadValue<Vector2>();
-                if (pos == Vector2.zero)
-                {
-                    break;
-                }
-                _Cursor.Position = pos;
-                break;
+            //delta = pointer_device.delta.ReadValue();
+        }
+        else
+        {
+            Debug.Assert(false, $"지원되는 디바이스가 아닙니다. : {device.GetType()}");
+            return;
         }
 
-        CheckDragAndExecute();
+        Vector2 pos = context.ReadValue<Vector2>();
+        if (pos != Vector2.zero)
+        {
+            _Cursor.Position = pos;
+        }
+
+        CheckDragAndExecute(/*delta*/);
     }
 
     /// <summary>
@@ -140,7 +143,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
         {
             while (_queue.TryPeek(out InputData front_data))
             {
-                if (front_data.Phase == UnityEngine.InputSystem.InputActionPhase.Started)
+                if (front_data.Phase == InputActionPhase.Started)
                 {
                     break;
                 }
@@ -214,7 +217,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
                     // OnDrag 처리
                     if (_Is_Dragged)
                     {
-                        OnDrag?.Invoke(InputActionPhase.Canceled, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
+                        OnDrag?.Invoke(InputActionPhase.Canceled, _Cursor.Delta, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
                     }
 
                     components = GetRayCastHittedCursorInteractable();
@@ -380,7 +383,6 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     {
         if (_Is_Pressed)
         {
-
             InputActionPhase phase = _Is_Dragged ? InputActionPhase.Performed : InputActionPhase.Started;
             if (phase == InputActionPhase.Started)
             {
@@ -391,8 +393,8 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
             }
             else
             {
-                var delta = _Cursor.Position - _Drag_Start_Position;
-                if (!delta.Equals(Vector2.zero))
+                var move_origin = _Cursor.Position - _Drag_Start_Position;
+                if (!move_origin.Equals(Vector2.zero))
                 {
                     var components = GetRayCastHittedCursorInteractable();
                     int cnt = components.Length;
@@ -409,7 +411,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
             }
             if (Enable)
             {
-                OnDrag?.Invoke(phase, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
+                OnDrag?.Invoke(phase, _Cursor.Delta, _Cursor.Position - _Drag_Start_Position, _Cursor.Position);
             }
         }
     }

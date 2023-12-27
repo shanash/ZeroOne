@@ -121,18 +121,18 @@ public class TouchCanvas : MonoBehaviour
     /// <param name="phase"></param>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnClickDragging(InputActionPhase phase, Vector2 drag_delta, Vector2 position)
+    void OnClickDragging(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position)
     {
         switch (phase)
         {
             case InputActionPhase.Started:      //  드래그 시작
-                OnDragBegin(drag_delta, position);
+                OnDragBegin(position);
                 break;
             case InputActionPhase.Performed:    //  드래깅
-                OnDragging(drag_delta, position);
+                OnDragging(position);
                 break;
             case InputActionPhase.Canceled:     //  드래그 종료
-                OnDragEnd(drag_delta, position);
+                OnDragEnd(position);
                 break;
             default:
                 Debug.Assert(false);
@@ -145,7 +145,7 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnDragBegin(Vector2 drag_delta, Vector2 position)
+    void OnDragBegin(Vector2 position)
     {
         TouchEffectNode node = null;
         if (Used_Touch_Effects.Exists(x => x.IsAction()))
@@ -163,7 +163,7 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnDragging(Vector2 drag_delta, Vector2 position)
+    void OnDragging(Vector2 position)
     {
         TouchEffectNode node = null;
         if (Used_Touch_Effects.Exists(x => x.IsDragging()))
@@ -182,7 +182,7 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnDragEnd(Vector2 drag_delta, Vector2 position) 
+    void OnDragEnd(Vector2 position) 
     {
         //  혹시 남아있을 수 있는 터치 이펙트를 모두 찾아서 드래그를 종료시켜준다.
         if (Used_Touch_Effects.Exists(x => x.IsDragging()))

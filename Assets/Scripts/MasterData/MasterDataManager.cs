@@ -439,7 +439,7 @@ public class MasterDataManager : BaseMasterDataManager
 
     public List<Me_Interaction_Data>[,] Get_MemorialInteraction(int player_character_id)
     {
-        List<Me_Interaction_Data>[,] result = new List<Me_Interaction_Data>[Enum.GetValues(typeof(TOUCH_BODY_TYPE)).Length, Enum.GetValues(typeof(TOUCH_GESTURE_TYPE)).Length];
+        List<Me_Interaction_Data>[,] result = new List<Me_Interaction_Data>[Enum.GetValues(typeof(TOUCH_GESTURE_TYPE)).Length, Enum.GetValues(typeof(TOUCH_BODY_TYPE)).Length];
         foreach (var data in _Me_Interaction_Data)
         {
             if (data.player_character_id != player_character_id)
@@ -448,11 +448,11 @@ public class MasterDataManager : BaseMasterDataManager
             int body = (int)data.touch_body_type;
             int gesture = (int)data.touch_gesture_type;
 
-            if (result[body,gesture] == null)
+            if (result[gesture, body] == null)
             {
-                result[body, gesture] = new List<Me_Interaction_Data>();
+                result[gesture, body] = new List<Me_Interaction_Data>();
             }
-            result[body, gesture].Add(data);
+            result[gesture, body].Add(data);
         }
 
         return result;
