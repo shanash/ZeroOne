@@ -29,16 +29,13 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     {
         return Wave_Datas[Wave];
     }
-    /// <summary>
-    /// 최대 웨이브 수
-    /// </summary>
-    /// <returns></returns>
-    public int GetMaxWaveCount()
+    
+    public override int GetMaxWaveCount()
     {
         return Wave_Datas.Count;
     }
 
-    public bool NextWave()
+    public override bool NextWave()
     {
         Wave += 1;
         if (Wave > Wave_Datas.Count - 1)

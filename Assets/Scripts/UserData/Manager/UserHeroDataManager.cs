@@ -59,7 +59,7 @@ public class UserHeroDataManager : ManagerBase
 
     public UserHeroData FindUserHeroData(UserHeroDeckMountData h)
     {
-        return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == h.Hero_Data_ID && x.Player_Character_Num == h.Hero_Data_Num); ;
+        return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == h.Player_Character_ID && x.Player_Character_Num == h.Player_Character_Num); ;
     }
 
     public UserHeroData FindUserHeroData(int hero_data_id, int hero_data_num)

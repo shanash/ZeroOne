@@ -27,15 +27,16 @@ public class LobbyCharacterCellItem : MonoBehaviour
     [SerializeField, Tooltip("Memorial Select Order Number")]
     TMP_Text Memorial_Select_Order;
 
-    System.Action<UserHeroData> Click_Callback;
-    UserHeroData User_Data;
 
-    public void SetUserHeroData(UserHeroData data)
+    System.Action<UserMemorialData> Click_Memorial_Callback;
+    UserMemorialData User_Data;
+
+    public void SetUserMemorialData(UserMemorialData data)
     {
         User_Data = data;
         UpdateCellItem();
-        
     }
+
 
     void UpdateCellItem()
     {
@@ -49,19 +50,20 @@ public class LobbyCharacterCellItem : MonoBehaviour
             Box.gameObject.SetActive(true);
         }
         //  character base
-        Character_Base.SetPlayerCharacterID(User_Data.GetPlayerCharacterID());
-
-
-
+        Character_Base.SetPlayerCharacterID(User_Data.Player_Character_ID);
 
         //  select frame
-        Memorial_Select_Frame.gameObject.SetActive(User_Data.Is_Choice_Lobby);
+        Memorial_Select_Frame.gameObject.SetActive(User_Data.Is_Temp_Choice);
+        Memorial_Select_Order.text = User_Data.Temp_Lobby_Choice_Number.ToString();
+
 
     }
 
-    public void SetClickCallback(System.Action<UserHeroData> cb)
+    
+
+    public void SetClickMemorialCallback(System.Action<UserMemorialData> cb)
     {
-        Click_Callback = cb;
+        Click_Memorial_Callback = cb;
     }
 
     public void OnClickCharacterItem()
@@ -71,6 +73,6 @@ public class LobbyCharacterCellItem : MonoBehaviour
             return;
         }
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        Click_Callback?.Invoke(User_Data);
+        Click_Memorial_Callback?.Invoke(User_Data);
     }
 }

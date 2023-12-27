@@ -39,6 +39,22 @@ public class BattleDungeonData : BattleDataBase
         return Wave;
     }
 
+    /// <summary>
+    /// 최대 웨이브 수
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetMaxWaveCount()
+    {
+        return 0;
+    }
+
+    public bool HasNextWave()
+    {
+        return GetWave() < GetMaxWaveCount();
+    }
+
+    public virtual bool NextWave() { return false; }
+
     public virtual void GetMonsterPrefabsPath(ref List<string> path) { }
 
     public virtual object GetWaveData() {  return null; }

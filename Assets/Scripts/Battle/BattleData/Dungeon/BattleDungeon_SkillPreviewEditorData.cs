@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
 
 public class BattleDungeon_SkillPreviewEditorData : BattleDungeonData
 {
@@ -10,15 +10,12 @@ public class BattleDungeon_SkillPreviewEditorData : BattleDungeonData
 
     public BattleDungeon_SkillPreviewEditorData() : base(GAME_TYPE.STORY_MODE) { }
 
-    
-
     public override void SetDungeonID(int dungeon_id)
     {
         var m = MasterDataManager.Instance;
         Stage = m.Get_EditorStageData(dungeon_id);
         m.Get_EditorWaveDataList(Stage.wave_group_id, ref Wave_Datas);
     }
-
 
 
     /// <summary>
@@ -33,12 +30,12 @@ public class BattleDungeon_SkillPreviewEditorData : BattleDungeonData
     /// 최대 웨이브 수
     /// </summary>
     /// <returns></returns>
-    public int GetMaxWaveCount()
+    public override int GetMaxWaveCount()
     {
         return Wave_Datas.Count;
     }
 
-    public bool NextWave()
+    public override bool NextWave()
     {
         Wave += 1;
         if (Wave > Wave_Datas.Count - 1)

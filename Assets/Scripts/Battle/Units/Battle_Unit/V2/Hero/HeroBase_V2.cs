@@ -6,6 +6,7 @@ using Spine;
 using System;
 using FluffyDuck.Util;
 using UnityEngine.Rendering;
+using DocumentFormat.OpenXml.Bibliography;
 
 public enum SD_BODY_TYPE
 {
@@ -97,7 +98,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 자동 회복<br/>
     /// 한 웨이브를 클리어 했을 때 회복되는 수치<br/>
-    /// 자동 회복량 = 최대 체력 * 자오 회복 값(배율)
+    /// 자동 회복량 = 최대 체력 * 자동 회복 값(배율)
     /// </summary>
     public double Auto_Recovery_Life { get; protected set; }
 
@@ -169,6 +170,12 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected object Effect_Queue_Lock = new object();
     protected float Effect_Queue_Interval;
     protected List<Effect_Queue_Data> Effect_Queue_Data_List = new List<Effect_Queue_Data>();
+
+
+    /// <summary>
+    /// 게임 타입
+    /// </summary>
+    protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
     
 
@@ -349,7 +356,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         float flip = is_flip ? -1f : 1f;
         var scale = this.transform.localScale;
-        scale.x *= Mathf.Abs(scale.x) * flip;
+        scale.x = Mathf.Abs(scale.x) * flip;
         this.transform.localScale = scale;
     }
 
@@ -674,6 +681,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         base.Spawned();
 
+        Game_Type = BlackBoard.Instance.GetBlackBoardData<GAME_TYPE>(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.STORY_MODE);
+
         if (Render_Texture == null)
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
@@ -691,7 +700,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void Despawned()
     {
         base.Despawned();
-
+        Game_Type = GAME_TYPE.NONE;
         Team_Mng = null;
     }
 
@@ -780,10 +789,14 @@ public partial class HeroBase_V2 : UnitBase_V2
         dmg.Damage = last_damage;
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
-        SendLastDamage(dmg);
+        dmg.Caster.SendLastDamage(dmg);
 
-        Render_Texture.SetHitColorV2(Color.red, 0.3f);
-        Life -= last_damage;
+        Render_Texture.SetHitColorV2(Color.red, 0.1f);
+        if (Game_Type != GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE && Game_Type != GAME_TYPE.EDITOR_SKILL_EDIT_MODE)
+        {
+            Life -= last_damage;
+        }
+        
         if (Life <= 0)
         {
             Life = 0;
@@ -806,7 +819,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        if (recovery_hp < 0)
+        if (recovery_hp <= 0)
         {
             return;
         }
@@ -819,6 +832,15 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text", Life_Bar_Pos, recovery_hp, 1f);
         UpdateLifeBar();
+    }
+
+    /// <summary>
+    /// 웨이브 종료시 체력 회복
+    /// </summary>
+    public void WaveEndRecoveryLife()
+    {
+        double recovery_hp = Max_Life * Auto_Recovery_Life;
+        AddLifeRecovery(recovery_hp);
     }
 
    
@@ -1190,6 +1212,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         this.transform.localPosition = pos;
     }
+
     /// <summary>
     /// Right Team 이동<br/>
     /// 적을 탐색하면서 이동한다.
@@ -1213,6 +1236,22 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         this.transform.localPosition = pos;
     }
+    /// <summary>
+    /// Left Team 화면 전환때까지 반대쪽으로 달리기(웨이브 이동)
+    /// </summary>
+    protected void WaveRunLeftTeam()
+    {
+        float move = (float)Move_Speed * Time.deltaTime;
+        var pos = this.transform.localPosition;
+        pos.x += move;
+        if (Is_Reposition)
+        {
+            float zmove = (float)Move_Speed * Time.deltaTime;
+            pos.z += zmove;
+        }
+        this.transform.localPosition = pos;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {

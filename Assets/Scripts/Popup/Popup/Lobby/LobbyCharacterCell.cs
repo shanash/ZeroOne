@@ -14,26 +14,23 @@ public class LobbyCharacterCell : InfiniteScrollItem
         base.UpdateData(scrollData);
 
         var data = (LobbyCharacterListData)scrollData;
-        var hero_list = data.GetUserHeroDataList();
-
+        
+        var memorial_list = data.GetUserMemorialDataList();
         int cnt = Cell_Items.Count;
         for (int i = 0; i < cnt; i++)
         {
             var slot = Cell_Items[i];
-            slot.SetClickCallback(data.Click_Callback);
-            if (i < hero_list.Count)
+            slot.SetClickMemorialCallback(data.Click_Memorial_Callback);
+            if (i < memorial_list.Count)
             {
-                slot.SetUserHeroData(hero_list[i]);
+                slot.SetUserMemorialData(memorial_list[i]);
             }
             else
             {
-                slot.SetUserHeroData(null);
+                slot.SetUserMemorialData(null);
             }
         }
     }
 
-    public void SetChoiceItemCallback(System.Action<UserHeroData> cb)
-    {
-        Cell_Items.ForEach(x => x.SetClickCallback(cb));
-    }
+    
 }

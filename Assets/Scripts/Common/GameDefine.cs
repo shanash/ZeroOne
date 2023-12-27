@@ -88,6 +88,7 @@ public class GameDefine : MonoBehaviour
 {
     public static readonly bool USE_DEBUG_MODE = true;
 
+    public static readonly string SCENE_TITLE = "title";
     public static readonly string SCENE_LOAD = "load";
     public static readonly string SCENE_HOME = "home";
 
@@ -106,6 +107,11 @@ public class GameDefine : MonoBehaviour
 
     public static readonly string TAG_HERO = "Hero";
     public static readonly string TAG_MONSTER = "Monster";
+
+    /// <summary>
+    /// 로비 캐릭터 최대 선택 가능 수
+    /// </summary>
+    public static readonly int MAX_LOBBY_CHARACTER_COUNT = 10;
 
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

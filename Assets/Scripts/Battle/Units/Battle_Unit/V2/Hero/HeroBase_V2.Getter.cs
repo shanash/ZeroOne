@@ -57,7 +57,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 접근 사거리 정보 반환
     /// </summary>
     /// <returns></returns>
-    protected virtual float GetApproachDistance()
+    public virtual float GetApproachDistance()
     {
         return Unit_Data.GetApproachDistance();
     }
@@ -162,6 +162,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         return Unit_Data;
     }
+
+    public POSITION_TYPE GetPositionType()
+    {
+        if (Unit_Data != null)
+        {
+            return Unit_Data.GetPositionType();
+        }
+        return POSITION_TYPE.NONE;
+    }
+
 
 
     /// <summary>

@@ -27,7 +27,7 @@ public class MonsterBase_V2 : HeroBase_V2
     }
 
     
-    protected override float GetApproachDistance()
+    public override float GetApproachDistance()
     {
         return Unit_Data.GetApproachDistance();
     }

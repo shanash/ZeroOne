@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
@@ -386,9 +387,8 @@ public partial class TeamManager_V2
     void FindTargetRuleNearest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  오름 차순
+        //  기준을 중심으로 가까운 거리 오름차순
         temp_list.Sort((a, b) => a.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
-
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -418,10 +418,12 @@ public partial class TeamManager_V2
     void FindTargetRuleAllyWithoutSelfFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
+
         temp_list.Remove(self);
 
-        //  내림 차순
-        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
+        // 기준을 중심으로 거리가 먼 우선순위 (내림차순) 
+        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -435,8 +437,10 @@ public partial class TeamManager_V2
     void FindTargetRuleFurthest(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  내림 차순
-        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
+
+        // 기준을 중심으로 거리가 먼 우선순위 (내림차순) 
+        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 
@@ -463,7 +467,7 @@ public partial class TeamManager_V2
     void FindTargetRuleHighestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  내림 차순
+        //  현재 체력 내림 차순
         temp_list.Sort((a, b) => b.Life.CompareTo(a.Life));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -476,7 +480,7 @@ public partial class TeamManager_V2
     void FindTargetRuleHighestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  내림 차순
+        //  현재 체력 비율 내림 차순
         temp_list.Sort((a, b) => b.GetLifePercentage().CompareTo(a.GetLifePercentage()));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -489,7 +493,7 @@ public partial class TeamManager_V2
     void FindTargetRuleLowestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  오름 차순
+        //  현재 체력 오름 차순
         temp_list.Sort((a, b) => a.Life.CompareTo(b.Life));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -504,7 +508,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
 
-        //  오름 차순
+        //  현재 체력 비율 오름 차순
         temp_list.Sort((a, b) => a.GetLifePercentage().CompareTo(b.GetLifePercentage()));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -518,7 +522,7 @@ public partial class TeamManager_V2
     void FindTargetRuleLowestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  오름 차순
+        //  공격력 오름 차순
         temp_list.Sort((a, b) => a.Attack.CompareTo(b.Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -531,7 +535,7 @@ public partial class TeamManager_V2
     void FindTargetRuleHighestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  내림 차순
+        //  공격력 내림 차순
         temp_list.Sort((a, b) => b.Attack.CompareTo(a.Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -544,7 +548,7 @@ public partial class TeamManager_V2
     void FindTargetRuleLowestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  오름 차순
+        //  방어력 오름 차순
         temp_list.Sort((a, b) => a.Defense.CompareTo(b.Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
 
@@ -558,7 +562,7 @@ public partial class TeamManager_V2
     void FindTargetRuleHighestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  내림 차순
+        //  방어력 내림 차순
         temp_list.Sort((a, b) => b.Defense.CompareTo(a.Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
@@ -737,8 +741,6 @@ public partial class TeamManager_V2
 
 
     #endregion
-
-
 
 
     /// <summary>

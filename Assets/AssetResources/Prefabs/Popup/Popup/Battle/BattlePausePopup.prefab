@@ -933,11 +933,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963d15e4b35f7804b80683b7ecdfc746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Move_In_Ease_Type: 22
-  Move_Out_Ease_Type: 26
-  Ease_Duration: 0.5
-  In_End_Scale: {x: 1, y: 1}
-  Out_End_Scale: {x: 0, y: 0}
+  Ease_Data_List:
+  - Move_Type: 1
+    Ease_Type: 27
+    Ease_Vector: {x: 1, y: 1}
+    Ease_Float: 0
+    Ease_Duration: 0.3
+  - Move_Type: 2
+    Ease_Type: 26
+    Ease_Vector: {x: 0, y: 0}
+    Ease_Float: 0
+    Ease_Duration: 0.3
 --- !u!1 &8092651022063130881
 GameObject:
   m_ObjectHideFlags: 0

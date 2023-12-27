@@ -37,7 +37,18 @@ public class Hero_100001 : HeroBase_V2
         base.UnitStateMove();
         
     }
-    
+
+
+    public override void UnitStateWaveRunBegin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
+    }
+    public override void UnitStateWaveRun()
+    {
+        WaveRunLeftTeam();
+        base.UnitStateWaveRun();
+    }
+
     public override void UnitStateAttackReady01Begin()
     {
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);

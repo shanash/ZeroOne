@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Diagnostics;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 namespace FluffyDuck.EditorUtil.UpperMenu
 {
@@ -68,6 +69,55 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         {
             SkillEditor.ShowWindow();
         }
+
+
+        [MenuItem("FluffyDuck/Move Scene/Title", false, 31)]
+        static void TitleSceneOpen()
+        {
+            string go_scene = "title";
+            string scene_name = EditorSceneManager.GetActiveScene().name;
+            if (scene_name.Equals(go_scene))
+            {
+                return;
+            }
+            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+        }
+
+        [MenuItem("FluffyDuck/Move Scene/Lobby", false, 32)]
+        static void LobbySceneOpen()
+        {
+            string go_scene = "home";
+            string scene_name = EditorSceneManager.GetActiveScene().name;
+            if (scene_name.Equals(go_scene))
+            {
+                return;
+            }
+            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+        }
+        [MenuItem("FluffyDuck/Move Scene/Battle", false, 33)]
+        static void BattleSceneOpen()
+        {
+            string go_scene = "battlev2";
+            string scene_name = EditorSceneManager.GetActiveScene().name;
+            if (scene_name.Equals(go_scene))
+            {
+                return;
+            }
+            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+        }
+
+        [MenuItem("FluffyDuck/Move Scene/Memorial", false, 34)]
+        static void MemorialSceneOpen()
+        {
+            string go_scene = "memorial";
+            string scene_name = EditorSceneManager.GetActiveScene().name;
+            if (scene_name.Equals(go_scene))
+            {
+                return;
+            }
+            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+        }
+
 
     }
 }

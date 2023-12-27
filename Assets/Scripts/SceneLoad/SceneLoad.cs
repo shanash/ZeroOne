@@ -5,6 +5,7 @@ using TMPro;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using FluffyDuck.Util;
 
 /// <summary>
 /// Addressable 예시를 위해 만든 에셋 다운로드 스크립트
@@ -70,6 +71,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
         string first_scene = "home";
 #if UNITY_EDITOR
         List<string> scene_list = new List<string>();
+        scene_list.Add("title");
         scene_list.Add("load");
         scene_list.Add("home");
         scene_list.Add("battlev2");
@@ -78,6 +80,14 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
         if (!scene_list.Contains(Start_Scene_Name))
         {
             first_scene = Start_Scene_Name;
+            if (first_scene.Equals("skill_preview"))
+            {
+                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
+            }
+            else if (first_scene.Equals("skill_editor"))
+            {
+                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
+            }
         }
 #endif
 

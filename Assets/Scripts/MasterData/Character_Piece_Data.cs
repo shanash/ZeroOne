@@ -6,9 +6,9 @@ using System.Collections.Generic;
 public class Character_Piece_Data : System.IDisposable
 {
 	///	<summary>
-	///	캐릭터 조각 id
+	///	캐릭터 아이디
 	///	</summary>
-	public int character_piece_id {get; set;}
+	public int player_character_id {get; set;}
 	///	<summary>
 	///	이름
 	///	</summary>
@@ -34,7 +34,7 @@ public class Character_Piece_Data : System.IDisposable
 
 	public Character_Piece_Data()
 	{
-		character_piece_id = 0;
+		player_character_id = 0;
 		name_kr = string.Empty;
 		tooltip_text = string.Empty;
 		sell_price = 0;
@@ -61,7 +61,7 @@ public class Character_Piece_Data : System.IDisposable
 	public override string ToString()
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
-		sb.AppendFormat("[character_piece_id] = <color=yellow>{0}</color>", character_piece_id).AppendLine();
+		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[tooltip_text] = <color=yellow>{0}</color>", tooltip_text).AppendLine();
 		sb.AppendFormat("[sell_price] = <color=yellow>{0}</color>", sell_price).AppendLine();

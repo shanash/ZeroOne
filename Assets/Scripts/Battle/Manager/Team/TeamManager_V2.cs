@@ -2,7 +2,6 @@ using FluffyDuck.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public partial class TeamManager_V2 : IDisposable
@@ -85,7 +84,10 @@ public partial class TeamManager_V2 : IDisposable
         if (Team_Type == TEAM_TYPE.LEFT)
         {
             //  0,0 부터 시작
-            MyTeamSpawn();
+            if (Game_Type != GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE && Game_Type != GAME_TYPE.EDITOR_SKILL_EDIT_MODE)
+            {
+                MyTeamSpawn();
+            }
         }
         else
         {
@@ -100,12 +102,39 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     protected void MyTeamSpawn()
     {
-        float size = Camera.main.fieldOfView;
+        //float size = Camera.main.fieldOfView;
         var pool = GameObjectPoolManager.Instance;
         var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
 
         int cnt = hero_list.Count;
+
+
+        for (int i = 0; i < cnt; i++)
+        {
+            UserHeroDeckMountData user_deck_hero = hero_list[i];
+            UserHeroData user_data = user_deck_hero.GetUserHeroData();
+
+            var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
+            HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
+            hero.SetTeamManager(this);
+            hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
+            hero.SetDeckOrder(i);
+            hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
+
+            AddMember(hero);
+        }
+
+        LeftTeamPosition();
+    }
+
+    /// <summary>
+    /// Left 팀 최초 포지션 설정
+    /// </summary>
+    public void LeftTeamPosition()
+    {
+        int cnt = Used_Members.Count;
+        float size = Camera.main.fieldOfView;
 
         float offset_z = 0f;
         float offset_x = -size;
@@ -114,31 +143,84 @@ public partial class TeamManager_V2 : IDisposable
 
         for (int i = 0; i < cnt; i++)
         {
-            UserHeroDeckMountData user_deck_hero = hero_list[i];
-            UserHeroData user_data = user_deck_hero.GetUserHeroData();
+            var member = Used_Members[i];
+            position_offset = (int)member.GetPositionType() * interval;
 
-            position_offset = (int)user_data.GetPositionType() * interval;
+            float distance = member.GetApproachDistance();
 
-            float distance = user_data.GetApproachDistance();
-            var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
-            HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
-            hero.SetTeamManager(this);
-            //hero.SetUserHeroData(user_data);
-            hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
-            hero.SetDeckOrder(i);
-            hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
-
-            List<UserHeroDeckMountData> same_positions = hero_list.FindAll(x => x.GetUserHeroData().GetPositionType() == user_data.GetPositionType());
-            same_positions = same_positions.OrderBy(x => x.GetUserHeroData().GetApproachDistance()).ToList();
+            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
+            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
             Debug.Assert(same_positions.Count > 0);
 
-            int find_index = same_positions.IndexOf(user_deck_hero);
+            int find_index = same_positions.IndexOf(member);
 
-            hero.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 5));
-
-            AddMember(hero);
+            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 5));
         }
     }
+
+    /// <summary>
+    /// 실제 게임상이 아닌, 스킬 에디터상에서의 좌표.<br/>
+    /// 화면 밖이 아닌, 화면 안의 적군 포지션에서 시작한다.
+    /// </summary>
+    public void EditorRightTeamPosition()
+    {
+        int cnt = Used_Members.Count;
+
+        float offset_z = 0f;
+        float offset_x = 5;
+        float interval = 12f;
+        float position_offset = 0f;
+
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            position_offset = (int)member.GetPositionType() * interval;
+
+            float distance = member.GetApproachDistance();
+
+            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
+            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
+            Debug.Assert(same_positions.Count > 0);
+
+            int find_index = same_positions.IndexOf(member);
+
+            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 5));
+        }
+
+    }
+
+    /// <summary>
+    /// Right 팀 최초 포지션 설정
+    /// </summary>
+    public void RightTeamPosition()
+    {
+        int cnt = Used_Members.Count;
+        float size = Camera.main.fieldOfView;
+
+        float offset_z = 0f;
+        float offset_x = size;
+        float interval = 12f;
+        float position_offset = 0f;
+
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            position_offset = (int)member.GetPositionType() * interval;
+
+            float distance = member.GetApproachDistance();
+
+            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
+            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
+            Debug.Assert(same_positions.Count > 0);
+
+            int find_index = same_positions.IndexOf(member);
+
+            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 5));
+        }
+
+    }
+
+
     /// <summary>
     /// 적군의 npc 캐릭터를 스폰한다.
     /// 0,0에 상대팀의 캐릭터가 있다는 전제하에 거리를 계산한다.
@@ -161,7 +243,30 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void EditorModeMonsterTeamSpawn()
     {
+        var pool = GameObjectPoolManager.Instance;
+        
+        var wdata = (Editor_Wave_Data)Dungeon.GetWaveData();
+        int len = wdata.enemy_appearance_info.Length;
 
+        //  battle npc data
+        for (int i = 0; i < len; i++)
+        {
+            var npc = new BattleNpcData();
+            npc.SetUnitID(wdata.enemy_appearance_info[i]);
+
+            var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
+            MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
+            monster.SetTeamManager(this);
+
+            monster.SetBattleUnitDataID(npc.GetUnitID());
+
+            monster.SetFlipX(true);
+            monster.SetDeckOrder(i);
+            monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
+            AddMember(monster);
+        }
+
+        EditorRightTeamPosition();
     }
 
     /// <summary>
@@ -170,41 +275,16 @@ public partial class TeamManager_V2 : IDisposable
     void StoryModeMonsterTeamSpawn()
     {
         var pool = GameObjectPoolManager.Instance;
-        var m = MasterDataManager.Instance;
-        float size = Camera.main.fieldOfView;
-
-        float offset_z = 0f;
-        float offset_x = size;
-        float interval = 12f;
-        float position_offset = 0f;
 
         var wdata = (Wave_Data)Dungeon.GetWaveData();
 
-        List<BattleUnitData> battle_npc_list = new List<BattleUnitData>();
-
         int len = wdata.enemy_appearance_info.Length;
+
         //  battle npc data
         for (int i = 0; i < len; i++)
         {
             var npc = new BattleNpcData();
             npc.SetUnitID(wdata.enemy_appearance_info[i]);
-            battle_npc_list.Add(npc);
-        }
-        //  사거리가 짧은 순으로 정렬
-        battle_npc_list.Sort(delegate (BattleUnitData a, BattleUnitData b)
-        {
-            if (a.GetApproachDistance() > b.GetApproachDistance())
-            {
-                return 1;
-            }
-            return -1;
-        });
-
-        //  npc gameobject
-        for (int i = 0; i < len; i++)
-        {
-            var npc = battle_npc_list[i];
-            position_offset = (int)npc.GetPositionType() * interval;
 
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
@@ -216,18 +296,15 @@ public partial class TeamManager_V2 : IDisposable
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
-            List<BattleUnitData> same_positions = battle_npc_list.FindAll(x => x.GetPositionType() == npc.GetPositionType());
-            same_positions = same_positions.OrderBy(x => x.GetApproachDistance()).ToList();
-            Debug.Assert(same_positions.Count > 0);
-
-            int find_index = same_positions.IndexOf(npc);
-
-            monster.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 5));
-
             AddMember(monster);
         }
 
+
+        RightTeamPosition();
+
     }
+
+    
     /// <summary>
     /// 멤버 추가
     /// </summary>
@@ -255,6 +332,7 @@ public partial class TeamManager_V2 : IDisposable
     {
         return Used_Members.Exists(x => x.IsAlive());
     }
+
     public List<HeroBase_V2> GetAliveMembers()
     {
         return Used_Members.FindAll(x => x.IsAlive());
@@ -274,51 +352,13 @@ public partial class TeamManager_V2 : IDisposable
         list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
         return list;
     }
-
-
+    
     /// <summary>
-    /// 살아있는 멤버 중, 나를 중심으로 가까운 거리로 정렬
+    /// 팀원들 웨이브 종료시 체력 회복 요청
     /// </summary>
-    /// <param name="center"></param>
-    /// <returns></returns>
-    public List<HeroBase_V2> GetAliveMembersDistanceAsc(HeroBase_V2 center)
+    public void RecoveryLifeWaveEndMembers()
     {
-        var list = GetAliveMembers();
-        //list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        //{
-        //    if (a.GetDistanceFromCenter(center) > b.GetDistanceFromCenter(center))
-        //    {
-        //        return 1;
-        //    }
-        //    return -1;
-        //});
-
-        //  오름 차순
-        list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
-        return list;
-    }
-
-    /// <summary>
-    /// 살아있는 멤버 중, 중앙을 중심으로 지정한 거리내에 있는 영웅 모두 반환
-    /// 거리에 따른 내림차순으로 정렬(가장 먼 유닛이 우선)
-    /// </summary>
-    /// <param name="center"></param>
-    /// <param name="distance"></param>
-    /// <returns></returns>
-    public List<HeroBase_V2> GetAliveMembersDistanceDesc(HeroBase_V2 center)
-    {
-        var list = GetAliveMembers();
-        //list.Sort(delegate (HeroBase_V2 a, HeroBase_V2 b)
-        //{
-        //    if (a.GetDistanceFromCenter(center) < b.GetDistanceFromCenter(center))
-        //    {
-        //        return 1;
-        //    }
-        //    return -1;
-        //});
-        //  내림 차순
-        list.Sort((a, b) => b.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
-        return list;
+        Used_Members.ForEach(x => x.WaveEndRecoveryLife());
     }
     
     /// <summary>
@@ -345,7 +385,10 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-
+    /// <summary>
+    /// 죽은 멤버 제거
+    /// </summary>
+    /// <param name="hero"></param>
     public void RemoveDeathMember(HeroBase_V2 hero)
     {
         GameObjectPoolManager.Instance.UnusedGameObject(hero.gameObject);
@@ -362,11 +405,13 @@ public partial class TeamManager_V2 : IDisposable
         switch (Game_Type)
         {
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
+                //  nothing
+                bool a = false;
                 break;
             case GAME_TYPE.EDITOR_SKILL_EDIT_MODE:
                 break;
             case GAME_TYPE.STORY_MODE:
-                GetStoryModeHeroPrefabs(ref list);
+                GetStoryModeHeroPrefabs(Game_Type, ref list);
                 break;
             default:
                 Debug.Assert(false);
@@ -375,16 +420,19 @@ public partial class TeamManager_V2 : IDisposable
     }
 
 
-    protected void GetStoryModeHeroPrefabs(ref List<string> list)
+    /// <summary>
+    /// 스토리 모드의 플레이어 캐릭터 프리팹 반환
+    /// </summary>
+    /// <param name="list"></param>
+    protected void GetStoryModeHeroPrefabs(GAME_TYPE gtype, ref List<string> list)
     {
-        var m = MasterDataManager.Instance;
-        var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
+        var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(gtype);
         var deck_heroes = deck.GetDeckHeroes();
         int cnt = deck_heroes.Count;
         for (int i = 0; i < cnt; i++)
         {
             UserHeroDeckMountData hero = deck_heroes[i];
-            Player_Character_Data hdata = m.Get_PlayerCharacterData(hero.Hero_Data_ID);
+            Player_Character_Data hdata = hero.GetUserHeroData().GetPlayerCharacterData();
             if (hdata != null)
             {
                 GetPcSkillEffectPrefabPath(hdata, ref list);
@@ -402,10 +450,15 @@ public partial class TeamManager_V2 : IDisposable
         var m = MasterDataManager.Instance;
         List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();
 
-        //  영웅의 프리팹
+        //  영웅의 Battle SD 프리팹
         if (!list.Contains(pc_data.prefab_path))
         {
             list.Add(pc_data.prefab_path);
+        }
+        //  영웅의 UI SD 프리팹 (전투 결과 창에서 사용)
+        if (!list.Contains(pc_data.sd_prefab_path))
+        {
+            list.Add(pc_data.sd_prefab_path);
         }
 
         //  battle data

@@ -14,6 +14,9 @@ public partial class BattleManager_V2 : MonoBehaviour
     [SerializeField, Tooltip("Stage Proceeding Manager")]
     protected StageProceedingManager Stage_Mng;
 
+    [SerializeField, Tooltip("Fade In Out Layer")]
+    UIEaseCanvasGroupAlpha Fade_In_Out_Layer;
+
     protected List<TeamManager_V2> Used_Team_List = new List<TeamManager_V2>();
 
     protected BattleField Field;
@@ -55,7 +58,6 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     protected void CreateTeamManagers()
     {
-        //var unit_container = GetBattleField().GetUnitContainer();
         var left_team = new TeamManager_V2(TEAM_TYPE.LEFT);
         left_team.SetManagers(this, UI_Mng);
         left_team.SetGameType(Game_Type);

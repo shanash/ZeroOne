@@ -25,7 +25,7 @@ public class PlayerInfoBox : MonoBehaviour
 
     public void OnClickTestBattleResult()
     {
-        bool test_win = true;
+        bool test_win = false;
         if (test_win)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>

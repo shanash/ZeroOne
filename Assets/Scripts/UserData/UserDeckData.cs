@@ -1,5 +1,6 @@
 
 
+using LitJson;
 using System.Collections.Generic;
 
 public class UserDeckData : UserDataBase
@@ -63,6 +64,18 @@ public class UserDeckData : UserDataBase
         this.Team_Name = team_name;
         Is_Update_Data = true;
     }
+
+    /// <summary>
+    /// 마운트되어 있는 영웅 찾기
+    /// </summary>
+    /// <param name="player_character_id"></param>
+    /// <param name="player_character_num"></param>
+    /// <returns></returns>
+    public UserHeroDeckMountData FindUserHeroDeckMountData(int player_character_id, int player_character_num)
+    {
+        return Deck_Heroes.Find(x => x.Player_Character_ID == player_character_id && x.Player_Character_Num == player_character_num);
+    }
+
     /// <summary>
     /// 덱 영웅 변경
     /// </summary>
@@ -81,7 +94,7 @@ public class UserDeckData : UserDataBase
             is_leader = true;
         }
         //  변경할 영웅이 이미 덱에 포함되어 있는 영웅인지 체크
-        var found_hero = Deck_Heroes.Find(x => x.Hero_Data_ID == new_hero.Hero_Data_ID && x.Hero_Data_Num == new_hero.Hero_Data_Num);
+        var found_hero = Deck_Heroes.Find(x => x.Player_Character_ID == new_hero.Player_Character_ID && x.Player_Character_Num == new_hero.Player_Character_Num);
         if (found_hero != null)
         {
             //  이미 포함되어 있던 영웅 정보 제거
@@ -102,12 +115,12 @@ public class UserDeckData : UserDataBase
         return ERROR_CODE.SUCCESS;
     }
 
-    public ERROR_CODE AddSlotHero(UserHeroData new_hero)
+    public ERROR_CODE AddSlotHero(int player_character_id, int player_character_num)
     {
-        var hero = new UserHeroDeckMountData();
-        hero.SetUserHeroData(new_hero);
-        
-        return AddSlotHero(hero);
+        var mount_hero = new UserHeroDeckMountData();
+        mount_hero.SetUserHeroData(player_character_id, player_character_num);
+
+        return AddSlotHero(mount_hero);
     }
 
     /// <summary>
@@ -116,7 +129,7 @@ public class UserDeckData : UserDataBase
     /// <param name="hero"></param>
     public void RemoveHero(UserHeroDeckMountData hero)
     {
-        var found = Deck_Heroes.Find(x => x.Hero_Data_ID == hero.Hero_Data_ID && x.Hero_Data_Num == hero.Hero_Data_Num);
+        var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.Player_Character_ID && x.Player_Character_Num == hero.Player_Character_Num);
         if (found != null)
         {
             Deck_Heroes.Remove(found);
@@ -136,7 +149,7 @@ public class UserDeckData : UserDataBase
     /// <returns></returns>
     public void RemoveHero(UserHeroData hero)
     {
-        var found = Deck_Heroes.Find(x => x.Hero_Data_ID == hero.GetPlayerCharacterID() && x.Hero_Data_Num == hero.Player_Character_Num);
+        var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.GetPlayerCharacterID() && x.Player_Character_Num == hero.Player_Character_Num);
         if (found != null)
         {
             
@@ -161,7 +174,7 @@ public class UserDeckData : UserDataBase
     /// <returns></returns>
     public bool IsExistHeroInDeck(int hero_data_id, int hero_data_num)
     {
-        return Deck_Heroes.Exists(x => x.Hero_Data_ID == hero_data_id && x.Hero_Data_Num == hero_data_num);
+        return Deck_Heroes.Exists(x => x.Player_Character_ID == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
     public bool IsExistHeroInDeck(UserHeroData hero)
     {
@@ -184,14 +197,7 @@ public class UserDeckData : UserDataBase
     public List<UserHeroDeckMountData> GetDeckHeroes()
     {
         //  사거리에 따라 정렬(사거리가 가까운 영웅부터)
-        Deck_Heroes.Sort((System.Comparison<UserHeroDeckMountData>)delegate (UserHeroDeckMountData a, UserHeroDeckMountData b)
-        {
-            if (a.GetUserHeroData().GetApproachDistance() > b.GetUserHeroData().GetApproachDistance())
-            {
-                return 1;
-            }
-            return -1;
-        });
+        Deck_Heroes.Sort((a, b) => a.GetUserHeroData().GetApproachDistance().CompareTo(b.GetUserHeroData().GetApproachDistance()));
         return Deck_Heroes;
     }
 
@@ -221,5 +227,107 @@ public class UserDeckData : UserDataBase
         }
         Is_Selected = select;
     }
+
+    public override JsonData Serialized()
+    {
+        var json = new JsonData();
+
+        var heroes_arr = new JsonData();
+
+        json[NODE_DECK_NUMBER] = Deck_Number;
+        json[NODE_GAME_TYPE] = (int)Game_Type;
+        json[NODE_IS_SELECTED] = Is_Selected;
+        json[NODE_TEAM_NAME] = Team_Name;
+
+        int cnt = Deck_Heroes.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var item = Deck_Heroes[i];
+            var jdata = item.Serialized();
+            if (jdata == null)
+            {
+                continue;
+            }
+            heroes_arr.Add(jdata);
+        }
+        json[NODE_DECK_HEROES] = heroes_arr;
+
+        return json;
+    }
+
+    public override bool Deserialized(JsonData json)
+    {
+        if (json == null)
+        {
+            return false;
+        }
+
+        if (json.ContainsKey(NODE_DECK_NUMBER))
+        {
+            Deck_Number = ParseInt(json, NODE_DECK_NUMBER);
+        }
+        if (json.ContainsKey(NODE_GAME_TYPE))
+        {
+            Game_Type = (GAME_TYPE)ParseInt(json, NODE_GAME_TYPE);
+        }
+        if (json.ContainsKey(NODE_IS_SELECTED))
+        {
+            Is_Selected = ParseBool(json, NODE_IS_SELECTED);
+        }
+        if (json.ContainsKey(NODE_TEAM_NAME))
+        {
+            Team_Name = ParseString(json, NODE_TEAM_NAME);
+        }
+        if (json.ContainsKey(NODE_DECK_HEROES))
+        {
+            var arr = json[NODE_DECK_HEROES];
+            if (arr.GetJsonType() == JsonType.Array)
+            {
+                int cnt = arr.Count;
+                for (int i = 0; i < cnt; i++)
+                {
+                    var jdata = arr[i];
+
+                    int player_character_id = 0;
+                    int player_character_num = 0;
+                    if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num))
+                    {
+                        UserHeroDeckMountData item = FindUserHeroDeckMountData(player_character_id, player_character_num);
+                        if (item != null)
+                        {
+                            item.Deserialized(jdata);
+                        }
+                        else
+                        {
+                            var code = AddSlotHero(player_character_id, player_character_num);
+                            if (code == ERROR_CODE.SUCCESS)
+                            {
+                                item = FindUserHeroDeckMountData(player_character_id, player_character_num);
+                                item?.Deserialized(jdata);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        InitUpdateData();
+
+        return true;
+    }
+
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_DECK_NUMBER = "dnum";
+    protected const string NODE_GAME_TYPE = "gtype";
+    protected const string NODE_IS_SELECTED = "sel";
+    protected const string NODE_TEAM_NAME = "tname";
+    protected const string NODE_DECK_HEROES = "heroes";
+
+
+    protected const string NODE_PLAYER_CHARACTER_ID = "pid";
+    protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
 
 }

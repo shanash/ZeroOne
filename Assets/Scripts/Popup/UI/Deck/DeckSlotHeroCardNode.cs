@@ -55,10 +55,10 @@ public class DeckSlotHeroCardNode : UIBase, IPointerDownHandler, IPointerUpHandl
         
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
-        Card_Box.gameObject.SetActive(deck.IsExistHeroInDeck(User_Data.Hero_Data_ID, User_Data.Hero_Data_Num));
+        Card_Box.gameObject.SetActive(deck.IsExistHeroInDeck(User_Data.Player_Character_ID, User_Data.Player_Character_Num));
 
         //  card update
-        Card.SetHeroDataID(User_Data.Hero_Data_ID);
+        Card.SetHeroDataID(User_Data.Player_Character_ID);
 
         //  leader icon
         Leader_Icon.gameObject.SetActive(User_Data.Is_Leader);

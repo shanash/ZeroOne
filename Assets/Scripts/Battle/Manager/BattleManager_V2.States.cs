@@ -9,6 +9,8 @@ public partial class BattleManager_V2 : MonoBehaviour
 {
     protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 
+    float Wave_Run_Delta;
+
     private void Awake()
     {
         StartCoroutine(InitAssets());
@@ -217,7 +219,16 @@ public partial class BattleManager_V2 : MonoBehaviour
 
             if (win_team.Team_Type == TEAM_TYPE.LEFT)
             {
-                ChangeState(GAME_STATES.GAME_OVER_WIN);
+                //  다음 웨이브가 있다면
+                if (Dungeon_Data.HasNextWave())
+                {
+                    ChangeState(GAME_STATES.WAVE_RUN);
+                }
+                else // 없으면 게임 종료(승리)
+                {
+                    ChangeState(GAME_STATES.GAME_OVER_WIN);
+                }
+                
             }
             else
             {
@@ -227,17 +238,68 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
     public virtual void GameStatePlayingExit() { }
 
-    public virtual void GameStateNextWaveBegin() { }
+    public virtual void GameStateNextWaveBegin() 
+    {
+        if (IsPrevPause())
+        {
+            return;
+        }
+        if (Dungeon_Data.NextWave())
+        {
+            var my_team = FindTeamManager(TEAM_TYPE.LEFT);
+            if (my_team != null)
+            {
+                my_team.ChangeStateTeamMembers(UNIT_STATES.IDLE);
+                my_team.LeftTeamPosition();
+            }
+
+            var enemy_team = FindTeamManager(TEAM_TYPE.RIGHT);
+            if (enemy_team != null)
+            {
+                enemy_team.SpawnHeros();
+            }
+
+            Fade_In_Out_Layer.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, () =>
+            {
+                ChangeState(GAME_STATES.PLAYING);
+            });
+        }
+        else
+        {
+            ChangeState(GAME_STATES.GAME_OVER_WIN);
+        }
+        
+    }
     public virtual void GameStateNextWave() { }
     public virtual void GameStateNextWaveExit() { }
 
-    public virtual void GameStateWaveRunBegin() { }
-    public virtual void GameStateWaveRun() { }
+    public virtual void GameStateWaveRunBegin() 
+    {
+        if (IsPrevPause())
+        {
+            return;
+        }
+        var my_team = FindTeamManager(TEAM_TYPE.LEFT);
+        if (my_team != null)
+        {
+            my_team.RecoveryLifeWaveEndMembers();
+            my_team.ChangeStateTeamMembers(UNIT_STATES.WAVE_RUN);
+        }
+
+        Fade_In_Out_Layer.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, () =>
+        {
+            ChangeState(GAME_STATES.NEXT_WAVE);
+        });
+    }
+
+    public virtual void GameStateWaveRun() 
+    {
+    }
     public virtual void GameStateWaveRunExit() { }
 
     public virtual void GameStatePauseBegin() 
     {
-        TeamMembersChangeState((UNIT_STATES.PAUSE));
+        TeamMembersChangeState(UNIT_STATES.PAUSE);
         GetEffectFactory().OnPause();
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattlePausePopup", (popup) =>
         {

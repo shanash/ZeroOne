@@ -1,10 +1,12 @@
 
 
+using LitJson;
+
 public class UserHeroDeckMountData : UserDataBase
 {
-    public int Hero_Data_ID { get; protected set; } = 0;
+    public int Player_Character_ID { get; protected set; } = 0;
 
-    public int Hero_Data_Num { get; protected set; } = 0;
+    public int Player_Character_Num { get; protected set; } = 0;
 
     public bool Is_Leader { get; protected set; } = false;
 
@@ -24,8 +26,8 @@ public class UserHeroDeckMountData : UserDataBase
 
     protected override void Destroy()
     {
-        Hero_Data_ID = 0;
-        Hero_Data_Num = 0;
+        Player_Character_ID = 0;
+        Player_Character_Num = 0;
         Is_Leader = false;
         User_Hero_Data = null;
     }
@@ -35,30 +37,20 @@ public class UserHeroDeckMountData : UserDataBase
         return User_Hero_Data;
     }
 
-    public UserHeroDeckMountData SetUserHeroData(UserHeroData hero)
+    public UserHeroDeckMountData SetUserHeroData(int player_character_id, int player_character_num)
     {
-        Hero_Data_ID = hero.GetPlayerCharacterID();
-        Hero_Data_Num = hero.Player_Character_Num;
-        Is_Leader = false;
-        User_Hero_Data = hero;
-        return this;
-    }
+        Player_Character_ID = player_character_id;
+        Player_Character_Num = player_character_num;
 
-    public UserHeroDeckMountData SetUserHeroData(int hero_data_id, int hero_data_num, bool leader)
-    {
-        Hero_Data_ID = hero_data_id;
-        Hero_Data_Num = hero_data_num;
-        Is_Leader = leader;
-
-        var hero_mng = GameData.Instance.GetUserHeroDataManager();
-        User_Hero_Data = hero_mng.FindUserHeroData(hero_data_id, hero_data_num);
-
+        InitMasterData();
         return this;
     }
 
     protected override void InitMasterData()
     {
-        
+        var hero_mng = GameData.Instance.GetUserHeroDataManager();
+        User_Hero_Data = hero_mng.FindUserHeroData(Player_Character_ID, Player_Character_Num);
+        Is_Update_Data = true;
     }
 
     public void SetLeader(bool leader)
@@ -69,4 +61,45 @@ public class UserHeroDeckMountData : UserDataBase
         }
         Is_Leader = leader;
     }
+
+    public override JsonData Serialized()
+    {
+        var json = new JsonData();
+        json[NODE_PLAYER_CHARACTER_ID] = Player_Character_ID;
+        json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
+        json[NODE_IS_LEADER] = Is_Leader;
+        return json;
+    }
+    public override bool Deserialized(JsonData json)
+    {
+        if (json == null)
+        {
+            return false;
+        }
+
+        if (json.ContainsKey(NODE_PLAYER_CHARACTER_ID))
+        {
+            Player_Character_ID = ParseInt(json, NODE_PLAYER_CHARACTER_ID);
+        }
+        if (json.ContainsKey(NODE_PLAYER_CHARACTER_NUM))
+        {
+            Player_Character_Num = ParseInt(json, NODE_PLAYER_CHARACTER_NUM);
+        }
+        if (json.ContainsKey(NODE_IS_LEADER))
+        {
+            Is_Leader = ParseBool(json, NODE_IS_LEADER);
+        }
+
+        InitMasterData();
+
+        return true;
+    }
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_PLAYER_CHARACTER_ID = "pid";
+    protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
+    protected const string NODE_IS_LEADER = "leader";
+
 }

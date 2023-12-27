@@ -1,31 +1,23 @@
-
-
 using Gpm.Ui;
 using System.Collections.Generic;
 
 public class LobbyCharacterListData : InfiniteScrollData
 {
-    List<UserHeroData> Hero_List = new List<UserHeroData>();
+    List<UserMemorialData> Memorial_List = new List<UserMemorialData>();
 
-    public System.Action<UserHeroData> Click_Callback;
+    public System.Action<UserMemorialData> Click_Memorial_Callback;
 
-    public void SetUserHeroDataList(List<UserHeroData> list)
+    public void SetUserMemorialDataList(List<UserMemorialData> list)
     {
-        Hero_List.Clear();
+        Memorial_List.Clear();
         if (list != null)
         {
-            Hero_List.AddRange(list);
+            Memorial_List.AddRange(list);
         }
     }
-
-    public List<UserHeroData> GetUserHeroDataList()
+    public List<UserMemorialData> GetUserMemorialDataList()
     {
-        return Hero_List;
+        return Memorial_List;
     }
-
-    public void SetClickCallback(System.Action<UserHeroData> cb)
-    {
-        Click_Callback = cb;
-    }
-    
+        
 }

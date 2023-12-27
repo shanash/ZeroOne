@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Drawing.Charts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +23,34 @@ public class MasterDataManager : BaseMasterDataManager
 
     public bool IsLoaded { get { return is_init_load; } }
 
+    #region Level
+    public PlayerLevelData Get_PlayerLevelData(int lv)
+    {
+        Check_PlayerLevelData();
+        return _PlayerLevelData.Find(x => x.level == lv);
+    }
+    public PlayerLevelData Get_PlayerLevelDataByAccumExp(int accum_exp)
+    {
+        Check_PlayerLevelData();
+        var list = _PlayerLevelData.OrderBy(x => x.level).ToList();
+        return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
+    public PlayerCharacterLevelData Get_PlayerCharacterLevelData(int lv)
+    {
+        Check_PlayerCharacterLevelData();
+        return _PlayerCharacterLevelData.Find(x => x.level == lv);
+    }
+
+    public PlayerCharacterLevelData Get_PlayerCharacterLevelDataByAccumExp(int accum_exp)
+    {
+        Check_PlayerCharacterLevelData();
+        var list = _PlayerCharacterLevelData.OrderBy(x => x.level).ToList();
+        return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
+    #endregion
+
     #region Item
     /// <summary>
     /// 아이템 타입 데이터 반환
@@ -38,13 +65,13 @@ public class MasterDataManager : BaseMasterDataManager
     /// <summary>
     /// 캐릭터 조각 데이터 반환
     /// </summary>
-    /// <param name="character_piece_id"></param>
+    /// <param name="player_character_id"></param>
     /// <returns></returns>
-    public Character_Piece_Data Get_CharacterPieceData(int character_piece_id)
+    public Character_Piece_Data Get_CharacterPieceData(int player_character_id)
     {
         Check_Character_Piece_Data();
 
-        return _Character_Piece_Data.Find(x => x.character_piece_id == character_piece_id);
+        return _Character_Piece_Data.Find(x => x.player_character_id == player_character_id);
     }
     /// <summary>
     /// 경험치 물약 데이터 반환

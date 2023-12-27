@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ public class UserDeckDataManager : ManagerBase
         //  story mode의 1개 덱만 일단 추가한다. 기본 덱을 선택해준다.
         var default_deck = AddDeck(GAME_TYPE.STORY_MODE);
         default_deck.SetSelect(true);
-
+        Save();
     }
     /// <summary>
     /// 덱 리스트 찾기
@@ -143,4 +144,75 @@ public class UserDeckDataManager : ManagerBase
         bool is_exist = deck_list.Exists(x => x.IsExistHeroInDeck(hero_data_id, hero_data_num));
         return is_exist;
     }
+
+
+    public override JsonData Serialized()
+    {
+        var json = new LitJson.JsonData();
+
+        var arr = new LitJson.JsonData();
+
+        int cnt = User_Deck_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var item = User_Deck_List[i];
+            var jdata = item.Serialized();
+            if (jdata == null)
+                continue;
+
+            arr.Add(jdata);
+        }
+
+        json[NODE_DECK_DATA_LIST] = arr;
+
+        return json;
+    }
+
+    public override bool Deserialized(JsonData json)
+    {
+        if (json == null)
+        {
+            return false;
+        }
+        if (json.ContainsKey(NODE_DECK_DATA_LIST))
+        {
+            var arr = json[NODE_DECK_DATA_LIST];
+            if (arr.GetJsonType() == JsonType.Array)
+            {
+                int cnt = arr.Count;
+                for (int i = 0; i < cnt; i++)
+                {
+                    var jdata = arr[i];
+
+                    int deck_number = 0;
+                    int game_type = 0;
+                    if (int.TryParse(jdata[NODE_DECK_NUMBER].ToString(), out deck_number) && int.TryParse(jdata[NODE_GAME_TYPE].ToString(), out game_type))
+                    {
+                        UserDeckData item = FindDeck((GAME_TYPE)game_type, deck_number);
+                        if (item != null)
+                        {
+                            item.Deserialized(jdata);
+                        }
+                        else
+                        {
+                            item = AddDeck((GAME_TYPE)game_type);
+                            item?.Deserialized(jdata);
+                        }
+                    }
+                }
+            }
+        }
+
+        InitUpdateData();
+        return true;
+    }
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_DECK_DATA_LIST = "dlist";
+
+    protected const string NODE_DECK_NUMBER = "dnum";
+    protected const string NODE_GAME_TYPE = "gtype";
+
 }

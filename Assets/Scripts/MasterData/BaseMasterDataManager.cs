@@ -48,6 +48,16 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<PlayerLevelData> _PlayerLevelData
+	{
+		get;
+		private set;
+	}
+	protected List<PlayerCharacterLevelData> _PlayerCharacterLevelData
+	{
+		get;
+		private set;
+	}
 	protected List<Me_Resource_Data> _Me_Resource_Data
 	{
 		get;
@@ -153,6 +163,16 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Stage_Reward_Data> _Stage_Reward_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Star_Reward_Data> _Star_Reward_Data
+	{
+		get;
+		private set;
+	}
 
 
 	protected bool is_init_load = false;
@@ -176,6 +196,8 @@ public class BaseMasterDataManager
 		await LoadMaster_Sta_Potion_Data();
 		await LoadMaster_Memoritem_Data();
 		await LoadMaster_Expendable_Item_Data();
+		await LoadMaster_PlayerLevelData();
+		await LoadMaster_PlayerCharacterLevelData();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
 		await LoadMaster_Me_Interaction_Data();
@@ -197,6 +219,8 @@ public class BaseMasterDataManager
 		await LoadMaster_Role_Icon_Data();
 		await LoadMaster_Stage_Data();
 		await LoadMaster_Wave_Data();
+		await LoadMaster_Stage_Reward_Data();
+		await LoadMaster_Star_Reward_Data();
 		is_init_load = true;
 	}
 
@@ -255,6 +279,18 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
 		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
+	}
+
+	protected async Task LoadMaster_PlayerLevelData()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/PlayerLevelData");
+		_PlayerLevelData = JsonConvert.DeserializeObject<List<PlayerLevelData>>(json);
+	}
+
+	protected async Task LoadMaster_PlayerCharacterLevelData()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/PlayerCharacterLevelData");
+		_PlayerCharacterLevelData = JsonConvert.DeserializeObject<List<PlayerCharacterLevelData>>(json);
 	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
@@ -383,6 +419,18 @@ public class BaseMasterDataManager
 		_Wave_Data = JsonConvert.DeserializeObject<List<Wave_Data>>(json);
 	}
 
+	protected async Task LoadMaster_Stage_Reward_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Stage_Reward_Data");
+		_Stage_Reward_Data = JsonConvert.DeserializeObject<List<Stage_Reward_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Star_Reward_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Star_Reward_Data");
+		_Star_Reward_Data = JsonConvert.DeserializeObject<List<Star_Reward_Data>>(json);
+	}
+
 	protected async void Check_Editor_Stage_Data()
 	{
 		if(_Editor_Stage_Data == null)
@@ -444,6 +492,22 @@ public class BaseMasterDataManager
 		if(_Expendable_Item_Data == null)
 		{
 			await LoadMaster_Expendable_Item_Data();
+		}
+	}
+
+	protected async void Check_PlayerLevelData()
+	{
+		if(_PlayerLevelData == null)
+		{
+			await LoadMaster_PlayerLevelData();
+		}
+	}
+
+	protected async void Check_PlayerCharacterLevelData()
+	{
+		if(_PlayerCharacterLevelData == null)
+		{
+			await LoadMaster_PlayerCharacterLevelData();
 		}
 	}
 
@@ -612,6 +676,22 @@ public class BaseMasterDataManager
 		if(_Wave_Data == null)
 		{
 			await LoadMaster_Wave_Data();
+		}
+	}
+
+	protected async void Check_Stage_Reward_Data()
+	{
+		if(_Stage_Reward_Data == null)
+		{
+			await LoadMaster_Stage_Reward_Data();
+		}
+	}
+
+	protected async void Check_Star_Reward_Data()
+	{
+		if(_Star_Reward_Data == null)
+		{
+			await LoadMaster_Star_Reward_Data();
 		}
 	}
 
