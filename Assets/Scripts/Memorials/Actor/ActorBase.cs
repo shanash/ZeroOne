@@ -8,14 +8,19 @@ using UnityEngine;
 
 namespace FluffyDuck.Memorial
 {
-    public abstract partial class ActorBase : MonoBehaviour
+    public abstract partial class ActorBase : MonoBehaviour, IActressPositionProvider
     {
         protected const int IDLE_BASE_TRACK = 0;
+        protected const int MOUTH_TRACK = 17;
         const string FACE_BONE_NAME = "touch_center";
         const string BALLOON_BONE_NAME = "balloon";
 
         [SerializeField]
         protected SkeletonAnimation Skeleton;
+
+        // 입모양 애니메이션
+        [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
+        float Talk_Mouth_Wide_Multiple = 10.0f;
 
         ////////////////////////// 상태
         protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
@@ -28,16 +33,23 @@ namespace FluffyDuck.Memorial
 
         Producer Producer;
         List<Me_Interaction_Data>[,] Touch_Type_Interactions;
-        Me_Interaction_Data Selected_Interaction;
+        Me_Interaction_Data Current_Interaction;
 
         protected Dictionary<int, Me_Chat_Motion_Data> Chat_Motions;
-        protected int Selected_Chat_Motion_Id;
+        protected int Current_Chat_Motion_Id;
+        protected int Current_Serifu_Index;
+        protected int Current_Balloon_ID = -1; // 표시되어 있는 말풍선 아이디
 
         Dictionary<int, Me_Serifu_Data> Serifues;
+        string Current_Mouth_Anim_Name;
 
         TrackEntry Drag_Track_Entry;
 
         float Nade_Point = 0;
+
+        float Origin_Mouth_Alpha = 0; // 원래 입 크기
+        float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
+        float Elapsed_Time_For_Mouth_Open = 0;
 
         // 상태 ID에 기반한 상태 데이터를 가져옵니다
         protected IdleAnimationData Current_State_Data
@@ -114,7 +126,7 @@ namespace FluffyDuck.Memorial
                     if (Idle_Played_Count % Current_State_Data.Bored_Count == 0)
                     {
                         int index = Idle_Played_Count / Current_State_Data.Bored_Count - 1;
-                        Selected_Chat_Motion_Id = Current_State_Data.Bored_Chatmotion_Ids[index];
+                        Current_Chat_Motion_Id = Current_State_Data.Bored_Chatmotion_Ids[index];
                         if (Current_State_Data.Bored_Chatmotion_Ids.Length - 1 == index)
                         {
                             Idle_Played_Count = 0;
@@ -159,7 +171,58 @@ namespace FluffyDuck.Memorial
         /// </summary>
         /// <param name="entry"></param>
         /// <param name="evt"></param>
-        protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt) { }
+        protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
+        {
+            Debug.Log($"SpineAnimationEvent : {entry.Animation.Name} : {evt.Data.Name} : {evt.String}");
+            MemorialDefine.TryParseEvent(evt.Data.Name.ToUpper(), out MemorialDefine.SPINE_EVENT eEvt);
+            switch (eEvt)
+            {
+                case MemorialDefine.SPINE_EVENT.MOUTH_OPEN:
+                    Current_Mouth_Anim_Name = evt.String;
+                    break;
+                case MemorialDefine.SPINE_EVENT.MOUTH_CLOSE:
+                    Current_Mouth_Anim_Name = string.Empty;
+                    break;
+                case MemorialDefine.SPINE_EVENT.VOICE:
+                    if (Current_Chat_Motion_Id == -1)
+                    {
+                        Debug.Assert(false, $"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
+                        return;
+                    }
+
+                    Current_Serifu_Index++;
+                    var serifu = GetSerifuData(Chat_Motions[Current_Chat_Motion_Id], Current_Serifu_Index);
+                    if (serifu == null)
+                    {
+                        Debug.LogWarning($"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
+                        //Debug.Assert(false, $"출력할 대사가 없습니다. {Current_Chat_Motion_ID} :: {Current_Serifu_Index}");
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(serifu.text_kr))
+                    {
+                        DisappearBalloon();
+
+                        SpeechBalloonManager.Instance.CreateBalloon(
+                            (balloon_id) =>
+                            {
+                                Current_Balloon_ID = balloon_id;
+                            },
+                            serifu.text_kr,
+                            this,
+                            new Vector2(460, 170),
+                            SpeechBalloon.BalloonSizeType.FixedWidth,
+                            SpeechBalloon.Pivot.Right);
+                    }
+
+                    string sound_key = serifu.audio_clip_key;
+                    if (!string.IsNullOrEmpty(sound_key))
+                    {
+                        AudioManager.Instance.PlayVoice(serifu.audio_clip_key, false, OnAudioStateAndVolumeChanged);
+                    }
+                    break;
+            }
+        }
 
         /// <summary>
         /// 스켈레톤(스파인) 이벤트 리스너 등록
@@ -189,6 +252,42 @@ namespace FluffyDuck.Memorial
             }
         }
 
+        public void OnAudioStateAndVolumeChanged(string sound_key, AudioManager.AUDIO_STATES audio_state, float volume_rms)
+        {
+            TrackEntry te;
+            switch (audio_state)
+            {
+                case AudioManager.AUDIO_STATES.PLAYING:
+                    te = FindTrack(MOUTH_TRACK);
+                    if (te == null || !te.Animation.Name.Equals(Current_Mouth_Anim_Name))
+                    {
+                        if (Current_Mouth_Anim_Name.Equals(string.Empty))
+                        {
+                            return;
+                        }
+                        te = Skeleton.AnimationState.SetAnimation(MOUTH_TRACK, Current_Mouth_Anim_Name, false);
+                        te.MixDuration = 0.2f;
+                        te.Alpha = 0;
+                        Dest_Mouth_Alpha = 0;
+                    }
+                    Elapsed_Time_For_Mouth_Open = 0;
+                    Origin_Mouth_Alpha = te.Alpha;
+                    Dest_Mouth_Alpha = Mathf.Clamp(volume_rms * Talk_Mouth_Wide_Multiple, 0, 1);
+                    Debug.Log($"Dest_Mouth_Alpha : {Dest_Mouth_Alpha}".WithColorTag(Color.red));
+                    break;
+                case AudioManager.AUDIO_STATES.END:
+                    DisappearBalloon();
+                    te = FindTrack(MOUTH_TRACK);
+                    if (te != null)
+                    {
+                        te.Alpha = 0;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         protected virtual void OnTap(ICursorInteractable comp)
         {
             if (FSM.CurrentTransitionID != ACTOR_STATES.IDLE)
@@ -203,13 +302,13 @@ namespace FluffyDuck.Memorial
                 return;
             }
 
-            Selected_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
-            if (Selected_Interaction == null)
+            Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
+            if (Current_Interaction == null)
             {
                 return;
             }
 
-            SetReactionData(Selected_Interaction, TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
+            SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
 
             FSM.ChangeState(ACTOR_STATES.REACT);
         }
@@ -228,13 +327,13 @@ namespace FluffyDuck.Memorial
                 return;
             }
 
-            Selected_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
-            if (Selected_Interaction == null)
+            Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
+            if (Current_Interaction == null)
             {
                 return;
             }
 
-            SetReactionData(Selected_Interaction, TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
+            SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
 
             FSM.ChangeState(ACTOR_STATES.REACT);
         }
@@ -277,12 +376,11 @@ namespace FluffyDuck.Memorial
 
             if (!string.IsNullOrEmpty(data.drag_animation_name))
             {
-                switch(state)
+                switch (state)
                 {
                     case 0:
-                        Debug.Log("SET!!".WithColorTag(Color.red));
-                        Selected_Interaction = data;
-                        SetReactionData(Selected_Interaction, TOUCH_GESTURE_TYPE.DRAG, bounding_box);
+                        Current_Interaction = data;
+                        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DRAG, bounding_box);
 
                         FSM.ChangeState(ACTOR_STATES.DRAG);
                         break;
@@ -295,13 +393,10 @@ namespace FluffyDuck.Memorial
                         {
                             if (close_value < 1)
                             {
-                                Debug.Log($"close_value : {close_value}".WithColorTag(Color.red));
-
                                 Drag_Track_Entry.TrackTime = close_value;
                             }
                             else
                             {
-                                Debug.Log($"REACT".WithColorTag(Color.red));
                                 FSM.ChangeState(ACTOR_STATES.REACT);
                             }
                         }
@@ -331,7 +426,7 @@ namespace FluffyDuck.Memorial
             }
 
             var data = GetInteractionData(TOUCH_GESTURE_TYPE.NADE, bounding_box);
-            
+
             if (data == null)
             {
                 return;
@@ -340,8 +435,8 @@ namespace FluffyDuck.Memorial
             switch (state)
             {
                 case 0:
-                    Selected_Interaction = data;
-                    SetReactionData(Selected_Interaction, TOUCH_GESTURE_TYPE.NADE, bounding_box);
+                    Current_Interaction = data;
+                    SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.NADE, bounding_box);
 
                     FSM.ChangeState(ACTOR_STATES.NADE);
                     break;
@@ -364,7 +459,18 @@ namespace FluffyDuck.Memorial
             }
         }
 
-        private Me_Interaction_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
+        int GetConsecutiveGestureCount(TOUCH_GESTURE_TYPE gesture_type, TOUCH_BODY_TYPE body_type)
+        {
+            var key = (gesture_type, body_type);
+            if (!Gesture_Touch_Counts.Key.Equals(key))
+            {
+                return 0;
+            }
+
+            return Gesture_Touch_Counts.Value;
+        }
+
+        Me_Interaction_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
         {
             var interaction_datas = Touch_Type_Interactions[(int)type, (int)bounding_box.GetTouchBodyType()];
 
@@ -373,12 +479,7 @@ namespace FluffyDuck.Memorial
                 return null;
             }
 
-            int count = 1;
-            var key = (type, bounding_box.GetTouchBodyType());
-            if (Gesture_Touch_Counts.Key.Equals(key))
-            {
-                count += Gesture_Touch_Counts.Value;
-            }
+            int count = 1 + GetConsecutiveGestureCount(type, bounding_box.GetTouchBodyType());
 
             try
             {
@@ -390,11 +491,11 @@ namespace FluffyDuck.Memorial
                     && (data.condition_max_gesture_count == 0 || count <= data.condition_max_gesture_count))) // condition_max_gesture_count 0이면 조건이 없는걸로 취급
                     .First();
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 // 조건들을 통과 못하는 경우는 그냥 패스
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // 이외의 예외는 확인해봅니다
                 Debug.LogError($"Current_State_Id : {Current_State_Id}");
@@ -409,16 +510,11 @@ namespace FluffyDuck.Memorial
             {
                 return;
             }
-            
-            int index = Array.IndexOf(data.chat_motion_ids, Selected_Chat_Motion_Id) + 1;
 
-            if (index >= data.chat_motion_ids.Length)
-            {
-                index = 0;
-            }
+            int index = GetConsecutiveGestureCount(type, bounding_box.GetTouchBodyType()) % data.chat_motion_ids.Length;
 
-            Selected_Interaction = data;
-            Selected_Chat_Motion_Id = data.chat_motion_ids[index];
+            Current_Interaction = data;
+            Current_Chat_Motion_Id = data.chat_motion_ids[index];
         }
 
         protected void AddGestureEventListener()
@@ -444,6 +540,8 @@ namespace FluffyDuck.Memorial
                 Debug.Assert(false, $"프리팹 {this.GetType()} 컴포넌트의 인스펙터에 SkeletonAnimation이 없습니다");
                 return false;
             }
+
+            InitField();
 
             if (!GetSkeletonComponents())
             {
@@ -480,6 +578,26 @@ namespace FluffyDuck.Memorial
             return true;
         }
 
+        void InitField()
+        {
+            Idle_Animation_Datas = null;
+            Current_State_Id = -1;
+            Idle_Played_Count = 0;
+            Gesture_Touch_Counts = default;
+            Face = null;
+            Balloon = null;
+            Producer = null;
+            Touch_Type_Interactions = null;
+            Current_Interaction = null;
+            Chat_Motions = null;
+            Serifues = null;
+            Drag_Track_Entry = null;
+            Current_Chat_Motion_Id = -1;
+            Current_Serifu_Index = -1;
+            Nade_Point = 0;
+            Current_Mouth_Anim_Name = string.Empty;
+        }
+
         bool GetSkeletonComponents()
         {
             try
@@ -495,6 +613,45 @@ namespace FluffyDuck.Memorial
             }
 
             return Face != null && Balloon != null;
+        }
+
+        /// <summary>
+        /// 해당 캐릭터의 대사 데이터를 가져오기
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        Me_Serifu_Data GetSerifuData(Me_Chat_Motion_Data data, int serifu_ids_index)
+        {
+            if (Serifues == null)
+            {
+                Debug.Assert(false, "정상적으로 초기화가 되지 않았습니다.");
+                return null;
+            }
+
+            if (Serifues.Count == 0 || data == null)
+            {
+                return null;
+            }
+
+            if (data.serifu_ids.Count() <= serifu_ids_index)
+            {
+                return null;
+            }
+
+            return Serifues[data.serifu_ids[serifu_ids_index]];
+        }
+
+        /// <summary>
+        /// 현재 표시되는 말풍선을 삭제
+        /// </summary>
+        void DisappearBalloon()
+        {
+            if (Current_Balloon_ID == -1)
+            {
+                return;
+            }
+            SpeechBalloonManager.Instance.DisappearBalloon(Current_Balloon_ID);
+            Current_Balloon_ID = -1;
         }
 
         /// <summary>
@@ -555,6 +712,11 @@ namespace FluffyDuck.Memorial
             bool result = int.TryParse(word[0], out int num);
             track_index = result ? num : -1;
             return result;
+        }
+
+        public Vector3 GetBalloonWorldPosition()
+        {
+            return Balloon.GetWorldPosition(Skeleton.transform);
         }
 
         public record IdleAnimationData

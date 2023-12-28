@@ -14,7 +14,7 @@ namespace FluffyDuck.Addressable
         {
             get
             {
-                string path = "";
+                string path;
                 if (isTest)
                 {
                     path = "http://10.10.0.20/clientdata";

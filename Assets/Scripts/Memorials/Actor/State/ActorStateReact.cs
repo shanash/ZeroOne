@@ -9,6 +9,11 @@ namespace FluffyDuck.Memorial
             actor.ActorStateReactBegin();
         }
 
+        public override void UpdateState(ActorBase actor)
+        {
+            actor.ActorStateReactUpdate();
+        }
+
         public override void ExitState(ActorBase actor)
         {
             actor.ActorStateReactExit();

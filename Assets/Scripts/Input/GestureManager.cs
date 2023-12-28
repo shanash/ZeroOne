@@ -190,7 +190,6 @@ public class GestureManager : Singleton<GestureManager>
             return;
         }
 
-        Debug.Log($"HandleDrag : {phase}");
         // 드래그 시작 감지 및 드래그 중 상태 업데이트
         if (!IsDragging && drag_origin.sqrMagnitude > DRAG_THRESHOLD)
         {

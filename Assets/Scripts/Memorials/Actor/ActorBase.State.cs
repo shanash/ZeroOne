@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using Spine;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,7 +89,7 @@ namespace FluffyDuck.Memorial
         public virtual void ActorStateReactBegin()
         {
             // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
-            var chat_motion_data = Chat_Motions[Selected_Chat_Motion_Id];
+            var chat_motion_data = Chat_Motions[Current_Chat_Motion_Id];
             foreach (string anim_name in chat_motion_data.animation_name)
             {
                 if (!TryGetTrackNum(anim_name, out int track_num))
@@ -107,11 +108,12 @@ namespace FluffyDuck.Memorial
                 // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
                 react_track_entries.Add(te);
             }
+            Current_Serifu_Index = -1;
 
             // 연속 제스쳐 카운트 갯수 하나 증가
-            if (Selected_Interaction != null)
+            if (Current_Interaction != null)
             {
-                var key = (Selected_Interaction.touch_gesture_type, Selected_Interaction.touch_body_type);
+                var key = (Current_Interaction.touch_gesture_type, Current_Interaction.touch_body_type);
                 if (!Gesture_Touch_Counts.Key.Equals(key))
                 {
                     Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, 1);
@@ -125,32 +127,37 @@ namespace FluffyDuck.Memorial
 
         public virtual void ActorStateReactUpdate()
         {
+            var te = FindTrack(MOUTH_TRACK);
+            if (te != null)
+            {
+                Elapsed_Time_For_Mouth_Open += Time.deltaTime;
+                te.Alpha = Mathf.Lerp(Origin_Mouth_Alpha, Dest_Mouth_Alpha, System.Math.Min(1.0f, Elapsed_Time_For_Mouth_Open / AudioManager.VOICE_TERM_SECONDS));
 
+                Debug.Log($"te.Alpha : {te.Alpha}".WithColorTag(Color.red));
+            }
         }
 
         public virtual void ActorStateReactExit()
         {
-            if (Selected_Interaction != null && Selected_Interaction.change_state_id != 0)
-            {
-                Current_State_Id = Selected_Interaction.change_state_id;
-            }
+            DisappearBalloon();
 
-            foreach (var track in react_track_entries)
+            if (Current_Interaction != null && Current_Interaction.change_state_id != 0)
             {
-
+                Current_State_Id = Current_Interaction.change_state_id;
             }
 
             react_track_entries.Clear();
+            Current_Chat_Motion_Id = -1;
         }
 
         public virtual void ActorStateDragBegin()
         {
-            if (!TryGetTrackNum(Selected_Interaction.drag_animation_name, out int track_num))
+            if (!TryGetTrackNum(Current_Interaction.drag_animation_name, out int track_num))
             {
                 throw new ActressBase.InvalidTrackException(track_num);
             }
 
-            Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Selected_Interaction.drag_animation_name, false);
+            Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Current_Interaction.drag_animation_name, false);
             Drag_Track_Entry.MixDuration = 0.0f;
             Drag_Track_Entry.TimeScale = 0.0f;
         }
