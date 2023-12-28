@@ -10,7 +10,7 @@ using MQTTnet.Server;
 
 namespace ProtocolShared.MQTT
 {
-    public class MosquittoService
+    public class Mosquitto
     {
         MqttFactory _mqttFactory = new MqttFactory();
         IMqttClient _mqttClient;
@@ -18,11 +18,10 @@ namespace ProtocolShared.MQTT
         MqttClientOptions? _options = null;
         bool isDisconnect = false;
         Func<string, string, Task>? _onMessage = null;
-        public MosquittoService(){
+        public Mosquitto(){
             _mqttClient = _mqttFactory.CreateMqttClient();
-
-
         }
+
         public async Task<bool> Connect(string host, ushort port, Func<string, string, Task>? onMessage = null, Func<MqttClientDisconnectedEventArgs, Task>? onDisconnected = null, Func<MqttClientConnectedEventArgs, Task>? onConnected = null)
         {
             _options = new MqttClientOptionsBuilder()

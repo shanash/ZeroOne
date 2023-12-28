@@ -1,8 +1,6 @@
-using DocumentFormat.OpenXml.Drawing.Diagrams;
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -34,10 +32,6 @@ public class SkillPreview : EditorWindow
     /// </summary>
     List<string> Unit_Choice_Drop_Down_Menu_List = new List<string>();
 
-    /// <summary>
-    /// 현재 사용중인 유닛
-    /// </summary>
-    HeroBase_V2 Used_Unit;
 
     /// <summary>
     /// 유닛 썸네일
@@ -53,6 +47,7 @@ public class SkillPreview : EditorWindow
     BattleManager_V2 Skill_Preview_Battle_Mng;
 
 
+    static bool Is_Enable = false;
     /// <summary>
     /// 팝업창 오픈
     /// </summary>
@@ -64,12 +59,24 @@ public class SkillPreview : EditorWindow
             {
                 return;
             }
-            if (EditorUtility.DisplayDialog("Scene Error", "skill_preview 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "이동", "취소"))
+
+            if (Is_Enable)
             {
                 EditorSceneManager.OpenScene("Assets/Scenes/skill_preview.unity");
                 GetWindow<SkillPreview>("Skill Preview").minSize = new Vector2(400, 600);
             }
-            return;
+            else
+            {
+                if (EditorUtility.DisplayDialog("Scene Error", "skill_preview 씬에서만 사용이 가능합니다.\n해당 씬으로 이동하시겠습니까?", "이동", "취소"))
+                {
+                    EditorSceneManager.OpenScene("Assets/Scenes/skill_preview.unity");
+                    GetWindow<SkillPreview>("Skill Preview").minSize = new Vector2(400, 600);
+
+                }
+                return;
+            }
+            
+
         }
         GetWindow<SkillPreview>("스킬 미리보기").minSize = new Vector2(400, 600);
     }
@@ -104,7 +111,6 @@ public class SkillPreview : EditorWindow
         Skill_Type = SKILL_TYPE.NONE;
         Prev_Skill_Type = SKILL_TYPE.NONE;
     }
-
 
     static bool IsSkillPreviewScene()
     {
@@ -339,13 +345,15 @@ public class SkillPreview : EditorWindow
     /// </summary>
     void ClearBattleUnit()
     {
-        if (Used_Unit == null)
-        {
-            return;
-        }
-        var pool = GameObjectPoolManager.Instance;
-        pool.UnusedGameObject(Used_Unit.gameObject);
-        Used_Unit = null;
+        //if (Used_Unit == null)
+        //{
+        //    return;
+        //}
+        //var pool = GameObjectPoolManager.Instance;
+        //pool.UnusedGameObject(Used_Unit.gameObject);
+        //Used_Unit = null;
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        team?.Editor_RemoveAllMembers();
     }
 
     /// <summary>
@@ -403,7 +411,12 @@ public class SkillPreview : EditorWindow
     /// </summary>
     void AddLayoutUnitThumbnail()
     {
-        if (Used_Unit == null)
+        //if (Used_Unit == null)
+        //{
+        //    return;
+        //}
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        if (team == null)
         {
             return;
         }
@@ -429,7 +442,8 @@ public class SkillPreview : EditorWindow
     /// </summary>
     void AddSkillChoice()
     {
-        if (Used_Unit == null)
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        if (team == null)
         {
             return;
         }
@@ -444,8 +458,6 @@ public class SkillPreview : EditorWindow
                 Skill_Type = (SKILL_TYPE)EditorGUILayout.EnumPopup("스킬 선택", Skill_Type);
             }
             EditorGUILayout.EndHorizontal();
-
-
         }
 
 
@@ -570,14 +582,17 @@ public class SkillPreview : EditorWindow
             return;
         }
 
-        if (Used_Unit == null)
+        //if (Used_Unit == null)
+        //{
+        //    return;
+        //}
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        if (team == null) {  return; }
+        var members = team.GetMembers();
+        if (members.Count > 0)
         {
-            return;
-        }
-       
-        if (Used_Unit != null)
-        {
-            string path = Used_Unit.GetBattleUnitData().GetThumbnailPath();
+            var unit = members[0];
+            string path = unit.GetBattleUnitData().GetThumbnailPath();
             if (!string.IsNullOrEmpty(path))
             {
                 CommonUtils.GetResourceFromAddressableAsset<Texture>(path, (obj) =>
@@ -591,6 +606,23 @@ public class SkillPreview : EditorWindow
                 Unit_Thumbnail = null;
             }
         }
+       
+        //if (Used_Unit != null)
+        //{
+        //    string path = Used_Unit.GetBattleUnitData().GetThumbnailPath();
+        //    if (!string.IsNullOrEmpty(path))
+        //    {
+        //        CommonUtils.GetResourceFromAddressableAsset<Texture>(path, (obj) =>
+        //        {
+        //            Unit_Thumbnail = obj;
+        //        });
+
+        //    }
+        //    else
+        //    {
+        //        Unit_Thumbnail = null;
+        //    }
+        //}
 
     }
 
@@ -609,7 +641,15 @@ public class SkillPreview : EditorWindow
 
         CheckSkillType();
 
-        if (Used_Unit != null)
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        if (team == null) 
+        {
+            ClearUnitThumnail();
+            return;
+        }
+        
+        var members = team.GetMembers();
+        if (members.Count > 0)
         {
             UpdateUnitThumbnail();
         }
@@ -617,6 +657,8 @@ public class SkillPreview : EditorWindow
         {
             ClearUnitThumnail();
         }
+
+        
     }
 
     void CheckSkillPreviewBattleMng()
@@ -635,9 +677,11 @@ public class SkillPreview : EditorWindow
     void OnEnable()
     {
         CheckSkillPreviewBattleMng();
+        Is_Enable = true;
     }
     void OnDisable()
     {
         Skill_Preview_Battle_Mng = null;
+        Is_Enable = false;
     }
 }
