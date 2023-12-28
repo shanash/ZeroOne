@@ -6,6 +6,8 @@ public class BattleNpcData : BattleUnitData
 
     Npc_Battle_Data Battle_Data;
 
+    public BattleNpcData() : base(CHARACTER_TYPE.NPC) { }
+
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {

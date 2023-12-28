@@ -1,6 +1,13 @@
 
 public class BattleUnitData : BattleDataBase
 {
+    public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
+
+    protected BattleUnitData(CHARACTER_TYPE ctype)
+    {
+        Character_Type = ctype;
+    }
+
     public virtual BattleUnitData SetUnitID(params int[] unit_ids)
     {
         return null;

@@ -43,6 +43,11 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Favorite_Item_Data> _Favorite_Item_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Expendable_Item_Data> _Expendable_Item_Data
 	{
 		get;
@@ -109,6 +114,11 @@ public class BaseMasterDataManager
 		private set;
 	}
 	protected List<Npc_Battle_Data> _Npc_Battle_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Npc_Level_Stat_Data> _Npc_Level_Stat_Data
 	{
 		get;
 		private set;
@@ -195,6 +205,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Exp_Potion_Data();
 		await LoadMaster_Sta_Potion_Data();
 		await LoadMaster_Memoritem_Data();
+		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
 		await LoadMaster_PlayerLevelData();
 		await LoadMaster_PlayerCharacterLevelData();
@@ -209,6 +220,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Npc_Skill_Duration_Data();
 		await LoadMaster_Npc_Data();
 		await LoadMaster_Npc_Battle_Data();
+		await LoadMaster_Npc_Level_Stat_Data();
 		await LoadMaster_Player_Character_Skill_Group();
 		await LoadMaster_Player_Character_Skill_Data();
 		await LoadMaster_Player_Character_Skill_Onetime_Data();
@@ -273,6 +285,12 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Memoritem_Data");
 		_Memoritem_Data = JsonConvert.DeserializeObject<List<Memoritem_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Favorite_Item_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Favorite_Item_Data");
+		_Favorite_Item_Data = JsonConvert.DeserializeObject<List<Favorite_Item_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Expendable_Item_Data()
@@ -357,6 +375,12 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Battle_Data");
 		_Npc_Battle_Data = JsonConvert.DeserializeObject<List<Npc_Battle_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Npc_Level_Stat_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Level_Stat_Data");
+		_Npc_Level_Stat_Data = JsonConvert.DeserializeObject<List<Npc_Level_Stat_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Group()
@@ -487,6 +511,14 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async void Check_Favorite_Item_Data()
+	{
+		if(_Favorite_Item_Data == null)
+		{
+			await LoadMaster_Favorite_Item_Data();
+		}
+	}
+
 	protected async void Check_Expendable_Item_Data()
 	{
 		if(_Expendable_Item_Data == null)
@@ -596,6 +628,14 @@ public class BaseMasterDataManager
 		if(_Npc_Battle_Data == null)
 		{
 			await LoadMaster_Npc_Battle_Data();
+		}
+	}
+
+	protected async void Check_Npc_Level_Stat_Data()
+	{
+		if(_Npc_Level_Stat_Data == null)
+		{
+			await LoadMaster_Npc_Level_Stat_Data();
 		}
 	}
 

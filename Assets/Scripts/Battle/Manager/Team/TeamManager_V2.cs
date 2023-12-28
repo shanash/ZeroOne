@@ -102,7 +102,6 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     protected void MyTeamSpawn()
     {
-        //float size = Camera.main.fieldOfView;
         var pool = GameObjectPoolManager.Instance;
         var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
@@ -158,36 +157,7 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-    /// <summary>
-    /// 실제 게임상이 아닌, 스킬 에디터상에서의 좌표.<br/>
-    /// 화면 밖이 아닌, 화면 안의 적군 포지션에서 시작한다.
-    /// </summary>
-    public void EditorRightTeamPosition()
-    {
-        int cnt = Used_Members.Count;
-
-        float offset_z = 0f;
-        float offset_x = 5;
-        float interval = 12f;
-        float position_offset = 0f;
-
-        for (int i = 0; i < cnt; i++)
-        {
-            var member = Used_Members[i];
-            position_offset = (int)member.GetPositionType() * interval;
-
-            float distance = member.GetApproachDistance();
-
-            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
-            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
-            Debug.Assert(same_positions.Count > 0);
-
-            int find_index = same_positions.IndexOf(member);
-
-            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 5));
-        }
-
-    }
+    
 
     /// <summary>
     /// Right 팀 최초 포지션 설정
@@ -233,41 +203,12 @@ public partial class TeamManager_V2 : IDisposable
                 StoryModeMonsterTeamSpawn();
                 break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
-                EditorModeMonsterTeamSpawn();
+                Editor_MonsterTeamSpawn();
                 break;
         }
     }
 
-    /// <summary>
-    /// 에디터 모드 몬스터 스폰
-    /// </summary>
-    void EditorModeMonsterTeamSpawn()
-    {
-        var pool = GameObjectPoolManager.Instance;
-        
-        var wdata = (Editor_Wave_Data)Dungeon.GetWaveData();
-        int len = wdata.enemy_appearance_info.Length;
-
-        //  battle npc data
-        for (int i = 0; i < len; i++)
-        {
-            var npc = new BattleNpcData();
-            npc.SetUnitID(wdata.enemy_appearance_info[i]);
-
-            var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
-            MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
-            monster.SetTeamManager(this);
-
-            monster.SetBattleUnitDataID(npc.GetUnitID());
-
-            monster.SetFlipX(true);
-            monster.SetDeckOrder(i);
-            monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
-            AddMember(monster);
-        }
-
-        EditorRightTeamPosition();
-    }
+    
 
     /// <summary>
     /// 스토리 모드 몬스터 스폰
@@ -558,5 +499,6 @@ public partial class TeamManager_V2 : IDisposable
             }
         }
     }
-    
+
+
 }

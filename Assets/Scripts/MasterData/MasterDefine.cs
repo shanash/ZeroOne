@@ -556,6 +556,8 @@ public enum ITEM_TYPE
 	EXPENDABLE_ITEM = 9,
 	/// <summary>장비</summary>
 	EQUIPMENT_ITEM = 10,
+	/// <summary>호감도 아이템</summary>
+	FAVORITE_ITEM = 11,
 }
 
 ///	<summary>

@@ -6,7 +6,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
 {
     public static class FluffyDuck
     {
-        [MenuItem("FluffyDuck/Convert Excel To Json")]
+        [MenuItem("FluffyDuck/Convert Excel To Json _%#j")]
         static void ConvertExcelToJson()
         {
             Excel2Json.Program.Main(
@@ -15,7 +15,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
                 "-cs", "Assets/Scripts/MasterData");
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor", false, 0)]
+        [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor _%#/", false, 0)]
         static void BuildLauncher_BuildAssetForLocalEditor()
         {
             BuildLauncher.BuildAssetForLocalEditor();
@@ -56,20 +56,20 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             BuildLauncher.DeleteAddressableCache();
         }
 
-        [MenuItem("FluffyDuck/Skill/Preview", false, 11)]
+        [MenuItem("FluffyDuck/Skill/Preview _&9", false, 11)]
         static void SkillPreviewOpen()
         {
             SkillPreview.ShowWindow();
         }
 
-        [MenuItem("FluffyDuck/Skill/Editor", false, 12)]
+        [MenuItem("FluffyDuck/Skill/Editor _&0", false, 12)]
         static void SkillEditorOpen()
         {
             SkillEditor.ShowWindow();
         }
 
 
-        [MenuItem("FluffyDuck/Move Scene/Title", false, 31)]
+        [MenuItem("FluffyDuck/Move Scene/Title _&1", false, 31)]
         static void TitleSceneOpen()
         {
             string go_scene = "title";
@@ -81,7 +81,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Lobby", false, 32)]
+        [MenuItem("FluffyDuck/Move Scene/Lobby _&2", false, 32)]
         static void LobbySceneOpen()
         {
             string go_scene = "home";
@@ -92,7 +92,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             }
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
-        [MenuItem("FluffyDuck/Move Scene/Battle", false, 33)]
+        [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
         static void BattleSceneOpen()
         {
             string go_scene = "battlev2";
@@ -104,7 +104,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Memorial", false, 34)]
+        [MenuItem("FluffyDuck/Move Scene/Memorial _&4", false, 34)]
         static void MemorialSceneOpen()
         {
             string go_scene = "memorial";

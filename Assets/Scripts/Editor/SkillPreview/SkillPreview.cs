@@ -50,7 +50,12 @@ public class SkillPreview : EditorWindow
     SKILL_TYPE Prev_Skill_Type = SKILL_TYPE.NONE;
 
 
-    
+    BattleManager_V2 Skill_Preview_Battle_Mng;
+
+
+    /// <summary>
+    /// 팝업창 오픈
+    /// </summary>
     public static void ShowWindow()
     {
         if (!IsSkillPreviewScene())
@@ -125,9 +130,9 @@ public class SkillPreview : EditorWindow
         {
             LayoutNonPlayingMode();
         }
-        
-        
     }
+
+
     /// <summary>
     /// Play button 그리기
     /// </summary>
@@ -150,6 +155,8 @@ public class SkillPreview : EditorWindow
                         {
                             EditorSceneManager.OpenScene("Assets/Scenes/skill_preview.unity");
                         }
+                        EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.EndVertical();
                         return;
                     }
                     ResetData();
@@ -314,15 +321,17 @@ public class SkillPreview : EditorWindow
     /// <param name="unit"></param>
     void SpawnGameObject(BattleUnitData unit)
     {
-        
-        GameObjectPoolManager.Instance.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
-        {
-            ClearBattleUnit();
-            Used_Unit = obj.GetComponent<HeroBase_V2>();
-            Used_Unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
-            Used_Unit.GetSkeletonRenderTexture().enabled = false;
-            
-        });
+        //GameObjectPoolManager.Instance.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
+        //{
+        //    ClearBattleUnit();
+        //    Used_Unit = obj.GetComponent<HeroBase_V2>();
+        //    Used_Unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
+        //    Used_Unit.GetSkeletonRenderTexture().enabled = false;
+
+        //});
+        CheckSkillPreviewBattleMng();
+        var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        team.Editor_AddBattleUnit(unit);
     }
 
     /// <summary>
@@ -608,5 +617,27 @@ public class SkillPreview : EditorWindow
         {
             ClearUnitThumnail();
         }
+    }
+
+    void CheckSkillPreviewBattleMng()
+    {
+        if (!IsSkillPreviewScene())
+        {
+            return;
+        }
+        if (Skill_Preview_Battle_Mng == null)
+        {
+            Skill_Preview_Battle_Mng = GameObject.Find("BattleManager_SkillPreview").GetComponent<BattleManager_V2>();
+        }
+    }
+
+
+    void OnEnable()
+    {
+        CheckSkillPreviewBattleMng();
+    }
+    void OnDisable()
+    {
+        Skill_Preview_Battle_Mng = null;
     }
 }

@@ -23,6 +23,14 @@ public class Wave_Data : System.IDisposable
 	///	</summary>
 	public int[] enemy_appearance_info {get; set;}
 	///	<summary>
+	///	NPC 레벨 정보
+	///	</summary>
+	public int[] npc_levels {get; set;}
+	///	<summary>
+	///	NPC 스탯 증가 정보
+	///	</summary>
+	public int[] npc_stat_ids {get; set;}
+	///	<summary>
 	///	웨이브 제한 시간
 	///	</summary>
 	public int wave_time {get; set;}
@@ -67,6 +75,26 @@ public class Wave_Data : System.IDisposable
 			for(int i = 0; i< cnt; i++)
 			{
 				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", enemy_appearance_info[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[npc_levels]");
+		if(npc_levels != null)
+		{
+			cnt = npc_levels.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", npc_levels[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[npc_stat_ids]");
+		if(npc_stat_ids != null)
+		{
+			cnt = npc_stat_ids.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", npc_stat_ids[i]).AppendLine();
 			}
 		}
 
