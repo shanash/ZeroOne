@@ -28,8 +28,28 @@ public class LobbyManager : MonoBehaviour
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
+        var pmng = PopupManager.Instance;
+        pmng.SetRootOnEnter(LobbyRootOnEnter);
+        pmng.SetRootOnExit(LobbyRootOnExit);
+
         Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
     }
+
+    /// <summary>
+    /// 로비 화면위의 모든 팝업이 사라졌을때 호출되는 함수
+    /// </summary>
+    void LobbyRootOnEnter()
+    {
+        Debug.Log("LobbyRootOnEnter");
+    }
+    /// <summary>
+    /// 로비 화면을 가리는 팝업이 생성되었을때 호출되는 함수
+    /// </summary>
+    void LobbyRootOnExit()
+    {
+        Debug.Log("LobbyRootOnExit");
+    }
+
 
     public void OnClickChangeCharacter()
     {
@@ -57,7 +77,12 @@ public class LobbyManager : MonoBehaviour
     public void OnClickCharacterList()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("캐릭터 리스트", TOAST_BOX_LENGTH.SHORT);
+        //CommonUtils.ShowToast("캐릭터 리스트", TOAST_BOX_LENGTH.SHORT);
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "캐릭터 리스트 준비중 입니다.");
+        });
     }
 
     public void OnClickDeck()
@@ -73,31 +98,47 @@ public class LobbyManager : MonoBehaviour
     public void OnClickHouse()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+        //CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "준비중 입니다.");
+        });
     }
 
     public void OnClickSearch()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "준비중 입니다.");
+        });
     }
     public void OnClickShop()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "준비중 입니다.");
+        });
     }
 
-    public void OnClickMission()
+    public void OnClickQuest()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        CommonUtils.ShowToast("미션 페이지 이동", TOAST_BOX_LENGTH.SHORT);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "준비중 입니다.");
+        });
     }
 
     public void OnClickPlay()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        CommonUtils.ShowToast("임무 페이지 이동", TOAST_BOX_LENGTH.SHORT);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", (popup) =>
+        {
+            popup.ShowPopup();
+        });
     }
 
     public void OnClickLeftMemorial()

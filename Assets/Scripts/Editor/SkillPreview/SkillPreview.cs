@@ -1,6 +1,7 @@
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -205,7 +206,6 @@ public class SkillPreview : EditorWindow
 
             EditorGUILayout.BeginHorizontal();
             {
-                //Choice_Char_Type_Index = EditorGUILayout.Popup("캐릭터 타입 선택", Choice_Char_Type_Index, Enum.GetNames(typeof(CHARACTER_TYPE)));
                 Choice_Character_Type = (CHARACTER_TYPE)EditorGUILayout.EnumPopup("캐릭터 타입 선택", Choice_Character_Type);
                 GUILayout.Space(10);
             }
@@ -327,14 +327,6 @@ public class SkillPreview : EditorWindow
     /// <param name="unit"></param>
     void SpawnGameObject(BattleUnitData unit)
     {
-        //GameObjectPoolManager.Instance.GetGameObject(unit.GetPrefabPath(), null, (obj) =>
-        //{
-        //    ClearBattleUnit();
-        //    Used_Unit = obj.GetComponent<HeroBase_V2>();
-        //    Used_Unit.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
-        //    Used_Unit.GetSkeletonRenderTexture().enabled = false;
-
-        //});
         CheckSkillPreviewBattleMng();
         var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
         team.Editor_AddBattleUnit(unit);
@@ -345,13 +337,6 @@ public class SkillPreview : EditorWindow
     /// </summary>
     void ClearBattleUnit()
     {
-        //if (Used_Unit == null)
-        //{
-        //    return;
-        //}
-        //var pool = GameObjectPoolManager.Instance;
-        //pool.UnusedGameObject(Used_Unit.gameObject);
-        //Used_Unit = null;
         var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
         team?.Editor_RemoveAllMembers();
     }
@@ -411,10 +396,6 @@ public class SkillPreview : EditorWindow
     /// </summary>
     void AddLayoutUnitThumbnail()
     {
-        //if (Used_Unit == null)
-        //{
-        //    return;
-        //}
         var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
         if (team == null)
         {
@@ -456,6 +437,17 @@ public class SkillPreview : EditorWindow
             {
                 GUILayout.Space(10);
                 Skill_Type = (SKILL_TYPE)EditorGUILayout.EnumPopup("스킬 선택", Skill_Type);
+                if (GUILayout.Button("실행", GUILayout.Width(80), GUILayout.Height(20)))
+                {
+                    if (Skill_Type != SKILL_TYPE.NONE)
+                    {
+                        var unit = team.GetMembers().First();
+                        if (unit != null)
+                        {
+                            //  todo
+                        }
+                    }
+                }
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -582,10 +574,6 @@ public class SkillPreview : EditorWindow
             return;
         }
 
-        //if (Used_Unit == null)
-        //{
-        //    return;
-        //}
         var team = Skill_Preview_Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
         if (team == null) {  return; }
         var members = team.GetMembers();
@@ -606,23 +594,6 @@ public class SkillPreview : EditorWindow
                 Unit_Thumbnail = null;
             }
         }
-       
-        //if (Used_Unit != null)
-        //{
-        //    string path = Used_Unit.GetBattleUnitData().GetThumbnailPath();
-        //    if (!string.IsNullOrEmpty(path))
-        //    {
-        //        CommonUtils.GetResourceFromAddressableAsset<Texture>(path, (obj) =>
-        //        {
-        //            Unit_Thumbnail = obj;
-        //        });
-
-        //    }
-        //    else
-        //    {
-        //        Unit_Thumbnail = null;
-        //    }
-        //}
 
     }
 

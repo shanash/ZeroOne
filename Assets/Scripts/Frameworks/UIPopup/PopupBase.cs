@@ -12,6 +12,7 @@ namespace FluffyDuck.UI
         UI_TYPE,
         POPUP_TYPE,
         MODAL_TYPE,
+        NOTI_TYPE,
     }
 
     public class Popup_Button_Data

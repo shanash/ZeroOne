@@ -13,6 +13,8 @@ namespace FluffyDuck.UI
         RectTransform Popup_Container;
         [SerializeField, Tooltip("모달 팝업. 최상위 팝업이다. 모달 팝업은 주로 메세지 등 강제적으로 안내해야 하는 경우에 사용")]
         RectTransform Modal_Container;
+        [SerializeField, Tooltip("노티 팝업. 모달 위에서도 보일 수 있는 팝업. 가장 최상위. 현재 UI의 기믹에는 영향을 주지 않고, 화면 일부에서 단순 메세지를 보여주기 위한 용도.")]
+        RectTransform Noti_Container;
 
         List<PopupBase> Popup_List = new List<PopupBase>();
 
@@ -145,6 +147,9 @@ namespace FluffyDuck.UI
                         case POPUP_TYPE.MODAL_TYPE:
                             container = Modal_Container;
                             break;
+                        case POPUP_TYPE.NOTI_TYPE:
+                            container = Noti_Container;
+                            break;
                         default:
                             container = Popup_Container;
                             Debug.Assert(false);
@@ -196,6 +201,9 @@ namespace FluffyDuck.UI
                 case POPUP_TYPE.MODAL_TYPE:
                     container = Modal_Container;
                     break;
+                case POPUP_TYPE.NOTI_TYPE:
+                    container = Noti_Container;
+                    break;
                 default:
                     container = Popup_Container;
                     Debug.Assert(false);
@@ -224,28 +232,7 @@ namespace FluffyDuck.UI
 
 
        
-        /// <summary>
-        /// 가장 최근에 추가된 팝업 삭제
-        /// </summary>
-        public void RemoveLastPopup()
-        {
-            if (Popup_List.Count > 0)
-            {
-                var pop = Popup_List[Popup_List.Count - 1];
-                pop.HidePopup();
-            }
-        }
-
-        public void RemovePopup(PopupBase popup)
-        {
-            if (Popup_List.Contains(popup))
-            {
-                popup.OnExit();
-                GameObjectPoolManager.Instance.UnusedGameObject(popup.gameObject, false);
-                Popup_List.Remove(popup);
-                LastKeyEventEnableCheck();
-            }
-        }
+     
 
         void LastKeyEventEnableCheck()
         {
@@ -282,7 +269,50 @@ namespace FluffyDuck.UI
         {
             return Popup_List.Exists(x => x.IsShow() && x.GetPopupType() == ptype);
         }
+        /// <summary>
+        /// 가장 최근에 추가된 팝업 삭제
+        /// </summary>
+        public void RemoveLastPopup()
+        {
+            if (Popup_List.Count > 0)
+            {
+                var pop = Popup_List[Popup_List.Count - 1];
+                pop.HidePopup();
+            }
+        }
 
+        /// <summary>
+        /// 가장 최근에 추가된 해당 타입의 팝업 삭제
+        /// </summary>
+        /// <param name="ptype"></param>
+        public void RemoveLastPopupType(POPUP_TYPE ptype)
+        {
+            var popup = Popup_List.FindLast(x => x.GetPopupType() == ptype);
+            if (popup != null)
+            {
+                popup.HidePopup();
+            }
+        }
+        /// <summary>
+        /// 요청 팝업 닫기
+        /// </summary>
+        /// <param name="popup"></param>
+        public void RemovePopup(PopupBase popup)
+        {
+            if (Popup_List.Contains(popup))
+            {
+                popup.OnExit();
+                GameObjectPoolManager.Instance.UnusedGameObject(popup.gameObject, false);
+                Popup_List.Remove(popup);
+                LastKeyEventEnableCheck();
+            }
+        }
+
+
+        /// <summary>
+        /// 요청 팝업 타입의 모든 팝업 닫기
+        /// </summary>
+        /// <param name="ptype"></param>
         public void CloseAllPopupType(POPUP_TYPE ptype)
         {
             var pool = GameObjectPoolManager.Instance;
@@ -297,14 +327,22 @@ namespace FluffyDuck.UI
             Popup_List.RemoveAll(temp_list.Contains);
         }
 
-
+        /// <summary>
+        /// 모든 팝업/UI 닫기
+        /// </summary>
         public void CloseAll()
         {
             CloseAllPopupType(POPUP_TYPE.MODAL_TYPE);
             CloseAllPopupType(POPUP_TYPE.POPUP_TYPE);
             CloseAllPopupType(POPUP_TYPE.UI_TYPE);
+            CloseAllPopupType(POPUP_TYPE.NOTI_TYPE);
+            
             LastKeyEventEnableCheck();
         }
+
+        /// <summary>
+        /// 모든 팝업 닫기(UI 제외)
+        /// </summary>
         public void CloseAllPopups()
         {
             CloseAllPopupType(POPUP_TYPE.MODAL_TYPE);
