@@ -6,7 +6,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public class GestureManager : Singleton<GestureManager>
 {
     // 더블터치와 롱프레스를 감지하기 위한 시간 및 거리 임계값
@@ -15,6 +14,7 @@ public class GestureManager : Singleton<GestureManager>
     const float DRAG_THRESHOLD = 0.01f; // 드래그로 인정할 최소 이동 거리의 제곱
 
     int Drag_Id = 0;
+    int Drag_State = 0;
     bool IsDragging = false;
 
     ReadOnlyCollection<ICursorInteractable> TouchDown_Components;
@@ -64,6 +64,11 @@ public class GestureManager : Singleton<GestureManager>
     /// <param name="components">터치 다운 이벤트 위치에 있는 ICursorInteractable</param>
     private void HandleInputDown(Vector2 position, ICollection<ICursorInteractable> components)
     {
+        if (!Enable)
+        {
+            return;
+        }
+
         // 터치 다운 시점의 상호작용 가능한 객체들 저장
         TouchDown_Components = new ReadOnlyCollection<ICursorInteractable>((IList<ICursorInteractable>)components);
 
@@ -81,6 +86,10 @@ public class GestureManager : Singleton<GestureManager>
     /// <param name="components">터치 업 이벤트 위치에 있는 ICursorInteractable</param>
     private void HandleInputUp(Vector2 position, ICollection<ICursorInteractable> components)
     {
+        if (!Enable)
+        {
+            return;
+        }
         // 터치 업 이벤트 발생
         foreach (var component in components)
         {
@@ -113,6 +122,11 @@ public class GestureManager : Singleton<GestureManager>
 
     private void HandleTap(Vector2 position, ICollection<ICursorInteractable> components)
     {
+        if (!Enable)
+        {
+            return;
+        }
+
         bool isWithinDistance = Vector2.Distance(Last_TouchPosition, position) < TOUCH_DISTANCE_MAX;
 
         if (Wait_For_Double_Touch == null)
@@ -141,6 +155,11 @@ public class GestureManager : Singleton<GestureManager>
 
     private void HandleLongTap(InputActionPhase phase, Vector2 position, ICollection<ICursorInteractable> components)
     {
+        if (!Enable)
+        {
+            return;
+        }
+
         if (phase == InputActionPhase.Started)
         {
             return;
@@ -162,10 +181,16 @@ public class GestureManager : Singleton<GestureManager>
     /// 드래그 이벤트 핸들러
     /// </summary>
     /// <param name="phase">현재 액션 페이즈</param>
-    /// <param name="dragDelta">드래그 스타트 지점에서 현재까지의 2D 벡터</param>
+    /// <param name="drag_origin">드래그 스타트 지점에서 현재까지의 2D 벡터</param>
     /// <param name="position">현재 위치</param>
     private void HandleDrag(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position)
     {
+        if (!Enable)
+        {
+            return;
+        }
+
+        Debug.Log($"HandleDrag : {phase}");
         // 드래그 시작 감지 및 드래그 중 상태 업데이트
         if (!IsDragging && drag_origin.sqrMagnitude > DRAG_THRESHOLD)
         {
@@ -203,10 +228,13 @@ public class GestureManager : Singleton<GestureManager>
     {
         yield return new WaitForSeconds(DOUBLETOUCH_THRESHOLD);
 
-        foreach (var component in matched_components)
+        if (Enable)
         {
-            OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position, 0);
-            OnTap?.Invoke(component);
+            foreach (var component in matched_components)
+            {
+                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position, 0);
+                OnTap?.Invoke(component);
+            }
         }
 
         Wait_For_Double_Touch = null;

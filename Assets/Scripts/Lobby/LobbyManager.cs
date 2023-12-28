@@ -33,6 +33,7 @@ public class LobbyManager : MonoBehaviour
         pmng.SetRootOnExit(LobbyRootOnExit);
 
         Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+        GestureManager.Instance.Enable = false;
     }
 
     /// <summary>
@@ -155,10 +156,13 @@ public class LobbyManager : MonoBehaviour
     public void OnUIHideComplete()
     {
         Fade_In_Box.gameObject.SetActive(true);
+        GestureManager.Instance.Enable = true;
     }
+
     public void OnUIShowBegin()
     {
         Fade_In_Box.gameObject.SetActive(false);
+        GestureManager.Instance.Enable = false;
     }
     #endregion
 }
