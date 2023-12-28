@@ -109,14 +109,17 @@ namespace FluffyDuck.Memorial
             }
 
             // 연속 제스쳐 카운트 갯수 하나 증가
-            var key = (Selected_Interaction.touch_gesture_type, Selected_Interaction.touch_body_type);
-            if (!Gesture_Touch_Counts.Key.Equals(key))
+            if (Selected_Interaction != null)
             {
-                Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, 1);
-            }
-            else
-            {
-                Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, Gesture_Touch_Counts.Value + 1);
+                var key = (Selected_Interaction.touch_gesture_type, Selected_Interaction.touch_body_type);
+                if (!Gesture_Touch_Counts.Key.Equals(key))
+                {
+                    Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, 1);
+                }
+                else
+                {
+                    Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, Gesture_Touch_Counts.Value + 1);
+                }
             }
         }
 
