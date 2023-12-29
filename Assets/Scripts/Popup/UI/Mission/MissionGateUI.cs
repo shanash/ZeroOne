@@ -9,7 +9,10 @@ public class MissionGateUI : PopupBase
     public void OnClickMainMission()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/SelectStageUI", (popup) =>
+        {
+            popup.ShowPopup();
+        });
     }
 
     public void OnClickSpecialMission()

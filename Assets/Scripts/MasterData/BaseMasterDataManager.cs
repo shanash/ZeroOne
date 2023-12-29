@@ -163,6 +163,16 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<World_Data> _World_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Zone_Data> _Zone_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Stage_Data> _Stage_Data
 	{
 		get;
@@ -229,6 +239,8 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Battle_Data();
 		await LoadMaster_Position_Icon_Data();
 		await LoadMaster_Role_Icon_Data();
+		await LoadMaster_World_Data();
+		await LoadMaster_Zone_Data();
 		await LoadMaster_Stage_Data();
 		await LoadMaster_Wave_Data();
 		await LoadMaster_Stage_Reward_Data();
@@ -429,6 +441,18 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Role_Icon_Data");
 		_Role_Icon_Data = JsonConvert.DeserializeObject<List<Role_Icon_Data>>(json);
+	}
+
+	protected async Task LoadMaster_World_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/World_Data");
+		_World_Data = JsonConvert.DeserializeObject<List<World_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Zone_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Zone_Data");
+		_Zone_Data = JsonConvert.DeserializeObject<List<Zone_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Stage_Data()
@@ -700,6 +724,22 @@ public class BaseMasterDataManager
 		if(_Role_Icon_Data == null)
 		{
 			await LoadMaster_Role_Icon_Data();
+		}
+	}
+
+	protected async void Check_World_Data()
+	{
+		if(_World_Data == null)
+		{
+			await LoadMaster_World_Data();
+		}
+	}
+
+	protected async void Check_Zone_Data()
+	{
+		if(_Zone_Data == null)
+		{
+			await LoadMaster_Zone_Data();
 		}
 	}
 

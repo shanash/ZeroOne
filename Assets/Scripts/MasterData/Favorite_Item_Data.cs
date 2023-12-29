@@ -10,17 +10,9 @@ public class Favorite_Item_Data : System.IDisposable
 	///	</summary>
 	public int item_index {get; set;}
 	///	<summary>
-	///	영문명
-	///	</summary>
-	public string item_name_en {get; set;}
-	///	<summary>
 	///	한글명
 	///	</summary>
 	public string item_name_kr {get; set;}
-	///	<summary>
-	///	타입
-	///	</summary>
-	public string item_type {get; set;}
 	///	<summary>
 	///	사용 효과
 	///	</summary>
@@ -43,9 +35,7 @@ public class Favorite_Item_Data : System.IDisposable
 	public Favorite_Item_Data()
 	{
 		item_index = 0;
-		item_name_en = string.Empty;
 		item_name_kr = string.Empty;
-		item_type = string.Empty;
 		use_effect = 0;
 		item_tooltip_text = string.Empty;
 		sell_price = 0;
@@ -72,9 +62,7 @@ public class Favorite_Item_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
-		sb.AppendFormat("[item_name_en] = <color=yellow>{0}</color>", item_name_en).AppendLine();
 		sb.AppendFormat("[item_name_kr] = <color=yellow>{0}</color>", item_name_kr).AppendLine();
-		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
 		sb.AppendFormat("[use_effect] = <color=yellow>{0}</color>", use_effect).AppendLine();
 		sb.AppendFormat("[item_tooltip_text] = <color=yellow>{0}</color>", item_tooltip_text).AppendLine();
 		sb.AppendFormat("[sell_price] = <color=yellow>{0}</color>", sell_price).AppendLine();

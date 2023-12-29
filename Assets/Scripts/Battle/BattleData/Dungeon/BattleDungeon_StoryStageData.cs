@@ -16,7 +16,7 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     {
         var m = MasterDataManager.Instance;
         Stage = m.Get_StageData(dungeon_id);
-        m.Get_WaveDataList(Stage.wave_group_id, ref Wave_Datas);
+        m.Get_WaveDataList(Stage.stage_id, ref Wave_Datas);
     }
 
 

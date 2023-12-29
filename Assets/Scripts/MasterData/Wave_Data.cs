@@ -10,6 +10,10 @@ public class Wave_Data : System.IDisposable
 	///	</summary>
 	public int wave_group_id {get; set;}
 	///	<summary>
+	///	웨이브 진행 스테이지
+	///	</summary>
+	public int stage_id {get; set;}
+	///	<summary>
 	///	웨이브 순서
 	///	</summary>
 	public int wave_sequence {get; set;}
@@ -40,6 +44,7 @@ public class Wave_Data : System.IDisposable
 	public Wave_Data()
 	{
 		wave_group_id = 0;
+		stage_id = 0;
 		wave_sequence = 0;
 		enemy_appearance_count = 0;
 		wave_time = 0;
@@ -66,6 +71,7 @@ public class Wave_Data : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[wave_group_id] = <color=yellow>{0}</color>", wave_group_id).AppendLine();
+		sb.AppendFormat("[stage_id] = <color=yellow>{0}</color>", stage_id).AppendLine();
 		sb.AppendFormat("[wave_sequence] = <color=yellow>{0}</color>", wave_sequence).AppendLine();
 		sb.AppendFormat("[enemy_appearance_count] = <color=yellow>{0}</color>", enemy_appearance_count).AppendLine();
 		sb.AppendLine("[enemy_appearance_info]");

@@ -20,6 +20,21 @@ public enum TRIBE_TYPE
 }
 
 ///	<summary>
+///	스테이지 난이도
+///	</summary>
+public enum STAGE_DIFFICULTY_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>노말</summary>
+	NOMAL = 1,
+	/// <summary>하드</summary>
+	HARD = 2,
+	/// <summary>베리하드</summary>
+	VERYHARD = 3,
+}
+
+///	<summary>
 ///	유저가 캐릭터 사거리를 대략적으로 쉽게 파악할 수 있게 편의성 용도로 제공할 표현
 ///	</summary>
 public enum POSITION_TYPE
@@ -558,6 +573,8 @@ public enum ITEM_TYPE
 	EQUIPMENT_ITEM = 10,
 	/// <summary>호감도 아이템</summary>
 	FAVORITE_ITEM = 11,
+	/// <summary>스태미나</summary>
+	STAMINA = 12,
 }
 
 ///	<summary>
