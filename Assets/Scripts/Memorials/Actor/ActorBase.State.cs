@@ -172,7 +172,21 @@ namespace FluffyDuck.Memorial
             Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false).MixDuration = 0.2f;
             Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
 
-            Nade_Point = 0;
+            te_horz = FindTrack(31);
+            te_vert = FindTrack(32);
+        }
+
+        TrackEntry te_vert;
+        TrackEntry te_horz;
+
+        public virtual void ActorStateNadeUpdate()
+        {
+            UpdateFaceAnimationDirection(0.1f, ref te_horz, ref te_vert, "31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down");
+
+            if (!ShouldContinueMovingFace())
+            {
+                FSM.ChangeState(ACTOR_STATES.IDLE);
+            }
         }
 
         public virtual void ActorStateNadeEnd()
@@ -185,6 +199,9 @@ namespace FluffyDuck.Memorial
             }
 
             Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false).MixDuration = mix_duration;
+            Skeleton.AnimationState.AddEmptyAnimation(30, 0.2f, 0.0f);
+
+            Dragged_Canvas_Position = Vector2.zero;
         }
 
     }

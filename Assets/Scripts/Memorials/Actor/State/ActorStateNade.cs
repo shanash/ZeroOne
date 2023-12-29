@@ -9,6 +9,11 @@ namespace FluffyDuck.Memorial
             actor.ActorStateNadeBegin();
         }
 
+        public override void UpdateState(ActorBase actor)
+        {
+            actor.ActorStateNadeUpdate();
+        }
+
         public override void ExitState(ActorBase actor)
         {
             actor.ActorStateNadeEnd();

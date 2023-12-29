@@ -10,6 +10,7 @@ namespace FluffyDuck.Memorial
 {
     public abstract partial class ActorBase : MonoBehaviour, IActressPositionProvider
     {
+        protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
         protected const int IDLE_BASE_TRACK = 0;
         protected const int MOUTH_TRACK = 17;
         const string FACE_BONE_NAME = "touch_center";
@@ -21,6 +22,12 @@ namespace FluffyDuck.Memorial
         // 입모양 애니메이션
         [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
         float Talk_Mouth_Wide_Multiple = 10.0f;
+
+        // 얼굴 방향 움직임    
+        [SerializeField, Tooltip("얼굴이 포인터를 따라가는 속도"), Range(1, 10)]
+        float Look_At_Speed = 3.0f;
+        Vector2 Dragged_Canvas_Position;
+        Vector2 Current_Face_Direction;// 얼굴 방향
 
         ////////////////////////// 상태
         protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
@@ -432,29 +439,26 @@ namespace FluffyDuck.Memorial
                 return;
             }
 
+            Dragged_Canvas_Position = position;
+
             switch (state)
             {
                 case 0:
                     Current_Interaction = data;
                     SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.NADE, bounding_box);
+                    Nade_Point = 0;
 
                     FSM.ChangeState(ACTOR_STATES.NADE);
                     break;
                 case 1:
-                    Nade_Point += delta.sqrMagnitude * 0.01f;
-                    if (Nade_Point < 1)
+                    Nade_Point += delta.sqrMagnitude * 0.00001f;
+                    if (Nade_Point > 10)
                     {
-                        Debug.Log($"Nade_Point : {Nade_Point}".WithColorTag(Color.red));
-                        // TODO:
-                    }
-                    else
-                    {
-                        Debug.Log($"Nade_Point : {Nade_Point}".WithColorTag(Color.red));
                         FSM.ChangeState(ACTOR_STATES.REACT);
                     }
                     break;
                 case 2:
-                    FSM.ChangeState(ACTOR_STATES.IDLE);
+                    Dragged_Canvas_Position = Vector2.zero;
                     break;
             }
         }
@@ -596,6 +600,8 @@ namespace FluffyDuck.Memorial
             Current_Serifu_Index = -1;
             Nade_Point = 0;
             Current_Mouth_Anim_Name = string.Empty;
+            Dragged_Canvas_Position = Vector2.zero;
+            Current_Face_Direction = Vector2.zero;
         }
 
         bool GetSkeletonComponents()
@@ -717,6 +723,95 @@ namespace FluffyDuck.Memorial
         public Vector3 GetBalloonWorldPosition()
         {
             return Balloon.GetWorldPosition(Skeleton.transform);
+        }
+
+        /// <summary>
+        /// 현재 프레임의 얼굴 방향 업데이트
+        /// </summary>
+        private void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
+        {
+            Vector3 face_world_pos = Face.GetWorldPosition(Skeleton.transform);
+            Vector2 face_screen_pos = Camera.main.WorldToScreenPoint(face_world_pos);
+            Vector2 dest_direction = CalculateDesiredDirection(face_screen_pos, multiple_value);
+
+            Current_Face_Direction = Vector2.Lerp(Current_Face_Direction, dest_direction, Time.deltaTime * Look_At_Speed);
+
+            SetFaceAnimation(ref track1, Current_Face_Direction.x, anim_names[0], anim_names[2]);
+            SetFaceAnimation(ref track2, Current_Face_Direction.y, anim_names[1], anim_names[3]);
+        }
+
+        /// <summary>
+        /// 목표로 하는 마우스 클릭방향 수치 정제
+        /// Dragged_Canvas_Position에 제로값이 들어가 있을경우는 손을 뗀 상태니까
+        /// 캐릭터는 서서히 정면을 바라보도록 합니다
+        /// </summary>
+        /// <param name="face_screen_pos">얼굴 본 위치</param>
+        /// <returns></returns>
+        Vector2 CalculateDesiredDirection(Vector2 face_screen_pos, float multiple_value)
+        {
+            Vector2 dest_direction = Vector2.zero;
+
+            float face_move_max_distance = FACE_MOVE_MAX_DISTANCE * multiple_value;
+
+            if (!Dragged_Canvas_Position.Equals(Vector2.zero))
+            {
+                // Dragged_Canvas_Position - face_screen_pos = 얼굴에서 드래그중인 포인트까지의 벡터
+                // 벡터 방향은 살린채 ClampMagnitude로 최대값을 FACE_MOVE_MAX_DISTANCE로 제한합니다
+                dest_direction = Vector2.ClampMagnitude(Dragged_Canvas_Position - face_screen_pos, FACE_MOVE_MAX_DISTANCE);
+                // dest_direction에 Mathf.Sqrt(2.0f) / FACE_MOVE_MAX_DISTANCE를 곱해서
+                // 자연스럽게 축소시키고, 45도 각도의 벡터 최대값이 (1,1)이 되도록 맞춥니다
+                dest_direction *= Mathf.Sqrt(2.0f) / face_move_max_distance;
+
+                // 1 ~ -1 값 외엔 다 잘라냅니다
+                dest_direction.x = Mathf.Clamp(dest_direction.x, -1f, 1f);
+                dest_direction.y = Mathf.Clamp(dest_direction.y, -1f, 1f);
+            }
+
+            return dest_direction;
+        }
+
+        /// <summary>
+        /// 얼굴 애니메이션 설정
+        /// </summary>
+        /// <param name="track">트랙</param>
+        /// <param name="track_index">트랙 인덱스</param>
+        /// <param name="direction_value">방향값, 상단오른쪽이 플러스, 하단 왼쪽이 마이너스</param>
+        /// <param name="positive_anim_name">플러스값 애니메이션 이름</param>
+        /// <param name="negative_anim_name">마이너스값 애니메이션 이름</param>
+        void SetFaceAnimation(ref TrackEntry track, float direction_value, string positive_anim_name, string negative_anim_name)
+        {
+            string animation_name = $"{(direction_value > 0 ? positive_anim_name : negative_anim_name)}";
+            if (track == null || track.Animation.Name != animation_name)
+            {
+                if (track != null)
+                {
+                    track.Alpha = 0;
+                }
+                TryGetTrackNum(animation_name, out var num);
+                track = Skeleton.AnimationState.SetAnimation(num, animation_name, false);
+                track.MixDuration = 0;
+            }
+
+            track.TimeScale = 0;
+            track.Alpha = Mathf.Abs(direction_value);
+        }
+
+        /// <summary>
+        /// 둘 다 제로에 근접해야지만 빠져나감
+        /// 처음 드래그했을때는 Dragged_Canvas_Position이 0이 아닐거고
+        /// 손을 땠을때는 Current_Face_Direction가 0이 아닐거기 때문에
+        /// 손을 때고서 Current_Face_Direction가 0이 될때까지 자연스럽게 기다리기 위한 의도입니다
+        /// = 손을 땠을때 부드럽게 정면보는 상태로 돌아가기 위한 의도
+        /// </summary>
+        /// <returns></returns>
+        bool ShouldContinueMovingFace()
+        {
+            var cursor = Vector2.Distance(Dragged_Canvas_Position, Vector2.zero);
+            var face_dir_distance = Vector2.Distance(Current_Face_Direction, Vector2.zero);
+
+            bool result = cursor > 0.01f || face_dir_distance > 0.01f;
+
+            return result;
         }
 
         public record IdleAnimationData
