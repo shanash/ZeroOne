@@ -8,7 +8,7 @@ public class Favorite_Item_Data : System.IDisposable
 	///	<summary>
 	///	인덱스
 	///	</summary>
-	public int item_index {get; set;}
+	public int favorite_item_id {get; set;}
 	///	<summary>
 	///	한글명
 	///	</summary>
@@ -34,7 +34,7 @@ public class Favorite_Item_Data : System.IDisposable
 
 	public Favorite_Item_Data()
 	{
-		item_index = 0;
+		favorite_item_id = 0;
 		item_name_kr = string.Empty;
 		use_effect = 0;
 		item_tooltip_text = string.Empty;
@@ -61,7 +61,7 @@ public class Favorite_Item_Data : System.IDisposable
 	public override string ToString()
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
-		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
+		sb.AppendFormat("[favorite_item_id] = <color=yellow>{0}</color>", favorite_item_id).AppendLine();
 		sb.AppendFormat("[item_name_kr] = <color=yellow>{0}</color>", item_name_kr).AppendLine();
 		sb.AppendFormat("[use_effect] = <color=yellow>{0}</color>", use_effect).AppendLine();
 		sb.AppendFormat("[item_tooltip_text] = <color=yellow>{0}</color>", item_tooltip_text).AppendLine();

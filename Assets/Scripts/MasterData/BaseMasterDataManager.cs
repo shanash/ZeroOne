@@ -53,12 +53,12 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
-	protected List<PlayerLevelData> _PlayerLevelData
+	protected List<Player_Level_Data> _Player_Level_Data
 	{
 		get;
 		private set;
 	}
-	protected List<PlayerCharacterLevelData> _PlayerCharacterLevelData
+	protected List<Player_Character_Level_Data> _Player_Character_Level_Data
 	{
 		get;
 		private set;
@@ -163,6 +163,16 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<First_Reward_Data> _First_Reward_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Repeat_Reward_Data> _Repeat_Reward_Data
+	{
+		get;
+		private set;
+	}
 	protected List<World_Data> _World_Data
 	{
 		get;
@@ -179,16 +189,6 @@ public class BaseMasterDataManager
 		private set;
 	}
 	protected List<Wave_Data> _Wave_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Stage_Reward_Data> _Stage_Reward_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Star_Reward_Data> _Star_Reward_Data
 	{
 		get;
 		private set;
@@ -217,8 +217,8 @@ public class BaseMasterDataManager
 		await LoadMaster_Memoritem_Data();
 		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
-		await LoadMaster_PlayerLevelData();
-		await LoadMaster_PlayerCharacterLevelData();
+		await LoadMaster_Player_Level_Data();
+		await LoadMaster_Player_Character_Level_Data();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
 		await LoadMaster_Me_Interaction_Data();
@@ -239,12 +239,12 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Battle_Data();
 		await LoadMaster_Position_Icon_Data();
 		await LoadMaster_Role_Icon_Data();
+		await LoadMaster_First_Reward_Data();
+		await LoadMaster_Repeat_Reward_Data();
 		await LoadMaster_World_Data();
 		await LoadMaster_Zone_Data();
 		await LoadMaster_Stage_Data();
 		await LoadMaster_Wave_Data();
-		await LoadMaster_Stage_Reward_Data();
-		await LoadMaster_Star_Reward_Data();
 		is_init_load = true;
 	}
 
@@ -311,16 +311,16 @@ public class BaseMasterDataManager
 		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
 	}
 
-	protected async Task LoadMaster_PlayerLevelData()
+	protected async Task LoadMaster_Player_Level_Data()
 	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/PlayerLevelData");
-		_PlayerLevelData = JsonConvert.DeserializeObject<List<PlayerLevelData>>(json);
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Level_Data");
+		_Player_Level_Data = JsonConvert.DeserializeObject<List<Player_Level_Data>>(json);
 	}
 
-	protected async Task LoadMaster_PlayerCharacterLevelData()
+	protected async Task LoadMaster_Player_Character_Level_Data()
 	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/PlayerCharacterLevelData");
-		_PlayerCharacterLevelData = JsonConvert.DeserializeObject<List<PlayerCharacterLevelData>>(json);
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Level_Data");
+		_Player_Character_Level_Data = JsonConvert.DeserializeObject<List<Player_Character_Level_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
@@ -443,6 +443,18 @@ public class BaseMasterDataManager
 		_Role_Icon_Data = JsonConvert.DeserializeObject<List<Role_Icon_Data>>(json);
 	}
 
+	protected async Task LoadMaster_First_Reward_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/First_Reward_Data");
+		_First_Reward_Data = JsonConvert.DeserializeObject<List<First_Reward_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Repeat_Reward_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Repeat_Reward_Data");
+		_Repeat_Reward_Data = JsonConvert.DeserializeObject<List<Repeat_Reward_Data>>(json);
+	}
+
 	protected async Task LoadMaster_World_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/World_Data");
@@ -465,18 +477,6 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Wave_Data");
 		_Wave_Data = JsonConvert.DeserializeObject<List<Wave_Data>>(json);
-	}
-
-	protected async Task LoadMaster_Stage_Reward_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Stage_Reward_Data");
-		_Stage_Reward_Data = JsonConvert.DeserializeObject<List<Stage_Reward_Data>>(json);
-	}
-
-	protected async Task LoadMaster_Star_Reward_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Star_Reward_Data");
-		_Star_Reward_Data = JsonConvert.DeserializeObject<List<Star_Reward_Data>>(json);
 	}
 
 	protected async void Check_Editor_Stage_Data()
@@ -551,19 +551,19 @@ public class BaseMasterDataManager
 		}
 	}
 
-	protected async void Check_PlayerLevelData()
+	protected async void Check_Player_Level_Data()
 	{
-		if(_PlayerLevelData == null)
+		if(_Player_Level_Data == null)
 		{
-			await LoadMaster_PlayerLevelData();
+			await LoadMaster_Player_Level_Data();
 		}
 	}
 
-	protected async void Check_PlayerCharacterLevelData()
+	protected async void Check_Player_Character_Level_Data()
 	{
-		if(_PlayerCharacterLevelData == null)
+		if(_Player_Character_Level_Data == null)
 		{
-			await LoadMaster_PlayerCharacterLevelData();
+			await LoadMaster_Player_Character_Level_Data();
 		}
 	}
 
@@ -727,6 +727,22 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async void Check_First_Reward_Data()
+	{
+		if(_First_Reward_Data == null)
+		{
+			await LoadMaster_First_Reward_Data();
+		}
+	}
+
+	protected async void Check_Repeat_Reward_Data()
+	{
+		if(_Repeat_Reward_Data == null)
+		{
+			await LoadMaster_Repeat_Reward_Data();
+		}
+	}
+
 	protected async void Check_World_Data()
 	{
 		if(_World_Data == null)
@@ -756,22 +772,6 @@ public class BaseMasterDataManager
 		if(_Wave_Data == null)
 		{
 			await LoadMaster_Wave_Data();
-		}
-	}
-
-	protected async void Check_Stage_Reward_Data()
-	{
-		if(_Stage_Reward_Data == null)
-		{
-			await LoadMaster_Stage_Reward_Data();
-		}
-	}
-
-	protected async void Check_Star_Reward_Data()
-	{
-		if(_Star_Reward_Data == null)
-		{
-			await LoadMaster_Star_Reward_Data();
 		}
 	}
 

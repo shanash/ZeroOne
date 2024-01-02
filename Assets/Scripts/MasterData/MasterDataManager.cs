@@ -24,28 +24,28 @@ public class MasterDataManager : BaseMasterDataManager
     public bool IsLoaded { get { return is_init_load; } }
 
     #region Level
-    public PlayerLevelData Get_PlayerLevelData(int lv)
+    public Player_Level_Data Get_PlayerLevelData(int lv)
     {
-        Check_PlayerLevelData();
-        return _PlayerLevelData.Find(x => x.level == lv);
+        Check_Player_Level_Data();
+        return _Player_Level_Data.Find(x => x.level == lv);
     }
-    public PlayerLevelData Get_PlayerLevelDataByAccumExp(int accum_exp)
+    public Player_Level_Data Get_PlayerLevelDataByAccumExp(int accum_exp)
     {
-        Check_PlayerLevelData();
-        var list = _PlayerLevelData.OrderBy(x => x.level).ToList();
+        Check_Player_Level_Data();
+        var list = _Player_Level_Data.OrderBy(x => x.level).ToList();
         return list.FindLast(x => x.accum_exp <= accum_exp);
     }
 
-    public PlayerCharacterLevelData Get_PlayerCharacterLevelData(int lv)
+    public Player_Character_Level_Data Get_PlayerCharacterLevelData(int lv)
     {
-        Check_PlayerCharacterLevelData();
-        return _PlayerCharacterLevelData.Find(x => x.level == lv);
+        Check_Player_Character_Level_Data();
+        return _Player_Character_Level_Data.Find(x => x.level == lv);
     }
 
-    public PlayerCharacterLevelData Get_PlayerCharacterLevelDataByAccumExp(int accum_exp)
+    public Player_Character_Level_Data Get_PlayerCharacterLevelDataByAccumExp(int accum_exp)
     {
-        Check_PlayerCharacterLevelData();
-        var list = _PlayerCharacterLevelData.OrderBy(x => x.level).ToList();
+        Check_Player_Character_Level_Data();
+        var list = _Player_Character_Level_Data.OrderBy(x => x.level).ToList();
         return list.FindLast(x => x.accum_exp <= accum_exp);
     }
 
@@ -113,6 +113,37 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Expendable_Item_Data();
         return _Expendable_Item_Data.Find(x => x.expendable_item_id == expendable_item_id);
     }
+    /// <summary>
+    /// 호감도 아이템 데이터 반환
+    /// </summary>
+    /// <param name="favorite_item_id"></param>
+    /// <returns></returns>
+    public Favorite_Item_Data Get_FavoriteItemData(int favorite_item_id)
+    {
+        Check_Favorite_Item_Data();
+        return _Favorite_Item_Data.Find(x => x.favorite_item_id == favorite_item_id);
+    }
+    /// <summary>
+    /// 초회 보상 데이터 반환
+    /// </summary>
+    /// <param name="first_reward_id"></param>
+    /// <returns></returns>
+    public First_Reward_Data Get_FirstRewardData(int first_reward_id)
+    {
+        Check_First_Reward_Data();
+        return _First_Reward_Data.Find(x => x.frist_reward_id == first_reward_id);
+    }
+    /// <summary>
+    /// 반복 보상 데이터 반환
+    /// </summary>
+    /// <param name="repeat_reward_id"></param>
+    /// <returns></returns>
+    public Repeat_Reward_Data Get_RepeatRewardData(int repeat_reward_id)
+    {
+        Check_Repeat_Reward_Data();
+        return _Repeat_Reward_Data.Find(x => x.repeat_reward_id ==  repeat_reward_id);
+    }
+    
 
     #endregion
 
@@ -276,6 +307,16 @@ public class MasterDataManager : BaseMasterDataManager
 
         return _Npc_Battle_Data.Find(x => x.npc_battle_id == npc_battle_info_id);
     }
+    /// <summary>
+    /// NPC의 레벨에 따른 스탯 증가량 정보 데이터
+    /// </summary>
+    /// <param name="npc_level_stat_id"></param>
+    /// <returns></returns>
+    public Npc_Level_Stat_Data Get_NpcLevelStatData(int npc_level_stat_id)
+    {
+        Check_Npc_Level_Stat_Data();
+        return _Npc_Level_Stat_Data.Find(x => x.npc_level_stat_id == npc_level_stat_id);
+    }
 
     /// <summary>
     /// npc의 스킬 그룹 정보 가져오기
@@ -355,6 +396,34 @@ public class MasterDataManager : BaseMasterDataManager
         list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
     }
 
+    public World_Data Get_WorldData(int world_id)
+    {
+        Check_World_Data();
+        return _World_Data.Find(x => x.world_id == world_id);
+    }
+
+    public void Get_WorldDataList(ref List<World_Data> list)
+    {
+        Check_World_Data();
+        list.Clear();
+        list.AddRange(_World_Data);
+        list.Sort((a, b) => a.world_id.CompareTo(b.world_id));
+    }
+
+    public Zone_Data Get_ZoneData(int zone_id)
+    {
+        Check_Zone_Data();
+        return _Zone_Data.Find(x => x.zone_id == zone_id);
+    }
+
+    public void Get_ZoneDataList(int world_id, STAGE_DIFFICULTY_TYPE diff_type, ref List<Zone_Data> list)
+    {
+        Check_Zone_Data();
+        list.Clear();
+        list.AddRange(_Zone_Data.FindAll(x => x.in_world_id == world_id && x.zone_difficulty == diff_type));
+        list.Sort((a, b) => a.zone_ordering.CompareTo(b.zone_ordering));
+    }
+
     /// <summary>
     /// 지정 스테이지 정보 가져오기
     /// </summary>
@@ -367,6 +436,15 @@ public class MasterDataManager : BaseMasterDataManager
 
         return _Stage_Data.Find(x => x.stage_id == stage_id);
     }
+    public void Get_StageDataList(int zone_id, ref List<Stage_Data> list)
+    {
+        Check_Stage_Data();
+        list.Clear();
+        list.AddRange(_Stage_Data.FindAll(x => x.zone_id == zone_id));
+        list.Sort((a, b) => a.stage_ordering.CompareTo(b.stage_ordering));
+    }
+
+
     /// <summary>
     /// 모든 스테이지 정보 가져오기
     /// 차후 지역별 스테이지 정보를 가져오는 방식이 될 수도 있다.
@@ -392,15 +470,6 @@ public class MasterDataManager : BaseMasterDataManager
         list.AddRange(_Wave_Data.FindAll(x => x.wave_group_id == wave_group_id));
         //  wave_sequence 오름 차순 정렬
         list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
-        //list.Sort(delegate (Wave_Data a, Wave_Data b)
-        //{
-        //    if (a.wave_sequence > b.wave_sequence)
-        //    {
-        //        return 1;
-        //    }
-        //    return -1;
-        //});
-
     }
     #endregion
 

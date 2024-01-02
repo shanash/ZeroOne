@@ -1,4 +1,4 @@
-using FluffyDuck.UI;
+using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +25,7 @@ public class TitleManager : MonoBehaviour
     {
         if (Is_Enable_Touch)
         {
+            CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
         }
     }
 

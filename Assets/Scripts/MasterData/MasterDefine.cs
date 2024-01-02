@@ -27,11 +27,11 @@ public enum STAGE_DIFFICULTY_TYPE
 	/// <summary>NONE</summary>
 	NONE = 0,
 	/// <summary>노말</summary>
-	NOMAL = 1,
+	NORMAL = 1,
 	/// <summary>하드</summary>
 	HARD = 2,
 	/// <summary>베리하드</summary>
-	VERYHARD = 3,
+	VERY_HARD = 3,
 }
 
 ///	<summary>

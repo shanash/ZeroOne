@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using ProtocolShared.Proto.Base;
+using ProtocolShared.Proto;
 
 #nullable enable
 
@@ -18,7 +19,7 @@ namespace ProtocolShared.FDHttpClient
         PUT,
         DELETE,
     }
-    internal class FDHttpClient
+    public class FDHttpClient
     {
         //private static string? _accessToken = null;
         //private static string? _refeshToken = null;
@@ -42,9 +43,22 @@ namespace ProtocolShared.FDHttpClient
         //    return client;
         //}
 
-        public async Task<ResponseData<T>>? HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod) where T : ResponseBase
+        public async Task DevLogin(string macAddress , Action<ResponseData<LoginResponse>> callBack)
         {
-            
+            DevLoginRequest request = new DevLoginRequest { macAddress = macAddress };
+
+            await HttpRequest<LoginResponse, DevLoginRequest>("https://dev-01.fluffyduck.co.kr/dev/account/login/dev", null, request, HttpMethod.POST, callBack);
+        }
+
+        public async Task HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod, Action<ResponseData<T>> onComplete) where T : class
+        {
+            ResponseData<T> res = await HttpRequest<T, U>(url, token, data, httpMethod);
+
+            onComplete?.Invoke(res);
+        }
+
+        public async Task<ResponseData<T>> HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod) where T : class
+        {
             try
             {
                 HttpClient httpClient = new HttpClient();
@@ -61,7 +75,7 @@ namespace ProtocolShared.FDHttpClient
                 CancellationTokenSource cancellation = new CancellationTokenSource();
                 cancellation.CancelAfter(10000);
 
-                string body = JsonConvert.SerializeObject(data);
+                string body = data != null ? JsonConvert.SerializeObject(data) : "";
 
                 switch (httpMethod)
                 {

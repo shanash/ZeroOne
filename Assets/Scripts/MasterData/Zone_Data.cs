@@ -20,7 +20,7 @@ public class Zone_Data : System.IDisposable
 	///	<summary>
 	///	오더링
 	///	</summary>
-	public int zone_odering {get; set;}
+	public int zone_ordering {get; set;}
 	///	<summary>
 	///	존 난이도
 	///	</summary>
@@ -41,7 +41,7 @@ public class Zone_Data : System.IDisposable
 		zone_id = 0;
 		zone_name = string.Empty;
 		in_world_id = 0;
-		zone_odering = 0;
+		zone_ordering = 0;
 		zone_difficulty = STAGE_DIFFICULTY_TYPE.NONE;
 		zone_img_path = string.Empty;
 		zone_tooltip = string.Empty;
@@ -69,7 +69,7 @@ public class Zone_Data : System.IDisposable
 		sb.AppendFormat("[zone_id] = <color=yellow>{0}</color>", zone_id).AppendLine();
 		sb.AppendFormat("[zone_name] = <color=yellow>{0}</color>", zone_name).AppendLine();
 		sb.AppendFormat("[in_world_id] = <color=yellow>{0}</color>", in_world_id).AppendLine();
-		sb.AppendFormat("[zone_odering] = <color=yellow>{0}</color>", zone_odering).AppendLine();
+		sb.AppendFormat("[zone_ordering] = <color=yellow>{0}</color>", zone_ordering).AppendLine();
 		sb.AppendFormat("[zone_difficulty] = <color=yellow>{0}</color>", zone_difficulty).AppendLine();
 		sb.AppendFormat("[zone_img_path] = <color=yellow>{0}</color>", zone_img_path).AppendLine();
 		sb.AppendFormat("[zone_tooltip] = <color=yellow>{0}</color>", zone_tooltip).AppendLine();

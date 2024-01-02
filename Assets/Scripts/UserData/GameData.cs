@@ -90,7 +90,15 @@ public class GameData : IDisposable
                 }
                 User_Data_Manager_List.Add(mng);
             }
-
+            //  story stage data
+            {
+                var mng = new UserStoryStageDataManager(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
+                if (!mng.Load())
+                {
+                    mng.InitDataManager();
+                }
+                User_Data_Manager_List.Add(mng);
+            }
 
             Is_Init = true;
         }
@@ -117,5 +125,9 @@ public class GameData : IDisposable
     public UserMemorialDataManager GetUserMemorialDataManager()
     {
         return FindUserDataManager<UserMemorialDataManager>(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
+    }
+    public UserStoryStageDataManager GetUserStoryStageDataManager()
+    {
+        return FindUserDataManager<UserStoryStageDataManager>(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
     }
 }
