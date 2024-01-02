@@ -165,6 +165,7 @@ namespace FluffyDuck.Memorial
                 }
             }
         }
+
         /// <summary>
         /// 스파인 애니메이션 동작 종료시 호출되는 리스너
         /// </summary>
@@ -173,6 +174,7 @@ namespace FluffyDuck.Memorial
         {
             //Debug.Log($"SpineAnimationEnd : {entry.Animation.Name}".WithColorTag(Color.red));
         }
+
         /// <summary>
         /// 스파인 애니메이션 동작 플레이 중 호출되는 이벤트를 받아주는 리스너
         /// </summary>
@@ -184,11 +186,8 @@ namespace FluffyDuck.Memorial
             MemorialDefine.TryParseEvent(evt.Data.Name.ToUpper(), out MemorialDefine.SPINE_EVENT eEvt);
             switch (eEvt)
             {
-                case MemorialDefine.SPINE_EVENT.MOUTH_OPEN:
-                    Current_Mouth_Anim_Name = evt.String;
-                    break;
-                case MemorialDefine.SPINE_EVENT.MOUTH_CLOSE:
-                    Current_Mouth_Anim_Name = string.Empty;
+                case MemorialDefine.SPINE_EVENT.MOUTH_SHAPE:
+                    Current_Mouth_Anim_Name = evt.String.Equals("close") ? string.Empty : evt.String;
                     break;
                 case MemorialDefine.SPINE_EVENT.VOICE:
                     if (Current_Chat_Motion_Id == -1)

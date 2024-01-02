@@ -25,7 +25,6 @@ public class MemorialDefine
     {
         NONE = 0,
         VOICE,
-        MOUTH_OPEN,
-        MOUTH_CLOSE,
+        MOUTH_SHAPE,
     }
 }

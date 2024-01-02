@@ -300,11 +300,8 @@ namespace FluffyDuck.Memorial
             MemorialDefine.TryParseEvent(evt.Data.Name.ToUpper(), out MemorialDefine.SPINE_EVENT eEvt);
             switch (eEvt)
             {
-                case MemorialDefine.SPINE_EVENT.MOUTH_OPEN:
-                    Current_Mouth_Anim_Name = evt.String;
-                    break;
-                case MemorialDefine.SPINE_EVENT.MOUTH_CLOSE:
-                    Current_Mouth_Anim_Name = string.Empty;
+                case MemorialDefine.SPINE_EVENT.MOUTH_SHAPE:
+                    Current_Mouth_Anim_Name = evt.String.Equals("close") ? string.Empty : evt.String;
                     break;
                 case MemorialDefine.SPINE_EVENT.VOICE:
                     if (Current_Chat_Motion_ID == -1)
