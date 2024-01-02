@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FluffyDuck.Memorial
 {
-    public abstract partial class ActorBase : MonoBehaviour, IActressPositionProvider
+    public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider
     {
         protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
         protected const int IDLE_BASE_TRACK = 0;
@@ -831,6 +831,28 @@ namespace FluffyDuck.Memorial
             public string Animation_Idle_Name;
             public int[] Bored_Chatmotion_Ids;
             public int Bored_Count;
+        }
+
+        public class ChatMotionNotFoundException : Exception
+        {
+            public int Chat_Motion_ID { get; private set; }
+
+            public ChatMotionNotFoundException(int chat_motion_id)
+                : base($"선택된 챗모션이 존재하지 않습니다, Chat Motion ID: {chat_motion_id}")
+            {
+                Chat_Motion_ID = chat_motion_id;
+            }
+        }
+
+        public class InvalidTrackException : Exception
+        {
+            public int Animation_Track { get; private set; }
+
+            public InvalidTrackException(int animation_track = -1)
+                : base($"선택된 트랙이 올바르지 않습니다, Animation Track: {animation_track}")
+            {
+                Animation_Track = animation_track;
+            }
         }
     }
 }

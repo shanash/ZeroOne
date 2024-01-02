@@ -57,7 +57,7 @@ public class SpeechBalloonManager : MonoBehaviourSingleton<SpeechBalloonManager>
     public async void CreateBalloon(
         Action<int> cb,
         string text,
-        IActressPositionProvider position_provider,
+        IActorPositionProvider position_provider,
         Vector2 size = default,
         SpeechBalloon.BalloonSizeType size_type = SpeechBalloon.BalloonSizeType.Flexible,
         SpeechBalloon.Pivot pivot = SpeechBalloon.Pivot.Bottom,
@@ -83,7 +83,7 @@ public class SpeechBalloonManager : MonoBehaviourSingleton<SpeechBalloonManager>
     /// <param name="parent_transform">말풍선이 붙을 부모</param>
     /// <param name="when_delete">말풍선이 삭제될때</param>
     /// <returns>말풍선의 id</returns>
-    public async Task<int> CreateBalloonAsync(string text, IActressPositionProvider position_provider, Vector2 size = default(Vector2), SpeechBalloon.BalloonSizeType size_type = SpeechBalloon.BalloonSizeType.Flexible, SpeechBalloon.Pivot pivot = SpeechBalloon.Pivot.Bottom, RectTransform parent_transform = null, int font_size = DEFAULT_FONT_SIZE, float display_seconds = 0, System.Action when_delete = null)
+    public async Task<int> CreateBalloonAsync(string text, IActorPositionProvider position_provider, Vector2 size = default(Vector2), SpeechBalloon.BalloonSizeType size_type = SpeechBalloon.BalloonSizeType.Flexible, SpeechBalloon.Pivot pivot = SpeechBalloon.Pivot.Bottom, RectTransform parent_transform = null, int font_size = DEFAULT_FONT_SIZE, float display_seconds = 0, System.Action when_delete = null)
     {
         s_CURRENT_LAST_ID++;
 

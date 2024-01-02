@@ -19,9 +19,6 @@ namespace FluffyDuck.Memorial
         [SerializeField, Tooltip("Name")]
         string Attach_Name = null;
 
-        [SerializeField, Tooltip("Actress")]
-        ActressBase Actress;
-
         [SerializeField, Tooltip("Actor")]
         ActorBase Actor;
 
@@ -69,11 +66,6 @@ namespace FluffyDuck.Memorial
         {
             InitBoundingBox();
             Main_Cam = Camera.main;
-            if (Actress != null)
-            {
-                Point = Actress.FindAttachment($"pt_{Attach_Name}", $"pt_{Attach_Name}") as PointAttachment;
-            }
-
             if (Actor != null)
             {
                 Point = Actor.FindAttachment($"pt_{Attach_Name}", $"pt_{Attach_Name}") as PointAttachment;
@@ -95,12 +87,6 @@ namespace FluffyDuck.Memorial
             return screen_dir;
         }
 
-        public void Set(ActressBase actress, string name)
-        {
-            Actress = actress;
-            Attach_Name = name;
-        }
-
         public void Set(ActorBase actor, string name)
         {
             Actor = actor;
@@ -109,8 +95,8 @@ namespace FluffyDuck.Memorial
 
         public void SetSlotAttach(string slot_name, string attach_name)
         {
-            Attach_Slot = Actress.FindSlot(slot_name);
-            Bounding_Box_Attach = (BoundingBoxAttachment)Actress.FindAttachment(slot_name, attach_name);
+            Attach_Slot = Actor.FindSlot(slot_name);
+            Bounding_Box_Attach = (BoundingBoxAttachment)Actor.FindAttachment(slot_name, attach_name);
         }
 
         /// <summary>

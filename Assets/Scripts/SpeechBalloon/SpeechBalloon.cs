@@ -53,7 +53,7 @@ public class SpeechBalloon : MonoBehaviour, IPoolableComponent
     System.Action<int> _Callback_When_Disappear = null;
     RectTransform _RectTransform = null;
     RectTransform _Parent_RectTransform = null;
-    IActressPositionProvider _Position_Provider = null;
+    IActorPositionProvider _Position_Provider = null;
     ContentSizeFitter _Text_Content_Size_Fitter = null;
     BalloonSizeType _Type = BalloonSizeType.None;
     Vector2 _Size = Vector2.zero;
@@ -71,7 +71,7 @@ public class SpeechBalloon : MonoBehaviour, IPoolableComponent
     /// <param name="display_seconds">0일경우는 무한</param>
     /// <param name="callback_when_disappear">사라질때 콜백</param>
     /// <returns></returns>
-    public bool Init(int id, string text, int font_size, Pivot pivot, BalloonSizeType size_type, Vector2 size, IActressPositionProvider position_provider, RectTransform parent_recttransfrom, float display_seconds, Action<int> callback_when_disappear = null)
+    public bool Init(int id, string text, int font_size, Pivot pivot, BalloonSizeType size_type, Vector2 size, IActorPositionProvider position_provider, RectTransform parent_recttransfrom, float display_seconds, Action<int> callback_when_disappear = null)
     {
         ID = id;
         _Message_Text.fontSize = font_size;

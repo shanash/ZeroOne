@@ -98,7 +98,7 @@ namespace FluffyDuck.Memorial
             {
                 if (!TryGetTrackNum(anim_name, out int track_num))
                 {
-                    throw new ActressBase.InvalidTrackException(track_num);
+                    throw new InvalidTrackException(track_num);
                 }
 
                 var te = Skeleton.AnimationState.SetAnimation(track_num, anim_name, false);
@@ -156,7 +156,7 @@ namespace FluffyDuck.Memorial
         {
             if (!TryGetTrackNum(Current_Interaction.drag_animation_name, out int track_num))
             {
-                throw new ActressBase.InvalidTrackException(track_num);
+                throw new InvalidTrackException(track_num);
             }
 
             Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Current_Interaction.drag_animation_name, false);

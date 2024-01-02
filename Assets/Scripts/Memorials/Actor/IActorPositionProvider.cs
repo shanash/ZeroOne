@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IActressPositionProvider
+public interface IActorPositionProvider
 {
     /// <summary>
     /// 말풍선이 표시될 위치를 가져옵니다.

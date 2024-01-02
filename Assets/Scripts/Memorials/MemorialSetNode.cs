@@ -30,7 +30,7 @@ namespace FluffyDuck.Memorial
         protected Transform Actress_Container;
 
         [SerializeField, Tooltip("Actress")]
-        protected ActressBase Actress;
+        protected ActorBase Actor;
 
         [SerializeField, Tooltip("Far BG Container")]
         protected Transform Far_BG_Container;
@@ -45,7 +45,7 @@ namespace FluffyDuck.Memorial
 
         SkeletonAnimation Actress_Skeleton_Animation
         {
-            get { return Actress.GetComponent<SkeletonAnimation>(); }
+            get { return Actor.GetComponent<SkeletonAnimation>(); }
         }
 
         public static async Task<MemorialSetNode> Create(int player_character_id, MEMORIAL_TYPE type, Transform parent, Image cover, CinemachineVirtualCamera virtual_camera)
@@ -115,7 +115,7 @@ namespace FluffyDuck.Memorial
         async Task Init(MEMORIAL_TYPE type, Me_Resource_Data data, Image cover, CinemachineVirtualCamera virtual_camera)
         {
             SetMemorialType(type);
-            Actress.Init(data.player_character_id, data.state_id);
+            //Actor.Init(data.player_character_id, data.state_id);
 
             virtual_camera.m_Lens = new LensSettings(MEMORIAL_CAMERA_VERTICAL_FOV, MEMORIAL_CAMERA_ORTHOGRAPHIC_SIZE, MEMORIAL_CAMERA_NEAR_CLIP, MEMORIAL_CAMERA_FAR_CLIP, MEMORIAL_CAMERA_DUTCH);
 
