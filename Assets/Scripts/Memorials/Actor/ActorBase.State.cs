@@ -12,6 +12,9 @@ namespace FluffyDuck.Memorial
         // 플레이되는 리액션 애니메이션 트랙들이 모두 종료되고서야 IDLE로 돌아가도록 하기 위해 체크할 트랙을 담아놓는다
         protected List<TrackEntry> react_track_entries = new List<TrackEntry>();
 
+        TrackEntry te_vert;
+        TrackEntry te_horz;
+
         protected virtual void InitStates()
         {
             FSM = new StateSystemBase<ACTOR_STATES>();
@@ -20,6 +23,7 @@ namespace FluffyDuck.Memorial
             FSM.AddTransition(new ActorStateReact());
             FSM.AddTransition(new ActorStateDrag());
             FSM.AddTransition(new ActorStateNade());
+            FSM.AddTransition(new ActorStateEyeTracker());
         }
 
         public virtual void Lazy_Init(ACTOR_STATES trans)
@@ -132,8 +136,6 @@ namespace FluffyDuck.Memorial
             {
                 Elapsed_Time_For_Mouth_Open += Time.deltaTime;
                 te.Alpha = Mathf.Lerp(Origin_Mouth_Alpha, Dest_Mouth_Alpha, System.Math.Min(1.0f, Elapsed_Time_For_Mouth_Open / AudioManager.VOICE_TERM_SECONDS));
-
-                Debug.Log($"te.Alpha : {te.Alpha}".WithColorTag(Color.red));
             }
         }
 
@@ -176,9 +178,6 @@ namespace FluffyDuck.Memorial
             te_vert = FindTrack(32);
         }
 
-        TrackEntry te_vert;
-        TrackEntry te_horz;
-
         public virtual void ActorStateNadeUpdate()
         {
             UpdateFaceAnimationDirection(0.1f, ref te_horz, ref te_vert, "31_nade_Right", "32_nade_Up", "31_nade_Left", "32_nade_Down");
@@ -200,9 +199,32 @@ namespace FluffyDuck.Memorial
 
             Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false).MixDuration = mix_duration;
             Skeleton.AnimationState.AddEmptyAnimation(30, 0.2f, 0.0f);
+            Skeleton.AnimationState.SetEmptyAnimation(31, 0);
+            Skeleton.AnimationState.SetEmptyAnimation(32, 0);
 
             Dragged_Canvas_Position = Vector2.zero;
         }
 
+        public virtual void ActorStateEyeTrakerBegin()
+        {
+            te_horz = FindTrack(10);
+            te_vert = FindTrack(11);
+        }
+
+        public virtual void ActorStateEyeTrackerUpdate()
+        {
+            UpdateFaceAnimationDirection(1, ref te_horz, ref te_vert, "10_Right", "11_Up", "10_Left", "11_Down");
+
+            if (!ShouldContinueMovingFace())
+            {
+                FSM.ChangeState(ACTOR_STATES.IDLE);
+            }
+        }
+
+        public virtual void ActorStateEyeTrakerEnd()
+        {
+            Skeleton.AnimationState.SetEmptyAnimation(10, 0);
+            Skeleton.AnimationState.SetEmptyAnimation(11, 0);
+        }
     }
 }

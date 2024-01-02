@@ -10,6 +10,7 @@ namespace FluffyDuck.Memorial
         REACT,
         DRAG,
         NADE,
+        EYE_TRACKER,
     }
 
     public class ActorState : StateBase<ACTOR_STATES>

@@ -280,7 +280,6 @@ namespace FluffyDuck.Memorial
                     Elapsed_Time_For_Mouth_Open = 0;
                     Origin_Mouth_Alpha = te.Alpha;
                     Dest_Mouth_Alpha = Mathf.Clamp(volume_rms * Talk_Mouth_Wide_Multiple, 0, 1);
-                    Debug.Log($"Dest_Mouth_Alpha : {Dest_Mouth_Alpha}".WithColorTag(Color.red));
                     break;
                 case AudioManager.AUDIO_STATES.END:
                     DisappearBalloon();
@@ -347,71 +346,86 @@ namespace FluffyDuck.Memorial
 
         protected virtual void OnDrag(ICursorInteractable comp, Vector2 position, Vector2 drag_vector, int state)
         {
-            bool isDragValid = FSM.CurrentTransitionID == ACTOR_STATES.DRAG && state >= 1;
+            bool isDragValid = (FSM.CurrentTransitionID == ACTOR_STATES.DRAG || FSM.CurrentTransitionID == ACTOR_STATES.EYE_TRACKER) && state >= 1;
             bool isIdleValid = FSM.CurrentTransitionID == ACTOR_STATES.IDLE && state == 0;
             if (!isDragValid && !isIdleValid)
             {
                 return;
             }
 
-            var bounding_box = comp as SpineBoundingBox;
-            if (bounding_box == null)
+            Vector2 drag_dest;
+
+            switch (comp)
             {
-                Debug.Assert(false, "ActorBase::OnTap : 터치된 bounding_box가 존재하지 않습니다.");
-                return;
-            }
+                case SpineBoundingBox bounding_box:
+                    var data = GetInteractionData(TOUCH_GESTURE_TYPE.DRAG, bounding_box);
 
-            var data = GetInteractionData(TOUCH_GESTURE_TYPE.DRAG, bounding_box);
+                    if (data == null)
+                    {
+                        return;
+                    }
 
-            if (data == null)
-            {
-                return;
-            }
+                    drag_dest = bounding_box.GetPtDirection();
 
-            Vector2 drag_dest = bounding_box.GetPtDirection();
+                    if (drag_dest.Equals(Vector2.zero))
+                    {
+                        Debug.Assert(false, "ActorBase::OnDrag : 해당 터치에는 포인트가 없어서 드래그할 수 없습니다");
+                        return;
+                    }
 
-            if (drag_dest.Equals(Vector2.zero))
-            {
-                Debug.Assert(false, "ActorBase::OnDrag : 해당 터치에는 포인트가 없어서 드래그할 수 없습니다");
-                return;
-            }
+                    if (drag_vector.sqrMagnitude.Equals(0.0f))
+                    {
+                        drag_vector = drag_dest * 0.001f;
+                    }
 
-            if (drag_vector.sqrMagnitude.Equals(0.0f))
-            {
-                drag_vector = drag_dest * 0.001f;
-            }
-
-            if (!string.IsNullOrEmpty(data.drag_animation_name))
-            {
-                switch (state)
-                {
-                    case 0:
-                        Current_Interaction = data;
-                        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DRAG, bounding_box);
-
-                        FSM.ChangeState(ACTOR_STATES.DRAG);
-                        break;
-                    case 1:
-                        float close_value = // 드래그한 정도가 얼만큼 drag_dest와 일치했는가 (0~1 이외의 값은 크게 의미 없다)
-                            (drag_vector.sqrMagnitude / drag_dest.sqrMagnitude) // 드래그한 길이가 얼마나 대상과 비슷한가
-                            * CommonUtils.Math.Cos(drag_dest, drag_vector); // 드래그한 방향이 얼마나 대상과 비슷한가
-
-                        if (Drag_Track_Entry != null)
+                    if (!string.IsNullOrEmpty(data.drag_animation_name))
+                    {
+                        switch (state)
                         {
-                            if (close_value < 1)
-                            {
-                                Drag_Track_Entry.TrackTime = close_value;
-                            }
-                            else
-                            {
-                                FSM.ChangeState(ACTOR_STATES.REACT);
-                            }
+                            case 0:
+                                Current_Interaction = data;
+                                SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DRAG, bounding_box);
+
+                                FSM.ChangeState(ACTOR_STATES.DRAG);
+                                break;
+                            case 1:
+                                float close_value = // 드래그한 정도가 얼만큼 drag_dest와 일치했는가 (0~1 이외의 값은 크게 의미 없다)
+                                    (drag_vector.sqrMagnitude / drag_dest.sqrMagnitude) // 드래그한 길이가 얼마나 대상과 비슷한가
+                                    * CommonUtils.Math.Cos(drag_dest, drag_vector); // 드래그한 방향이 얼마나 대상과 비슷한가
+
+                                if (Drag_Track_Entry != null)
+                                {
+                                    if (close_value < 1)
+                                    {
+                                        Drag_Track_Entry.TrackTime = close_value;
+                                    }
+                                    else
+                                    {
+                                        FSM.ChangeState(ACTOR_STATES.REACT);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                FSM.ChangeState(ACTOR_STATES.IDLE);
+                                break;
                         }
-                        break;
-                    case 2:
-                        FSM.ChangeState(ACTOR_STATES.IDLE);
-                        break;
-                }
+                    }
+                    break;
+                case Background:
+                    Dragged_Canvas_Position = position;
+
+                    switch (state)
+                    {
+                        case 0:
+                            FSM.ChangeState(ACTOR_STATES.EYE_TRACKER);
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            Dragged_Canvas_Position = Vector2.zero;
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -428,7 +442,6 @@ namespace FluffyDuck.Memorial
             var bounding_box = obj as SpineBoundingBox;
             if (bounding_box == null)
             {
-                Debug.Assert(false, "ActorBase::OnTap : 터치된 bounding_box가 존재하지 않습니다.");
                 return;
             }
 
