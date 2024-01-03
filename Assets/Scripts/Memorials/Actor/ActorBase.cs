@@ -32,7 +32,7 @@ namespace FluffyDuck.Memorial
         ////////////////////////// 상태
         protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
         protected int Current_State_Id;
-        private KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int> Gesture_Touch_Counts;
+        KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int> Gesture_Touch_Counts;
         protected int Idle_Played_Count;
 
         protected Bone Face; // 얼굴 위치를 가져오기 위한 본
@@ -74,6 +74,7 @@ namespace FluffyDuck.Memorial
             }
         }
 
+        #region MonoBehaviour Methods
         void OnEnable()
         {
             AddGestureEventListener();
@@ -90,7 +91,9 @@ namespace FluffyDuck.Memorial
         {
             FSM.UpdateState();
         }
+        #endregion
 
+        #region Spine Animation Callbacks
         /// <summary>
         /// 스파인 애니메이션 시작시 호출되는 리스너
         /// </summary>
@@ -229,6 +232,7 @@ namespace FluffyDuck.Memorial
                     break;
             }
         }
+        #endregion
 
         /// <summary>
         /// 스켈레톤(스파인) 이벤트 리스너 등록
@@ -293,6 +297,7 @@ namespace FluffyDuck.Memorial
             }
         }
 
+        #region Gesture Callbacks
         protected virtual void OnTap(ICursorInteractable comp)
         {
             if (FSM.CurrentTransitionID != ACTOR_STATES.IDLE)
@@ -474,6 +479,7 @@ namespace FluffyDuck.Memorial
                     break;
             }
         }
+        #endregion
 
         int GetConsecutiveGestureCount(TOUCH_GESTURE_TYPE gesture_type, TOUCH_BODY_TYPE body_type)
         {
@@ -520,7 +526,7 @@ namespace FluffyDuck.Memorial
             return null;
         }
 
-        private void SetReactionData(Me_Interaction_Data data, TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
+        void SetReactionData(Me_Interaction_Data data, TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
         {
             if (data == null)
             {
@@ -689,36 +695,6 @@ namespace FluffyDuck.Memorial
         }
 
         /// <summary>
-        /// 슬롯 찾기
-        /// </summary>
-        /// <param name="slot_name"></param>
-        /// <returns></returns>
-        public Slot FindSlot(string slot_name)
-        {
-            return Skeleton.Skeleton.FindSlot(slot_name);
-        }
-
-        /// <summary>
-        /// 트랙 찾기
-        /// </summary>
-        /// <param name="track">트랙 넘버</param>
-        /// <returns>찾은 트랙엔트리</returns>
-        public TrackEntry FindTrack(int track)
-        {
-            return Skeleton.AnimationState.GetCurrent(track);
-        }
-
-        /// <summary>
-        /// 본(뼈대) 찾기
-        /// </summary>
-        /// <param name="bone_name">본 이름</param>
-        /// <returns>찾은 본</returns>
-        public Bone FindBone(string bone_name)
-        {
-            return Skeleton.Skeleton.FindBone(bone_name);
-        }
-
-        /// <summary>
         /// 입력한 애니메이션의 지정트랙을 가져온다
         /// 규격외의 이름이 입력된 경우엔 -1을 돌려준다
         /// </summary>
@@ -732,15 +708,10 @@ namespace FluffyDuck.Memorial
             return result;
         }
 
-        public Vector3 GetBalloonWorldPosition()
-        {
-            return Balloon.GetWorldPosition(Skeleton.transform);
-        }
-
         /// <summary>
         /// 현재 프레임의 얼굴 방향 업데이트
         /// </summary>
-        private void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
+        void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
         {
             Vector3 face_world_pos = Face.GetWorldPosition(Skeleton.transform);
             Vector2 face_screen_pos = Camera.main.WorldToScreenPoint(face_world_pos);
@@ -824,6 +795,54 @@ namespace FluffyDuck.Memorial
             bool result = cursor > 0.01f || face_dir_distance > 0.01f;
 
             return result;
+        }
+
+        /// <summary>
+        /// 말풍선 뼈대 위치
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetBalloonWorldPosition()
+        {
+            return Balloon.GetWorldPosition(Skeleton.transform);
+        }
+
+        /// <summary>
+        /// 슬롯 찾기
+        /// </summary>
+        /// <param name="slot_name"></param>
+        /// <returns></returns>
+        public Slot FindSlot(string slot_name)
+        {
+            return Skeleton.Skeleton.FindSlot(slot_name);
+        }
+
+        /// <summary>
+        /// 트랙 찾기
+        /// </summary>
+        /// <param name="track">트랙 넘버</param>
+        /// <returns>찾은 트랙엔트리</returns>
+        public TrackEntry FindTrack(int track)
+        {
+            return Skeleton.AnimationState.GetCurrent(track);
+        }
+
+        /// <summary>
+        /// 본(뼈대) 찾기
+        /// </summary>
+        /// <param name="bone_name">본 이름</param>
+        /// <returns>찾은 본</returns>
+        public Bone FindBone(string bone_name)
+        {
+            return Skeleton.Skeleton.FindBone(bone_name);
+        }
+
+        public void Pause(bool val)
+        {
+            Skeleton.AnimationState.TimeScale = val ? 0 : 1;
+            if (val)
+            {
+
+            }
         }
 
         public record IdleAnimationData

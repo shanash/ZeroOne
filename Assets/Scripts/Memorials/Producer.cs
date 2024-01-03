@@ -28,5 +28,15 @@ namespace FluffyDuck.Memorial
             Actor = await MBFactory.CreateAsync<ActorBase>(data.actor_prefab_key, Stage.Actor_Parent, this, data);
             Background = await MBFactory.CreateAsync<Background>(data.background_prefab_key, Stage.Background_Parent, data);
         }
+
+        public void Pause()
+        {
+            Actor.Pause(true);
+        }
+
+        public void Resume()
+        {
+            Actor.Pause(false);
+        }
     }
 }

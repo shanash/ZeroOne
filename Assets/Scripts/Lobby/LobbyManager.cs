@@ -19,6 +19,8 @@ public class LobbyManager : MonoBehaviour
 
     Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
 
+    Producer pd;
+
     private void Start()
     {
         var audio = AudioManager.Instance;
@@ -32,7 +34,7 @@ public class LobbyManager : MonoBehaviour
         pmng.SetRootOnEnter(LobbyRootOnEnter);
         pmng.SetRootOnExit(LobbyRootOnExit);
 
-        Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+        pd = Factory.Create<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
     }
 
@@ -42,6 +44,7 @@ public class LobbyManager : MonoBehaviour
     void LobbyRootOnEnter()
     {
         Debug.Log("LobbyRootOnEnter");
+        pd.Resume();
     }
     /// <summary>
     /// 로비 화면을 가리는 팝업이 생성되었을때 호출되는 함수
@@ -49,6 +52,7 @@ public class LobbyManager : MonoBehaviour
     void LobbyRootOnExit()
     {
         Debug.Log("LobbyRootOnExit");
+        pd.Pause();
     }
 
 
