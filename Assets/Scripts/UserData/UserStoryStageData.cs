@@ -102,20 +102,29 @@ public class UserStoryStageData : UserDataBase
         return STAGE_DIFFICULTY_TYPE.NONE;
     }
 
-    public int GetFirstRewardID()
+    public int GetFirstRewardGroupID()
     {
         if (Data != null)
         {
-            return Data.first_reward_id;
+            return Data.first_reward_group_id;
         }
         return 0;
     }
 
-    public int GetRepeatRewardID()
+    public int GetRepeatRewardGroupID()
     {
         if (Data != null)
         {
-            return Data.repeat_reward_id;
+            return Data.repeat_reward_group_id;
+        }
+        return 0;
+    }
+
+    public int GetStarRewardGroupID()
+    {
+        if (Data != null)
+        {
+            return Data.star_reward_group_id;
         }
         return 0;
     }

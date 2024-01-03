@@ -6,9 +6,13 @@ using System.Collections.Generic;
 public class Repeat_Reward_Data : System.IDisposable
 {
 	///	<summary>
-	///	보상 인덱스
+	///	보상 고유 인덱스
 	///	</summary>
 	public int repeat_reward_id {get; set;}
+	///	<summary>
+	///	보상 그룹 아이디
+	///	</summary>
+	public int repeat_reward_group_id {get; set;}
 	///	<summary>
 	///	타입
 	///	</summary>
@@ -31,6 +35,7 @@ public class Repeat_Reward_Data : System.IDisposable
 	public Repeat_Reward_Data()
 	{
 		repeat_reward_id = 0;
+		repeat_reward_group_id = 0;
 		item_type = ITEM_TYPE.NONE;
 		item_index = 0;
 		min_count = 0;
@@ -57,6 +62,7 @@ public class Repeat_Reward_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[repeat_reward_id] = <color=yellow>{0}</color>", repeat_reward_id).AppendLine();
+		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
 		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
 		sb.AppendFormat("[min_count] = <color=yellow>{0}</color>", min_count).AppendLine();

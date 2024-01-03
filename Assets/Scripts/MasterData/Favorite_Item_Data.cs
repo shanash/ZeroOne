@@ -28,7 +28,7 @@ public class Favorite_Item_Data : System.IDisposable
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public int icon_path {get; set;}
+	public string icon_path {get; set;}
 
 	private bool disposed = false;
 
@@ -39,7 +39,7 @@ public class Favorite_Item_Data : System.IDisposable
 		use_effect = 0;
 		item_tooltip_text = string.Empty;
 		sell_price = 0;
-		icon_path = 0;
+		icon_path = string.Empty;
 	}
 
 	public void Dispose()

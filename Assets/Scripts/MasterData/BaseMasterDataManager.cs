@@ -173,6 +173,11 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Star_Reward_Data> _Star_Reward_Data
+	{
+		get;
+		private set;
+	}
 	protected List<World_Data> _World_Data
 	{
 		get;
@@ -241,6 +246,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Role_Icon_Data();
 		await LoadMaster_First_Reward_Data();
 		await LoadMaster_Repeat_Reward_Data();
+		await LoadMaster_Star_Reward_Data();
 		await LoadMaster_World_Data();
 		await LoadMaster_Zone_Data();
 		await LoadMaster_Stage_Data();
@@ -453,6 +459,12 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Repeat_Reward_Data");
 		_Repeat_Reward_Data = JsonConvert.DeserializeObject<List<Repeat_Reward_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Star_Reward_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Star_Reward_Data");
+		_Star_Reward_Data = JsonConvert.DeserializeObject<List<Star_Reward_Data>>(json);
 	}
 
 	protected async Task LoadMaster_World_Data()
@@ -740,6 +752,14 @@ public class BaseMasterDataManager
 		if(_Repeat_Reward_Data == null)
 		{
 			await LoadMaster_Repeat_Reward_Data();
+		}
+	}
+
+	protected async void Check_Star_Reward_Data()
+	{
+		if(_Star_Reward_Data == null)
+		{
+			await LoadMaster_Star_Reward_Data();
 		}
 	}
 

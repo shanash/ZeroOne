@@ -126,23 +126,25 @@ public class MasterDataManager : BaseMasterDataManager
     /// <summary>
     /// 초회 보상 데이터 반환
     /// </summary>
-    /// <param name="first_reward_id"></param>
+    /// <param name="first_reward_group_id"></param>
     /// <returns></returns>
-    public First_Reward_Data Get_FirstRewardData(int first_reward_id)
+    public void Get_FirstRewardDataList(int first_reward_group_id, ref List<First_Reward_Data> list)
     {
         Check_First_Reward_Data();
-        return _First_Reward_Data.Find(x => x.frist_reward_id == first_reward_id);
+        list.Clear();
+        list.AddRange(_First_Reward_Data.FindAll(x => x.first_reward_group_id == first_reward_group_id));
     }
     /// <summary>
     /// 반복 보상 데이터 반환
     /// </summary>
-    /// <param name="repeat_reward_id"></param>
+    /// <param name="repeat_reward_group_id"></param>
     /// <returns></returns>
-    public Repeat_Reward_Data Get_RepeatRewardData(int repeat_reward_id)
+    public Repeat_Reward_Data Get_RepeatRewardData(int repeat_reward_group_id)
     {
         Check_Repeat_Reward_Data();
-        return _Repeat_Reward_Data.Find(x => x.repeat_reward_id ==  repeat_reward_id);
+        return _Repeat_Reward_Data.Find(x => x.repeat_reward_group_id ==  repeat_reward_group_id);
     }
+    
     
 
     #endregion

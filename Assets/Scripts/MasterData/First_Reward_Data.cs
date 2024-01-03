@@ -6,9 +6,13 @@ using System.Collections.Generic;
 public class First_Reward_Data : System.IDisposable
 {
 	///	<summary>
-	///	보상 그룹 인덱스
+	///	보상 고유 인덱스
 	///	</summary>
-	public int frist_reward_id {get; set;}
+	public int first_reward_id {get; set;}
+	///	<summary>
+	///	보상 그룹 아이디
+	///	</summary>
+	public int first_reward_group_id {get; set;}
 	///	<summary>
 	///	타입
 	///	</summary>
@@ -20,16 +24,17 @@ public class First_Reward_Data : System.IDisposable
 	///	<summary>
 	///	지급 수량
 	///	</summary>
-	public string count {get; set;}
+	public string item_count {get; set;}
 
 	private bool disposed = false;
 
 	public First_Reward_Data()
 	{
-		frist_reward_id = 0;
+		first_reward_id = 0;
+		first_reward_group_id = 0;
 		item_type = ITEM_TYPE.NONE;
 		item_index = string.Empty;
-		count = string.Empty;
+		item_count = string.Empty;
 	}
 
 	public void Dispose()
@@ -51,10 +56,11 @@ public class First_Reward_Data : System.IDisposable
 	public override string ToString()
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
-		sb.AppendFormat("[frist_reward_id] = <color=yellow>{0}</color>", frist_reward_id).AppendLine();
+		sb.AppendFormat("[first_reward_id] = <color=yellow>{0}</color>", first_reward_id).AppendLine();
+		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
 		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
-		sb.AppendFormat("[count] = <color=yellow>{0}</color>", count).AppendLine();
+		sb.AppendFormat("[item_count] = <color=yellow>{0}</color>", item_count).AppendLine();
 		return sb.ToString();
 	}
 }

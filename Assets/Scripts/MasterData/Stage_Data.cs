@@ -40,11 +40,15 @@ public class Stage_Data : System.IDisposable
 	///	<summary>
 	///	초회 보상
 	///	</summary>
-	public int first_reward_id {get; set;}
+	public int first_reward_group_id {get; set;}
 	///	<summary>
 	///	통상 보상
 	///	</summary>
-	public int repeat_reward_id {get; set;}
+	public int repeat_reward_group_id {get; set;}
+	///	<summary>
+	///	별 보상
+	///	</summary>
+	public int star_reward_group_id {get; set;}
 
 	private bool disposed = false;
 
@@ -58,8 +62,9 @@ public class Stage_Data : System.IDisposable
 		character_exp = 0;
 		destiny_exp = 0;
 		gold = 0;
-		first_reward_id = 0;
-		repeat_reward_id = 0;
+		first_reward_group_id = 0;
+		repeat_reward_group_id = 0;
+		star_reward_group_id = 0;
 	}
 
 	public void Dispose()
@@ -89,8 +94,9 @@ public class Stage_Data : System.IDisposable
 		sb.AppendFormat("[character_exp] = <color=yellow>{0}</color>", character_exp).AppendLine();
 		sb.AppendFormat("[destiny_exp] = <color=yellow>{0}</color>", destiny_exp).AppendLine();
 		sb.AppendFormat("[gold] = <color=yellow>{0}</color>", gold).AppendLine();
-		sb.AppendFormat("[first_reward_id] = <color=yellow>{0}</color>", first_reward_id).AppendLine();
-		sb.AppendFormat("[repeat_reward_id] = <color=yellow>{0}</color>", repeat_reward_id).AppendLine();
+		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
+		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
+		sb.AppendFormat("[star_reward_group_id] = <color=yellow>{0}</color>", star_reward_group_id).AppendLine();
 		return sb.ToString();
 	}
 }
