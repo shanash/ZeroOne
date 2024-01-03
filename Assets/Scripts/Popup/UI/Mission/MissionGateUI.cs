@@ -11,7 +11,9 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/SelectStageUI", (popup) =>
         {
-            popup.ShowPopup();
+            var mng = GameData.Instance.GetUserStoryStageDataManager();
+
+            popup.ShowPopup(mng.GetCurrentZoneID());
         });
     }
 

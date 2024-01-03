@@ -45,10 +45,6 @@ public class UIButtonBase : Selectable, IPointerClickHandler
         {
             return;
         }
-        if (!interactable)
-        {
-            return;
-        }
         if (Scale_Rect != null)
         {
             Scale_Rect.localScale = Vector2.one;

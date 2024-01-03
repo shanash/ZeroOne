@@ -1,5 +1,6 @@
+using Cysharp.Text;
+using FluffyDuck.UI;
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,5 +25,68 @@ public class StageListCellNode : InfiniteScrollItem
 
     [SerializeField, Tooltip("Lock Cover")]
     RectTransform Lock_Cover;
+
+    public override void UpdateData(InfiniteScrollData sdata)
+    {
+        base.UpdateData(sdata);
+
+        var data = (StageListData)sdata;
+
+        //  stage number
+        Stage_Number.text = ZString.Format("{0}-{1}", data.Zone.zone_ordering, data.Data.stage_ordering);
+
+        //  stage name
+        Stage_Name.text = data.Data.stage_name;
+
+        //  star point
+        if (data.IsExistUserData())
+        {
+            MarkStarPoint(data.User_Data.GetStarPoint());
+        }
+        else
+        {
+            MarkStarPoint(0);
+        }
+
+        //  lock cover
+        if (data.IsExistUserData())
+        {
+            Lock_Cover.gameObject.SetActive(false);
+        }
+        else
+        {
+            Lock_Cover.gameObject.SetActive(true);
+        }
+    }
+
+
+    void MarkStarPoint(int pt)
+    {
+        int cnt = Stage_Star_Points.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Stage_Star_Points[i].gameObject.SetActive(false);
+        }
+        if (pt >= cnt)
+        {
+            pt = cnt;
+        }
+        for (int i = 0; i < pt; i++)
+        {
+            Stage_Star_Points[i].gameObject.SetActive(true);
+        }
+    }
+
+    public void OnClickStageEntrance()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", (popup) =>
+        {
+            var data = (StageListData)this.scrollData;
+
+            popup.ShowPopup(data.Data);
+        });
+    }
 
 }

@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 
 public class BattleDungeon_StoryStageData : BattleDungeonData
 {
+    UserStoryStageData User_Data;
     Stage_Data Stage;
     List<Wave_Data> Wave_Datas = new List<Wave_Data>();
 
@@ -17,6 +18,9 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         var m = MasterDataManager.Instance;
         Stage = m.Get_StageData(dungeon_id);
         m.Get_WaveDataList(Stage.stage_id, ref Wave_Datas);
+
+        var mng = GameData.Instance.GetUserStoryStageDataManager();
+        User_Data = mng.FindUserStoryStageData(Stage.stage_id);
     }
 
 

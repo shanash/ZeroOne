@@ -1,13 +1,16 @@
 using LitJson;
+using Spine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UserStoryStageDataManager : ManagerBase
 {
-    STAGE_DIFFICULTY_TYPE Current_Difficulty_Type = STAGE_DIFFICULTY_TYPE.NORMAL;
+    int Current_Zone_ID;
 
     List<UserStoryStageData> User_Story_Stage_Data = new List<UserStoryStageData>();
+    Zone_Data Current_Zone;
 
     public UserStoryStageDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype)
     {
@@ -25,29 +28,37 @@ public class UserStoryStageDataManager : ManagerBase
 
     public override void InitDataManager()
     {
+        var m = MasterDataManager.Instance;
+
+        if (Current_Zone_ID != 0)
+        {
+            SetCurrentZoneID(Current_Zone_ID);
+        }
+
         if (User_Story_Stage_Data.Count > 0)
         {
             return;
         }
 
-        Current_Difficulty_Type = STAGE_DIFFICULTY_TYPE.NORMAL;
         //  first stage init
-        var m = MasterDataManager.Instance;
+        
         List<World_Data> world_list = new List<World_Data>();
         m.Get_WorldDataList(ref world_list);
         if (world_list.Count == 0)
             return;
         var first_world = world_list[0];
         List<Zone_Data> zone_list = new List<Zone_Data>();
-        m.Get_ZoneDataList(first_world.world_id, Current_Difficulty_Type, ref zone_list);
+        m.Get_ZoneDataList(first_world.world_id, STAGE_DIFFICULTY_TYPE.NORMAL, ref zone_list);
         if (zone_list.Count == 0)
         {
             return;
         }
         var first_zone = zone_list[0];
+        Current_Zone = first_zone;
+        Current_Zone_ID = first_zone.zone_id;
 
         List<Stage_Data> stage_list = new List<Stage_Data>();
-        m.Get_StageDataList(first_zone.zone_id, ref stage_list);
+        m.Get_StageDataList(Current_Zone_ID, ref stage_list);
 
         if (stage_list.Count == 0)
             return;
@@ -58,9 +69,43 @@ public class UserStoryStageDataManager : ManagerBase
         Save();
     }
 
+    public void SetCurrentZoneID(int zone_id)
+    {
+        Current_Zone_ID = zone_id;
+        Current_Zone = MasterDataManager.Instance.Get_ZoneData(Current_Zone_ID);
+    }
+
     public STAGE_DIFFICULTY_TYPE GetCurrentStageDifficultyType()
     {
-        return Current_Difficulty_Type;
+        if (Current_Zone != null)
+        {
+            return Current_Zone.zone_difficulty;
+        }
+        return STAGE_DIFFICULTY_TYPE.NONE;
+    }
+
+    public int GetTotalStarCount(int zone_id)
+    {
+        var list = FindUserStoryStageDataList(zone_id);
+        return list.Count * 3;
+    }
+
+    public int GetGainStarPoints(int zone_id)
+    {
+        var list = FindUserStoryStageDataList(zone_id);
+        int sum = User_Story_Stage_Data.Sum(x => x.GetStarPoint());
+        return sum;
+    }
+
+
+    public int GetCurrentZoneID()
+    {
+        return Current_Zone_ID;
+    }
+
+    public Zone_Data GetCurrentZoneData()
+    {
+        return Current_Zone;
     }
 
     public List<UserStoryStageData> FindUserStoryStageDataList(int zone_id)
@@ -89,11 +134,13 @@ public class UserStoryStageDataManager : ManagerBase
         }
         return stage;
     }
+    
 
     public override JsonData Serialized()
     {
         var json = new LitJson.JsonData();
-        json[NODE_CURRENT_DIFFICULTY_TYPE] = (int)Current_Difficulty_Type;
+
+        json[NODE_CURRENT_ZONE_ID] = Current_Zone_ID;
 
         var arr = new JsonData();
 
@@ -120,10 +167,12 @@ public class UserStoryStageDataManager : ManagerBase
             return false;
         }
 
-        if (json.ContainsKey(NODE_CURRENT_DIFFICULTY_TYPE))
+        if (json.ContainsKey(NODE_CURRENT_ZONE_ID))
         {
-            Current_Difficulty_Type = (STAGE_DIFFICULTY_TYPE)ParseInt(json, NODE_CURRENT_DIFFICULTY_TYPE);
+            int zone_id = ParseInt(json, NODE_CURRENT_ZONE_ID);
+            SetCurrentZoneID(zone_id);
         }
+        
 
         if (json.ContainsKey(NODE_STAGE_DATA_LIST))
         {
@@ -161,7 +210,7 @@ public class UserStoryStageDataManager : ManagerBase
     //-------------------------------------------------------------------------
     // Json Node Name
     //-------------------------------------------------------------------------
-    protected const string NODE_CURRENT_DIFFICULTY_TYPE = "dtype";
+    protected const string NODE_CURRENT_ZONE_ID = "zid";
     protected const string NODE_STAGE_DATA_LIST = "slist";
 
     protected const string NODE_STAGE_ID = "sid";
