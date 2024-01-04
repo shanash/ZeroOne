@@ -20,7 +20,7 @@ public class Repeat_Reward_Data : System.IDisposable
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public int item_index {get; set;}
+	public int item_id {get; set;}
 	///	<summary>
 	///	최소 수량
 	///	</summary>
@@ -37,7 +37,7 @@ public class Repeat_Reward_Data : System.IDisposable
 		repeat_reward_id = 0;
 		repeat_reward_group_id = 0;
 		item_type = ITEM_TYPE.NONE;
-		item_index = 0;
+		item_id = 0;
 		min_count = 0;
 		max_count = 0;
 	}
@@ -64,7 +64,7 @@ public class Repeat_Reward_Data : System.IDisposable
 		sb.AppendFormat("[repeat_reward_id] = <color=yellow>{0}</color>", repeat_reward_id).AppendLine();
 		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
-		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
+		sb.AppendFormat("[item_id] = <color=yellow>{0}</color>", item_id).AppendLine();
 		sb.AppendFormat("[min_count] = <color=yellow>{0}</color>", min_count).AppendLine();
 		sb.AppendFormat("[max_count] = <color=yellow>{0}</color>", max_count).AppendLine();
 		return sb.ToString();

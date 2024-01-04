@@ -93,16 +93,7 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Sta_Potion_Data();
         return _Sta_Potion_Data.Find(x => x.sta_potion_id == sta_potion_id);
     }
-    /// <summary>
-    /// 메모리템(메모리얼에서 사용될 아이템) 데이터 반환
-    /// </summary>
-    /// <param name="memoritem_id"></param>
-    /// <returns></returns>
-    public Memoritem_Data Get_MemoritemData(int memoritem_id)
-    {
-        Check_Memoritem_Data();
-        return _Memoritem_Data.Find(x => x.memoritem_id == memoritem_id);
-    }
+
     /// <summary>
     /// 소비성 아이템 데이터 반환
     /// </summary>
@@ -124,27 +115,41 @@ public class MasterDataManager : BaseMasterDataManager
         return _Favorite_Item_Data.Find(x => x.favorite_item_id == favorite_item_id);
     }
     /// <summary>
-    /// 초회 보상 데이터 반환
+    /// 초회 보상 그룹 데이터 반환
     /// </summary>
     /// <param name="first_reward_group_id"></param>
-    /// <returns></returns>
+    /// <param name="list"></param>
     public void Get_FirstRewardDataList(int first_reward_group_id, ref List<First_Reward_Data> list)
     {
         Check_First_Reward_Data();
         list.Clear();
         list.AddRange(_First_Reward_Data.FindAll(x => x.first_reward_group_id == first_reward_group_id));
+        list.Sort((a, b) => a.first_reward_id.CompareTo(b.first_reward_id));
     }
     /// <summary>
-    /// 반복 보상 데이터 반환
+    /// 반복 보상 그룹 데이터 반환
     /// </summary>
     /// <param name="repeat_reward_group_id"></param>
-    /// <returns></returns>
-    public Repeat_Reward_Data Get_RepeatRewardData(int repeat_reward_group_id)
+    /// <param name="list"></param>
+    public void Get_RepeatRewardDataList(int repeat_reward_group_id, ref List<Repeat_Reward_Data> list)
     {
         Check_Repeat_Reward_Data();
-        return _Repeat_Reward_Data.Find(x => x.repeat_reward_group_id ==  repeat_reward_group_id);
+        list.Clear();
+        list.AddRange(_Repeat_Reward_Data.FindAll(x => x.repeat_reward_group_id == repeat_reward_group_id));
+        list.Sort((a, b) => a.repeat_reward_id.CompareTo(b.repeat_reward_id));
     }
-    
+    /// <summary>
+    /// 별 보상 그룹 데이터 반환
+    /// </summary>
+    /// <param name="star_reward_group_id"></param>
+    /// <param name="list"></param>
+    public void Get_StarRewardDataList(int star_reward_group_id, ref List<Star_Reward_Data> list)
+    {
+        Check_Star_Reward_Data();
+        list.Clear();
+        list.AddRange(_Star_Reward_Data.FindAll(x => x.star_reward_group_id == star_reward_group_id));
+        list.Sort((a, b) => a.star_reward_id.CompareTo(b.star_reward_id));
+    }
     
 
     #endregion

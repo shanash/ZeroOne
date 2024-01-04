@@ -77,7 +77,7 @@ public class UserHeroDataManager : ManagerBase
         if (hero == null)
         {
             hero = new UserHeroData();
-            hero.SetHeroDataID(hero_data_id, hero_data_num);
+            hero.SetPlayerCharacterDataID(hero_data_id, hero_data_num);
             User_Hero_Data_List.Add(hero);
             Is_Update_Data = true;
         }

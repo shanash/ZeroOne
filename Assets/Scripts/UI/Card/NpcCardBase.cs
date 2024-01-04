@@ -21,6 +21,8 @@ public class NpcCardBase : UIBase
     protected Npc_Data Data;
     protected bool Is_Boss;
 
+    Vector2 Init_Scale = new Vector2(0.66f, 0.66f);
+
     public void SetNpcID(int npc_id)
     {
         Data = MasterDataManager.Instance.Get_NpcData(npc_id);
@@ -29,13 +31,14 @@ public class NpcCardBase : UIBase
     public void SetBoss(bool boss)
     {
         Is_Boss = boss;
+        Boss_Tag.gameObject.SetActive(Is_Boss);
     }
 
     protected void UpdateNpcIcon()
     {
-        CommonUtils.GetResourceFromAddressableAsset<Sprite>("", (obj) =>
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) =>
         {
-
+            Npc_Icon.sprite = spr;
         });
     }
 
@@ -46,6 +49,16 @@ public class NpcCardBase : UIBase
             return Data.npc_data_id;
         }
         return 0;
+    }
+    public override void Spawned()
+    {
+        base.Spawned();
+        this.transform.localScale = Init_Scale;
+    }
+    public override void Despawned()
+    {
+        base.Despawned();
+        SetBoss(false);
     }
 
 }

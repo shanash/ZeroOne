@@ -24,7 +24,7 @@ public class Star_Reward_Data : System.IDisposable
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public int item_index {get; set;}
+	public int item_id {get; set;}
 	///	<summary>
 	///	지급 수량
 	///	</summary>
@@ -38,7 +38,7 @@ public class Star_Reward_Data : System.IDisposable
 		star_reward_group_id = 0;
 		star_point = 0;
 		item_type = ITEM_TYPE.NONE;
-		item_index = 0;
+		item_id = 0;
 		item_count = 0;
 	}
 
@@ -65,7 +65,7 @@ public class Star_Reward_Data : System.IDisposable
 		sb.AppendFormat("[star_reward_group_id] = <color=yellow>{0}</color>", star_reward_group_id).AppendLine();
 		sb.AppendFormat("[star_point] = <color=yellow>{0}</color>", star_point).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
-		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
+		sb.AppendFormat("[item_id] = <color=yellow>{0}</color>", item_id).AppendLine();
 		sb.AppendFormat("[item_count] = <color=yellow>{0}</color>", item_count).AppendLine();
 		return sb.ToString();
 	}

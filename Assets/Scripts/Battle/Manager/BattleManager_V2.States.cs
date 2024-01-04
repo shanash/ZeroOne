@@ -51,6 +51,14 @@ public partial class BattleManager_V2 : MonoBehaviour
 
         CreateTeamManagers();
 
+        {
+            var audio = AudioManager.Instance;
+
+            List<string> audio_clip_list = new List<string>();
+            audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
+
+            audio.PreloadAudioClipsAsync(audio_clip_list, null);
+        }
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
@@ -66,6 +74,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         list.Add("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text");
         list.Add("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text");
         list.Add("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text");
+        list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
 
 
         //  npc prefabs
@@ -160,6 +169,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateInitBegin() 
     {
         InitBattleField();
+        Skill_Slot_Mng.SetGameType(Game_Type);
     }
     public virtual void GameStateInit() 
     {
@@ -169,7 +179,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateReadyBegin() 
     {
-        StartStageProceeding();
+        
     }
     public virtual void GameStateReady() 
     {
@@ -207,6 +217,8 @@ public partial class BattleManager_V2 : MonoBehaviour
         {
             return;
         }
+
+        UI_Mng.UpdateWaveCount();
         TeamMembersChangeState(UNIT_STATES.MOVE_IN);
     }
     public virtual void GameStatePlaying() 

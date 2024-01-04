@@ -11,11 +11,11 @@ public partial class BattleManager_V2 : MonoBehaviour
     [SerializeField, Tooltip("Virtual Cam Manager")]
     protected VirtualCineManager Cine_Mng;
 
-    [SerializeField, Tooltip("Stage Proceeding Manager")]
-    protected StageProceedingManager Stage_Mng;
-
     [SerializeField, Tooltip("Fade In Out Layer")]
-    UIEaseCanvasGroupAlpha Fade_In_Out_Layer;
+    protected UIEaseCanvasGroupAlpha Fade_In_Out_Layer;
+
+    [SerializeField, Tooltip("Skill Slot Manager")]
+    protected BattleSkillSlotManager Skill_Slot_Mng;
 
     protected List<TeamManager_V2> Used_Team_List = new List<TeamManager_V2>();
 
@@ -35,6 +35,15 @@ public partial class BattleManager_V2 : MonoBehaviour
     public BattleField GetBattleField() { return Field; }
 
     public EffectFactory GetEffectFactory() { return Field.GetEffectFactory(); }
+
+    public int GetMaxWave()
+    {
+        return Dungeon_Data.GetMaxWaveCount();
+    }
+    public int GetCurrentWave()
+    {
+        return Dungeon_Data.GetWave();
+    }
 
     protected void InitBattleField()
     {
@@ -81,18 +90,13 @@ public partial class BattleManager_V2 : MonoBehaviour
         {
             Used_Team_List[i].SpawnHeros();
         }
+
+        var myteam = FindTeamManager(TEAM_TYPE.LEFT);
+        Skill_Slot_Mng.SetHeroMembers(myteam.GetMembers());
     }
 
 
-    protected void StartStageProceeding()
-    {
-        if (Stage_Mng == null)
-        {
-            return;
-        }
-        WAVE_POINT_TYPE[] points = new WAVE_POINT_TYPE[] { WAVE_POINT_TYPE.START_POINT, WAVE_POINT_TYPE.MID_POINT, WAVE_POINT_TYPE.MID_POINT, WAVE_POINT_TYPE.BOSS_POINT  };
-        Stage_Mng.StartStageProceeding(points);
-    }
+    
 
     protected void WaveInfoCloseCallback()
     {

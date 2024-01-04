@@ -25,10 +25,21 @@ public class PCDeckSettingUI : PopupBase
 
     List<DeckHeroListCell> Used_Deck_Hero_List_Cells = new List<DeckHeroListCell>();
 
+    GAME_TYPE Game_Type = GAME_TYPE.NONE;
+    int Dungeon_ID;
+
     public override void ShowPopup(params object[] data)
     {
-        //  data setting 필요시 [todo]
+        if (data.Length != 2)
+        {
+            HidePopup();
+            return;
+        }
 
+        Game_Type = (GAME_TYPE)data[0];
+        Dungeon_ID = (int)data[1];
+
+        Deck_Mng.SetGameType(Game_Type);
 
         base.ShowPopup(data);
 
@@ -212,18 +223,21 @@ public class PCDeckSettingUI : PopupBase
             return;
         }
         var board = BlackBoard.Instance;
-        var m = MasterDataManager.Instance;
-        List<Stage_Data> stage_list = new List<Stage_Data>();
-        m.Get_StageDataList(ref stage_list);
 
-        if (stage_list.Count > 0)
+        if (Game_Type == GAME_TYPE.STORY_MODE)
         {
-            var first_stage = stage_list[0];
-
-            board.SetBlackBoard(BLACK_BOARD_KEY.STORY_STAGE_ID, first_stage.stage_id);
-            board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.STORY_MODE);
-
-            SceneManager.LoadScene("battlev2");
+            board.SetBlackBoard(BLACK_BOARD_KEY.STORY_STAGE_ID, Dungeon_ID);
         }
+        board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
+
+        SceneManager.LoadScene("battlev2");
+    }
+
+    public override void Despawned()
+    {
+        base.Despawned();
+        Game_Type = GAME_TYPE.NONE;
+        Dungeon_ID = 0;
+        Deck_Mng.SetGameType(Game_Type);
     }
 }

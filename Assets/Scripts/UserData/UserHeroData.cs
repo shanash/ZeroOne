@@ -42,10 +42,10 @@ public class UserHeroData : UserDataBase
             Exp = new SecureVar<int>();
         }
     }
-    public void SetHeroDataID(int hero_data_id, int hero_data_num)
+    public void SetPlayerCharacterDataID(int player_character_id, int player_character_num)
     {
-        Player_Character_ID.Set(hero_data_id);
-        Player_Character_Num = hero_data_num;
+        Player_Character_ID.Set(player_character_id);
+        Player_Character_Num = player_character_num;
         InitMasterData();
         Is_Update_Data = true;
     }

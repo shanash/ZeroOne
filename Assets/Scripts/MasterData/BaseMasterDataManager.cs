@@ -38,11 +38,6 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
-	protected List<Memoritem_Data> _Memoritem_Data
-	{
-		get;
-		private set;
-	}
 	protected List<Favorite_Item_Data> _Favorite_Item_Data
 	{
 		get;
@@ -219,7 +214,6 @@ public class BaseMasterDataManager
 		await LoadMaster_Character_Piece_Data();
 		await LoadMaster_Exp_Potion_Data();
 		await LoadMaster_Sta_Potion_Data();
-		await LoadMaster_Memoritem_Data();
 		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
 		await LoadMaster_Player_Level_Data();
@@ -297,12 +291,6 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Sta_Potion_Data");
 		_Sta_Potion_Data = JsonConvert.DeserializeObject<List<Sta_Potion_Data>>(json);
-	}
-
-	protected async Task LoadMaster_Memoritem_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Memoritem_Data");
-		_Memoritem_Data = JsonConvert.DeserializeObject<List<Memoritem_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Favorite_Item_Data()
@@ -536,14 +524,6 @@ public class BaseMasterDataManager
 		if(_Sta_Potion_Data == null)
 		{
 			await LoadMaster_Sta_Potion_Data();
-		}
-	}
-
-	protected async void Check_Memoritem_Data()
-	{
-		if(_Memoritem_Data == null)
-		{
-			await LoadMaster_Memoritem_Data();
 		}
 	}
 

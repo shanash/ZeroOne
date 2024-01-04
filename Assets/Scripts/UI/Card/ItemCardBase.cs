@@ -56,7 +56,7 @@ public class ItemCardBase : UIBase
                 item = new ItemStaminaPotionData();
                 break;
             case ITEM_TYPE.MEMORIAL_ITEM:
-                item = new ItemMemoritemData();
+                Debug.Assert(false);
                 break;
             case ITEM_TYPE.CHARACTER:
                 Debug.Assert(false);
@@ -77,6 +77,7 @@ public class ItemCardBase : UIBase
                 Debug.Assert(false);
                 break;
         }
+        item?.SetItem(itype, item_id);
         return item;
     }
     

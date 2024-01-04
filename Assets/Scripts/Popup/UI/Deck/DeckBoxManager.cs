@@ -7,13 +7,20 @@ public class DeckBoxManager : MonoBehaviour
     [SerializeField, Tooltip("Deck Slot Card")]
     List<DeckSlotHeroCardNode> Card_Slots;
 
+    GAME_TYPE Game_Type = GAME_TYPE.NONE;
+
+    public void SetGameType(GAME_TYPE gtype)
+    {
+        Game_Type = gtype;
+    }
+
     /// <summary>
     /// 팝업의 로드가 모두 완료된 후 덱 구성을 초기화 해준다.
     /// </summary>
     public void UpdateUserDeckUpdate()
     {
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+        var deck = deck_mng.FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
         
         int cnt = Card_Slots.Count;

@@ -20,7 +20,7 @@ public class First_Reward_Data : System.IDisposable
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public string item_index {get; set;}
+	public int item_id {get; set;}
 	///	<summary>
 	///	지급 수량
 	///	</summary>
@@ -33,7 +33,7 @@ public class First_Reward_Data : System.IDisposable
 		first_reward_id = 0;
 		first_reward_group_id = 0;
 		item_type = ITEM_TYPE.NONE;
-		item_index = string.Empty;
+		item_id = 0;
 		item_count = string.Empty;
 	}
 
@@ -59,7 +59,7 @@ public class First_Reward_Data : System.IDisposable
 		sb.AppendFormat("[first_reward_id] = <color=yellow>{0}</color>", first_reward_id).AppendLine();
 		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
-		sb.AppendFormat("[item_index] = <color=yellow>{0}</color>", item_index).AppendLine();
+		sb.AppendFormat("[item_id] = <color=yellow>{0}</color>", item_id).AppendLine();
 		sb.AppendFormat("[item_count] = <color=yellow>{0}</color>", item_count).AppendLine();
 		return sb.ToString();
 	}

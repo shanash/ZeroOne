@@ -4,10 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HeroCardBase : MonoBehaviour, IPoolableComponent
+public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
+    [SerializeField, Tooltip("Box")]
+    protected RectTransform Box;
+
+    [Header("Card")]
     [SerializeField, Tooltip("Card BG")]
     protected Image Card_BG;
 
@@ -17,14 +22,52 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Card Frame")]
     protected Image Card_Frame;
 
-    [SerializeField, Tooltip("Position Icon")]
-    protected Image Position_Icon_Image;
+    [Header("Filter")]
+    [SerializeField, Tooltip("Filter Box")]
+    protected RectTransform Filter_Box;
 
-    [SerializeField, Tooltip("Distance Text")]
-    protected TMP_Text Distance_Text;
+    [SerializeField, Tooltip("Filter Text")]
+    protected TMP_Text Filter_Text;
+
+    [Header("Spec")]
+    [SerializeField, Tooltip("Spec Info Box")]
+    protected RectTransform Spec_Info_Box;
+
+    [SerializeField, Tooltip("Level Box")]
+    protected RectTransform Level_Box;
+    [SerializeField, Tooltip("Level Text")]
+    protected TMP_Text Level_Text;
+
+    [SerializeField, Tooltip("Star Box")]
+    protected RectTransform Star_Box;
+    [SerializeField, Tooltip("Star Text")]
+    protected TMP_Text Star_Text;
+
+    [SerializeField, Tooltip("Role")]
+    protected RectTransform Role_Box;
+
+    [SerializeField, Tooltip("Role Icons")]
+    protected List<Image> Role_Icons;
+
+    [Header("Party Select")]
+
+    [SerializeField, Tooltip("Part Select Frame")]
+    protected RectTransform Part_Select_Frame;
+
+    [Header("Name")]
+    [SerializeField, Tooltip("Name")]
+    protected TMP_Text Name_Text;
 
     protected Player_Character_Data Data;
     protected Player_Character_Battle_Data Battle_Data;
+
+    public delegate void TouchDownAction(PointerEventData evt);
+    public delegate void TouchUpAction(PointerEventData evt);
+    public delegate void ClickAction(PointerEventData evt);
+
+    public event TouchDownAction TouchDown;
+    public event TouchUpAction TouchUp;
+    public event ClickAction Click;
 
     public void SetHeroDataID(int hero_data_id)
     {
@@ -47,15 +90,6 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
             Hero_Icon_Image.sprite = spr;
         });
 
-        //  position icon
-        var pos_data = MasterDataManager.Instance.Get_PositionIconData(Battle_Data.position_type);
-        CommonUtils.GetResourceFromAddressableAsset<Sprite>(pos_data.icon, (spr) =>
-        {
-            Position_Icon_Image.sprite = spr;
-        });
-
-        //  distance
-        Distance_Text.text = Battle_Data.approach.ToString();
 
     }
 
@@ -67,5 +101,20 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     public virtual void Spawned()
     {
 
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        TouchDown?.Invoke(eventData);
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        TouchUp?.Invoke(eventData);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Click?.Invoke(eventData);
     }
 }

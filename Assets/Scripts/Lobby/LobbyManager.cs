@@ -93,10 +93,15 @@ public class LobbyManager : MonoBehaviour
     public void OnClickDeck()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Deck/PCDeckSettingUI", (popup) =>
+
+        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Deck/PCDeckSettingUI", (popup) =>
+        //{
+        //    popup.ShowPopup();
+        //});
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup();
+            popup.ShowPopup(3f, "덱 세팅 준비중 입니다.");
         });
     }
 

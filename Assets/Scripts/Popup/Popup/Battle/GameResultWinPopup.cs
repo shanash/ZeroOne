@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameResultWinPopup : PopupBase
 {
@@ -214,12 +215,12 @@ public class GameResultWinPopup : PopupBase
     public void OnClickGameRewardNext()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        HidePopup();
+        SceneManager.LoadScene("home");
     }
     public void OnClickGameRewardHome()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        HidePopup();
+        SceneManager.LoadScene("home");
 
     }
 
