@@ -2,26 +2,32 @@ using System;
 
 public abstract class Singleton<T> : IDisposable where T : Singleton<T>, new()
 {
-    private static T instance;
-    private static bool disposed;
+    static T instance = null;
+    static protected bool disposed = false;
+    static object Sync_Obj = new object();
 
     public static T Instance
     {
         get
         {
             if (disposed)
-                throw new ObjectDisposedException(nameof(instance), "Trying to access disposed singleton");
-
-            if (instance == null)
             {
-                instance = new T();
-                instance.Init();
+                throw new ObjectDisposedException(nameof(instance), "Trying to access disposed singleton");
+            }
+
+            lock (Sync_Obj)
+            {
+                if (instance == null)
+                {
+                    instance = new T();
+                    instance.Initialize();
+                }
             }
             return instance;
         }
     }
 
-    protected virtual void Init() { }
+    protected abstract void Initialize();
 
     public void Dispose()
     {
@@ -32,7 +38,7 @@ public abstract class Singleton<T> : IDisposable where T : Singleton<T>, new()
         }
     }
 
-    protected virtual void OnDispose() { }
+    protected abstract void OnDispose();
 
     protected Singleton() { }
 }

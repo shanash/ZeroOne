@@ -37,9 +37,8 @@ public class GestureManager : Singleton<GestureManager>
 
     public bool Enable { get; set; } = true;
 
-    protected override void Init()
+    protected override void Initialize()
     {
-        base.Init();
         InputCanvas.OnInputDown += HandleInputDown;
         InputCanvas.OnInputUp += HandleInputUp;
         InputCanvas.OnDrag += HandleDrag;
@@ -49,7 +48,6 @@ public class GestureManager : Singleton<GestureManager>
 
     protected override void OnDispose()
     {
-        base.OnDispose();
         InputCanvas.OnInputDown -= HandleInputDown;
         InputCanvas.OnInputUp -= HandleInputUp;
         InputCanvas.OnDrag -= HandleDrag;

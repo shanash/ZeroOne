@@ -1,11 +1,10 @@
 using Newtonsoft.Json;
 using System;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using ProtocolShared.Proto.Base;
-using ProtocolShared.Proto;
+using System.Net.Http;
 
 #nullable enable
 
@@ -19,6 +18,7 @@ namespace ProtocolShared.FDHttpClient
         PUT,
         DELETE,
     }
+
     public class FDHttpClient
     {
         //private static string? _accessToken = null;
@@ -43,13 +43,6 @@ namespace ProtocolShared.FDHttpClient
         //    return client;
         //}
 
-        public async Task DevLogin(string macAddress , Action<ResponseData<LoginResponse>> callBack)
-        {
-            DevLoginRequest request = new DevLoginRequest { macAddress = macAddress };
-
-            await HttpRequest<LoginResponse, DevLoginRequest>("https://dev-01.fluffyduck.co.kr/dev/account/login/dev", null, request, HttpMethod.POST, callBack);
-        }
-
         public async Task HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod, Action<ResponseData<T>> onComplete) where T : class
         {
             ResponseData<T> res = await HttpRequest<T, U>(url, token, data, httpMethod);
@@ -61,6 +54,7 @@ namespace ProtocolShared.FDHttpClient
         {
             try
             {
+                //TODO:이후에 필드에 저장해놓고 재활용하는 걸 시간날때...ㅋ
                 HttpClient httpClient = new HttpClient();
 
                 if (token != null)
@@ -97,30 +91,29 @@ namespace ProtocolShared.FDHttpClient
 
                 if (response == null)
                 {
-                    return new ResponseData<T> { resCode = ResCode.NullResponse };
+                    return new ResponseData<T> { ResCode = ResCode.NullResponse };
                 }
 
                 if (response.IsSuccessStatusCode == false)
                 {
-                    return new ResponseData<T> { resCode = (ResCode)response.StatusCode };
+                    return new ResponseData<T> { ResCode = (ResCode)response.StatusCode };
                 }
 
                 byte[] results = await response.Content.ReadAsByteArrayAsync();
                 var bodyString = Encoding.UTF8.GetString(results);
 
-                ResponseData<T> bodyObj = JsonConvert.DeserializeObject<ResponseData<T>>(bodyString) ?? new ResponseData<T> { resCode = ResCode.EmptyBody };
+                ResponseData<T> bodyObj = JsonConvert.DeserializeObject<ResponseData<T>>(bodyString) ?? new ResponseData<T> { ResCode = ResCode.EmptyBody };
 
                 if (bodyObj == null)
                 {
-                    return new ResponseData<T> { resCode = ResCode.JsonParseFailed };
+                    return new ResponseData<T> { ResCode = ResCode.JsonParseFailed };
                 }
 
                 return bodyObj;
             }
             catch (Exception)
             {
-
-                return new ResponseData<T> { resCode = ResCode.Exception };
+                return new ResponseData<T> { ResCode = ResCode.Exception };
             }
         }
     }

@@ -70,7 +70,7 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
     #region Static Members
     private static T Saved_Instance = null;
     private static object Sync_Obj = new object();
-    private static bool App_Is_Closing = false;
+    protected static bool App_Is_Closing = false;
     private static AsyncOperationHandle Handle = default(AsyncOperationHandle);
     // 불러올 프리팹 키
     // static 생성자에서 입력해 놓으면 해당 Prefab에서 생성합니다
