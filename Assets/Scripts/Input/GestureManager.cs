@@ -14,7 +14,7 @@ public class GestureManager : Singleton<GestureManager>
     const float DRAG_THRESHOLD = 0.01f; // 드래그로 인정할 최소 이동 거리의 제곱
 
     int Drag_Id = 0;
-    int Drag_State = 0;
+    //int Drag_State = 0;
     bool IsDragging = false;
 
     ReadOnlyCollection<ICursorInteractable> TouchDown_Components;
