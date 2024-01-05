@@ -11,6 +11,10 @@ public class #SCRIPTNAME# : Singleton<#SCRIPTNAME#>
 
     protected override void OnDispose()
     {
-        // 관리되는 자원 해제
+        // 유니티에서 관리되지 않은 자원 해제
+        // - 네이티브 리소스 : C++코드, 텍스처나 메시데이터 같은 하드웨어 리소스
+        // - 외부 라이브러리
+        // - 파일 핸들과 네트워크 연결
+        // - 비관리 메모리 할당 : Marshal 클래스를 사용한 것 등
     }
 }

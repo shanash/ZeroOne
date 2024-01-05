@@ -1,13 +1,12 @@
 using System;
-using System.Diagnostics;
 using System.Reflection;
-using System.Security.Cryptography;
+using UnityEngine;
 
 namespace FluffyDuck.Util
 {
     public abstract class Singleton<T> : IDisposable where T : Singleton<T>
     {
-        static T instance = null;
+        static T Saved_Instance = null;
         static protected bool Disposed = false;
         static object Sync_Obj = new object();
 
@@ -17,18 +16,19 @@ namespace FluffyDuck.Util
             {
                 if (Disposed)
                 {
-                    throw new ObjectDisposedException(nameof(instance), "Trying to access disposed singleton");
+                    return null;
                 }
 
                 lock (Sync_Obj)
                 {
-                    if (instance == null)
+                    if (Saved_Instance == null)
                     {
-                        instance = (T)Activator.CreateInstance(typeof(T), BindingFlags.Instance | BindingFlags.NonPublic, null, null, null);
-                        instance.Initialize();
+                        Saved_Instance = (T)Activator.CreateInstance(typeof(T), BindingFlags.Instance | BindingFlags.NonPublic, null, null, null);
+                        Saved_Instance.Initialize();
+                        Application.quitting += () => Saved_Instance.Dispose();
                     }
                 }
-                return instance;
+                return Saved_Instance;
             }
         }
 
@@ -38,7 +38,9 @@ namespace FluffyDuck.Util
         {
             if (!Disposed)
             {
+                Saved_Instance = null;
                 OnDispose();
+
                 Disposed = true;
             }
         }
