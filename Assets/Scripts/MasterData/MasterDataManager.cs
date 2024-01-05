@@ -255,6 +255,17 @@ public class MasterDataManager : BaseMasterDataManager
 
         return _Position_Icon_Data.Find(x => x.position_type == pos_type);
     }
+    /// <summary>
+    /// 직군(롤)에 따라 아이콘 표시를 위한 데이터
+    /// </summary>
+    /// <param name="rtype"></param>
+    /// <returns></returns>
+    public Role_Icon_Data Get_RoleIconData(ROLE_TYPE rtype)
+    {
+        Check_Role_Icon_Data();
+        return _Role_Icon_Data.Find(x => x.role_type == rtype);
+    }
+
     #endregion
 
     #region None Player Character

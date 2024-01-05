@@ -51,8 +51,8 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
 
     [Header("Party Select")]
 
-    [SerializeField, Tooltip("Part Select Frame")]
-    protected RectTransform Part_Select_Frame;
+    [SerializeField, Tooltip("Party Select Frame")]
+    protected RectTransform Party_Select_Frame;
 
     [Header("Name")]
     [SerializeField, Tooltip("Name")]
@@ -74,6 +74,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
         var m = MasterDataManager.Instance;
         Data = m.Get_PlayerCharacterData(hero_data_id);
         Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
+        
         UpdateCardBase();
     }
 
@@ -89,9 +90,47 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
         { 
             Hero_Icon_Image.sprite = spr;
         });
-
-
     }
+
+    /// <summary>
+    /// 캐릭터 스펙 정보 프레임 On/Off
+    /// </summary>
+    /// <param name="show"></param>
+    public void ShowCharacterSpec(bool show)
+    {
+        Spec_Info_Box.gameObject.SetActive(show);
+    }
+
+    public void SetLevel(int lv)
+    {
+        Level_Text.text = lv.ToString();
+    }
+    public void SetStarGrade(int star_grade)
+    {
+        Star_Text.text = star_grade.ToString();
+    }
+    public void SetRoleType(ROLE_TYPE rtype)
+    {
+        int idx = (int)rtype - 1;
+        if (idx < 0)
+        {
+            idx = 0;
+        }
+        for (int i = 0; i < Role_Icons.Count; i++)
+        {
+            Role_Icons[i].gameObject.SetActive(i == idx);
+        }
+    }
+
+    /// <summary>
+    /// 파티 덱 선택 프레임 On/Off
+    /// </summary>
+    /// <param name="select"></param>
+    public void SetPartySelect(bool select)
+    {
+        Party_Select_Frame.gameObject.SetActive(select);
+    }
+
 
     public virtual void Despawned()
     {

@@ -15,7 +15,7 @@ public class Editor_Wave_Data : System.IDisposable
 	public int wave_sequence {get; set;}
 	///	<summary>
 	///	웨이브에 출현하는
-	///	적 최대 마리 수
+	///	적 최대 마리 수 
 	///	</summary>
 	public int enemy_appearance_count {get; set;}
 	///	<summary>

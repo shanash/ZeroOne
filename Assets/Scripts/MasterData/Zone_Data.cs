@@ -33,6 +33,10 @@ public class Zone_Data : System.IDisposable
 	///	존 설명
 	///	</summary>
 	public string zone_tooltip {get; set;}
+	///	<summary>
+	///	해금 조건
+	///	</summary>
+	public LIMIT_TYPE limit_type {get; set;}
 
 	private bool disposed = false;
 
@@ -45,6 +49,7 @@ public class Zone_Data : System.IDisposable
 		zone_difficulty = STAGE_DIFFICULTY_TYPE.NONE;
 		zone_img_path = string.Empty;
 		zone_tooltip = string.Empty;
+		limit_type = LIMIT_TYPE.NONE;
 	}
 
 	public void Dispose()
@@ -73,6 +78,7 @@ public class Zone_Data : System.IDisposable
 		sb.AppendFormat("[zone_difficulty] = <color=yellow>{0}</color>", zone_difficulty).AppendLine();
 		sb.AppendFormat("[zone_img_path] = <color=yellow>{0}</color>", zone_img_path).AppendLine();
 		sb.AppendFormat("[zone_tooltip] = <color=yellow>{0}</color>", zone_tooltip).AppendLine();
+		sb.AppendFormat("[limit_type] = <color=yellow>{0}</color>", limit_type).AppendLine();
 		return sb.ToString();
 	}
 }

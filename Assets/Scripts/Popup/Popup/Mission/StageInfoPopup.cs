@@ -122,21 +122,39 @@ public class StageInfoPopup : PopupBase
         string npc_prefab = "Assets/AssetResources/Prefabs/UI/Card/NpcCard";
         List<Wave_Data> wave_data_list = new List<Wave_Data>();
         m.Get_WaveDataList(Stage.stage_id, ref wave_data_list);
+
+        List<BattleNpcData> npc_data_list = new List<BattleNpcData>();
+
         cnt = wave_data_list.Count;
+        //  npc 데이터 정보를 중복없이 리스트에 정리
         for (int i = 0; i < cnt; i++)
         {
             var wave = wave_data_list[i];
             for (int e = 0; e < wave.enemy_appearance_info.Length; e++)
             {
                 int npc_id = wave.enemy_appearance_info[e];
-                var obj = pool.GetGameObject(npc_prefab, Npc_List_View.content);
-                var npc_card = obj.GetComponent<NpcCardBase>();
-                npc_card.SetNpcID(npc_id);
-                Used_Npc_List.Add(npc_card);
+
+                if (!npc_data_list.Exists(x => x.GetUnitID() == npc_id))
+                {
+                    var new_data = new BattleNpcData();
+                    new_data.SetUnitID(npc_id);
+                    npc_data_list.Add(new_data);
+                }
             }
         }
+        //  접근 사거리 기준으로 짧은 순으로 오름 차순 정렬
+        npc_data_list.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
+        cnt = npc_data_list.Count;
+        for (int n = 0; n < cnt; n++)
+        {
+            var npc = npc_data_list[n];
+            var obj = pool.GetGameObject(npc_prefab, Npc_List_View.content);
+            var npc_card = obj.GetComponent<NpcCardBase>();
+            npc_card.SetNpcID(npc.GetUnitID());
+            Used_Npc_List.Add(npc_card);
+        }
 
-
+        //  리워드
         string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/RewardItemCard";
 
         //  first reward list
@@ -224,7 +242,7 @@ public class StageInfoPopup : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         HidePopup(() =>
         {
-            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Deck/PCDeckSettingUI", (popup) =>
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", (popup) =>
             {
                 popup.ShowPopup(GAME_TYPE.STORY_MODE, Stage.stage_id);
             });

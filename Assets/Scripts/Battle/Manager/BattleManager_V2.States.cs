@@ -31,8 +31,8 @@ public partial class BattleManager_V2 : MonoBehaviour
         {
             case GAME_TYPE.STORY_MODE:
                 {
-                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.STORY_STAGE_ID, 100001);
-                    board.RemoveBlackBoardData(BLACK_BOARD_KEY.STORY_STAGE_ID);     //  스테이지 id를 받은 후 해당 데이터를 삭제
+                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.DUNGEON_ID, 100001);
+                    board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);     //  스테이지 id를 받은 후 해당 데이터를 삭제
 
                     Dungeon_Data = new BattleDungeon_StoryStageData();
                     Dungeon_Data.SetDungeonID(stage_id);

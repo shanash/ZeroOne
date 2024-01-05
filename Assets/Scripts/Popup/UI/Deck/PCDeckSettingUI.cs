@@ -60,8 +60,8 @@ public class PCDeckSettingUI : PopupBase
     }
 
     /// <summary>
-    /// 해당 팝업에서 사용할 프리팹이 이미 로드되어 있는지 여부 체크
-    /// 각 팝업마다 필요로하는 프리팹의 요소가 다르기 때문에
+    /// 해당 팝업에서 사용할 프리팹이 이미 로드되어 있는지 여부 체크<br/>
+    /// 각 팝업마다 필요로하는 프리팹의 요소가 다르기 때문에<br/>
     /// 각 팝업마다 구현이 필요
     /// </summary>
     protected override void CheckPopupUsePrefabs()
@@ -226,7 +226,7 @@ public class PCDeckSettingUI : PopupBase
 
         if (Game_Type == GAME_TYPE.STORY_MODE)
         {
-            board.SetBlackBoard(BLACK_BOARD_KEY.STORY_STAGE_ID, Dungeon_ID);
+            board.SetBlackBoard(BLACK_BOARD_KEY.DUNGEON_ID, Dungeon_ID);
         }
         board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
 

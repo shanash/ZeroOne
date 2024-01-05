@@ -16,7 +16,7 @@ public class Player_Character_Data : System.IDisposable
 	///	<summary>
 	///	태생 성급
 	///	</summary>
-	public int bone_star {get; set;}
+	public int default_star {get; set;}
 	///	<summary>
 	///	역할군
 	///	</summary>
@@ -72,7 +72,7 @@ public class Player_Character_Data : System.IDisposable
 	{
 		player_character_id = 0;
 		name_kr = string.Empty;
-		bone_star = 0;
+		default_star = 0;
 		role_type = ROLE_TYPE.NONE;
 		tribe_type = TRIBE_TYPE.NONE;
 		profile_age = 0;
@@ -108,7 +108,7 @@ public class Player_Character_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
-		sb.AppendFormat("[bone_star] = <color=yellow>{0}</color>", bone_star).AppendLine();
+		sb.AppendFormat("[default_star] = <color=yellow>{0}</color>", default_star).AppendLine();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
 		sb.AppendFormat("[profile_age] = <color=yellow>{0}</color>", profile_age).AppendLine();

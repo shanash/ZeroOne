@@ -8,6 +8,8 @@ public class UserHeroData : UserDataBase
     public SecureVar<int> Level { get; protected set; } = null;
     public SecureVar<int> Exp { get; protected set; } = null;
 
+    public SecureVar<int> Star_Grade { get; protected set; } = null;
+
     public int Lobby_Choice_Num { get; protected set; } = 0;
 
     public bool Is_Choice_Lobby { get; protected set; } = false;
@@ -24,6 +26,7 @@ public class UserHeroData : UserDataBase
         Player_Character_ID.Set(0);
         Level.Set(1);
         Exp.Set(0);
+        Star_Grade.Set(0);
         Lobby_Choice_Num = 0;
         Is_Choice_Lobby = false;
     }
@@ -41,6 +44,10 @@ public class UserHeroData : UserDataBase
         {
             Exp = new SecureVar<int>();
         }
+        if (Star_Grade == null)
+        {
+            Star_Grade = new SecureVar<int>();
+        }
     }
     public void SetPlayerCharacterDataID(int player_character_id, int player_character_num)
     {
@@ -54,6 +61,10 @@ public class UserHeroData : UserDataBase
         var m = MasterDataManager.Instance;
         Hero_Data = m.Get_PlayerCharacterData(GetPlayerCharacterID());
         Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id);
+        if (GetStarGrade() == 0)
+        {
+            Star_Grade.Set(Hero_Data.default_star);
+        }
     }
 
     public Player_Character_Data GetPlayerCharacterData()
@@ -95,6 +106,12 @@ public class UserHeroData : UserDataBase
     {
         return Exp.Get();
     }
+
+    public int GetStarGrade()
+    {
+        return Star_Grade.Get();
+    }
+
     public POSITION_TYPE GetPositionType()
     {
         return Battle_Data.position_type;
@@ -118,6 +135,7 @@ public class UserHeroData : UserDataBase
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
         json[NODE_LEVEL] = GetLevel();
         json[NODE_EXP] = GetExp();
+        json[NODE_STAR_GRADE] = GetStarGrade();
         json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
         
@@ -150,6 +168,10 @@ public class UserHeroData : UserDataBase
             {
                 Exp.Set(ParseInt(json, NODE_EXP));
             }
+            if (json.ContainsKey(NODE_STAR_GRADE))
+            {
+                Star_Grade.Set(ParseInt(json, NODE_STAR_GRADE));
+            }
             if (json.ContainsKey(NODE_LOBBY_CHOICE_NUMBER))
             {
                 Lobby_Choice_Num = ParseInt(json, NODE_LOBBY_CHOICE_NUMBER);
@@ -174,6 +196,7 @@ public class UserHeroData : UserDataBase
     protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
     protected const string NODE_LEVEL = "lv";
     protected const string NODE_EXP = "xp";
+    protected const string NODE_STAR_GRADE = "star";
     protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
     protected const string NODE_IS_CHOICE = "choice";
 

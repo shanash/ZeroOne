@@ -10,7 +10,7 @@ namespace FluffyDuck.Util
         TEST_KEY_ID,
         GAME_TYPE,
 
-        STORY_STAGE_ID,
+        DUNGEON_ID,
         EDITOR_STAGE_ID,
 
     }
