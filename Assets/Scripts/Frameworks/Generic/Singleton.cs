@@ -32,8 +32,6 @@ namespace FluffyDuck.Util
             }
         }
 
-        protected abstract void Initialize();
-
         public void Dispose()
         {
             if (!Disposed)
@@ -44,6 +42,8 @@ namespace FluffyDuck.Util
                 Disposed = true;
             }
         }
+
+        protected abstract void Initialize();
 
         protected abstract void OnDispose();
     }
