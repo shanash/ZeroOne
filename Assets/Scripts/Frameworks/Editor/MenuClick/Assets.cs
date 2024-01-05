@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
 using System;
 using System.Diagnostics;
 using System.IO;
 using UnityEditor;
-using UnityEngine;
 
 namespace FluffyDuck.Editor.Menu
 {
@@ -88,6 +88,11 @@ namespace FluffyDuck.Editor.Menu
             File.WriteAllText(copyPath, fileContent);
 
             AssetDatabase.Refresh();
+
+            // 생성된 스크립트 파일 선택
+            UnityEngine.Object createdScript = AssetDatabase.LoadAssetAtPath(relativePath, typeof(UnityEngine.Object));
+            Selection.activeObject = createdScript;
         }
     }
 }
+#endif
