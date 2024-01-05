@@ -1,10 +1,8 @@
-using UnityEngine;
-
-public class FactoryInstance
+public class #SCRIPTNAME#
 {
-    FactoryInstance() { }
+    #SCRIPTNAME#() { }
     
-    // 초기화할때 필요한 파라미터를 추가해주세요
+    // 초기화할때 필요한 파라미터를 Initialize에 추가해주세요
     bool Initialize()
     {
         return true;

@@ -48,30 +48,39 @@ namespace FluffyDuck.Editor.Menu
         static string _CurrentScriptDirectory = string.Empty;
 
         [MenuItem("Assets/Create/C# Factory Script", priority = 19)]
-        private static void Create_CsharpFactoryScript()
+        static void Create_CsharpFactoryScript()
         {
-            // 사용자 정의 스크립트 템플릿 경로
-            string templatePath = $"{CurrentScriptDirectory}/ScriptTemplates/FactoryInstance.txt";
-
-            // 새 스크립트 파일 경로 및 이름 설정
-            string targetPath = $"{AssetDatabase.GetAssetPath(Selection.activeObject)}/FactoryInstance.cs";
-
-            // 템플릿에서 새 스크립트 파일 생성
-            File.Copy(templatePath, targetPath);
-            AssetDatabase.Refresh();
+            CreateScript("FactoryInstance", "Create C# Factory Script");
         }
 
         [MenuItem("Assets/Create/C# MonoBehaviour Factory Script", priority = 19)]
-        private static void Create_CsharpMonobehaviourFactoryScript()
+        static void Create_CsharpMonobehaviourFactoryScript()
+        {
+            CreateScript("MonoFactoryInstance", "Create C# MonoBehaviour Factory Script");
+        }
+
+        static void CreateScript(string defaultName, string menuName)
         {
             // 사용자 정의 스크립트 템플릿 경로
-            string templatePath = $"{CurrentScriptDirectory}/ScriptTemplates//MonoFactoryInstance.txt";
+            string templatePath = $"{CurrentScriptDirectory}/ScriptTemplates/{defaultName}.txt";
 
-            // 새 스크립트 파일 경로 및 이름 설정
-            string targetPath = AssetDatabase.GetAssetPath(Selection.activeObject) + "/MonoFactoryInstance.cs";
+            // 파일 저장 대화 상자를 통해 사용자로부터 파일 이름 받기
+            string path = EditorUtility.SaveFilePanel(menuName, AssetDatabase.GetAssetPath(Selection.activeObject), defaultName, "cs");
+            if (string.IsNullOrEmpty(path)) return;
 
-            // 템플릿에서 새 스크립트 파일 생성
-            File.Copy(templatePath, targetPath);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+            string copyPath = path.Replace('\\', '/');
+            int index = copyPath.IndexOf("Assets/");
+            string relativePath = copyPath.Substring(index);
+
+            // 템플릿 파일 복사
+            File.Copy(templatePath, copyPath, true);
+
+            // 클래스 이름 변경
+            string fileContent = File.ReadAllText(copyPath);
+            fileContent = fileContent.Replace("#SCRIPTNAME#", fileNameWithoutExtension);
+            File.WriteAllText(copyPath, fileContent);
+
             AssetDatabase.Refresh();
         }
     }
