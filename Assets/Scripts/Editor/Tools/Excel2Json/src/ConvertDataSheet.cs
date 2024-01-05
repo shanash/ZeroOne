@@ -2,6 +2,8 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+
 #if UNITY_5_3_OR_NEWER
 using System.Collections.Generic;
 using System;
@@ -245,27 +247,49 @@ namespace Excel2Json
 
         static JToken ProcessSingleCell(IXLCell cell, ColumnInfo info)
         {
-            // 타입에 따라 셀 값을 처리
-            switch (info.type.ToLower())
+            try
             {
-                case "int":
-                    return JToken.FromObject(cell.GetValue<int>());
-                case "bool":
-                    return JToken.FromObject(cell.GetValue<bool>());
-                case "string":
-                    return JToken.FromObject(cell.GetValue<string>());
-                case "double":
-                    return JToken.FromObject(cell.GetValue<double>());
-                // 기타 데이터 타입에 대한 처리 필요
-                default:
-                    if (info.is_enum)
-                    {
+                // 타입에 따라 셀 값을 처리
+                switch (info.type.ToLower())
+                {
+                    case "int":
                         return JToken.FromObject(cell.GetValue<int>());
-                    }
-                    
-                    System.Diagnostics.Debug.Assert(false, "Unknown type");
-                    return null;
+                    case "bool":
+                        return JToken.FromObject(cell.GetValue<bool>());
+                    case "string":
+                        return JToken.FromObject(cell.GetValue<string>());
+                    case "double":
+                        return JToken.FromObject(cell.GetValue<double>());
+                    // 기타 데이터 타입에 대한 처리 필요
+                    default:
+                        if (info.is_enum)
+                        {
+                            try
+                            {
+                                return JToken.FromObject(cell.GetValue<int>());
+                            }
+                            catch (InvalidCastException ex)
+                            {
+                                // 원인불명의 이유로 캐스팅이 되지 않으면
+                                // 숫자인지만 확인하고 강제로 캐스팅해주자
+                                Logger.LogWarning($"Exception : {ex}");
+                                Logger.Log($"Cell Info =  Address : {cell.Address}, CachedValue : {cell.CachedValue}, CachedValueIsNumber: {cell.CachedValue.IsNumber}");
+                                if (cell.CachedValue.IsNumber)
+                                {
+                                    return (int)cell.CachedValue.GetNumber();
+                                }
+                            }
+                        }
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.ToString());
+            }
+
+            Logger.Assert(false, "Unknown type");
+            return null;
         }
 
         static JArray ProcessArrayCell(IXLCell cell, ColumnInfo info)
@@ -298,7 +322,7 @@ namespace Excel2Json
                             array.Add(JToken.FromObject(int.Parse(element.Trim())));
                             break;
                         }
-                        System.Diagnostics.Debug.Assert(false, "Unknown array type");
+                        Logger.Assert(false, "Unknown array type");
                         break;
                 }
             }
