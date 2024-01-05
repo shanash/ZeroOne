@@ -7,192 +7,189 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
-namespace FluffyDuck.Memorial
+[CustomEditor(typeof(ActorBase), true)]
+[CanEditMultipleObjects]
+public class ActorBaseInspector : Editor
 {
-    [CustomEditor(typeof(ActorBase), true)]
-    [CanEditMultipleObjects]
-    public class ActorBaseInspector : Editor
+    readonly GUIContent SpawnHierarchyButtonLabel = new GUIContent("Add BoundingBoxes", Spine.Unity.Editor.SpineEditorUtilities.Icons.skeleton);
+
+    ActorBase _Actor;
+    SkeletonUtility _Skeleton_Utility;
+    Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>> _Bone_Bounding_Box_Table = new Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>>();
+
+    void OnEnable()
     {
-        readonly GUIContent SpawnHierarchyButtonLabel = new GUIContent("Add BoundingBoxes", Spine.Unity.Editor.SpineEditorUtilities.Icons.skeleton);
+        _Actor = (ActorBase)target;
+        _Skeleton_Utility = _Actor.gameObject.GetComponent<SkeletonUtility>();
 
-        ActorBase _Actor;
-        SkeletonUtility _Skeleton_Utility;
-        Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>> _Bone_Bounding_Box_Table = new Dictionary<SkeletonUtilityBone, Dictionary<Slot, List<Attachment>>>();
+        var bones = _Actor.GetComponentsInChildren<SkeletonUtilityBone>();
+        _Bone_Bounding_Box_Table.Clear();
 
-        void OnEnable()
+        foreach (var utilityBone in bones)
         {
-            _Actor = (ActorBase)target;
-            _Skeleton_Utility = _Actor.gameObject.GetComponent<SkeletonUtility>();
+            var skeletonUtility = utilityBone.hierarchy;
 
-            var bones = _Actor.GetComponentsInChildren<SkeletonUtilityBone>();
-            _Bone_Bounding_Box_Table.Clear();
-
-            foreach (var utilityBone in bones)
+            if (!utilityBone.valid && skeletonUtility != null)
             {
-                var skeletonUtility = utilityBone.hierarchy;
-
-                if (!utilityBone.valid && skeletonUtility != null)
-                {
-                    if (skeletonUtility.skeletonRenderer != null)
-                        skeletonUtility.skeletonRenderer.Initialize(false);
-                    if (skeletonUtility.skeletonGraphic != null)
-                        skeletonUtility.skeletonGraphic.Initialize(false);
-                }
-
-                if (utilityBone.bone == null) continue;
-
-                Skeleton skeleton = utilityBone.bone.Skeleton;
-                int slotCount = skeleton.Slots.Count;
-                Skin skin = skeleton.Skin;
-                if (skeleton.Skin == null)
-                    skin = skeleton.Data.DefaultSkin;
-
-                Dictionary<Slot, List<Attachment>> boundingBoxTable = new Dictionary<Slot, List<Attachment>>();
-
-                for (int i = 0; i < slotCount; i++)
-                {
-                    Slot slot = skeletonUtility.Skeleton.Slots.Items[i];
-                    if (slot.Bone == utilityBone.bone)
-                    {
-                        List<Skin.SkinEntry> slotAttachments = new List<Skin.SkinEntry>();
-                        int slotIndex = skeleton.Data.FindSlot(slot.Data.Name).Index;
-                        skin.GetAttachments(slotIndex, slotAttachments);
-
-                        List<Attachment> boundingBoxes = new List<Attachment>();
-                        foreach (Skin.SkinEntry entry in slotAttachments)
-                        {
-                            switch (entry.Attachment)
-                            {
-                                case BoundingBoxAttachment boundingBoxAttachment:
-                                    boundingBoxes.Add(boundingBoxAttachment);
-                                    break;
-                                case PointAttachment pointAttachment:
-                                    boundingBoxes.Add(pointAttachment);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-
-                        if (boundingBoxes.Count > 0)
-                            boundingBoxTable.Add(slot, boundingBoxes);
-                    }
-                }
-                _Bone_Bounding_Box_Table.Add(utilityBone, boundingBoxTable);
+                if (skeletonUtility.skeletonRenderer != null)
+                    skeletonUtility.skeletonRenderer.Initialize(false);
+                if (skeletonUtility.skeletonGraphic != null)
+                    skeletonUtility.skeletonGraphic.Initialize(false);
             }
-        }
 
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-            base.OnInspectorGUI();
+            if (utilityBone.bone == null) continue;
 
-            if (SpineInspectorUtility.LargeCenteredButton(SpawnHierarchyButtonLabel))
+            Skeleton skeleton = utilityBone.bone.Skeleton;
+            int slotCount = skeleton.Slots.Count;
+            Skin skin = skeleton.Skin;
+            if (skeleton.Skin == null)
+                skin = skeleton.Data.DefaultSkin;
+
+            Dictionary<Slot, List<Attachment>> boundingBoxTable = new Dictionary<Slot, List<Attachment>>();
+
+            for (int i = 0; i < slotCount; i++)
             {
-                SkeletonAnimation skel = _Actor.GetComponent<SkeletonAnimation>();
-
-                foreach (var bounding_box_table in _Bone_Bounding_Box_Table)
+                Slot slot = skeletonUtility.Skeleton.Slots.Items[i];
+                if (slot.Bone == utilityBone.bone)
                 {
-                    var utilityBone = bounding_box_table.Key;
-                    foreach (KeyValuePair<Slot, List<Attachment>> entry in bounding_box_table.Value)
+                    List<Skin.SkinEntry> slotAttachments = new List<Skin.SkinEntry>();
+                    int slotIndex = skeleton.Data.FindSlot(slot.Data.Name).Index;
+                    skin.GetAttachments(slotIndex, slotAttachments);
+
+                    List<Attachment> boundingBoxes = new List<Attachment>();
+                    foreach (Skin.SkinEntry entry in slotAttachments)
                     {
-                        Slot slot = entry.Key;
-                        List<Attachment> boundingBoxes = entry.Value;
-
-                        foreach (Attachment attachment in boundingBoxes)
+                        switch (entry.Attachment)
                         {
-                            utilityBone.bone.Skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+                            case BoundingBoxAttachment boundingBoxAttachment:
+                                boundingBoxes.Add(boundingBoxAttachment);
+                                break;
+                            case PointAttachment pointAttachment:
+                                boundingBoxes.Add(pointAttachment);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
-                            switch (attachment)
-                            {
-                                case BoundingBoxAttachment box:
-                                    Transform bbTransform = utilityBone.transform.Find("[BoundingBox]" + box.Name); // Use FindChild in older versions of Unity.
-                                    if (bbTransform != null)
-                                    {
-                                        PolygonCollider2D originalCollider = bbTransform.GetComponent<PolygonCollider2D>();
-                                        if (originalCollider != null)
-                                            SkeletonUtility.SetColliderPointsLocal(originalCollider, slot, box);
-                                        else
-                                            SkeletonUtility.AddBoundingBoxAsComponent(box, slot, bbTransform.gameObject);
-                                    }
+                    if (boundingBoxes.Count > 0)
+                        boundingBoxTable.Add(slot, boundingBoxes);
+                }
+            }
+            _Bone_Bounding_Box_Table.Add(utilityBone, boundingBoxTable);
+        }
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        base.OnInspectorGUI();
+
+        if (SpineInspectorUtility.LargeCenteredButton(SpawnHierarchyButtonLabel))
+        {
+            SkeletonAnimation skel = _Actor.GetComponent<SkeletonAnimation>();
+
+            foreach (var bounding_box_table in _Bone_Bounding_Box_Table)
+            {
+                var utilityBone = bounding_box_table.Key;
+                foreach (KeyValuePair<Slot, List<Attachment>> entry in bounding_box_table.Value)
+                {
+                    Slot slot = entry.Key;
+                    List<Attachment> boundingBoxes = entry.Value;
+
+                    foreach (Attachment attachment in boundingBoxes)
+                    {
+                        utilityBone.bone.Skeleton.UpdateWorldTransform(Skeleton.Physics.Update);
+
+                        switch (attachment)
+                        {
+                            case BoundingBoxAttachment box:
+                                Transform bbTransform = utilityBone.transform.Find("[BoundingBox]" + box.Name); // Use FindChild in older versions of Unity.
+                                if (bbTransform != null)
+                                {
+                                    PolygonCollider2D originalCollider = bbTransform.GetComponent<PolygonCollider2D>();
+                                    if (originalCollider != null)
+                                        SkeletonUtility.SetColliderPointsLocal(originalCollider, slot, box);
                                     else
+                                        SkeletonUtility.AddBoundingBoxAsComponent(box, slot, bbTransform.gameObject);
+                                }
+                                else
+                                {
+                                    PolygonCollider2D newPolygonCollider = SkeletonUtility.AddBoundingBoxGameObject(null, box, slot, utilityBone.transform);
+                                    bbTransform = newPolygonCollider.transform;
+                                }
+
+                                var spine_bounding_box = bbTransform.GetComponent<SpineBoundingBox>();
+                                if (spine_bounding_box == null)
+                                {
+                                    spine_bounding_box = bbTransform.AddComponent<SpineBoundingBox>();
+                                }
+
+                                string name = box.Name.Replace("bd_", "");
+
+                                spine_bounding_box.Set(_Actor, name);
+
+                                int length = name.Length;
+                                TOUCH_BODY_DIRECTION dir = TOUCH_BODY_DIRECTION.NONE;
+
+                                if (name[length - 2] == '_')
+                                {
+                                    if (name[length - 1].Equals('R'))
                                     {
-                                        PolygonCollider2D newPolygonCollider = SkeletonUtility.AddBoundingBoxGameObject(null, box, slot, utilityBone.transform);
-                                        bbTransform = newPolygonCollider.transform;
+                                        dir = TOUCH_BODY_DIRECTION.R;
                                     }
-
-                                    var spine_bounding_box = bbTransform.GetComponent<SpineBoundingBox>();
-                                    if (spine_bounding_box == null)
+                                    else if (name[length - 1].Equals('L'))
                                     {
-                                        spine_bounding_box = bbTransform.AddComponent<SpineBoundingBox>();
+                                        dir = TOUCH_BODY_DIRECTION.L;
                                     }
+                                    Debug.Assert(dir != TOUCH_BODY_DIRECTION.NONE, $"뼈의 방향 입력이 잘못되었습니다 : box.Name : {box.Name}");
 
-                                    string name = box.Name.Replace("bd_", "");
+                                    name = name.Substring(0, length - 2);
+                                }
+                                else
+                                {
+                                    dir = TOUCH_BODY_DIRECTION.NONE;
+                                }
 
-                                    spine_bounding_box.Set(_Actor, name);
+                                string enum_name = name.ToUpper();
+                                if (Enum.TryParse(enum_name, out TOUCH_BODY_TYPE result))
+                                {
+                                    spine_bounding_box.SetTouchBodyType(result, dir);
+                                }
+                                break;
+                            case PointAttachment pt:
+                                Transform ptTransform = utilityBone.transform.Find("[Point]" + pt.Name);
 
-                                    int length = name.Length;
-                                    TOUCH_BODY_DIRECTION dir = TOUCH_BODY_DIRECTION.NONE;
+                                if (ptTransform != null)
+                                {
+                                    PointFollower pf = ptTransform.GetComponent<PointFollower>();
+                                    pf.slotName = pt.Name;
+                                    pf.pointAttachmentName = pt.Name;
+                                    pf.skeletonRenderer = _Actor.GetComponent<SkeletonRenderer>();
+                                }
+                                else
+                                {
+                                    GameObject go = new GameObject("[Point]" + pt.Name);
+                                    Transform tf = go.transform;
+                                    tf.parent = utilityBone.transform;
+                                    tf.localPosition = Vector3.zero;
+                                    tf.localRotation = Quaternion.identity;
+                                    tf.localScale = Vector3.one;
 
-                                    if (name[length - 2] == '_')
-                                    {
-                                        if (name[length - 1].Equals('R'))
-                                        {
-                                            dir = TOUCH_BODY_DIRECTION.R;
-                                        }
-                                        else if (name[length - 1].Equals('L'))
-                                        {
-                                            dir = TOUCH_BODY_DIRECTION.L;
-                                        }
-                                        Debug.Assert(dir != TOUCH_BODY_DIRECTION.NONE, $"뼈의 방향 입력이 잘못되었습니다 : box.Name : {box.Name}");
-
-                                        name = name.Substring(0, length - 2);
-                                    }
-                                    else
-                                    {
-                                        dir = TOUCH_BODY_DIRECTION.NONE;
-                                    }
-
-                                    string enum_name = name.ToUpper();
-                                    if (Enum.TryParse(enum_name, out TOUCH_BODY_TYPE result))
-                                    {
-                                        spine_bounding_box.SetTouchBodyType(result, dir);
-                                    }
-                                    break;
-                                case PointAttachment pt:
-                                    Transform ptTransform = utilityBone.transform.Find("[Point]" + pt.Name);
-
-                                    if (ptTransform != null)
-                                    {
-                                        PointFollower pf = ptTransform.GetComponent<PointFollower>();
-                                        pf.slotName = pt.Name;
-                                        pf.pointAttachmentName = pt.Name;
-                                        pf.skeletonRenderer = _Actor.GetComponent<SkeletonRenderer>();
-                                    }
-                                    else
-                                    {
-                                        GameObject go = new GameObject("[Point]" + pt.Name);
-                                        Transform tf = go.transform;
-                                        tf.parent = utilityBone.transform;
-                                        tf.localPosition = Vector3.zero;
-                                        tf.localRotation = Quaternion.identity;
-                                        tf.localScale = Vector3.one;
-
-                                        PointFollower pf = go.AddComponent<PointFollower>();
-                                        pf.slotName = pt.Name;
-                                        pf.pointAttachmentName = pt.Name;
-                                        pf.skeletonRenderer = skel;
-                                    }
-                                    break;
-                            }
+                                    PointFollower pf = go.AddComponent<PointFollower>();
+                                    pf.slotName = pt.Name;
+                                    pf.pointAttachmentName = pt.Name;
+                                    pf.skeletonRenderer = skel;
+                                }
+                                break;
                         }
                     }
                 }
-
-                AssetDatabase.SaveAssets();
             }
 
-            serializedObject.ApplyModifiedProperties();
+            AssetDatabase.SaveAssets();
         }
+
+        serializedObject.ApplyModifiedProperties();
     }
 }

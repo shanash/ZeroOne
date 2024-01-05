@@ -1,22 +1,19 @@
-namespace FluffyDuck.Memorial
+public class ActorStateEyeTracker : ActorState
 {
-    public class ActorStateEyeTracker : ActorState
+    public ActorStateEyeTracker() : base(ACTOR_STATES.EYE_TRACKER) { }
+
+    public override void EnterState(ActorBase actor)
     {
-        public ActorStateEyeTracker() : base(ACTOR_STATES.EYE_TRACKER) { }
+        actor.ActorStateEyeTrakerBegin();
+    }
 
-        public override void EnterState(ActorBase actor)
-        {
-            actor.ActorStateEyeTrakerBegin();
-        }
+    public override void UpdateState(ActorBase actor)
+    {
+        actor.ActorStateEyeTrackerUpdate();
+    }
 
-        public override void UpdateState(ActorBase actor)
-        {
-            actor.ActorStateEyeTrackerUpdate();
-        }
-
-        public override void ExitState(ActorBase actor)
-        {
-            actor.ActorStateEyeTrakerEnd();
-        }
+    public override void ExitState(ActorBase actor)
+    {
+        actor.ActorStateEyeTrakerEnd();
     }
 }

@@ -1,6 +1,5 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using FluffyDuck.Memorial;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

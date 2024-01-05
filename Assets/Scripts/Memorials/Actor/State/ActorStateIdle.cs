@@ -1,12 +1,9 @@
-namespace FluffyDuck.Memorial
+public class ActorStateIdle : ActorState
 {
-    public class ActorStateIdle : ActorState
-    {
-        public ActorStateIdle() : base(ACTOR_STATES.IDLE) { }
+    public ActorStateIdle() : base(ACTOR_STATES.IDLE) { }
 
-        public override void EnterState(ActorBase actor)
-        {
-            actor.ActorStateIdleBegin();
-        }
+    public override void EnterState(ActorBase actor)
+    {
+        actor.ActorStateIdleBegin();
     }
 }

@@ -1,22 +1,19 @@
-namespace FluffyDuck.Memorial
+public class ActorStateReact : ActorState
 {
-    public class ActorStateReact : ActorState
+    public ActorStateReact() : base(ACTOR_STATES.REACT) { }
+
+    public override void EnterState(ActorBase actor)
     {
-        public ActorStateReact() : base(ACTOR_STATES.REACT) { }
+        actor.ActorStateReactBegin();
+    }
 
-        public override void EnterState(ActorBase actor)
-        {
-            actor.ActorStateReactBegin();
-        }
+    public override void UpdateState(ActorBase actor)
+    {
+        actor.ActorStateReactUpdate();
+    }
 
-        public override void UpdateState(ActorBase actor)
-        {
-            actor.ActorStateReactUpdate();
-        }
-
-        public override void ExitState(ActorBase actor)
-        {
-            actor.ActorStateReactExit();
-        }
+    public override void ExitState(ActorBase actor)
+    {
+        actor.ActorStateReactExit();
     }
 }
