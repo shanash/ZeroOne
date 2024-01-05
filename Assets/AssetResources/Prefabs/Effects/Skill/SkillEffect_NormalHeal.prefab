@@ -4853,7 +4853,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d05de1cb7933b54382cb902e6df247e, type: 2}
+  - {fileID: 2100000, guid: 41680105a9c8e394cb87826b09841f29, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9748,7 +9748,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1d24714123b9477449d11d3a4b4d12a8, type: 2}
+  - {fileID: 2100000, guid: 073cca53457f3b24a973dbc24142f2bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9813,6 +9813,7 @@ GameObject:
   - component: {fileID: 3536872565660967110}
   - component: {fileID: 3556756999757822104}
   - component: {fileID: 4919379282458016849}
+  - component: {fileID: 8459444987858943953}
   m_Layer: 0
   m_Name: SkillEffect_NormalHeal
   m_TagString: Untagged
@@ -14664,7 +14665,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ZOrder: 51
-  Default_Order: 51
 --- !u!210 &4919379282458016849
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -14677,6 +14677,19 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &8459444987858943953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856926646240328607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
 --- !u!1 &4058187742791149797
 GameObject:
   m_ObjectHideFlags: 0
@@ -19512,7 +19525,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1d24714123b9477449d11d3a4b4d12a8, type: 2}
+  - {fileID: 2100000, guid: 073cca53457f3b24a973dbc24142f2bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24416,7 +24429,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 97c2cbf3072649945a117c54d5991868, type: 2}
+  - {fileID: 2100000, guid: 967bd2852d9980645888435cf7d57698, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29320,8 +29333,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff87d2bc3929c014d99276676a319665, type: 2}
-  - {fileID: 2100000, guid: ff87d2bc3929c014d99276676a319665, type: 2}
+  - {fileID: 2100000, guid: 8020208b4698ef14b947bd23ee0e4e5f, type: 2}
+  - {fileID: 2100000, guid: 8020208b4698ef14b947bd23ee0e4e5f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
