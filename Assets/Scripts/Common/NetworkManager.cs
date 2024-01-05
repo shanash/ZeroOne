@@ -5,10 +5,8 @@ using ProtocolShared.Proto.Base;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using FluffyDuck.Util;
 using System.Net.NetworkInformation;
-using UnityEngine;
 
 public class NetworkManager : Singleton<NetworkManager>
 {
@@ -32,6 +30,8 @@ public class NetworkManager : Singleton<NetworkManager>
     string User_Id;
     string Access_Token;
     string Refresh_Token;
+
+    NetworkManager() { }
 
     protected override void Initialize()
     {
@@ -148,7 +148,7 @@ public class NetworkManager : Singleton<NetworkManager>
     /// </summary>
     async void ProcessQueue()
     {
-        while (!disposed)
+        while (!Disposed)
         {
             // 일단 있으면 빼고
             if (Request_Queue.TryDequeue(out var requestTask))

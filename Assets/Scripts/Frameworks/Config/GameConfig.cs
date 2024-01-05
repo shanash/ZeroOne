@@ -10,30 +10,21 @@ namespace FluffyDuck.Util
     /// 서버에 저장할 필요는 없고, 클라이언트 로컬에 저장되어야 할 일부 데이터를 저장하기 위한 기능을 함.
     /// PlayerPref 사용.
     /// </summary>
-    public class GameConfig
+    public class GameConfig : Singleton<GameConfig>
     {
-        static GameConfig _instance = null;
-        public static GameConfig Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new GameConfig();
-                    _instance.InitGameConfig();
-                }
-                return _instance;
-            }
-        }
-        Dictionary<string, object> Key_Values = new Dictionary<string, object>();
 
-        bool is_init;
-        void InitGameConfig()
+        Dictionary<string, object> Key_Values;
+
+        GameConfig() { }
+
+        protected override void Initialize()
         {
-            if (!is_init)
-            {
-                is_init = true;
-            }
+            Key_Values = new Dictionary<string, object>();
+        }
+
+        protected override void OnDispose()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetGameConfig<T>(GAME_CONFIG_KEY key, object val)

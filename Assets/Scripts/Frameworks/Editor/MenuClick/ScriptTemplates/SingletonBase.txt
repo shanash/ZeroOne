@@ -1,0 +1,16 @@
+using FluffyDuck.Util;
+
+public class #SCRIPTNAME# : Singleton<#SCRIPTNAME#>
+{
+    #SCRIPTNAME#() { }
+    
+    protected override void Initialize()
+    {
+        // 초기화
+    }
+
+    protected override void OnDispose()
+    {
+        // 관리되는 자원 해제
+    }
+}

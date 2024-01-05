@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using FluffyDuck.Util;
 
 public class GestureManager : Singleton<GestureManager>
 {
@@ -36,6 +37,8 @@ public class GestureManager : Singleton<GestureManager>
     public event NadeEventHandler OnNade;
 
     public bool Enable { get; set; } = true;
+
+    GestureManager() { }
 
     protected override void Initialize()
     {

@@ -1,106 +1,75 @@
+using FluffyDuck.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 
-public class GameData : IDisposable
+public class GameData : Singleton<GameData>
 {
-    static GameData _instance = null;
-    public static GameData Instance
+    List<ManagerBase> User_Data_Manager_List;
+
+    GameData() { }
+
+    protected override void Initialize()
     {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new GameData();
-                _instance.InitGameData();
-            }
-            return _instance;
-        }
+        User_Data_Manager_List = new List<ManagerBase>();
+        InitGameData();
     }
 
-    List<ManagerBase> User_Data_Manager_List = new List<ManagerBase>();
-    bool Is_Init;
-
-    private bool disposed = false;
-    public GameData()
+    protected override void OnDispose()
     {
-
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
         GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposed)
-        {
-            if (disposing)
-            {
-                //  관리되는 자원 해제
-
-            }
-            disposed = true;
-        }
     }
 
     void InitGameData()
     {
-        if (!Is_Init)
+        //  player data
         {
-            //  player data
+            var mng = new UserGameInfoDataManager(USER_DATA_MANAGER_TYPE.USER_GAME_INFO_DATA_MANAGER);
+            if (!mng.Load())
             {
-                var mng = new UserGameInfoDataManager(USER_DATA_MANAGER_TYPE.USER_GAME_INFO_DATA_MANAGER);
-                if (!mng.Load())
-                {
-                    mng.InitDataManager();
-                }
-                User_Data_Manager_List.Add(mng);
+                mng.InitDataManager();
             }
+            User_Data_Manager_List.Add(mng);
+        }
 
-            //  hero data
+        //  hero data
+        {
+            var mng = new UserHeroDataManager(USER_DATA_MANAGER_TYPE.USER_HERO_DATA_MANAGER);
+            if (!mng.Load())
             {
-                var mng = new UserHeroDataManager(USER_DATA_MANAGER_TYPE.USER_HERO_DATA_MANAGER);
-                if (!mng.Load())
-                {
-                    mng.InitDataManager();
-                }
-                User_Data_Manager_List.Add(mng);
+                mng.InitDataManager();
             }
+            User_Data_Manager_List.Add(mng);
+        }
 
-            //  hero deck mount data
+        //  hero deck mount data
+        {
+            var mng = new UserDeckDataManager(USER_DATA_MANAGER_TYPE.USER_DECK_DATA_MANAGER);
+            if (!mng.Load())
             {
-                var mng = new UserDeckDataManager(USER_DATA_MANAGER_TYPE.USER_DECK_DATA_MANAGER);
-                if (!mng.Load())
-                {
-                    mng.InitDataManager();
-                }
-                User_Data_Manager_List.Add(mng);
+                mng.InitDataManager();
             }
+            User_Data_Manager_List.Add(mng);
+        }
 
-            //  memorial data
+        //  memorial data
+        {
+            var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
+            if (!mng.Load())
             {
-                var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
-                if (!mng.Load())
-                {
-                    mng.InitDataManager();
-                }
-                User_Data_Manager_List.Add(mng);
+                mng.InitDataManager();
             }
-            //  story stage data
+            User_Data_Manager_List.Add(mng);
+        }
+        //  story stage data
+        {
+            var mng = new UserStoryStageDataManager(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
+            if (!mng.Load())
             {
-                var mng = new UserStoryStageDataManager(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
-                if (!mng.Load())
-                {
-                    mng.InitDataManager();
-                }
-                User_Data_Manager_List.Add(mng);
+                mng.InitDataManager();
             }
-
-            Is_Init = true;
+            User_Data_Manager_List.Add(mng);
         }
     }
 

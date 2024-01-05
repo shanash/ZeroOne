@@ -8,31 +8,20 @@ namespace FluffyDuck.Util
     /// 게임이 종료되면 모든 데이터는 초기화됨.
     /// 메모리에 데이터를 저장하는 방식이기 때문에 사용처에 맞도록 사용해야 함
     /// </summary>
-    public class BlackBoard
+    public class BlackBoard : Singleton<BlackBoard>
     {
-        static BlackBoard _instance = null;
-        public static BlackBoard Instance
+        Dictionary<string, object> Key_Values;
+
+        BlackBoard() { }
+
+        protected override void Initialize()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new BlackBoard();
-                    _instance.InitBoardData();
-                }
-                return _instance;
-            }
+            Key_Values = new Dictionary<string, object>();
         }
 
-        Dictionary<string, object> Key_Values = new Dictionary<string, object>();
-
-        bool Is_Init;
-        void InitBoardData()
+        protected override void OnDispose()
         {
-            if (!Is_Init)
-            {
-                Is_Init = true;
-            }
+            throw new System.NotImplementedException();
         }
 
         public void SetBlackBoard(BLACK_BOARD_KEY key, object v)
@@ -113,6 +102,5 @@ namespace FluffyDuck.Util
             Key_Values.Clear();
         }
     }
-
 }
 
