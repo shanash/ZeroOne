@@ -4,7 +4,6 @@ using Gpm.Ui;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -49,6 +48,7 @@ public class PartySettingPopup : PopupBase
     [SerializeField, Tooltip("Confirm Btn Text")]
     TMP_Text Confirm_Btn_Text;
 
+    CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
 
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     int Dungeon_ID;
@@ -65,7 +65,9 @@ public class PartySettingPopup : PopupBase
         Dungeon_ID = (int)data[1];
 
         base.ShowPopup(data);
-
+        
+        Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+        UpdateFilterType();
         InitPopupUI();
     }
 
@@ -136,12 +138,51 @@ public class PartySettingPopup : PopupBase
         //  파티 슬롯에 클릭 콜백 등록
         Party_Mng.SetSlotCardChoiceCallback(PartySlotCardChoiceCallback);
 
-        
+        UpdateFilterType();
+    }
+
+    void UpdateFilterType()
+    {
+        switch (Filter_Type)
+        {
+            case CHARACTER_SORT.NAME:
+                Filter_Name.text = "이름";
+                break;
+            case CHARACTER_SORT.LEVEL_CHARACTER:
+                Filter_Name.text = "레벨";
+                break;
+            case CHARACTER_SORT.STAR:
+                Filter_Name.text = "성급";
+                break;
+            case CHARACTER_SORT.DESTINY:
+                Filter_Name.text = "인연 레벨";
+                break;
+            case CHARACTER_SORT.SKILL_LEVEL:
+                Filter_Name.text = "스킬 레벨";
+                break;
+            case CHARACTER_SORT.EX_SKILL_LEVEL:
+                Filter_Name.text = "궁극 스킬 레벨";
+                break;
+            case CHARACTER_SORT.ATTACK:
+                Filter_Name.text = "공격력";
+                break;
+            case CHARACTER_SORT.DEFEND:
+                Filter_Name.text = "방어력";
+                break;
+            case CHARACTER_SORT.RANGE:
+                Filter_Name.text = "사정거리";
+                break;
+            case CHARACTER_SORT.LIKEABILITY:
+                Filter_Name.text = "호감도";
+                break;
+        }
     }
 
     public override void UpdatePopup()
     {
         Party_Mng.UpdateUserPartySettings();
+
+
     }
 
     /// <summary>
@@ -219,7 +260,20 @@ public class PartySettingPopup : PopupBase
         HidePopup();
     }
 
-    public void OnClickSortPopup()
+    public void OnClickFilterPopup()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/FilterPopup", (popup) =>
+        {
+            popup.SetHideCompleteCallback(() =>
+            {
+                Filter_Type = GameConfig.Instance.GetGameConfigValue<CHARACTER_SORT>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+                FixedUpdatePopup();
+            });
+            popup.ShowPopup();
+        });
+    }
+    public void OnClickSort()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
     }

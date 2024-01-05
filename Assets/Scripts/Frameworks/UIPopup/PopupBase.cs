@@ -44,7 +44,7 @@ namespace FluffyDuck.UI
 
 
         /// <summary>
-        /// 닫기 완료 후 호출되는 함ㅅ - 팝업을 호출한 클래스에서 사용됨
+        /// 닫기 완료 후 호출되는 함수 - 팝업을 호출한 클래스에서 사용됨
         /// </summary>
         protected System.Action Popup_Hide_Complete_Callback;
 
