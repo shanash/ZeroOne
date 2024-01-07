@@ -1,0 +1,11 @@
+using FluffyDuck.Util;
+
+public class #SCRIPTNAME# : MonoSingleton<#SCRIPTNAME#>
+{
+    protected override bool Is_DontDestroyOnLoad => true;
+    
+    protected override void Initialize()
+    {
+        // 초기화
+    }
+}

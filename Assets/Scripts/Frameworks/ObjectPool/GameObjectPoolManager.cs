@@ -14,54 +14,37 @@ namespace FluffyDuck.Util
     /// 필요한 경우 각 씬마다 1개씩 생성하여 사용이 가능
     /// DontDestory 모드가 아니기 때문에 씬 변경시 모두 삭제됨
     /// </summary>
-    public class GameObjectPoolManager : MonoBehaviour
+    public class GameObjectPoolManager : MonoSingleton<GameObjectPoolManager>
     {
-        private static GameObjectPoolManager _instance = null;
-        public static GameObjectPoolManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    var obj = FindObjectOfType<GameObjectPoolManager>();
-
-                    if (obj != null)
-                    {
-                        _instance = obj;
-                    }
-                    else
-                    {
-                        var new_obj = new GameObject();
-                        _instance = new_obj.AddComponent<GameObjectPoolManager>();
-                        new_obj.name = _instance.GetType().Name;
-                        _instance.CreateRecycledObjectContainer();
-                        _instance.Is_Alive = true;
-                    }
-
-                }
-                return _instance;
-            }
-        }
-
-        public bool Is_Alive { get; private set; } = false;
+        protected override bool Is_DontDestroyOnLoad => throw new System.NotImplementedException();
 
         /// <summary>
         /// 회수된 오브젝트를 보관 할 컨테이너
         /// </summary>
         Transform Recycled_Object_Container;
 
-
         /// <summary>
         /// Object Pool 리스트
         /// </summary>
-        Dictionary<string, PoolManager> Pool_List = new Dictionary<string, PoolManager>();
+        Dictionary<string, PoolManager> Pool_List;
 
-        List<string> Preload_Prefab_Path_List = new List<string>();
-        bool Is_Preload = false;
+        List<string> Preload_Prefab_Path_List;
+        bool Is_Preload;
         int Total_Preload_Path_Count;
         System.Action<int, int> PreloadDoingCallback;
         System.Action PreloadCompleteCallback;
 
+        protected override void Initialize()
+        {
+            Pool_List = new Dictionary<string, PoolManager>();
+            Preload_Prefab_Path_List = new List<string>();
+            Is_Preload = false;
+            Total_Preload_Path_Count = 0;
+            PreloadDoingCallback = null;
+            PreloadCompleteCallback = null;
+
+            CreateRecycledObjectContainer();
+        }
 
         /// <summary>
         /// 회수 후 보관할 컨테이너 생성
@@ -93,6 +76,7 @@ namespace FluffyDuck.Util
 
             return Pool_List.ContainsKey(name);
         }
+
         /// <summary>
         /// 체크하는 프리팹 리스트 중에서 아직 PoolManager가 생성되어 있지 않은 패스만 반환해준다.
         /// </summary>
@@ -131,11 +115,6 @@ namespace FluffyDuck.Util
         /// <returns></returns>
         public async Task<GameObject> GetGameObjectAsync(string path, Transform parent)
         {
-            if (!Is_Alive)
-            {
-                return null;
-            }
-
             string name = System.IO.Path.GetFileNameWithoutExtension(path);
             if (string.IsNullOrEmpty(name))
             {
@@ -189,10 +168,6 @@ namespace FluffyDuck.Util
         /// <returns></returns>
         public GameObject GetGameObject(string path, Transform parent)
         {
-            if (!Is_Alive)
-            {
-                return null;
-            }
             string name = System.IO.Path.GetFileNameWithoutExtension(path);
             if (string.IsNullOrEmpty(name))
             {
@@ -225,10 +200,6 @@ namespace FluffyDuck.Util
         /// <returns></returns>
         public GameObject GetGameObject(string path, Transform parent, Vector3 pos)
         {
-            if (!Is_Alive)
-            {
-                return null;
-            }
             string name = System.IO.Path.GetFileNameWithoutExtension(path);
             if (string.IsNullOrEmpty(name))
             {
@@ -252,7 +223,6 @@ namespace FluffyDuck.Util
             return null;
         }
 
-
         /// <summary>
         /// path의 prefab을 GameObject로 생성하여 재사용 컨테이너에 저장해둔다.
         /// 게임내에서 사용하기 전에 미리 생성해두는 것으로, 실시간 생성시 노드가 발생할 수 있으니,
@@ -261,15 +231,12 @@ namespace FluffyDuck.Util
         /// <param name="path"></param>
         public void PreloadGameObject(string path)
         {
-            if (!Is_Alive)
-            {
-                return;
-            }
             string name = System.IO.Path.GetFileNameWithoutExtension(path);
             if (string.IsNullOrEmpty(name))
             {
                 return;
             }
+
             PoolManager p = null;
             if (Pool_List.ContainsKey(name))
             {
@@ -280,6 +247,7 @@ namespace FluffyDuck.Util
                 p = new PoolManager(Recycled_Object_Container);
                 Pool_List.Add(name, p);
             }
+
             if (p != null)
             {
                 //  todo
@@ -289,10 +257,6 @@ namespace FluffyDuck.Util
 
         public async void PreloadGameObjectPrefabsAsync(List<string> path_list, System.Action<int,int> callback)
         {
-            if (!Is_Alive)
-            {
-                return;
-            }
             var all_tasks = new List<Task<int>>();
 
             int total_cnt = path_list.Count;
@@ -333,7 +297,6 @@ namespace FluffyDuck.Util
                 }
             }
         }
-
      
         public void AddPreloadGameObjectPath(string path)
         {
@@ -377,10 +340,7 @@ namespace FluffyDuck.Util
                     }
                 }
             }
-
         }
-
-
 
         /// <summary>
         /// GameObject 회수
@@ -389,10 +349,6 @@ namespace FluffyDuck.Util
         /// <param name="is_out_move">화면밖으로 강제 이동 시킬 것인지 여부. 기본값은 true</param>
         public void UnusedGameObject(GameObject obj, bool is_out_move = true)
         {
-            if (!Is_Alive)
-            {
-                return;
-            }
             PoolManager p = null;
             string name = obj.name;
             if (string.IsNullOrEmpty(name))
@@ -417,16 +373,13 @@ namespace FluffyDuck.Util
                 Debug.Assert(false);
             }
         }
+
         /// <summary>
         /// 사용 중지 및 삭제
         /// </summary>
         /// <param name="obj"></param>
         public void UnusedGameObjectDestroy(GameObject obj)
         {
-            if (!Is_Alive)
-            {
-                return;
-            }
             if (obj == null)
             {
                 return;
@@ -457,9 +410,7 @@ namespace FluffyDuck.Util
             //{
             //    Debug.Assert(false);
             //}
-
         }
-
 
         [ContextMenu("ToStringGameObjectPoolManager")]
         public void ToStringGameObjectPoolManager()
@@ -485,9 +436,9 @@ namespace FluffyDuck.Util
                 p.Dispose();
             }
             Pool_List.Clear();
-            Is_Alive = true;
             Resources.UnloadUnusedAssets(); //  Resources로 호출되었던 사용하지 않는 에셋만 해제
         }
+
         public void OnDestroy()
         {
             AllDestroy();

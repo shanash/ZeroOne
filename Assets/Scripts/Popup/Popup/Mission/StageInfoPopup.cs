@@ -247,7 +247,6 @@ public class StageInfoPopup : PopupBase
                 popup.ShowPopup(GAME_TYPE.STORY_MODE, Stage.stage_id);
             });
         });
-        
     }
 
     void ClearNpcList()

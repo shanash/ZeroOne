@@ -1,34 +1,19 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using UnityEngine;
 
 namespace FluffyDuck.Util
 {
-    public class Dispatcher : MonoBehaviour, IDispatcher
+    public class Dispatcher : MonoSingleton<Dispatcher>, IDispatcher
     {
-        List<Action> pending = new List<Action>();
-        private static Dispatcher _instance;
-        public static Dispatcher Instance
+        ConcurrentQueue<Action> Pending;
+
+        protected override bool Is_DontDestroyOnLoad => true;
+
+        protected override void Initialize()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    var obj = FindObjectOfType<Dispatcher>();
-                    if (obj != null)
-                    {
-                        _instance = obj;
-                    }
-                    else
-                    {
-                        var new_obj = new GameObject();
-                        _instance = new_obj.AddComponent<Dispatcher>();
-                        new_obj.name = _instance.GetType().Name;
-                    }
-                }
-                return _instance;
-            }
+            Pending = new ConcurrentQueue<Action>();
         }
 
         /// <summary>
@@ -37,13 +22,9 @@ namespace FluffyDuck.Util
         /// <param name="fn"></param>
         public void AddAction(Action fn)
         {
-            if (fn == null)
+            if (fn != null)
             {
-                return;
-            }
-            lock (pending)
-            {
-                pending.Add(fn);
+                Pending.Enqueue(fn);
             }
         }
 
@@ -51,6 +32,7 @@ namespace FluffyDuck.Util
         {
             StartCoroutine(StartDelayAddAction(fn, delay));
         }
+
         IEnumerator StartDelayAddAction(Action fn, float delay)
         {
             yield return new WaitForSeconds(delay);
@@ -62,16 +44,11 @@ namespace FluffyDuck.Util
         /// </summary>
         public void InvokePending()
         {
-            lock (pending)
+            while (Pending.Count > 0)
             {
-                if (pending.Count > 0)
+                if (Pending.TryDequeue(out Action action))
                 {
-                    for (int i = 0; i < pending.Count; i++)
-                    {
-                        var action = pending[i];
-                        action();
-                    }
-                    pending.Clear();
+                    action();
                 }
             }
         }
@@ -81,5 +58,4 @@ namespace FluffyDuck.Util
             InvokePending();
         }
     }
-
 }

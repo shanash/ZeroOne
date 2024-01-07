@@ -19,11 +19,6 @@ namespace FluffyDuck.Util
             Key_Values = new Dictionary<string, object>();
         }
 
-        protected override void OnDispose()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void SetBlackBoard(BLACK_BOARD_KEY key, object v)
         {
             SetBlackBoard(key.ToString(), v);

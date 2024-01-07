@@ -65,6 +65,13 @@ namespace FluffyDuck.Editor.Menu
             CreateScript("SingletonBase", "Create C# Singleton Script");
         }
 
+        [MenuItem("Assets/Create/C# MonoBehaviour Singleton Script", priority = 19)]
+        static void Create_CsharpMonoBehaviourSingletonScript()
+        {
+            CreateScript("MonoSingletonBase", "Create C# MonoBehaviour Singleton Script");
+        }
+
+
         static void CreateScript(string defaultName, string menuName)
         {
             // 사용자 정의 스크립트 템플릿 경로

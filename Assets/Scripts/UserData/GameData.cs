@@ -16,11 +16,6 @@ public class GameData : Singleton<GameData>
         InitGameData();
     }
 
-    protected override void OnDispose()
-    {
-        GC.SuppressFinalize(this);
-    }
-
     void InitGameData()
     {
         //  player data

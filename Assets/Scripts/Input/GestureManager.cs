@@ -49,15 +49,6 @@ public class GestureManager : Singleton<GestureManager>
         InputCanvas.OnLongTap += HandleLongTap;
     }
 
-    protected override void OnDispose()
-    {
-        InputCanvas.OnInputDown -= HandleInputDown;
-        InputCanvas.OnInputUp -= HandleInputUp;
-        InputCanvas.OnDrag -= HandleDrag;
-        InputCanvas.OnTap -= HandleTap;
-        InputCanvas.OnLongTap -= HandleLongTap;
-    }
-
     /// <summary>
     /// 터치 다운 이벤트 핸들러
     /// </summary>

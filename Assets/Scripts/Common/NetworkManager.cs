@@ -49,8 +49,6 @@ public class NetworkManager : Singleton<NetworkManager>
         Task.Run(() => ProcessQueue());
     }
 
-    protected override void OnDispose() { }
-
     /// <summary>
     /// 개발용 로그인을 요청하기 위한 메소드
     /// </summary>
@@ -148,7 +146,7 @@ public class NetworkManager : Singleton<NetworkManager>
     /// </summary>
     async void ProcessQueue()
     {
-        while (!Disposed)
+        while (!IsQuitting)
         {
             // 일단 있으면 빼고
             if (Request_Queue.TryDequeue(out var requestTask))

@@ -22,12 +22,15 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
                 if (Saved_Instance == null)
                 {
                     T[] objs = FindObjectsOfType<T>();
-
                     if (objs.Length > 0)
+                    {
                         Saved_Instance = objs[0];
+                    }
 
                     if (objs.Length > 1)
+                    {
                         Debug.LogError("There is more than one " + typeof(T).Name + " in the scene.");
+                    }
 
                     if (Saved_Instance == null)
                     {
