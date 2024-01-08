@@ -11,7 +11,7 @@ namespace FluffyDuck.EditorUtil
     [InitializeOnLoad]
     public class InitializeOnLoad
     {
-        const string SESSION_STATE_KEY = "AndroidPlatformSetter_Initialized";
+        const string SESSION_STATE_KEY = "InitializeOnLoad";
 
         static AddressableAssetSettings Settings = AddressableAssetSettingsDefaultObject.Settings;
 
