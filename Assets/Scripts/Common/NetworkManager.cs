@@ -49,8 +49,6 @@ public class NetworkManager : Singleton<NetworkManager>
         Task.Run(() => ProcessQueue());
     }
 
-    protected override void OnDispose() { }
-
     /// <summary>
     /// 개발용 로그인을 요청하기 위한 메소드
     /// </summary>
@@ -124,7 +122,7 @@ public class NetworkManager : Singleton<NetworkManager>
                 if (response.ResCode != ResCode.Successed
                     && ((int)response.ResCode < 200 || (int)response.ResCode >= 300))
                 {
-                    MainThreadDispatcher.Instance.Enqueue(() => callback?.Invoke(response));
+                    MainThreadDispatcher.Instance.AddAction(() => callback?.Invoke(response));
                     while (!retry)
                     {
                         await Task.Delay(PING_MILLISECONDS);
@@ -133,7 +131,7 @@ public class NetworkManager : Singleton<NetworkManager>
                 else
                 {
                     // 그래서 요렇게 MainThreadDispatcher에 넣어서 유니티 Monobehaviour의 업데이트에서 호출해줍니다
-                    MainThreadDispatcher.Instance.Enqueue(() => callback?.Invoke(response));
+                    MainThreadDispatcher.Instance.AddAction(() => callback?.Invoke(response));
                 }
             } while (retry);
         }
@@ -148,7 +146,7 @@ public class NetworkManager : Singleton<NetworkManager>
     /// </summary>
     async void ProcessQueue()
     {
-        while (!Disposed)
+        while (!IsQuitting)
         {
             // 일단 있으면 빼고
             if (Request_Queue.TryDequeue(out var requestTask))

@@ -1,0 +1,17 @@
+using FluffyDuck.Util;
+
+public class #SCRIPTNAME# : MonoSingleton<#SCRIPTNAME#>
+{
+    protected override bool Is_DontDestroyOnLoad => true;
+    
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void CallInstance()
+    {
+        _ = Instance;
+    }
+
+    protected override void Initialize()
+    {
+        // 초기화
+    }
+}

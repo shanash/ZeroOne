@@ -7,41 +7,30 @@ namespace FluffyDuck.Util
     public enum UPDATE_EVENT_TYPE
     {
         NONE = 0,
-
-        
     }
 
-    public class UpdateEventDispatcher : MonoBehaviour
+    public class UpdateEventDispatcher : MonoSingleton<UpdateEventDispatcher>
     {
-        static UpdateEventDispatcher _instance = null;
-        public static UpdateEventDispatcher Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    var obj = FindObjectOfType<UpdateEventDispatcher>();
-                    if (obj != null)
-                    {
-                        _instance = obj;
-                    }
-                    else
-                    {
-                        var new_obj = new GameObject();
-                        _instance = new_obj.AddComponent<UpdateEventDispatcher>();
-                        new_obj.name = _instance.GetType().Name;
-                    }
-                }
-                return _instance;
-            }
-        }
+        protected override bool Is_DontDestroyOnLoad => true;
 
         Dictionary<UPDATE_EVENT_TYPE, List<System.Action<UPDATE_EVENT_TYPE>>> Event_Action_List = new Dictionary<UPDATE_EVENT_TYPE, List<System.Action<UPDATE_EVENT_TYPE>>>();
         List<UPDATE_EVENT_TYPE> Event_Queue = new List<UPDATE_EVENT_TYPE>();
 
         Dictionary<UPDATE_EVENT_TYPE, System.Action<UPDATE_EVENT_TYPE>> Event_Actions = new Dictionary<UPDATE_EVENT_TYPE, System.Action<UPDATE_EVENT_TYPE>>();
 
-        bool Is_Use_Add_Action = false;
+        bool Is_Use_Add_Action;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void CallInstance()
+        {
+            _ = Instance;
+        }
+
+        protected override void Initialize()
+        {
+            Event_Actions = new Dictionary<UPDATE_EVENT_TYPE, System.Action<UPDATE_EVENT_TYPE>>();
+            Is_Use_Add_Action = false;
+        }
 
         public void AddEventCallback(UPDATE_EVENT_TYPE etype, System.Action<UPDATE_EVENT_TYPE> callback)
         {
@@ -225,7 +214,6 @@ namespace FluffyDuck.Util
         {
             InvokeEventQueuePending();
         }
-
     }
 
 }

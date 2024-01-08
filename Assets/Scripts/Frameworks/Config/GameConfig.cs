@@ -22,11 +22,6 @@ namespace FluffyDuck.Util
             Key_Values = new Dictionary<string, object>();
         }
 
-        protected override void OnDispose()
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetGameConfig<T>(GAME_CONFIG_KEY key, object val)
         {
             var key_str = key.ToString();

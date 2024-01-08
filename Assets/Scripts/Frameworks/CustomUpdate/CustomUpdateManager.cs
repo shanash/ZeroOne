@@ -3,35 +3,23 @@ using UnityEngine;
 
 namespace FluffyDuck.Util
 {
-    public class CustomUpdateManager : MonoBehaviour
+    public class CustomUpdateManager : MonoSingleton<CustomUpdateManager>
     {
+        protected override bool Is_DontDestroyOnLoad { get => true; }
 
-        private static CustomUpdateManager _instance = null;
-        public static CustomUpdateManager Instance
+        List<IUpdateComponent> Update_Component_List;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void CallInstance()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    var obj = FindObjectOfType<CustomUpdateManager>();
-                    if (obj != null)
-                    {
-                        _instance = obj;
-                    }
-                    else
-                    {
-                        var new_obj = new GameObject();
-                        _instance = new_obj.AddComponent<CustomUpdateManager>();
-                        new_obj.name = _instance.GetType().Name;
-                    }
-                }
-                return _instance;
-            }
+            _ = Instance;
         }
 
-        List<IUpdateComponent> Update_Component_List = new List<IUpdateComponent>();
+        protected override void Initialize()
+        {
+            Update_Component_List = new List<IUpdateComponent>();
+        }
 
-        // Update is called once per frame
         void Update()
         {
             float dt = Time.deltaTime;
@@ -74,8 +62,5 @@ namespace FluffyDuck.Util
                 }
             }
         }
-
-
     }
-
 }
