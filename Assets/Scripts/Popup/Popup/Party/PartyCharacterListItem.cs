@@ -68,9 +68,10 @@ public class PartyCharacterListItem : MonoBehaviour
     {
         if (Card != null)
         {
-            Card.TouchDown += TouchDownCallback;
-            Card.TouchUp += TouchUpCallback;
-            Card.Click += ClickCallback;
+            //Card.TouchDown += TouchDownCallback;
+            //Card.TouchUp += TouchUpCallback;
+            //Card.Click += ClickCallback;
+            Card.AddTouchEventCallback(TouchEventCallback);
         }
     }
 
@@ -78,27 +79,24 @@ public class PartyCharacterListItem : MonoBehaviour
     {
         if (Card != null)
         {
-            Card.TouchDown -= TouchDownCallback;
-            Card.TouchUp -= TouchUpCallback;
-            Card.Click -= ClickCallback;
+            //Card.TouchDown -= TouchDownCallback;
+            //Card.TouchUp -= TouchUpCallback;
+            //Card.Click -= ClickCallback;
+            Card.RemoveTouchEventCallback(TouchEventCallback);
         }
     }
 
-    void TouchDownCallback(TOUCH_STATES_TYPE etype)
+    void TouchEventCallback(TOUCH_RESULT_TYPE result)
     {
-        Box.transform.localScale = Press_Scale;
-    }
-    void TouchUpCallback(TOUCH_STATES_TYPE etype)
-    {
-        Box.transform.localScale = Vector2.one;
-    }
-    void ClickCallback(TOUCH_STATES_TYPE etype)
-    {
-        if (User_Data == null)
+        if (result == TOUCH_RESULT_TYPE.CLICK)
         {
-            return;
+            if (User_Data == null)
+            {
+                return;
+            }
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+            Click_Hero_Callback?.Invoke(this);
         }
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        Click_Hero_Callback?.Invoke(this);
     }
+
 }

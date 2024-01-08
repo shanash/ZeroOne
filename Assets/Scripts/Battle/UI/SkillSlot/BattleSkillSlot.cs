@@ -82,26 +82,22 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         UpdateLifeBar();
     }
 
-    void TouchEventCallback(TOUCH_STATES_TYPE state)
+    void TouchEventCallback(TOUCH_RESULT_TYPE result)
     {
+        if (result == TOUCH_RESULT_TYPE.CLICK)
+        {
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+            Hero?.SpecialSkillExec();
 
+        }
+        else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)
+        {
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+            //  show skill tooltip
+            Debug.Log("Skill Slot Long Touch");
+        }
     }
-
-    void TouchDownCallback(TOUCH_STATES_TYPE etype)
-    {
-        Card.transform.localScale = Press_Scale;
-    }
-
-    void TouchUpCallback(TOUCH_STATES_TYPE etype)
-    {
-        Card.transform.localScale = Vector2.one;
-        
-    }
-    void ClickCallback(TOUCH_STATES_TYPE etype)
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        Hero?.SpecialSkillExec();
-    }
+    
 
     void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
     {
@@ -149,10 +145,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     {
         if (Card != null)
         {
-            Card.TouchDown += TouchDownCallback;
-            Card.TouchUp += TouchUpCallback;
-            Card.Click += ClickCallback;
-            Card.Touch_Event += TouchEventCallback;
+            Card.AddTouchEventCallback(TouchEventCallback);
         }
     }
 
@@ -160,10 +153,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     {
         if (Card != null)
         {
-            Card.TouchDown -= TouchDownCallback;
-            Card.TouchUp -= TouchUpCallback;
-            Card.Click -= ClickCallback;
-            Card.Touch_Event -= TouchEventCallback;
+            Card.RemoveTouchEventCallback(TouchEventCallback);
         }
         if (Hero != null)
         {

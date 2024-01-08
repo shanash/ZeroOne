@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using Spine.Unity.Editor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,7 @@ namespace FluffyDuck.EditorUtil
 {
     public class BuildLauncher : EditorWindow
     {
+        private SpinePreferences a;
         public const string VERSION_TEXT_GUID = "178705673f426ff47bd5d57d97fa9aad";
         const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
         const string ADDRESSABLE_GROUP = "AddressableGroup";

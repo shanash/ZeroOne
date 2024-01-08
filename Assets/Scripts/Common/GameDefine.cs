@@ -79,14 +79,7 @@ public enum HERO_PLAY_ANIMATION_TYPE
 
 }
 
-public enum TOUCH_STATES_TYPE
-{
-    NONE = 0,
-    TOUCH_BEGIN,                //  touch down
-    TOUCH_PRESS,                //  click => press & release
-    TOUCH_LONG_PRESS,           //  long touch => long_press & release
-    TOUCH_RELEASE,
-}
+
 
 
 /// <summary>
