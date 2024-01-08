@@ -45,9 +45,6 @@ public class BattleUIManager_V2 : MonoBehaviour
     /// </summary>
     List<LifeBarNode> Used_Life_Bar_List = new List<LifeBarNode>();
 
-   
-
-
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))

@@ -6,6 +6,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum SKILL_SLOT_EVENT_TYPE
+{
+    NONE = 0,
+
+    HITTED,                     //  피격
+    LIFE_UPDATE,                //  체력 게이지 업데이트
+    DURATION_SKILL_ICON_UPDATE, //  지속성 효과 아이콘 업데이트
+
+}
+
 public class BattleSkillSlot : UIBase, IUpdateComponent
 {
     [SerializeField, Tooltip("Box")]
@@ -37,16 +47,16 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     UserHeroData User_Data;
     HeroBase_V2 Hero;
 
-    public void SetPlayerCharacterData(int player_character_id, int player_character_num)
-    {
-        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(player_character_id, player_character_num);
-
-        UpdateSkillSlot();
-    }
 
     public void SetHeroBase(HeroBase_V2 hero)
     {
         Hero = hero;
+        Hero.Slot_Events += SkillSlotEventCallback;
+
+        var battle_unit = Hero.GetBattleUnitData();
+        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(battle_unit.GetUnitID(), battle_unit.GetUnitNum());
+        
+        UpdateSkillSlot();
     }
 
 
@@ -68,23 +78,72 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     void UpdateSkillSlot()
     {
         Card.SetHeroDataID(User_Data.GetPlayerCharacterID());
+
+        UpdateLifeBar();
     }
 
+    void TouchEventCallback(TOUCH_STATES_TYPE state)
+    {
 
+    }
 
-    void TouchDownCallback(PointerEventData evt)
+    void TouchDownCallback(TOUCH_STATES_TYPE etype)
     {
         Card.transform.localScale = Press_Scale;
     }
 
-    void TouchUpCallback(PointerEventData evt)
+    void TouchUpCallback(TOUCH_STATES_TYPE etype)
     {
         Card.transform.localScale = Vector2.one;
+        
     }
-    void ClickCallback(PointerEventData evt)
+    void ClickCallback(TOUCH_STATES_TYPE etype)
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Hero?.SpecialSkillExec();
     }
+
+    void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
+    {
+        switch (etype)
+        {
+            case SKILL_SLOT_EVENT_TYPE.HITTED:
+                UpdateHitted();
+                break;
+            case SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE:
+                UpdateLifeBar();
+                break;
+            case SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE:
+                UpdateDurationSkillIcons();
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+    }
+
+    #region Slot Event Funcs
+
+    void UpdateHitted()
+    {
+
+    }
+    void UpdateLifeBar()
+    {
+        if (Hero == null)
+        {
+            return;
+        }
+        float per = (float)(Hero.Life / Hero.Max_Life);
+        Life_Bar_Gauge.fillAmount = Mathf.Clamp01(per);
+    }
+    void UpdateDurationSkillIcons()
+    {
+
+    }
+
+
+    #endregion
 
     private void OnEnable()
     {
@@ -93,6 +152,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             Card.TouchDown += TouchDownCallback;
             Card.TouchUp += TouchUpCallback;
             Card.Click += ClickCallback;
+            Card.Touch_Event += TouchEventCallback;
         }
     }
 
@@ -103,7 +163,13 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             Card.TouchDown -= TouchDownCallback;
             Card.TouchUp -= TouchUpCallback;
             Card.Click -= ClickCallback;
+            Card.Touch_Event -= TouchEventCallback;
         }
+        if (Hero != null)
+        {
+            Hero.Slot_Events -= SkillSlotEventCallback;
+        }
+        Hero = null;
     }
 
     public override void Spawned()
@@ -115,7 +181,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     public override void Despawned()
     {
         base.Despawned();
-        
         CustomUpdateManager.Instance.DeregistCustomUpdateComponent(this);
         Hero = null;
     }

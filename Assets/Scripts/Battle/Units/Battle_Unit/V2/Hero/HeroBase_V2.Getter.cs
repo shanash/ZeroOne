@@ -65,7 +65,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 스킬 매니저 반환
     /// </summary>
     /// <returns></returns>
-    protected BattleSkillManager GetSkillManager()
+    public BattleSkillManager GetSkillManager()
     {
         return Skill_Mng;
     }

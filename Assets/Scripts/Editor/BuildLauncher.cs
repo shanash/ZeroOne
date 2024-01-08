@@ -22,7 +22,7 @@ namespace FluffyDuck.EditorUtil
         const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
         const string ADDRESSABLE_GROUP = "AddressableGroup";
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
-        static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
+        public static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
 
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
@@ -30,7 +30,7 @@ namespace FluffyDuck.EditorUtil
         static readonly string IS_CLEAN_BUILD_KEY = "IsCleanBuild";
 
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
-        static readonly string DEFAULT_GROUP_NAME = "Default";
+        public static readonly string DEFAULT_GROUP_NAME = "Default";
 
         static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
@@ -703,7 +703,7 @@ namespace FluffyDuck.EditorUtil
             return File.Exists(ADDRESSABLE_VERSION_FILE_PATH);
         }
 
-        public static void CreateVersionText()
+        public static void CreateVersionText(string version_text = "000")
         {
             Directory.CreateDirectory(ADDRESSABLE_GROUP_ROOT_TEXT_PATH);
 
@@ -711,7 +711,7 @@ namespace FluffyDuck.EditorUtil
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
-                    sw.WriteLine("000");
+                    sw.WriteLine(version_text);
                 }
             }
         }
@@ -754,13 +754,7 @@ namespace FluffyDuck.EditorUtil
                 return;
             }
 
-            using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.Create, FileAccess.Write))
-            {
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.WriteLine(override_player_version);
-                }
-            }
+            CreateVersionText(override_player_version);
 
             AssetDatabase.Refresh();
 

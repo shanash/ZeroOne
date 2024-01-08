@@ -169,7 +169,6 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateInitBegin() 
     {
         InitBattleField();
-        Skill_Slot_Mng.SetGameType(Game_Type);
     }
     public virtual void GameStateInit() 
     {

@@ -916,8 +916,6 @@ MonoBehaviour:
   Npc_List_View: {fileID: 3815264444254719177}
   First_Reward_List_View: {fileID: 2094322194507877521}
   Repeat_Reward_List_View: {fileID: 2191669983509658332}
-  Npc_Card_Prefab: {fileID: 7941140061802145411, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
-  Reward_Item_Card_Prefab: {fileID: 6606012012318116145, guid: 86ff79231c0014749b1a1dc64853d626, type: 3}
 --- !u!1 &2204380315882539042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 150.555, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6737545193065270648
@@ -1876,7 +1874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 34.01, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4096084946813889344
@@ -2588,10 +2586,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8601789905642961459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 108}
-  m_SizeDelta: {x: 1194, y: 496}
+  m_SizeDelta: {x: -6, y: -424}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &129933871884249048
 CanvasRenderer:
@@ -2994,7 +2992,7 @@ GameObject:
   - component: {fileID: 8023083346877922637}
   - component: {fileID: 6805175757254637820}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Box_BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

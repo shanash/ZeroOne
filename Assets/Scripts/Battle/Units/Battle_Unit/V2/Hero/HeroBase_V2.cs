@@ -170,6 +170,13 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected float Effect_Queue_Interval;
     protected List<Effect_Queue_Data> Effect_Queue_Data_List = new List<Effect_Queue_Data>();
 
+    /// <summary>
+    /// 스킬 슬롯에서 필요한 이벤트를 받기 위해 델리게이트 등록
+    /// </summary>
+    /// <param name="evt_type"></param>
+    public delegate void Skill_Slot_Event_Delegate(SKILL_SLOT_EVENT_TYPE evt_type);
+    public event Skill_Slot_Event_Delegate Slot_Events;
+
 
     /// <summary>
     /// 게임 타입
@@ -230,7 +237,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         float per = (float)(Life / Max_Life);
         Life_Bar?.SetLifePercent(per);
-
+        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
 
     
@@ -765,6 +772,8 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", Life_Bar_Pos, dmg, 1f);
         UpdateLifeBar();
+
+        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
     }
     /// <summary>
     /// 체력 회복
@@ -906,6 +915,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetBodyPositionByProjectileType(PROJECTILE_TYPE.INSTANT_TARGET_BODY), d_type, 1f);
 
                 }
+                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
             
         }
@@ -1093,6 +1103,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                     duration.Dispose();
                     duration = null;
                 }
+
+                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
         }
 
@@ -1142,6 +1154,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     duration.Dispose();
                     duration = null;
                 }
+                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
         }
         
@@ -1208,7 +1221,16 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         this.transform.localPosition = pos;
     }
-
+    /// <summary>
+    /// 궁극기 시전 요청
+    /// </summary>
+    public void SpecialSkillExec()
+    {
+        //  여러가지 상황상 궁극기를 사용할 수 없는 상황을 체크
+        //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
+        //ChangeState(UNIT_STATES.SKILL_1);
+        Debug.Log("SpecialSkillExec");
+    }
 
     private void OnTriggerEnter(Collider other)
     {

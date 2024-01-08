@@ -58,16 +58,33 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
     [SerializeField, Tooltip("Name")]
     protected TMP_Text Name_Text;
 
+    [SerializeField, Tooltip("Use Long Touch")]
+    protected bool Use_Long_Touch;
+
     protected Player_Character_Data Data;
     protected Player_Character_Battle_Data Battle_Data;
 
-    public delegate void TouchDownAction(PointerEventData evt);
-    public delegate void TouchUpAction(PointerEventData evt);
-    public delegate void ClickAction(PointerEventData evt);
+    public delegate void TouchDownAction(TOUCH_STATES_TYPE etype);
+    public delegate void TouchUpAction(TOUCH_STATES_TYPE etype);
+    public delegate void ClickAction(TOUCH_STATES_TYPE etype);
+    public delegate void TouchEventAction(TOUCH_STATES_TYPE etype);
 
     public event TouchDownAction TouchDown;
     public event TouchUpAction TouchUp;
     public event ClickAction Click;
+
+    public event TouchEventAction Touch_Event;
+
+
+    /// <summary>
+    /// 롱터치 관련 변수
+    /// </summary>
+    TOUCH_STATES_TYPE Touch_State = TOUCH_STATES_TYPE.NONE;
+    Coroutine Long_Touch_Coroutine;
+    bool Is_Cancel;
+    bool Is_Long_Press;
+    float Touch_Delta;
+
 
     public void SetHeroDataID(int hero_data_id)
     {
@@ -76,6 +93,11 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
         Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
         
         UpdateCardBase();
+    }
+
+    public void SetUseLongTouch(bool use)
+    {
+        Use_Long_Touch = use;
     }
 
     void UpdateCardBase()
@@ -144,16 +166,44 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent, IPointerDownHandl
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        TouchDown?.Invoke(eventData);
+        if (Use_Long_Touch)
+        {
+            Is_Cancel = false;
+            Touch_Delta = 0f;
+            Touch_State = TOUCH_STATES_TYPE.TOUCH_BEGIN;
+            TouchDown?.Invoke(Touch_State);
+        }
+        else
+        {
+            TouchDown?.Invoke(Touch_State);
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        TouchUp?.Invoke(eventData);
+        if (Use_Long_Touch)
+        {
+            Is_Long_Press = false;
+            if (Touch_State == TOUCH_STATES_TYPE.TOUCH_BEGIN)
+            {
+
+            }
+            else
+            {
+
+            }
+
+            TouchUp?.Invoke(Touch_State);
+        }
+        else
+        {
+            TouchUp?.Invoke(Touch_State);
+        }
+        
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Click?.Invoke(eventData);
+        Click?.Invoke(Touch_State);
     }
 }

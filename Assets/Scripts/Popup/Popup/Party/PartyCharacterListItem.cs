@@ -84,15 +84,15 @@ public class PartyCharacterListItem : MonoBehaviour
         }
     }
 
-    void TouchDownCallback(PointerEventData evt)
+    void TouchDownCallback(TOUCH_STATES_TYPE etype)
     {
         Box.transform.localScale = Press_Scale;
     }
-    void TouchUpCallback(PointerEventData evt)
+    void TouchUpCallback(TOUCH_STATES_TYPE etype)
     {
         Box.transform.localScale = Vector2.one;
     }
-    void ClickCallback(PointerEventData evt)
+    void ClickCallback(TOUCH_STATES_TYPE etype)
     {
         if (User_Data == null)
         {
