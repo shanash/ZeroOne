@@ -19,7 +19,7 @@ namespace FluffyDuck.EditorUtil
         {
             bool is_initialized = SessionState.GetBool(SESSION_STATE_KEY, false);
 
-            if (is_initialized)
+            if (!is_initialized)
             {
                 EditorApplication.update += SetAndroidPlatform;
                 EditorApplication.update += CreateVersionText;
