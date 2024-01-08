@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -18,7 +19,7 @@ namespace FluffyDuck.EditorUtil
 {
     public class BuildLauncher : EditorWindow
     {
-        const string VERSION_TEXT_GUID = "aa5ec36119d9e49a795ca758b8137a7d";
+        public const string VERSION_TEXT_GUID = "178705673f426ff47bd5d57d97fa9aad";
         const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
         const string ADDRESSABLE_GROUP = "AddressableGroup";
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
@@ -661,38 +662,32 @@ namespace FluffyDuck.EditorUtil
             using (FileStream fs = new FileStream($"{ADDRESSABLE_VERSION_FILE_PATH}.meta", FileMode.Open, FileAccess.ReadWrite))
             {
                 List<string> lines = new List<string>();
-                using (StreamReader sr = new StreamReader(fs))
+                using (StreamReader sr = new StreamReader(fs, Encoding.UTF8, true, 1024, true))
                 {
-                    string line = sr.ReadLine();
-                    lines.Add(line);
-                    while (!line.Contains(find_word))
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        line = sr.ReadLine();
-                        if (string.IsNullOrEmpty(line))
+                        if (line.Contains(find_word))
                         {
-                            Debug.Assert(false, $"{ADDRESSABLE_VERSION_FILE_PATH} 메타 파일의 guid가 없습니다?");
-                            return;
+                            guid = line.Replace(find_word, "");
+                            if (!guid.Equals(VERSION_TEXT_GUID))
+                            {
+                                line = $"{find_word}{VERSION_TEXT_GUID}";
+                            }
                         }
                         lines.Add(line);
                     }
+                }
 
-                    guid = line.Replace(find_word, "");
+                // Reset the position of FileStream to the beginning of the file
+                fs.SetLength(0); // This will truncate the file
+                fs.Position = 0; // Set the position to the start of the file
 
-                    if (!guid.Equals(VERSION_TEXT_GUID))
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    foreach (var l in lines)
                     {
-                        lines[lines.Count - 1] = $"{find_word}{VERSION_TEXT_GUID}";
-                        while(!string.IsNullOrEmpty(line = sr.ReadLine()))
-                        {
-                            lines.Add(line);
-                        }
-
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            foreach (var l in lines)
-                            {
-                                sw.WriteLine(l);
-                            }
-                        }
+                        sw.WriteLine(l);
                     }
                 }
             }

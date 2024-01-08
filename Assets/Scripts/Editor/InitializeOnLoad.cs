@@ -59,9 +59,8 @@ namespace FluffyDuck.EditorUtil
             {
                 string guid = AssetDatabase.AssetPathToGUID(BuildLauncher.ADDRESSABLE_VERSION_FILE_PATH);
 
-                if (Settings.FindAssetEntry(guid) == null)
+                if (!BuildLauncher.VERSION_TEXT_GUID.Equals(guid))
                 {
-                    AssetDatabase.Refresh();
                     return;
                 }
 
@@ -75,13 +74,6 @@ namespace FluffyDuck.EditorUtil
         /// </summary>
         static void AddVersionTextToAddressableGroup()
         {
-            string guid = AssetDatabase.AssetPathToGUID(BuildLauncher.ADDRESSABLE_VERSION_FILE_PATH);
-
-            if (Settings.FindAssetEntry(guid) == null)
-            {
-                AssetDatabase.Refresh();
-            }
-
             AddressableAssetGroup default_group = null;
 
             foreach (var group in Settings.groups)
@@ -95,7 +87,7 @@ namespace FluffyDuck.EditorUtil
 
             Debug.Assert(default_group != null, "Default 그룹을 찾을 수 없습니다.");
 
-            var entry = default_group.GetAssetEntry(guid);
+            var entry = default_group.GetAssetEntry(BuildLauncher.VERSION_TEXT_GUID);
 
             if (entry != null)
             {
@@ -103,7 +95,7 @@ namespace FluffyDuck.EditorUtil
                 return;
             }
 
-            entry = Settings.CreateOrMoveEntry(guid, default_group);
+            entry = Settings.CreateOrMoveEntry(BuildLauncher.VERSION_TEXT_GUID, default_group);
             entry.address = BuildLauncher.ADDRESSABLE_VERSION_FILE_PATH.Replace(".txt", "");
             List<AddressableAssetEntry> entries = new List<AddressableAssetEntry>
             {
