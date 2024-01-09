@@ -16,7 +16,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     public delegate void InputPhaseAction(InputActionPhase phase, Vector2 position, ICollection<ICursorInteractable> components);
     public delegate void InputDragAction(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position);
     public delegate void InputTap(ICursorInteractable[] components);
-   
+
     public static event InputAction OnInputDown;
     public static event InputAction OnInputUp;
     public static event InputDragAction OnDrag;
@@ -37,7 +37,9 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     // 같은 오브젝트 안에서 버튼다운-> 버튼업이 되어 정상적으로 오브젝트를 클릭한 것
     private ReadOnlyCollection<ICursorInteractable> _Focus_Components = null;
 
-    public bool Enable { get => _Enable;
+    public bool Enable
+    {
+        get => _Enable;
         set
         {
             _Enable = value;
@@ -54,7 +56,9 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     bool _Is_Multiple_Input { get; set; } = false;
     protected override bool _Is_DontDestroyOnLoad { get { return true; } }
 
-    int Input_Down_Hold_Reference { get => _Input_Down_Hold_Reference;
+    int Input_Down_Hold_Reference
+    {
+        get => _Input_Down_Hold_Reference;
         set
         {
             //Debug.Log($"Input_Down_Hold_Reference : {value}");
@@ -265,7 +269,7 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     ICursorInteractable[] GetRayCastHittedCursorInteractable()
     {
         Vector3 mpos = _Cursor.Position;
-        mpos.z = - Camera.main.transform.position.z;
+        mpos.z = -Camera.main.transform.position.z;
         mpos = Camera.main.ScreenToWorldPoint(mpos);
 
         var hits = Physics2D.RaycastAll(mpos, Vector2.zero);

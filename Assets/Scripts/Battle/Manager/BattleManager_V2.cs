@@ -1,5 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,7 +58,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         Field.transform.localPosition = Vector3.zero;
 
         int cnt = Used_Team_List.Count;
-        for ( int i = 0; i < cnt; i++ )
+        for (int i = 0; i < cnt; i++)
         {
             Used_Team_List[i].SetHeroContainer(Field.GetUnitContainer());
         }
@@ -96,7 +95,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
 
 
-    
+
 
     protected void WaveInfoCloseCallback()
     {

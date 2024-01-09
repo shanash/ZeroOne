@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class BattleSkillManager : BattleDataBase
 {
@@ -9,7 +7,7 @@ public class BattleSkillManager : BattleDataBase
     /// 스킬 사용 순서 인덱스
     /// </summary>
     int Skill_Pattern_Order;
-    
+
 
     List<BattleSkillGroup> Skill_Groups = new List<BattleSkillGroup>();
 

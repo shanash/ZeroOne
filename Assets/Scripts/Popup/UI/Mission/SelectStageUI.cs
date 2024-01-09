@@ -1,7 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;

@@ -1,9 +1,6 @@
 using LitJson;
-using Spine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class UserStoryStageDataManager : ManagerBase
 {
@@ -41,7 +38,7 @@ public class UserStoryStageDataManager : ManagerBase
         }
 
         //  first stage init
-        
+
         List<World_Data> world_list = new List<World_Data>();
         m.Get_WorldDataList(ref world_list);
         if (world_list.Count == 0)
@@ -134,7 +131,7 @@ public class UserStoryStageDataManager : ManagerBase
         }
         return stage;
     }
-    
+
 
     public override JsonData Serialized()
     {
@@ -172,7 +169,7 @@ public class UserStoryStageDataManager : ManagerBase
             int zone_id = ParseInt(json, NODE_CURRENT_ZONE_ID);
             SetCurrentZoneID(zone_id);
         }
-        
+
 
         if (json.ContainsKey(NODE_STAGE_DATA_LIST))
         {

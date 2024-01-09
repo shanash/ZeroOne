@@ -26,7 +26,7 @@ namespace FluffyDuck.UI
             Distance = found.Ease_Vector - Start_Position;
             base.StartMove(mtype, cb);
         }
-        
+
 
         protected override void UpdateEase(EasingFunction.Function func, float weight)
         {

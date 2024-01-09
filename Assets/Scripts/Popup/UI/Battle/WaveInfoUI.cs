@@ -1,6 +1,4 @@
 using FluffyDuck.UI;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -42,7 +40,7 @@ public class WaveInfoUI : PopupBase
 
     protected override void OnUpdatePopup()
     {
-        if (Is_Action) 
+        if (Is_Action)
         {
             Delay_Time -= Time.deltaTime;
             if (Delay_Time < 0f)

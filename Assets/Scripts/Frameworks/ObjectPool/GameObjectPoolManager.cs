@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace FluffyDuck.Util
 {
@@ -261,7 +258,7 @@ namespace FluffyDuck.Util
             }
         }
 
-        public async void PreloadGameObjectPrefabsAsync(List<string> path_list, System.Action<int,int> callback)
+        public async void PreloadGameObjectPrefabsAsync(List<string> path_list, System.Action<int, int> callback)
         {
             var all_tasks = new List<Task<int>>();
 
@@ -303,7 +300,7 @@ namespace FluffyDuck.Util
                 }
             }
         }
-     
+
         public void AddPreloadGameObjectPath(string path)
         {
             lock (Preload_Prefab_Path_List)

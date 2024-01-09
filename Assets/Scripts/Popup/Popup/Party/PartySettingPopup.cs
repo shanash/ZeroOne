@@ -1,7 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -65,7 +64,7 @@ public class PartySettingPopup : PopupBase
         Dungeon_ID = (int)data[1];
 
         base.ShowPopup(data);
-        
+
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         UpdateFilterType();
         InitPopupUI();
@@ -233,7 +232,7 @@ public class PartySettingPopup : PopupBase
         }
         user_deck_mng.Save();
 
-        
+
     }
 
     void PartySlotCardChoiceCallback(PartySlotNode slot)
@@ -302,7 +301,7 @@ public class PartySettingPopup : PopupBase
                 });
                 return;
             }
-            
+
             var board = BlackBoard.Instance;
             board.SetBlackBoard(BLACK_BOARD_KEY.DUNGEON_ID, Dungeon_ID);
             board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);

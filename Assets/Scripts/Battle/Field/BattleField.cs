@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleField : MonoBehaviour
@@ -14,11 +12,11 @@ public class BattleField : MonoBehaviour
     Transform Near_Obj_Container;
 
 
-    public Transform GetFarBGContainer() { return Far_BG_Container;}
-    public Transform GetUnitContainer() { return Unit_Container;}
-    public EffectFactory GetEffectFactory() { return Effect_Container;}
-    public Transform GetNearBGContainer() { return Near_Obj_Container;}
-    
+    public Transform GetFarBGContainer() { return Far_BG_Container; }
+    public Transform GetUnitContainer() { return Unit_Container; }
+    public EffectFactory GetEffectFactory() { return Effect_Container; }
+    public Transform GetNearBGContainer() { return Near_Obj_Container; }
+
 
 
 }

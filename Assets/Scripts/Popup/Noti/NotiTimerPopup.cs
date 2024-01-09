@@ -1,7 +1,4 @@
 using FluffyDuck.UI;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO.IsolatedStorage;
 using TMPro;
 using UnityEngine;
 
@@ -44,6 +41,6 @@ public class NotiTimerPopup : PopupBase
                 Show_Message = false;
             }
         }
-        
+
     }
 }

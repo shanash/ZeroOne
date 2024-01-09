@@ -62,7 +62,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
-        
+
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBarNode");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Death_Member_Flag_Node");
@@ -86,7 +86,7 @@ public partial class BattleManager_V2 : MonoBehaviour
             player_team.GetHeroPrefabsPath(ref list);
         }
 
-        
+
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(list, PreloadCallback);
     }
 
@@ -166,21 +166,21 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     #region Game States
 
-    public virtual void GameStateInitBegin() 
+    public virtual void GameStateInitBegin()
     {
         InitBattleField();
     }
-    public virtual void GameStateInit() 
+    public virtual void GameStateInit()
     {
         ChangeState(GAME_STATES.READY);
     }
     public virtual void GameStateInitExit() { }
 
-    public virtual void GameStateReadyBegin() 
+    public virtual void GameStateReadyBegin()
     {
-        
+
     }
-    public virtual void GameStateReady() 
+    public virtual void GameStateReady()
     {
         ChangeState(GAME_STATES.SPAWN);
     }
@@ -197,7 +197,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateSpawnExit() { }
 
 
-    public virtual void GameStateWaveInfoBegin() 
+    public virtual void GameStateWaveInfoBegin()
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Battle/WaveInfoUI", (popup) =>
         {
@@ -210,7 +210,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateWaveInfoExit() { }
 
 
-    public virtual void GameStatePlayingBegin() 
+    public virtual void GameStatePlayingBegin()
     {
         if (IsPrevPause())
         {
@@ -220,7 +220,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         UI_Mng.UpdateWaveCount();
         TeamMembersChangeState(UNIT_STATES.MOVE_IN);
     }
-    public virtual void GameStatePlaying() 
+    public virtual void GameStatePlaying()
     {
         var all_death_team = Used_Team_List.Find(x => !x.IsAliveMembers());
         if (all_death_team != null)
@@ -239,7 +239,7 @@ public partial class BattleManager_V2 : MonoBehaviour
                 {
                     ChangeState(GAME_STATES.GAME_OVER_WIN);
                 }
-                
+
             }
             else
             {
@@ -249,7 +249,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     }
     public virtual void GameStatePlayingExit() { }
 
-    public virtual void GameStateNextWaveBegin() 
+    public virtual void GameStateNextWaveBegin()
     {
         if (IsPrevPause())
         {
@@ -279,12 +279,12 @@ public partial class BattleManager_V2 : MonoBehaviour
         {
             ChangeState(GAME_STATES.GAME_OVER_WIN);
         }
-        
+
     }
     public virtual void GameStateNextWave() { }
     public virtual void GameStateNextWaveExit() { }
 
-    public virtual void GameStateWaveRunBegin() 
+    public virtual void GameStateWaveRunBegin()
     {
         if (IsPrevPause())
         {
@@ -303,12 +303,12 @@ public partial class BattleManager_V2 : MonoBehaviour
         });
     }
 
-    public virtual void GameStateWaveRun() 
+    public virtual void GameStateWaveRun()
     {
     }
     public virtual void GameStateWaveRunExit() { }
 
-    public virtual void GameStatePauseBegin() 
+    public virtual void GameStatePauseBegin()
     {
         TeamMembersChangeState(UNIT_STATES.PAUSE);
         GetEffectFactory().OnPause();
@@ -325,13 +325,13 @@ public partial class BattleManager_V2 : MonoBehaviour
         });
     }
     public virtual void GameStatePause() { }
-    public virtual void GameStatePauseExit() 
+    public virtual void GameStatePauseExit()
     {
         TeamMembersRevertState();
         GetEffectFactory().OnResume();
     }
 
-    public virtual void GameStateGameOverWinBegin() 
+    public virtual void GameStateGameOverWinBegin()
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
         {
@@ -341,7 +341,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateGameOverWin() { }
     public virtual void GameStateGameOverWinExit() { }
 
-    public virtual void GameStateGameOverLoseBegin() 
+    public virtual void GameStateGameOverLoseBegin()
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
         {

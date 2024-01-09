@@ -1,8 +1,8 @@
-using UnityEngine;
+using System;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
-using System;
 
 namespace FluffyDuck.Util
 {

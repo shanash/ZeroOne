@@ -42,9 +42,9 @@ public enum DURATION_CALC_RESULT_TYPE
 public enum HERO_PLAY_ANIMATION_TYPE
 {
     NONE = 0,
-    
+
     PREPARE_01,
-    
+
     IDLE_01,
     IDLE_02,
 

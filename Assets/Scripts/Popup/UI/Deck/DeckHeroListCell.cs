@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -41,5 +40,5 @@ public class DeckHeroListCell : UIBase
             Hero_Cards[i].UpdateCardNode();
         }
     }
-   
+
 }

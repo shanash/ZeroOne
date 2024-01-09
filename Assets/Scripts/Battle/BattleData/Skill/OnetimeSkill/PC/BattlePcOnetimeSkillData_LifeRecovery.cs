@@ -15,7 +15,7 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
 
 
         int t_cnt = data.Targets.Count;
-        
+
         for (int i = 0; i < t_cnt; i++)
         {
             send_data.ClearTargets();

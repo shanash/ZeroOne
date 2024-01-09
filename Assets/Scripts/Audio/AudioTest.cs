@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AudioTest : MonoBehaviour
 {
@@ -58,7 +55,8 @@ public class AudioTest : MonoBehaviour
 
     public void PlayVoice()
     {
-        AudioManager.Instance.PlayVoice($"{DEFAULT_PATH}Voice/CutePout", false, (name, state, vol) => {
+        AudioManager.Instance.PlayVoice($"{DEFAULT_PATH}Voice/CutePout", false, (name, state, vol) =>
+        {
             Debug.Log($"name : {name}");
         });
     }
@@ -111,5 +109,5 @@ public class AudioTest : MonoBehaviour
     public void AllStop()
     {
         AudioManager.Instance.StopAllFX();
-    }   
+    }
 }

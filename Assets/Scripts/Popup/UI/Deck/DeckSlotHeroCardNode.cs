@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -52,7 +50,7 @@ public class DeckSlotHeroCardNode : UIBase, IPointerDownHandler, IPointerUpHandl
             Card_Box.gameObject.SetActive(false);
             return;
         }
-        
+
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
         Card_Box.gameObject.SetActive(deck.IsExistHeroInDeck(User_Data.Player_Character_ID, User_Data.Player_Character_Num));

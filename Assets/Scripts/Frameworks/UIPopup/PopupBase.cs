@@ -1,8 +1,6 @@
-using UnityEngine;
 using FluffyDuck.Util;
-using Unity.VisualScripting;
 using System.Collections.Generic;
-using System.Xml.Schema;
+using UnityEngine;
 
 namespace FluffyDuck.UI
 {
@@ -57,7 +55,7 @@ namespace FluffyDuck.UI
         protected Popup_Closeed_Delegate Closed_Delegate;
 
         protected bool Is_Enable_Esc_Key_Exit;
-        
+
         void Start()
         {
             Initialize();
@@ -65,7 +63,7 @@ namespace FluffyDuck.UI
 
         protected virtual void Initialize()
         {
-            
+
         }
 
         public void SetEnableEscKeyExit(bool enable)
@@ -126,7 +124,7 @@ namespace FluffyDuck.UI
         /// <summary>
         /// 애니메이션이 있는 경우, 팝업 숨김 완료 후 호출되는 함수
         /// </summary>
-        protected virtual void HidePopupAniEndCallback() 
+        protected virtual void HidePopupAniEndCallback()
         {
             Hide();
         }

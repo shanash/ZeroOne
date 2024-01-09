@@ -1,12 +1,12 @@
-using System;
+using FluffyDuck.Util;
 using ProtocolShared.FDHttpClient;
 using ProtocolShared.Proto;
 using ProtocolShared.Proto.Base;
+using System;
 using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using FluffyDuck.Util;
-using System.Net.NetworkInformation;
 
 public class NetworkManager : Singleton<NetworkManager>
 {
@@ -64,9 +64,10 @@ public class NetworkManager : Singleton<NetworkManager>
 
         SendRequest(
             HttpMethod.POST,
-            "account/login/dev", 
+            "account/login/dev",
             new DevLoginRequest { macAddress = mac_address },
-            (ResponseData<DevLoginResponse> res) => {
+            (ResponseData<DevLoginResponse> res) =>
+            {
                 User_Id = res.Data.userId;
                 Access_Token = res.Data.accessToken;
                 Refresh_Token = res.Data.refreshToken;

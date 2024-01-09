@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchEffectNode : MonoBehaviour, IPoolableComponent
@@ -82,7 +80,7 @@ public class TouchEffectNode : MonoBehaviour, IPoolableComponent
     {
         transform.localScale = Origin_Scale;
     }
-    
+
     public void Despawned()
     {
         Is_Action = false;

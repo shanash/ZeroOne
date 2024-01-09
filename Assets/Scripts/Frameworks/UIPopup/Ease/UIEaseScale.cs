@@ -1,7 +1,5 @@
 using FluffyDuck.Util;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace FluffyDuck.UI
@@ -28,7 +26,7 @@ namespace FluffyDuck.UI
             Diff_Scale = found.Ease_Vector - Start_Scale;
             base.StartMove(mtype, cb);
         }
-       
+
 
         protected override void UpdateEase(EasingFunction.Function func, float weight)
         {
@@ -49,7 +47,7 @@ namespace FluffyDuck.UI
             {
                 This_Rect.localScale = found.Ease_Vector;
             }
-            
+
         }
 
         public override void ResetEase(params object[] data)

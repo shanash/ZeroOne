@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +37,7 @@ public partial class TeamManager_V2
             {
                 hero = obj.GetComponent<MonsterBase_V2>();
             }
-            
+
             if (hero != null)
             {
                 hero.SetTeamManager(this);
@@ -48,7 +46,7 @@ public partial class TeamManager_V2
                 hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
                 AddMember(hero);
             }
-          
+
         });
         EditorLeftTeamPosition();
     }

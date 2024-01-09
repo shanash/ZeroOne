@@ -35,7 +35,7 @@ public class UserMemorialDataManager : ManagerBase
         List<Me_Resource_Data> list = new List<Me_Resource_Data>();
         m.Get_MemorialResourceDataList(ref list);
 
-        for (int i = 0;i < list.Count;i++)
+        for (int i = 0; i < list.Count; i++)
         {
             var mdata = list[i];
             AddUserMemorialData(mdata.memorial_id, mdata.player_character_id);
@@ -143,7 +143,7 @@ public class UserMemorialDataManager : ManagerBase
                         return ERROR_CODE.NOT_WORK;
                     }
                 }
-                
+
             }
         }
         return ERROR_CODE.FAILED;
@@ -182,7 +182,7 @@ public class UserMemorialDataManager : ManagerBase
             item.SetLobbyChoiceNumber(item.Temp_Lobby_Choice_Number);
             item.ResetTempLobbyChoice();
         }
-        
+
         Save();
     }
 

@@ -1,5 +1,4 @@
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +27,7 @@ public class PartyCharacterListCell : InfiniteScrollItem
             {
                 slot.SetUserHeroData(null, data.Game_Type);
             }
-            
+
         }
     }
 }

@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     }
 
     #region Properties
-    protected override bool _Is_DontDestroyOnLoad {  get { return false; } }
+    protected override bool _Is_DontDestroyOnLoad { get { return false; } }
 
     public bool IsInit
     {
@@ -628,7 +628,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         if (!EnableFX) return;
 
         int cnt = _FX_Srcs.Count;
-        for (int i = 0;i < cnt; ++i)
+        for (int i = 0; i < cnt; ++i)
         {
             _FX_Srcs[i].Stop();
         }
@@ -801,7 +801,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         }
 
         int total_cnt = audio_Pathes.Count;
-        for (int i = 0; i < total_cnt; i++) 
+        for (int i = 0; i < total_cnt; i++)
         {
             all_tasks.Add(PreloadAudioAsync(audio_Pathes[i]));
         }

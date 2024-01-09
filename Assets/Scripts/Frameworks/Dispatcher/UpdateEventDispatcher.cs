@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,7 +69,7 @@ namespace FluffyDuck.Util
                     }
                 }
             }
-            
+
 
         }
 
@@ -100,7 +99,7 @@ namespace FluffyDuck.Util
                     }
                 }
             }
-            
+
         }
 
         public void RemoveEventCallback(UPDATE_EVENT_TYPE etype, System.Action<UPDATE_EVENT_TYPE> cb)
@@ -136,7 +135,7 @@ namespace FluffyDuck.Util
                     }
                 }
             }
-            
+
         }
 
         public void AddEvent(UPDATE_EVENT_TYPE etype, bool is_dup_check = false)

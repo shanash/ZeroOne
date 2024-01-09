@@ -150,7 +150,7 @@ public class MasterDataManager : BaseMasterDataManager
         list.AddRange(_Star_Reward_Data.FindAll(x => x.star_reward_group_id == star_reward_group_id));
         list.Sort((a, b) => a.star_reward_id.CompareTo(b.star_reward_id));
     }
-    
+
 
     #endregion
 
@@ -449,7 +449,7 @@ public class MasterDataManager : BaseMasterDataManager
     /// <returns></returns>
     public Stage_Data Get_StageData(int stage_id)
     {
-        
+
         Check_Stage_Data();
 
         return _Stage_Data.Find(x => x.stage_id == stage_id);
@@ -482,7 +482,7 @@ public class MasterDataManager : BaseMasterDataManager
     /// <param name="list"></param>
     public void Get_WaveDataList(int wave_group_id, ref List<Wave_Data> list)
     {
-        
+
         Check_Wave_Data();
         list.Clear();
         list.AddRange(_Wave_Data.FindAll(x => x.wave_group_id == wave_group_id));

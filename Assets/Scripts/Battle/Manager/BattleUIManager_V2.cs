@@ -1,7 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -62,7 +61,7 @@ public class BattleUIManager_V2 : MonoBehaviour
             {
                 Battle_Mng.ChangeState(GAME_STATES.PAUSE);
             }
-            
+
         }
     }
 
@@ -79,7 +78,7 @@ public class BattleUIManager_V2 : MonoBehaviour
         var life = obj.GetComponent<LifeBarNode>();
         life.SetBarColor(ttype);
         life.SetTargetTransform(t);
-        
+
 
         Used_Life_Bar_List.Add(life);
         return life;
@@ -105,7 +104,7 @@ public class BattleUIManager_V2 : MonoBehaviour
     public void UpdateWaveCount()
     {
         int max_wave = Battle_Mng.GetMaxWave();
-        int cur_wave = Battle_Mng.GetCurrentWave()+1;
+        int cur_wave = Battle_Mng.GetCurrentWave() + 1;
 
         Current_Wave.text = cur_wave.ToString();
         Wave_Max_Text.text = ZString.Format("/{0}", max_wave);

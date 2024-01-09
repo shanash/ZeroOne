@@ -1,8 +1,6 @@
 using LitJson;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class UserDeckDataManager : ManagerBase
 {
@@ -32,13 +30,13 @@ public class UserDeckDataManager : ManagerBase
     public void FindDeckList(GAME_TYPE game_type, ref List<UserDeckData> list)
     {
         var temp_list = User_Deck_List.FindAll(x => x.Game_Type == game_type);
-        temp_list.Sort(delegate (UserDeckData a, UserDeckData b) 
+        temp_list.Sort(delegate (UserDeckData a, UserDeckData b)
         {
             if (a.Deck_Number > b.Deck_Number)
             {
                 return 1;
             }
-            return -1; 
+            return -1;
         });
         list.AddRange(temp_list);
     }
@@ -64,7 +62,7 @@ public class UserDeckDataManager : ManagerBase
     /// <param name="deck_num"></param>
     public void SetSelectedDeck(GAME_TYPE game_type, int deck_num)
     {
-        List<UserDeckData> deck_list = new List<UserDeckData> ();
+        List<UserDeckData> deck_list = new List<UserDeckData>();
         FindDeckList(game_type, ref deck_list);
         int cnt = deck_list.Count;
         for (int i = 0; i < cnt; i++)
@@ -107,7 +105,7 @@ public class UserDeckDataManager : ManagerBase
     /// <returns></returns>
     public UserDeckData FindDeck(GAME_TYPE game_type, int deck_num)
     {
-        var deck = User_Deck_List.Find( x => x.Game_Type == game_type && x.Deck_Number == deck_num );
+        var deck = User_Deck_List.Find(x => x.Game_Type == game_type && x.Deck_Number == deck_num);
         if (deck == null)
         {
             deck = new UserDeckData();

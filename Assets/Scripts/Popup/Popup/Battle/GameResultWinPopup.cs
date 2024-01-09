@@ -36,7 +36,7 @@ public class GameResultWinPopup : PopupBase
     UIEaseSlide Player_Info_Ease_Slide;
     [SerializeField, Tooltip("Player Info Ease Alpha")]
     UIEaseCanvasGroupAlpha Player_Info_Ease_Alpha;
-    
+
 
     [Space()]
     [SerializeField, Tooltip("Character Info Ease Alpha")]
@@ -76,7 +76,7 @@ public class GameResultWinPopup : PopupBase
         base.ShowPopup(data);
         SetEnableEscKeyExit(false);
         InitAssets();
-        
+
     }
 
     void InitAssets()
@@ -115,7 +115,7 @@ public class GameResultWinPopup : PopupBase
 
 
         //  character info
-        
+
         AddPlayerInfoNodes();
 
         //  backlight 밝아지기

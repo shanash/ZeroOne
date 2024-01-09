@@ -1,7 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,7 +36,7 @@ public class TestScalePopup : PopupBase
         {
             var obj = pool.GetGameObject(Prefab_Name, Content_View);
             var node = obj.GetComponent<TestListNode>();
-            node.SetListText((i+1).ToString());
+            node.SetListText((i + 1).ToString());
             Used_List_Nodes.Add(node);
         }
     }

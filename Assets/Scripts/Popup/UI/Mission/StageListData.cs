@@ -1,7 +1,4 @@
 using Gpm.Ui;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class StageListData : InfiniteScrollData
 {
@@ -25,6 +22,6 @@ public class StageListData : InfiniteScrollData
     {
         return User_Data != null;
     }
-    
+
 
 }

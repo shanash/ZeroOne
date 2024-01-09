@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
 using System;
-using System.IO;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace FluffyDuck.Util
 {
@@ -64,7 +60,7 @@ namespace FluffyDuck.Util
             this.Recycled_Object_Container = recycled_container;
         }
 
-        
+
 
 
         /// <summary>
@@ -166,7 +162,7 @@ namespace FluffyDuck.Util
                 {
                     var task = Addressables.LoadAssetAsync<GameObject>(path);
                     Object_Prefab = await task.Task;
-                    Debug.Assert(task.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded, 
+                    Debug.Assert(task.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded,
                         $"GameObjectPoolMananger::PopAsync 프리팹이 정상적으로 로딩되지 않았습니다. {path}");
                 }
 
@@ -182,7 +178,7 @@ namespace FluffyDuck.Util
             {
                 component.Spawned();
             }
-            
+
             return item;
         }
 
@@ -259,7 +255,7 @@ namespace FluffyDuck.Util
             {
                 Addressables.Release(Handle);
             }
-            
+
         }
 
         public override string ToString()

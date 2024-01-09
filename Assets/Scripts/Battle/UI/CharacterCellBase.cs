@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +38,7 @@ public class CharacterCellBase : MonoBehaviour
 
     protected void UpdateIcon()
     {
-        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) => 
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) =>
         {
             Hero_Icon.sprite = spr;
         });

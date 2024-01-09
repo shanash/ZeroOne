@@ -1,7 +1,4 @@
 using Cysharp.Text;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +10,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     readonly float VELOCITY = 100f;
 
 
-    
+
 
     public override void SetData(params object[] data)
     {
@@ -21,7 +18,7 @@ public class Damage_Normal_Effect_Text : EffectBase
         {
             return;
         }
-        
+
         BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)data[0];
 
         //double dmg = Math.Truncate(send_data.Damage);

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ public class DeckBoxManager : MonoBehaviour
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
-        
+
         int cnt = Card_Slots.Count;
         for (int i = 0; i < cnt; i++)
         {

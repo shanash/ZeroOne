@@ -1,7 +1,4 @@
-using System;
-using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
 
 public class EventTriggerMixerBehaviour : PlayableBehaviour
 {
@@ -15,13 +12,13 @@ public class EventTriggerMixerBehaviour : PlayableBehaviour
     //        float inputWeight = playable.GetInputWeight(i);
     //        ScriptPlayable<EventTriggerBehaviour> inputPlayable = (ScriptPlayable<EventTriggerBehaviour>)playable.GetInput(i);
     //        EventTriggerBehaviour input = inputPlayable.GetBehaviour ();
-            
+
     //        // Use the above variables to process each frame of this playable.
     //        if (inputWeight > 0f)
     //        {
 
     //        }
-            
+
     //    }
     //}
 

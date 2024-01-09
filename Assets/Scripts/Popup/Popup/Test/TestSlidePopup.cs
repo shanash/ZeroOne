@@ -1,7 +1,4 @@
 using FluffyDuck.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestSlidePopup : PopupBase
@@ -16,5 +13,5 @@ public class TestSlidePopup : PopupBase
         Debug.Log("ShowPopupAniEndCallback");
     }
 
-    
+
 }

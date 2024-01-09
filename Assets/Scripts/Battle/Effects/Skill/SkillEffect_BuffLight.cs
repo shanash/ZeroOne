@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillEffect_BuffLight : SkillEffectBase

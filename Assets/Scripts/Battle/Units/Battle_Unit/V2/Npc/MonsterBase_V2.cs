@@ -1,6 +1,3 @@
-using Spine.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -26,7 +23,7 @@ public class MonsterBase_V2 : HeroBase_V2
         return Unit_Data;
     }
 
-    
+
     public override float GetApproachDistance()
     {
         return Unit_Data.GetApproachDistance();

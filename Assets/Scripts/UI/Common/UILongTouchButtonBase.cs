@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -86,7 +85,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
             Long_Touch_Coroutine = null;
             Is_Long_Press = false;
         }
-        
+
     }
 
     /// <summary>

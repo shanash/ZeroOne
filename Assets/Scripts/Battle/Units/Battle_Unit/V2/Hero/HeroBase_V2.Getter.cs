@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public partial class HeroBase_V2 : UnitBase_V2
@@ -350,11 +348,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="caster_lv">공격자의 레벨</param>
     /// <param name="target_lv">피격자의 레벨</param>
     /// <returns>백만분율로 변환</returns>
-    protected double GetCriticalChanceRate(int caster_lv, int target_lv) 
+    protected double GetCriticalChanceRate(int caster_lv, int target_lv)
     {
-        
-        double chance = (GetCriticalChancePoint() * 0.05 * ((double)caster_lv/(double)target_lv) * 0.01) * 1000000;
-        return chance; 
+
+        double chance = (GetCriticalChancePoint() * 0.05 * ((double)caster_lv / (double)target_lv) * 0.01) * 1000000;
+        return chance;
     }
 
 

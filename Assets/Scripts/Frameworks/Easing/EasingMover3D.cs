@@ -1,7 +1,5 @@
 using FluffyDuck.Util;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EasingMover3D : EasingFade
@@ -11,7 +9,7 @@ public class EasingMover3D : EasingFade
     Vector3 Distance = Vector3.zero;
     Transform Target_Transform;
 
-    
+
     /// <summary>
     /// Easing을 이용하여 좌표 이동. 2D 좌표로 이동만 가능.
     /// </summary>

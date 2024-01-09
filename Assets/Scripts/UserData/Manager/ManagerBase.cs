@@ -1,7 +1,5 @@
 using FluffyDuck.Util;
 using LitJson;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 using UnityEngine;
@@ -80,10 +78,10 @@ public class ManagerBase : IDisposable
     public USER_DATA_MANAGER_TYPE GetManagerType() { return Manager_Type; }
 
     public virtual LitJson.JsonData Serialized() { return null; }
-    public virtual bool Deserialized(LitJson.JsonData json) {  return false; }
+    public virtual bool Deserialized(LitJson.JsonData json) { return false; }
 
 
-    public virtual void Save() 
+    public virtual void Save()
     {
         JsonData json = Serialized();
         if (json == null)
@@ -95,11 +93,11 @@ public class ManagerBase : IDisposable
 
         LitJson.JsonMapper.ToJson(json, writer);
         string json_data = writer.TextWriter.ToString();
-        
+
         FileUtils.SaveFileData(json_data, GetFilePath());
     }
 
-    public virtual bool Load() 
+    public virtual bool Load()
     {
         string path = GetFilePath();
         if (!FileUtils.IsExistFile(path))
@@ -111,10 +109,10 @@ public class ManagerBase : IDisposable
         {
             return false;
         }
-        
+
         JsonData json = JsonMapper.ToObject(json_data);
         return Deserialized(json);
-        
+
     }
 
     #region Json Parse

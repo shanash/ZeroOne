@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using UnityEngine;
 using FluffyDuck.Util;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace FluffyDuck.UI
 {
@@ -186,7 +186,7 @@ namespace FluffyDuck.UI
             PopupBase popup = null;
 
             RectTransform container = UI_Container;
-            
+
             popup = AddPopup(path, container);
 
             //  팝업 오브젝트가 담길 컨테이너. 각 팝업 타입에 따라 각기 다른 컨테이너에 담긴다.
@@ -231,8 +231,8 @@ namespace FluffyDuck.UI
         }
 
 
-       
-     
+
+
 
         void LastKeyEventEnableCheck()
         {
@@ -336,7 +336,7 @@ namespace FluffyDuck.UI
             CloseAllPopupType(POPUP_TYPE.POPUP_TYPE);
             CloseAllPopupType(POPUP_TYPE.UI_TYPE);
             CloseAllPopupType(POPUP_TYPE.NOTI_TYPE);
-            
+
             LastKeyEventEnableCheck();
         }
 

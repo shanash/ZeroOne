@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,5 +78,5 @@ public class ItemCardBase : UIBase
         item?.SetItem(itype, item_id);
         return item;
     }
-    
+
 }

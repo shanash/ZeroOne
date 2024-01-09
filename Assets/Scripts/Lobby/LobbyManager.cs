@@ -1,6 +1,5 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -92,7 +91,7 @@ public class LobbyManager : MonoBehaviour
     public void OnClickDeck()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        
+
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", (popup) =>
         {
             popup.ShowPopup(GAME_TYPE.NONE, 0);

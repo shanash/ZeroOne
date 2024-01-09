@@ -13,7 +13,8 @@ namespace FluffyDuck.Util
         T data;
         string encryptKey = string.Empty;
 
-        public SecureVar(){
+        public SecureVar()
+        {
             string key = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8);
             SetKey(key);
         }

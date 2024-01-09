@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using FluffyDuck.Util;
 
 public class GestureManager : Singleton<GestureManager>
 {
@@ -190,7 +190,7 @@ public class GestureManager : Singleton<GestureManager>
         // 드래그 시작 감지 및 드래그 중 상태 업데이트
         if (!IsDragging && drag_origin.sqrMagnitude > DRAG_THRESHOLD)
         {
-            Drag_Id ++;
+            Drag_Id++;
             IsDragging = true;
 
             int cnt = TouchDown_Components.Count;

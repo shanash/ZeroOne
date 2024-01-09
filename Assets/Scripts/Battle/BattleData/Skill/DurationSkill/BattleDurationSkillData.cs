@@ -58,7 +58,8 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
     {
         Skill_Effect = effect;
     }
-    public void SetBattleSendData(BATTLE_SEND_DATA data) { 
+    public void SetBattleSendData(BATTLE_SEND_DATA data)
+    {
         Send_Data = data;
         Send_Data.Duration_Effect_Type = Send_Data.Duration.GetDurationEffectType();
     }
@@ -80,7 +81,7 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
     /// 0보다 클 경우 지정 시간만큼만 이펙트 유지<br/>
     /// </summary>
     /// <returns>이펙트의 지속 시간</returns>
-    public virtual double GetEffectDuration() {  return 0; }
+    public virtual double GetEffectDuration() { return 0; }
 
     /// <summary>
     /// 적용 확률
@@ -113,12 +114,12 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
     /// 3 : ATTACK (공격 횟수 제한)
     /// </summary>
     /// <returns>지속성 방식 타입 반환</returns>
-    public virtual PERSISTENCE_TYPE GetPersistenceType() {  return PERSISTENCE_TYPE.NONE; }
+    public virtual PERSISTENCE_TYPE GetPersistenceType() { return PERSISTENCE_TYPE.NONE; }
     /// <summary>
     /// 종료 이펙트를 사용하는지 여부 반환
     /// </summary>
     /// <returns></returns>
-    public bool IsUseFinishEffect() {  return Finish_Onetime_Effect_Data_List.Count > 0; }
+    public bool IsUseFinishEffect() { return Finish_Onetime_Effect_Data_List.Count > 0; }
 
     /// <summary>
     /// 반복 주기를 사용하는지 여부 
@@ -128,9 +129,9 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
     {
         return false;
     }
-    
-    protected virtual double GetRepeatInterval() {  return 0; }
-    
+
+    protected virtual double GetRepeatInterval() { return 0; }
+
     /// <summary>
     /// 반복 효과 일회성 스킬 데이터 반환
     /// </summary>
@@ -141,7 +142,7 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
     /// </summary>
     /// <returns></returns>
     public List<BattleOnetimeSkillData> GetFinishOnetimeSkillDataList() { return Finish_Onetime_Effect_Data_List; }
-    
+
 
     public virtual DURATION_CALC_RESULT_TYPE CalcDuration_V2(float dt)
     {
@@ -186,7 +187,7 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
         return result;
     }
 
-    
+
 
     public virtual bool CalcEtcPersistenceCount(PERSISTENCE_TYPE ptype)
     {
@@ -228,7 +229,7 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
         return is_throwing;
     }
 
-    public virtual void ExecSkill(BATTLE_SEND_DATA data) 
+    public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {
         Send_Data = data;
         Send_Data.Duration_Effect_Type = Send_Data.Duration.GetDurationEffectType();

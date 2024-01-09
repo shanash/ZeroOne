@@ -188,7 +188,7 @@ public class SpeechBalloon : MonoBehaviour, IPoolableComponent
                 break;
         }
 
-        _RectTransform.sizeDelta = text_ui_size 
+        _RectTransform.sizeDelta = text_ui_size
             + new Vector2(_Balloon_Image.sprite.border.w + _Balloon_Image.sprite.border.y, _Balloon_Image.sprite.border.x + _Balloon_Image.sprite.border.z)
             + (_Tail_Image.sprite.rect.size - new Vector2(BALLOON_LINE_THICKNESS, BALLOON_LINE_THICKNESS)) * 2;
     }
@@ -244,7 +244,7 @@ public class SpeechBalloon : MonoBehaviour, IPoolableComponent
         balloon_rt.anchorMin = Vector2.zero;
         balloon_rt.anchorMax = Vector2.one;
         balloon_rt.pivot = new Vector2(0.5f, 0.5f);
-        balloon_rt.sizeDelta = (- _Tail_Image.sprite.rect.size + new Vector2(BALLOON_LINE_THICKNESS, BALLOON_LINE_THICKNESS)) * 2;
+        balloon_rt.sizeDelta = (-_Tail_Image.sprite.rect.size + new Vector2(BALLOON_LINE_THICKNESS, BALLOON_LINE_THICKNESS)) * 2;
     }
 
     /// <summary>

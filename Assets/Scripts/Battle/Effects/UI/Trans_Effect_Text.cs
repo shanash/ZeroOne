@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -48,7 +46,7 @@ public class Trans_Effect_Text : EffectBase
         return trans_name;
     }
 
-    
+
 
     private void Update()
     {

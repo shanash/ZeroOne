@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 
@@ -17,7 +15,7 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     public int Wave { get; protected set; } = 0;
 
-    public BattleDungeonData(GAME_TYPE gtype) {  Game_Type = gtype; }
+    public BattleDungeonData(GAME_TYPE gtype) { Game_Type = gtype; }
     /// <summary>
     /// 던전 정보 세팅
     /// </summary>
@@ -57,14 +55,14 @@ public class BattleDungeonData : BattleDataBase
 
     public virtual void GetMonsterPrefabsPath(ref List<string> path) { }
 
-    public virtual object GetWaveData() {  return null; }
+    public virtual object GetWaveData() { return null; }
 
     /// <summary>
     /// NPC의 스킬에 사용될 이펙트 프리팹 경로들을 가져온다
     /// </summary>
     /// <param name="npc"></param>
     /// <param name="list"></param>
-    protected void GetNpcSkillEffectPrefabPath(Npc_Data npc, ref List<string> list) 
+    protected void GetNpcSkillEffectPrefabPath(Npc_Data npc, ref List<string> list)
     {
         var m = MasterDataManager.Instance;
         List<Npc_Skill_Data> skill_list = new List<Npc_Skill_Data>();

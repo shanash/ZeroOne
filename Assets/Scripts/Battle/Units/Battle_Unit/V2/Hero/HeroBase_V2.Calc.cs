@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public partial class HeroBase_V2 : UnitBase_V2
 {
     /// <summary>
@@ -98,5 +94,5 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Vampire_Point = Unit_Data.GetVampirePoint();
     }
-    
+
 }

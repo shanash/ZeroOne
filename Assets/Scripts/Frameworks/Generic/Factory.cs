@@ -81,6 +81,7 @@ namespace FluffyDuck.Util
         /// <returns></returns>
         public static T Instantiate<T>(params object[] args) where T : class, IProduct
         {
+            Debug.Log("Check For Instantiate Gap".WithColorTag(Color.white));
             T instance = null;
             try
             {

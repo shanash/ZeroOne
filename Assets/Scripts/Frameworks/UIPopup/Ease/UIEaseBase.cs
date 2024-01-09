@@ -1,6 +1,5 @@
 using FluffyDuck.Util;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,7 +44,7 @@ namespace FluffyDuck.UI
 
         [SerializeField, Tooltip("Ease Data List")]
         protected List<UIEaseData> Ease_Data_List;
-        
+
 
         /// <summary>
         /// 기본 지속시간

@@ -9,7 +9,7 @@ public class UserMemorialData : UserDataBase
 
     public int Lobby_Choice_Number { get; protected set; } = 0;
 
-    public bool Is_Choice_Lobby { get; protected set; }  = false;
+    public bool Is_Choice_Lobby { get; protected set; } = false;
 
     /// <summary>
     /// 임시 지정번호

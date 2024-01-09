@@ -1,5 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +17,7 @@ public class StageProceedingManager : MonoBehaviour
     [SerializeField, Tooltip("Stage Test Slider")]
     Slider Stage_Test_Slider;
 
-    
+
     /// <summary>
     /// 사용중인 깃발 노드 리스트
     /// </summary>

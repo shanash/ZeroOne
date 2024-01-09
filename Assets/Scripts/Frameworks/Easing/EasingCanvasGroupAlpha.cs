@@ -12,7 +12,7 @@ public class EasingCanvasGroupAlpha : EasingFade
 
     EasingAlphaData Alpha_Data;
 
-    float Origin_Alpha = 0; 
+    float Origin_Alpha = 0;
     /// <summary>
     /// Easing을 이용하여 알파 변경
     /// </summary>

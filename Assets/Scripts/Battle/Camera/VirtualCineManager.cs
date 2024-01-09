@@ -1,7 +1,5 @@
 using Cinemachine;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class VirtualCineManager : MonoBehaviour, IEventTrigger
@@ -13,7 +11,7 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
 
     [SerializeField, Tooltip("Camera Brain")]
     CinemachineBrain Brain_Cam;
-    
+
     [SerializeField, Tooltip("Stage Camera")]
     CinemachineVirtualCamera Stage_Cam;
     [SerializeField, Tooltip("Character Camera")]
@@ -25,7 +23,7 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     [SerializeField, Tooltip("Target Group Camera")]
     CinemachineVirtualCamera Target_Group_Cam;
 
-   
+
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
 
     void Start()
@@ -67,12 +65,12 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
             pos.y = 70f;
             pos.z = -41f;
         }
-        else if(angle == 45f)
+        else if (angle == 45f)
         {
             pos.y = 59f;
             pos.z = -60f;
         }
-        else if(angle == 30f)
+        else if (angle == 30f)
         {
             pos.y = 43f;
             pos.z = -75f;
@@ -123,7 +121,7 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         Brain_Cam.m_DefaultBlend.m_Time = 1f;
         Target_Group_Cam.Priority = FOCUS_PRIORITY;
     }
-    
+
     public void ReleaseGroupView()
     {
         Target_Group_Cam.Priority = RELEASE_PRIORITY;

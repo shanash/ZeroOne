@@ -1,6 +1,5 @@
 using FluffyDuck.Util;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -157,7 +156,7 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-    
+
 
     /// <summary>
     /// Right 팀 최초 포지션 설정
@@ -208,7 +207,7 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-    
+
 
     /// <summary>
     /// 스토리 모드 몬스터 스폰
@@ -245,7 +244,7 @@ public partial class TeamManager_V2 : IDisposable
 
     }
 
-    
+
     /// <summary>
     /// 멤버 추가
     /// </summary>
@@ -293,7 +292,7 @@ public partial class TeamManager_V2 : IDisposable
         list.Sort((a, b) => a.GetDistanceFromCenter(center).CompareTo(b.GetDistanceFromCenter(center)));
         return list;
     }
-    
+
     /// <summary>
     /// 팀원들 웨이브 종료시 체력 회복 요청
     /// </summary>
@@ -301,7 +300,7 @@ public partial class TeamManager_V2 : IDisposable
     {
         Used_Members.ForEach(x => x.WaveEndRecoveryLife());
     }
-    
+
     /// <summary>
     /// 팀원 전체의 상태를 변경하기 위한 함수
     /// </summary>

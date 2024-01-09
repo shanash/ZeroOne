@@ -11,7 +11,7 @@ public class UserHeroDeckMountData : UserDataBase
     public bool Is_Leader { get; protected set; } = false;
 
     UserHeroData User_Hero_Data;
-    
+
 
     public UserHeroDeckMountData()
         : base()
@@ -21,7 +21,7 @@ public class UserHeroDeckMountData : UserDataBase
 
     protected override void Reset()
     {
-        
+
     }
 
     protected override void Destroy()

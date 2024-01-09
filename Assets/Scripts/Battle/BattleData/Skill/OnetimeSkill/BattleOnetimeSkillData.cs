@@ -1,7 +1,6 @@
 
 
 using System;
-using System.Diagnostics;
 
 public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Util.Factory.IProduct
 {
@@ -14,7 +13,7 @@ public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Uti
     public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
 
     public virtual double GetEffectDuration() { return 0; }
-    
+
     /// <summary>
     /// 날아가는 발사체인지, 타겟에서 즉시 발생하는 이펙트인지 여부 반환
     /// </summary>
@@ -43,7 +42,7 @@ public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Uti
         return is_throwing;
     }
 
-    public virtual void ExecSkill(BATTLE_SEND_DATA data) 
+    public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {
     }
 

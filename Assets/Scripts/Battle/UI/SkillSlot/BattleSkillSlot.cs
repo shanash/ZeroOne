@@ -1,10 +1,7 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public enum SKILL_SLOT_EVENT_TYPE
@@ -60,7 +57,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
         var battle_unit = Hero.GetBattleUnitData();
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(battle_unit.GetUnitID(), battle_unit.GetUnitNum());
-        
+
         UpdateSkillSlot();
     }
 
@@ -117,7 +114,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             });
         }
     }
-    
+
     /// <summary>
     /// 영웅 SD에서 스킬 슬롯에 이벤트를 전달할 경우 사용
     /// </summary>
@@ -219,6 +216,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         {
             return;
         }
-        
+
     }
 }

@@ -1,10 +1,8 @@
 using Cysharp.Text;
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PartySelectInfo : MonoBehaviour
@@ -35,7 +33,7 @@ public class PartySelectInfo : MonoBehaviour
     //  todo [skill list]
 
     UserHeroData User_Data;
-    
+
     public void SetPlayerCharacterID(int pc_id, int pc_num)
     {
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);

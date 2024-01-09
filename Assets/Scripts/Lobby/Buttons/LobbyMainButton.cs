@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +24,7 @@ public class LobbyMainButton : UIButtonBase
     {
         Lock_Icon.gameObject.SetActive(!Is_Temp_Open);
         Badge.gameObject.SetActive(false);
-        
+
         Group.alpha = Is_Temp_Open ? 1f : 0.5f;
     }
 }

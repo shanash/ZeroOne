@@ -1,11 +1,11 @@
-using UnityEngine;
 using FluffyDuck.Addressable;
-using UnityEngine.UI;
-using TMPro;
-using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 using FluffyDuck.Util;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Addressable 예시를 위해 만든 에셋 다운로드 스크립트
@@ -19,7 +19,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
     [SerializeField]
     Slider _UI_Progress = null;
 
-    protected override bool _Is_DontDestroyOnLoad {  get { return false; } }
+    protected override bool _Is_DontDestroyOnLoad { get { return false; } }
 
     public static string Start_Scene_Name;
 

@@ -1,5 +1,4 @@
 using FluffyDuck.Util;
-using Spine.Unity;
 using Spine.Unity.Examples;
 using System.Collections;
 using UnityEngine;
@@ -94,5 +93,5 @@ public class UnitRenderTexture : SkeletonRenderTexture
     }
 
 
-    
+
 }

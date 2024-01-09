@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStateSystem<B, U> {
+public class GameStateSystem<B, U>
+{
 
     private B BattleMng;
     private U UiMng;
@@ -100,7 +100,7 @@ public class GameStateSystem<B, U> {
         {
             Queue_States.Enqueue(trans);
         }
-        
+
     }
 
     void RealChangeState(GAME_STATES trans)

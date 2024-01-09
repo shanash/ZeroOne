@@ -19,5 +19,5 @@ public class LobbyCharacterListData : InfiniteScrollData
     {
         return Memorial_List;
     }
-        
+
 }

@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
@@ -18,8 +16,8 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     protected virtual void OnAwake() { }
     protected virtual void InitStates()
     {
-        FSM = new UnitStateSystem<UnitBase_V2, BattleManager_V2, BattleUIManager_V2> ();
-        
+        FSM = new UnitStateSystem<UnitBase_V2, BattleManager_V2, BattleUIManager_V2>();
+
     }
 
     public virtual void Lazy_Init(BattleManager_V2 mng, BattleUIManager_V2 ui, UNIT_STATES trans)
@@ -28,7 +26,7 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
         UI_Mng = ui;
         if (FSM == null)
         {
-            InitStates ();
+            InitStates();
         }
         FSM.Lazy_Init_Setting(this, mng, ui, trans);
     }
@@ -168,12 +166,12 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     public virtual void UnitStateBindExit() { }
 
 
-    public virtual void UnitStatePauseBegin() 
+    public virtual void UnitStatePauseBegin()
     {
         OnPause();
     }
     public virtual void UnitStatePause() { }
-    public virtual void UnitStatePauseExit() 
+    public virtual void UnitStatePauseExit()
     {
         OnResume();
     }

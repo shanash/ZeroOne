@@ -1,6 +1,3 @@
-
-using System.Linq;
-
 public class BattlePcDurationSkillData : BattleDurationSkillData
 {
     protected Player_Character_Skill_Duration_Data Data;
@@ -116,7 +113,7 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
     {
         return Data.value;
     }
-    
+
     public override DURATION_CALC_RESULT_TYPE CalcDuration_V2(float dt)
     {
         var result = base.CalcDuration_V2(dt);

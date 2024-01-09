@@ -1,5 +1,4 @@
 using FluffyDuck.Util;
-using LitJson;
 
 public class UserHeroData : UserDataBase
 {
@@ -84,7 +83,7 @@ public class UserHeroData : UserDataBase
     {
         return (float)Battle_Data.approach;
     }
-    
+
     public bool IsEquals(UserHeroData ud)
     {
         return IsEquals(ud.GetPlayerCharacterID(), ud.Player_Character_Num);
@@ -130,7 +129,7 @@ public class UserHeroData : UserDataBase
     public override LitJson.JsonData Serialized()
     {
         var json = new LitJson.JsonData();
-        
+
         json[NODE_PLAYER_CHARACTER_ID] = GetPlayerCharacterID();
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
         json[NODE_LEVEL] = GetLevel();
@@ -138,7 +137,7 @@ public class UserHeroData : UserDataBase
         json[NODE_STAR_GRADE] = GetStarGrade();
         json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
-        
+
         return json;
     }
 

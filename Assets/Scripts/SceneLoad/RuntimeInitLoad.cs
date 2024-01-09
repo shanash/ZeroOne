@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class RuntimeInitLoad
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void BeforeSetup() 
+    static void BeforeSetup()
     {
         SceneLoad.Start_Scene_Name = SceneManager.GetActiveScene().name;
         SceneManager.LoadSceneAsync(GameDefine.SCENE_TITLE);

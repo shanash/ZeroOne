@@ -1,10 +1,9 @@
+using Cysharp.Text;
+using FluffyDuck.Util;
+using Spine;
 using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
-using Cysharp.Text;
-using Spine;
-using System;
-using FluffyDuck.Util;
 using UnityEngine.Rendering;
 
 public enum SD_BODY_TYPE
@@ -120,8 +119,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 보유 에너지
     /// </summary>
     public int Energy_Value { get; protected set; }
-    
-    
+
+
     /// <summary>
     /// 리더/보스 여부
     /// </summary>
@@ -183,7 +182,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
-    
+
 
     public virtual void SetBattleUnitDataID(params int[] unit_ids)
     {
@@ -201,14 +200,14 @@ public partial class HeroBase_V2 : UnitBase_V2
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
     }
-    
+
 
     public void SetDeckOrder(int order)
     {
         Deck_Order = order;
     }
 
-    
+
     /// <summary>
     /// 체력 바 추가
     /// </summary>
@@ -240,9 +239,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
 
-    
 
-    
+
+
     /// <summary>
     /// 스켈레톤(스파인) 이벤트 리스너 등록
     /// </summary>
@@ -268,7 +267,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 스파인 애니메이션 동작 완료시 호출되는 리스너
     /// </summary>
     /// <param name="entry"></param>
-    protected virtual void SpineAnimationComplete(TrackEntry entry) 
+    protected virtual void SpineAnimationComplete(TrackEntry entry)
     {
         string animation_name = entry.Animation.Name;
 
@@ -310,7 +309,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="evt"></param>
-    protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt) 
+    protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
     {
         string animation_name = entry.Animation.Name;
         string evt_name = evt.Data.Name;
@@ -342,7 +341,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         Team_Type = Team_Mng.Team_Type;
     }
-  
+
     /// <summary>
     /// 스켈레톤 알파값 수정
     /// </summary>
@@ -383,7 +382,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Skeleton.AnimationState.AddAnimation(track, anim_name, loop, 0);
     }
-    
+
     /// <summary>
     /// 동작 플레이 타입
     /// </summary>
@@ -421,14 +420,14 @@ public partial class HeroBase_V2 : UnitBase_V2
                 break;
         }
     }
-    
-    
+
+
 
     /// <summary>
     /// 가장 가까운 적을 찾는다.
     /// 공격하기 위함이 아닌, 단지 사거리를 유지하기 위해서
     /// </summary>
-    protected virtual void FindApproachTargets() 
+    protected virtual void FindApproachTargets()
     {
         float distance = GetApproachDistance();
         Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
@@ -437,11 +436,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 각 스킬에 지정되어 있는 타겟 찾기
     /// </summary>
     /// <param name="skill"></param>
-    protected virtual void FindTargets(BattleSkillData skill) 
+    protected virtual void FindTargets(BattleSkillData skill)
     {
         Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Normal_Attack_Target);
     }
-    
+
 
     /// <summary>
     /// 현재 스켈레톤 애니메이션의 모든 트랙을 반환
@@ -562,7 +561,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     for (int d = 0; d < dur_cnt; d++)
                     {
                         var duration = duration_list[d];
-                        
+
                         string effect_path = duration.GetEffectPrefab();
                         if (string.IsNullOrEmpty(effect_path))
                         {
@@ -595,7 +594,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 {
                     PROJECTILE_TYPE ptype = skill.GetProjectileType();
                     var target_trans = target.GetBodyPositionByProjectileType(ptype);
-                    
+
                     var target_pos = target_trans.position;
                     if (skill.IsThrowingNode())
                     {
@@ -618,7 +617,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             }
         }
 
-        
+
     }
 
 
@@ -670,7 +669,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             }
             Used_Battle_Duration_Data_List.Clear();
         }
-        
+
     }
 
     public override void Spawned()
@@ -685,9 +684,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         if (Render_Texture.quad != null)
         {
-            
+
         }
-        
+
         if (Utility == null)
         {
             Utility = GetComponent<SkeletonUtility>();
@@ -732,10 +731,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             AddLifeRecovery(vampire_hp);
         }
-        
+
     }
 
-   
+
     /// <summary>
     /// 적에게서 데미지를 받는다.
     /// </summary>
@@ -792,7 +791,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             Life -= last_damage;
         }
-        
+
         if (Life <= 0)
         {
             Life = 0;
@@ -841,7 +840,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         AddLifeRecovery(recovery_hp);
     }
 
-   
+
 
     protected void AddSpawnEffectText(string path, Transform target, object data, float duration)
     {
@@ -859,7 +858,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void OnUpdate(float dt)
     {
         base.OnUpdate(dt);
-        
+
         lock (Effect_Queue_Lock)
         {
             if (Effect_Queue_Data_List.Count > 0)
@@ -874,7 +873,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     Effect_Queue_Interval = 0.1f;
                 }
-                
+
             }
         }
     }
@@ -891,7 +890,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         effect.StartParticle(edata.Duration);
     }
 
-    
+
     /// <summary>
     /// 지속성 효과 추가(확률에 따라 적용됨)
     /// </summary>
@@ -949,7 +948,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 }
                 Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
-            
+
         }
         else
         {
@@ -1143,7 +1142,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-   
+
 
     /// <summary>
     /// 지속성 효과의 지속성 방식 타입 갱신<br/>
@@ -1157,7 +1156,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        
+
         lock (Duration_Lock)
         {
             int cnt = Used_Battle_Duration_Data_List.Count;
@@ -1189,7 +1188,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
         }
-        
+
     }
     /// <summary>
     /// Left Team 이동<br/>
@@ -1273,7 +1272,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         UnitTriggerExit(other);
     }
 
-    protected virtual void UnitTriggerEnter(Collider other) 
+    protected virtual void UnitTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
         {
@@ -1288,7 +1287,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             }
         }
     }
-    protected virtual void UnitTriggerExit(Collider other) 
+    protected virtual void UnitTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
         {

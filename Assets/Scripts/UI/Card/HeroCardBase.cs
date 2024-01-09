@@ -1,12 +1,9 @@
 using FluffyDuck.Util;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
 public class HeroCardBase : MonoBehaviour, IPoolableComponent
@@ -82,7 +79,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         var m = MasterDataManager.Instance;
         Data = m.Get_PlayerCharacterData(hero_data_id);
         Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
-        
+
         UpdateCardBase();
     }
 
@@ -94,8 +91,8 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         }
 
         //  icon
-        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) => 
-        { 
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) =>
+        {
             Hero_Icon_Image.sprite = spr;
         });
     }
@@ -157,7 +154,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        
+
         TouchUp?.Invoke(eventData);
 
     }

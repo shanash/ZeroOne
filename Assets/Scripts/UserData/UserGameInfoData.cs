@@ -1,7 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class UserGameInfoData : UserDataBase
 {
@@ -22,7 +19,7 @@ public class UserGameInfoData : UserDataBase
 
     protected override void Destroy()
     {
-        
+
     }
 
     protected override void InitSecureVars()
@@ -39,7 +36,7 @@ public class UserGameInfoData : UserDataBase
 
     protected override void InitMasterData()
     {
-        
+
     }
 
     public int GetLevel()

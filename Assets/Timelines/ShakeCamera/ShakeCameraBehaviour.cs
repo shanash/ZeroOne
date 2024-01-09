@@ -65,7 +65,7 @@ public class ShakeCameraBehaviour : PlayableBehaviour
     /// <param name="playerData">track 앞쪽에 입력되어 있는 data</param>
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        VirtualCineManager virtualCineManager = playerData as VirtualCineManager;   
+        VirtualCineManager virtualCineManager = playerData as VirtualCineManager;
 
         if (!virtualCineManager)
             return;

@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ItemCharacterPieceData : ItemDataBase
 {
     protected Character_Piece_Data Data;

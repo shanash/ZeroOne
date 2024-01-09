@@ -16,7 +16,7 @@ public class BattlePcOnetimeSkillData : BattleOnetimeSkillData
         var m = MasterDataManager.Instance;
         Data = m.Get_PlayerCharacterSkillOnetimeData(skill_onetime_id);
     }
-    
+
     public override object GetOnetimeSkillData()
     {
         return Data;

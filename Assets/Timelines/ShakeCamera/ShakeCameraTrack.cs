@@ -16,6 +16,6 @@ public class ShakeCameraTrack : TrackAsset
             shakeCameraClip.ClipPassthrough = clip;
         }
 
-        return ScriptPlayable<ShakeCameraMixerBehaviour>.Create (graph, inputCount);
+        return ScriptPlayable<ShakeCameraMixerBehaviour>.Create(graph, inputCount);
     }
 }

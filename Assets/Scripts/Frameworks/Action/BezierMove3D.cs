@@ -1,5 +1,3 @@
-using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,7 +122,7 @@ namespace FluffyDuck.Util
                     Bezier_Points[i] = CalcBezierPoints(pos_list[i], distance);
                 }
             }
-            
+
             this.transform.position = Bezier_Points[0];
 
             Is_Move = true;

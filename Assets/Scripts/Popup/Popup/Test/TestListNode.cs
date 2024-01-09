@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,7 +15,7 @@ public class TestListNode : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     Vector2 Press_Scale = new Vector2(0.95f, 0.95f);
 
-    
+
     public void OnPointerDown(PointerEventData eventData)
     {
         Box_Rect.localScale = Press_Scale;
@@ -39,7 +37,7 @@ public class TestListNode : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     }
     public void Despawned()
     {
-        
+
     }
 
 }

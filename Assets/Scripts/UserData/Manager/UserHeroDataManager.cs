@@ -1,9 +1,5 @@
-using FluffyDuck.Util;
 using LitJson;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class UserHeroDataManager : ManagerBase
 {
@@ -14,7 +10,7 @@ public class UserHeroDataManager : ManagerBase
     {
     }
 
-    
+
 
     protected override void Destroy()
     {
@@ -38,7 +34,7 @@ public class UserHeroDataManager : ManagerBase
     void DummyDataSettting()
     {
         var m = MasterDataManager.Instance;
-        List<Player_Character_Data> pc_data_list = new List<Player_Character_Data> ();
+        List<Player_Character_Data> pc_data_list = new List<Player_Character_Data>();
         m.Get_PlayerCharacterDataList(ref pc_data_list);
         int hero_data_num = 1;
         int cnt = pc_data_list.Count;
@@ -122,7 +118,7 @@ public class UserHeroDataManager : ManagerBase
                 for (int i = 0; i < cnt; i++)
                 {
                     var jdata = arr[i];
-                    
+
                     int player_character_id = 0;
                     int player_character_num = 0;
                     if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num))

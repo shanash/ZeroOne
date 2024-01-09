@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChildUnitBillBoard : MonoBehaviour
@@ -24,7 +22,7 @@ public class ChildUnitBillBoard : MonoBehaviour
     void Update()
     {
         int cnt = this.transform.childCount;
-        
+
         for (int i = 0; i < cnt; i++)
         {
             Transform tran = this.transform.GetChild(i);

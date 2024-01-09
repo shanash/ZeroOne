@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -61,5 +60,5 @@ public class EventTriggerClip : PlayableAsset, ITimelineClipAsset
     {
         _Template.SetEventTriggerObject(trigger_obj);
     }
-    
+
 }

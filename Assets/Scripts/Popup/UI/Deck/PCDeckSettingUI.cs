@@ -48,7 +48,7 @@ public class PCDeckSettingUI : PopupBase
         {
             CheckPopupUsePrefabs();
         }
-        
+
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ public class PCDeckSettingUI : PopupBase
         Deck_Mng.SetSlotCardChoiceCallback(DeckSlotCardChoiceCallback);
     }
 
-   
+
 
     public override void UpdatePopup()
     {
@@ -191,7 +191,7 @@ public class PCDeckSettingUI : PopupBase
 
             Deck_Mng.UpdateUserDeckUpdate();
             hero.UpdateCardNode();
-            
+
         }
         user_deck_mng.Save();
     }

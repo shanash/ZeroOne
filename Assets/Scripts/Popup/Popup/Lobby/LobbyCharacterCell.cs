@@ -1,5 +1,4 @@
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class LobbyCharacterCell : InfiniteScrollItem
         base.UpdateData(scrollData);
 
         var data = (LobbyCharacterListData)scrollData;
-        
+
         var memorial_list = data.GetUserMemorialDataList();
         int cnt = Cell_Items.Count;
         for (int i = 0; i < cnt; i++)
@@ -32,5 +31,5 @@ public class LobbyCharacterCell : InfiniteScrollItem
         }
     }
 
-    
+
 }

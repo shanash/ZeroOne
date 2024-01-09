@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ItemStaminaPotionData : ItemDataBase
 {
     protected Sta_Potion_Data Data;

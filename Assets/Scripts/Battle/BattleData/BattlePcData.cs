@@ -1,7 +1,3 @@
-
-
-using Unity.VisualScripting;
-
 public class BattlePcData : BattleUnitData
 {
     Player_Character_Data Data;
@@ -203,5 +199,5 @@ public class BattlePcData : BattleUnitData
     {
         return NPC_TYPE.NONE;
     }
-    
+
 }

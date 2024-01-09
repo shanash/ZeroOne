@@ -1,12 +1,11 @@
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 [RequireComponent(typeof(RendererSortingZ))]
-[RequireComponent (typeof(SortingGroup))]
+[RequireComponent(typeof(SortingGroup))]
 [RequireComponent(typeof(EffectFollowingComponent))]
 public class SkillEffectBase : EffectBase
 {
@@ -205,7 +204,7 @@ public class SkillEffectBase : EffectBase
             }
 
         }
-        
+
     }
 
     /// <summary>
@@ -248,13 +247,13 @@ public class SkillEffectBase : EffectBase
                 else
                 {
                     effect.StartParticle(target_trans, eff_dur, eff_dur == 0);
-                    
+
                 }
-                
+
             }
         }
 
-        
+
     }
 
 
@@ -263,6 +262,6 @@ public class SkillEffectBase : EffectBase
         base.Spawned();
         Send_Data.Reset();
     }
-    
+
 
 }

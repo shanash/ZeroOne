@@ -152,7 +152,7 @@ public class UserDeckData : UserDataBase
         var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.GetPlayerCharacterID() && x.Player_Character_Num == hero.Player_Character_Num);
         if (found != null)
         {
-            
+
             Deck_Heroes.Remove(found);
             if (found.Is_Leader)
             {

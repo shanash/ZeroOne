@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class LobbyCharacterCellItem : MonoBehaviour
@@ -59,7 +56,7 @@ public class LobbyCharacterCellItem : MonoBehaviour
 
     }
 
-    
+
 
     public void SetClickMemorialCallback(System.Action<UserMemorialData> cb)
     {

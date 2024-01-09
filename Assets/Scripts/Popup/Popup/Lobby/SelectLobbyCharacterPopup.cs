@@ -1,8 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
-using FluffyDuck.Util;
 using Gpm.Ui;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -23,7 +21,7 @@ public class SelectLobbyCharacterPopup : PopupBase
     [SerializeField, Tooltip("Character List View")]
     InfiniteScroll Character_List_View;
 
-    
+
     protected override void ShowPopupAniEndCallback()
     {
         FixedUpdatePopup();
@@ -98,7 +96,7 @@ public class SelectLobbyCharacterPopup : PopupBase
             UpdatePopup();
         }
     }
-    
+
     public override void HidePopup(System.Action cb = null)
     {
         if (cb == null)
@@ -109,7 +107,7 @@ public class SelectLobbyCharacterPopup : PopupBase
         {
             base.HidePopup(cb);
         }
-        
+
     }
     /// <summary>
     /// 로비 메모리얼 순서 롤백(취소)
@@ -150,6 +148,6 @@ public class SelectLobbyCharacterPopup : PopupBase
 
     public void OnClickToggleCheck()
     {
-        
+
     }
 }

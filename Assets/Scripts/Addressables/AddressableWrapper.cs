@@ -6,7 +6,7 @@ namespace FluffyDuck.Addressable
     public class AddressableWrapper
     {
         public static bool isTest = true;
-        
+
         /// <summary>
         /// TODO: 이후에 코드값으로 Addressables Profiles에서 참조해도 괜찮지 않을까?
         /// </summary>
@@ -30,7 +30,7 @@ namespace FluffyDuck.Addressable
 
         public static int Data_Version
         {
-            get;set;
+            get; set;
         }
 
 #if UNITY_EDITOR

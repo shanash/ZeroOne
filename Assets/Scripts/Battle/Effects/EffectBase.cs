@@ -28,7 +28,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     protected float Delta;
     protected float Duration;
-    
+
     public virtual void MoveTarget(Transform target, float duration)
     {
         Target_Transform = target;
@@ -71,7 +71,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Loop = loop;
     }
 
-    
+
 
     public void SetFinishCallback(System.Action<EffectBase> cb)
     {
@@ -83,7 +83,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Factory = fac;
     }
 
-    public void SetLoop(bool loop) {  this.Is_Loop = loop; }
+    public void SetLoop(bool loop) { this.Is_Loop = loop; }
 
     public virtual void UnusedEffect()
     {
@@ -108,7 +108,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         return null;
     }
 
-    public virtual void OnPuase() 
+    public virtual void OnPuase()
     {
         Is_Action = false;
         if (Particle_Effect != null)
@@ -126,7 +126,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         }
     }
 
-    public virtual void OnResume() 
+    public virtual void OnResume()
     {
         Is_Action = true;
         if (Particle_Effect != null)
@@ -143,17 +143,17 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
             }
         }
     }
-    
+
     public virtual void Spawned()
     {
-        
+
         Is_Action = false;
         Is_Loop = false;
     }
     public virtual void Despawned()
     {
-        
+
     }
 
-    
+
 }

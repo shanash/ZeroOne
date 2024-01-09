@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -19,7 +16,7 @@ namespace FluffyDuck.Util
         }
 
         protected EasingFunction.Ease EaseFade = EasingFunction.Ease.EaseInOutBack;
-        
+
         protected float AnimationDuration = 0f;
 
         protected float PreDelayTime = 1f;
@@ -56,7 +53,7 @@ namespace FluffyDuck.Util
                 case FADE_STATES.ANIMATION:
                     Delta_Time += Time.deltaTime;
                     OnFadeUpdate(Mathf.Clamp01(Delta_Time / AnimationDuration));
-                    
+
                     if (Delta_Time > AnimationDuration)
                     {
                         Delta_Time = 0f;
@@ -83,7 +80,7 @@ namespace FluffyDuck.Util
                     {
                         ChangeStates(FADE_STATES.NONE);
                     }
-                    
+
                     break;
             }
         }
@@ -193,6 +190,6 @@ namespace FluffyDuck.Util
         }
     }
 
-    
+
 
 }

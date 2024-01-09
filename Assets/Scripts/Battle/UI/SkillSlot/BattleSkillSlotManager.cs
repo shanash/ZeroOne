@@ -1,7 +1,5 @@
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class BattleSkillSlotManager : MonoBehaviour
@@ -46,5 +44,5 @@ public class BattleSkillSlotManager : MonoBehaviour
         Used_Battle_Skill_Slots.Clear();
     }
 
-   
+
 }

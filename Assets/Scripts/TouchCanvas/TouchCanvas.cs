@@ -1,11 +1,8 @@
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class TouchCanvas : MonoBehaviour
 {
@@ -182,7 +179,7 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     /// <param name="drag_delta"></param>
     /// <param name="position"></param>
-    void OnDragEnd(Vector2 position) 
+    void OnDragEnd(Vector2 position)
     {
         //  혹시 남아있을 수 있는 터치 이펙트를 모두 찾아서 드래그를 종료시켜준다.
         if (Used_Touch_Effects.Exists(x => x.IsDragging()))
@@ -201,7 +198,7 @@ public class TouchCanvas : MonoBehaviour
         Used_Touch_Effects.Remove(node);
         GameObjectPoolManager.Instance.UnusedGameObject(node.gameObject);
     }
-    
+
     /// <summary>
     /// 이펙트 노드 소환
     /// </summary>

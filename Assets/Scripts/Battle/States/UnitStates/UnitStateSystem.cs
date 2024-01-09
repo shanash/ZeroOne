@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class UnitStateSystem<N, B, U> : StateSystemBase<UNIT_STATES>
     where N : class
     where B : class

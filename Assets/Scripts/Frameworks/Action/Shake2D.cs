@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Shake2D : MonoBehaviour
@@ -30,7 +29,7 @@ public class Shake2D : MonoBehaviour
 
         Shake_Coroutine = null;
         yield break;
-        
+
     }
 
 }

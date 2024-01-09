@@ -89,7 +89,7 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
         return Data.repeat_interval;
     }
 
-    
+
 
     public override double GetRate()
     {
@@ -117,7 +117,7 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
     {
         return Data.value;
     }
-    
+
 
     public override DURATION_CALC_RESULT_TYPE CalcDuration_V2(float dt)
     {

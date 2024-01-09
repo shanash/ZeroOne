@@ -1,7 +1,5 @@
 using FluffyDuck.Util;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,7 +14,7 @@ public class EasingScaler : EasingFade
     Vector3 OriginLocalScale = Vector3.one;
 
     Vector2 ScaleData = Vector2.zero;
-    
+
     private void Awake()
     {
         SaveOriginScale();

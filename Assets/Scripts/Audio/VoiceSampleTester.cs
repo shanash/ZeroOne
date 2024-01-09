@@ -1,11 +1,7 @@
-using Cysharp.Text;
 using Spine;
 using Spine.Unity;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class VoiceSampleTester : MonoBehaviour
@@ -20,7 +16,7 @@ public class VoiceSampleTester : MonoBehaviour
     [SerializeField, Tooltip("Audio Clip Paths")]
     List<string> Voice_Clip_Paths;
 
-    
+
     readonly int LAUGH_TRACK = 16;
 
 
@@ -61,7 +57,7 @@ public class VoiceSampleTester : MonoBehaviour
         AudioManager.Instance.VoiceVolume = Volume_Slider.value;
     }
 
-   
+
     public void OnClickVoiceTest(int vidx)
     {
         string clip_key = Voice_Clip_Paths[vidx];
@@ -127,7 +123,7 @@ public class VoiceSampleTester : MonoBehaviour
     //{
     //    int qsamples = 1024;
     //    Audio.GetOutputData(sample_data, channel);
-        
+
     //    float sum = 0;
     //    for (int i = 0; i < sample_data.Length; i++)
     //    {

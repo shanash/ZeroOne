@@ -90,7 +90,7 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
         Effect_Weight_Index = 0;
     }
 
-  
+
     #region Getter
     public override BattleSkillData GetExecuableSkillData(string evt_name)
     {

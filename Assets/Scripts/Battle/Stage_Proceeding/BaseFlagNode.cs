@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -23,5 +21,5 @@ public class BaseFlagNode : MonoBehaviour
 
     public FLAG_TYPE GetFlagType() { return Flag_Type; }
 
-    
+
 }

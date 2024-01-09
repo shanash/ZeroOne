@@ -1,7 +1,5 @@
 using Cysharp.Text;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class BattleSkillGroup : BattleDataBase
 {
@@ -27,7 +25,7 @@ public class BattleSkillGroup : BattleDataBase
     /// 스킬 리스트 반환
     /// </summary>
     /// <returns></returns>
-    public List<BattleSkillData> GetBattleSkillDataList() { return Battle_Skill_Data_List;}
+    public List<BattleSkillData> GetBattleSkillDataList() { return Battle_Skill_Data_List; }
 
     /// <summary>
     /// 스킬 오더 설정
@@ -39,13 +37,13 @@ public class BattleSkillGroup : BattleDataBase
     /// 첫번째 스킬 가져오기
     /// </summary>
     /// <returns></returns>
-    public virtual BattleSkillData GetFirstSkillData() 
+    public virtual BattleSkillData GetFirstSkillData()
     {
         if (Battle_Skill_Data_List.Count > 0)
         {
             return Battle_Skill_Data_List[0];
         }
-        return null; 
+        return null;
     }
 
     /// <summary>
@@ -70,8 +68,8 @@ public class BattleSkillGroup : BattleDataBase
     /// 첫번째 스킬의 경우 선쿨타임이 없음
     /// </summary>
     /// <param name="is_first"></param>
-    public void SetFirstSkill(bool is_first) 
-    { 
+    public void SetFirstSkill(bool is_first)
+    {
         Is_First_Skill = is_first;
         if (Is_First_Skill)
         {
@@ -118,7 +116,7 @@ public class BattleSkillGroup : BattleDataBase
         //    skill.ExecSkill(caster, target);
         //}
     }
-    
+
     /// <summary>
     /// 스킬 그룹 내의 모든 스킬을 실행
     /// 모든 타겟에 적용

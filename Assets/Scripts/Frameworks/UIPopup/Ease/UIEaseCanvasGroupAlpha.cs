@@ -1,8 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CanvasGroup))]
@@ -39,7 +37,7 @@ public class UIEaseCanvasGroupAlpha : UIEaseBase
         base.StartMove(mtype, cb);
     }
 
- 
+
     protected override void OnFadeUpdate(float weight)
     {
         if (EaseFade == EasingFunction.Ease.NotUse)

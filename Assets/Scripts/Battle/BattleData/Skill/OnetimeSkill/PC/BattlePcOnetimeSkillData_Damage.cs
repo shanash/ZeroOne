@@ -64,7 +64,7 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
             send_data.Damage = Math.Truncate(damage);
             t.AddDamage(send_data);
         }
-        
+
     }
-    
+
 }

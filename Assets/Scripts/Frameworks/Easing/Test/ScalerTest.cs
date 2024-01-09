@@ -1,6 +1,4 @@
 using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,7 +21,7 @@ public class ScalerTest : MonoBehaviour, IPointerClickHandler
         {
             Ease_Type = FluffyDuck.Util.EasingFunction.Ease.EaseInQuad;
         }
-        
+
         Fade?.SetEasing(Ease_Type, 0, 0.5f);
         int t = (int)Ease_Type;
         if (t % 2 == 0)
@@ -34,7 +32,7 @@ public class ScalerTest : MonoBehaviour, IPointerClickHandler
         {
             Fade?.StartEasing(-Vector2.one);
         }
-        
+
         Easing_Name.text = Ease_Type.ToString();
     }
 

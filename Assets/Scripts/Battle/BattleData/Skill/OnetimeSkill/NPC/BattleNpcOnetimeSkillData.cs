@@ -1,6 +1,3 @@
-
-using FluffyDuck.Util;
-
 public class BattleNpcOnetimeSkillData : BattleOnetimeSkillData
 {
     protected Npc_Skill_Onetime_Data Data;

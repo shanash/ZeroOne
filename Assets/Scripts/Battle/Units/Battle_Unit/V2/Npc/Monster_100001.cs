@@ -1,21 +1,16 @@
-using Spine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class Monster_100001 : MonsterBase_V2
 {
 
 
     #region States
 
-  
+
 
     public override void UnitStateMoveIn()
     {
         MoveRightTeam();
     }
-    
+
 
     public override void UnitStateMove()
     {
@@ -24,7 +19,7 @@ public class Monster_100001 : MonsterBase_V2
 
     }
 
-    
+
     public override void UnitStateAttack01Begin()
     {
 

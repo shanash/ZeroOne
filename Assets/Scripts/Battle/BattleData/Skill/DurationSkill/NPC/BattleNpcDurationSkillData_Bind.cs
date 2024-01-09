@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class BattleNpcDurationSkillData_Bind : BattleNpcDurationSkillData
 {
     BattleNpcDurationSkillData_Bind() { }

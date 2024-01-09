@@ -31,7 +31,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// <summary>
     /// 1회성 스킬 효과 데이터 리스트
     /// </summary>
-    protected List<BattleOnetimeSkillData> Onetime_Skill_List = new List<BattleOnetimeSkillData> ();
+    protected List<BattleOnetimeSkillData> Onetime_Skill_List = new List<BattleOnetimeSkillData>();
 
     /// <summary>
     /// 세컨 타겟용 1회성 스킬 효과 데이터 리스트
@@ -48,9 +48,9 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// </summary>
     protected List<BattleDurationSkillData> Second_Target_Duration_Skill_List = new List<BattleDurationSkillData>();
 
-    public BattleSkillData(UNIT_SKILL_TYPE stype) {  Unit_Skill_Type = stype; }
+    public BattleSkillData(UNIT_SKILL_TYPE stype) { Unit_Skill_Type = stype; }
 
-    public virtual void ExecSkill(BATTLE_SEND_DATA data) 
+    public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {
         //  onetime skill
         int cnt = Onetime_Skill_List.Count;
@@ -98,7 +98,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
         return is_throwing;
     }
 
-   
+
 
     protected void AddOnetimeSkillData(BattleOnetimeSkillData onetime)
     {
@@ -184,16 +184,16 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 투사체의 발사 속도
     /// </summary>
     /// <returns></returns>
-    public virtual double GetProjectileSpeed() {  return 0; }
+    public virtual double GetProjectileSpeed() { return 0; }
 
     public virtual TARGET_TYPE GetTargetType() { return TARGET_TYPE.MY_TEAM; }
     public virtual TARGET_RULE_TYPE GetTargetRuleType() { return TARGET_RULE_TYPE.RANDOM; }
 
 
-    public virtual int GetTargetOrder() {  return 0; }
+    public virtual int GetTargetOrder() { return 0; }
     public virtual int GetTargetCount() { return 0; }
 
-    public virtual float GetTargetRange() {  return 0; }
+    public virtual float GetTargetRange() { return 0; }
 
     /// <summary>
     /// 세컨 타겟 룰
@@ -218,7 +218,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     {
         Effect_Weight_Index = weight_index;
     }
-    
+
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋

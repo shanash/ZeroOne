@@ -1,9 +1,5 @@
-using FluffyDuck.Util;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public partial class TeamManager_V2
 {
@@ -28,7 +24,7 @@ public partial class TeamManager_V2
             {
                 targets.RemoveRange(max_count, targets.Count - max_count);
             }
-            
+
         }
     }
 
@@ -57,7 +53,7 @@ public partial class TeamManager_V2
     /// <param name="center"></param>
     /// <param name="range"></param>
     /// <param name="targets"></param>
-    void FindSecondTargetRuleAroundSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets) 
+    void FindSecondTargetRuleAroundSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets)
     {
         var members = GetAliveMembers();
         members.Remove(center); //  본인 제외
@@ -79,7 +75,7 @@ public partial class TeamManager_V2
     /// <param name="range"></param>
     /// <param name="max_count"></param>
     /// <param name="targets"></param>
-    void FindSecondTargetRuleBackSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets) 
+    void FindSecondTargetRuleBackSplash(HeroBase_V2 center, float range, int max_count, ref List<HeroBase_V2> targets)
     {
         List<HeroBase_V2> temp_list = new List<HeroBase_V2>();
         var members = GetAliveMembers();
@@ -589,7 +585,7 @@ public partial class TeamManager_V2
             else
             {
                 target = members.First();
-                
+
             }
             if (target == null)
             {

@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class BattleDungeon_StoryStageData : BattleDungeonData
 {
@@ -11,7 +8,7 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
 
     public BattleDungeon_StoryStageData() : base(GAME_TYPE.STORY_MODE) { }
 
-    
+
 
     public override void SetDungeonID(int dungeon_id)
     {
@@ -33,7 +30,7 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     {
         return Wave_Datas[Wave];
     }
-    
+
     public override int GetMaxWaveCount()
     {
         return Wave_Datas.Count;
@@ -84,5 +81,5 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         }
     }
 
-    
+
 }

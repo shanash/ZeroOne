@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PartyCharacterListItem : MonoBehaviour
 {
@@ -54,7 +51,7 @@ public class PartyCharacterListItem : MonoBehaviour
         Card.SetStarGrade(User_Data.GetStarGrade());
         //  role type
         Card.SetRoleType(User_Data.GetPlayerCharacterData().role_type);
-        
+
     }
 
     public void SetClickHeroCallback(System.Action<PartyCharacterListItem> callback)

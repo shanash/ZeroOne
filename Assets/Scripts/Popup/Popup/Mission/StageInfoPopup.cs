@@ -1,7 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -58,7 +57,7 @@ public class StageInfoPopup : PopupBase
             HidePopup();
             return;
         }
-        
+
         Stage = (Stage_Data)data[0];
 
         User_Data = GameData.Instance.GetUserStoryStageDataManager().FindUserStoryStageData(Stage.stage_id);
@@ -98,7 +97,7 @@ public class StageInfoPopup : PopupBase
             FixedUpdatePopup();
             UpdatePopup();
         }
-        
+
     }
 
     protected override void HidePopupAniEndCallback()
@@ -211,7 +210,7 @@ public class StageInfoPopup : PopupBase
 
     public override void UpdatePopup()
     {
-        
+
     }
 
     void MarkStarPoint(int pt)
@@ -291,6 +290,6 @@ public class StageInfoPopup : PopupBase
         ClearNpcList();
         ClearRewardItemList();
 
-        
+
     }
 }

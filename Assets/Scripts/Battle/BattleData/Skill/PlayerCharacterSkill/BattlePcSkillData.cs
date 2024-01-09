@@ -1,9 +1,7 @@
-using FluffyDuck.Util;
-
 public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProduct
 {
     Player_Character_Skill_Data Data;
-    
+
     protected BattlePcSkillData() : base(UNIT_SKILL_TYPE.PC_SKILL) { }
 
     protected virtual bool Initialize(Player_Character_Skill_Data data)

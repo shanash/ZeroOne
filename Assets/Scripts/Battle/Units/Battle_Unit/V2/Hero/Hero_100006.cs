@@ -1,15 +1,9 @@
-using Spine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 public class Hero_100006 : HeroBase_V2
 {
 
 
     #region States
-    
+
 
     public override void UnitStateMoveIn()
     {
@@ -28,7 +22,7 @@ public class Hero_100006 : HeroBase_V2
         MoveLeftTeam();
         base.UnitStateMove();
     }
-    
+
 
     public override void UnitStateAttack01Begin()
     {
