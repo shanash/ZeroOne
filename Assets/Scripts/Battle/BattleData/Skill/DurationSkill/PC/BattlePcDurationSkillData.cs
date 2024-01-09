@@ -5,9 +5,30 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
 {
     protected Player_Character_Skill_Duration_Data Data;
 
+    protected BattlePcDurationSkillData() { }
+
+    protected virtual bool Initialize(Player_Character_Skill_Duration_Data data)
+    {
+        SetDurationSkillData(data);
+        return true;
+    }
+
+    bool Initialize(Player_Character_Skill_Duration_Data data, BATTLE_SEND_DATA send_data, SkillEffectBase skill_effect)
+    {
+        SetDurationSkillData(data);
+        SetBattleSendData(send_data);
+        SetSkillEffect(skill_effect);
+        return true;
+    }
+
     public override void SetDurationSkillDataID(int skill_duration_id)
     {
-        Data = MasterDataManager.Instance.Get_PlayerCharacterSkillDurationData(skill_duration_id);
+        SetDurationSkillData(MasterDataManager.Instance.Get_PlayerCharacterSkillDurationData(skill_duration_id));
+    }
+
+    void SetDurationSkillData(Player_Character_Skill_Duration_Data data)
+    {
+        Data = data;
         Duration = (float)Data.time;
         Effect_Count = Data.count;
         Repeat_Interval = (float)Data.repeat_interval;
@@ -30,10 +51,10 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
 
         //  종료시 적용되는 일회성 효과
         cnt = Data.finish_pc_onetime_ids.Length;
-        for(int i = 0;i < cnt; i++)
+        for (int i = 0; i < cnt; i++)
         {
             int onetime_id = Data.finish_pc_onetime_ids[i];
-            if(onetime_id == 0)
+            if (onetime_id == 0)
             {
                 continue;
             }
@@ -95,7 +116,6 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
     {
         return Data.value;
     }
-
     
     public override DURATION_CALC_RESULT_TYPE CalcDuration_V2(float dt)
     {
@@ -106,6 +126,7 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
         }
         return result;
     }
+
     /// <summary>
     /// 지속성 효과의 지속성 방식 타입 갱신<br/>
     /// 시간 지속성 방식은 <see cref="CalcDurationSkillTime"/>을 사용한다.<br/>
@@ -129,10 +150,6 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
 
     public override object Clone()
     {
-        var clone = new BattlePcDurationSkillData();
-        clone.SetDurationSkillDataID(Data.pc_skill_duration_id);
-        clone.SetBattleSendData(Send_Data.Clone());
-        clone.SetSkillEffect(Skill_Effect);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattlePcDurationSkillData>(Data, Send_Data.Clone(), Skill_Effect);
     }
 }

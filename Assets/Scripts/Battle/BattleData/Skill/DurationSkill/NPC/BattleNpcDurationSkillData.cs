@@ -3,9 +3,30 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
 {
     protected Npc_Skill_Duration_Data Data;
 
+    protected BattleNpcDurationSkillData() { }
+
+    protected virtual bool Initialize(Npc_Skill_Duration_Data data)
+    {
+        SetDurationSkillData(data);
+        return true;
+    }
+
+    bool Initialize(Npc_Skill_Duration_Data data, BATTLE_SEND_DATA send_data, SkillEffectBase skill_effect)
+    {
+        SetDurationSkillData(data);
+        SetBattleSendData(send_data);
+        SetSkillEffect(skill_effect);
+        return true;
+    }
+
     public override void SetDurationSkillDataID(int skill_duration_id)
     {
-        Data = MasterDataManager.Instance.Get_NpcSkillDurationData(skill_duration_id);
+        SetDurationSkillData(MasterDataManager.Instance.Get_NpcSkillDurationData(skill_duration_id));
+    }
+
+    void SetDurationSkillData(Npc_Skill_Duration_Data data)
+    {
+        Data = data;
         Duration = Data.time;
         Effect_Count = Data.count;
         Repeat_Interval = Data.repeat_interval;
@@ -18,9 +39,9 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
         for (int i = 0; i < cnt; i++)
         {
             int onetime_id = Data.repeat_npc_onetime_ids[i];
-            if (onetime_id == 0) 
+            if (onetime_id == 0)
             {
-                continue; 
+                continue;
             }
             var onetime = BattleSkillDataFactory.CreateNpcBattleOnetimeSkillData(onetime_id);
             Repeat_Onetime_Effect_Data_List.Add(onetime);
@@ -131,10 +152,6 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
 
     public override object Clone()
     {
-        var clone = new BattleNpcDurationSkillData();
-        clone.SetDurationSkillDataID(Data.npc_skill_duration_id);
-        clone.SetBattleSendData(Send_Data.Clone());
-        clone.SetSkillEffect(Skill_Effect);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattleNpcDurationSkillData>(Data, Send_Data.Clone(), Skill_Effect);
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BattleNpcDurationSkillData_Poison : BattleNpcDurationSkillData
 {
+    BattleNpcDurationSkillData_Poison() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         base.ExecSkill(data);

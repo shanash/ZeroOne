@@ -1,17 +1,26 @@
+using FluffyDuck.Util;
 
-
-using System.Diagnostics;
-
-public class BattlePcSkillData : BattleSkillData
+public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProduct
 {
     Player_Character_Skill_Data Data;
-    public BattlePcSkillData() : base(UNIT_SKILL_TYPE.PC_SKILL) { }
+    
+    protected BattlePcSkillData() : base(UNIT_SKILL_TYPE.PC_SKILL) { }
+
+    protected virtual bool Initialize(Player_Character_Skill_Data data)
+    {
+        SetSkillData(data);
+        return true;
+    }
 
     public override void SetSkillID(int skill_id)
     {
         var m = MasterDataManager.Instance;
-        Data = m.Get_PlayerCharacterSkillData(skill_id);
+        SetSkillData(m.Get_PlayerCharacterSkillData(skill_id));
+    }
 
+    void SetSkillData(Player_Character_Skill_Data data)
+    {
+        Data = data;
         //  pc onetime skill
         int len = 0;
         if (Data.onetime_effect_ids != null)
@@ -24,6 +33,7 @@ public class BattlePcSkillData : BattleSkillData
                 {
                     continue;
                 }
+
                 var battle_onetime = BattleSkillDataFactory.CreatePcBattleOnetimeSkillData(onetime_skill_id);
                 if (battle_onetime != null)
                 {
@@ -87,8 +97,8 @@ public class BattlePcSkillData : BattleSkillData
                 }
             }
         }
-        
-        
+
+
         //  스킬 효과 비중 횟수
         Max_Effect_Count = Data.effect_weight.Length;
         Effect_Weight_Index = 0;
@@ -210,8 +220,6 @@ public class BattlePcSkillData : BattleSkillData
 
     public override object Clone()
     {
-        var clone = new BattlePcSkillData();
-        clone.SetSkillID(Data.pc_skill_id);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattlePcSkillData>(Data);
     }
 }

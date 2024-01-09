@@ -23,8 +23,7 @@ public class BattleNpcSkillGroup : BattleSkillGroup
         for (int i = 0; i < cnt; i++)
         {
             var skill = skill_list[i];
-            var battle_skill = new BattleNpcSkillData();
-            battle_skill.SetSkillID(skill.npc_skill_id);
+            var battle_skill = FluffyDuck.Util.Factory.Instantiate<BattleNpcSkillData>(skill);
             Battle_Skill_Data_List.Add(battle_skill);
         }
 

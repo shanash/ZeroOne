@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 
-public class BattleOnetimeSkillData : BattleDataBase, ICloneable
+public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Util.Factory.IProduct
 {
     public virtual void SetOnetimeSkillDataID(int skill_onetime_id) { }
 

@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
 {
+    BattlePcOnetimeSkillData_LifeRecovery() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         double recovery_hp = 0;

@@ -2,6 +2,15 @@
 public class BattlePcOnetimeSkillData : BattleOnetimeSkillData
 {
     protected Player_Character_Skill_Onetime_Data Data;
+
+    protected BattlePcOnetimeSkillData() { }
+
+    protected virtual bool Initialize(Player_Character_Skill_Onetime_Data data)
+    {
+        Data = data;
+        return true;
+    }
+
     public override void SetOnetimeSkillDataID(int skill_onetime_id)
     {
         var m = MasterDataManager.Instance;
@@ -34,8 +43,6 @@ public class BattlePcOnetimeSkillData : BattleOnetimeSkillData
 
     public override object Clone()
     {
-        var clone = new BattlePcOnetimeSkillData();
-        clone.SetOnetimeSkillDataID(Data.pc_skill_onetime_id);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattlePcOnetimeSkillData>(Data);
     }
 }

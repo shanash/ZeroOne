@@ -1,4 +1,8 @@
 
+using FluffyDuck.Util;
+using System;
+using UnityEngine;
+
 public class BattleSkillDataFactory
 {
     /// <summary>
@@ -9,26 +13,7 @@ public class BattleSkillDataFactory
     public static BattleOnetimeSkillData CreatePcBattleOnetimeSkillData(int pc_onetime_skill_id)
     {
         var data = MasterDataManager.Instance.Get_PlayerCharacterSkillOnetimeData(pc_onetime_skill_id);
-        if (data != null)
-        {
-            BattleOnetimeSkillData onetime_skill = null;
-            switch (data.onetime_effect_type)
-            {
-                case ONETIME_EFFECT_TYPE.DAMAGE:
-                    onetime_skill = new BattlePcOnetimeSkillData_Damage();
-                    break;
-                case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
-                    onetime_skill = new BattlePcOnetimeSkillData_LifeRecovery();
-                    break;
-                default:
-                    UnityEngine.Debug.Assert(false);
-                    onetime_skill = new BattlePcOnetimeSkillData();
-                    break;
-            }
-            onetime_skill?.SetOnetimeSkillDataID(pc_onetime_skill_id);
-            return onetime_skill;
-        }
-        return null;
+        return data != null ? CreateBattleOnetimeSkillData(data) : null;
     }
 
     /// <summary>
@@ -39,27 +24,7 @@ public class BattleSkillDataFactory
     public static BattleOnetimeSkillData CreateNpcBattleOnetimeSkillData(int npc_onetime_skill_id)
     {
         var data = MasterDataManager.Instance.Get_NpcSkillOnetimeData(npc_onetime_skill_id);
-        if (data != null)
-        {
-            BattleOnetimeSkillData onetime_skill = null;
-            switch (data.onetime_effect_type)
-            {
-                case ONETIME_EFFECT_TYPE.DAMAGE:
-                    onetime_skill = new BattleNpcOnetimeSkillData_Damage();
-                    break;
-                case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
-                    onetime_skill = new BattleNpcOnetimeSkillData_LifeRecovery();
-                    break;
-                    
-                default:
-                    onetime_skill = new BattleNpcOnetimeSkillData();
-                    UnityEngine.Debug.Assert(false);
-                    break;
-            }
-            onetime_skill?.SetOnetimeSkillDataID(npc_onetime_skill_id);
-            return onetime_skill;
-        }
-        return null;
+        return data != null ? CreateBattleOnetimeSkillData(data) : null;
     }
 
     /// <summary>
@@ -70,50 +35,7 @@ public class BattleSkillDataFactory
     public static BattleDurationSkillData CreatePcBattleDurationSkillData(int pc_duration_skill_id)
     {
         var data = MasterDataManager.Instance.Get_PlayerCharacterSkillDurationData(pc_duration_skill_id);
-        if (data != null)
-        {
-            BattleDurationSkillData duration_skill = null;
-            switch (data.duration_effect_type)
-            {
-                case DURATION_EFFECT_TYPE.DAMAGE_REDUCE:
-                    duration_skill = new BattlePcDurationSkillData_DamageReduce();
-                    break;
-                case DURATION_EFFECT_TYPE.POISON:
-                    duration_skill = new BattlePcDurationSkillData_Poison();
-                    break;
-                case DURATION_EFFECT_TYPE.STUN:
-                    duration_skill = new BattlePcDurationSkillData_Stun();
-                    break;
-                case DURATION_EFFECT_TYPE.SILENCE:
-                    duration_skill = new BattlePcDurationSkillData_Silence();
-                    break;
-                case DURATION_EFFECT_TYPE.BIND:
-                    duration_skill = new BattlePcDurationSkillData_Bind();
-                    break;
-                case DURATION_EFFECT_TYPE.FREEZE:
-                    duration_skill = new BattlePcDurationSkillData_Freeze();
-                    break;
-                case DURATION_EFFECT_TYPE.ATK_UP:
-                    duration_skill = new BattlePcDurationSkillData_AttackUp();
-                    break;
-                case DURATION_EFFECT_TYPE.DEF_UP:
-                    duration_skill = new BattlePcDurationSkillData_DefenseUp();
-                    break;
-                case DURATION_EFFECT_TYPE.ATK_DOWN:
-                    duration_skill = new BattlePcDurationSkillData_AttackDown();
-                    break;
-                case DURATION_EFFECT_TYPE.DEF_DOWN:
-                    duration_skill = new BattlePcDurationSkillData_DefenseDown();
-                    break;
-                default:
-                    UnityEngine.Debug.Assert(false);
-                    duration_skill = new BattlePcDurationSkillData();
-                    break;
-            }
-            duration_skill?.SetDurationSkillDataID(pc_duration_skill_id);
-            return duration_skill;
-        }
-        return null;
+        return data != null ? CreateBattleDurationSkillData(data) : null;
     }
 
     /// <summary>
@@ -124,49 +46,124 @@ public class BattleSkillDataFactory
     public static BattleDurationSkillData CreateNpcBattleDurationSkillData(int npc_duration_skill_id)
     {
         var data = MasterDataManager.Instance.Get_NpcSkillDurationData(npc_duration_skill_id);
-        if (data != null)
+        return data != null ? CreateBattleDurationSkillData(data) : null;
+    }
+
+    /// <summary>
+    /// 일회성 효과 스킬데이터 생성
+    /// </summary>
+    /// <param name="data">Json에서 파싱된 PC or NPC 스킬데이터</param>
+    /// <returns>가공한 스킬데이터</returns>
+    static BattleOnetimeSkillData CreateBattleOnetimeSkillData(object data)
+    {
+        Factory.AddTypeMapping<BattleOnetimeSkillData>(objs =>
         {
-            BattleDurationSkillData duration_skill = null;
-            switch (data.duration_effect_type)
+            if (objs[0] is Player_Character_Skill_Onetime_Data pc_skill)
             {
-                case DURATION_EFFECT_TYPE.DAMAGE_REDUCE:
-                    duration_skill = new BattleNpcDurationSkillData_DamageReduce();
-                    break;
-                case DURATION_EFFECT_TYPE.POISON:
-                    duration_skill = new BattleNpcDurationSkillData_Poison();
-                    break;
-                case DURATION_EFFECT_TYPE.STUN:
-                    duration_skill = new BattleNpcDurationSkillData_Stun();
-                    break;
-                case DURATION_EFFECT_TYPE.SILENCE:
-                    duration_skill = new BattleNpcDurationSkillData_Silence();
-                    break;
-                case DURATION_EFFECT_TYPE.BIND:
-                    duration_skill = new BattleNpcDurationSkillData_Bind();
-                    break;
-                case DURATION_EFFECT_TYPE.FREEZE:
-                    duration_skill = new BattleNpcDurationSkillData_Freeze();
-                    break;
-                case DURATION_EFFECT_TYPE.ATK_UP:
-                    duration_skill = new BattleNpcDurationSkillData_AttackUp();
-                    break;
-                case DURATION_EFFECT_TYPE.ATK_DOWN:
-                    duration_skill = new BattleNpcDurationSkillData_AttackDown();
-                    break;
-                case DURATION_EFFECT_TYPE.DEF_UP:
-                    duration_skill = new BattleNpcDurationSkillData_DefenseUp();
-                    break;
-                case DURATION_EFFECT_TYPE.DEF_DOWN:
-                    duration_skill = new BattleNpcDurationSkillData_DefenseDown();
-                    break;
-                default:
-                    UnityEngine.Debug.Assert(false);
-                    duration_skill = new BattleNpcDurationSkillData();
-                    break;
+                switch (pc_skill.onetime_effect_type)
+                {
+                    case ONETIME_EFFECT_TYPE.DAMAGE:
+                        return typeof(BattlePcOnetimeSkillData_Damage);
+                    case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
+                        return typeof(BattlePcOnetimeSkillData_LifeRecovery);
+                    default:
+                        Debug.Assert(false, "PC 일회성 스킬데이터가 정상적이지 않습니다!!!");
+                        return typeof(BattlePcOnetimeSkillData);
+                }
             }
-            duration_skill?.SetDurationSkillDataID(npc_duration_skill_id);
-            return duration_skill;
-        }
-        return null;
+            else if (objs[0] is Npc_Skill_Onetime_Data npc_skill)
+            {
+                switch (npc_skill.onetime_effect_type)
+                {
+                    case ONETIME_EFFECT_TYPE.DAMAGE:
+                        return typeof(BattleNpcOnetimeSkillData_Damage);
+                    case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
+                        return typeof(BattleNpcOnetimeSkillData_LifeRecovery);
+                    default:
+                        Debug.Assert(false, "NPC 일회성 스킬데이터가 정상적이지 않습니다!!!");
+                        return typeof(BattleNpcOnetimeSkillData);
+                }
+            }
+
+            Debug.Assert(false, "Json 파싱된 일회성 스킬데이터가 정상적으로 입력되지 않았습니다!!!");
+            return default(Type);
+        });
+
+        return Factory.Create<BattleOnetimeSkillData>(data);
+    }
+
+    /// <summary>
+    /// 버프 스킬데이터 생성
+    /// </summary>
+    /// <param name="data">Json에서 파싱된 PC or NPC 버프 스킬 데이터</param>
+    /// <returns>가공된 버프 스킬 데이터</returns>
+    static BattleDurationSkillData CreateBattleDurationSkillData(object data)
+    {
+        Factory.AddTypeMapping<BattleDurationSkillData>(objs =>
+        {
+            if (objs[0] is Player_Character_Skill_Duration_Data pc_skill)
+            {
+                switch (pc_skill.duration_effect_type)
+                {
+                    case DURATION_EFFECT_TYPE.DAMAGE_REDUCE:
+                        return typeof(BattlePcDurationSkillData_DamageReduce);
+                    case DURATION_EFFECT_TYPE.POISON:
+                        return typeof(BattlePcDurationSkillData_Poison);
+                    case DURATION_EFFECT_TYPE.STUN:
+                        return typeof(BattlePcDurationSkillData_Stun);
+                    case DURATION_EFFECT_TYPE.SILENCE:
+                        return typeof(BattlePcDurationSkillData_Silence);
+                    case DURATION_EFFECT_TYPE.BIND:
+                        return typeof(BattlePcDurationSkillData_Bind);
+                    case DURATION_EFFECT_TYPE.FREEZE:
+                        return typeof(BattlePcDurationSkillData_Freeze);
+                    case DURATION_EFFECT_TYPE.ATK_UP:
+                        return typeof(BattlePcDurationSkillData_AttackUp);
+                    case DURATION_EFFECT_TYPE.DEF_UP:
+                        return typeof(BattlePcDurationSkillData_DefenseUp);
+                    case DURATION_EFFECT_TYPE.ATK_DOWN:
+                        return typeof(BattlePcDurationSkillData_AttackDown);
+                    case DURATION_EFFECT_TYPE.DEF_DOWN:
+                        return typeof(BattlePcDurationSkillData_DefenseDown);
+                    default:
+                        Debug.Assert(false, "PC 버프 스킬데이터가 정상적이지 않습니다!!!");
+                        return typeof(BattlePcDurationSkillData);
+                }
+            }
+            else if (objs[0] is Npc_Skill_Duration_Data npc_skill)
+            {
+                switch (npc_skill.duration_effect_type)
+                {
+                    case DURATION_EFFECT_TYPE.DAMAGE_REDUCE:
+                        return typeof(BattleNpcDurationSkillData_DamageReduce);
+                    case DURATION_EFFECT_TYPE.POISON:
+                        return typeof(BattleNpcDurationSkillData_Poison);
+                    case DURATION_EFFECT_TYPE.STUN:
+                        return typeof(BattleNpcDurationSkillData_Stun);
+                    case DURATION_EFFECT_TYPE.SILENCE:
+                        return typeof(BattleNpcDurationSkillData_Silence);
+                    case DURATION_EFFECT_TYPE.BIND:
+                        return typeof(BattleNpcDurationSkillData_Bind);
+                    case DURATION_EFFECT_TYPE.FREEZE:
+                        return typeof(BattleNpcDurationSkillData_Freeze);
+                    case DURATION_EFFECT_TYPE.ATK_UP:
+                        return typeof(BattleNpcDurationSkillData_AttackUp);
+                    case DURATION_EFFECT_TYPE.DEF_UP:
+                        return typeof(BattleNpcDurationSkillData_DefenseUp);
+                    case DURATION_EFFECT_TYPE.ATK_DOWN:
+                        return typeof(BattleNpcDurationSkillData_AttackDown);
+                    case DURATION_EFFECT_TYPE.DEF_DOWN:
+                        return typeof(BattleNpcDurationSkillData_DefenseDown);
+                    default:
+                        Debug.Assert(false, "NPC 버프 스킬데이터가 정상적이지 않습니다!!!");
+                        return typeof(BattleNpcDurationSkillData);
+                }
+            }
+
+            Debug.Assert(false, "Json 파싱된 버프 스킬데이터가 정상적으로 입력되지 않았습니다!!!");
+            return default(Type);
+        });
+
+        return Factory.Create<BattleDurationSkillData>(data);
     }
 }

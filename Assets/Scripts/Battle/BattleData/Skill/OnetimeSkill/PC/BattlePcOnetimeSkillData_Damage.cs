@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
 {
+    BattlePcOnetimeSkillData_Damage() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         int weight = data.Skill.GetEffectWeightValue(data.Effect_Weight_Index);

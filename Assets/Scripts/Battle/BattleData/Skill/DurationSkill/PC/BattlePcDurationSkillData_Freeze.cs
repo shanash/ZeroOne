@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BattlePcDurationSkillData_Freeze : BattlePcDurationSkillData
 {
+    BattlePcDurationSkillData_Freeze() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         base.ExecSkill(data);

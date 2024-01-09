@@ -1,15 +1,25 @@
 
-public class BattleNpcSkillData : BattleSkillData
+public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProduct
 {
     Npc_Skill_Data Data;
 
-    public BattleNpcSkillData() : base(UNIT_SKILL_TYPE.NPC_SKILL) { }
+    protected BattleNpcSkillData() : base(UNIT_SKILL_TYPE.NPC_SKILL) { }
+
+    protected virtual bool Initialize(Npc_Skill_Data data)
+    {
+        SetSkillData(data);
+        return true;
+    }
 
     public override void SetSkillID(int skill_id)
     {
         var m = MasterDataManager.Instance;
-        Data = m.Get_NpcSkillData(skill_id);
+        SetSkillData(m.Get_NpcSkillData(skill_id));
+    }
 
+    void SetSkillData(Npc_Skill_Data data)
+    {
+        Data = data;
         //  npc onetime skill
         int len = Data.onetime_effect_ids.Length;
         for (int i = 0; i < len; i++)
@@ -20,7 +30,6 @@ public class BattleNpcSkillData : BattleSkillData
                 continue;
             }
             var battle_onetime = BattleSkillDataFactory.CreateNpcBattleOnetimeSkillData(onetime_skill_id);
-            battle_onetime.SetOnetimeSkillDataID(onetime_skill_id);
             AddOnetimeSkillData(battle_onetime);
         }
 
@@ -194,8 +203,6 @@ public class BattleNpcSkillData : BattleSkillData
 
     public override object Clone()
     {
-        var clone = new BattleNpcSkillData();
-        clone.SetSkillID(Data.npc_skill_id);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattleNpcSkillData>(Data);
     }
 }
