@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MissionGateUI : PopupBase
 {
+
     public void OnClickMainMission()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");

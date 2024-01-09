@@ -1,3 +1,4 @@
+using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ public enum SKILL_SLOT_EVENT_TYPE
     HITTED,                     //  피격
     LIFE_UPDATE,                //  체력 게이지 업데이트
     DURATION_SKILL_ICON_UPDATE, //  지속성 효과 아이콘 업데이트
+
+    DEATH,                      //  죽었을 때
 
 }
 
@@ -42,11 +45,13 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     [SerializeField, Tooltip("Death")]
     RectTransform Death_Box;
 
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
+    [SerializeField, Tooltip("Shaker")]
+    Shake2D Shake;
 
     UserHeroData User_Data;
     HeroBase_V2 Hero;
 
+    Vector2 Tooltip_Upper_Pos = new Vector2(0, 280f);
 
     public void SetHeroBase(HeroBase_V2 hero)
     {
@@ -82,23 +87,41 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         UpdateLifeBar();
     }
 
+
+    /// <summary>
+    /// 아이콘 터치 이벤트.<br/>
+    /// Click / Long Touch 이벤트 사용
+    /// </summary>
+    /// <param name="result"></param>
     void TouchEventCallback(TOUCH_RESULT_TYPE result)
     {
         if (result == TOUCH_RESULT_TYPE.CLICK)
         {
             AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+            if (!Hero.IsAlive())
+            {
+                return;
+            }
             Hero?.SpecialSkillExec();
-
         }
         else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)
         {
             AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
             //  show skill tooltip
-            Debug.Log("Skill Slot Long Touch");
+            Vector2 pos = this.transform.position;
+            pos += Tooltip_Upper_Pos;
+
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", (popup) =>
+            {
+                popup.ShowPopup(0, pos);
+            });
         }
     }
     
-
+    /// <summary>
+    /// 영웅 SD에서 스킬 슬롯에 이벤트를 전달할 경우 사용
+    /// </summary>
+    /// <param name="etype"></param>
     void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
     {
         switch (etype)
@@ -112,6 +135,9 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             case SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE:
                 UpdateDurationSkillIcons();
                 break;
+            case SKILL_SLOT_EVENT_TYPE.DEATH:
+                UpdateDeath();
+                break;
             default:
                 Debug.Assert(false);
                 break;
@@ -122,7 +148,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     void UpdateHitted()
     {
-
+        Shake.Shake(0.3f, 10f, null);
     }
     void UpdateLifeBar()
     {
@@ -135,7 +161,15 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     }
     void UpdateDurationSkillIcons()
     {
+        //  todo
+    }
 
+    void UpdateDeath()
+    {
+        Death_Box.gameObject.SetActive(true);
+        Cooltime_Gauge.gameObject.SetActive(false);
+        Skill_Ready.gameObject.SetActive(false);
+        UpdateLifeBar();
     }
 
 
@@ -165,14 +199,18 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     public override void Spawned()
     {
         base.Spawned();
+        Death_Box.gameObject.SetActive(false);
+        Skill_Ready.gameObject.SetActive(false);
+        Cooltime_Gauge.gameObject.SetActive(false);
+
         CustomUpdateManager.Instance.RegistCustomUpdateComponent(this);
+
     }
 
     public override void Despawned()
     {
         base.Despawned();
         CustomUpdateManager.Instance.DeregistCustomUpdateComponent(this);
-        Hero = null;
     }
 
     public void OnUpdate(float dt)

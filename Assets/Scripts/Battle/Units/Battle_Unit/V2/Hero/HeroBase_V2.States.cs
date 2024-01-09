@@ -140,6 +140,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         RemoveLifeBar();
         ClearDurationSkillDataList();
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.DEATH_01);
+        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DEATH);
     }
 
     public override void UnitStateWinBegin()

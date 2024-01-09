@@ -17,8 +17,6 @@ public class PartyCharacterListItem : MonoBehaviour
 
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
-
     public void SetUserHeroData(UserHeroData ud, GAME_TYPE gtype)
     {
         User_Data = ud;
@@ -68,9 +66,6 @@ public class PartyCharacterListItem : MonoBehaviour
     {
         if (Card != null)
         {
-            //Card.TouchDown += TouchDownCallback;
-            //Card.TouchUp += TouchUpCallback;
-            //Card.Click += ClickCallback;
             Card.AddTouchEventCallback(TouchEventCallback);
         }
     }
@@ -79,9 +74,6 @@ public class PartyCharacterListItem : MonoBehaviour
     {
         if (Card != null)
         {
-            //Card.TouchDown -= TouchDownCallback;
-            //Card.TouchUp -= TouchUpCallback;
-            //Card.Click -= ClickCallback;
             Card.RemoveTouchEventCallback(TouchEventCallback);
         }
     }

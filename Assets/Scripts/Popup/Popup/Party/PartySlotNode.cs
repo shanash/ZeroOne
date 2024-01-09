@@ -21,8 +21,6 @@ public class PartySlotNode : MonoBehaviour
 
     System.Action<PartySlotNode> Click_Callback;
 
-    Vector2 Press_Scale = new Vector2(0.95f, 0.95f);
-
     public void SetUserHeroDeckMountData(UserHeroDeckMountData ud)
     {
         User_Data = ud;
