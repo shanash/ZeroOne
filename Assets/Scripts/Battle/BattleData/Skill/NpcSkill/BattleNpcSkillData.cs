@@ -103,10 +103,15 @@ public class BattleNpcSkillData : BattleSkillData
         return Data;
     }
 
-    public override string GetEffectPrefabPath()
+    public override string GetTriggerEffectPrefabPath()
     {
-        return Data.effect_path;
+        return Data.trigger_effect_path;
     }
+    public override string GetCastEffectPrefabPath()
+    {
+        return Data.cast_effect_path;
+    }
+
     public override PROJECTILE_TYPE GetProjectileType()
     {
         return Data.projectile_type;
@@ -115,7 +120,10 @@ public class BattleNpcSkillData : BattleSkillData
     {
         return Data.effect_duration;
     }
-
+    public override double GetProjectileSpeed()
+    {
+        return Data.projectile_speed;
+    }
     public override int GetEffectWeightValue(int weight_index)
     {
         int weight = 100;

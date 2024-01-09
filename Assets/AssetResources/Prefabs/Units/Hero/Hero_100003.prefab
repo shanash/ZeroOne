@@ -5733,10 +5733,10 @@ GameObject:
   - component: {fileID: 2204837006492046222}
   - component: {fileID: 2671725508148364158}
   - component: {fileID: 950180452907419150}
-  - component: {fileID: 5384460539782269711}
   - component: {fileID: 2027394078249611826}
   - component: {fileID: 5002705820384419032}
   - component: {fileID: 8816374931922001455}
+  - component: {fileID: 2322786060547746684}
   m_Layer: 12
   m_Name: Hero_100003
   m_TagString: Hero
@@ -5754,7 +5754,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4447537072129227564}
@@ -5930,27 +5930,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 100
   m_CollisionDetection: 0
---- !u!114 &5384460539782269711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7398527384412396415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dafc61bc061a7b643a1004c6e8ea7ac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Skeleton: {fileID: 7431480570141930048}
-  Life_Bar_Pos: {fileID: 961353610174853882}
-  Sd_Body_Transforms:
-  - Body_Type: 3
-    Trans: {fileID: 7271205155198806266}
-  - Body_Type: 2
-    Trans: {fileID: 878493846750774613}
-  - Body_Type: 1
-    Trans: {fileID: 70391649803749215}
 --- !u!114 &2027394078249611826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5994,6 +5973,27 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &2322786060547746684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398527384412396415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ef429a8a7f19cc4a8d86883d2184859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Skeleton: {fileID: 7431480570141930048}
+  Life_Bar_Pos: {fileID: 961353610174853882}
+  Sd_Body_Transforms:
+  - Body_Type: 3
+    Trans: {fileID: 7271205155198806266}
+  - Body_Type: 2
+    Trans: {fileID: 878493846750774613}
+  - Body_Type: 1
+    Trans: {fileID: 70391649803749215}
 --- !u!1 &7467486625857937532
 GameObject:
   m_ObjectHideFlags: 0

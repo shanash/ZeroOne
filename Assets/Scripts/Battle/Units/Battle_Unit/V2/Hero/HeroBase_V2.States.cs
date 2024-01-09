@@ -128,12 +128,50 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         CalcDurationSkillTime();
     }
+    public override void UnitStateMoveInBegin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
+    }
 
+    public override void UnitStateMoveBegin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
+    }
     public override void UnitStateMove()
     {
         CalcDurationSkillTime();
     }
 
+    public override void UnitStateWaveRunBegin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
+    }
+    public override void UnitStateWaveRun()
+    {
+        WaveRunLeftTeam();
+        base.UnitStateWaveRun();
+    }
+
+    public override void UnitStateAttackReady01Begin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
+    }
+    public override void UnitStateAttackReady01()
+    {
+        bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(Time.deltaTime);
+        if (is_delay_finish)
+        {
+            FindApproachTargets();
+            if (Normal_Attack_Target.Count == 0)
+            {
+                ChangeState(UNIT_STATES.MOVE);
+                return;
+            }
+            ChangeState(UNIT_STATES.ATTACK_1);
+        }
+
+        base.UnitStateAttackReady01();
+    }
 
     public override void UnitStateDeathBegin()
     {

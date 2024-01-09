@@ -133,11 +133,11 @@ public partial class TeamManager_V2 : IDisposable
     public void LeftTeamPosition()
     {
         int cnt = Used_Members.Count;
-        float size = Camera.main.fieldOfView;
+        float size = 20f;
 
         float offset_z = 0f;
         float offset_x = -size;
-        float interval = 12f;
+        float interval = 2f;
         float position_offset = 0f;
 
         for (int i = 0; i < cnt; i++)
@@ -153,7 +153,7 @@ public partial class TeamManager_V2 : IDisposable
 
             int find_index = same_positions.IndexOf(member);
 
-            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 5));
+            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 2));
         }
     }
 
@@ -165,11 +165,11 @@ public partial class TeamManager_V2 : IDisposable
     public void RightTeamPosition()
     {
         int cnt = Used_Members.Count;
-        float size = Camera.main.fieldOfView;
+        float size = 20f;
 
         float offset_z = 0f;
         float offset_x = size;
-        float interval = 12f;
+        float interval = 2f;
         float position_offset = 0f;
 
         for (int i = 0; i < cnt; i++)
@@ -185,7 +185,7 @@ public partial class TeamManager_V2 : IDisposable
 
             int find_index = same_positions.IndexOf(member);
 
-            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 5));
+            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 2));
         }
 
     }
@@ -424,9 +424,9 @@ public partial class TeamManager_V2 : IDisposable
                 {
                     var pc_skill = skill_list[s];
                     //  pc skill effect
-                    if (!string.IsNullOrEmpty(pc_skill.effect_path) && !list.Contains(pc_skill.effect_path))
+                    if (!string.IsNullOrEmpty(pc_skill.trigger_effect_path) && !list.Contains(pc_skill.trigger_effect_path))
                     {
-                        list.Add(pc_skill.effect_path);
+                        list.Add(pc_skill.trigger_effect_path);
                     }
                     if (pc_skill.onetime_effect_ids != null)
                     {

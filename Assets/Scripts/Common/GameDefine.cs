@@ -44,34 +44,17 @@ public enum HERO_PLAY_ANIMATION_TYPE
     NONE = 0,
     
     PREPARE_01,
-    PREPARE_02,
     
     IDLE_01,
     IDLE_02,
 
-    READY_01,
-    READY_02,
-
-    JUMP_01,
-    JUMP_02,
-
     RUN_01,
-    RUN_02,
-    RUN_03,
-
-    WALK_01,
 
     DAMAGE_01,
     DAMAGE_02,
     DAMAGE_03,
 
-    ATTACK_01,
-    ATTACK_02,
-    ATTACK_03,
-
-    SKILL_01,
-    SKILL_02,
-    SKILL_03,
+    STUN,
 
     DEATH_01,
 

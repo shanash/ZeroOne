@@ -27,14 +27,14 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "hit",
+    "event_name": "shoot",
     "effect_duration": 0.0
   },
   {
     "pc_skill_id": 100002,
     "pc_skill_group_id": 100002,
     "target_type": 0,
-    "target_rule_type": 1,
+    "target_rule_type": 3001,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,
@@ -58,7 +58,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "buff",
+    "event_name": "heal",
     "effect_duration": 0.0
   },
   {
@@ -89,7 +89,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "hit",
+    "event_name": "shoot",
     "effect_duration": 0.0
   },
   {
@@ -293,7 +293,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -313,8 +313,8 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100302,
@@ -325,7 +325,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -345,8 +345,8 @@
       0
     ],
     "event_name": "debuff",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 0.5
+    "effect_duration": 0.5,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
   },
   {
     "pc_skill_id": 100303,
@@ -357,7 +357,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -378,8 +378,8 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100401,
@@ -390,7 +390,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -410,8 +410,8 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100402,
@@ -422,7 +422,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -442,8 +442,8 @@
       0
     ],
     "event_name": "buff",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 0.5
+    "effect_duration": 0.5,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
   },
   {
     "pc_skill_id": 100403,
@@ -454,7 +454,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -474,8 +474,8 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100501,
@@ -486,7 +486,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -506,8 +506,8 @@
       0
     ],
     "event_name": "shoot",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100502,
@@ -518,7 +518,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 2,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -538,8 +538,8 @@
       0
     ],
     "event_name": "debuff",
-    "effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight",
-    "effect_duration": 0.3
+    "effect_duration": 0.3,
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
   },
   {
     "pc_skill_id": 100503,
@@ -550,7 +550,7 @@
     "target_count": 1,
     "target_range": 0.0,
     "projectile_type": 12,
-    "projectile_speed": 0.0,
+    "projectile_speed": 20.0,
     "second_target_rule": 2,
     "max_second_target_count": 0,
     "second_target_range": 10.0,

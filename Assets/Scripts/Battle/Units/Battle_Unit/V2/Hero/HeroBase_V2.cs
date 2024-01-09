@@ -257,6 +257,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
     }
 
+
+
     /// <summary>
     /// 스파인 애니메이션 시작시 호출되는 리스너
     /// </summary>
@@ -278,6 +280,25 @@ public partial class HeroBase_V2 : UnitBase_V2
                 ChangeState(UNIT_STATES.END);
             }
         }
+        else if (state == UNIT_STATES.ATTACK_1)
+        {
+            var skill = GetSkillManager().GetCurrentSkillGroup();
+
+            if (animation_name.Equals(skill.GetSkillActionName()))
+            {
+                GetSkillManager().SetNextSkillPattern();
+                FindApproachTargets();
+                if (Normal_Attack_Target.Count == 0)
+                {
+                    ChangeState(UNIT_STATES.MOVE);
+                }
+                else
+                {
+                    ChangeState(UNIT_STATES.ATTACK_READY_1);
+                }
+                return;
+            }
+        }
     }
     /// <summary>
     /// 스파인 애니메이션 동작 종료시 호출되는 리스너
@@ -289,7 +310,31 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="evt"></param>
-    protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt) { }
+    protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt) 
+    {
+        string animation_name = entry.Animation.Name;
+        string evt_name = evt.Data.Name;
+        UNIT_STATES state = GetCurrentState();
+
+        if (state == UNIT_STATES.ATTACK_1)
+        {
+            var skill = GetSkillManager().GetCurrentSkillGroup();
+
+            if (animation_name.Equals(skill.GetSkillActionName()))
+            {
+                var exec_list = skill.GetExecuableSkillDatas(evt_name);
+                if (exec_list.Count > 0)
+                {
+                    int cnt = exec_list.Count;
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        SkillEffectSpawnV2(exec_list[i]);
+                    }
+                }
+            }
+
+        }
+    }
 
     public void SetTeamManager(TeamManager_V2 mng)
     {
@@ -334,12 +379,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Skeleton.AnimationState.SetAnimation(track, anim_name, loop);
     }
+    protected void AddAnimation(int track, string anim_name, bool loop)
+    {
+        Skeleton.AnimationState.AddAnimation(track, anim_name, loop, 0);
+    }
     
     /// <summary>
     /// 동작 플레이 타입
     /// </summary>
     /// <param name="ani_type"></param>
-    protected void PlayAnimation(HERO_PLAY_ANIMATION_TYPE ani_type)
+    protected virtual void PlayAnimation(HERO_PLAY_ANIMATION_TYPE ani_type)
     {
         switch (ani_type)
         {
@@ -347,29 +396,13 @@ public partial class HeroBase_V2 : UnitBase_V2
                 break;
             case HERO_PLAY_ANIMATION_TYPE.PREPARE_01:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.PREPARE_02:
-                break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_01:
                 PlayAnimation(1, "1_idle", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_02:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.READY_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.READY_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.JUMP_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.JUMP_02:
-                break;
             case HERO_PLAY_ANIMATION_TYPE.RUN_01:
                 PlayAnimation(1, "1_run", true);
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.RUN_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.RUN_03:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.WALK_01:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
                 break;
@@ -377,19 +410,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_03:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_01:
-                PlayAnimation(1, "1_attack_1", false);
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_02:
-                PlayAnimation(1, "1_attack_2", false);
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_03:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_03:
+            case HERO_PLAY_ANIMATION_TYPE.STUN:
+                PlayAnimation(1, "1_stun", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DEATH_01:
                 PlayAnimation(1, "1_death", false);
@@ -458,7 +480,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             dmg.Damage = GetAttackPoint();
             dmg.Effect_Weight_Index = effect_weight_index;
 
-            string skill_effect_prefab = skill.GetEffectPrefabPath();
+            string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
             if (string.IsNullOrEmpty(skill_effect_prefab))
             {
 
@@ -493,7 +515,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Damage = GetAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
-                string skill_effect_prefab = skill.GetEffectPrefabPath();
+                string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
                 //  이펙트가 정의되어 있지 않다면, 즉시 시전 및 트리거 방식으로 적용
                 if (string.IsNullOrEmpty(skill_effect_prefab))
                 {
@@ -519,7 +541,12 @@ public partial class HeroBase_V2 : UnitBase_V2
                         {
                             target_pos.z = this.transform.position.z;
                             effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
-                            effect.MoveTarget(target_trans, (float)onetime.GetEffectDuration());
+
+                            float distance = Vector3.Distance(effect.transform.position, target_pos);
+                            float throwing_duration = distance / (float)skill.GetProjectileSpeed();
+
+                            //effect.MoveTarget(target_trans, (float)onetime.GetEffectDuration());
+                            effect.MoveTarget(target_trans, throwing_duration);
                         }
                         else
                         {
@@ -576,7 +603,12 @@ public partial class HeroBase_V2 : UnitBase_V2
                         effect.SetBattleSendData(dmg);
                         target_pos.z = this.transform.position.z;
                         effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
-                        effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());
+
+                        float distance = Vector3.Distance(transform.position, target_pos);
+                        float throwing_duration = distance / (float)skill.GetProjectileSpeed();
+
+                        //effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());
+                        effect.MoveTarget(target_trans, throwing_duration);
                     }
                     else
                     {

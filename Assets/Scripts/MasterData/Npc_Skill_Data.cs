@@ -85,13 +85,17 @@ public class Npc_Skill_Data : System.IDisposable
 	///	</summary>
 	public string event_name {get; set;}
 	///	<summary>
-	///	이펙트 프리팹
+	///	캐스트 이펙트
 	///	</summary>
-	public string effect_path {get; set;}
+	public string cast_effect_path {get; set;}
 	///	<summary>
 	///	이펙트 지속시간
 	///	</summary>
 	public double effect_duration {get; set;}
+	///	<summary>
+	///	트리거 이펙트 프리팹
+	///	</summary>
+	public string trigger_effect_path {get; set;}
 
 	private bool disposed = false;
 
@@ -107,7 +111,8 @@ public class Npc_Skill_Data : System.IDisposable
 		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
 		max_second_target_count = 0;
 		event_name = string.Empty;
-		effect_path = string.Empty;
+		cast_effect_path = string.Empty;
+		trigger_effect_path = string.Empty;
 	}
 
 	public void Dispose()
@@ -193,8 +198,9 @@ public class Npc_Skill_Data : System.IDisposable
 		}
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();
-		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
+		sb.AppendFormat("[cast_effect_path] = <color=yellow>{0}</color>", cast_effect_path).AppendLine();
 		sb.AppendFormat("[effect_duration] = <color=yellow>{0}</color>", effect_duration).AppendLine();
+		sb.AppendFormat("[trigger_effect_path] = <color=yellow>{0}</color>", trigger_effect_path).AppendLine();
 		return sb.ToString();
 	}
 }

@@ -17,27 +17,11 @@ public class UIHeroBase : UnitBase_V2
                 break;
             case HERO_PLAY_ANIMATION_TYPE.PREPARE_01:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.PREPARE_02:
-                break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_01:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_02:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.READY_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.READY_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.JUMP_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.JUMP_02:
-                break;
             case HERO_PLAY_ANIMATION_TYPE.RUN_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.RUN_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.RUN_03:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.WALK_01:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
                 break;
@@ -45,17 +29,7 @@ public class UIHeroBase : UnitBase_V2
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_03:
                 break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.ATTACK_03:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_01:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_02:
-                break;
-            case HERO_PLAY_ANIMATION_TYPE.SKILL_03:
+            case HERO_PLAY_ANIMATION_TYPE.STUN:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DEATH_01:
                 break;

@@ -92,9 +92,9 @@ public class BattleDungeonData : BattleDataBase
                 {
                     var npc_skill = skill_list[s];
                     //  npc skill effect
-                    if (!string.IsNullOrEmpty(npc_skill.effect_path) && !list.Contains(npc_skill.effect_path))
+                    if (!string.IsNullOrEmpty(npc_skill.trigger_effect_path) && !list.Contains(npc_skill.trigger_effect_path))
                     {
-                        list.Add(npc_skill.effect_path);
+                        list.Add(npc_skill.trigger_effect_path);
                     }
 
                     //  onetime skill list

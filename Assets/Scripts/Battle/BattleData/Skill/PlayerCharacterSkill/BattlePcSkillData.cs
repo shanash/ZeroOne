@@ -116,9 +116,13 @@ public class BattlePcSkillData : BattleSkillData
         return Data;
     }
 
-    public override string GetEffectPrefabPath()
+    public override string GetTriggerEffectPrefabPath()
     {
-        return Data.effect_path;
+        return Data.trigger_effect_path;
+    }
+    public override string GetCastEffectPrefabPath()
+    {
+        return Data.cast_effect_path;
     }
     public override PROJECTILE_TYPE GetProjectileType()
     {
@@ -128,8 +132,11 @@ public class BattlePcSkillData : BattleSkillData
     {
         return Data.effect_duration;
     }
+    public override double GetProjectileSpeed()
+    {
+        return Data.projectile_speed;
+    }
 
-    
     public override TARGET_TYPE GetTargetType()
     {
         return Data.target_type;
