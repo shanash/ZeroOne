@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BattlePcDurationSkillData_DefenseDown : BattlePcDurationSkillData
 {
+    BattlePcDurationSkillData_DefenseDown() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         base.ExecSkill(data);

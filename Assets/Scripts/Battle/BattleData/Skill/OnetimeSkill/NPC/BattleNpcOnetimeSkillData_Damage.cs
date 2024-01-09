@@ -5,6 +5,8 @@ using System;
 
 public class BattleNpcOnetimeSkillData_Damage : BattleNpcOnetimeSkillData
 {
+    BattleNpcOnetimeSkillData_Damage() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         BATTLE_SEND_DATA send_data = data.Clone();

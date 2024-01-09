@@ -1,7 +1,18 @@
 
+using FluffyDuck.Util;
+
 public class BattleNpcOnetimeSkillData : BattleOnetimeSkillData
 {
     protected Npc_Skill_Onetime_Data Data;
+
+    protected BattleNpcOnetimeSkillData() { }
+
+    protected virtual bool Initialize(Npc_Skill_Onetime_Data data)
+    {
+        UnityEngine.Debug.Log("Init NPC".WithColorTag(UnityEngine.Color.red));
+        Data = data;
+        return true;
+    }
 
     public override void SetOnetimeSkillDataID(int skill_onetime_id)
     {
@@ -37,8 +48,6 @@ public class BattleNpcOnetimeSkillData : BattleOnetimeSkillData
 
     public override object Clone()
     {
-        var clone = new BattleNpcOnetimeSkillData();
-        clone.SetOnetimeSkillDataID(Data.npc_skill_onetime_id);
-        return clone;
+        return FluffyDuck.Util.Factory.Instantiate<BattleNpcOnetimeSkillData>(Data);
     }
 }

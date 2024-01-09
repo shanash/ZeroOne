@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class BattleDurationSkillData : BattleDataBase, ICloneable
+public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Util.Factory.IProduct
 {
     /// <summary>
     /// 지속성 효과 1개와, 이펙트는 1:1로 매칭되어야만 한다.
@@ -227,7 +227,6 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable
         }
         return is_throwing;
     }
-
 
     public virtual void ExecSkill(BATTLE_SEND_DATA data) 
     {

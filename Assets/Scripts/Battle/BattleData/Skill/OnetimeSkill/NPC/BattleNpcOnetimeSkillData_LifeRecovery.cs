@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 public class BattleNpcOnetimeSkillData_LifeRecovery : BattleNpcOnetimeSkillData
 {
+    BattleNpcOnetimeSkillData_LifeRecovery() { }
+
     public override void ExecSkill(BATTLE_SEND_DATA data)
     {
         double recovery_hp = 0;
