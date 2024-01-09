@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StageBase : MonoBehaviour
+public class StageBase : MonoBehaviour, FluffyDuck.Util.MonoFactory.IProduct
 {
     public Transform Background_Parent
     {

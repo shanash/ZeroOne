@@ -1,4 +1,3 @@
-using FluffyDuck.Util;
 using System.Reflection;
 using System.Threading.Tasks;
 using System;
@@ -26,7 +25,9 @@ namespace FluffyDuck.Util
     /// </summary>
     public abstract class MonoFactory
     {
-        static T CreateInstance<T>(GameObject obj, params object[] args) where T : MonoBehaviour
+        public interface IProduct { }
+
+        static T CreateInstance<T>(GameObject obj, params object[] args) where T : MonoBehaviour, IProduct
         {
             T instance = obj.GetComponent<T>();
 
@@ -60,7 +61,7 @@ namespace FluffyDuck.Util
             return instance;
         }
 
-        public static void Create<T>(string path, Transform parent, Action<T> cb, params object[] args) where T : MonoBehaviour
+        public static void Create<T>(string path, Transform parent, Action<T> cb, params object[] args) where T : MonoBehaviour, IProduct
         {
             try
             {
@@ -77,7 +78,7 @@ namespace FluffyDuck.Util
             }
         }
 
-        public async static Task<T> CreateAsync<T>(string path, Transform parent, params object[] args) where T : MonoBehaviour
+        public async static Task<T> CreateAsync<T>(string path, Transform parent, params object[] args) where T : MonoBehaviour, IProduct
         {
             try
             {

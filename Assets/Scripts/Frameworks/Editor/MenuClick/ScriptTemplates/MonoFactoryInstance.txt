@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour
+public class #SCRIPTNAME# : MonoBehaviour, FluffyDuck.Util.MonoFactory.IProduct
 {
     // 초기화할때 필요한 파라미터를 Initialize에 추가해주세요
     bool Initialize()

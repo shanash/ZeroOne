@@ -2,7 +2,7 @@ using FluffyDuck.Util;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Producer
+public class Producer : FluffyDuck.Util.Factory.IProduct
 {
     StageBase Stage = null;
     Background Background = null;

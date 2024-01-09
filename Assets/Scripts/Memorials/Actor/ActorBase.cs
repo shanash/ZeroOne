@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider
+public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
 {
     protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
