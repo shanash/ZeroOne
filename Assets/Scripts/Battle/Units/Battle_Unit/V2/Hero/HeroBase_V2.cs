@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public enum SD_BODY_TYPE
-{
-    NONE = 0,
-    HEAD,
-    BODY,
-    FOOT,
-}
+//public enum SD_BODY_TYPE
+//{
+//    NONE = 0,
+//    HEAD,
+//    BODY,
+//    FOOT,
+//}
 
 
 /// <summary>
@@ -565,15 +565,23 @@ public partial class HeroBase_V2 : UnitBase_V2
                         PROJECTILE_TYPE ptype = onetime.GetProjectileType();
                         var target_trans = target.GetBodyPositionByProjectileType(ptype);
                         var target_pos = target_trans.position;
+                        var body_type = skill.GetSDBodyType();
+
+                        Transform this_trans = this.transform;
+                        if (body_type == SD_BODY_TYPE.NONE)
+                        {
+                            this_trans = GetBodyTypeTransform(body_type);
+                        }
+                        
                         if (onetime.IsThrowingNode())
                         {
-                            target_pos.z = this.transform.position.z;
+                            //target_pos.z = this.transform.position.z;
+                            target_pos.z = this_trans.position.z;
                             effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
 
                             float distance = Vector3.Distance(effect.transform.position, target_pos);
                             float throwing_duration = distance / (float)skill.GetProjectileSpeed();
 
-                            //effect.MoveTarget(target_trans, (float)onetime.GetEffectDuration());
                             effect.MoveTarget(target_trans, throwing_duration);
                         }
                         else
@@ -632,7 +640,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                         target_pos.z = this.transform.position.z;
                         effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
 
-                        float distance = Vector3.Distance(transform.position, target_pos);
+                        var body_type = skill.GetSDBodyType();
+                        Transform this_trans = this.transform;
+                        if (body_type == SD_BODY_TYPE.NONE)
+                        {
+                            this_trans = GetBodyTypeTransform(body_type);
+                        }
+
+                        //float distance = Vector3.Distance(transform.position, target_pos);
+                        float distance = Vector3.Distance(this_trans.position, target_pos);
                         float throwing_duration = distance / (float)skill.GetProjectileSpeed();
 
                         //effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());

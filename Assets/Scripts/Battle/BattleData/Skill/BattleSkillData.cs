@@ -28,6 +28,8 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// </summary>
     public UNIT_SKILL_TYPE Unit_Skill_Type { get; protected set; } = UNIT_SKILL_TYPE.NONE;
 
+    
+
     /// <summary>
     /// 1회성 스킬 효과 데이터 리스트
     /// </summary>
@@ -47,6 +49,8 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 세컨 타겟용 지속성 스킬 효과 데이터 리스트
     /// </summary>
     protected List<BattleDurationSkillData> Second_Target_Duration_Skill_List = new List<BattleDurationSkillData>();
+
+
 
     public BattleSkillData(UNIT_SKILL_TYPE stype) { Unit_Skill_Type = stype; }
 
@@ -160,7 +164,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     {
         return Second_Target_Duration_Skill_List;
     }
-
+    
 
     public virtual object GetSkillData() { return null; }
     /// <summary>
@@ -174,7 +178,12 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// <returns></returns>
 
     public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
-    
+    /// <summary>
+    /// 투사체가 시작되는 부분 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual SD_BODY_TYPE GetSDBodyType() { return SD_BODY_TYPE.NONE; }
+
     /// <summary>
     /// 투사체의 발사 속도
     /// </summary>

@@ -716,6 +716,25 @@ public enum CHARGE_TYPE
 }
 
 ///	<summary>
+///	SD 캐릭터의 본 파츠
+///	</summary>
+public enum SD_BODY_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>머리</summary>
+	HEAD = 1,
+	/// <summary>몸(중앙)</summary>
+	BODY = 2,
+	/// <summary>발끝(ROOT)</summary>
+	FOOT = 3,
+	/// <summary>왼손</summary>
+	LEFT_HAND = 4,
+	/// <summary>오른손</summary>
+	RIGHT_HAND = 5,
+}
+
+///	<summary>
 ///	PC or NPC TYPE
 ///	</summary>
 public enum CHARACTER_TYPE

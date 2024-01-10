@@ -86,6 +86,10 @@ public class Player_Character_Skill_Data : System.IDisposable
 	///	</summary>
 	public string event_name {get; set;}
 	///	<summary>
+	///	투사체 시작 위치
+	///	</summary>
+	public SD_BODY_TYPE sd_body_type {get; set;}
+	///	<summary>
 	///	트리거 이펙트 프리팹
 	///	스킬의 이펙트는 트리거 역할을 해줘야 함
 	///	이펙트 패스 정보가 없는 경우는 즉시 스킬을 시전/적용하는 방식이고
@@ -107,6 +111,7 @@ public class Player_Character_Skill_Data : System.IDisposable
 		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
 		max_second_target_count = 0;
 		event_name = string.Empty;
+		sd_body_type = SD_BODY_TYPE.NONE;
 		trigger_effect_path = string.Empty;
 	}
 
@@ -193,6 +198,7 @@ public class Player_Character_Skill_Data : System.IDisposable
 		}
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();
+		sb.AppendFormat("[sd_body_type] = <color=yellow>{0}</color>", sd_body_type).AppendLine();
 		sb.AppendFormat("[trigger_effect_path] = <color=yellow>{0}</color>", trigger_effect_path).AppendLine();
 		return sb.ToString();
 	}

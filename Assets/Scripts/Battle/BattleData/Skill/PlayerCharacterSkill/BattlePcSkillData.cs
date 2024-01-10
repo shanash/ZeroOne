@@ -132,6 +132,10 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     {
         return Data.projectile_type;
     }
+    public override SD_BODY_TYPE GetSDBodyType()
+    {
+        return Data.sd_body_type;
+    }
     public override double GetProjectileSpeed()
     {
         return Data.projectile_speed;
