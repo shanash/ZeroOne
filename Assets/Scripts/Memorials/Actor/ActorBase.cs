@@ -56,6 +56,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
     float Elapsed_Time_For_Mouth_Open = 0;
 
+    bool Is_Quit = false;
+
     // 상태 ID에 기반한 상태 데이터를 가져옵니다
     protected IdleAnimationData Current_State_Data
     {
@@ -79,10 +81,18 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         AddSkeletonEventListener();
     }
 
+    void OnApplicationQuit()
+    {
+        Is_Quit = true;
+    }
+
     void OnDisable()
     {
-        RemoveGestureEventListener();
-        RemoveSkeletonEventListener();
+        if (!Is_Quit)
+        {
+            RemoveGestureEventListener();
+            RemoveSkeletonEventListener();
+        }
     }
 
     void Update()
@@ -618,6 +628,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Current_Mouth_Anim_Name = string.Empty;
         Dragged_Canvas_Position = Vector2.zero;
         Current_Face_Direction = Vector2.zero;
+        Is_Quit = false;
     }
 
     bool GetSkeletonComponents()
