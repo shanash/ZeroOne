@@ -1,11 +1,11 @@
 
 using System;
 
-public class BattleDataBase : IDisposable
+public abstract class BattleDataBase : IDisposable
 {
     protected bool disposed = false;
 
-    public BattleDataBase()
+    protected BattleDataBase()
     {
         Reset();
     }
