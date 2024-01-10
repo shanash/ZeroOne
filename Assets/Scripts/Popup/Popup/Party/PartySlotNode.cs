@@ -40,11 +40,12 @@ public class PartySlotNode : MonoBehaviour
             Card.gameObject.SetActive(false);
             return;
         }
+
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
         Card.gameObject.SetActive(deck.IsExistHeroInDeck(User_Data.Player_Character_ID, User_Data.Player_Character_Num));
 
-        //  card update
+        // card update
         Card.SetHeroDataID(User_Data.Player_Character_ID);
 
         if (User_Hero != null)
@@ -56,7 +57,6 @@ public class PartySlotNode : MonoBehaviour
             //  role type
             Card.SetRoleType(User_Hero.GetPlayerCharacterData().role_type);
         }
-
     }
 
     public void SetSlotCardChoiceCallback(System.Action<PartySlotNode> cb)

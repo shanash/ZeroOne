@@ -44,6 +44,7 @@ public class LobbyManager : MonoBehaviour
         Debug.Log("LobbyRootOnEnter");
         pd.Resume();
     }
+
     /// <summary>
     /// 로비 화면을 가리는 팝업이 생성되었을때 호출되는 함수
     /// </summary>
@@ -52,7 +53,6 @@ public class LobbyManager : MonoBehaviour
         Debug.Log("LobbyRootOnExit");
         pd.Pause();
     }
-
 
     public void OnClickChangeCharacter()
     {
@@ -82,9 +82,9 @@ public class LobbyManager : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         //CommonUtils.ShowToast("캐릭터 리스트", TOAST_BOX_LENGTH.SHORT);
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Character/CharacterListUI", (popup) =>
         {
-            popup.ShowPopup(3f, "캐릭터 리스트 준비중 입니다.");
+            popup.ShowPopup();
         });
     }
 

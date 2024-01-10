@@ -56,11 +56,6 @@ namespace FluffyDuck.UI
 
         protected bool Is_Enable_Esc_Key_Exit;
 
-        void Start()
-        {
-            Initialize();
-        }
-
         protected virtual void Initialize()
         {
 
@@ -111,6 +106,7 @@ namespace FluffyDuck.UI
         /// <param name="data"></param>
         public virtual void ShowPopup(params object[] data)
         {
+            Initialize();
             Is_Enable_Key_Event = true;
             Box_Rect?.gameObject.SetActive(true);
             Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);

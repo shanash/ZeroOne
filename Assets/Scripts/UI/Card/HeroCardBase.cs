@@ -71,8 +71,23 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     public event TouchUpAction TouchUp;
     public event ClickAction Click;
 
+    public void SetHeroData(UserHeroData data, CHARACTER_SORT filter_type)
+    {
+        Data = data.GetPlayerCharacterData();
+        Battle_Data = data.GetPlayerCharacterBattleData();
 
+        SetLevel(data.GetLevel());
+        // star
+        SetStarGrade(data.GetStarGrade());
+        // role type
+        SetRoleType(data.GetPlayerCharacterData().role_type);
+        // 
+        SetName(data.GetPlayerCharacterData().name_kr);
 
+        SetFilter(data, filter_type);
+
+        UpdateCardBase();
+    }
 
     public void SetHeroDataID(int hero_data_id)
     {
@@ -110,10 +125,12 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     {
         Level_Text.text = lv.ToString();
     }
+
     public void SetStarGrade(int star_grade)
     {
         Star_Text.text = star_grade.ToString();
     }
+
     public void SetRoleType(ROLE_TYPE rtype)
     {
         int idx = (int)rtype - 1;
@@ -125,6 +142,35 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         {
             Role_Icons[i].gameObject.SetActive(i == idx);
         }
+    }
+
+    public void SetName(string name)
+    {
+        Name_Text.text = name;
+    }
+
+    public void SetFilter(UserHeroData data, CHARACTER_SORT filter_type)
+    {
+        // Filter
+        Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
+        string filter_text = "미구현";
+        switch (filter_type)
+        {
+            case CHARACTER_SORT.LEVEL_CHARACTER:
+                filter_text = $"Lv.{data.GetLevel()}";
+                break;
+            case CHARACTER_SORT.STAR:
+                filter_text = new string('★', data.GetStarGrade());
+                break;
+            case CHARACTER_SORT.NAME:
+                Filter_Text.text = Data.name_kr;
+                break;
+            default:
+                Filter_Text.text = "미구현";
+                break;
+        }
+
+        Filter_Text.text = filter_text;
     }
 
     /// <summary>
