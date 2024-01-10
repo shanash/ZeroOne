@@ -152,7 +152,7 @@ public partial class TeamManager_V2 : IDisposable
 
             int find_index = same_positions.IndexOf(member);
 
-            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 2));
+            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 1.5f));
         }
     }
 
@@ -184,7 +184,7 @@ public partial class TeamManager_V2 : IDisposable
 
             int find_index = same_positions.IndexOf(member);
 
-            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 2));
+            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 1.5f));
         }
 
     }
@@ -232,7 +232,7 @@ public partial class TeamManager_V2 : IDisposable
 
             monster.SetBattleUnitDataID(npc.GetUnitID());
 
-            monster.SetFlipX(true);
+            //monster.SetFlipX(true);
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 

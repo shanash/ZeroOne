@@ -6,7 +6,7 @@ using UnityEngine;
 /// 투사체가 날아가며 타겟까지 도달한 후 스킬 트리거 발생
 /// 도착 후 트리거로 인한 효과를 보여줄 수 있음.
 /// </summary>
-public class SkillEffect_NormalFireball : SkillEffectBase
+public class SkillEffect_Normal_Bullet : SkillEffectBase
 {
 
     public override void MoveTarget(Transform target, float duration)

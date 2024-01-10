@@ -1,34 +1,5 @@
-using Spine;
-
-public class Hero_100001 : HeroBase_V2
+public class Monster_100003 : MonsterBase_V2
 {
-
-
-    #region States
-
-
-    //public override void UnitStateMoveIn()
-    //{
-    //    if (Team_Type == TEAM_TYPE.LEFT)
-    //    {
-    //        MoveLeftTeam();
-    //    }
-    //    else
-    //    {
-    //        MoveRightTeam();
-    //    }
-
-    //}
-
-    //public override void UnitStateMove()
-    //{
-    //    MoveLeftTeam();
-    //    base.UnitStateMove();
-    //}
-
-
-
-    #endregion
 
 
     #region Etc Funcs
@@ -66,6 +37,5 @@ public class Hero_100001 : HeroBase_V2
         }
     }
     #endregion
-
 
 }
