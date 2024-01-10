@@ -109,12 +109,6 @@ public class BattleSkillGroup : BattleDataBase
     /// <param name="target"></param>
     public void ExecSkillGroup(HeroBase_V2 caster, HeroBase_V2 target)
     {
-        //int cnt = Battle_Skill_Data_List.Count;
-        //for (int i = 0; i < cnt; i++)
-        //{
-        //    var skill = Battle_Skill_Data_List[i];
-        //    skill.ExecSkill(caster, target);
-        //}
     }
 
     /// <summary>
@@ -125,11 +119,6 @@ public class BattleSkillGroup : BattleDataBase
     /// <param name="targets"></param>
     public void ExecSkillGroup(HeroBase_V2 caster, List<HeroBase_V2> targets)
     {
-        //int cnt = targets.Count;
-        //for (int i = 0; i < cnt; i++)
-        //{
-        //    ExecSkillGroup(caster, targets[i]);
-        //}
     }
     /// <summary>
     /// 스킬 사용가능한 데이터 반환
@@ -167,6 +156,9 @@ public class BattleSkillGroup : BattleDataBase
         ResetDelayTime();
     }
     public virtual SKILL_TYPE GetSkillType() { return SKILL_TYPE.NONE; }
+
+    public virtual string GetSkillCastEffectPath() { return null; }
+    public virtual float GetSkillCastEffectDuration() { return 0; }
 
     public override string ToString()
     {

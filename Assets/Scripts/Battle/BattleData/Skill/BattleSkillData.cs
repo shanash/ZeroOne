@@ -172,14 +172,9 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// 각 스킬 캐스트용 이펙트 프리팹 패스 반환
     /// </summary>
     /// <returns></returns>
-    public virtual string GetCastEffectPrefabPath() { return null; }
 
     public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
-    /// <summary>
-    /// 캐스트용 이펙트의 지속시간 반환
-    /// </summary>
-    /// <returns></returns>
-    public virtual double GetEffectDuration() { return 0; }
+    
     /// <summary>
     /// 투사체의 발사 속도
     /// </summary>

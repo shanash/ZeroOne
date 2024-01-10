@@ -116,19 +116,12 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
     {
         return Data.trigger_effect_path;
     }
-    public override string GetCastEffectPrefabPath()
-    {
-        return Data.cast_effect_path;
-    }
 
     public override PROJECTILE_TYPE GetProjectileType()
     {
         return Data.projectile_type;
     }
-    public override double GetEffectDuration()
-    {
-        return Data.effect_duration;
-    }
+    
     public override double GetProjectileSpeed()
     {
         return Data.projectile_speed;

@@ -262,7 +262,21 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 스파인 애니메이션 시작시 호출되는 리스너
     /// </summary>
     /// <param name="entry"></param>
-    protected virtual void SpineAnimationStart(TrackEntry entry) { }
+    protected virtual void SpineAnimationStart(TrackEntry entry) 
+    {
+        string animation_name = entry.Animation.Name;
+
+        UNIT_STATES state = GetCurrentState();
+        if (state == UNIT_STATES.ATTACK_1)
+        {
+            var skill = GetSkillManager().GetCurrentSkillGroup();
+            if (animation_name.Equals(skill.GetSkillActionName()))
+            {
+                SkillCastEffectSpawn(skill);
+            }
+        }
+
+    }
     /// <summary>
     /// 스파인 애니메이션 동작 완료시 호출되는 리스너
     /// </summary>
@@ -453,6 +467,21 @@ public partial class HeroBase_V2 : UnitBase_V2
             return Skeleton.AnimationState.Tracks.Items;
         }
         return null;
+    }
+
+    protected virtual void SkillCastEffectSpawn(BattleSkillGroup skill_grp)
+    {
+        string effect_path = skill_grp.GetSkillCastEffectPath();
+        float duration = skill_grp.GetSkillCastEffectDuration();
+        if (string.IsNullOrEmpty(effect_path))
+        {
+            return;
+        }
+
+        var factory = Battle_Mng.GetEffectFactory();
+        var eff = factory.CreateEffect(effect_path);
+        eff.transform.position = this.transform.position;
+        eff.StartParticle(duration);
     }
 
     /// <summary>
@@ -786,7 +815,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
 
-        Render_Texture.SetHitColorV2(Color.red, 0.1f);
+        Render_Texture.SetHitColorV2(Color.white, 0.05f);
         if (Game_Type != GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE && Game_Type != GAME_TYPE.EDITOR_SKILL_EDIT_MODE)
         {
             Life -= last_damage;

@@ -82,6 +82,12 @@ public class BattleDungeonData : BattleDataBase
                     UnityEngine.Debug.Assert(false);
                     continue;
                 }
+                //  skill group cast effect
+                if (!string.IsNullOrEmpty(skill_group.cast_effect_path) && !list.Contains(skill_group.cast_effect_path))
+                {
+                    list.Add(skill_group.cast_effect_path);
+                }
+
                 //  skill list
                 m.Get_NpcSkillDataListBySkillGroup(skill_group.npc_skill_group_id, ref skill_list);
 

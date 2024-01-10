@@ -13,7 +13,7 @@ namespace FluffyDuck.Util
     /// </summary>
     public class GameObjectPoolManager : MonoSingleton<GameObjectPoolManager>
     {
-        protected override bool Is_DontDestroyOnLoad => true;
+        protected override bool Is_DontDestroyOnLoad => false;
 
         /// <summary>
         /// 회수된 오브젝트를 보관 할 컨테이너

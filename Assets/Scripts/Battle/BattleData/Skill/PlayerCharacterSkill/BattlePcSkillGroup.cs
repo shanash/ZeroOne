@@ -57,8 +57,15 @@ public class BattlePcSkillGroup : BattleSkillGroup
             return Skill_Group.Skill_Type;
         return SKILL_TYPE.NONE;
     }
+    public override string GetSkillCastEffectPath()
+    {
+        return Skill_Group.cast_effect_path;
+    }
 
-
+    public override float GetSkillCastEffectDuration()
+    {
+        return (float)Skill_Group.effect_duration;
+    }
 
 
 }

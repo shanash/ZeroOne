@@ -416,6 +416,11 @@ public partial class TeamManager_V2 : IDisposable
                     Debug.Assert(false);
                     continue;
                 }
+                //  skill group cast effect
+                if (!string.IsNullOrEmpty(skill_group.cast_effect_path) && !list.Contains(skill_group.cast_effect_path))
+                {
+                    list.Add(skill_group.cast_effect_path);
+                }
                 //  skill list
                 m.Get_PlayerCharacterSkillDataListBySkillGroup(skill_group.pc_skill_group_id, ref skill_list);
                 int skill_cnt = skill_list.Count;
