@@ -184,6 +184,8 @@ public partial class TeamManager_V2 : IDisposable
 
             int find_index = same_positions.IndexOf(member);
 
+            Debug.Log($"Find Index {find_index}");
+
             member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 1.5f));
         }
 

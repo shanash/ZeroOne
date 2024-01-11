@@ -178,11 +178,7 @@ public class BattleSkillData : BattleDataBase, ICloneable
     /// <returns></returns>
 
     public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
-    /// <summary>
-    /// 투사체가 시작되는 부분 반환
-    /// </summary>
-    /// <returns></returns>
-    public virtual SD_BODY_TYPE GetSDBodyType() { return SD_BODY_TYPE.NONE; }
+    
 
     /// <summary>
     /// 투사체의 발사 속도
