@@ -7,8 +7,8 @@ namespace FluffyDuck.UI
     public enum POPUP_TYPE
     {
         NONE = 0,
-        UI_TYPE,
-        POPUP_TYPE,
+        FULLPAGE_TYPE,
+        DIALOG_TYPE,
         MODAL_TYPE,
         NOTI_TYPE,
     }

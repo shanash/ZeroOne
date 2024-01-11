@@ -113,7 +113,7 @@ public class HeroInfoUI : PopupBase
     public void OnClickBack()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.UI_TYPE);
+        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
     }
 
     protected override void FixedUpdatePopup()

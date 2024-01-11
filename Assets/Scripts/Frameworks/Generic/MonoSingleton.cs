@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace FluffyDuck.Util
 {
@@ -6,7 +7,7 @@ namespace FluffyDuck.Util
     {
         static T Saved_Instance = null;
         static protected bool IsQuitting = false;
-        static object Sync_Obj = new object();
+        static readonly object Sync_Obj = new object();
 
         public static T Instance
         {
@@ -38,7 +39,6 @@ namespace FluffyDuck.Util
                             GameObject go = new GameObject(typeof(T).ToString(), typeof(T));
                             Saved_Instance = go.GetComponent<T>();
                             Saved_Instance._Initialize();
-                            Application.quitting += Saved_Instance.OnAppQuit;
                         }
                     }
                 }
@@ -46,6 +46,29 @@ namespace FluffyDuck.Util
             }
         }
 
+        /// <summary>
+        /// 인스턴스를 날리고 새로운 인스턴스를 만든다
+        /// </summary>
+        public virtual void ResetInstance()
+        {
+            Application.quitting -= OnAppQuit;
+
+            if (ResetInstanceOnChangeScene)
+            {
+                SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+            }
+
+            // 혹시라도 유니티에서 비관리 되는 리소스가 있다면 상속받아서 해제해줍시다
+            if (Saved_Instance != null)
+            {
+                DestroyImmediate(Saved_Instance.gameObject);
+                Saved_Instance = null;
+            }
+
+            _ = Instance;
+        }
+
+        protected virtual bool ResetInstanceOnChangeScene => false;
         protected abstract bool Is_DontDestroyOnLoad { get; }
         protected abstract void Initialize();
 
@@ -63,6 +86,18 @@ namespace FluffyDuck.Util
             {
                 DontDestroyOnLoad(this.gameObject);
             }
+
+            if (ResetInstanceOnChangeScene)
+            {
+                SceneManager.activeSceneChanged += OnActiveSceneChanged;
+            }
+
+            Application.quitting += OnAppQuit;
+        }
+
+        void OnActiveSceneChanged(Scene oldScene, Scene newScene)
+        {
+            ResetInstance();
         }
     }
 }

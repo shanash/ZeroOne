@@ -10,7 +10,7 @@ public class TopStatusBar : MonoBehaviour
     public void OnClickBack()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.UI_TYPE);
+        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
     }
 
     public void OnClickGoHome()
