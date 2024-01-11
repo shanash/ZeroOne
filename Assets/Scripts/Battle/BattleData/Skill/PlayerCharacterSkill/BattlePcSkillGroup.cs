@@ -66,6 +66,4 @@ public class BattlePcSkillGroup : BattleSkillGroup
     {
         return (float)Skill_Group.effect_duration;
     }
-
-
 }

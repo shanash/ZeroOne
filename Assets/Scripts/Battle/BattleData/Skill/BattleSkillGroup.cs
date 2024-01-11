@@ -1,25 +1,34 @@
 using Cysharp.Text;
 using System.Collections.Generic;
 
-public class BattleSkillGroup : BattleDataBase
+public abstract class BattleSkillGroup : BattleDataBase
 {
-    public int Skill_Order { get; protected set; } = 0;
-
-    public UNIT_SKILL_TYPE Unit_Skill_Type { get; protected set; } = UNIT_SKILL_TYPE.NONE;
-
-    protected List<BattleSkillData> Battle_Skill_Data_List = new List<BattleSkillData>();
-
+    protected List<BattleSkillData> Battle_Skill_Data_List;
     protected double Delay_Time;
-
     protected bool Is_First_Skill;
 
-    public BattleSkillGroup(UNIT_SKILL_TYPE stype) { Unit_Skill_Type = stype; }
+    public int Skill_Order { get; protected set; }
+    public UNIT_SKILL_TYPE Unit_Skill_Type { get; protected set; }
+
+    protected BattleSkillGroup(UNIT_SKILL_TYPE stype) : base() { Unit_Skill_Type = stype; }
+
+    protected override void Reset()
+    {
+        base.Reset();
+
+        Battle_Skill_Data_List = new List<BattleSkillData>();
+        Delay_Time = 0;
+        Is_First_Skill = false;
+
+        Skill_Order = 0;
+        Unit_Skill_Type = UNIT_SKILL_TYPE.NONE;
+    }
 
     /// <summary>
     /// 스킬 그룹 아이디 세팅
     /// </summary>
     /// <param name="skill_group_id"></param>
-    public virtual void SetSkillGroupID(int skill_group_id) { }
+    public abstract void SetSkillGroupID(int skill_group_id);
 
     /// <summary>
     /// 스킬 리스트 반환
@@ -59,10 +68,7 @@ public class BattleSkillGroup : BattleDataBase
     /// 스킬 액션 이름 반환
     /// </summary>
     /// <returns></returns>
-    public virtual string GetSkillActionName()
-    {
-        return null;
-    }
+    public abstract string GetSkillActionName();
 
     /// <summary>
     /// 첫번째 스킬의 경우 선쿨타임이 없음
@@ -98,8 +104,7 @@ public class BattleSkillGroup : BattleDataBase
     /// <summary>
     /// 공격 대기시간 초기화
     /// </summary>
-    public virtual void ResetDelayTime() { }
-
+    public abstract void ResetDelayTime();
 
     /// <summary>
     /// 스킬 그룹 내의 모든 스킬 실행.
@@ -120,6 +125,7 @@ public class BattleSkillGroup : BattleDataBase
     public void ExecSkillGroup(HeroBase_V2 caster, List<HeroBase_V2> targets)
     {
     }
+
     /// <summary>
     /// 스킬 사용가능한 데이터 반환
     /// 스킬 효과를 불러올 때 사용가능한 스킬 정보를 가져온다.
@@ -155,10 +161,14 @@ public class BattleSkillGroup : BattleDataBase
 
         ResetDelayTime();
     }
-    public virtual SKILL_TYPE GetSkillType() { return SKILL_TYPE.NONE; }
 
-    public virtual string GetSkillCastEffectPath() { return null; }
-    public virtual float GetSkillCastEffectDuration() { return 0; }
+    public abstract SKILL_TYPE GetSkillType();
+
+    public abstract string GetSkillCastEffectPath();
+
+    public abstract float GetSkillCastEffectDuration();
+
+    public virtual string GetSkillIconPath() { return "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy"; }
 
     public override string ToString()
     {
@@ -174,6 +184,4 @@ public class BattleSkillGroup : BattleDataBase
         }
         return sb.ToString();
     }
-
-
 }

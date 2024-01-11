@@ -7,10 +7,16 @@ public class BattleSkillManager : BattleDataBase
     /// 스킬 사용 순서 인덱스
     /// </summary>
     int Skill_Pattern_Order;
+    List<BattleSkillGroup> _Skill_Groups = new List<BattleSkillGroup>();
 
+    public IReadOnlyList<BattleSkillGroup> Skill_Groups => _Skill_Groups.AsReadOnly();
 
-    List<BattleSkillGroup> Skill_Groups = new List<BattleSkillGroup>();
-
+    protected override void Reset()
+    {
+        base.Reset();
+        Skill_Pattern_Order = 0;
+        _Skill_Groups = new List<BattleSkillGroup>();
+    }
 
     /// <summary>
     /// 플레이어 캐릭터의 스킬 패턴에 따른 스킬 그룹 추가
@@ -25,7 +31,7 @@ public class BattleSkillManager : BattleDataBase
             var battle_group = new BattlePcSkillGroup();
             battle_group.SetSkillOrder(i);
             battle_group.SetSkillGroupID(skill_group_id);
-            Skill_Groups.Add(battle_group);
+            _Skill_Groups.Add(battle_group);
         }
     }
 
@@ -42,7 +48,7 @@ public class BattleSkillManager : BattleDataBase
             var battle_group = new BattleNpcSkillGroup();
             battle_group.SetSkillOrder(i);
             battle_group.SetSkillGroupID(skill_group_id);
-            Skill_Groups.Add(battle_group);
+            _Skill_Groups.Add(battle_group);
         }
     }
 
@@ -53,9 +59,9 @@ public class BattleSkillManager : BattleDataBase
     /// <returns></returns>
     public BattleSkillGroup GetCurrentSkillGroup()
     {
-        if (Skill_Groups.Count > 0)
+        if (_Skill_Groups.Count > 0)
         {
-            return Skill_Groups.Find(x => x.Skill_Order == Skill_Pattern_Order);
+            return _Skill_Groups.Find(x => x.Skill_Order == Skill_Pattern_Order);
         }
         return null;
     }
@@ -71,7 +77,7 @@ public class BattleSkillManager : BattleDataBase
 
         //  다음 스킬로 이동
         Skill_Pattern_Order += 1;
-        int max_order = Skill_Groups.Max(x => x.Skill_Order);
+        int max_order = _Skill_Groups.Max(x => x.Skill_Order);
         if (Skill_Pattern_Order > max_order)
         {
             Skill_Pattern_Order = 0;
@@ -95,7 +101,6 @@ public class BattleSkillManager : BattleDataBase
     /// <returns></returns>
     public BattleSkillGroup FindSkillType(SKILL_TYPE stype)
     {
-        return Skill_Groups.Find(x => x.GetSkillType() == stype);
+        return _Skill_Groups.Find(x => x.GetSkillType() == stype);
     }
-
 }

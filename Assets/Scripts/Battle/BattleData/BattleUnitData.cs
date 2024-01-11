@@ -33,31 +33,44 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public abstract object GetUnitData();
+    
     /// <summary>
     /// 유닛의 전투 데이터 반환
     /// </summary>
     /// <returns></returns>
     public abstract object GetBattleData();
+ 
     /// <summary>
     /// 유닛의 사용자 데이터 반환
     /// </summary>
     /// <returns></returns>
     public virtual object GetUserUnitData() {  return null; }
+
+    /// <summary>
+    /// 전투력 포인트
+    /// TODO: 일단 UI에 있어서 만들어놓았습니다만 구현하던지 필요없다면 삭제를..
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetCombatPoint() { return 1557; }
+
     /// <summary>
     /// 공격 포인트
     /// </summary>
     /// <returns></returns>
     public abstract double GetAttackPoint();
+
     /// <summary>
     /// 방어력 포인트
     /// </summary>
     /// <returns></returns>
     public abstract double GetDefensePoint();
+
     /// <summary>
     /// 체력 포인트
     /// </summary>
     /// <returns></returns>
     public abstract double GetLifePoint();
+
     /// <summary>
     /// 명중 포인트
     /// </summary>
@@ -139,5 +152,4 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual NPC_TYPE GetNpctype() { return NPC_TYPE.NONE; }
-    
 }

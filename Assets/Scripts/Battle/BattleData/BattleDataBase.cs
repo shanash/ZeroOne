@@ -10,7 +10,6 @@ public abstract class BattleDataBase : IDisposable
         Reset();
     }
 
-
     public void Dispose()
     {
         Dispose(true);
