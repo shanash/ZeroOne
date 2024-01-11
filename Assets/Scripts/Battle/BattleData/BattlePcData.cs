@@ -4,6 +4,7 @@ public class BattlePcData : BattleUnitData
     Player_Character_Battle_Data Battle_Data;
 
     UserHeroData User_Data;
+
     public BattlePcData() : base(CHARACTER_TYPE.PC) { }
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)

@@ -2,16 +2,16 @@ using UnityEngine;
 using System.Collections.Generic;
 using Gpm.Ui;
 
-public class CharacterListCell : InfiniteScrollItem
+public class HeroListCell : InfiniteScrollItem
 {
     [SerializeField, Tooltip("Card Item List")]
-    List<CharacterListItem> Card_Item_List;
+    List<HeroListItem> Card_Item_List;
 
     public override void UpdateData(InfiniteScrollData scroll_data)
     {
         base.UpdateData(scroll_data);
 
-        var data = (CharacterListData)scroll_data;
+        var data = (HeroListData)scroll_data;
 
         var hero_list = data.GetUserHeroDataList();
         int cnt = Card_Item_List.Count;

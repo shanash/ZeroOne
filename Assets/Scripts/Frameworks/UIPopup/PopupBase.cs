@@ -65,6 +65,7 @@ namespace FluffyDuck.UI
         {
             Is_Enable_Esc_Key_Exit = enable;
         }
+
         /// <summary>
         /// 등장/숨김 시 애니메이션을 사용하는지 여부 체크
         /// </summary>
@@ -73,6 +74,7 @@ namespace FluffyDuck.UI
         {
             return Ease_Base != null;
         }
+        
         public virtual void HidePopup(System.Action cb = null)
         {
             Is_Enable_Key_Event = false;
@@ -161,12 +163,14 @@ namespace FluffyDuck.UI
         {
             Closed_Delegate = d;
         }
+        
         /// <summary>
         /// 팝업 등장 후 최초 1회만 실행하기 위한 함수.
         /// 경우에 따라 필요한 조건에 만족하면 한번 더 호출하여 사용할 수도 있겠지만
         /// 가급적 최초 1회만 호출하는 조건을 위반하지는 말자.
         /// </summary>
         protected virtual void FixedUpdatePopup() { }
+
         /// <summary>
         /// 팝업 내에서 필요시 자주 업데이트가 필요한 요소들을 업데이트 해주기 위한 함수
         /// 유저의 액션이나 어떤 조건에 의해 변경되는 부분들은 이 함수를 구현해서 사용하자
@@ -193,7 +197,6 @@ namespace FluffyDuck.UI
             HidePopup();
 
             //  click sound [todo]
-
         }
 
         public POPUP_TYPE GetPopupType()
@@ -237,6 +240,7 @@ namespace FluffyDuck.UI
         {
 
         }
+
         public virtual void OnExit()
         {
 
@@ -246,12 +250,14 @@ namespace FluffyDuck.UI
         {
             Is_Enable_Esc_Key_Exit = true;
         }
+        
         public virtual void Despawned()
         {
 
         }
 
         protected virtual void OnUpdatePopup() { }
+
         protected void Update()
         {
             if (Is_Enable_Esc_Key_Exit)
@@ -267,9 +273,6 @@ namespace FluffyDuck.UI
             OnUpdatePopup();
         }
 
-
         public virtual void AddModalButtonEvent(params Popup_Button_Data[] btns) { }
-
     }
-
 }

@@ -1,4 +1,4 @@
-
+// TODO: 팩토리로 생성 가능할듯
 public abstract class BattleUnitData : BattleDataBase
 {
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;

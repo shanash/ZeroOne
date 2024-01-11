@@ -80,9 +80,8 @@ public class LobbyManager : MonoBehaviour
     public void OnClickCharacterList()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        //CommonUtils.ShowToast("캐릭터 리스트", TOAST_BOX_LENGTH.SHORT);
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Character/CharacterListUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", (popup) =>
         {
             popup.ShowPopup();
         });

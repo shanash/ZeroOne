@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using FluffyDuck.Util;
 using TMPro;
 
-public class CharacterListUI : PopupBase
+public class HeroListUI : PopupBase
 {
     [SerializeField, Tooltip("Character List View")]
     InfiniteScroll Character_LIst_View;
@@ -103,7 +103,7 @@ public class CharacterListUI : PopupBase
         {
             start = r * column_count;
 
-            CharacterListData new_data = new CharacterListData();
+            HeroListData new_data = new HeroListData();
             new_data.Filter_Type = Filter_Type;
             new_data.Click_Hero_Callback = SelectCharacterCallback;
 
@@ -125,8 +125,17 @@ public class CharacterListUI : PopupBase
     /// 영웅 리스트에서 영웅 선택시 콜백
     /// </summary>
     /// <param name="ud"></param>
-    void SelectCharacterCallback(CharacterListItem hero)
+    void SelectCharacterCallback(HeroListItem hero)
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+
+        var PC_Battle_Data = new BattlePcData();
+        PC_Battle_Data.SetUnitID(hero.User_Data.GetPlayerCharacterID(), hero.User_Data.Player_Character_Num);
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", (popup) =>
+        {
+            popup.ShowPopup(PC_Battle_Data);
+        });
     }
 
     void UpdateFilterType()

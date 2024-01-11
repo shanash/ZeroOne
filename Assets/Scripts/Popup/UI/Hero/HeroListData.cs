@@ -1,11 +1,11 @@
 using Gpm.Ui;
 using System.Collections.Generic;
 
-public class CharacterListData : InfiniteScrollData
+public class HeroListData : InfiniteScrollData
 {
     List<UserHeroData> User_Hero_Data_List = new List<UserHeroData>();
 
-    public System.Action<CharacterListItem> Click_Hero_Callback;
+    public System.Action<HeroListItem> Click_Hero_Callback;
 
     public CHARACTER_SORT Filter_Type { get; set; }
 

@@ -13,6 +13,7 @@ public class UserHeroData : UserDataBase
 
     public bool Is_Choice_Lobby { get; protected set; } = false;
 
+    // TODO: get; private set;으로 일괄 변경합시다
     Player_Character_Data Hero_Data;
     Player_Character_Battle_Data Battle_Data;
 

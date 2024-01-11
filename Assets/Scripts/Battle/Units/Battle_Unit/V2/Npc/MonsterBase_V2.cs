@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class MonsterBase_V2 : HeroBase_V2
 {
     public override void SetBattleUnitDataID(params int[] unit_ids)
@@ -17,18 +16,15 @@ public class MonsterBase_V2 : HeroBase_V2
         Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
     }
 
-
     public BattleUnitData GetNpcData()
     {
         return Unit_Data;
     }
 
-
     public override float GetApproachDistance()
     {
         return Unit_Data.GetApproachDistance();
     }
-
 
     #region Cal Ability Point
     protected override void CalcMaxLife()
