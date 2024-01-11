@@ -7,7 +7,7 @@ public class BattleSkillManager : BattleDataBase
     /// 스킬 사용 순서 인덱스
     /// </summary>
     int Skill_Pattern_Order;
-    List<BattleSkillGroup> _Skill_Groups = new List<BattleSkillGroup>();
+    List<BattleSkillGroup> _Skill_Groups;
 
     public IReadOnlyList<BattleSkillGroup> Skill_Groups => _Skill_Groups.AsReadOnly();
 
