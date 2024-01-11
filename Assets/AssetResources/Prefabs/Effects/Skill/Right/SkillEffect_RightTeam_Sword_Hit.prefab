@@ -4928,6 +4928,7 @@ GameObject:
   - component: {fileID: 719856101487364887}
   - component: {fileID: 8339794632725902710}
   - component: {fileID: 2685064407457620374}
+  - component: {fileID: -8712099529068382870}
   m_Layer: 0
   m_Name: SkillEffect_RightTeam_Sword_Hit
   m_TagString: Untagged
@@ -9803,6 +9804,31 @@ MonoBehaviour:
   Skel_Effect: {fileID: 0}
   Mover: {fileID: 0}
   Hide_Comp: {fileID: 0}
+--- !u!114 &-8712099529068382870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3687606901701513326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effect_Type: 3
+  Effect_Count_Type: 2
+  Effect_Duration: 0.7
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 2
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Curve_Height: 0
+  Mover: {fileID: 0}
+  Projectile_Velocity: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+  Following_Target: {fileID: 0}
 --- !u!1 &5682922335955312385
 GameObject:
   m_ObjectHideFlags: 0

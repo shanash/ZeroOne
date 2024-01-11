@@ -6,13 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-//public enum SD_BODY_TYPE
-//{
-//    NONE = 0,
-//    HEAD,
-//    BODY,
-//    FOOT,
-//}
 
 
 /// <summary>
@@ -39,6 +32,12 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     [SerializeField, Tooltip("Body Pos Type")]
     protected List<SD_Body_Pos_Data> Sd_Body_Transforms;
+
+    [SerializeField, Tooltip("Start Projectile Type")]
+    protected List<Start_Projectile_Pos_Data> Start_Projectile_Transforms;
+
+    [SerializeField, Tooltip("Reach Pos Type")]
+    protected List<Target_Reach_Pos_Data> Reach_Pos_Transforms;
 
     protected UnitRenderTexture Render_Texture;
 
@@ -272,7 +271,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             var skill = GetSkillManager().GetCurrentSkillGroup();
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
-                SkillCastEffectSpawn(skill);
+                SpawnSkillCastEffect(skill);
             }
         }
 
@@ -288,7 +287,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         UNIT_STATES state = GetCurrentState();
         if (state == UNIT_STATES.DEATH)
         {
-            if (animation_name.Equals("1_death"))
+            if (animation_name.Equals("1_death") || animation_name.Equals("00_death"))
             {
                 ChangeState(UNIT_STATES.END);
             }
@@ -469,7 +468,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         return null;
     }
 
-    protected virtual void SkillCastEffectSpawn(BattleSkillGroup skill_grp)
+    protected virtual void SpawnSkillCastEffect(BattleSkillGroup skill_grp)
     {
         string effect_path = skill_grp.GetSkillCastEffectPath();
         float duration = skill_grp.GetSkillCastEffectDuration();
@@ -479,9 +478,120 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
 
         var factory = Battle_Mng.GetEffectFactory();
-        var eff = factory.CreateEffect(effect_path);
-        eff.transform.position = this.transform.position;
+        var eff = (SkillEffectBase)factory.CreateEffect(effect_path);
+        var ec = eff.GetEffectComponent();
+        if (ec != null)
+        {
+            var tran = GetReachPosTypeTransform(eff.GetEffectComponent().Projectile_Reach_Pos_Type);
+            eff.transform.position = tran.position;
+        }
+        else
+        {
+            eff.transform.position = this.transform.position;
+        }
+        
         eff.StartParticle(duration);
+    }
+
+    /// <summary>
+    /// 스킬 구현 V3<br/>
+    /// 스킬 프리팹에 EffectComponent 정의를 사용하여<br/>
+    /// 이펙트에서 사용할 정의는 해당 컴포넌트를 참조하여 사용한다.<br/>
+    /// 스킬에 이펙트 프리팹 정보가 있을 경우 해당 이펙트를 트리거로 사용하여 효과를 줄 수 있다<br/>
+    /// 스킬에 이펙트 프리팹 정보가 없을 경우, 즉시 발동하는 스킬로 해당 스킬에서 바로 적용할 수 있도록 한다.
+    /// </summary>
+    /// <param name="skill"></param>
+    protected virtual void SpawnSkillEffect_V3(BattleSkillData skill)
+    {
+        var factory = Battle_Mng.GetEffectFactory();
+        FindTargets(skill);
+        int target_cnt = Normal_Attack_Target.Count;
+        int effect_weight_index = skill.GetEffectWeightIndex();
+
+        string skill_trigger_effect_prefab = skill.GetTriggerEffectPrefabPath();
+        if (string.IsNullOrEmpty(skill_trigger_effect_prefab))
+        {
+            //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
+
+        }
+        else
+        {
+            //  단일 이펙트
+            if (skill.GetEffectCountType() == EFFECT_COUNT_TYPE.SINGLE_EFFECT)
+            {
+                BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
+                dmg.Caster = this;
+                dmg.AddTargets(Normal_Attack_Target);
+                dmg.Skill = skill;
+                dmg.Damage = GetAttackPoint();
+                dmg.Effect_Weight_Index = effect_weight_index;
+
+                //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
+                var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab);
+                var ec = trigger_effect.GetEffectComponent();
+                Transform target_trans = GetTargetReachPostionByTargetReachPosType(ec.Projectile_Reach_Pos_Type);
+                var target_pos = target_trans.position;
+
+                //  즉발형인지
+                if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                {
+                    trigger_effect.SetBattleSendData(dmg);
+                    target_pos.z = target_trans.position.z;
+                    trigger_effect.transform.position = target_pos;
+                    trigger_effect.StartParticle(ec.Effect_Duration);
+                }
+                else if(ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) //  투사체인지
+                {
+                    //  nothing (현재까지 투사체 샘플이 없음)
+                }
+                else
+                {
+                    Debug.Assert(false);
+                }
+
+            }
+            else  // 각 타겟별 이펙트
+            {
+                for (int i = 0; i < target_cnt; i++)
+                {
+                    var target = Normal_Attack_Target[i];
+
+                    BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
+                    dmg.Caster = this;
+                    dmg.AddTarget(target);
+                    dmg.Skill = skill;
+                    dmg.Damage = GetAttackPoint();
+                    dmg.Effect_Weight_Index = effect_weight_index;
+
+                    //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
+                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab);
+                    var ec = trigger_effect.GetEffectComponent();
+
+                    Transform target_trans = GetTargetReachPostionByTargetReachPosType(ec.Projectile_Reach_Pos_Type);
+                    var target_pos = target_trans.position;
+
+                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                    {
+                        trigger_effect.SetBattleSendData(dmg);
+                        target_pos.z = target_trans.position.z;
+                        trigger_effect.transform.position = target_pos;
+                        trigger_effect.StartParticle(ec.Effect_Duration);
+                    }
+                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
+                    {
+                        
+                    }
+                    else
+                    {
+                        Debug.Assert(false);
+                    }
+
+                    
+
+                }
+            }
+            
+        }
     }
 
     /// <summary>

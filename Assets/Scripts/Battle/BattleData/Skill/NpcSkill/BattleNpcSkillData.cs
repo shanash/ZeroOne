@@ -126,6 +126,11 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
     {
         return Data.projectile_speed;
     }
+
+    public override EFFECT_COUNT_TYPE GetEffectCountType()
+    {
+        return Data.effect_count_type;
+    }
     public override int GetEffectWeightValue(int weight_index)
     {
         int weight = 100;

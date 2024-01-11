@@ -63,6 +63,7 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
 
     public virtual void SetSkillID(int skill_id) { }
 
+    [Obsolete]
     /// <summary>
     /// 날아가는 발사체인지, 타겟에서 즉시 발생하는 이펙트인지 여부 반환
     /// </summary>
@@ -155,6 +156,8 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
     /// </summary>
     /// <returns></returns>
     public virtual string GetTriggerEffectPrefabPath() { return null; }
+
+    [Obsolete]
     /// <summary>
     /// 각 스킬 캐스트용 이펙트 프리팹 패스 반환
     /// </summary>
@@ -162,11 +165,21 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
 
     public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
 
+    [Obsolete]
     /// <summary>
     /// 투사체의 발사 속도
     /// </summary>
     /// <returns></returns>
     public virtual double GetProjectileSpeed() { return 0; }
+
+
+    /// <summary>
+    /// 이펙트 카운트 타입<br/>
+    /// 단일 이펙트인지<br/>
+    /// 각 타겟별 개별적으로 구현되는 이펙트인지 여부
+    /// </summary>
+    /// <returns></returns>
+    public virtual EFFECT_COUNT_TYPE GetEffectCountType() { return EFFECT_COUNT_TYPE.NONE; }
 
     public virtual TARGET_TYPE GetTargetType() { return TARGET_TYPE.MY_TEAM; }
     

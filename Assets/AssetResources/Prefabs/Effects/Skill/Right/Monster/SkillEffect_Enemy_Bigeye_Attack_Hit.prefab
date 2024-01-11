@@ -14799,6 +14799,7 @@ GameObject:
   - component: {fileID: 7000281583299371653}
   - component: {fileID: 1691367626865654656}
   - component: {fileID: 8754733314210192048}
+  - component: {fileID: -1159980562262849485}
   m_Layer: 0
   m_Name: SkillEffect_Enemy_Bigeye_Attack_Hit
   m_TagString: Untagged
@@ -19674,6 +19675,31 @@ MonoBehaviour:
   Skel_Effect: {fileID: 0}
   Mover: {fileID: 0}
   Hide_Comp: {fileID: 0}
+--- !u!114 &-1159980562262849485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7738025461366445407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effect_Type: 3
+  Effect_Count_Type: 2
+  Effect_Duration: 0.7
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 2
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Curve_Height: 0
+  Mover: {fileID: 0}
+  Projectile_Velocity: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+  Following_Target: {fileID: 0}
 --- !u!1 &8422070890287132270
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,8 @@ public class SkillEffectBase : EffectBase
 
     protected BATTLE_SEND_DATA Send_Data;
 
+    protected EffectComponent Effect_Comp;
+
     public void SetBattleSendData(BATTLE_SEND_DATA d)
     {
         this.Send_Data = d;
@@ -165,9 +167,10 @@ public class SkillEffectBase : EffectBase
             targets.AddRange(Send_Data.Targets);
         }
 
-        ExecOnetimeSkills(targets);
+        ExecOnetimeSkills_V2(targets);
         ExecDurationSkills(targets);
     }
+
     /// <summary>
     /// 일회성 스킬 이펙트 구현
     /// </summary>
@@ -206,6 +209,51 @@ public class SkillEffectBase : EffectBase
         }
 
     }
+    protected void ExecOnetimeSkills_V2(List<HeroBase_V2> targets)
+    {
+        var onetime_list = Send_Data.Skill.GetOnetimeSkillDataList();
+        int t_cnt = targets.Count;
+        for (int t = 0; t < t_cnt; t++)
+        {
+            var target = targets[t];
+            int cnt = onetime_list.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                var onetime = onetime_list[i];
+                string effect_path = onetime.GetEffectPrefab();
+                if (string.IsNullOrEmpty(effect_path))
+                {
+                    onetime.ExecSkill(Send_Data);
+                    continue;
+                }
+                Send_Data.Onetime = onetime;
+
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                effect.SetBattleSendData(Send_Data);
+
+                var ec = effect.GetEffectComponent();
+                if (ec != null)
+                {
+                    var target_trans = ec.GetTargetReachPosition(target);
+                    var target_pos = target_trans.position;
+                    target_pos.z = target.transform.position.z;
+                    effect.transform.position = target_pos;
+                    effect.StartParticle(ec.Effect_Duration);
+                }
+                else
+                {
+                    PROJECTILE_TYPE ptype = onetime.GetProjectileType();
+                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
+                    var target_pos = target_trans.position;
+
+                    target_pos.z = target.transform.position.z;
+                    effect.transform.position = target_pos;
+                    effect.StartParticle((float)onetime.GetEffectDuration());
+                }
+            }
+        }
+    }
+
 
     /// <summary>
     /// 지속섣 스킬 이펙트 구현
@@ -252,14 +300,96 @@ public class SkillEffectBase : EffectBase
 
             }
         }
+    }
+    protected void ExecDurationSkills_V2(List<HeroBase_V2> targets)
+    {
+        var duration_list = Send_Data.Skill.GetDurationSkillDataList();
+        int t_cnt = targets.Count;
+        for (int t = 0; t < t_cnt; t++)
+        {
+            var target = targets[t];
+            int cnt = duration_list.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                var duration = duration_list[i];
+                string effect_path = duration.GetEffectPrefab();
+                if (string.IsNullOrEmpty(effect_path))
+                {
+                    duration.ExecSkill(Send_Data);
+                    continue;
+                }
+                Send_Data.Duration = duration;
+
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                effect.SetBattleSendData(Send_Data);
+
+                var ec = effect.GetEffectComponent();
+                if (ec != null)
+                {
+                    var target_trans = ec.GetTargetReachPosition(target);
+                    var target_pos = target_trans.position;
+                    target_pos.z = target.transform.position.z;
+                    effect.transform.position = target_pos;
+
+                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
+                    {
+                        float distance = Vector3.Distance(this.transform.position, target_trans.position);
+                        float flying_time = distance / ec.Projectile_Velocity;
+                        effect.MoveTarget(target_trans, flying_time);
+                    }
+                    else if(ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                    {
+                        effect.StartParticle(target_trans, ec.Effect_Duration, ec.Is_Loop);
+                    }
+                    else
+                    {
+                        Debug.Assert(false);
+                    }
+                }
+                else
+                {
+                    PROJECTILE_TYPE ptype = duration.GetProjectileType();
+                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
+
+                    var target_pos = target_trans.position;
+                    target_pos.z = target.transform.position.z;
+                    effect.transform.position = target_pos;
+
+                    float eff_dur = (float)duration.GetEffectDuration();
+                    if (duration.IsThrowingNode())
+                    {
+                        effect.MoveTarget(target_trans, eff_dur);
+                    }
+                    else
+                    {
+                        effect.StartParticle(target_trans, eff_dur, eff_dur == 0);
+
+                    }
+                }
 
 
+            }
+        }
     }
 
+    public EffectComponent GetEffectComponent()
+    {
+        CheckEffectComponent();
+        return Effect_Comp;
+    }
+
+    protected void CheckEffectComponent()
+    {
+        if (Effect_Comp == null)
+        {
+            Effect_Comp = GetComponent<EffectComponent>();
+        }
+    }
 
     public override void Spawned()
     {
         base.Spawned();
+        CheckEffectComponent();
         Send_Data.Reset();
     }
 

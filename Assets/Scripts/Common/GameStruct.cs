@@ -84,6 +84,20 @@ public struct SD_Body_Pos_Data
     public UnityEngine.Transform Trans;
 }
 
+[Serializable]
+public struct Start_Projectile_Pos_Data
+{
+    public CASTER_START_POS_TYPE Pos_Type;
+    public UnityEngine.Transform Trans;
+}
+
+[Serializable]
+public struct Target_Reach_Pos_Data
+{
+    public TARGET_REACH_POS_TYPE Pos_Type;
+    public UnityEngine.Transform Trans;
+}
+
 public struct Effect_Queue_Data
 {
     public string effect_path;

@@ -146,7 +146,6 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     public virtual void Spawned()
     {
-
         Is_Action = false;
         Is_Loop = false;
     }

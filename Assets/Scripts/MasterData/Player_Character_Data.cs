@@ -46,11 +46,11 @@ public class Player_Character_Data : System.IDisposable
 	///	</summary>
 	public int battle_info_id {get; set;}
 	///	<summary>
-	///	프리팹
+	///	전투용 프리팹
 	///	</summary>
 	public string prefab_path {get; set;}
 	///	<summary>
-	///	UI 프리팹
+	///	결과 UI 프리팹
 	///	</summary>
 	public string sd_prefab_path {get; set;}
 	///	<summary>

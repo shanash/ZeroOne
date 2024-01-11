@@ -1,3 +1,5 @@
+using Spine;
+
 public class Monster_100001 : MonsterBase_V2
 {
 
@@ -40,6 +42,21 @@ public class Monster_100001 : MonsterBase_V2
     #endregion
 
     #region Spine Func Callback
+
+    //protected override void SpineAnimationStart(TrackEntry entry)
+    //{
+    //    string animation_name = entry.Animation.Name;
+
+    //    UNIT_STATES state = GetCurrentState();
+    //    if (state == UNIT_STATES.ATTACK_1)
+    //    {
+    //        var skill = GetSkillManager().GetCurrentSkillGroup();
+    //        if (animation_name.Equals(skill.GetSkillActionName()))
+    //        {
+    //            SpawnSkillCastEffect(skill);
+    //        }
+    //    }
+    //}
     //protected override void SpineAnimationComplete(TrackEntry entry)
     //{
     //    string animation_name = entry.Animation.Name;

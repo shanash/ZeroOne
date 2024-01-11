@@ -728,10 +728,19 @@ public enum SD_BODY_TYPE
 	BODY = 2,
 	/// <summary>발끝(ROOT)</summary>
 	FOOT = 3,
-	/// <summary>왼손</summary>
-	LEFT_HAND = 4,
-	/// <summary>오른손</summary>
-	RIGHT_HAND = 5,
+}
+
+///	<summary>
+///	이펙트의 싱글/멀티플 타입
+///	</summary>
+public enum EFFECT_COUNT_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>전체 공격 등 대표 이펙트 하나만 발현되는 이펙트</summary>
+	SINGLE_EFFECT = 1,
+	/// <summary>각 타겟에 개별적으로 발현되는 이펙트</summary>
+	EACH_TARGET_EFFECT = 2,
 }
 
 ///	<summary>

@@ -11,9 +11,20 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
 
     public override void MoveTarget(Transform target, float duration)
     {
-        base.MoveTarget(target, duration);
-        Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
-        Mover.StartEasing(Target_Transform, MoveEndCallback);
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            base.MoveTarget(target, duration);
+            ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+            ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
+        }
+        else
+        {
+            base.MoveTarget(target, duration);
+            Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+            Mover.StartEasing(Target_Transform, MoveEndCallback);
+        }
+        
     }
 
     /// <summary>
@@ -29,13 +40,31 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
     public override void OnPuase()
     {
         base.OnPuase();
-        Mover?.OnPause();
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Mover?.OnPause();
+        }
+        else
+        {
+            Mover?.OnPause();
+        }
+        
     }
 
     public override void OnResume()
     {
         base.OnResume();
-        Mover?.OnResume();
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Mover?.OnResume();
+        }
+        else 
+        { 
+            Mover?.OnResume(); 
+        }
+        
     }
 
 }

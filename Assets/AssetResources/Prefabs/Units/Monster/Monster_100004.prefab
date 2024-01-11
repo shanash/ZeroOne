@@ -1293,6 +1293,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5044185317357716102}
+--- !u!1 &3216003701861002131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4661021010726482183}
+  m_Layer: 0
+  m_Name: PROJECTILE_POS_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4661021010726482183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3216003701861002131}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.87, y: -0.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1532632890031170691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3227964721309884810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,6 +1748,16 @@ MonoBehaviour:
   - Body_Type: 2
     Trans: {fileID: 2044324755221471627}
   - Body_Type: 1
+    Trans: {fileID: 5244812092419025548}
+  Start_Projectile_Transforms:
+  - Pos_Type: 1
+    Trans: {fileID: 4661021010726482183}
+  Reach_Pos_Transforms:
+  - Pos_Type: 3
+    Trans: {fileID: 432140634127385083}
+  - Pos_Type: 2
+    Trans: {fileID: 2044324755221471627}
+  - Pos_Type: 1
     Trans: {fileID: 5244812092419025548}
 --- !u!1 &3668174237278136019
 GameObject:
@@ -3253,7 +3294,8 @@ Transform:
   m_LocalPosition: {x: 1.6532568, y: 0.008087311, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4661021010726482183}
   m_Father: {fileID: 4587002142647472967}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5571666713280093203

@@ -10,7 +10,15 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
 {
     public override void StartParticle(float duration, bool loop)
     {
-        base.StartParticle(duration, loop);
+        var ec = GetEffectComponent();
+        if (ec != null )
+        {
+            base.StartParticle(ec.Effect_Duration, loop);
+        }
+        else
+        {
+            base.StartParticle(duration, loop);
+        }
 
         Send_Data.Onetime?.ExecSkill(Send_Data);
     }

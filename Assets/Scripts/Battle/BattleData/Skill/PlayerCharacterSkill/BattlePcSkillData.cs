@@ -138,6 +138,11 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
         return Data.projectile_speed;
     }
 
+    public override EFFECT_COUNT_TYPE GetEffectCountType()
+    {
+        return Data.effect_count_type;
+    }
+
     public override TARGET_TYPE GetTargetType()
     {
         return Data.target_type;

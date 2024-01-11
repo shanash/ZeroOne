@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7336980788748749167}
   - component: {fileID: 6873484093455003102}
   - component: {fileID: 7710633174745982843}
+  - component: {fileID: 8410392740079947188}
   m_Layer: 0
   m_Name: SkillEffect_Lucia_Attack_01_Cast
   m_TagString: Untagged
@@ -4888,6 +4889,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+--- !u!114 &8410392740079947188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1741790483498069381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effect_Type: 1
+  Effect_Duration: 1.1
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 3
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Curve_Height: 0
+  Mover: {fileID: 0}
+  Projectile_Velocity: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+  Following_Target: {fileID: 0}
 --- !u!1 &2949730242082812128
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,6 +38,10 @@ public class Npc_Skill_Data : System.IDisposable
 	///	</summary>
 	public double target_range {get; set;}
 	///	<summary>
+	///	이펙트 카운트 타입
+	///	</summary>
+	public EFFECT_COUNT_TYPE effect_count_type {get; set;}
+	///	<summary>
 	///	발사체 타입
 	///	</summary>
 	public PROJECTILE_TYPE projectile_type {get; set;}
@@ -85,10 +89,6 @@ public class Npc_Skill_Data : System.IDisposable
 	///	</summary>
 	public string event_name {get; set;}
 	///	<summary>
-	///	투사체 시작 위치
-	///	</summary>
-	public SD_BODY_TYPE sd_body_type {get; set;}
-	///	<summary>
 	///	트리거 이펙트 프리팹
 	///	</summary>
 	public string trigger_effect_path {get; set;}
@@ -103,11 +103,11 @@ public class Npc_Skill_Data : System.IDisposable
 		target_rule_type = TARGET_RULE_TYPE.RANDOM;
 		target_order = 0;
 		target_count = 0;
+		effect_count_type = EFFECT_COUNT_TYPE.NONE;
 		projectile_type = PROJECTILE_TYPE.NONE;
 		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
 		max_second_target_count = 0;
 		event_name = string.Empty;
-		sd_body_type = SD_BODY_TYPE.NONE;
 		trigger_effect_path = string.Empty;
 	}
 
@@ -138,6 +138,7 @@ public class Npc_Skill_Data : System.IDisposable
 		sb.AppendFormat("[target_order] = <color=yellow>{0}</color>", target_order).AppendLine();
 		sb.AppendFormat("[target_count] = <color=yellow>{0}</color>", target_count).AppendLine();
 		sb.AppendFormat("[target_range] = <color=yellow>{0}</color>", target_range).AppendLine();
+		sb.AppendFormat("[effect_count_type] = <color=yellow>{0}</color>", effect_count_type).AppendLine();
 		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
 		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendFormat("[second_target_rule] = <color=yellow>{0}</color>", second_target_rule).AppendLine();
@@ -194,7 +195,6 @@ public class Npc_Skill_Data : System.IDisposable
 		}
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();
-		sb.AppendFormat("[sd_body_type] = <color=yellow>{0}</color>", sd_body_type).AppendLine();
 		sb.AppendFormat("[trigger_effect_path] = <color=yellow>{0}</color>", trigger_effect_path).AppendLine();
 		return sb.ToString();
 	}

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public partial class HeroBase_V2 : UnitBase_V2
@@ -120,7 +121,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return sum;
     }
-
+    [Obsolete]
     /// <summary>
     /// body 타입에 따른 좌표 정보 반환
     /// </summary>
@@ -134,6 +135,53 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return null;
     }
+
+    /// <summary>
+    /// 도착 pos type에 따른 좌표 정보 반환
+    /// </summary>
+    /// <param name="ptype"></param>
+    /// <returns></returns>
+    protected Transform GetReachPosTypeTransform(TARGET_REACH_POS_TYPE ptype)
+    {
+        if (ptype == TARGET_REACH_POS_TYPE.RIGHT_TEAM_CENTER || ptype == TARGET_REACH_POS_TYPE.LEFT_TEAM_CENTER)
+        {
+            var factory = Battle_Mng.GetEffectFactory();
+            if (ptype == TARGET_REACH_POS_TYPE.LEFT_TEAM_CENTER)
+            {
+                return factory.GetLeftCenter();
+            }
+            else if (ptype == TARGET_REACH_POS_TYPE.RIGHT_TEAM_CENTER)
+            {
+                return factory.GetRightCenter();
+            }
+            return null;
+        }
+        else
+        {
+            if (Reach_Pos_Transforms.Exists(x => x.Pos_Type == ptype))
+            {
+                return Reach_Pos_Transforms.Find(x => x.Pos_Type == ptype).Trans;
+            }
+
+            return null;
+        }
+        
+    }
+    /// <summary>
+    /// 투사체의 시작 위치 찾기
+    /// </summary>
+    /// <param name="ptype"></param>
+    /// <returns></returns>
+    public Transform GetStartPosTypeTransform(CASTER_START_POS_TYPE ptype)
+    {
+        if (Start_Projectile_Transforms.Exists(x => x.Pos_Type == ptype))
+        {
+            return Start_Projectile_Transforms.Find(x => x.Pos_Type == ptype).Trans;
+        }
+        return null;
+    }
+
+    [Obsolete]
     /// <summary>
     /// 발사체 타입에 따른 타겟의 Transform 반환
     /// </summary>
@@ -154,6 +202,18 @@ public partial class HeroBase_V2 : UnitBase_V2
                 return GetBodyTypeTransform(SD_BODY_TYPE.HEAD);
         }
         return null;
+    }
+
+    /// <summary>
+    /// 이펙트 발현 타겟 위치<br/>
+    /// 투사체 : 이펙트의 도착 위치<br/>
+    /// 캐스팅, 즉발형 : 이펙트의 시작 위치
+    /// </summary>
+    /// <param name="ptype"></param>
+    /// <returns></returns>
+    public Transform GetTargetReachPostionByTargetReachPosType(TARGET_REACH_POS_TYPE ptype)
+    {
+        return GetReachPosTypeTransform(ptype);
     }
 
     public BattleUnitData GetBattleUnitData()
