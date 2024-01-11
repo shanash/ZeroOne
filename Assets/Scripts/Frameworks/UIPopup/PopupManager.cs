@@ -9,9 +9,8 @@ namespace FluffyDuck.UI
 {
     public class PopupManager : MonoSingleton<PopupManager>
     {
-        PopupContainer Container;
-
         List<PopupBase> Popup_List;
+        PopupContainer Container;
 
         /// <summary>
         /// 모든 팝업이 사라지면 Root에 OnEnter()를 호출해준다.
@@ -46,8 +45,16 @@ namespace FluffyDuck.UI
 
         async void InitializeAsync()
         {
-            var go = await GameObjectPoolManager.Instance.GetGameObjectAsync("Assets/AssetResources/Prefabs/Popup/Popup_Container", this.transform);
-            Container = go.GetComponent<PopupContainer>();
+            try
+            {
+                var go = await GameObjectPoolManager.Instance.GetGameObjectAsync("Assets/AssetResources/Prefabs/Popup/Popup_Container", this.transform);
+                Container = go.GetComponent<PopupContainer>();
+            }
+            catch (Exception)
+            {
+                // 없으면 재시도..
+                Invoke("Initialize", 1.0f);
+            }
         }
 
         /// <summary>
