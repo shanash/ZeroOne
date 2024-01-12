@@ -1,4 +1,5 @@
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -48,10 +49,10 @@ public class StatusPopup : PopupBase
             (ConstString.Hero.ATTACK_POWER, Data.GetAttackPoint().ToString("N0")),
             (ConstString.Hero.DEFENCE_POINT, Data.GetDefensePoint().ToString("N0")),
             (ConstString.Hero.APPROACH_DISTANCE, Data.GetApproachDistance().ToString("N0")),
-            (ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToString("N0")),
+            (ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToPercentage()),
             (ConstString.Hero.EVASION_POINT, Data.GetEvationPoint().ToString("N0")),
             (ConstString.Hero.ACCURACY_POINT, Data.GetAccuracyPoint().ToString("N0")),
-            (ConstString.Hero.AUTO_RECORVERY, Data.GetAutoRecoveryLife().ToString("N0")),
+            (ConstString.Hero.AUTO_RECORVERY, Data.GetAutoRecoveryLife().ToPercentage()),
         };
 
         while (Statuses.Count < tuple_status_data.Length)
@@ -64,5 +65,11 @@ public class StatusPopup : PopupBase
             ui.gameObject.SetActive(true);
             Statuses.Add(ui);
         }
+    }
+
+    public void OnClickClose()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
     }
 }
