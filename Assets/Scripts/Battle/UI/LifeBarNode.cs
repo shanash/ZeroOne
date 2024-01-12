@@ -30,11 +30,11 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     {
         if (ttype == TEAM_TYPE.LEFT)
         {
-            Life_Bar.color = CommonUtils.ToRGBFromHex("00FF00");
+            Life_Bar.color = "00FF00".ToRGBFromHex();
         }
         else
         {
-            Life_Bar.color = CommonUtils.ToRGBFromHex("FFAA00");
+            Life_Bar.color = "FFAA00".ToRGBFromHex();
         }
 
         if (Show_Coroutine != null)

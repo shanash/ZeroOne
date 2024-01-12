@@ -15,39 +15,7 @@ public class FilterRadioBtn : MonoBehaviour
 
     private void Start()
     {
-        switch (Filter_Type)
-        {
-            case CHARACTER_SORT.NAME:
-                Filter_Text.text = "이름";
-                break;
-            case CHARACTER_SORT.LEVEL_CHARACTER:
-                Filter_Text.text = "레벨";
-                break;
-            case CHARACTER_SORT.STAR:
-                Filter_Text.text = "성급";
-                break;
-            case CHARACTER_SORT.DESTINY:
-                Filter_Text.text = "인연 랭크";
-                break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                Filter_Text.text = "스킬 레벨";
-                break;
-            case CHARACTER_SORT.EX_SKILL_LEVEL:
-                Filter_Text.text = "궁극기 스킬 레벨";
-                break;
-            case CHARACTER_SORT.ATTACK:
-                Filter_Text.text = "공격력";
-                break;
-            case CHARACTER_SORT.DEFEND:
-                Filter_Text.text = "방어력";
-                break;
-            case CHARACTER_SORT.RANGE:
-                Filter_Text.text = "사거리";
-                break;
-            case CHARACTER_SORT.LIKEABILITY:
-                Filter_Text.text = "호감도";
-                break;
-        }
+        Filter_Text.text = ConstString.Hero.SORT_FILLTER[(int)Filter_Type];
     }
 
     public CHARACTER_SORT GetCharacterFilterType()

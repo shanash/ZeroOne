@@ -48,10 +48,30 @@ public abstract class BattleUnitData : BattleDataBase
 
     /// <summary>
     /// 전투력 포인트
-    /// TODO: 일단 UI에 있어서 만들어놓았습니다만 구현하던지 필요없다면 삭제를..
     /// </summary>
     /// <returns></returns>
-    public virtual double GetCombatPoint() { return 1557; }
+    public virtual double GetCombatPoint()
+    {
+        var hp = GetLifePoint();
+        var ap = GetAttackPoint();
+        var dp = GetDefensePoint();
+        var al = GetAutoRecoveryLife();
+        var ep = GetEvationPoint();
+        var ar = GetAttackRecovery();
+        var acp = GetAccuracyPoint();
+        var sum_skills_level = GetSumSkillsLevel();
+
+        var cp =
+            hp * 0.1f
+            + (ap + dp) * 4.5f
+            + al * 0.1f
+            + ep * 6f
+            + ar * 4.5f
+            + acp * 2f
+            + sum_skills_level * 10f;
+
+        return cp;
+    }
 
     /// <summary>
     /// 공격 포인트
@@ -70,6 +90,12 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public abstract double GetLifePoint();
+
+    /// <summary>
+    /// 흡혈량
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetAttackRecovery() { return 0; }
 
     /// <summary>
     /// 명중 포인트
@@ -122,6 +148,13 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public abstract int[] GetSkillPattern();
+
+    /// <summary>
+    /// 데이터가 없어서 임시로 만들어놓은 UI 표시용 레벨합계 값입니다
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetSumSkillsLevel() { return 3; }
+
     /// <summary>
     /// 포지션 타입
     /// </summary>

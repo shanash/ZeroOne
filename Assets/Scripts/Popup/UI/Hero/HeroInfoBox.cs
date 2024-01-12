@@ -1,8 +1,15 @@
-using FluffyDuck.UI;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HeroInfoBox : MonoBehaviour
 {
+    [SerializeField]
+    List<TMP_Text> Tab_Off_Names;
+
+    [SerializeField]
+    List<TMP_Text> Tab_On_Names;
+
     [SerializeField, Tooltip("Tab Controller")]
     Gpm.Ui.TabController Tab_Controller;
 
@@ -17,6 +24,19 @@ public class HeroInfoBox : MonoBehaviour
     public void SetHeroData(BattleUnitData data)
     {
         User_Hero_Data = data;
+        FixedUpdatePopup();
+    }
+
+    public void FixedUpdatePopup()
+    {
+        int cnt = ConstString.HeroInfoUI.TAB_NAMES.Length;
+
+        for (int i = 0; i < cnt; i++)
+        {
+            Tab_Off_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
+            Tab_On_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
+        }
+
         Refresh();
     }
 
@@ -31,7 +51,7 @@ public class HeroInfoBox : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 }

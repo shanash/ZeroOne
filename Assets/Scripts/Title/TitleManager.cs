@@ -23,7 +23,7 @@ public class TitleManager : MonoBehaviour
     {
         if (Is_Enable_Touch)
         {
-            CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+            CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
         }
     }
 

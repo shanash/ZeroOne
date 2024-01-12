@@ -93,6 +93,15 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
+    public override double GetAttackRecovery()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.attack_recovery;
+        }
+        return base.GetAttackRecovery();
+    }
+
     public override double GetAccuracyPoint()
     {
         if (Battle_Data != null)

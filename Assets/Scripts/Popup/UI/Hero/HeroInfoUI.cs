@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class HeroInfoUI : PopupBase
 {
+    [SerializeField]
+    TMP_Text Title;
+
     [SerializeField, Tooltip("InfoBox Tap Controller")]
     Gpm.Ui.TabController InfoBox_Tab_Controller;
 
@@ -72,6 +75,8 @@ public class HeroInfoUI : PopupBase
         var Hero_Base_Data = (Player_Character_Data)User_Hero_Battle_Data.GetUnitData();
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
 
+        Title.text = ConstString.HeroInfoUI.TITLE;
+
         Level_Text.text = $"LV. {User_Hero_Battle_Data.GetLevel()}";
         Name_Text.text = Hero_Base_Data.name_kr;
 
@@ -89,12 +94,12 @@ public class HeroInfoUI : PopupBase
         index = (int)User_Hero_Battle_Data.GetTribeType() - 1;
         Tribe_Box.sprite = Tribe_Box_Sprites[index];
         Tribe_Tag.sprite = Tribe_Tag_Sprites[index];
-        Tribe_Text.text = ConstString.Hero_Tribes[(int)Hero_Base_Data.tribe_type];
+        Tribe_Text.text = ConstString.Hero.TRIBES[(int)Hero_Base_Data.tribe_type];
 
         // 역할 태그 설정
         index = (int)Hero_Base_Data.role_type - 1;
         Role_Icon.sprite = Role_Icon_Sprites[index];
-        Role_Text.text = ConstString.Hero_Roles[(int)Hero_Base_Data.role_type];
+        Role_Text.text = ConstString.Hero.ROLE[(int)Hero_Base_Data.role_type];
 
         Hero_Info_Box.Refresh();
     }
@@ -123,7 +128,7 @@ public class HeroInfoUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 

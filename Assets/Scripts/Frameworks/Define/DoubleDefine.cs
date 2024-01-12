@@ -74,6 +74,11 @@ namespace FluffyDuck.Util
 
             return string.Format("{0}{1}{2}", significant, showNumber, unityString);
         }
+
+        public static string ToPercentage(this double value)
+        {
+            return $"{value * 100}%";
+        }
     }
 
 }

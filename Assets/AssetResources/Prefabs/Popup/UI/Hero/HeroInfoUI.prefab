@@ -1235,10 +1235,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c493a747cb267c4f9f5bd9440f8e1a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Combat_Subject: {fileID: 4957184588657783070}
+  Attack_Subject: {fileID: 245126187357417496}
+  Defense_Subject: {fileID: 8511520306015307297}
+  Life_Subject: {fileID: 8799003835706464226}
+  Advance_Skill: {fileID: 8796648883531019450}
+  Advance_Equipment: {fileID: 4280297354950373868}
+  Attack_Weapon: {fileID: 1606190117734652634}
   Combat_Number_Text: {fileID: 851373014752878776}
   Attack_Number_Text: {fileID: 794792768033873099}
   Defense_Number_Text: {fileID: 9026519989358627676}
-  Health_Number_Text: {fileID: 4310103280195613635}
+  Life_Number_Text: {fileID: 4310103280195613635}
   Skill_Icons:
   - {fileID: 2189729020555797737}
   - {fileID: 2494486491391273342}
@@ -3546,6 +3553,7 @@ MonoBehaviour:
   Box_Rect: {fileID: 8817862936172661720}
   Popup_Type: 1
   Ease_Base: {fileID: 0}
+  Title: {fileID: 7291611200885026745}
   InfoBox_Tab_Controller: {fileID: 1343118700148395145}
   Level_Text: {fileID: 8724072765337831883}
   Name_Text: {fileID: 6249263199654467923}
@@ -7101,6 +7109,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae8ede89e48e114c9e632beb1a197d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Tab_Off_Names:
+  - {fileID: 1260419616030043044}
+  - {fileID: 4502810788413014681}
+  - {fileID: 4649544407459432863}
+  Tab_On_Names:
+  - {fileID: 4672174112814604645}
+  - {fileID: 1525376938587288517}
+  - {fileID: 2798701046477334559}
   Tab_Controller: {fileID: 1343118700148395145}
   Hero_Info_Box_Basic: {fileID: 2937203946966874282}
   Hero_Info_Box_LevelUp: {fileID: 5044565184698142114}
@@ -14311,6 +14327,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6365549811680612700, guid: 924fd6f648cca894d81115658b1ff172, type: 3}
   m_PrefabInstance: {fileID: 7374530295810601434}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7291611200885026745 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 245052529936129635, guid: 924fd6f648cca894d81115658b1ff172, type: 3}
+  m_PrefabInstance: {fileID: 7374530295810601434}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8910783084214062075
 PrefabInstance:
   m_ObjectHideFlags: 0

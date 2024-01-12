@@ -19,7 +19,7 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
     public void OnClickSearch()
@@ -27,7 +27,7 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
     public void OnClickDungeon()
@@ -35,7 +35,7 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
     public void OnClickClanBattle()
@@ -43,7 +43,7 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
     public void OnClickBossBattle()
@@ -51,7 +51,7 @@ public class MissionGateUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 }

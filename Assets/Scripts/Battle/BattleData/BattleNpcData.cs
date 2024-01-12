@@ -82,6 +82,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+
     public override double GetAccuracyPoint()
     {
         if (Battle_Data != null)

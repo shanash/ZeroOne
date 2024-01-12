@@ -101,10 +101,10 @@ public class LobbyManager : MonoBehaviour
     public void OnClickHouse()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        //CommonUtils.ShowToast("준비중 입니다.", TOAST_BOX_LENGTH.SHORT);
+        //CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 
@@ -113,7 +113,7 @@ public class LobbyManager : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
     public void OnClickShop()
@@ -121,7 +121,7 @@ public class LobbyManager : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 
@@ -131,7 +131,7 @@ public class LobbyManager : MonoBehaviour
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 

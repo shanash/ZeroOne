@@ -142,46 +142,12 @@ public class PartySettingPopup : PopupBase
 
     void UpdateFilterType()
     {
-        switch (Filter_Type)
-        {
-            case CHARACTER_SORT.NAME:
-                Filter_Name.text = "이름";
-                break;
-            case CHARACTER_SORT.LEVEL_CHARACTER:
-                Filter_Name.text = "레벨";
-                break;
-            case CHARACTER_SORT.STAR:
-                Filter_Name.text = "성급";
-                break;
-            case CHARACTER_SORT.DESTINY:
-                Filter_Name.text = "인연 레벨";
-                break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                Filter_Name.text = "스킬 레벨";
-                break;
-            case CHARACTER_SORT.EX_SKILL_LEVEL:
-                Filter_Name.text = "궁극 스킬 레벨";
-                break;
-            case CHARACTER_SORT.ATTACK:
-                Filter_Name.text = "공격력";
-                break;
-            case CHARACTER_SORT.DEFEND:
-                Filter_Name.text = "방어력";
-                break;
-            case CHARACTER_SORT.RANGE:
-                Filter_Name.text = "사정거리";
-                break;
-            case CHARACTER_SORT.LIKEABILITY:
-                Filter_Name.text = "호감도";
-                break;
-        }
+        Filter_Name.text = ConstString.Hero.SORT_FILLTER[(int)Filter_Type];
     }
 
     public override void UpdatePopup()
     {
         Party_Mng.UpdateUserPartySettings();
-
-
     }
 
     /// <summary>

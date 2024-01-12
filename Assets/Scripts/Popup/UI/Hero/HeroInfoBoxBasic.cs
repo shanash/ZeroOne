@@ -7,6 +7,21 @@ using UnityEngine.UI;
 
 public class HeroInfoBoxBasic : MonoBehaviour
 {
+    [SerializeField]
+    TMP_Text Combat_Subject;
+    [SerializeField]
+    TMP_Text Attack_Subject;
+    [SerializeField]
+    TMP_Text Defense_Subject;
+    [SerializeField]
+    TMP_Text Life_Subject;
+    [SerializeField]
+    TMP_Text Advance_Skill;
+    [SerializeField]
+    TMP_Text Advance_Equipment;
+    [SerializeField]
+    TMP_Text Attack_Weapon;
+
     [SerializeField, Tooltip("Combat Text")]
     protected TMP_Text Combat_Number_Text;
 
@@ -17,7 +32,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
     protected TMP_Text Defense_Number_Text;
 
     [SerializeField, Tooltip("Health Text")]
-    protected TMP_Text Health_Number_Text;
+    protected TMP_Text Life_Number_Text;
 
     [SerializeField, Tooltip("Skill Icons")]
     protected List<Image> Skill_Icons;
@@ -28,6 +43,16 @@ public class HeroInfoBoxBasic : MonoBehaviour
     public void SetHeroData(BattleUnitData data)
     {
         Unit_Data = data;
+
+        FixedUpdatePopup();
+    }
+
+    public void FixedUpdatePopup()
+    {
+        Combat_Subject.text = ConstString.Hero.COMBAT_POWER;
+        Attack_Subject.text = ConstString.Hero.ATTACK_POWER;
+        Defense_Subject.text = ConstString.Hero.DEFENCE_POINT;
+        Life_Subject.text = ConstString.Hero.LIFE_POINT;
 
         Refresh();
     }
@@ -42,7 +67,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Combat_Number_Text.text = Unit_Data.GetCombatPoint().ToString("N0");
         Attack_Number_Text.text = Unit_Data.GetAttackPoint().ToString("N0");
         Defense_Number_Text.text = Unit_Data.GetDefensePoint().ToString("N0");
-        Health_Number_Text.text = Unit_Data.GetLifePoint().ToString("N0");
+        Life_Number_Text.text = Unit_Data.GetLifePoint().ToString("N0");
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
@@ -53,7 +78,6 @@ public class HeroInfoBoxBasic : MonoBehaviour
             int index = i;
             CommonUtils.GetResourceFromAddressableAsset<Sprite>(Skill_Mng.Skill_Groups[i].GetSkillIconPath(), (spr) =>
             {
-                Debug.Log($"index : {index}");
                 Skill_Icons[index].sprite = spr;
             });
         }
@@ -69,16 +93,16 @@ public class HeroInfoBoxBasic : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 
     public void OnClickStatusDetailButon()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(Unit_Data);
         });
     }
 
@@ -87,7 +111,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 
@@ -96,7 +120,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
         {
-            popup.ShowPopup(3f, "준비중 입니다.");
+            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
     }
 }
