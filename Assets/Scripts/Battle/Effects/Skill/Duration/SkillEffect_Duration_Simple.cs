@@ -9,7 +9,15 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
     {
         base.StartParticle(target, duration, loop);
 
-        Following?.SetTarget(target);
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.SetFollowingTarget(target);
+        }
+        else
+        {
+            Following?.SetTarget(target);
+        }
 
         //  add duration skill data
         Send_Data.Duration?.SetSkillEffect(this);
@@ -22,7 +30,16 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
         base.MoveTarget(target, duration);
 
         Is_Loop = duration == 0f;
-        Following?.SetTarget(target);
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.SetFollowingTarget(target);
+        }
+        else
+        {
+            Following?.SetTarget(target);
+        }
+        
 
         Send_Data.Duration?.SetSkillEffect(this);
         Send_Data.Duration?.ExecSkill(Send_Data);

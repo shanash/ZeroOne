@@ -54,7 +54,7 @@ public enum THROWING_TYPE
 {
     NONE = 0,
     LINEAR,                 //  직선형
-    CURVE,                  //  곡선형(포물선형)
+    PARABOLA,               //  곡선형(포물선형)
 }
 
 
@@ -80,11 +80,14 @@ public class EffectComponent : MonoBehaviour
     [SerializeField, Tooltip("투사 방식의 타입\n 투사 방식에 따라 Curve 또는 Mover를 사용한다.")]
     public THROWING_TYPE Throwing_Type = THROWING_TYPE.NONE;
 
-    [SerializeField, Tooltip("포물선 이동 컴포넌트")]
+    [SerializeField, Tooltip("커브 이동 컴포넌트")]
     public BezierMove3D Curve;
 
+    [SerializeField, Tooltip("포물선 컴포넌트")]
+    public ParabolaMove3D Parabola;
+
     [SerializeField, Tooltip("포물선 이동 높이")]
-    public float Curve_Height;
+    public float Parabola_Height;
 
     [SerializeField, Tooltip("직선 이동 컴포넌트")]
     public EasingMover3D Mover;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillEffect_Bezier_Bullet : SkillEffectBase
+public class SkillEffect_Parabola_Bullet : SkillEffectBase
 {
     public override void MoveTarget(Transform target, float duration)
     {
@@ -11,18 +11,11 @@ public class SkillEffect_Bezier_Bullet : SkillEffectBase
         
         var this_pos = this.transform.position;
         var target_pos = target.position;
-        var center_pos = (this_pos + target_pos) * 0.5f;
-        center_pos.y += ec.Curve_Height;
 
-        List<Vector3> pos_list = new List<Vector3>();
-        pos_list.Add(this_pos);
-        pos_list.Add(center_pos);
-        pos_list.Add(target_pos);
-
-        ec.Curve.Move(pos_list, duration, 0, CurveEndCallback);
+        ec.Parabola.Move(this_pos, target_pos, ec.Parabola_Height, ec.Projectile_Velocity, MoveEndCallback);
     }
 
-    void CurveEndCallback(object data)
+    void MoveEndCallback(object data)
     {
         SkillExec();
         Finish_Callback?.Invoke(this);
@@ -32,11 +25,21 @@ public class SkillEffect_Bezier_Bullet : SkillEffectBase
     public override void OnPuase()
     {
         base.OnPuase();
-        //  curve pause todo
+        //  parabola pause todo
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Parabola?.SetPuase(true);
+        }
     }
     public override void OnResume()
     {
         base.OnResume();
-        //  curve resume todo
+        //  parabola resume todo
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Parabola?.SetPuase(false);
+        }
     }
 }

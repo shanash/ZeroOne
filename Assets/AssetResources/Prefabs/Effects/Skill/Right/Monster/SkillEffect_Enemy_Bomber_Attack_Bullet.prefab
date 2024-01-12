@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 854545118943464363}
   - component: {fileID: 9196096676015384376}
   - component: {fileID: 8800525562459116963}
-  - component: {fileID: 3805326515784513547}
   - component: {fileID: 871863677826831496}
   - component: {fileID: 328592059939070342}
   - component: {fileID: 1669474977827628956}
   - component: {fileID: 6450453735029319001}
   - component: {fileID: 3617453101892856563}
+  - component: {fileID: -6392088779832871589}
   m_Layer: 0
   m_Name: SkillEffect_Enemy_Bomber_Attack_Bullet
   m_TagString: Untagged
@@ -4835,18 +4835,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &3805326515784513547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3754621594486084364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d076f185ea25cc4eaa3b5e181ff1777, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &871863677826831496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4919,13 +4907,26 @@ MonoBehaviour:
   Projectile_Start_Pos_Type: 1
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 2
-  Curve: {fileID: 3805326515784513547}
-  Curve_Height: 10
+  Curve: {fileID: 0}
+  Parabola: {fileID: -6392088779832871589}
+  Parabola_Height: 5
   Mover: {fileID: 0}
-  Projectile_Velocity: 30
+  Projectile_Velocity: 15
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
   Following_Target: {fileID: 0}
+--- !u!114 &-6392088779832871589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3754621594486084364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd224fef45b0d4c4cbf728fb47a48228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7270898726882747254
 GameObject:
   m_ObjectHideFlags: 0
