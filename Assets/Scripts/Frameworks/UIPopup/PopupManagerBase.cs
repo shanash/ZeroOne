@@ -2,15 +2,16 @@ using UnityEngine;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using System;
-using UnityEngine.SceneManagement;
-
 
 namespace FluffyDuck.UI
 {
-    public class PopupManager : MonoSingleton<PopupManager>
+    /// <summary>
+    /// 팝업 구성이 변동될 수 있기 때문에 PopupContainer는 abstract로 따로 빼두고
+    /// PopupManagerBase를 상속받은 클래스를 사용합니다
+    /// </summary>
+    public abstract class PopupManagerBase<T> : MonoSingleton<T> where T : MonoSingleton<T>
     {
         List<PopupBase> Popup_List;
-        PopupContainer Container;
 
         /// <summary>
         /// 모든 팝업이 사라지면 Root에 OnEnter()를 호출해준다.
@@ -21,40 +22,19 @@ namespace FluffyDuck.UI
         /// </summary>
         Action Root_On_Exit;
 
+        protected abstract PopupContainer Container { get; }
+
         /// <summary>
         /// Scene이 변할때마다 재생성됩니다
         /// </summary>
         protected override bool ResetInstanceOnChangeScene => true;
         protected override bool Is_DontDestroyOnLoad => true;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void CallInstance()
-        {
-            _ = Instance;
-        }
-
         protected override void Initialize()
         {
-            Container = null;
             Popup_List = new List<PopupBase>();
             Root_On_Exit = null;
             Root_On_Enter = null;
-
-            InitializeAsync();
-        }
-
-        async void InitializeAsync()
-        {
-            try
-            {
-                var go = await GameObjectPoolManager.Instance.GetGameObjectAsync("Assets/AssetResources/Prefabs/Popup/Popup_Container", this.transform);
-                Container = go.GetComponent<PopupContainer>();
-            }
-            catch (Exception)
-            {
-                // 없으면 재시도..
-                Invoke("Initialize", 1.0f);
-            }
         }
 
         /// <summary>
@@ -355,7 +335,6 @@ namespace FluffyDuck.UI
             CloseAllPopupType(POPUP_TYPE.DIALOG_TYPE);
             LastKeyEventEnableCheck();
         }
-
 
         public void SetRootOnEnter(System.Action enter)
         {
