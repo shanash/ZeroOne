@@ -31,9 +31,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     [SerializeField, Tooltip("Life Bar Pos")]
     protected Transform Life_Bar_Pos;
 
-    [SerializeField, Tooltip("Body Pos Type")]
-    protected List<SD_Body_Pos_Data> Sd_Body_Transforms;
-
     [SerializeField, Tooltip("Start Projectile Type")]
     protected List<Start_Projectile_Pos_Data> Start_Projectile_Transforms;
 
@@ -699,171 +696,171 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
     }
 
-    /// <summary>
-    /// 스킬 구현 V2<br/>
-    /// 스킬의 이펙트 정의 여부에 따라 달라진다.<br/>
-    /// 스킬에 이펙트 프리팹 정보가 있을 경우 해당 이펙트를 트리거로 사용하여 효과를 줄 수 있다<br/>
-    /// 스킬에 이펙트 프리팹 정보가 없을 경우, 즉시 발동하는 스킬로, 해당 스킬에서 바로 적용될 수 있도록 한다.
-    /// </summary>
-    /// <param name="skill"></param>
-    protected virtual void SkillEffectSpawnV2(BattleSkillData skill)
-    {
-        var factory = Battle_Mng.GetEffectFactory();
-        FindTargets(skill);
-        int target_cnt = Normal_Attack_Target.Count;
-        int effect_weight_index = skill.GetEffectWeightIndex();
+    ///// <summary>
+    ///// 스킬 구현 V2<br/>
+    ///// 스킬의 이펙트 정의 여부에 따라 달라진다.<br/>
+    ///// 스킬에 이펙트 프리팹 정보가 있을 경우 해당 이펙트를 트리거로 사용하여 효과를 줄 수 있다<br/>
+    ///// 스킬에 이펙트 프리팹 정보가 없을 경우, 즉시 발동하는 스킬로, 해당 스킬에서 바로 적용될 수 있도록 한다.
+    ///// </summary>
+    ///// <param name="skill"></param>
+    //protected virtual void SkillEffectSpawnV2(BattleSkillData skill)
+    //{
+    //    var factory = Battle_Mng.GetEffectFactory();
+    //    FindTargets(skill);
+    //    int target_cnt = Normal_Attack_Target.Count;
+    //    int effect_weight_index = skill.GetEffectWeightIndex();
 
-        if (skill.GetProjectileType() == PROJECTILE_TYPE.ALL_ROUND)
-        {
-            Transform center = Team_Type == TEAM_TYPE.LEFT ? factory.GetRightCenter() : factory.GetLeftCenter();
-            BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-            dmg.Caster = this;
-            dmg.AddTargets(Normal_Attack_Target);
-            dmg.Skill = skill;
-            dmg.Damage = GetAttackPoint();
-            dmg.Effect_Weight_Index = effect_weight_index;
+    //    if (skill.GetProjectileType() == PROJECTILE_TYPE.ALL_ROUND)
+    //    {
+    //        Transform center = Team_Type == TEAM_TYPE.LEFT ? factory.GetRightCenter() : factory.GetLeftCenter();
+    //        BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
+    //        dmg.Caster = this;
+    //        dmg.AddTargets(Normal_Attack_Target);
+    //        dmg.Skill = skill;
+    //        dmg.Damage = GetAttackPoint();
+    //        dmg.Effect_Weight_Index = effect_weight_index;
 
-            string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
-            if (string.IsNullOrEmpty(skill_effect_prefab))
-            {
+    //        string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
+    //        if (string.IsNullOrEmpty(skill_effect_prefab))
+    //        {
 
-            }
-            else
-            {
-                var target_pos = center.position;
-                if (skill.IsThrowingNode())
-                {
-                }
-                else
-                {
-                    var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
-                    effect.SetBattleSendData(dmg);
-                    target_pos.z = center.position.z;
-                    effect.transform.position = target_pos;
-                    effect.StartParticle(1f);
+    //        }
+    //        else
+    //        {
+    //            var target_pos = center.position;
+    //            if (skill.IsThrowingNode())
+    //            {
+    //            }
+    //            else
+    //            {
+    //                var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
+    //                effect.SetBattleSendData(dmg);
+    //                target_pos.z = center.position.z;
+    //                effect.transform.position = target_pos;
+    //                effect.StartParticle(1f);
 
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < target_cnt; i++)
-            {
-                var target = Normal_Attack_Target[i];
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        for (int i = 0; i < target_cnt; i++)
+    //        {
+    //            var target = Normal_Attack_Target[i];
 
-                BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-                dmg.Caster = this;
-                dmg.AddTarget(target);
-                dmg.Skill = skill;
-                dmg.Damage = GetAttackPoint();
-                dmg.Effect_Weight_Index = effect_weight_index;
+    //            BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
+    //            dmg.Caster = this;
+    //            dmg.AddTarget(target);
+    //            dmg.Skill = skill;
+    //            dmg.Damage = GetAttackPoint();
+    //            dmg.Effect_Weight_Index = effect_weight_index;
 
-                string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
-                //  이펙트가 정의되어 있지 않다면, 즉시 시전 및 트리거 방식으로 적용
-                if (string.IsNullOrEmpty(skill_effect_prefab))
-                {
-                    //  onetime skill
-                    var onetime_list = skill.GetOnetimeSkillDataList();
-                    int one_cnt = onetime_list.Count;
-                    for (int o = 0; o < one_cnt; o++)
-                    {
-                        var onetime = onetime_list[o];
-                        string effect_path = onetime.GetEffectPrefab();
-                        if (string.IsNullOrEmpty(effect_path))
-                        {
-                            continue;
-                        }
-                        dmg.Onetime = onetime;
+    //            string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
+    //            //  이펙트가 정의되어 있지 않다면, 즉시 시전 및 트리거 방식으로 적용
+    //            if (string.IsNullOrEmpty(skill_effect_prefab))
+    //            {
+    //                //  onetime skill
+    //                var onetime_list = skill.GetOnetimeSkillDataList();
+    //                int one_cnt = onetime_list.Count;
+    //                for (int o = 0; o < one_cnt; o++)
+    //                {
+    //                    var onetime = onetime_list[o];
+    //                    string effect_path = onetime.GetEffectPrefab();
+    //                    if (string.IsNullOrEmpty(effect_path))
+    //                    {
+    //                        continue;
+    //                    }
+    //                    dmg.Onetime = onetime;
 
-                        var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
-                        effect.SetBattleSendData(dmg);
-                        PROJECTILE_TYPE ptype = onetime.GetProjectileType();
-                        var target_trans = target.GetBodyPositionByProjectileType(ptype);
-                        var target_pos = target_trans.position;
+    //                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
+    //                    effect.SetBattleSendData(dmg);
+    //                    PROJECTILE_TYPE ptype = onetime.GetProjectileType();
+    //                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
+    //                    var target_pos = target_trans.position;
                         
-                        if (onetime.IsThrowingNode())
-                        {
-                            target_pos.z = this.transform.position.z;
+    //                    if (onetime.IsThrowingNode())
+    //                    {
+    //                        target_pos.z = this.transform.position.z;
                             
-                            effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
+    //                        effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
 
-                            float distance = Vector3.Distance(effect.transform.position, target_pos);
-                            float throwing_duration = distance / (float)skill.GetProjectileSpeed();
+    //                        float distance = Vector3.Distance(effect.transform.position, target_pos);
+    //                        float throwing_duration = distance / (float)skill.GetProjectileSpeed();
 
-                            effect.MoveTarget(target_trans, throwing_duration);
-                        }
-                        else
-                        {
-                            target_pos.z = target.transform.position.z;
-                            effect.transform.position = target_pos;
-                            effect.StartParticle((float)onetime.GetEffectDuration());
-                        }
-                    }
+    //                        effect.MoveTarget(target_trans, throwing_duration);
+    //                    }
+    //                    else
+    //                    {
+    //                        target_pos.z = target.transform.position.z;
+    //                        effect.transform.position = target_pos;
+    //                        effect.StartParticle((float)onetime.GetEffectDuration());
+    //                    }
+    //                }
 
-                    //  duration skill
-                    var duration_list = skill.GetDurationSkillDataList();
-                    int dur_cnt = duration_list.Count;
-                    for (int d = 0; d < dur_cnt; d++)
-                    {
-                        var duration = duration_list[d];
+    //                //  duration skill
+    //                var duration_list = skill.GetDurationSkillDataList();
+    //                int dur_cnt = duration_list.Count;
+    //                for (int d = 0; d < dur_cnt; d++)
+    //                {
+    //                    var duration = duration_list[d];
 
-                        string effect_path = duration.GetEffectPrefab();
-                        if (string.IsNullOrEmpty(effect_path))
-                        {
-                            continue;
-                        }
-                        dmg.Duration = duration;
-                        PROJECTILE_TYPE ptype = duration.GetProjectileType();
-                        if (duration.IsThrowingNode())
-                        {
-                            //  지속성 효과를 투사체로 사용하기 위해서는 자체 이펙트를 이용해서 사용하는 방법은 아직 없음.
-                            //  상위 스킬의 이펙트 효과 트리거로 사용하고 있는 중.
-                        }
-                        else
-                        {
-                            var target_trans = target.GetBodyPositionByProjectileType(ptype);
-                            var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
+    //                    string effect_path = duration.GetEffectPrefab();
+    //                    if (string.IsNullOrEmpty(effect_path))
+    //                    {
+    //                        continue;
+    //                    }
+    //                    dmg.Duration = duration;
+    //                    PROJECTILE_TYPE ptype = duration.GetProjectileType();
+    //                    if (duration.IsThrowingNode())
+    //                    {
+    //                        //  지속성 효과를 투사체로 사용하기 위해서는 자체 이펙트를 이용해서 사용하는 방법은 아직 없음.
+    //                        //  상위 스킬의 이펙트 효과 트리거로 사용하고 있는 중.
+    //                    }
+    //                    else
+    //                    {
+    //                        var target_trans = target.GetBodyPositionByProjectileType(ptype);
+    //                        var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
 
-                            effect.SetBattleSendData(dmg);
-                            var target_pos = target_trans.position;
-                            target_pos.z = target.transform.position.z;
-                            effect.transform.position = target_pos;
+    //                        effect.SetBattleSendData(dmg);
+    //                        var target_pos = target_trans.position;
+    //                        target_pos.z = target.transform.position.z;
+    //                        effect.transform.position = target_pos;
 
-                            effect.MoveTarget(target_trans, (float)duration.GetEffectDuration());
+    //                        effect.MoveTarget(target_trans, (float)duration.GetEffectDuration());
 
-                        }
+    //                    }
 
-                    }
-                }
-                else // 이펙트가 정의되어 있다면, 해당 이펙트의 사용으로 스킬 시전 트리거를 발생시킨다.
-                {
-                    PROJECTILE_TYPE ptype = skill.GetProjectileType();
-                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
+    //                }
+    //            }
+    //            else // 이펙트가 정의되어 있다면, 해당 이펙트의 사용으로 스킬 시전 트리거를 발생시킨다.
+    //            {
+    //                PROJECTILE_TYPE ptype = skill.GetProjectileType();
+    //                var target_trans = target.GetBodyPositionByProjectileType(ptype);
 
-                    var target_pos = target_trans.position;
-                    if (skill.IsThrowingNode())
-                    {
-                        var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
-                        effect.SetBattleSendData(dmg);
-                        target_pos.z = this.transform.position.z;
-                        effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
+    //                var target_pos = target_trans.position;
+    //                if (skill.IsThrowingNode())
+    //                {
+    //                    var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
+    //                    effect.SetBattleSendData(dmg);
+    //                    target_pos.z = this.transform.position.z;
+    //                    effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
 
-                        float distance = Vector3.Distance(transform.position, target_pos);
-                        float throwing_duration = distance / (float)skill.GetProjectileSpeed();
+    //                    float distance = Vector3.Distance(transform.position, target_pos);
+    //                    float throwing_duration = distance / (float)skill.GetProjectileSpeed();
 
-                        //effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());
-                        effect.MoveTarget(target_trans, throwing_duration);
-                    }
-                    else
-                    {
-                        //  아직은 투사체가 아닌 방식의 이펙트 트리거가 없음. 아마도 장판같은 이펙트를 사용할 수 있을 것으로 예상
-                    }
-                }
-            }
-        }
+    //                    //effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());
+    //                    effect.MoveTarget(target_trans, throwing_duration);
+    //                }
+    //                else
+    //                {
+    //                    //  아직은 투사체가 아닌 방식의 이펙트 트리거가 없음. 아마도 장판같은 이펙트를 사용할 수 있을 것으로 예상
+    //                }
+    //            }
+    //        }
+    //    }
 
 
-    }
+    //}
 
 
     /// <summary>
@@ -1162,8 +1159,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                 if (duration_skill.IsOverlapable())
                 {
                     Used_Battle_Duration_Data_List.Add(duration_skill);
-
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetBodyPositionByProjectileType(PROJECTILE_TYPE.INSTANT_TARGET_BODY), d_type, 1f);
+                    
+                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
                 }
                 else
                 {
@@ -1190,7 +1187,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                     }
 
                     Used_Battle_Duration_Data_List.Add(duration_skill);
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetBodyPositionByProjectileType(PROJECTILE_TYPE.INSTANT_TARGET_BODY), d_type, 1f);
+                    
+                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
 
                 }
                 Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
@@ -1219,23 +1217,38 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else
         {
+            send_data.Onetime = onetime;
+
             var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
             effect.SetBattleSendData(send_data);
 
-            PROJECTILE_TYPE ptype = onetime.GetProjectileType();
-            var target_trans = GetBodyPositionByProjectileType(ptype);
+            var ec = effect.GetEffectComponent();
+
+            var target_trans = ec.GetTargetReachPosition(this);
             var target_pos = target_trans.position;
-            if (onetime.IsThrowingNode())
-            {
-                //  todo
-            }
-            else
-            {
-                target_pos.z = transform.position.z;
-                effect.transform.position = target_pos;
-                effect.StartParticle((float)onetime.GetEffectDuration());
-            }
+            effect.transform.position = target_pos;
+            effect.StartParticle(ec.Effect_Duration);
+            
+
+            //PROJECTILE_TYPE ptype = onetime.GetProjectileType();
+            //var target_trans = GetBodyPositionByProjectileType(ptype);
+            //var target_pos = target_trans.position;
+            //if (onetime.IsThrowingNode())
+            //{
+            //    //  todo
+            //}
+            //else
+            //{
+            //    target_pos.z = transform.position.z;
+            //    effect.transform.position = target_pos;
+            //    effect.StartParticle((float)onetime.GetEffectDuration());
+            //}
         }
+    }
+
+    void SpawnOnetimeEffectFromDurationSkill_V2(BattleOnetimeSkillData onetime, BATTLE_SEND_DATA send_data)
+    {
+
     }
 
     /// <summary>

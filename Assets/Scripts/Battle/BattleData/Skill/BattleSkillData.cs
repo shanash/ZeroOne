@@ -68,28 +68,28 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
     /// 날아가는 발사체인지, 타겟에서 즉시 발생하는 이펙트인지 여부 반환
     /// </summary>
     /// <returns></returns>
-    public bool IsThrowingNode()
-    {
-        bool is_throwing = false;
-        switch (GetProjectileType())
-        {
-            case PROJECTILE_TYPE.THROW_FOOT:
-            case PROJECTILE_TYPE.THROW_BODY:
-            case PROJECTILE_TYPE.THROW_HEAD:
-                is_throwing = true;
-                break;
-            case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
-            case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
-            case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
-            case PROJECTILE_TYPE.ALL_ROUND:
-                is_throwing = false;
-                break;
-            default:
-                UnityEngine.Debug.Assert(false);
-                break;
-        }
-        return is_throwing;
-    }
+    //public bool IsThrowingNode()
+    //{
+    //    bool is_throwing = false;
+    //    switch (GetProjectileType())
+    //    {
+    //        case PROJECTILE_TYPE.THROW_FOOT:
+    //        case PROJECTILE_TYPE.THROW_BODY:
+    //        case PROJECTILE_TYPE.THROW_HEAD:
+    //            is_throwing = true;
+    //            break;
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
+    //        case PROJECTILE_TYPE.ALL_ROUND:
+    //            is_throwing = false;
+    //            break;
+    //        default:
+    //            UnityEngine.Debug.Assert(false);
+    //            break;
+    //    }
+    //    return is_throwing;
+    //}
 
     protected void AddOnetimeSkillData(BattleOnetimeSkillData onetime)
     {
@@ -157,20 +157,20 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
     /// <returns></returns>
     public virtual string GetTriggerEffectPrefabPath() { return null; }
 
-    [Obsolete]
-    /// <summary>
-    /// 각 스킬 캐스트용 이펙트 프리팹 패스 반환
-    /// </summary>
-    /// <returns></returns>
+    //[Obsolete]
+    ///// <summary>
+    ///// 각 스킬 캐스트용 이펙트 프리팹 패스 반환
+    ///// </summary>
+    ///// <returns></returns>
 
-    public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
+    //public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
 
-    [Obsolete]
-    /// <summary>
-    /// 투사체의 발사 속도
-    /// </summary>
-    /// <returns></returns>
-    public virtual double GetProjectileSpeed() { return 0; }
+    //[Obsolete]
+    ///// <summary>
+    ///// 투사체의 발사 속도
+    ///// </summary>
+    ///// <returns></returns>
+    //public virtual double GetProjectileSpeed() { return 0; }
 
 
     /// <summary>

@@ -78,13 +78,6 @@ public struct BATTLE_SEND_DATA
 
 
 [Serializable]
-public struct SD_Body_Pos_Data
-{
-    public SD_BODY_TYPE Body_Type;
-    public UnityEngine.Transform Trans;
-}
-
-[Serializable]
 public struct Start_Projectile_Pos_Data
 {
     public CASTER_START_POS_TYPE Pos_Type;

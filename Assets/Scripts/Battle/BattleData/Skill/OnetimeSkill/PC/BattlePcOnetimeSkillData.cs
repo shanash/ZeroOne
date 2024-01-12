@@ -26,15 +26,15 @@ public class BattlePcOnetimeSkillData : BattleOnetimeSkillData
         return Data.effect_path;
     }
 
-    public override double GetEffectDuration()
-    {
-        return Data.effect_duration;
-    }
+    //public override double GetEffectDuration()
+    //{
+    //    return Data.effect_duration;
+    //}
 
-    public override PROJECTILE_TYPE GetProjectileType()
-    {
-        return Data.projectile_type;
-    }
+    //public override PROJECTILE_TYPE GetProjectileType()
+    //{
+    //    return Data.projectile_type;
+    //}
 
     public override string ToString()
     {

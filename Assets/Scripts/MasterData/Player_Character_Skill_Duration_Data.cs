@@ -39,14 +39,6 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 	///	</summary>
 	public int[] finish_pc_onetime_ids {get; set;}
 	///	<summary>
-	///	발사체 타입
-	///	</summary>
-	public PROJECTILE_TYPE projectile_type {get; set;}
-	///	<summary>
-	///	발사체 속도
-	///	</summary>
-	public double projectile_speed {get; set;}
-	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
@@ -69,13 +61,6 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 	///	</summary>
 	public string effect_path {get; set;}
 	///	<summary>
-	///	이펙트 지속시간
-	///	이펙트 지속 시간
-	///	0 : loop
-	///	0 보다 클 경우 해당 시간만큼만 유지
-	///	</summary>
-	public double effect_duration {get; set;}
-	///	<summary>
 	///	중첩 가능
 	///	</summary>
 	public bool is_overlapable {get; set;}
@@ -88,7 +73,6 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 		duration_effect_type = DURATION_EFFECT_TYPE.NONE;
 		persistence_type = PERSISTENCE_TYPE.NONE;
 		count = 0;
-		projectile_type = PROJECTILE_TYPE.NONE;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
 		value = 0;
 		effect_path = string.Empty;
@@ -141,14 +125,11 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 			}
 		}
 
-		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
-		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();
 		sb.AppendFormat("[rate] = <color=yellow>{0}</color>", rate).AppendLine();
 		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
-		sb.AppendFormat("[effect_duration] = <color=yellow>{0}</color>", effect_duration).AppendLine();
 		sb.AppendFormat("[is_overlapable] = <color=yellow>{0}</color>", is_overlapable).AppendLine();
 		return sb.ToString();
 	}

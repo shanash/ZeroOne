@@ -49342,6 +49342,7 @@ GameObject:
   - component: {fileID: 1517946713508552000}
   - component: {fileID: 1999922038771737601}
   - component: {fileID: 1753697086802243682}
+  - component: {fileID: 4909940587277599405}
   m_Layer: 0
   m_Name: SkillEffect_AllRound
   m_TagString: Untagged
@@ -54186,8 +54187,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 5003810831907223152}
   Skel_Effect: {fileID: 0}
-  Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &1999922038771737601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54213,6 +54212,34 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 70
   m_SortAtRoot: 0
+--- !u!114 &4909940587277599405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459812019139836889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effect_Type: 3
+  Effect_Duration: 1
+  Is_Loop: 0
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 5
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
+  Mover: {fileID: 0}
+  Projectile_Velocity: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+  Following_Target: {fileID: 0}
 --- !u!1 &7663992951372712650
 GameObject:
   m_ObjectHideFlags: 0

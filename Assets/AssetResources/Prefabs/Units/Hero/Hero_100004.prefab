@@ -975,13 +975,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Skeleton: {fileID: 328012121796191011}
   Life_Bar_Pos: {fileID: 5854399311541087868}
-  Sd_Body_Transforms:
-  - Body_Type: 3
-    Trans: {fileID: 6229375262533448368}
-  - Body_Type: 2
-    Trans: {fileID: 2733538611425640948}
-  - Body_Type: 1
-    Trans: {fileID: 3343156529052286601}
   Start_Projectile_Transforms:
   - Pos_Type: 1
     Trans: {fileID: 7419379727326558552}
@@ -2413,7 +2406,8 @@ Transform:
   m_LocalPosition: {x: 0.94602203, y: -0.006446075, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7419379727326558552}
   m_Father: {fileID: 7513808661955310485}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &580980709600365840
@@ -3872,8 +3866,7 @@ Transform:
   m_LocalPosition: {x: 0.98131377, y: 0.009365234, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7419379727326558552}
+  m_Children: []
   m_Father: {fileID: 1935431334060283639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6738768667925827981
@@ -6043,11 +6036,11 @@ Transform:
   m_GameObject: {fileID: 7432684005111146993}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.505, y: -0, z: 0}
+  m_LocalPosition: {x: 0.56, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3533559415679910729}
+  m_Father: {fileID: 8264909550306955635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7434862498585810365
 GameObject:

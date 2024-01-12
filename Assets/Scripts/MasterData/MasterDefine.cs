@@ -473,29 +473,6 @@ public enum PERSISTENCE_TYPE
 }
 
 ///	<summary>
-///	투사체 타입
-///	</summary>
-public enum PROJECTILE_TYPE
-{
-	/// <summary>NONE</summary>
-	NONE = 0,
-	/// <summary>1 투사체를 타겟의 발 밑에 던진다</summary>
-	THROW_FOOT = 1,
-	/// <summary>2 투사체를 타겟의 몸에 던진다</summary>
-	THROW_BODY = 2,
-	/// <summary>3 투사체를 타겟의 머리에 던진다</summary>
-	THROW_HEAD = 3,
-	/// <summary>11 타겟의 발 밑에서 즉시 효과 발동</summary>
-	INSTANT_TARGET_FOOT = 11,
-	/// <summary>12 타겟의 몸에서 즉시 효과 발동</summary>
-	INSTANT_TARGET_BODY = 12,
-	/// <summary>13 타겟의 머리에서 즉시 효과 발동</summary>
-	INSTANT_TARGET_HEAD = 13,
-	/// <summary>21 전체 선택(진영의 중앙)</summary>
-	ALL_ROUND = 21,
-}
-
-///	<summary>
 ///	부등호 타입
 ///	</summary>
 public enum INEQUALITY_TYPE
@@ -717,21 +694,6 @@ public enum CHARGE_TYPE
 	VALUE_CUT = 5,
 	/// <summary>지정 수치만큼 차징, Final max값 이상 차징 가능</summary>
 	VALUE_OVER = 6,
-}
-
-///	<summary>
-///	SD 캐릭터의 본 파츠
-///	</summary>
-public enum SD_BODY_TYPE
-{
-	/// <summary>NONE</summary>
-	NONE = 0,
-	/// <summary>머리</summary>
-	HEAD = 1,
-	/// <summary>몸(중앙)</summary>
-	BODY = 2,
-	/// <summary>발끝(ROOT)</summary>
-	FOOT = 3,
 }
 
 ///	<summary>

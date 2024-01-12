@@ -69,15 +69,7 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
     {
         return Data.effect_path;
     }
-    public override PROJECTILE_TYPE GetProjectileType()
-    {
-        return Data.projectile_type;
-    }
-
-    public override double GetEffectDuration()
-    {
-        return Data.effect_duration;
-    }
+    
 
     public override bool IsUseRepeatInterval()
     {

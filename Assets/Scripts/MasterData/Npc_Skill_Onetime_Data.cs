@@ -14,14 +14,6 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 	///	</summary>
 	public ONETIME_EFFECT_TYPE onetime_effect_type {get; set;}
 	///	<summary>
-	///	발사체 타입
-	///	</summary>
-	public PROJECTILE_TYPE projectile_type {get; set;}
-	///	<summary>
-	///	발사체 속도
-	///	</summary>
-	public double projectile_speed {get; set;}
-	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
@@ -37,10 +29,6 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 	///	이펙트 프리팹
 	///	</summary>
 	public string effect_path {get; set;}
-	///	<summary>
-	///	이펙트 지속시간
-	///	</summary>
-	public double effect_duration {get; set;}
 
 	private bool disposed = false;
 
@@ -48,7 +36,6 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 	{
 		npc_skill_onetime_id = 0;
 		onetime_effect_type = ONETIME_EFFECT_TYPE.NONE;
-		projectile_type = PROJECTILE_TYPE.NONE;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
 		value = 0;
 		effect_path = string.Empty;
@@ -75,13 +62,10 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[npc_skill_onetime_id] = <color=yellow>{0}</color>", npc_skill_onetime_id).AppendLine();
 		sb.AppendFormat("[onetime_effect_type] = <color=yellow>{0}</color>", onetime_effect_type).AppendLine();
-		sb.AppendFormat("[projectile_type] = <color=yellow>{0}</color>", projectile_type).AppendLine();
-		sb.AppendFormat("[projectile_speed] = <color=yellow>{0}</color>", projectile_speed).AppendLine();
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();
 		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
-		sb.AppendFormat("[effect_duration] = <color=yellow>{0}</color>", effect_duration).AppendLine();
 		return sb.ToString();
 	}
 }

@@ -71,17 +71,9 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
 
     public virtual string GetEffectPrefab() { return null; }
 
-    public virtual PROJECTILE_TYPE GetProjectileType() { return PROJECTILE_TYPE.NONE; }
+    
 
     public virtual DURATION_EFFECT_TYPE GetDurationEffectType() { return DURATION_EFFECT_TYPE.NONE; }
-
-    /// <summary>
-    /// 이펙트 지속 시간<br/>
-    /// <b>0</b> : loop<br/>
-    /// 0보다 클 경우 지정 시간만큼만 이펙트 유지<br/>
-    /// </summary>
-    /// <returns>이펙트의 지속 시간</returns>
-    public virtual double GetEffectDuration() { return 0; }
 
     /// <summary>
     /// 적용 확률
@@ -203,31 +195,7 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
         return false;
     }
 
-    /// <summary>
-    /// 날아가는 발사체인지, 타겟에서 즉시 발생하는 이펙트인지 여부 반환
-    /// </summary>
-    /// <returns>날아가는 발사체인 경우 true 반환</returns>
-    public bool IsThrowingNode()
-    {
-        bool is_throwing = false;
-        switch (GetProjectileType())
-        {
-            case PROJECTILE_TYPE.THROW_FOOT:
-            case PROJECTILE_TYPE.THROW_BODY:
-            case PROJECTILE_TYPE.THROW_HEAD:
-                is_throwing = true;
-                break;
-            case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
-            case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
-            case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
-                is_throwing = false;
-                break;
-            default:
-                UnityEngine.Debug.Assert(false);
-                break;
-        }
-        return is_throwing;
-    }
+    
 
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {

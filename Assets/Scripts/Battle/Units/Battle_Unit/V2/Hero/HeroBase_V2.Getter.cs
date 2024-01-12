@@ -121,20 +121,20 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return sum;
     }
-    [Obsolete]
-    /// <summary>
-    /// body 타입에 따른 좌표 정보 반환
-    /// </summary>
-    /// <param name="btype"></param>
-    /// <returns></returns>
-    protected Transform GetBodyTypeTransform(SD_BODY_TYPE btype)
-    {
-        if (Sd_Body_Transforms.Exists(x => x.Body_Type == btype))
-        {
-            return Sd_Body_Transforms.Find(x => x.Body_Type == btype).Trans;
-        }
-        return null;
-    }
+    //[Obsolete]
+    ///// <summary>
+    ///// body 타입에 따른 좌표 정보 반환
+    ///// </summary>
+    ///// <param name="btype"></param>
+    ///// <returns></returns>
+    //protected Transform GetBodyTypeTransform(SD_BODY_TYPE btype)
+    //{
+    //    if (Sd_Body_Transforms.Exists(x => x.Body_Type == btype))
+    //    {
+    //        return Sd_Body_Transforms.Find(x => x.Body_Type == btype).Trans;
+    //    }
+    //    return null;
+    //}
 
     /// <summary>
     /// 도착 pos type에 따른 좌표 정보 반환
@@ -181,28 +181,28 @@ public partial class HeroBase_V2 : UnitBase_V2
         return null;
     }
 
-    [Obsolete]
-    /// <summary>
-    /// 발사체 타입에 따른 타겟의 Transform 반환
-    /// </summary>
-    /// <param name="ptype"></param>
-    /// <returns></returns>
-    public Transform GetBodyPositionByProjectileType(PROJECTILE_TYPE ptype)
-    {
-        switch (ptype)
-        {
-            case PROJECTILE_TYPE.THROW_FOOT:
-            case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
-                return GetBodyTypeTransform(SD_BODY_TYPE.FOOT);
-            case PROJECTILE_TYPE.THROW_BODY:
-            case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
-                return GetBodyTypeTransform(SD_BODY_TYPE.BODY);
-            case PROJECTILE_TYPE.THROW_HEAD:
-            case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
-                return GetBodyTypeTransform(SD_BODY_TYPE.HEAD);
-        }
-        return null;
-    }
+    //[Obsolete]
+    ///// <summary>
+    ///// 발사체 타입에 따른 타겟의 Transform 반환
+    ///// </summary>
+    ///// <param name="ptype"></param>
+    ///// <returns></returns>
+    //public Transform GetBodyPositionByProjectileType(PROJECTILE_TYPE ptype)
+    //{
+    //    switch (ptype)
+    //    {
+    //        case PROJECTILE_TYPE.THROW_FOOT:
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
+    //            return GetBodyTypeTransform(SD_BODY_TYPE.FOOT);
+    //        case PROJECTILE_TYPE.THROW_BODY:
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
+    //            return GetBodyTypeTransform(SD_BODY_TYPE.BODY);
+    //        case PROJECTILE_TYPE.THROW_HEAD:
+    //        case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
+    //            return GetBodyTypeTransform(SD_BODY_TYPE.HEAD);
+    //    }
+    //    return null;
+    //}
 
     /// <summary>
     /// 이펙트 발현 타겟 위치<br/>

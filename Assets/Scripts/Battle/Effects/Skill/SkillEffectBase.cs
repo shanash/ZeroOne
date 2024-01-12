@@ -191,24 +191,11 @@ public class SkillEffectBase : EffectBase
                 effect.SetBattleSendData(Send_Data);
 
                 var ec = effect.GetEffectComponent();
-                if (ec != null)
-                {
-                    var target_trans = ec.GetTargetReachPosition(target);
-                    var target_pos = target_trans.position;
-                    target_pos.z = target.transform.position.z;
-                    effect.transform.position = target_pos;
-                    effect.StartParticle(ec.Effect_Duration);
-                }
-                else
-                {
-                    PROJECTILE_TYPE ptype = onetime.GetProjectileType();
-                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
-                    var target_pos = target_trans.position;
-
-                    target_pos.z = target.transform.position.z;
-                    effect.transform.position = target_pos;
-                    effect.StartParticle((float)onetime.GetEffectDuration());
-                }
+                var target_trans = ec.GetTargetReachPosition(target);
+                var target_pos = target_trans.position;
+                target_pos.z = target.transform.position.z;
+                effect.transform.position = target_pos;
+                effect.StartParticle(ec.Effect_Duration);
             }
         }
     }
@@ -262,26 +249,26 @@ public class SkillEffectBase : EffectBase
                         Debug.Assert(false);
                     }
                 }
-                else
-                {
-                    PROJECTILE_TYPE ptype = duration.GetProjectileType();
-                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
+                //else
+                //{
+                //    PROJECTILE_TYPE ptype = duration.GetProjectileType();
+                //    var target_trans = target.GetBodyPositionByProjectileType(ptype);
 
-                    var target_pos = target_trans.position;
-                    target_pos.z = target.transform.position.z;
-                    effect.transform.position = target_pos;
+                //    var target_pos = target_trans.position;
+                //    target_pos.z = target.transform.position.z;
+                //    effect.transform.position = target_pos;
 
-                    float eff_dur = (float)duration.GetEffectDuration();
-                    if (duration.IsThrowingNode())
-                    {
-                        effect.MoveTarget(target_trans, eff_dur);
-                    }
-                    else
-                    {
-                        effect.StartParticle(target_trans, eff_dur, eff_dur == 0);
+                //    float eff_dur = (float)duration.GetEffectDuration();
+                //    if (duration.IsThrowingNode())
+                //    {
+                //        effect.MoveTarget(target_trans, eff_dur);
+                //    }
+                //    else
+                //    {
+                //        effect.StartParticle(target_trans, eff_dur, eff_dur == 0);
 
-                    }
-                }
+                //    }
+                //}
 
 
             }
