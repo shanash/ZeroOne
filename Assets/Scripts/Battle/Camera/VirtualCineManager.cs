@@ -23,7 +23,6 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     [SerializeField, Tooltip("Target Group Camera")]
     CinemachineVirtualCamera Target_Group_Cam;
 
-
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
 
     void Start()
@@ -39,6 +38,8 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     {
         transform.position = ORIGIN_POS;
     }
+
+    public CinemachineVirtualCamera GetStageCamera() { return Stage_Cam; }
 
     public void FocusCharacter(GameObject unit)
     {

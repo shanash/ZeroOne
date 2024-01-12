@@ -17,16 +17,10 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         FSM.AddTransition(new UnitStateAttackReady01_V2());
         FSM.AddTransition(new UnitStateAttack01_V2());
-        //FSM.AddTransition(new UnitStateAttackReady02_V2());
-        //FSM.AddTransition(new UnitStateAttack02_V2());
         FSM.AddTransition(new UnitStateAttackEnd_V2());
 
         FSM.AddTransition(new UnitStateSkillReady01_V2());
         FSM.AddTransition(new UnitStateSkill01_V2());
-        //FSM.AddTransition(new UnitStateSkillReady02_V2());
-        //FSM.AddTransition(new UnitStateSkill02_V2());
-        //FSM.AddTransition(new UnitStateSkillReady03_V2());
-        //FSM.AddTransition(new UnitStateSkill03_V2());
         FSM.AddTransition(new UnitStateSkillEnd_V2());
 
         FSM.AddTransition(new UnitStateStun_V2());
@@ -51,6 +45,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         CalcHeroAbility();
         AddLifeBar();
+        
     }
 
     public override void UnitStateInit()

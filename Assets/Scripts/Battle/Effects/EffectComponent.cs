@@ -54,7 +54,8 @@ public enum THROWING_TYPE
 {
     NONE = 0,
     LINEAR,                 //  직선형
-    PARABOLA,               //  곡선형(포물선형)
+    PARABOLA,               //  포물선형
+    BEZIER,                 //  곡선형
 }
 
 
@@ -82,6 +83,12 @@ public class EffectComponent : MonoBehaviour
 
     [SerializeField, Tooltip("커브 이동 컴포넌트")]
     public BezierMove3D Curve;
+
+    [SerializeField, Tooltip("시작 위치의 커브 변화 영역")]
+    public float Start_Curve_Dist;
+
+    [SerializeField, Tooltip("도착 위치의 커브 변화 영역")]
+    public float End_Curve_Dist;
 
     [SerializeField, Tooltip("포물선 컴포넌트")]
     public ParabolaMove3D Parabola;

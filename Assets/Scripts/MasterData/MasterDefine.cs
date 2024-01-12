@@ -602,6 +602,10 @@ public enum GOODS_TYPE
 	CHARACTER = 7,
 	/// <summary>6 장비</summary>
 	EQUIPMENT = 8,
+	/// <summary>근원 전달 횟수(플레이어 보유)</summary>
+	SEND_ESSENCE = 9,
+	/// <summary>근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
+	GET_ESSENCE = 10,
 	/// <summary>101 경험치 물약</summary>
 	EXP_POTION = 101,
 	/// <summary>102 스테미나 회복 물약</summary>

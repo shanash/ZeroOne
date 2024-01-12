@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5573846578120124307}
   - component: {fileID: 4236629835374485042}
   - component: {fileID: 7037722285307706488}
-  - component: {fileID: 7922876248809264826}
   - component: {fileID: 2354393750210640565}
   - component: {fileID: 3856250756159837389}
   m_Layer: 0
@@ -4863,19 +4862,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &7922876248809264826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596430320929805970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &2354393750210640565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4890,8 +4876,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 5573846578120124307}
   Skel_Effect: {fileID: 0}
-  Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &3856250756159837389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4911,7 +4895,8 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
   Curve: {fileID: 0}
-  Curve_Height: 0
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
   Hide_Transforms: []

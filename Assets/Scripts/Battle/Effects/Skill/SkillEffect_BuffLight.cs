@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class SkillEffect_BuffLight : SkillEffectBase
 {
-    [SerializeField, Tooltip("Bezier")]
-    BezierMove3D Curve;
-
     readonly float START_CURVE_DIST = 3f;
 
     public override void MoveTarget(Transform target, float duration)
     {
         base.MoveTarget(target, duration);
 
-        Curve.Move(this.transform.position, target, duration, START_CURVE_DIST, 0, CurveMoveEndCallback);
+        var ec = GetEffectComponent();
+        ec.Curve?.Move(this.transform.position, target, duration, ec.Start_Curve_Dist, ec.End_Curve_Dist, CurveMoveEndCallback);
+
     }
 
-    void CurveMoveEndCallback(object obj)
+    void CurveMoveEndCallback()
     {
         SkillExec();
 
@@ -26,11 +25,12 @@ public class SkillEffect_BuffLight : SkillEffectBase
     public override void OnPuase()
     {
         base.OnPuase();
-        Curve.SetPuase(true);
+        GetEffectComponent().Curve.SetPuase(true);
+
     }
     public override void OnResume()
     {
         base.OnResume();
-        Curve.SetPuase(false);
+        GetEffectComponent().Curve.SetPuase(false);
     }
 }

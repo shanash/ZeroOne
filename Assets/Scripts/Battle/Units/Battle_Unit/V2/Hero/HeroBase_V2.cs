@@ -4,6 +4,7 @@ using Spine;
 using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
 
@@ -38,6 +39,9 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     [SerializeField, Tooltip("Reach Pos Type")]
     protected List<Target_Reach_Pos_Data> Reach_Pos_Transforms;
+
+    [SerializeField, Tooltip("Ultimate Skill Playable Director")]
+    protected PlayableDirector Ultimate_Skill_Playable_Director;
 
     protected UnitRenderTexture Render_Texture;
 
@@ -205,6 +209,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Deck_Order = order;
     }
+
+    protected virtual void InitPlayableDirector() { }
 
 
     /// <summary>
@@ -930,6 +936,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             Utility = GetComponent<SkeletonUtility>();
         }
+
+        InitPlayableDirector();
     }
     public override void Despawned()
     {

@@ -24,9 +24,9 @@ namespace FluffyDuck.Util
 
         float Distance;
 
-        System.Action<object> Move_End_Callback;
+        System.Action Move_End_Callback;
 
-        public void Move(Vector3 start_pt, Vector3 end_pt, float parabola_height, float velocity, System.Action<object> cb)
+        public void Move(Vector3 start_pt, Vector3 end_pt, float parabola_height, float velocity, System.Action cb)
         {
             this.Velocity = velocity;
             
@@ -91,7 +91,7 @@ namespace FluffyDuck.Util
                 {
                     Is_Move = false;
                     this.transform.position = End_Position;
-                    Move_End_Callback?.Invoke(this);
+                    Move_End_Callback?.Invoke();
                 }
             }
         }

@@ -12,8 +12,10 @@ public class SkillEffect_Missile : SkillEffectBase
     public override void MoveTarget(Transform target, float duration)
     {
         base.MoveTarget(target, duration);
-        Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
-        Mover.StartEasing(Target_Transform, MoveEndCallback);
+        var ec = GetEffectComponent();
+        ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+        ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
+        
     }
 
     /// <summary>
@@ -21,9 +23,14 @@ public class SkillEffect_Missile : SkillEffectBase
     /// </summary>
     void MoveEndCallback()
     {
-        Hide_Comp.Show(false);
         SkillExec();
-        StartCoroutine(Wait(Hide_Comp.GetDelayTime()));
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.ShowObjects(false);
+            StartCoroutine(Wait(ec.Hide_After_Delay_Time));
+        }
+        
     }
 
     IEnumerator Wait(float delay)
@@ -37,19 +44,32 @@ public class SkillEffect_Missile : SkillEffectBase
     public override void OnPuase()
     {
         base.OnPuase();
-        Mover?.OnPause();
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Mover?.OnPause();
+        }
+        
     }
 
     public override void OnResume()
     {
         base.OnResume();
-        Mover?.OnResume();
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.Mover?.OnResume();
+        }
     }
 
     public override void Spawned()
     {
         base.Spawned();
-        Hide_Comp.Show(true);
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.ShowObjects(true);
+        }
     }
 
 }

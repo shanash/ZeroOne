@@ -4926,7 +4926,6 @@ GameObject:
   - component: {fileID: 410609154234843606}
   - component: {fileID: 4432447621714974705}
   - component: {fileID: 3048666594735755571}
-  - component: {fileID: 3263149980563764441}
   - component: {fileID: 188732461878165701}
   - component: {fileID: -3476904206500274337}
   m_Layer: 0
@@ -9776,19 +9775,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &3263149980563764441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1627499728556705017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &188732461878165701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9824,7 +9810,8 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
   Curve: {fileID: 0}
-  Curve_Height: 0
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
   Hide_Transforms: []

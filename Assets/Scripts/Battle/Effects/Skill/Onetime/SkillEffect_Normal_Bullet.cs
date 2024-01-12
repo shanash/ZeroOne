@@ -15,14 +15,23 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
         if (ec != null)
         {
             base.MoveTarget(target, duration);
-            ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
-            ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
-        }
-        else
-        {
-            base.MoveTarget(target, duration);
-            Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
-            Mover.StartEasing(Target_Transform, MoveEndCallback);
+            switch (ec.Throwing_Type)
+            {
+                case THROWING_TYPE.LINEAR:
+                    ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+                    ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
+                    break;
+                case THROWING_TYPE.PARABOLA:
+                    ec.Parabola.Move(this.transform.position, target.position, ec.Parabola_Height, ec.Projectile_Velocity, MoveEndCallback);
+                    break;
+                case THROWING_TYPE.BEZIER:
+                    ec.Curve.Move(this.transform.position, target, duration, ec.Start_Curve_Dist, ec.End_Curve_Dist, MoveEndCallback);
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            
         }
         
     }
@@ -45,10 +54,6 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
         {
             ec.Mover?.OnPause();
         }
-        else
-        {
-            Mover?.OnPause();
-        }
         
     }
 
@@ -59,10 +64,6 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
         if (ec != null)
         {
             ec.Mover?.OnResume();
-        }
-        else 
-        { 
-            Mover?.OnResume(); 
         }
         
     }

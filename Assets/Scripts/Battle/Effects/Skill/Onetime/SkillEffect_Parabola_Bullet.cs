@@ -15,7 +15,7 @@ public class SkillEffect_Parabola_Bullet : SkillEffectBase
         ec.Parabola.Move(this_pos, target_pos, ec.Parabola_Height, ec.Projectile_Velocity, MoveEndCallback);
     }
 
-    void MoveEndCallback(object data)
+    void MoveEndCallback()
     {
         SkillExec();
         Finish_Callback?.Invoke(this);

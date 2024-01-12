@@ -36,9 +36,9 @@ namespace FluffyDuck.Util
 
         Transform Target_Transform;
 
-        System.Action<object> Move_End_Callback;
+        System.Action Move_End_Callback;
 
-        public void Move(Vector3 start_pt, Transform target, float duration, float start_curve_dist, float end_curve_dist, System.Action<object> cb)
+        public void Move(Vector3 start_pt, Transform target, float duration, float start_curve_dist, float end_curve_dist, System.Action cb)
         {
             Target_Transform = target;
             Duration = duration;
@@ -59,7 +59,7 @@ namespace FluffyDuck.Util
             Is_Local = false;
         }
 
-        public void Move(Vector3 start_pt, Vector3 end_pt, float duration, float start_curve_dist, float end_curve_dist, System.Action<object> cb)
+        public void Move(Vector3 start_pt, Vector3 end_pt, float duration, float start_curve_dist, float end_curve_dist, System.Action cb)
         {
             Duration = duration;
             Delta = 0f;
@@ -79,7 +79,7 @@ namespace FluffyDuck.Util
             Is_Local = false;
         }
 
-        public void MoveLocal(Vector3 start_pt, Vector3 end_pt, float duration, float start_curve_dist, float end_curve_dist, System.Action<object> cb)
+        public void MoveLocal(Vector3 start_pt, Vector3 end_pt, float duration, float start_curve_dist, float end_curve_dist, System.Action cb)
         {
             Duration = duration;
             Delta = 0f;
@@ -105,7 +105,7 @@ namespace FluffyDuck.Util
         /// <param name="pos_list"></param>
         /// <param name="duration"></param>
         /// <param name="cb"></param>
-        public void Move(List<Vector3> pos_list, float duration, float distance, System.Action<object> cb)
+        public void Move(List<Vector3> pos_list, float duration, float distance, System.Action cb)
         {
             Duration = duration;
             Delta = 0f;
@@ -134,7 +134,7 @@ namespace FluffyDuck.Util
         /// <param name="pos_list"></param>
         /// <param name="duration"></param>
         /// <param name="cb"></param>
-        public void MoveLocal(List<Vector3> pos_list, float duration, float distance, System.Action<object> cb)
+        public void MoveLocal(List<Vector3> pos_list, float duration, float distance, System.Action cb)
         {
             Duration = duration;
             Delta = 0f;
@@ -201,7 +201,7 @@ namespace FluffyDuck.Util
                 if (Delta > Duration)
                 {
                     Is_Move = false;
-                    Move_End_Callback?.Invoke(this);
+                    Move_End_Callback?.Invoke();
                 }
             }
         }

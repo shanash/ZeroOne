@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4967606167241050220}
   - component: {fileID: 7114526484841253674}
   - component: {fileID: 396012779515994477}
-  - component: {fileID: 7212392461963676680}
   - component: {fileID: 5069984268690205179}
   - component: {fileID: 3613341571289048144}
   m_Layer: 0
@@ -4862,19 +4861,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &7212392461963676680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 161576390957195964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &5069984268690205179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4904,13 +4890,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Effect_Type: 3
-  Effect_Count_Type: 2
   Effect_Duration: 0.7
+  Is_Loop: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
   Curve: {fileID: 0}
-  Curve_Height: 0
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
   Hide_Transforms: []

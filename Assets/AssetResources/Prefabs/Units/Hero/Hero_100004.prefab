@@ -982,6 +982,9 @@ MonoBehaviour:
     Trans: {fileID: 2733538611425640948}
   - Body_Type: 1
     Trans: {fileID: 3343156529052286601}
+  Start_Projectile_Transforms:
+  - Pos_Type: 1
+    Trans: {fileID: 7419379727326558552}
   Reach_Pos_Transforms:
   - Pos_Type: 3
     Trans: {fileID: 6229375262533448368}
@@ -989,6 +992,7 @@ MonoBehaviour:
     Trans: {fileID: 2733538611425640948}
   - Pos_Type: 1
     Trans: {fileID: 3343156529052286601}
+  Ultimate_Skill_Playable_Director: {fileID: 0}
 --- !u!1 &1166821295209580657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3868,7 +3872,8 @@ Transform:
   m_LocalPosition: {x: 0.98131377, y: 0.009365234, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7419379727326558552}
   m_Father: {fileID: 1935431334060283639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6738768667925827981
@@ -6013,6 +6018,37 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 828139984507637213}
+--- !u!1 &7432684005111146993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7419379727326558552}
+  m_Layer: 12
+  m_Name: PROJECTILE_POS_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7419379727326558552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7432684005111146993}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.505, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3533559415679910729}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7434862498585810365
 GameObject:
   m_ObjectHideFlags: 0

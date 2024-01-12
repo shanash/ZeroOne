@@ -44169,8 +44169,8 @@ GameObject:
   - component: {fileID: 8185498177542550060}
   - component: {fileID: 7710193596404390366}
   - component: {fileID: 817962373812775332}
-  - component: {fileID: 1239830332259113679}
   - component: {fileID: 932770461808322104}
+  - component: {fileID: 2157284307661579662}
   m_Layer: 0
   m_Name: SkillEffect_Pierce_Splash
   m_TagString: Untagged
@@ -49014,19 +49014,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &1239830332259113679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7822304099392803709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &932770461808322104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49041,8 +49028,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 8185498177542550060}
   Skel_Effect: {fileID: 0}
+--- !u!114 &2157284307661579662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822304099392803709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effect_Type: 3
+  Effect_Duration: 1
+  Is_Loop: 0
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 2
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
   Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
+  Projectile_Velocity: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+  Following_Target: {fileID: 0}
 --- !u!1 &8082644131485439494
 GameObject:
   m_ObjectHideFlags: 0
