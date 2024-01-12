@@ -2,7 +2,6 @@ using FluffyDuck.UI;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 public class HeroInfoUI : PopupBase
@@ -90,12 +89,12 @@ public class HeroInfoUI : PopupBase
         index = (int)User_Hero_Battle_Data.GetTribeType() - 1;
         Tribe_Box.sprite = Tribe_Box_Sprites[index];
         Tribe_Tag.sprite = Tribe_Tag_Sprites[index];
-        Tribe_Text.text = Hero_Base_Data.tribe_type.ToString();
+        Tribe_Text.text = ConstString.Hero_Tribes[(int)Hero_Base_Data.tribe_type];
 
         // 역할 태그 설정
         index = (int)Hero_Base_Data.role_type - 1;
         Role_Icon.sprite = Role_Icon_Sprites[index];
-        Role_Text.text = Hero_Base_Data.role_type.ToString();
+        Role_Text.text = ConstString.Hero_Roles[(int)Hero_Base_Data.role_type];
 
         Hero_Info_Box.Refresh();
     }
@@ -108,6 +107,24 @@ public class HeroInfoUI : PopupBase
         // 레벨업 탭과 승급 탭은 일단 막아놓습니다.
         InfoBox_Tab_Controller.GetTab(1).SetBlockTab(true);
         InfoBox_Tab_Controller.GetTab(2).SetBlockTab(true);
+    }
+
+    public void OnClickProfileButton()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/ProfilePopup", (popup) =>
+        {
+            popup.ShowPopup((Player_Character_Data)User_Hero_Battle_Data.GetUnitData());
+        });
+    }
+
+    public void OnClickMemorialButton()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        {
+            popup.ShowPopup(3f, "준비중 입니다.");
+        });
     }
 
     public void OnClickBack()
