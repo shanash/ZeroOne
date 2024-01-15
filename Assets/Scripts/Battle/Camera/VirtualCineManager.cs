@@ -14,6 +14,14 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
 
     [SerializeField, Tooltip("Stage Camera")]
     CinemachineVirtualCamera Stage_Cam;
+
+    [SerializeField, Tooltip("Landscape Camera")]
+    CinemachineVirtualCamera Landscape_Cam;
+
+    [SerializeField, Tooltip("Free Camera")]
+    CinemachineVirtualCamera Free_Cam;
+
+
     [SerializeField, Tooltip("Character Camera")]
     CinemachineVirtualCamera Character_Cam;
 
@@ -22,6 +30,14 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
 
     [SerializeField, Tooltip("Target Group Camera")]
     CinemachineVirtualCamera Target_Group_Cam;
+
+
+    [SerializeField, Tooltip("Active Target Group")]
+    CinemachineTargetGroup Active_Target_Group;
+
+    [SerializeField, Tooltip("Active Target Group Camera")]
+    CinemachineVirtualCamera Active_Target_Group_Cam;
+
 
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
 

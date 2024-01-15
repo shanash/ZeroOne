@@ -84,7 +84,6 @@ public class Hero_100001 : HeroBase_V2
             return;
         }
 
-
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
 
