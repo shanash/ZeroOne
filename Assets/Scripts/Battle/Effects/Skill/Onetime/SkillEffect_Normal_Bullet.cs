@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 
@@ -42,6 +43,23 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
     void MoveEndCallback()
     {
         SkillExec();
+
+        var ec = GetEffectComponent();
+        if (ec != null && ec.Use_Hide_Transforms)
+        {
+            ec.ShowObjects(false);
+            StartCoroutine(WaitDelay(ec.Hide_After_Delay_Time));
+        }
+        else
+        {
+            Finish_Callback?.Invoke(this);
+            UnusedEffect();
+        }
+    }
+
+    IEnumerator WaitDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         Finish_Callback?.Invoke(this);
         UnusedEffect();
     }
@@ -52,20 +70,58 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
         var ec = GetEffectComponent();
         if (ec != null)
         {
-            ec.Mover?.OnPause();
+            switch (ec.Throwing_Type)
+            {
+                case THROWING_TYPE.LINEAR:
+                    ec.Mover?.OnPause();
+                    break;
+                case THROWING_TYPE.PARABOLA:
+                    ec.Parabola?.SetPuase(true);
+                    break;
+                case THROWING_TYPE.BEZIER:
+                    ec.Curve?.SetPuase(true);
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
         }
-        
     }
 
     public override void OnResume()
     {
         base.OnResume();
+        
         var ec = GetEffectComponent();
         if (ec != null)
         {
-            ec.Mover?.OnResume();
+            switch (ec.Throwing_Type)
+            {
+                case THROWING_TYPE.LINEAR:
+                    ec.Mover?.OnResume();
+                    break;
+                case THROWING_TYPE.PARABOLA:
+                    ec.Parabola?.SetPuase(false);
+                    break;
+                case THROWING_TYPE.BEZIER:
+                    ec.Curve?.SetPuase(false);
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
         }
-        
+
+    }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        var ec = GetEffectComponent();
+        if (ec != null && ec.Use_Hide_Transforms)
+        {
+            ec.ShowObjects(true);
+        }
     }
 
 }

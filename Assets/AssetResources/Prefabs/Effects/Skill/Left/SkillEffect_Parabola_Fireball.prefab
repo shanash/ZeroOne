@@ -14563,10 +14563,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff109bf7f1e3b274f962d42351057ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Particle_Effect: {fileID: 0}
+  Particle_Effect: {fileID: 6549119347321535064}
   Skel_Effect: {fileID: 0}
-  Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &3097156473369476790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14611,13 +14609,15 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 2
   Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
   Parabola: {fileID: 1889246528357546580}
   Parabola_Height: 5
   Mover: {fileID: 0}
   Projectile_Velocity: 20
+  Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!114 &1889246528357546580
 MonoBehaviour:
   m_ObjectHideFlags: 0

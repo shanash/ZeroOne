@@ -19,6 +19,7 @@ public enum CASTER_START_POS_TYPE
     PROJECTILE_POS_09,
     PROJECTILE_POS_10,
 
+    RANDOM = 101,           //  지정된 위치중 임의의 위치 선택
 }
 
 /// <summary>
@@ -61,6 +62,10 @@ public enum THROWING_TYPE
 
 public class EffectComponent : MonoBehaviour
 {
+    [Header("모든 프로퍼티 보기")]
+    [SerializeField, Tooltip("모두 보기")]
+    protected bool Is_Show_All_Properties;
+
     [Header("이펙트 타입 선택")]
     [SerializeField, Tooltip("이펙트 타입. \n 캐스팅, 투사체, 즉발형")]
     public SKILL_EFFECT_TYPE Effect_Type = SKILL_EFFECT_TYPE.NONE;
@@ -102,18 +107,17 @@ public class EffectComponent : MonoBehaviour
     [SerializeField, Tooltip("투사체 이동 속도\n 이동속도는 초당 이동 거리를 지정한다.")]
     public float Projectile_Velocity;
 
+    [SerializeField, Tooltip("투사체 이동 후 감추기 사용 여부")]
+    public bool Use_Hide_Transforms;
 
+    [Header("숨김 오브젝트")]
     [SerializeField, Tooltip("감춰야 할 오브젝트")]
     public List<Transform> Hide_Transforms;
 
     [SerializeField, Tooltip("감춰야할 오브젝트를 감춰두고, 이펙트 종료까지 대기 시간")]
     public float Hide_After_Delay_Time;
 
-
-
-    [Header("타겟을 따라다니는 이펙트")]
-    [SerializeField, Tooltip("타겟의 위치를 계속 따라다니는 이펙트\n 지속성 효과에 주로 사용됨")]
-    Transform Following_Target;
+    protected Transform Following_Target;
     
     public void SetFollowingTarget(Transform t)
     {
@@ -143,6 +147,10 @@ public class EffectComponent : MonoBehaviour
     /// <param name="show"></param>
     public void ShowObjects(bool show)
     {
+        if (!Use_Hide_Transforms)
+        {
+            return;
+        }
         Hide_Transforms.ForEach(x => x.gameObject.SetActive(show));
     }
     /// <summary>

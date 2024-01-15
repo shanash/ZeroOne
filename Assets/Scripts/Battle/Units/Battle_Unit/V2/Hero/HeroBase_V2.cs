@@ -207,7 +207,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         Deck_Order = order;
     }
 
-    protected virtual void InitPlayableDirector() { }
+    protected virtual void SetPlayableDirector() { }
+
+    protected virtual void UnsetPlayableDirector() { }
 
 
     /// <summary>
@@ -277,6 +279,10 @@ public partial class HeroBase_V2 : UnitBase_V2
                 SpawnSkillCastEffect(skill);
             }
         }
+        else if (state == UNIT_STATES.SKILL_1)
+        {
+            bool a = false;
+        }
 
     }
     /// <summary>
@@ -314,6 +320,14 @@ public partial class HeroBase_V2 : UnitBase_V2
                 return;
             }
         }
+        else if (state == UNIT_STATES.SKILL_1)
+        {
+            if (animation_name.Equals("00_ultimate"))
+            {
+                UnsetPlayableDirector();
+                ChangeState(UNIT_STATES.ATTACK_READY_1);
+            }
+        }
     }
     /// <summary>
     /// 스파인 애니메이션 동작 종료시 호출되는 리스너
@@ -348,7 +362,10 @@ public partial class HeroBase_V2 : UnitBase_V2
                     }
                 }
             }
-
+        }
+        else if (state == UNIT_STATES.SKILL_1)
+        {
+            Debug.Log($"{animation_name} => {evt_name}");
         }
     }
 
@@ -696,172 +713,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
     }
 
-    ///// <summary>
-    ///// 스킬 구현 V2<br/>
-    ///// 스킬의 이펙트 정의 여부에 따라 달라진다.<br/>
-    ///// 스킬에 이펙트 프리팹 정보가 있을 경우 해당 이펙트를 트리거로 사용하여 효과를 줄 수 있다<br/>
-    ///// 스킬에 이펙트 프리팹 정보가 없을 경우, 즉시 발동하는 스킬로, 해당 스킬에서 바로 적용될 수 있도록 한다.
-    ///// </summary>
-    ///// <param name="skill"></param>
-    //protected virtual void SkillEffectSpawnV2(BattleSkillData skill)
-    //{
-    //    var factory = Battle_Mng.GetEffectFactory();
-    //    FindTargets(skill);
-    //    int target_cnt = Normal_Attack_Target.Count;
-    //    int effect_weight_index = skill.GetEffectWeightIndex();
-
-    //    if (skill.GetProjectileType() == PROJECTILE_TYPE.ALL_ROUND)
-    //    {
-    //        Transform center = Team_Type == TEAM_TYPE.LEFT ? factory.GetRightCenter() : factory.GetLeftCenter();
-    //        BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-    //        dmg.Caster = this;
-    //        dmg.AddTargets(Normal_Attack_Target);
-    //        dmg.Skill = skill;
-    //        dmg.Damage = GetAttackPoint();
-    //        dmg.Effect_Weight_Index = effect_weight_index;
-
-    //        string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
-    //        if (string.IsNullOrEmpty(skill_effect_prefab))
-    //        {
-
-    //        }
-    //        else
-    //        {
-    //            var target_pos = center.position;
-    //            if (skill.IsThrowingNode())
-    //            {
-    //            }
-    //            else
-    //            {
-    //                var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
-    //                effect.SetBattleSendData(dmg);
-    //                target_pos.z = center.position.z;
-    //                effect.transform.position = target_pos;
-    //                effect.StartParticle(1f);
-
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        for (int i = 0; i < target_cnt; i++)
-    //        {
-    //            var target = Normal_Attack_Target[i];
-
-    //            BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-    //            dmg.Caster = this;
-    //            dmg.AddTarget(target);
-    //            dmg.Skill = skill;
-    //            dmg.Damage = GetAttackPoint();
-    //            dmg.Effect_Weight_Index = effect_weight_index;
-
-    //            string skill_effect_prefab = skill.GetTriggerEffectPrefabPath();
-    //            //  이펙트가 정의되어 있지 않다면, 즉시 시전 및 트리거 방식으로 적용
-    //            if (string.IsNullOrEmpty(skill_effect_prefab))
-    //            {
-    //                //  onetime skill
-    //                var onetime_list = skill.GetOnetimeSkillDataList();
-    //                int one_cnt = onetime_list.Count;
-    //                for (int o = 0; o < one_cnt; o++)
-    //                {
-    //                    var onetime = onetime_list[o];
-    //                    string effect_path = onetime.GetEffectPrefab();
-    //                    if (string.IsNullOrEmpty(effect_path))
-    //                    {
-    //                        continue;
-    //                    }
-    //                    dmg.Onetime = onetime;
-
-    //                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
-    //                    effect.SetBattleSendData(dmg);
-    //                    PROJECTILE_TYPE ptype = onetime.GetProjectileType();
-    //                    var target_trans = target.GetBodyPositionByProjectileType(ptype);
-    //                    var target_pos = target_trans.position;
-                        
-    //                    if (onetime.IsThrowingNode())
-    //                    {
-    //                        target_pos.z = this.transform.position.z;
-                            
-    //                        effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
-
-    //                        float distance = Vector3.Distance(effect.transform.position, target_pos);
-    //                        float throwing_duration = distance / (float)skill.GetProjectileSpeed();
-
-    //                        effect.MoveTarget(target_trans, throwing_duration);
-    //                    }
-    //                    else
-    //                    {
-    //                        target_pos.z = target.transform.position.z;
-    //                        effect.transform.position = target_pos;
-    //                        effect.StartParticle((float)onetime.GetEffectDuration());
-    //                    }
-    //                }
-
-    //                //  duration skill
-    //                var duration_list = skill.GetDurationSkillDataList();
-    //                int dur_cnt = duration_list.Count;
-    //                for (int d = 0; d < dur_cnt; d++)
-    //                {
-    //                    var duration = duration_list[d];
-
-    //                    string effect_path = duration.GetEffectPrefab();
-    //                    if (string.IsNullOrEmpty(effect_path))
-    //                    {
-    //                        continue;
-    //                    }
-    //                    dmg.Duration = duration;
-    //                    PROJECTILE_TYPE ptype = duration.GetProjectileType();
-    //                    if (duration.IsThrowingNode())
-    //                    {
-    //                        //  지속성 효과를 투사체로 사용하기 위해서는 자체 이펙트를 이용해서 사용하는 방법은 아직 없음.
-    //                        //  상위 스킬의 이펙트 효과 트리거로 사용하고 있는 중.
-    //                    }
-    //                    else
-    //                    {
-    //                        var target_trans = target.GetBodyPositionByProjectileType(ptype);
-    //                        var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
-
-    //                        effect.SetBattleSendData(dmg);
-    //                        var target_pos = target_trans.position;
-    //                        target_pos.z = target.transform.position.z;
-    //                        effect.transform.position = target_pos;
-
-    //                        effect.MoveTarget(target_trans, (float)duration.GetEffectDuration());
-
-    //                    }
-
-    //                }
-    //            }
-    //            else // 이펙트가 정의되어 있다면, 해당 이펙트의 사용으로 스킬 시전 트리거를 발생시킨다.
-    //            {
-    //                PROJECTILE_TYPE ptype = skill.GetProjectileType();
-    //                var target_trans = target.GetBodyPositionByProjectileType(ptype);
-
-    //                var target_pos = target_trans.position;
-    //                if (skill.IsThrowingNode())
-    //                {
-    //                    var effect = (SkillEffectBase)factory.CreateEffect(skill_effect_prefab);
-    //                    effect.SetBattleSendData(dmg);
-    //                    target_pos.z = this.transform.position.z;
-    //                    effect.transform.position = GetBodyPositionByProjectileType(PROJECTILE_TYPE.THROW_BODY).position;
-
-    //                    float distance = Vector3.Distance(transform.position, target_pos);
-    //                    float throwing_duration = distance / (float)skill.GetProjectileSpeed();
-
-    //                    //effect.MoveTarget(target_trans, (float)skill.GetEffectDuration());
-    //                    effect.MoveTarget(target_trans, throwing_duration);
-    //                }
-    //                else
-    //                {
-    //                    //  아직은 투사체가 아닌 방식의 이펙트 트리거가 없음. 아마도 장판같은 이펙트를 사용할 수 있을 것으로 예상
-    //                }
-    //            }
-    //        }
-    //    }
-
-
-    //}
-
+   
 
     /// <summary>
     /// 현재 재생중인 애니메이션을 일시 정지.<br/>
@@ -934,7 +786,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             Utility = GetComponent<SkeletonUtility>();
         }
 
-        InitPlayableDirector();
+        
     }
     public override void Despawned()
     {
@@ -1521,6 +1373,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
         //ChangeState(UNIT_STATES.SKILL_1);
         Debug.Log("SpecialSkillExec");
+        Skeleton.AnimationState.ClearTracks();
+        Skill_Mng.SetNextSkillPattern();
+        ChangeState(UNIT_STATES.SKILL_READY_1);
+
     }
 
     private void OnTriggerEnter(Collider other)

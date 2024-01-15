@@ -9779,7 +9779,6 @@ GameObject:
   - component: {fileID: 21042790114022089}
   - component: {fileID: 1590396078344018324}
   - component: {fileID: 4886513155576766842}
-  - component: {fileID: 4269054494950393531}
   - component: {fileID: 1933094105435356681}
   - component: {fileID: 6472439296259968781}
   - component: {fileID: 2483204398204191557}
@@ -14627,19 +14626,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &4269054494950393531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5397946183525080140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &1933094105435356681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14652,10 +14638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff109bf7f1e3b274f962d42351057ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Particle_Effect: {fileID: 21042790114022089}
-  Skel_Effect: {fileID: 0}
-  Mover: {fileID: 6472439296259968781}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &6472439296259968781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14687,13 +14669,15 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 1
   Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
   Parabola: {fileID: 0}
   Parabola_Height: 0
   Mover: {fileID: 6472439296259968781}
   Projectile_Velocity: 30
+  Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!1 &6460639546696410341
 GameObject:
   m_ObjectHideFlags: 0

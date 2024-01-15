@@ -1,16 +1,10 @@
 using FluffyDuck.Util;
-using Spine;
-using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EffectBase : MonoBehaviour, IPoolableComponent
 {
-    [SerializeField, Tooltip("Particle Effect")]
     protected ParticleSystem Particle_Effect;
-
-    [SerializeField, Tooltip("Spine Effect")]
-    protected SkeletonAnimation Skel_Effect;
 
     protected EffectFactory Factory;
 
@@ -95,18 +89,6 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     public virtual void SetData(params object[] data) { }
 
-    /// <summary>
-    /// 스파인 이펙트의 애니메이션 진행중인 모든 트랙 반환
-    /// </summary>
-    /// <returns></returns>
-    protected TrackEntry[] FindAllTracks()
-    {
-        if (Skel_Effect != null)
-        {
-            return Skel_Effect.AnimationState.Tracks.Items;
-        }
-        return null;
-    }
 
     public virtual void OnPuase()
     {
@@ -114,15 +96,6 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         if (Particle_Effect != null)
         {
             Particle_Effect.Pause(true);
-        }
-        var tracks = FindAllTracks();
-        if (tracks != null)
-        {
-            int len = tracks.Length;
-            for (int i = 0; i < len; i++)
-            {
-                tracks[i].TimeScale = 0f;
-            }
         }
     }
 
@@ -133,19 +106,14 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         {
             Particle_Effect.Play(true);
         }
-        var tracks = FindAllTracks();
-        if (tracks != null)
-        {
-            int len = tracks.Length;
-            for (int i = 0; i < len; i++)
-            {
-                tracks[i].TimeScale = 1f;
-            }
-        }
     }
 
     public virtual void Spawned()
     {
+        if (Particle_Effect == null)
+        {
+            Particle_Effect = GetComponent<ParticleSystem>();
+        }
         Is_Action = false;
         Is_Loop = false;
     }

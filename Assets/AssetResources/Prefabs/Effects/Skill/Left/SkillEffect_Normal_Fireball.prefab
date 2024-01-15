@@ -9729,7 +9729,6 @@ GameObject:
   - component: {fileID: 3097156473369476790}
   - component: {fileID: 4046136650359191221}
   - component: {fileID: 8228570368267118135}
-  - component: {fileID: 7165457467258189253}
   - component: {fileID: 6513705678894338924}
   m_Layer: 0
   m_Name: SkillEffect_Normal_Fireball
@@ -14564,10 +14563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff109bf7f1e3b274f962d42351057ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Particle_Effect: {fileID: 0}
-  Skel_Effect: {fileID: 0}
-  Mover: {fileID: 8228570368267118135}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &3097156473369476790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14605,19 +14600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4befcb966d0172458fd1e4947588dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7165457467258189253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4390363996122362252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
 --- !u!114 &6513705678894338924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14637,13 +14619,15 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 1
   Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
   Parabola: {fileID: 0}
   Parabola_Height: 0
   Mover: {fileID: 8228570368267118135}
   Projectile_Velocity: 20
+  Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!1 &4733032849251062334
 GameObject:
   m_ObjectHideFlags: 0

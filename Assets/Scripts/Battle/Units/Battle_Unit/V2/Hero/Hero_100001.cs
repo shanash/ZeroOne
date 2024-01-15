@@ -29,6 +29,14 @@ public class Hero_100001 : HeroBase_V2
     //    base.UnitStateMove();
     //}
 
+    public override void UnitStateSkillReady01Begin()
+    {
+        SetPlayableDirector();
+    }
+    public override void UnitStateSkillReady01()
+    {
+        ChangeState(UNIT_STATES.SKILL_1);
+    }
 
 
     #endregion
@@ -36,38 +44,71 @@ public class Hero_100001 : HeroBase_V2
 
     #region Etc Funcs
 
-    protected override void InitPlayableDirector()
+    protected override void SetPlayableDirector()
     {
         if (Ultimate_Skill_Playable_Director == null)
         {
             return;
         }
-        //var stage_cam = Battle_Mng.GetVirtualCineManager().GetStageCamera();
-        //var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
+        var stage_cam = Battle_Mng.GetVirtualCineManager().GetStageCamera();
+        var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
 
-        //var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
-        //var tracks = ta.GetOutputTracks();
-        //foreach ( var track in tracks )
-        //{
-        //    if (track is AnimationTrack)
-        //    {
-        //        if (track.name.Equals("Unit_Back_BG_Animation_Track"))
-        //        {
-        //            Ultimate_Skill_Playable_Director.SetGenericBinding(track, unit_back_bg.GetComponent<Animator>());
-        //        }
-        //        else if(track.name.Equals("Stage_Cam_Animation_Track"))
-        //        {
-        //            Ultimate_Skill_Playable_Director.SetGenericBinding(track, stage_cam.GetComponent<Animator>());
-        //        }
-        //    }
-        //    else if (track is CinemachineTrack)
-        //    {
-        //        Ultimate_Skill_Playable_Director.SetGenericBinding(track, Camera.main.GetComponent<CinemachineBrain>());
-        //    }
-        //}
+        var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
+        var tracks = ta.GetOutputTracks();
+        foreach (var track in tracks)
+        {
+            if (track is AnimationTrack)
+            {
+                if (track.name.Equals("Unit_Back_BG_Animation_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, unit_back_bg.GetComponent<Animator>());
+                }
+                else if (track.name.Equals("Stage_Cam_Animation_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, stage_cam.GetComponent<Animator>());
+                }
+            }
+            else if (track is CinemachineTrack)
+            {
+                Ultimate_Skill_Playable_Director.SetGenericBinding(track, Camera.main.GetComponent<CinemachineBrain>());
+            }
+        }
 
-        //Ultimate_Skill_Playable_Director.Play();
+        Ultimate_Skill_Playable_Director.Play();
     }
+
+    protected override void UnsetPlayableDirector()
+    {
+        if (Ultimate_Skill_Playable_Director == null)
+        {
+            return;
+        }
+
+
+        var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
+        var tracks = ta.GetOutputTracks();
+
+        foreach (var track in tracks)
+        {
+            if (track is AnimationTrack)
+            {
+                if (track.name.Equals("Unit_Back_BG_Animation_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
+                }
+                else if (track.name.Equals("Stage_Cam_Animation_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
+                }
+            }
+            else if (track is CinemachineTrack)
+            {
+                Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
+            }
+
+        }
+    }
+
     protected override void PlayAnimation(HERO_PLAY_ANIMATION_TYPE ani_type)
     {
         switch (ani_type)
@@ -102,6 +143,6 @@ public class Hero_100001 : HeroBase_V2
         }
     }
     #endregion
-
+    
 
 }

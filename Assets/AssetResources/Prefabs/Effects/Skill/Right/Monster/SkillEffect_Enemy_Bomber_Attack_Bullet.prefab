@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 8800525562459116963}
   - component: {fileID: 871863677826831496}
   - component: {fileID: 328592059939070342}
-  - component: {fileID: 1669474977827628956}
-  - component: {fileID: 6450453735029319001}
   - component: {fileID: 3617453101892856563}
   - component: {fileID: -6392088779832871589}
+  - component: {fileID: 4187840169810616759}
   m_Layer: 0
   m_Name: SkillEffect_Enemy_Bomber_Attack_Bullet
   m_TagString: Untagged
@@ -4860,35 +4859,6 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &1669474977827628956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3754621594486084364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 661670baf536e284288e4dede1d71b99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
---- !u!114 &6450453735029319001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3754621594486084364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd71c420955b4aa4ba06d7d91cf416af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Particle_Effect: {fileID: 8800525562459116963}
-  Skel_Effect: {fileID: 0}
-  Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
 --- !u!114 &3617453101892856563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4901,6 +4871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Is_Show_All_Properties: 0
   Effect_Type: 2
   Effect_Duration: 0
   Is_Loop: 0
@@ -4908,13 +4879,15 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 2
   Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
   Parabola: {fileID: -6392088779832871589}
   Parabola_Height: 5
   Mover: {fileID: 0}
   Projectile_Velocity: 15
+  Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!114 &-6392088779832871589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4925,6 +4898,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd224fef45b0d4c4cbf728fb47a48228, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4187840169810616759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3754621594486084364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff109bf7f1e3b274f962d42351057ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7270898726882747254

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class SkillEffect_Duration_Simple : SkillEffectBase
 {
-    EffectFollowingComponent Following;
-
 
     public override void StartParticle(Transform target, float duration, bool loop = false)
     {
@@ -14,11 +12,6 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
         {
             ec.SetFollowingTarget(target);
         }
-        else
-        {
-            Following?.SetTarget(target);
-        }
-
         //  add duration skill data
         Send_Data.Duration?.SetSkillEffect(this);
         Send_Data.Duration?.ExecSkill(Send_Data);
@@ -35,11 +28,6 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
         {
             ec.SetFollowingTarget(target);
         }
-        else
-        {
-            Following?.SetTarget(target);
-        }
-        
 
         Send_Data.Duration?.SetSkillEffect(this);
         Send_Data.Duration?.ExecSkill(Send_Data);
@@ -50,17 +38,16 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
     public override void Spawned()
     {
         base.Spawned();
-
-        if (Following == null)
-        {
-            Following = GetComponent<EffectFollowingComponent>();
-        }
     }
 
     public override void Despawned()
     {
         base.Despawned();
 
-        Following?.ResetComponent();
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            ec.ResetFollowingTarget();
+        }
     }
 }

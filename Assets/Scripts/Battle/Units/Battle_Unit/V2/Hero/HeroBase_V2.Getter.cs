@@ -174,9 +174,20 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     public Transform GetStartPosTypeTransform(CASTER_START_POS_TYPE ptype)
     {
-        if (Start_Projectile_Transforms.Exists(x => x.Pos_Type == ptype))
+        if (ptype == CASTER_START_POS_TYPE.RANDOM)
         {
-            return Start_Projectile_Transforms.Find(x => x.Pos_Type == ptype).Trans;
+            if (Start_Projectile_Transforms.Count > 0)
+            {
+                int r = UnityEngine.Random.Range(0, Start_Projectile_Transforms.Count);
+                return Start_Projectile_Transforms[r].Trans;
+            }
+        }
+        else
+        {
+            if (Start_Projectile_Transforms.Exists(x => x.Pos_Type == ptype))
+            {
+                return Start_Projectile_Transforms.Find(x => x.Pos_Type == ptype).Trans;
+            }
         }
         return null;
     }
