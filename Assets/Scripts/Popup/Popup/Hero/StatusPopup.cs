@@ -1,5 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using Gpm.Ui;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class StatusPopup : PopupBase
 
     BattleUnitData Data;
     List<StatusTextUI> Statuses;
+
+    [SerializeField, Tooltip("Status List View")]
+    InfiniteScroll Status_LIst_View;
 
     protected override void Initialize()
     {
@@ -42,28 +46,20 @@ public class StatusPopup : PopupBase
     {
         Title.text = ConstString.StatusPopup.TITLE;
 
-        (string subject, string value)[] tuple_status_data = new (string, string)[]
+        Queue<StatusItemData> status_queue = new Queue<StatusItemData>();
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.COMBAT_POWER, Data.GetCombatPoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.LIFE_POINT, Data.GetLifePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_POWER, Data.GetAttackPoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.DEFENCE_POINT, Data.GetDefensePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Data.GetApproachDistance().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToPercentage()));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.EVASION_POINT, Data.GetEvationPoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ACCURACY_POINT, Data.GetAccuracyPoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Data.GetAutoRecoveryLife().ToPercentage()));
+
+        while (status_queue.TryDequeue(out StatusItemData data))
         {
-            (ConstString.Hero.COMBAT_POWER, Data.GetCombatPoint().ToString("N0")),
-            (ConstString.Hero.LIFE_POINT, Data.GetLifePoint().ToString("N0")),
-            (ConstString.Hero.ATTACK_POWER, Data.GetAttackPoint().ToString("N0")),
-            (ConstString.Hero.DEFENCE_POINT, Data.GetDefensePoint().ToString("N0")),
-            (ConstString.Hero.APPROACH_DISTANCE, Data.GetApproachDistance().ToString("N0")),
-            (ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToPercentage()),
-            (ConstString.Hero.EVASION_POINT, Data.GetEvationPoint().ToString("N0")),
-            (ConstString.Hero.ACCURACY_POINT, Data.GetAccuracyPoint().ToString("N0")),
-            (ConstString.Hero.AUTO_RECORVERY, Data.GetAutoRecoveryLife().ToPercentage()),
-        };
-
-        while (Statuses.Count < tuple_status_data.Length)
-        {
-            var ui = Instantiate(Status_Base, Status_Base.transform.parent, false);
-
-            ui.Subject.text = tuple_status_data[Statuses.Count].subject;
-            ui.Value.text = tuple_status_data[Statuses.Count].value;
-
-            ui.gameObject.SetActive(true);
-            Statuses.Add(ui);
+            Status_LIst_View.InsertData(data);
         }
     }
 
