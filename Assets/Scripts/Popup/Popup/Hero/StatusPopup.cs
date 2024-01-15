@@ -46,6 +46,8 @@ public class StatusPopup : PopupBase
     {
         Title.text = ConstString.StatusPopup.TITLE;
 
+        Status_LIst_View.Clear();
+
         Queue<StatusItemData> status_queue = new Queue<StatusItemData>();
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.COMBAT_POWER, Data.GetCombatPoint().ToString("N0")));
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.LIFE_POINT, Data.GetLifePoint().ToString("N0")));
