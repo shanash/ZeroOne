@@ -12,8 +12,10 @@ public static class ConstString
 
         public const string COMBAT_POWER = "전투력";
         public const string LIFE_POINT = "체력";
-        public const string ATTACK_POWER = "공격력";
-        public const string DEFENCE_POINT = "방어력";
+        public const string ATTACK_DAMAGE = "물리 공격력";
+        public const string MAGIC_DAMAGE = "마법 공격력";
+        public const string ATTACK_DEFENSE = "물리 방어력";
+        public const string MAGIC_DEFENSE = "마법 방어력";
         public const string APPROACH_DISTANCE = "접근 사거리";
         public const string ATTACK_RECOVERY = "흡혈";
         public const string EVASION_POINT = "회피";

@@ -49,8 +49,10 @@ public class StatusPopup : PopupBase
         Queue<StatusItemData> status_queue = new Queue<StatusItemData>();
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.COMBAT_POWER, Data.GetCombatPoint().ToString("N0")));
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.LIFE_POINT, Data.GetLifePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_POWER, Data.GetAttackPoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.DEFENCE_POINT, Data.GetDefensePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Data.GetAttackDamagePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Data.GetMagicDamagePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Data.GetAttackDefensePoint().ToString("N0")));
+        status_queue.Enqueue(new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Data.GetMagicDefensePoint().ToString("N0")));
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Data.GetApproachDistance().ToString("N0")));
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToPercentage()));
         status_queue.Enqueue(new StatusItemData(ConstString.Hero.EVASION_POINT, Data.GetEvationPoint().ToString("N0")));

@@ -53,8 +53,8 @@ public abstract class BattleUnitData : BattleDataBase
     public virtual double GetCombatPoint()
     {
         var hp = GetLifePoint();
-        var ap = GetAttackPoint();
-        var dp = GetDefensePoint();
+        var ap = GetAttackDamagePoint();
+        var dp = GetAttackDefensePoint();
         var al = GetAutoRecoveryLife();
         var ep = GetEvationPoint();
         var ar = GetAttackRecovery();
@@ -77,13 +77,16 @@ public abstract class BattleUnitData : BattleDataBase
     /// 공격 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetAttackPoint();
+    public abstract double GetAttackDamagePoint();
+
+    public virtual double GetMagicDamagePoint() { return 0; }
 
     /// <summary>
     /// 방어력 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetDefensePoint();
+    public abstract double GetAttackDefensePoint();
+    public virtual double GetMagicDefensePoint() {  return 0; }
 
     /// <summary>
     /// 체력 포인트

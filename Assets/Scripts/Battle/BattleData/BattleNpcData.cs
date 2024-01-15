@@ -58,7 +58,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetAttackPoint()
+    public override double GetAttackDamagePoint()
     {
         if (Battle_Data != null)
         {
@@ -66,7 +66,8 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetDefensePoint()
+
+    public override double GetAttackDefensePoint()
     {
         if (Battle_Data != null)
         {

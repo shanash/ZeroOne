@@ -33,14 +33,14 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected virtual void CalcAttackPoint()
     {
-        Attack = Unit_Data.GetAttackPoint();
+        Attack = Unit_Data.GetAttackDamagePoint();
     }
     /// <summary>
     /// 방어력 계산. 패시브 방어력 등 계산
     /// </summary>
     protected virtual void CalcDefensePoint()
     {
-        Defense = Unit_Data.GetDefensePoint();
+        Defense = Unit_Data.GetAttackDefensePoint();
     }
     /// <summary>
     /// 치명타 확률

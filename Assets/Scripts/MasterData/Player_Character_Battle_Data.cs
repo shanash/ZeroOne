@@ -35,13 +35,21 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public double hp {get; set;}
 	///	<summary>
-	///	공격력
+	///	물리 공격력
 	///	</summary>
 	public double attack {get; set;}
 	///	<summary>
-	///	방어력
+	///	마법 공격력
+	///	</summary>
+	public double m_attack {get; set;}
+	///	<summary>
+	///	물리 방어력
 	///	</summary>
 	public double defend {get; set;}
+	///	<summary>
+	///	마법_방어력
+	///	</summary>
+	public double m_defend {get; set;}
 	///	<summary>
 	///	회복량
 	///	</summary>
@@ -115,7 +123,9 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[super_skill_group_id] = <color=yellow>{0}</color>", super_skill_group_id).AppendLine();
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
+		sb.AppendFormat("[m_attack] = <color=yellow>{0}</color>", m_attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
+		sb.AppendFormat("[m_defend] = <color=yellow>{0}</color>", m_defend).AppendLine();
 		sb.AppendFormat("[attack_recovery] = <color=yellow>{0}</color>", attack_recovery).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();

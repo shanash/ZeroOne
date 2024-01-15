@@ -68,7 +68,7 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetAttackPoint()
+    public override double GetAttackDamagePoint()
     {
         if (Battle_Data != null)
         {
@@ -76,7 +76,17 @@ public class BattlePcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetDefensePoint()
+
+    public override double GetMagicDamagePoint()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.m_attack;
+        }
+        return 0;
+    }
+
+    public override double GetAttackDefensePoint()
     {
         if (Battle_Data != null)
         {
@@ -84,6 +94,16 @@ public class BattlePcData : BattleUnitData
         }
         return 0;
     }
+
+    public override double GetMagicDefensePoint()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.m_defend;
+        }
+        return 0;
+    }
+
     public override double GetLifePoint()
     {
         if (Battle_Data != null)

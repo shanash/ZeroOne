@@ -50,8 +50,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
     public void FixedUpdatePopup()
     {
         Combat_Subject.text = ConstString.Hero.COMBAT_POWER;
-        Attack_Subject.text = ConstString.Hero.ATTACK_POWER;
-        Defense_Subject.text = ConstString.Hero.DEFENCE_POINT;
+        Attack_Subject.text = ConstString.Hero.ATTACK_DAMAGE;
+        Defense_Subject.text = ConstString.Hero.ATTACK_DEFENSE;
         Life_Subject.text = ConstString.Hero.LIFE_POINT;
 
         Refresh();
@@ -65,8 +65,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
         }
 
         Combat_Number_Text.text = Unit_Data.GetCombatPoint().ToString("N0");
-        Attack_Number_Text.text = Unit_Data.GetAttackPoint().ToString("N0");
-        Defense_Number_Text.text = Unit_Data.GetDefensePoint().ToString("N0");
+        Attack_Number_Text.text = Unit_Data.GetAttackDamagePoint().ToString("N0");
+        Defense_Number_Text.text = Unit_Data.GetAttackDefensePoint().ToString("N0");
         Life_Number_Text.text = Unit_Data.GetLifePoint().ToString("N0");
 
         Skill_Mng = new BattleSkillManager();
