@@ -2,7 +2,6 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 #if UNITY_5_3_OR_NEWER
 using System.Collections.Generic;
@@ -52,7 +51,7 @@ namespace Excel2Json
         /// <param name="is_encrypt"></param>
         /// <param name="enc_password"></param>
         /// <param name="master_table_columns"></param>
-        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns)
+        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, bool use_raw_cs_file)
         {
             try
             {
@@ -79,7 +78,11 @@ namespace Excel2Json
 
                 if (is_csharp_make)
                 {
-                    MakeCSharpFile(col_info, table_name, csharp_output_dir);
+                    MakeCSharpFile(col_info, table_name, csharp_output_dir, use_raw_cs_file);
+                    if (use_raw_cs_file)
+                    {
+                        MakeCSharpRawFile(col_info, table_name, csharp_output_dir);
+                    }
                     master_table_columns.Add(table_name, col_info);
                 }
             }
@@ -338,18 +341,15 @@ namespace Excel2Json
         /// <param name="col_info_list"></param>
         /// <param name="data_table_name"></param>
         /// <param name="output_dir"></param>
-        static void MakeCSharpFile(List<ColumnInfo> col_info_list, string data_table_name, string output_dir)
+        static void MakeCSharpFile(List<ColumnInfo> col_info_list, string data_table_name, string output_dir, bool use_raw_cs_file)
         {
             StringBuilder sb = new StringBuilder();
 
-            //  include package
-            sb.AppendLine("using System.Collections;");
-            sb.AppendLine("using System.Collections.Generic;");
-            sb.AppendLine().AppendLine();
-
-            sb.AppendLine("[System.Serializable]");
-
             //  class declare
+            if (!use_raw_cs_file)
+            {
+                sb.AppendLine("[System.Serializable]");
+            }
             sb.AppendLine($"public class {data_table_name} : System.IDisposable");
             sb.AppendLine("{");
 
@@ -389,15 +389,30 @@ namespace Excel2Json
                 sb.AppendLine("\t///\t</summary>");
                 //sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
 
-                sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
-
+                if (use_raw_cs_file)
+                {
+                    sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
+                }
+                else
+                {
+                    sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
+                }
             }
             sb.AppendLine();
             sb.AppendLine("\tprivate bool disposed = false;").AppendLine();
 
             //  constructer
-            sb.AppendLine($"\tpublic {data_table_name}()");
+            if (use_raw_cs_file)
+            {
+                sb.AppendLine($"\tpublic {data_table_name}(Raw_{data_table_name} raw_data)");
+            }
+            else
+            {
+                sb.AppendLine($"\tpublic {data_table_name}()");
+            }
+
             sb.AppendLine("\t{");
+
 
             for (int i = 0; i < col_info_list.Count; i++)
             {
@@ -406,26 +421,45 @@ namespace Excel2Json
                 {
                     continue;
                 }
+
                 if (info.type == "int")
                 {
-                    sb.AppendLine($"\t\t{info.key} = 0;");
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = 0;");
                 }
                 else if (info.type == "string")
                 {
-                    sb.AppendLine($"\t\t{info.key} = string.Empty;");
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = string.Empty;");
                 }
                 else if (info.type == "bool")
                 {
-                    sb.AppendLine($"\t\t{info.key} = false;");
+                    sb.AppendLine(use_raw_cs_file
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = false;");
+                }
+                else if (info.type == "double")
+                {
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = 0;");
                 }
                 else if (info.is_enum)
                 {
                     if (!info.is_array)
                     {
-                        sb.AppendLine($"\t\t{info.key} = {info.type}.{info.init_value};");
+                        sb.AppendLine(use_raw_cs_file
+                            ? $"\t\t{info.key} = raw_data.{info.key};" 
+                            : $"\t\t{info.key} = {info.type}.{info.init_value};");
                     }
                 }
 
+                if (use_raw_cs_file && info.is_array)
+                {
+                    sb.AppendLine($"\t\t{info.key} = raw_data.{info.key} != null ? ({info.type})raw_data.{info.key}.Clone() : new {info.type.Replace("[]", "")}[0];");
+                }
             }
 
             sb.AppendLine("\t}").AppendLine();
@@ -488,13 +522,133 @@ namespace Excel2Json
             sb.AppendLine("\t\treturn sb.ToString();");
             sb.AppendLine("\t}");
 
-
             sb.AppendLine("}").AppendLine();    //  class end
-
 
             string filename = string.Format("{0}.cs", data_table_name);
             string path = Path.Combine(output_dir, filename);
             //File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
+            File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// C# 파일 생성
+        /// </summary>
+        /// <param name="col_info_list"></param>
+        /// <param name="data_table_name"></param>
+        /// <param name="output_dir"></param>
+        static void MakeCSharpRawFile(List<ColumnInfo> col_info_list, string data_table_name, string output_dir)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //  include package
+            sb.AppendLine().AppendLine();
+
+            sb.AppendLine("[System.Serializable]");
+
+            //  class declare
+            sb.AppendLine($"public class Raw_{data_table_name} : System.IDisposable");
+            sb.AppendLine("{");
+
+            string get_set_str = "{get; set;}";
+            //  declare variables
+            for (int i = 0; i < col_info_list.Count; i++)
+            {
+                ColumnInfo info = col_info_list[i];
+                if (info.is_ref)
+                {
+                    continue;
+                }
+                sb.AppendLine("\t///\t<summary>");
+                if (!string.IsNullOrEmpty(info.key_name))
+                {
+                    string[] knames = info.key_name.Trim().Split('\n');
+                    for (int k = 0; k < knames.Length; k++)
+                    {
+                        sb.AppendLine($"\t///\t{knames[k]}");
+                    }
+                }
+
+                //sb.AppendLine($"\t///\t[{info.key_name}]");
+                if (info.comment != null)
+                {
+                    string[] comments = info.comment.Trim().Split('\n');
+                    for (int n = 0; n < comments.Length; n++)
+                    {
+                        if (string.IsNullOrEmpty(comments[n]))
+                        {
+                            continue;
+                        }
+                        sb.AppendLine($"\t///\t{comments[n]}");
+                    }
+                }
+
+                sb.AppendLine("\t///\t</summary>");
+                //sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
+
+                sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
+
+            }
+            sb.AppendLine();
+            sb.AppendLine("\tprivate bool disposed = false;").AppendLine();
+
+            //  constructer
+            sb.AppendLine($"\tpublic Raw_{data_table_name}()");
+            sb.AppendLine("\t{");
+
+            for (int i = 0; i < col_info_list.Count; i++)
+            {
+                ColumnInfo info = col_info_list[i];
+                if (info.is_ref)
+                {
+                    continue;
+                }
+                if (info.type == "int")
+                {
+                    sb.AppendLine($"\t\t{info.key} = 0;");
+                }
+                else if (info.type == "string")
+                {
+                    sb.AppendLine($"\t\t{info.key} = string.Empty;");
+                }
+                else if (info.type == "bool")
+                {
+                    sb.AppendLine($"\t\t{info.key} = false;");
+                }
+                else if (info.is_enum)
+                {
+                    if (!info.is_array)
+                    {
+                        sb.AppendLine($"\t\t{info.key} = {info.type}.{info.init_value};");
+                    }
+                }
+            }
+
+            sb.AppendLine("\t}").AppendLine();
+
+            //  Dispose()
+            sb.AppendLine("\tpublic void Dispose()");
+            sb.AppendLine("\t{");
+            sb.AppendLine("\t\tDispose(true);");
+            sb.AppendLine("\t\tSystem.GC.SuppressFinalize(this);");
+            sb.AppendLine("\t}");
+
+            //  Dispose(bool disposing) - begin
+            sb.AppendLine("\tprotected virtual void Dispose(bool disposing)");
+            sb.AppendLine("\t{");
+            sb.AppendLine("\t\tif (!disposed)");
+            sb.AppendLine("\t\t{");
+            sb.AppendLine("\t\t\tif (disposing)");
+            sb.AppendLine("\t\t\t{");
+            sb.AppendLine("\t\t\t\t// todo dispose resouces");
+            sb.AppendLine("\t\t\t}");
+            sb.AppendLine("\t\t\tdisposed = true;");
+            sb.AppendLine("\t\t}");
+            sb.AppendLine("\t}");       //  Dispose(bool disposing) - finish
+
+            sb.AppendLine("}").AppendLine();    //  class end
+
+            string filename = string.Format("{0}.cs", $"Raw_{data_table_name}");
+            string path = Path.Combine(output_dir, filename);
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
     }

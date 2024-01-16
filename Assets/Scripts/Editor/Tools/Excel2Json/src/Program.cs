@@ -16,9 +16,11 @@ namespace Excel2Json
         CSHARP_OUTOUT_DIR,
         ENCRYPT_ENABLE,
     }
+
     public static class Program
     {
-        const string VERSION = "Excel2Json Ver.1.5.0";
+        public const bool USE_RAW_CS_FILE = false;
+        const string VERSION = "Excel2Json Ver.1.5.1";
 
         public static void Main(params string[] args)
         {
@@ -212,7 +214,7 @@ namespace Excel2Json
             
             if (is_csharp_make && master_table_columns.Count > 0)
             {
-                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt);
+                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt, USE_RAW_CS_FILE);
             }
 
             if (is_csharp_make && master_enum_data_list.Count > 0)

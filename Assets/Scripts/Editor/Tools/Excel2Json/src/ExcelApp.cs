@@ -45,7 +45,7 @@ namespace Excel2Json
                             }
                             else
                             {
-                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns);
+                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, Program.USE_RAW_CS_FILE);
                             }
                         }
                     }
@@ -161,7 +161,7 @@ namespace Excel2Json
         /// <param name="master_table_columns"></param>
         /// <param name="output_dir"></param>
         /// <param name="is_encrypt"></param>
-        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt)
+        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt, bool use_raw_cs_file)
         {
             StringBuilder sb = new StringBuilder();
             const string mng_name = "BaseMasterDataManager";
@@ -256,12 +256,34 @@ namespace Excel2Json
                     {
                         sb.AppendLine($"\t\tstring data = LoadJsonData(\"Master/{table.Key}\");");
                         sb.AppendLine("\t\tstring decrypt = ForestJ.Util.Security.AESDecrypt256(data);");
-                        sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                        if (use_raw_cs_file)
+                        {
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                        }
                     }
                     else
                     {
                         sb.AppendLine($"\t\tstring data = LoadJsonData(\"Master/{table.Key}\");");
-                        sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(data);");
+                        if (use_raw_cs_file)
+                        {
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(data);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(data);");
+                        }
+                    }
+                    if (use_raw_cs_file)
+                    {
+                        sb.AppendLine($"\t\t_{table.Key} = new List<{table.Key}>();");
+                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
+                        sb.AppendLine("\t\t{");
+                        sb.AppendLine($"\t\t\t_{table.Key}.Add(new {table.Key}(raw_data));");
+                        sb.AppendLine("\t\t}");
                     }
                     sb.AppendLine("\t}").AppendLine();
                 }
@@ -288,15 +310,36 @@ namespace Excel2Json
                     {
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
                         sb.AppendLine("\t\tstring decrypt = FluffyDuck.Util.Security.AESDecrypt256(json);");
-                        sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                        if (use_raw_cs_file)
+                        {
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                        }
                     }
                     else
                     {
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
-                        sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");
+                        if (use_raw_cs_file)
+                        {
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(json);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");
+                        }
                     }
 
-
+                    if (use_raw_cs_file)
+                    {
+                        sb.AppendLine($"\t\t_{table.Key} = new List<{table.Key}>();");
+                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
+                        sb.AppendLine("\t\t{");
+                        sb.AppendLine($"\t\t\t_{table.Key}.Add(new {table.Key}(raw_data));");
+                        sb.AppendLine("\t\t}");
+                    }
                     sb.AppendLine("\t}");
                     sb.AppendLine();
                 }
