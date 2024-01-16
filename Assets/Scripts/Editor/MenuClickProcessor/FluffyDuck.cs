@@ -13,6 +13,8 @@ namespace FluffyDuck.EditorUtil.UpperMenu
                 "-d", "Android/ExcelData",
                 "-o", "Assets/AssetResources/Master",
                 "-cs", "Assets/Scripts/MasterData");
+
+            AssetDatabase.Refresh();
         }
 
         [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor _%#/", false, 0)]
