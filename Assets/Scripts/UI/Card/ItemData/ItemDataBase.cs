@@ -46,7 +46,7 @@ public class ItemDataBase : IDisposable
         Item_Type = itype;
         Item_ID = item_id;
     }
-
+    
     public void AddItemCount(int cnt) { Item_Count += cnt; }
 
     public virtual string GetItemIconPath() { return string.Empty; }

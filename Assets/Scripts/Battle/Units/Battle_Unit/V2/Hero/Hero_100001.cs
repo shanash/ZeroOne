@@ -50,8 +50,15 @@ public class Hero_100001 : HeroBase_V2
         {
             return;
         }
-        var stage_cam = Battle_Mng.GetVirtualCineManager().GetStageCamera();
+        
         var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
+        var virtual_cam = Battle_Mng.GetVirtualCineManager();
+        var brain_cam = virtual_cam.GetBrainCam();
+        var stage_cam = virtual_cam.GetStageCamera();
+
+        var character_cam = virtual_cam.GetCharacterCamera();
+        var active_group_cam = virtual_cam.GetActiveTargetGroupCamera();
+        var active_group = virtual_cam.GetActiveTargetGroup();
 
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
@@ -59,18 +66,43 @@ public class Hero_100001 : HeroBase_V2
         {
             if (track is AnimationTrack)
             {
-                if (track.name.Equals("Unit_Back_BG_Animation_Track"))
+                if (track.name.Equals("imation_TrackAnimation_Track"))
                 {
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, unit_back_bg.GetComponent<Animator>());
                 }
-                else if (track.name.Equals("Stage_Cam_Animation_Track"))
+                else if (track.name.Equals("CharacterCameraAnimationTrack"))
                 {
-                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, stage_cam.GetComponent<Animator>());
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, character_cam.GetComponent<Animator>());
+                }
+                else if (track.name.Equals("ActiveGroupCameraAnimationTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, active_group_cam.GetComponent<Animator>());
                 }
             }
             else if (track is CinemachineTrack)
             {
-                Ultimate_Skill_Playable_Director.SetGenericBinding(track, Camera.main.GetComponent<CinemachineBrain>());
+                Ultimate_Skill_Playable_Director.SetGenericBinding(track, brain_cam);
+                var clips = track.GetClips();
+                foreach (var clip in clips)
+                {
+                    CinemachineShot shot = clip.asset as CinemachineShot;
+                    if (shot != null)
+                    {
+                        if (shot.DisplayName.Equals("CharacterCamera"))
+                        {
+                            Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, character_cam);
+                        }
+                        else if (shot.DisplayName.Equals("ActiveGroupCamera"))
+                        {
+                            Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, active_group_cam);
+                        }
+                        else if (shot.DisplayName.Equals("StageCamera"))
+                        {
+                            Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, stage_cam);
+                        }
+
+                    }
+                }
             }
         }
 

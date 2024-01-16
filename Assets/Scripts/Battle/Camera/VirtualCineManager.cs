@@ -55,8 +55,17 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         transform.position = ORIGIN_POS;
     }
 
-    public CinemachineVirtualCamera GetStageCamera() { return Stage_Cam; }
+    public CinemachineBrain GetBrainCam() { return Brain_Cam; }
 
+    public CinemachineVirtualCamera GetStageCamera() { return Stage_Cam; }
+    public CinemachineVirtualCamera GetLandscapeCamera() { return Landscape_Cam; }
+    public CinemachineVirtualCamera GetFreeCamera() { return Free_Cam; }
+    public CinemachineVirtualCamera GetCharacterCamera() { return Character_Cam; }
+    public CinemachineVirtualCamera GetActiveTargetGroupCamera() { return Active_Target_Group_Cam; }
+    public CinemachineTargetGroup GetActiveTargetGroup() { return Active_Target_Group; }
+
+
+    
     public void FocusCharacter(GameObject unit)
     {
         Brain_Cam.m_DefaultBlend.m_Time = 0.5f;

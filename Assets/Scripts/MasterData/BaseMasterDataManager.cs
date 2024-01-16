@@ -48,6 +48,26 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Goods_Data> _Goods_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Item_Data> _Item_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Item_Piece_Data> _Item_Piece_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Equipment_Data> _Equipment_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Player_Level_Data> _Player_Level_Data
 	{
 		get;
@@ -221,6 +241,10 @@ public class BaseMasterDataManager
 		await LoadMaster_Sta_Potion_Data();
 		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
+		await LoadMaster_Goods_Data();
+		await LoadMaster_Item_Data();
+		await LoadMaster_Item_Piece_Data();
+		await LoadMaster_Equipment_Data();
 		await LoadMaster_Player_Level_Data();
 		await LoadMaster_Player_Character_Level_Data();
 		await LoadMaster_Me_Resource_Data();
@@ -309,6 +333,30 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
 		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Goods_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Goods_Data");
+		_Goods_Data = JsonConvert.DeserializeObject<List<Goods_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Item_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Data");
+		_Item_Data = JsonConvert.DeserializeObject<List<Item_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Item_Piece_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Piece_Data");
+		_Item_Piece_Data = JsonConvert.DeserializeObject<List<Item_Piece_Data>>(json);
+	}
+
+	protected async Task LoadMaster_Equipment_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Equipment_Data");
+		_Equipment_Data = JsonConvert.DeserializeObject<List<Equipment_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Player_Level_Data()
@@ -552,6 +600,38 @@ public class BaseMasterDataManager
 		if(_Expendable_Item_Data == null)
 		{
 			await LoadMaster_Expendable_Item_Data();
+		}
+	}
+
+	protected async void Check_Goods_Data()
+	{
+		if(_Goods_Data == null)
+		{
+			await LoadMaster_Goods_Data();
+		}
+	}
+
+	protected async void Check_Item_Data()
+	{
+		if(_Item_Data == null)
+		{
+			await LoadMaster_Item_Data();
+		}
+	}
+
+	protected async void Check_Item_Piece_Data()
+	{
+		if(_Item_Piece_Data == null)
+		{
+			await LoadMaster_Item_Piece_Data();
+		}
+	}
+
+	protected async void Check_Equipment_Data()
+	{
+		if(_Equipment_Data == null)
+		{
+			await LoadMaster_Equipment_Data();
 		}
 	}
 

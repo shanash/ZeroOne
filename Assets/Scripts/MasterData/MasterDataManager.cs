@@ -154,6 +154,56 @@ public class MasterDataManager : BaseMasterDataManager
 
     #endregion
 
+    #region New Item Data
+    public Goods_Data Get_GoodsTypeData(GOODS_TYPE gtype)
+    {
+        Check_Goods_Data();
+        return _Goods_Data.Find(x => x.goods_type == gtype);
+    }
+    public Item_Data Get_ItemData(GOODS_TYPE gtype, int item_id)
+    {
+        Check_Item_Data();
+        return _Item_Data.Find(x => x.goods_type == gtype && x.item_id == item_id);
+    }
+    public Item_Data Get_ItemData(int item_id)
+    {
+        Check_Item_Data();
+        return _Item_Data.Find(x => x.item_id == item_id);
+    }
+
+    public Item_Piece_Data Get_ItemPieceData(PIECE_TYPE ptype, int item_piece_id)
+    {
+        Check_Item_Piece_Data();
+        return _Item_Piece_Data.Find(x => x.piece_type == ptype && x.itempiece_id == item_piece_id);
+    }
+
+    public Item_Piece_Data Get_ItemPieceData(int item_piece_id)
+    {
+        Check_Item_Piece_Data();
+        return _Item_Piece_Data.Find(x => x.itempiece_id == item_piece_id);
+    }
+    public Equipment_Data Get_EquipmentData(EQUIPMENT_TYPE etype, int equipment_id)
+    {
+        Check_Equipment_Data();
+        return _Equipment_Data.Find(x => x.equipment_type == etype && x.item_id == equipment_id);
+    }
+
+    public Equipment_Data Get_EquipmentData(int equipment_id)
+    {
+        Check_Equipment_Data();
+        return _Equipment_Data.Find(x => x.item_id == equipment_id);
+    }
+
+    public void Get_RewardSetDataList(int reward_id, ref List<Reward_Set_Data> list)
+    {
+        Check_Reward_Set_Data();
+        list.Clear();
+        list.AddRange(_Reward_Set_Data.FindAll(x => x.reward_id == reward_id));
+        list.Sort((a, b) => a.sort_order.CompareTo(b.sort_order));
+    }
+
+    #endregion
+
     #region Player Character
     /// <summary>
     /// 지정한 플레이어 캐릭터 데이터 가져오기
