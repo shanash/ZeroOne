@@ -70,7 +70,7 @@ namespace Spine {
 			mix = data.mix;
 		}
 
-		/** Copy constructor. */
+		/// <summary>Copy constructor.</summary>
 		public PhysicsConstraint (PhysicsConstraint constraint) {
 			if (constraint == null) throw new ArgumentNullException("constraint", "constraint cannot be null.");
 			data = constraint.data;
@@ -168,7 +168,7 @@ namespace Spine {
 					if (rotateOrShearX || scaleX) {
 						float ca = (float)Math.Atan2(bone.c, bone.a), c, s, mr = 0;
 						if (rotateOrShearX) {
-							mr = mix * data.rotate;
+							mr = (data.rotate + data.shearX) * mix;
 							float dx = cx - bone.worldX, dy = cy - bone.worldY, r = (float)Math.Atan2(dy + ty, dx + tx) - ca - rotateOffset * mr;
 							rotateOffset += (r - (float)Math.Ceiling(r * MathUtils.InvPI2 - 0.5f) * MathUtils.PI2) * i;
 							r = rotateOffset * mr + ca;
@@ -274,7 +274,7 @@ namespace Spine {
 		public bool Active { get { return active; } }
 
 
-		/** The physics constraint's setup pose data. */
+		/// <summary>The physics constraint's setup pose data.</summary>
 		public PhysicsConstraintData getData () {
 			return data;
 		}

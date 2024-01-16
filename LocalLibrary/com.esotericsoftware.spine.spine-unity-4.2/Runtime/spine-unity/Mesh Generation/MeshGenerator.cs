@@ -35,6 +35,12 @@
 #define SPINE_TRIANGLECHECK // Avoid calling SetTriangles at the cost of checking for mesh differences (vertex counts, memberwise attachment list compare) every frame.
 //#define SPINE_DEBUG
 
+// New optimization option to avoid rendering fully transparent attachments at slot alpha 0.
+// Comment out this line to revert to previous behaviour.
+// You may only need this option disabled when utilizing a custom shader which
+// uses vertex color alpha for purposes other than transparency.
+#define SLOT_ALPHA_DISABLES_ATTACHMENT
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -196,7 +202,11 @@ namespace Spine.Unity {
 			Slot[] drawOrderItems = drawOrder.Items;
 			for (int i = 0; i < drawOrderCount; i++) {
 				Slot slot = drawOrderItems[i];
-				if (!slot.Bone.Active) {
+				if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+					|| slot.A == 0f
+#endif
+					) {
 					workingAttachmentsItems[i] = null;
 					continue;
 				}
@@ -267,7 +277,11 @@ namespace Spine.Unity {
 			Material lastRendererMaterial = null;
 			for (int i = 0; i < drawOrderCount; i++) {
 				Slot slot = drawOrderItems[i];
-				if (!slot.Bone.Active) continue;
+				if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+					|| slot.A == 0f
+#endif
+					) continue;
 				Attachment attachment = slot.Attachment;
 				IHasTextureRegion rendererAttachment = attachment as IHasTextureRegion;
 				if (rendererAttachment != null) {
@@ -320,7 +334,11 @@ namespace Spine.Unity {
 			Slot[] drawOrderItems = drawOrder.Items;
 			for (int i = 0; i < drawOrderCount; i++) {
 				Slot slot = drawOrderItems[i];
-				if (!slot.Bone.Active) {
+				if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+					|| slot.A == 0f
+#endif
+					) {
 					workingAttachmentsItems[i] = null;
 					continue;
 				}
@@ -473,6 +491,8 @@ namespace Spine.Unity {
 			SubmeshInstruction[] wsii = workingSubmeshInstructions.Items;
 			for (int i = 0; i < workingSubmeshInstructions.Count; i++) {
 				Material material = wsii[i].material;
+				if (material == null) continue;
+
 				Material overrideMaterial;
 				if (customMaterialOverride.TryGetValue(material, out overrideMaterial))
 					wsii[i].material = overrideMaterial;
@@ -789,7 +809,11 @@ namespace Spine.Unity {
 
 					for (int slotIndex = startSlot; slotIndex < endSlot; slotIndex++) {
 						Slot slot = drawOrderItems[slotIndex];
-						if (!slot.Bone.Active) continue;
+						if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+							|| slot.A == 0f
+#endif
+							) continue;
 						Attachment attachment = slot.Attachment;
 
 						rg.x = slot.R2; //r
@@ -832,7 +856,11 @@ namespace Spine.Unity {
 
 				for (int slotIndex = startSlot; slotIndex < endSlot; slotIndex++) {
 					Slot slot = drawOrderItems[slotIndex];
-					if (!slot.Bone.Active) continue;
+					if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+						|| slot.A == 0f
+#endif
+						) continue;
 					Attachment attachment = slot.Attachment;
 					float z = slotIndex * settings.zSpacing;
 
@@ -988,7 +1016,11 @@ namespace Spine.Unity {
 					Slot[] drawOrderItems = skeleton.DrawOrder.Items;
 					for (int slotIndex = submeshInstruction.startSlot, endSlot = submeshInstruction.endSlot; slotIndex < endSlot; slotIndex++) {
 						Slot slot = drawOrderItems[slotIndex];
-						if (!slot.Bone.Active) continue;
+						if (!slot.Bone.Active
+#if SLOT_ALPHA_DISABLES_ATTACHMENT
+							|| slot.A == 0f
+#endif
+							) continue;
 
 						Attachment attachment = drawOrderItems[slotIndex].Attachment;
 						if (attachment is RegionAttachment) {
