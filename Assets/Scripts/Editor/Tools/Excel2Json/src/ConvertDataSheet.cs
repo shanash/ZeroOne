@@ -558,35 +558,8 @@ namespace Excel2Json
                 {
                     continue;
                 }
-                sb.AppendLine("\t///\t<summary>");
-                if (!string.IsNullOrEmpty(info.key_name))
-                {
-                    string[] knames = info.key_name.Trim().Split('\n');
-                    for (int k = 0; k < knames.Length; k++)
-                    {
-                        sb.AppendLine($"\t///\t{knames[k]}");
-                    }
-                }
-
-                //sb.AppendLine($"\t///\t[{info.key_name}]");
-                if (info.comment != null)
-                {
-                    string[] comments = info.comment.Trim().Split('\n');
-                    for (int n = 0; n < comments.Length; n++)
-                    {
-                        if (string.IsNullOrEmpty(comments[n]))
-                        {
-                            continue;
-                        }
-                        sb.AppendLine($"\t///\t{comments[n]}");
-                    }
-                }
-
-                sb.AppendLine("\t///\t</summary>");
-                //sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
 
                 sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
-
             }
             sb.AppendLine();
             sb.AppendLine("\tprivate bool disposed = false;").AppendLine();
