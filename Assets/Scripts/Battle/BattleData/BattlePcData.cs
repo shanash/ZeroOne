@@ -184,6 +184,15 @@ public class BattlePcData : BattleUnitData
         return null;
     }
 
+    public override int GetSpecialSkillID()
+    {
+        if (Battle_Data != null)
+        {
+            return Battle_Data.special_skill_group_id;
+        }
+        return 0;
+    }
+
     public override POSITION_TYPE GetPositionType()
     {
         if (Battle_Data != null)

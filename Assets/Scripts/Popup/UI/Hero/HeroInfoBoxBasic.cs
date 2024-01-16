@@ -71,7 +71,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-
+        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
         for (int i = 0; i < Skill_Mng.Skill_Groups.Count; i++)
         {
             // 콜백 참조 때문에 별도로 변수를 선언해야 합니다

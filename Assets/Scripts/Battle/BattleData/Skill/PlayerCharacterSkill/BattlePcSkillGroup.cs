@@ -54,7 +54,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
     public override SKILL_TYPE GetSkillType()
     {
         if (Skill_Group != null)
-            return Skill_Group.Skill_Type;
+            return Skill_Group.skill_type;
         return SKILL_TYPE.NONE;
     }
     public override string GetSkillCastEffectPath()

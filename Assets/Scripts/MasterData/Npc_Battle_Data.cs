@@ -22,6 +22,10 @@ public class Npc_Battle_Data : System.IDisposable
 	///	</summary>
 	public int passive_skill_group_id {get; set;}
 	///	<summary>
+	///	궁극기
+	///	</summary>
+	public int special_skill_group_id {get; set;}
+	///	<summary>
 	///	레벨
 	///	</summary>
 	public int npc_level {get; set;}
@@ -62,6 +66,7 @@ public class Npc_Battle_Data : System.IDisposable
 		approach = 0;
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
+		special_skill_group_id = 0;
 		npc_level = 0;
 		hp = 0;
 		attack = 0;
@@ -106,6 +111,7 @@ public class Npc_Battle_Data : System.IDisposable
 		}
 
 		sb.AppendFormat("[passive_skill_group_id] = <color=yellow>{0}</color>", passive_skill_group_id).AppendLine();
+		sb.AppendFormat("[special_skill_group_id] = <color=yellow>{0}</color>", special_skill_group_id).AppendLine();
 		sb.AppendFormat("[npc_level] = <color=yellow>{0}</color>", npc_level).AppendLine();
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();

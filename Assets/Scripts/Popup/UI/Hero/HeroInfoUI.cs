@@ -142,6 +142,7 @@ public class HeroInfoUI : PopupBase
     {
         var skill_manager = new BattleSkillManager();
         skill_manager.SetPlayerCharacterSkillGroups(User_Hero_Battle_Data.GetSkillPattern());
+        skill_manager.SetPlayerCharacterSpecialSkillGroup(User_Hero_Battle_Data.GetSpecialSkillID());
 
         foreach(var skill_group in skill_manager.Skill_Groups)
         {

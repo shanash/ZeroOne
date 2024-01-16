@@ -153,6 +153,12 @@ public abstract class BattleUnitData : BattleDataBase
     public abstract int[] GetSkillPattern();
 
     /// <summary>
+    /// 궁극기 스킬 id
+    /// </summary>
+    /// <returns></returns>
+    public abstract int GetSpecialSkillID();
+
+    /// <summary>
     /// 데이터가 없어서 임시로 만들어놓은 UI 표시용 레벨합계 값입니다
     /// </summary>
     /// <returns></returns>

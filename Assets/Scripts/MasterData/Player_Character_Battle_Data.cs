@@ -25,7 +25,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	<summary>
 	///	궁극기
 	///	</summary>
-	public int super_skill_group_id {get; set;}
+	public int special_skill_group_id {get; set;}
 	///	<summary>
 	///	체력
 	///	</summary>
@@ -79,7 +79,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		approach = 0;
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
-		super_skill_group_id = 0;
+		special_skill_group_id = 0;
 		hp = 0;
 		attack = 0;
 		m_attack = 0;
@@ -127,7 +127,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		}
 
 		sb.AppendFormat("[passive_skill_group_id] = <color=yellow>{0}</color>", passive_skill_group_id).AppendLine();
-		sb.AppendFormat("[super_skill_group_id] = <color=yellow>{0}</color>", super_skill_group_id).AppendLine();
+		sb.AppendFormat("[special_skill_group_id] = <color=yellow>{0}</color>", special_skill_group_id).AppendLine();
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[m_attack] = <color=yellow>{0}</color>", m_attack).AppendLine();

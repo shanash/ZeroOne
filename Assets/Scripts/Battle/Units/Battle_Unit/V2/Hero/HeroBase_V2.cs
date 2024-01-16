@@ -199,6 +199,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
     }
 
 
@@ -1350,8 +1351,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         //  여러가지 상황상 궁극기를 사용할 수 없는 상황을 체크
         //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
-        //ChangeState(UNIT_STATES.SKILL_1);
-        Debug.Log("SpecialSkillExec");
         Skeleton.AnimationState.ClearTracks();
         Skill_Mng.SetNextSkillPattern();
         ChangeState(UNIT_STATES.SKILL_READY_1);

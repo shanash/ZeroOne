@@ -28,11 +28,27 @@ public class BattleSkillManager : BattleDataBase
         for (int i = 0; i < len; i++)
         {
             int skill_group_id = skill_patterns[i];
-            var battle_group = new BattlePcSkillGroup();
-            battle_group.SetSkillOrder(i);
-            battle_group.SetSkillGroupID(skill_group_id);
-            _Skill_Groups.Add(battle_group);
+            if (skill_group_id == 0)
+                continue;
+            AddPlayerCharacterBattleSkillGroup(skill_group_id, i);
         }
+    }
+
+    public void SetPlayerCharacterSpecialSkillGroup(int special_skill_id)
+    {
+        if (special_skill_id == 0)
+        {
+            return;
+        }
+        AddPlayerCharacterBattleSkillGroup(special_skill_id, 10);
+    }
+
+    void AddPlayerCharacterBattleSkillGroup(int skill_group_id, int order)
+    {
+        var grp = new BattlePcSkillGroup();
+        grp.SetSkillOrder(order);
+        grp.SetSkillGroupID(skill_group_id);
+        _Skill_Groups.Add(grp);
     }
 
     /// <summary>
@@ -45,25 +61,54 @@ public class BattleSkillManager : BattleDataBase
         for (int i = 0; i < len; i++)
         {
             int skill_group_id = skill_patterns[i];
-            var battle_group = new BattleNpcSkillGroup();
-            battle_group.SetSkillOrder(i);
-            battle_group.SetSkillGroupID(skill_group_id);
-            _Skill_Groups.Add(battle_group);
+            if (skill_group_id == 0)
+            {
+                continue;
+            }
+            AddNpcBattleSkillGroup(skill_group_id, i);
         }
+    }
+    public void SetNpcSpecialSkillGroup(int special_skill_id)
+    {
+        if (special_skill_id == 0)
+        {
+            return;
+        }
+        AddNpcBattleSkillGroup(special_skill_id, 10);
+    }
+    void AddNpcBattleSkillGroup(int skill_group_id, int order)
+    {
+        var grp = new BattleNpcSkillGroup();
+        grp.SetSkillOrder(order);
+        grp.SetSkillGroupID(skill_group_id) ;
+        _Skill_Groups.Add(grp);
     }
 
     /// <summary>
-    /// 현재 진행중인 스킬 그룹 반환
+    /// 현재 진행중인 스킬 그룹 반환<br/>
     /// 해당 스킬 사용후에는 다음 스킬로 넘어가야 함
     /// </summary>
     /// <returns></returns>
     public BattleSkillGroup GetCurrentSkillGroup()
     {
-        if (_Skill_Groups.Count > 0)
+        var skill_list = _Skill_Groups.FindAll(x => x.GetSkillType() != SKILL_TYPE.SPECIAL_SKILL);
+        if (skill_list.Count > 0)
         {
-            return _Skill_Groups.Find(x => x.Skill_Order == Skill_Pattern_Order);
+            return skill_list.Find(x => x.Skill_Order == Skill_Pattern_Order);
         }
+        //if (_Skill_Groups.Count > 0)
+        //{
+        //    return _Skill_Groups.Find(x => x.Skill_Order == Skill_Pattern_Order);
+        //}
         return null;
+    }
+    /// <summary>
+    /// 궁극기 스킬 데이터 반환
+    /// </summary>
+    /// <returns></returns>
+    public BattleSkillGroup GetSpecialSkillGroup()
+    {
+        return FindSkillType(SKILL_TYPE.SPECIAL_SKILL);
     }
 
     /// <summary>
@@ -77,7 +122,8 @@ public class BattleSkillManager : BattleDataBase
 
         //  다음 스킬로 이동
         Skill_Pattern_Order += 1;
-        int max_order = _Skill_Groups.Max(x => x.Skill_Order);
+        var skill_list = _Skill_Groups.FindAll(x => x.GetSkillType() != SKILL_TYPE.SPECIAL_SKILL);
+        int max_order = skill_list.Max(x => x.Skill_Order);
         if (Skill_Pattern_Order > max_order)
         {
             Skill_Pattern_Order = 0;
@@ -92,6 +138,11 @@ public class BattleSkillManager : BattleDataBase
     public bool CalcSkillUseDelay(float delta_time)
     {
         return GetCurrentSkillGroup().CalcDelayTime(delta_time);
+    }
+
+    public bool CalcSpecialSkillCooltime(float delta_time)
+    {
+        return GetSpecialSkillGroup().CalcDelayTime(delta_time);
     }
 
     /// <summary>

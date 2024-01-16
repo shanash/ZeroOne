@@ -284,9 +284,9 @@ public enum SECOND_TARGET_RULE_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>0 타겟을 중심으로 지정 반경내에 감지되는 타겟 검사</summary>
+	/// <summary>1 타겟을 중심으로 지정 반경내에 감지되는 타겟 검사</summary>
 	AROUND_SPLASH = 1,
-	/// <summary>1 타겟 뒤로 지정 반경내에 감지되는 타겟 검사</summary>
+	/// <summary>2 타겟 뒤로 지정 반경내에 감지되는 타겟 검사</summary>
 	BACK_SPLASH = 2,
 }
 
