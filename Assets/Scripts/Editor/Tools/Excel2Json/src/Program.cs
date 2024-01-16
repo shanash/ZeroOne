@@ -19,7 +19,7 @@ namespace Excel2Json
 
     public static class Program
     {
-        public const bool USE_RAW_CS_FILE = false;
+        public const bool USE_RAW_CS_FILE = true;
         const string VERSION = "Excel2Json Ver.1.5.1";
 
         public static void Main(params string[] args)
