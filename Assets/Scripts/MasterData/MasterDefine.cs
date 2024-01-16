@@ -473,6 +473,29 @@ public enum PERSISTENCE_TYPE
 }
 
 ///	<summary>
+///	투사체 타입
+///	</summary>
+public enum PROJECTILE_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>1 투사체를 타겟의 발 밑에 던진다</summary>
+	THROW_FOOT = 1,
+	/// <summary>2 투사체를 타겟의 몸에 던진다</summary>
+	THROW_BODY = 2,
+	/// <summary>3 투사체를 타겟의 머리에 던진다</summary>
+	THROW_HEAD = 3,
+	/// <summary>11 타겟의 발 밑에서 즉시 효과 발동</summary>
+	INSTANT_TARGET_FOOT = 11,
+	/// <summary>12 타겟의 몸에서 즉시 효과 발동</summary>
+	INSTANT_TARGET_BODY = 12,
+	/// <summary>13 타겟의 머리에서 즉시 효과 발동</summary>
+	INSTANT_TARGET_HEAD = 13,
+	/// <summary>21 전체 선택(진영의 중앙)</summary>
+	ALL_ROUND = 21,
+}
+
+///	<summary>
 ///	부등호 타입
 ///	</summary>
 public enum INEQUALITY_TYPE
@@ -563,48 +586,32 @@ public enum GOODS_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>1 금화(게임내 사용되는 재화)</summary>
-	GOLD = 1,
-	/// <summary>2 보석(게임내 사용되는 유료 재화)</summary>
-	DIA = 2,
-	/// <summary>3 스태미나</summary>
-	STAMINA = 3,
-	/// <summary>4 호감도</summary>
-	FAVORITE = 4,
-	/// <summary>5 플레이어 경험치</summary>
-	EXP_PLAYER = 5,
-	/// <summary>6 캐릭터 경험치</summary>
-	EXP_CHARACTER = 6,
-	/// <summary>7 캐릭터</summary>
-	CHARACTER = 7,
-	/// <summary>6 장비</summary>
-	EQUIPMENT = 8,
-	/// <summary>근원 전달 횟수(플레이어 보유)</summary>
-	SEND_ESSENCE = 9,
-	/// <summary>근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
-	GET_ESSENCE = 10,
-	/// <summary>101 경험치 물약</summary>
-	EXP_POTION = 101,
-	/// <summary>102 스테미나 회복 물약</summary>
-	STA_POTION = 102,
-	/// <summary>103 호감도 아이템</summary>
-	FAVORITE_ITEM = 103,
-	/// <summary>104 스테이지 스킵 티켓</summary>
-	STAGE_SKIP = 104,
-	/// <summary>105 던전 입장 티켓</summary>
-	TICKET_DUNGEON = 105,
-	/// <summary>106 정련석(장비 성장)</summary>
-	EQ_GROWUP = 106,
-	/// <summary>107 보상 선택 티켓(1개를 선택 획득)</summary>
-	TICKET_REWARD_SELECT = 107,
-	/// <summary>108 보상 랜덤 티켓(1개를 확률 획득)</summary>
-	TICKET_REWARD_RANDOM = 108,
-	/// <summary>109 보상 패키지 티켓(모든 보상 획득)</summary>
-	TICKET_REWARD_ALL = 109,
-	/// <summary>110 장비 조각</summary>
-	PIECE_EQUIPMENT = 110,
-	/// <summary>111 캐릭터 조각</summary>
-	PIECE_CHARACTER = 111,
+	/// <summary>1 플레이어 경험치 물약</summary>
+	EXP_POTION_P = 1,
+	/// <summary>2 캐릭터 경험치 물약</summary>
+	EXP_POTION_C = 2,
+	/// <summary>3 스테미나 회복 물약</summary>
+	STA_POTION = 3,
+	/// <summary>4 호감도 아이템</summary>
+	FAVORITE_ITEM = 4,
+	/// <summary>5 스킬 경험치 아이템</summary>
+	EXP_SKILL = 5,
+	/// <summary>6 스테이지 스킵 티켓</summary>
+	STAGE_SKIP = 6,
+	/// <summary>7 던전 입장 티켓</summary>
+	TICKET_DUNGEON = 7,
+	/// <summary>8 정련석(장비 성장)</summary>
+	EQ_GROWUP = 8,
+	/// <summary>9 보상 선택 티켓(1개를 선택 획득)</summary>
+	TICKET_REWARD_SELECT = 9,
+	/// <summary>10 보상 랜덤 티켓(1개를 확률 획득)</summary>
+	TICKET_REWARD_RANDOM = 10,
+	/// <summary>11 보상 패키지 티켓(모든 보상 획득)</summary>
+	TICKET_REWARD_ALL = 11,
+	/// <summary>100 장비</summary>
+	EQUIPMENT = 100,
+	/// <summary>1000 장비 조각</summary>
+	PIECE_EQUIPMENT = 1000,
 }
 
 ///	<summary>
@@ -616,10 +623,10 @@ public enum PIECE_TYPE
 	NONE = 0,
 	/// <summary>1 아이템</summary>
 	ITEM = 1,
-	/// <summary>2 캐릭터</summary>
-	CHARACTER = 2,
-	/// <summary>3 장비</summary>
-	EQUIPMENT = 3,
+	/// <summary>2 장비</summary>
+	EQUIPMENT = 2,
+	/// <summary>3  캐릭터</summary>
+	CHARACTER = 3,
 }
 
 ///	<summary>
@@ -639,8 +646,6 @@ public enum EQUIPMENT_TYPE
 	RING = 4,
 	/// <summary>5 목걸이</summary>
 	NECKLACE = 5,
-	/// <summary>6 팔찌</summary>
-	BRACELET = 6,
 }
 
 ///	<summary>
@@ -694,6 +699,61 @@ public enum CHARGE_TYPE
 	VALUE_CUT = 5,
 	/// <summary>지정 수치만큼 차징, Final max값 이상 차징 가능</summary>
 	VALUE_OVER = 6,
+}
+
+///	<summary>
+///	재화 및 아이템 종류
+///	</summary>
+public enum REWARD_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>1 금화(게임내 사용되는 재화)</summary>
+	GOLD = 1,
+	/// <summary>2 보석(게임내 사용되는 유료 재화)</summary>
+	DIA = 2,
+	/// <summary>3 스태미나</summary>
+	STAMINA = 3,
+	/// <summary>4 호감도</summary>
+	FAVORITE = 4,
+	/// <summary>5 플레이어 경험치</summary>
+	EXP_PLAYER = 5,
+	/// <summary>6 캐릭터 경험치</summary>
+	EXP_CHARACTER = 6,
+	/// <summary>7 캐릭터</summary>
+	CHARACTER = 7,
+	/// <summary>6 장비</summary>
+	EQUIPMENT = 8,
+	/// <summary>근원 전달 횟수(플레이어 보유)</summary>
+	SEND_ESSENCE = 9,
+	/// <summary>근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
+	GET_ESSENCE = 10,
+	/// <summary>101 플레이어 경험치 물약</summary>
+	EXP_POTION_P = 101,
+	/// <summary>102 캐릭터 경험치 물약</summary>
+	EXP_POTION_C = 102,
+	/// <summary>103 스테미나 회복 물약</summary>
+	STA_POTION = 103,
+	/// <summary>104 호감도 아이템</summary>
+	FAVORITE_ITEM = 104,
+	/// <summary>105 스테이지 스킵 티켓</summary>
+	STAGE_SKIP = 105,
+	/// <summary>106 던전 입장 티켓</summary>
+	TICKET_DUNGEON = 106,
+	/// <summary>107 정련석(장비 성장)</summary>
+	EQ_GROWUP = 107,
+	/// <summary>109 보상 선택 티켓(1개를 선택 획득)</summary>
+	TICKET_REWARD_SELECT = 108,
+	/// <summary>100 보상 랜덤 티켓(1개를 확률 획득)</summary>
+	TICKET_REWARD_RANDOM = 109,
+	/// <summary>110 보상 패키지 티켓(모든 보상 획득)</summary>
+	TICKET_REWARD_ALL = 110,
+	/// <summary>111 장비 조각</summary>
+	PIECE_EQUIPMENT = 111,
+	/// <summary>112 캐릭터 조각</summary>
+	PIECE_CHARACTER = 112,
+	/// <summary>113 스킬 경험치 아이템</summary>
+	EXP_SKILL = 113,
 }
 
 ///	<summary>

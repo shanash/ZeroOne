@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Npc_Skill_Group : System.IDisposable
 {
 	///	<summary>
@@ -44,10 +40,12 @@ public class Npc_Skill_Group : System.IDisposable
 	{
 		npc_skill_group_id = 0;
 		name_kr = string.Empty;
+		skill_use_delay = 0;
 		Skill_Type = SKILL_TYPE.NONE;
 		icon = string.Empty;
 		action_name = string.Empty;
 		cast_effect_path = string.Empty;
+		effect_duration = 0;
 	}
 
 	public void Dispose()

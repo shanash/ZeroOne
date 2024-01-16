@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Npc_Skill_Data : System.IDisposable
 {
 	///	<summary>
@@ -95,9 +91,11 @@ public class Npc_Skill_Data : System.IDisposable
 		target_rule_type = TARGET_RULE_TYPE.RANDOM;
 		target_order = 0;
 		target_count = 0;
+		target_range = 0;
 		effect_count_type = EFFECT_COUNT_TYPE.NONE;
 		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
 		max_second_target_count = 0;
+		second_target_range = 0;
 		event_name = string.Empty;
 		trigger_effect_path = string.Empty;
 	}

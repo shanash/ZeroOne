@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Exp_Potion_Data : System.IDisposable
 {
 	///	<summary>

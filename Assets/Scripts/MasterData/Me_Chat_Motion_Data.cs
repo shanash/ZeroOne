@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Me_Chat_Motion_Data : System.IDisposable
 {
 	///	<summary>

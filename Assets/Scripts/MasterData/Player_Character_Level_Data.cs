@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Player_Character_Level_Data : System.IDisposable
 {
 	///	<summary>
@@ -28,6 +24,8 @@ public class Player_Character_Level_Data : System.IDisposable
 	{
 		player_character_level_id = 0;
 		level = 0;
+		accum_exp = 0;
+		need_exp = 0;
 	}
 
 	public void Dispose()

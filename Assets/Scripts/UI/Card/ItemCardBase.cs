@@ -8,13 +8,18 @@ public class ItemCardBase : UIBase
     protected Image Item_Icon;
 
 
-
+    protected ItemGoodsDataBase Item_Goods_Data;
     protected ItemDataBase Item_Data;
 
     public void SetItem(ITEM_TYPE itype, int item_id)
     {
         Item_Data = CreateItemData(itype, item_id);
         UpdateItemIcon();
+    }
+
+    public void SetGoods(GOODS_TYPE gtype, int item_id)
+    {
+
     }
 
     protected void UpdateItemIcon()
@@ -29,6 +34,7 @@ public class ItemCardBase : UIBase
             Item_Icon.sprite = spr;
         });
     }
+
 
     ItemDataBase CreateItemData(ITEM_TYPE itype, int item_id)
     {

@@ -48,11 +48,6 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
-	protected List<Goods_Data> _Goods_Data
-	{
-		get;
-		private set;
-	}
 	protected List<Item_Data> _Item_Data
 	{
 		get;
@@ -241,7 +236,6 @@ public class BaseMasterDataManager
 		await LoadMaster_Sta_Potion_Data();
 		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
-		await LoadMaster_Goods_Data();
 		await LoadMaster_Item_Data();
 		await LoadMaster_Item_Piece_Data();
 		await LoadMaster_Equipment_Data();
@@ -333,12 +327,6 @@ public class BaseMasterDataManager
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
 		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
-	}
-
-	protected async Task LoadMaster_Goods_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Goods_Data");
-		_Goods_Data = JsonConvert.DeserializeObject<List<Goods_Data>>(json);
 	}
 
 	protected async Task LoadMaster_Item_Data()
@@ -600,14 +588,6 @@ public class BaseMasterDataManager
 		if(_Expendable_Item_Data == null)
 		{
 			await LoadMaster_Expendable_Item_Data();
-		}
-	}
-
-	protected async void Check_Goods_Data()
-	{
-		if(_Goods_Data == null)
-		{
-			await LoadMaster_Goods_Data();
 		}
 	}
 

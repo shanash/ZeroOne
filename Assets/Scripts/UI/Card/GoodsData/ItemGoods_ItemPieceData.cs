@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 public class ItemGoods_ItemPieceData : ItemGoodsDataBase
 {
     protected Item_Piece_Data Data;
@@ -41,17 +43,8 @@ public class ItemGoods_ItemPieceData : ItemGoodsDataBase
                         icon_path = item_data.icon_path;
                     }
                     break;
-                case PIECE_TYPE.CHARACTER:
-                    {
-                        var char_data = m.Get_PlayerCharacterData(Data.target_id);
-                        icon_path = char_data.icon_path;
-                    }
-                    break;
-                case PIECE_TYPE.EQUIPMENT:
-                    {
-                        var equip_data = m.Get_EquipmentData(Data.target_id);
-                        icon_path = equip_data.icon_path;
-                    }
+                default:
+                    Debug.Assert(false);
                     break;
             }
             return icon_path;

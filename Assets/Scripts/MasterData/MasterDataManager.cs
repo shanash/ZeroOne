@@ -155,11 +155,6 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region New Item Data
-    public Goods_Data Get_GoodsTypeData(GOODS_TYPE gtype)
-    {
-        Check_Goods_Data();
-        return _Goods_Data.Find(x => x.goods_type == gtype);
-    }
     public Item_Data Get_ItemData(GOODS_TYPE gtype, int item_id)
     {
         Check_Item_Data();

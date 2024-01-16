@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Npc_Level_Stat_Data : System.IDisposable
 {
 	///	<summary>
@@ -50,6 +46,11 @@ public class Npc_Level_Stat_Data : System.IDisposable
 		npc_type = NPC_TYPE.NONE;
 		tribe_type = TRIBE_TYPE.NONE;
 		role_type = ROLE_TYPE.NONE;
+		attack_inc = 0;
+		defend_inc = 0;
+		hp_inc = 0;
+		evation_inc = 0;
+		accuracy_inc = 0;
 	}
 
 	public void Dispose()

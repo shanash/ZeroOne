@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Player_Character_Skill_Onetime_Data : System.IDisposable
 {
 	///	<summary>
@@ -38,6 +34,7 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 		onetime_effect_type = ONETIME_EFFECT_TYPE.NONE;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
 		value = 0;
+		multiple = 0;
 		effect_path = string.Empty;
 	}
 

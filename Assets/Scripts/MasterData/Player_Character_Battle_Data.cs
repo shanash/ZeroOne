@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Player_Character_Battle_Data : System.IDisposable
 {
 	///	<summary>
@@ -80,9 +76,20 @@ public class Player_Character_Battle_Data : System.IDisposable
 	public Player_Character_Battle_Data()
 	{
 		battle_info_id = 0;
+		approach = 0;
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
 		super_skill_group_id = 0;
+		hp = 0;
+		attack = 0;
+		m_attack = 0;
+		defend = 0;
+		m_defend = 0;
+		attack_recovery = 0;
+		evasion = 0;
+		accuracy = 0;
+		auto_recovery = 0;
+		move_speed = 0;
 		attack_script = string.Empty;
 	}
 

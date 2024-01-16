@@ -1,20 +1,19 @@
 
-public class ItemGoods_EquipmentData : ItemGoodsDataBase
+
+public class ItemGoods_CharacterData : ItemGoodsDataBase
 {
-    protected Equipment_Data Data;
+    Player_Character_Data Data;
 
     public override void SetGoods(GOODS_TYPE gtype, int item_id)
     {
         base.SetGoods(gtype, item_id);
-        Data = MasterDataManager.Instance.Get_EquipmentData(item_id);
-        
+        Data = MasterDataManager.Instance.Get_PlayerCharacterData(item_id);
     }
 
     public override object GetItemData()
     {
         return Data;
     }
-
     public override string GetItemIconPath()
     {
         if (Data != null)
@@ -24,12 +23,5 @@ public class ItemGoods_EquipmentData : ItemGoodsDataBase
         return string.Empty;
     }
 
-    public override EQUIPMENT_TYPE GetEquipmentType()
-    {
-        if (Data != null)
-        {
-            return Data.equipment_type;
-        }
-        return EQUIPMENT_TYPE.NONE;
-    }
+
 }

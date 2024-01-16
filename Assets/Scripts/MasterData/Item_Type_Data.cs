@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Item_Type_Data : System.IDisposable
 {
 	///	<summary>
@@ -38,6 +34,7 @@ public class Item_Type_Data : System.IDisposable
 		name_kr = string.Empty;
 		tooltip_text = string.Empty;
 		sellable = false;
+		max_bounds = 0;
 		icon_path = string.Empty;
 	}
 

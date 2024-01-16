@@ -357,7 +357,6 @@ public partial class HeroBase_V2 : UnitBase_V2
                     int cnt = exec_list.Count;
                     for (int i = 0; i < cnt; i++)
                     {
-                        //SkillEffectSpawnV2(exec_list[i]);
                         SpawnSkillEffect_V3(exec_list[i]);
                     }
                 }
@@ -1080,27 +1079,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             var target_pos = target_trans.position;
             effect.transform.position = target_pos;
             effect.StartParticle(ec.Effect_Duration);
-            
-
-            //PROJECTILE_TYPE ptype = onetime.GetProjectileType();
-            //var target_trans = GetBodyPositionByProjectileType(ptype);
-            //var target_pos = target_trans.position;
-            //if (onetime.IsThrowingNode())
-            //{
-            //    //  todo
-            //}
-            //else
-            //{
-            //    target_pos.z = transform.position.z;
-            //    effect.transform.position = target_pos;
-            //    effect.StartParticle((float)onetime.GetEffectDuration());
-            //}
         }
-    }
-
-    void SpawnOnetimeEffectFromDurationSkill_V2(BattleOnetimeSkillData onetime, BATTLE_SEND_DATA send_data)
-    {
-
     }
 
     /// <summary>

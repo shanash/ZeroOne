@@ -72,10 +72,12 @@ public class Hero_100001 : HeroBase_V2
                 }
                 else if (track.name.Equals("CharacterCameraAnimationTrack"))
                 {
+                    character_cam.Follow = this.transform;
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, character_cam.GetComponent<Animator>());
                 }
                 else if (track.name.Equals("ActiveGroupCameraAnimationTrack"))
                 {
+                    active_group.AddMember(this.transform, 1, 2);
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, active_group_cam.GetComponent<Animator>());
                 }
             }
@@ -111,32 +113,18 @@ public class Hero_100001 : HeroBase_V2
 
     protected override void UnsetPlayableDirector()
     {
-        if (Ultimate_Skill_Playable_Director == null)
+        var virtual_mng = Battle_Mng.GetVirtualCineManager();
+
+        var character_cam = virtual_mng.GetCharacterCamera();
+        if (character_cam != null)
         {
-            return;
+            character_cam.Follow = null;
         }
 
-        var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
-        var tracks = ta.GetOutputTracks();
-
-        foreach (var track in tracks)
+        var active_target_group = virtual_mng.GetActiveTargetGroup();
+        if (active_target_group != null)
         {
-            if (track is AnimationTrack)
-            {
-                if (track.name.Equals("Unit_Back_BG_Animation_Track"))
-                {
-                    Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
-                }
-                else if (track.name.Equals("Stage_Cam_Animation_Track"))
-                {
-                    Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
-                }
-            }
-            else if (track is CinemachineTrack)
-            {
-                Ultimate_Skill_Playable_Director.ClearGenericBinding(track);
-            }
-
+            active_target_group.RemoveMember(this.transform);
         }
     }
 

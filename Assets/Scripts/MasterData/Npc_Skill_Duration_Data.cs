@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-
-[System.Serializable]
+﻿[System.Serializable]
 public class Npc_Skill_Duration_Data : System.IDisposable
 {
 	///	<summary>
@@ -71,9 +67,13 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 		npc_skill_duration_id = 0;
 		duration_effect_type = DURATION_EFFECT_TYPE.NONE;
 		persistence_type = PERSISTENCE_TYPE.NONE;
+		time = 0;
 		count = 0;
+		repeat_interval = 0;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
 		value = 0;
+		multiple = 0;
+		rate = 0;
 		effect_path = string.Empty;
 		is_overlapable = false;
 	}

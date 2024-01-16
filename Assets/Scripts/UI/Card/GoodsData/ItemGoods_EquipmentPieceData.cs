@@ -1,5 +1,5 @@
 
-public class ItemGoods_EquipmentData : ItemGoodsDataBase
+public class ItemGoods_EquipmentPieceData : ItemGoodsDataBase
 {
     protected Equipment_Data Data;
 
@@ -7,14 +7,12 @@ public class ItemGoods_EquipmentData : ItemGoodsDataBase
     {
         base.SetGoods(gtype, item_id);
         Data = MasterDataManager.Instance.Get_EquipmentData(item_id);
-        
     }
 
     public override object GetItemData()
     {
         return Data;
     }
-
     public override string GetItemIconPath()
     {
         if (Data != null)
@@ -32,4 +30,10 @@ public class ItemGoods_EquipmentData : ItemGoodsDataBase
         }
         return EQUIPMENT_TYPE.NONE;
     }
+
+    public override PIECE_TYPE GetPieceType()
+    {
+        return PIECE_TYPE.EQUIPMENT;
+    }
+
 }
