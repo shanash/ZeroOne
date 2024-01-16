@@ -167,7 +167,6 @@ namespace Excel2Json
             const string mng_name = "BaseMasterDataManager";
 
             //  include package
-            sb.AppendLine("using System.Collections;");
             sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine("using UnityEngine;");
             if (USE_ADDRESSABLE_ASSETS)
@@ -187,6 +186,10 @@ namespace Excel2Json
                 }
             }
             sb.AppendLine("using Newtonsoft.Json;");
+            if (use_raw_cs_file)
+            {
+                sb.AppendLine("using System.Linq;");
+            }
             sb.AppendLine();
 
             //  class declare
@@ -277,14 +280,12 @@ namespace Excel2Json
                             sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(data);");
                         }
                     }
+
                     if (use_raw_cs_file)
                     {
-                        sb.AppendLine($"\t\t_{table.Key} = new List<{table.Key}>();");
-                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
-                        sb.AppendLine("\t\t{");
-                        sb.AppendLine($"\t\t\t_{table.Key}.Add(new {table.Key}(raw_data));");
-                        sb.AppendLine("\t\t}");
+                        sb.AppendLine($"\t\t_{table.Key} = raw_data_list.Select(raw_data => new {table.Key}(raw_data)).ToList();");
                     }
+
                     sb.AppendLine("\t}").AppendLine();
                 }
                 sb.AppendLine("\t}").AppendLine();
