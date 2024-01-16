@@ -52,7 +52,7 @@ namespace Excel2Json
         /// <param name="is_encrypt"></param>
         /// <param name="enc_password"></param>
         /// <param name="master_table_columns"></param>
-        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, bool is_byte_json_file, bool use_raw_cs_file)
+        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, bool is_bin_json_file, bool use_raw_cs_file)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Excel2Json
                 GetColumnInfo(ws, ref col_info);
                 JArray newton_sheet_arr = GetSheetData(ws, col_info);
 
-                string filename = Path.Combine(output_dir, table_name + ".json");
+                string filename = Path.Combine(output_dir, table_name + $".{(is_bin_json_file ? "bin" : "json")}");
                 string newton_str_json = newton_sheet_arr.ToString();
                 string write_data = newton_str_json;
 
@@ -74,7 +74,7 @@ namespace Excel2Json
                     write_data = Security.AESEncrypt256(newton_str_json, enc_password);
                 }
 
-                if (is_byte_json_file)
+                if (is_bin_json_file)
                 {
                     byte[] bytes = Encoding.UTF8.GetBytes(write_data);
                     File.WriteAllBytes(filename, bytes);

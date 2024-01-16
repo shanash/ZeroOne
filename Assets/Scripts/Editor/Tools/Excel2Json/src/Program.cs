@@ -181,7 +181,7 @@ namespace Excel2Json
 
             bool is_csharp_make = csharp_type == PARAM_TYPE.CSHARP_MAKE;
             bool is_encrypt = encrypt_type == PARAM_TYPE.ENCRYPT_ENABLE;
-            bool is_byte_json_file = output_file_type.Equals("bin");
+            bool is_bin_json_file = output_file_type.Equals("bin");
 
             if (input_type == PARAM_TYPE.DIRECTORY)
             {
@@ -197,7 +197,7 @@ namespace Excel2Json
                         if (ext == ".xlsx" && !is_backup_file)
                         {
                             Logger.Log($"Convert => {fname}");
-                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, is_byte_json_file, ref master_table_columns, ref master_enum_data_list);
+                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, is_bin_json_file, ref master_table_columns, ref master_enum_data_list);
                         }
                     }
 
@@ -234,7 +234,7 @@ namespace Excel2Json
             
             if (is_csharp_make && master_table_columns.Count > 0)
             {
-                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt, USE_RAW_CS_FILE);
+                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt, is_bin_json_file, USE_RAW_CS_FILE);
             }
 
             if (is_csharp_make && master_enum_data_list.Count > 0)

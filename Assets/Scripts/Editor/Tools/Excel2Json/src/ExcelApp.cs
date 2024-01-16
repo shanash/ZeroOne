@@ -12,7 +12,7 @@ namespace Excel2Json
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
 
-        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, bool is_byte_json_file, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
+        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, bool is_bin_json_file, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
         {
             string tempPath = Path.GetTempFileName(); // 임시 파일 경로 생성
 
@@ -45,7 +45,7 @@ namespace Excel2Json
                             }
                             else
                             {
-                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, is_byte_json_file, Program.USE_RAW_CS_FILE);
+                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, is_bin_json_file, Program.USE_RAW_CS_FILE);
                             }
                         }
                     }
@@ -161,7 +161,7 @@ namespace Excel2Json
         /// <param name="master_table_columns"></param>
         /// <param name="output_dir"></param>
         /// <param name="is_encrypt"></param>
-        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt, bool use_raw_cs_file)
+        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt, bool is_bin_json_file, bool use_raw_cs_file)
         {
             StringBuilder sb = new StringBuilder();
             const string mng_name = "BaseMasterDataManager";
@@ -187,6 +187,10 @@ namespace Excel2Json
                 }
             }
             sb.AppendLine("using Newtonsoft.Json;");
+            if (is_bin_json_file)
+            {
+                sb.AppendLine("using System.Text;");
+            }
             sb.AppendLine();
 
             //  class declare
@@ -291,45 +295,55 @@ namespace Excel2Json
             }
             else
             {
-                //  LoadJsonDataAsync
-                sb.AppendLine("\tasync Task<string> LoadJsonDataAsync(string path)");
-                sb.AppendLine("\t{");              //  LoadJsonData begin
-                sb.AppendLine("\t\tvar handle = Addressables.LoadAssetAsync<TextAsset>(path);");
-                sb.AppendLine("\t\tTextAsset txt_asset = await handle.Task;");
-                sb.Append("\t\treturn txt_asset.text;");
-                sb.AppendLine();
-                sb.AppendLine("\t}");              //  LoadJsonData end
-                sb.AppendLine().AppendLine();
+                if (is_bin_json_file)
+                {
+                    //  LoadBinaryJsonDataAsync
+                    sb.AppendLine("\tasync Task<byte[]> LoadBinaryJsonDataAsync(string path)");
+                    sb.AppendLine("\t{");              //  LoadJsonData begin
+                    sb.AppendLine("\t\tvar handle = Addressables.LoadAssetAsync<TextAsset>(path);");
+                    sb.AppendLine("\t\tTextAsset bin_asset = await handle.Task;");
+                    sb.Append("\t\treturn bin_asset.bytes;");
+                    sb.AppendLine();
+                    sb.AppendLine("\t}");              //  LoadJsonData end
+                    sb.AppendLine().AppendLine();
+                }
+                else
+                {
+                    //  LoadJsonDataAsync
+                    sb.AppendLine("\tasync Task<string> LoadJsonDataAsync(string path)");
+                    sb.AppendLine("\t{");              //  LoadJsonData begin
+                    sb.AppendLine("\t\tvar handle = Addressables.LoadAssetAsync<TextAsset>(path);");
+                    sb.AppendLine("\t\tTextAsset txt_asset = await handle.Task;");
+                    sb.Append("\t\treturn txt_asset.text;");
+                    sb.AppendLine();
+                    sb.AppendLine("\t}");              //  LoadJsonData end
+                    sb.AppendLine().AppendLine();
+                }
 
                 //  load master funcs
                 foreach (var table in master_table_columns)
                 {
                     sb.AppendLine($"\tprotected async Task LoadMaster_{table.Key}()");
                     sb.AppendLine("\t{");
+                    sb.AppendLine($"\t\t{(is_bin_json_file ? "var binary_data" : "string json")} = await {(is_bin_json_file ? "LoadBinaryJsonDataAsync" : "LoadJsonDataAsync")}(\"Assets/AssetResources/Master/{table.Key}\");");
+
+                    if (is_bin_json_file)
+                    {
+                        sb.AppendLine($"\t\tstring json = Encoding.UTF8.GetString(binary_data);");
+                    }
+
                     if (is_encrypt)
                     {
-                        sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
                         sb.AppendLine("\t\tstring decrypt = FluffyDuck.Util.Security.AESDecrypt256(json);");
-                        if (use_raw_cs_file)
-                        {
-                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
-                        }
+                    }
+
+                    if (use_raw_cs_file)
+                    {
+                        sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>({(is_encrypt ? "decrypt" : "json")});");
                     }
                     else
                     {
-                        sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
-                        if (use_raw_cs_file)
-                        {
-                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(json);");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");
-                        }
+                        sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>({(is_encrypt ? "decrypt" : "json")});");
                     }
 
                     if (use_raw_cs_file)
