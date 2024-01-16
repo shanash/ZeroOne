@@ -12,7 +12,7 @@ namespace Excel2Json
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
 
-        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
+        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, bool is_byte_json_file, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
         {
             string tempPath = Path.GetTempFileName(); // 임시 파일 경로 생성
 
@@ -45,7 +45,7 @@ namespace Excel2Json
                             }
                             else
                             {
-                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, Program.USE_RAW_CS_FILE);
+                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, is_byte_json_file, Program.USE_RAW_CS_FILE);
                             }
                         }
                     }

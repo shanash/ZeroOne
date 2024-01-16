@@ -44,6 +44,8 @@ namespace Excel2Json
             PARAM_TYPE encrypt_type = PARAM_TYPE.NONE;
             string encrypt_password = string.Empty;
 
+            string output_file_type = "txt";
+
 
             //  check help type
             for (int i = 0; i < args.Length; i++)
@@ -142,6 +144,23 @@ namespace Excel2Json
                         encrypt_type = PARAM_TYPE.ENCRYPT_ENABLE;
                     }
                 }
+                else if (arg == "-jfmt")
+                {
+                    int idx = i + 1;
+                    if (idx < args.Length)
+                    {
+                        if (args[idx].Equals("txt") || args[idx].Equals("bin"))
+                        {
+                            output_file_type = args[idx];
+                        }
+                        else
+                        {
+                            Logger.Log("===== Error =====");
+                            Logger.Log("The format for the JSON file is not corrected. Please input \'txt\' or \'bin\'");
+                            Logger.Log("=================");
+                        }
+                    }
+                }
             }
 
             if (output_type != PARAM_TYPE.OUTPUT_DIR)
@@ -162,6 +181,7 @@ namespace Excel2Json
 
             bool is_csharp_make = csharp_type == PARAM_TYPE.CSHARP_MAKE;
             bool is_encrypt = encrypt_type == PARAM_TYPE.ENCRYPT_ENABLE;
+            bool is_byte_json_file = output_file_type.Equals("bin");
 
             if (input_type == PARAM_TYPE.DIRECTORY)
             {
@@ -177,7 +197,7 @@ namespace Excel2Json
                         if (ext == ".xlsx" && !is_backup_file)
                         {
                             Logger.Log($"Convert => {fname}");
-                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, ref master_table_columns, ref master_enum_data_list);
+                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, is_byte_json_file, ref master_table_columns, ref master_enum_data_list);
                         }
                     }
 
@@ -255,6 +275,7 @@ namespace Excel2Json
             Logger.Log("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
             Logger.Log("-cs : Generate C#(Csharp) file with key, data type of Json file.");
             Logger.Log("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
+            Logger.Log("-jfmt : Specify the format for the JSON file: \'txt\' for text, \'bin\' for binary. (Default is text)");
             Logger.Log("-h/-help : Help Menual");
             Logger.Log("==================================================");
         }

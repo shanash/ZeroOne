@@ -28,6 +28,7 @@ namespace Excel2Json
             is_ref = false;
         }
     }
+
     enum DATA_ROW_TYPE_INDEX
     {
         NAME = 2,
@@ -51,7 +52,7 @@ namespace Excel2Json
         /// <param name="is_encrypt"></param>
         /// <param name="enc_password"></param>
         /// <param name="master_table_columns"></param>
-        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, bool use_raw_cs_file)
+        public static void ConvertSheet(IXLWorksheet ws, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, bool is_byte_json_file, bool use_raw_cs_file)
         {
             try
             {
@@ -65,16 +66,22 @@ namespace Excel2Json
 
                 string filename = Path.Combine(output_dir, table_name + ".json");
                 string newton_str_json = newton_sheet_arr.ToString();
+                string write_data = newton_str_json;
 
                 // TODO: Json은 이후에 바이너리 파일로 저장해서 사용하는것을 고려해봅시다...
                 if (is_encrypt)
                 {
-                    string encJson = Security.AESEncrypt256(newton_str_json, enc_password);
-                    File.WriteAllText(filename, encJson, Encoding.UTF8);
+                    write_data = Security.AESEncrypt256(newton_str_json, enc_password);
+                }
+
+                if (is_byte_json_file)
+                {
+                    byte[] bytes = Encoding.UTF8.GetBytes(write_data);
+                    File.WriteAllBytes(filename, bytes);
                 }
                 else
                 {
-                    File.WriteAllText(filename, newton_str_json, Encoding.UTF8);
+                    File.WriteAllText(filename, write_data, Encoding.UTF8);
                 }
 
                 if (is_csharp_make)
