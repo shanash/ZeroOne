@@ -66,6 +66,7 @@ namespace Excel2Json
                 string filename = Path.Combine(output_dir, table_name + ".json");
                 string newton_str_json = newton_sheet_arr.ToString();
 
+                // TODO: Json은 이후에 바이너리 파일로 저장해서 사용하는것을 고려해봅시다...
                 if (is_encrypt)
                 {
                     string encJson = Security.AESEncrypt256(newton_str_json, enc_password);
