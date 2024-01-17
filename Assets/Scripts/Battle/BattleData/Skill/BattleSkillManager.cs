@@ -96,10 +96,6 @@ public class BattleSkillManager : BattleDataBase
         {
             return skill_list.Find(x => x.Skill_Order == Skill_Pattern_Order);
         }
-        //if (_Skill_Groups.Count > 0)
-        //{
-        //    return _Skill_Groups.Find(x => x.Skill_Order == Skill_Pattern_Order);
-        //}
         return null;
     }
     /// <summary>

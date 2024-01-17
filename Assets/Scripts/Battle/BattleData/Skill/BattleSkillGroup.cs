@@ -1,4 +1,5 @@
 using Cysharp.Text;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Collections.Generic;
 
 public abstract class BattleSkillGroup : BattleDataBase
@@ -64,6 +65,8 @@ public abstract class BattleSkillGroup : BattleDataBase
         Delay_Time = delay;
     }
 
+    public virtual double GetCooltime() {  return 0; }
+
     /// <summary>
     /// 스킬 액션 이름 반환
     /// </summary>
@@ -99,6 +102,11 @@ public abstract class BattleSkillGroup : BattleDataBase
             return true;
         }
         return false;
+    }
+
+    public bool IsPrepareCooltime()
+    {
+        return Delay_Time < 0;
     }
 
     /// <summary>

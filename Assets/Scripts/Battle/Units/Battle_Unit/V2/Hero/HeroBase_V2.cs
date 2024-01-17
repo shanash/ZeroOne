@@ -326,6 +326,11 @@ public partial class HeroBase_V2 : UnitBase_V2
             if (animation_name.Equals("00_ultimate"))
             {
                 UnsetPlayableDirector();
+                var skill = GetSkillManager().GetSpecialSkillGroup();
+                if (skill != null)
+                {
+                    skill.ResetSkill();
+                }
                 ChangeState(UNIT_STATES.ATTACK_READY_1);
             }
         }
@@ -365,7 +370,20 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            Debug.Log($"{animation_name} => {evt_name}");
+            //Debug.Log($"{animation_name} => {evt_name}");
+            var skill = GetSkillManager().GetSpecialSkillGroup();
+            if (animation_name.Equals(skill.GetSkillActionName()))
+            {
+                var exec_list = skill.GetExecuableSkillDatas(evt_name);
+                if (exec_list.Count > 0)
+                {
+                    int cnt = exec_list.Count;
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        SpawnSkillEffect_V3(exec_list[i]);
+                    }
+                }
+            }
         }
     }
 
@@ -1351,8 +1369,20 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         //  여러가지 상황상 궁극기를 사용할 수 없는 상황을 체크
         //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
+        var skill = GetSkillManager().GetSpecialSkillGroup();
+        //if (!skill.IsPrepareCooltime())
+        //{
+        //    return;
+        //}
+        var target_skill = skill.GetFirstSkillData();
+        if (target_skill != null)
+        {
+            FindTargets(target_skill);
+        }
+
         Skeleton.AnimationState.ClearTracks();
         Skill_Mng.SetNextSkillPattern();
+        
         ChangeState(UNIT_STATES.SKILL_READY_1);
 
     }

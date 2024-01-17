@@ -47,6 +47,10 @@ public class BattleNpcSkillGroup : BattleSkillGroup
             SetDelayTime(Skill_Group.skill_use_delay);
         }
     }
+    public override double GetCooltime()
+    {
+        return Skill_Group.skill_use_delay;
+    }
 
     public override string GetSkillActionName()
     {
@@ -60,7 +64,7 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     public override SKILL_TYPE GetSkillType()
     {
         if (Skill_Group != null)
-            return Skill_Group.Skill_Type;
+            return Skill_Group.skill_type;
         return SKILL_TYPE.NONE;
     }
 

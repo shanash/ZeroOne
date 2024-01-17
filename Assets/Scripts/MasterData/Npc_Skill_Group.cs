@@ -16,7 +16,7 @@ public class Npc_Skill_Group : System.IDisposable
 	///	<summary>
 	///	스킬 타입
 	///	</summary>
-	public SKILL_TYPE Skill_Type {get; set;}
+	public SKILL_TYPE skill_type {get; set;}
 	///	<summary>
 	///	스킬 아이콘
 	///	</summary>
@@ -41,7 +41,7 @@ public class Npc_Skill_Group : System.IDisposable
 		npc_skill_group_id = 0;
 		name_kr = string.Empty;
 		skill_use_delay = 0;
-		Skill_Type = SKILL_TYPE.NONE;
+		skill_type = SKILL_TYPE.NONE;
 		icon = string.Empty;
 		action_name = string.Empty;
 		cast_effect_path = string.Empty;
@@ -70,7 +70,7 @@ public class Npc_Skill_Group : System.IDisposable
 		sb.AppendFormat("[npc_skill_group_id] = <color=yellow>{0}</color>", npc_skill_group_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[skill_use_delay] = <color=yellow>{0}</color>", skill_use_delay).AppendLine();
-		sb.AppendFormat("[Skill_Type] = <color=yellow>{0}</color>", Skill_Type).AppendLine();
+		sb.AppendFormat("[skill_type] = <color=yellow>{0}</color>", skill_type).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[action_name] = <color=yellow>{0}</color>", action_name).AppendLine();
 		sb.AppendFormat("[cast_effect_path] = <color=yellow>{0}</color>", cast_effect_path).AppendLine();

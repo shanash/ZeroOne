@@ -41,7 +41,10 @@ public class BattlePcSkillGroup : BattleSkillGroup
             SetDelayTime(Skill_Group.skill_use_delay);
         }
     }
-
+    public override double GetCooltime()
+    {
+        return Skill_Group.skill_use_delay;
+    }
     public override string GetSkillActionName()
     {
         if (Skill_Group != null)
