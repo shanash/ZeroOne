@@ -72,14 +72,21 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
         Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
-        for (int i = 0; i < Skill_Mng.Skill_Groups.Count; i++)
+
+        int i = 0;
+
+        for (SKILL_TYPE type = SKILL_TYPE.SKILL_01; type <= SKILL_TYPE.SPECIAL_SKILL; type++)
         {
+            var skill_group = Skill_Mng.FindSkillType(type);
+
             // 콜백 참조 때문에 별도로 변수를 선언해야 합니다
-            int index = i;
-            CommonUtils.GetResourceFromAddressableAsset<Sprite>(Skill_Mng.Skill_Groups[i].GetSkillIconPath(), (spr) =>
+            int sprite_index = i;
+
+            CommonUtils.GetResourceFromAddressableAsset<Sprite>(skill_group.GetSkillIconPath(), (spr) =>
             {
-                Skill_Icons[index].sprite = spr;
+                Skill_Icons[sprite_index].sprite = spr;
             });
+            i++;
         }
     }
 

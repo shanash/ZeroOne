@@ -52,6 +52,14 @@ public class HeroInfoUI : PopupBase
 
     BattleUnitData User_Hero_Battle_Data;
 
+    protected override void Initialize()
+    {
+        base.Initialize();
+
+        User_Hero_Battle_Data = null;
+        Hero_Info_Box.SetHeroData(null);
+    }
+
     public override void ShowPopup(params object[] data)
     {
         base.ShowPopup(data);
@@ -107,6 +115,8 @@ public class HeroInfoUI : PopupBase
     public override void Spawned()
     {
         base.Spawned();
+
+        Initialize();
         InfoBox_Tab_Controller.SelectFirstTab();
 
         // 레벨업 탭과 승급 탭은 일단 막아놓습니다.
@@ -134,6 +144,7 @@ public class HeroInfoUI : PopupBase
 
     public void OnClickBack()
     {
+        Initialize();
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
     }
