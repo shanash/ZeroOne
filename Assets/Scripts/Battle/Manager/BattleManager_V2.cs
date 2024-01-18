@@ -1,11 +1,11 @@
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
+using FluffyDuck.UI;
 using static ConstString;
 
 public partial class BattleManager_V2 : MonoBehaviour
 {
-
     [SerializeField, Tooltip("UI Manager")]
     protected BattleUIManager_V2 UI_Mng;
     [SerializeField, Tooltip("Virtual Cam Manager")]

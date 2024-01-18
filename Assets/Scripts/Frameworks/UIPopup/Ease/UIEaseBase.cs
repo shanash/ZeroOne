@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace FluffyDuck.UI
 {
-    public class UIEaseBase : EasingFade
+    public abstract class UIEaseBase : EasingFade
     {
         public enum MOVE_TYPE
         {

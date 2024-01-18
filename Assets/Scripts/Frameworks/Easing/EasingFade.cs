@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace FluffyDuck.Util
 {
     public abstract class EasingFade : MonoBehaviour, IPoolableComponent
@@ -71,7 +70,6 @@ namespace FluffyDuck.Util
                     break;
                 case FADE_STATES.END:
                     Delta_Time = 0f;
-                    Easing_End_Callback?.Invoke();
                     if (IsRepeat)
                     {
                         ChangeStates(FADE_STATES.PRE_DELAY);
@@ -80,7 +78,7 @@ namespace FluffyDuck.Util
                     {
                         ChangeStates(FADE_STATES.NONE);
                     }
-
+                    Easing_End_Callback?.Invoke();
                     break;
             }
         }
@@ -189,7 +187,4 @@ namespace FluffyDuck.Util
 
         }
     }
-
-
-
 }
