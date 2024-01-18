@@ -1,51 +1,50 @@
-﻿[System.Serializable]
-public class Npc_Skill_Group : System.IDisposable
+﻿public class Npc_Skill_Group : System.IDisposable
 {
 	///	<summary>
 	///	npc 스킬 그룹 인덱스
 	///	</summary>
-	public int npc_skill_group_id {get; set;}
+	public readonly int npc_skill_group_id;
 	///	<summary>
 	///	스킬 이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	쿨타임
 	///	</summary>
-	public double skill_use_delay {get; set;}
+	public readonly double skill_use_delay;
 	///	<summary>
 	///	스킬 타입
 	///	</summary>
-	public SKILL_TYPE skill_type {get; set;}
+	public readonly SKILL_TYPE skill_type;
 	///	<summary>
 	///	스킬 아이콘
 	///	</summary>
-	public string icon {get; set;}
+	public readonly string icon;
 	///	<summary>
 	///	액션
 	///	</summary>
-	public string action_name {get; set;}
+	public readonly string action_name;
 	///	<summary>
 	///	캐스팅 이펙트
 	///	</summary>
-	public string cast_effect_path {get; set;}
+	public readonly string cast_effect_path;
 	///	<summary>
 	///	이펙트 지속시간
 	///	</summary>
-	public double effect_duration {get; set;}
+	public readonly double effect_duration;
 
 	private bool disposed = false;
 
-	public Npc_Skill_Group()
+	public Npc_Skill_Group(Raw_Npc_Skill_Group raw_data)
 	{
-		npc_skill_group_id = 0;
-		name_kr = string.Empty;
-		skill_use_delay = 0;
-		skill_type = SKILL_TYPE.NONE;
-		icon = string.Empty;
-		action_name = string.Empty;
-		cast_effect_path = string.Empty;
-		effect_duration = 0;
+		npc_skill_group_id = raw_data.npc_skill_group_id;
+		name_kr = raw_data.name_kr;
+		skill_use_delay = raw_data.skill_use_delay;
+		skill_type = raw_data.skill_type;
+		icon = raw_data.icon;
+		action_name = raw_data.action_name;
+		cast_effect_path = raw_data.cast_effect_path;
+		effect_duration = raw_data.effect_duration;
 	}
 
 	public void Dispose()

@@ -23,7 +23,27 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
                     ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
                     break;
                 case THROWING_TYPE.PARABOLA:
-                    ec.Parabola.Move(this.transform.position, target.position, ec.Parabola_Height, ec.Projectile_Velocity, MoveEndCallback);
+                    {
+                        float dist = Vector3.Distance(this.transform.position, target.position);
+                        float height = ec.Parabola_Height;
+                        float velocity = ec.Projectile_Velocity;
+                        if (dist < 5)
+                        {
+                            height = ec.Parabola_Height * 0.2f;
+                            velocity = ec.Projectile_Velocity * 0.5f;
+                        }
+                        else if(dist < 10)
+                        {
+                            height = ec.Parabola_Height * 0.5f;
+                            velocity = ec.Projectile_Velocity * 0.7f;
+                        }
+                        else
+                        {
+                            height = ec.Parabola_Height;
+                            velocity = ec.Projectile_Velocity;
+                        }
+                        ec.Parabola.Move(this.transform.position, target.position, height, velocity, MoveEndCallback);
+                    }
                     break;
                 case THROWING_TYPE.BEZIER:
                     ec.Curve.Move(this.transform.position, target, duration, ec.Start_Curve_Dist, ec.End_Curve_Dist, MoveEndCallback);

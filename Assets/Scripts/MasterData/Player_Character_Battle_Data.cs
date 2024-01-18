@@ -1,96 +1,96 @@
-﻿[System.Serializable]
-public class Player_Character_Battle_Data : System.IDisposable
+﻿public class Player_Character_Battle_Data : System.IDisposable
 {
 	///	<summary>
 	///	전투 인덱스
 	///	</summary>
-	public int battle_info_id {get; set;}
+	public readonly int battle_info_id;
 	///	<summary>
 	///	접근 사거리
 	///	</summary>
-	public double approach {get; set;}
+	public readonly double approach;
 	///	<summary>
 	///	배치 위치
 	///	</summary>
-	public POSITION_TYPE position_type {get; set;}
+	public readonly POSITION_TYPE position_type;
 	///	<summary>
 	///	스킬 패턴
 	///	pc_group_skill_id를 사용한다.
 	///	</summary>
-	public int[] skill_pattern {get; set;}
+	public readonly int[] skill_pattern;
 	///	<summary>
 	///	패시브
 	///	</summary>
-	public int passive_skill_group_id {get; set;}
+	public readonly int passive_skill_group_id;
 	///	<summary>
 	///	궁극기
 	///	</summary>
-	public int special_skill_group_id {get; set;}
+	public readonly int special_skill_group_id;
 	///	<summary>
 	///	체력
 	///	</summary>
-	public double hp {get; set;}
+	public readonly double hp;
 	///	<summary>
 	///	물리 공격력
 	///	</summary>
-	public double attack {get; set;}
+	public readonly double attack;
 	///	<summary>
 	///	마법 공격력
 	///	</summary>
-	public double m_attack {get; set;}
+	public readonly double m_attack;
 	///	<summary>
 	///	물리 방어력
 	///	</summary>
-	public double defend {get; set;}
+	public readonly double defend;
 	///	<summary>
 	///	마법_방어력
 	///	</summary>
-	public double m_defend {get; set;}
+	public readonly double m_defend;
 	///	<summary>
 	///	회복량
 	///	</summary>
-	public double attack_recovery {get; set;}
+	public readonly double attack_recovery;
 	///	<summary>
 	///	회피
 	///	</summary>
-	public double evasion {get; set;}
+	public readonly double evasion;
 	///	<summary>
 	///	명중
 	///	</summary>
-	public double accuracy {get; set;}
+	public readonly double accuracy;
 	///	<summary>
 	///	자동 회복
 	///	</summary>
-	public double auto_recovery {get; set;}
+	public readonly double auto_recovery;
 	///	<summary>
 	///	전투 이동 속도
 	///	</summary>
-	public double move_speed {get; set;}
+	public readonly double move_speed;
 	///	<summary>
 	///	전투 대사 인덱스
 	///	</summary>
-	public string attack_script {get; set;}
+	public readonly string attack_script;
 
 	private bool disposed = false;
 
-	public Player_Character_Battle_Data()
+	public Player_Character_Battle_Data(Raw_Player_Character_Battle_Data raw_data)
 	{
-		battle_info_id = 0;
-		approach = 0;
-		position_type = POSITION_TYPE.NONE;
-		passive_skill_group_id = 0;
-		special_skill_group_id = 0;
-		hp = 0;
-		attack = 0;
-		m_attack = 0;
-		defend = 0;
-		m_defend = 0;
-		attack_recovery = 0;
-		evasion = 0;
-		accuracy = 0;
-		auto_recovery = 0;
-		move_speed = 0;
-		attack_script = string.Empty;
+		battle_info_id = raw_data.battle_info_id;
+		approach = raw_data.approach;
+		position_type = raw_data.position_type;
+		skill_pattern = raw_data.skill_pattern != null ? (int[])raw_data.skill_pattern.Clone() : new int[0];
+		passive_skill_group_id = raw_data.passive_skill_group_id;
+		special_skill_group_id = raw_data.special_skill_group_id;
+		hp = raw_data.hp;
+		attack = raw_data.attack;
+		m_attack = raw_data.m_attack;
+		defend = raw_data.defend;
+		m_defend = raw_data.m_defend;
+		attack_recovery = raw_data.attack_recovery;
+		evasion = raw_data.evasion;
+		accuracy = raw_data.accuracy;
+		auto_recovery = raw_data.auto_recovery;
+		move_speed = raw_data.move_speed;
+		attack_script = raw_data.attack_script;
 	}
 
 	public void Dispose()

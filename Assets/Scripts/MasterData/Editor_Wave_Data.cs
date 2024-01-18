@@ -1,36 +1,36 @@
-﻿[System.Serializable]
-public class Editor_Wave_Data : System.IDisposable
+﻿public class Editor_Wave_Data : System.IDisposable
 {
 	///	<summary>
 	///	웨이브 그룹 ID
 	///	</summary>
-	public int wave_group_id {get; set;}
+	public readonly int wave_group_id;
 	///	<summary>
 	///	웨이브 순서
 	///	</summary>
-	public int wave_sequence {get; set;}
+	public readonly int wave_sequence;
 	///	<summary>
 	///	웨이브에 출현하는
 	///	적 최대 마리 수
 	///	</summary>
-	public int enemy_appearance_count {get; set;}
+	public readonly int enemy_appearance_count;
 	///	<summary>
 	///	출현 적 정보
 	///	</summary>
-	public int[] enemy_appearance_info {get; set;}
+	public readonly int[] enemy_appearance_info;
 	///	<summary>
 	///	웨이브 제한 시간
 	///	</summary>
-	public int wave_time {get; set;}
+	public readonly int wave_time;
 
 	private bool disposed = false;
 
-	public Editor_Wave_Data()
+	public Editor_Wave_Data(Raw_Editor_Wave_Data raw_data)
 	{
-		wave_group_id = 0;
-		wave_sequence = 0;
-		enemy_appearance_count = 0;
-		wave_time = 0;
+		wave_group_id = raw_data.wave_group_id;
+		wave_sequence = raw_data.wave_sequence;
+		enemy_appearance_count = raw_data.enemy_appearance_count;
+		enemy_appearance_info = raw_data.enemy_appearance_info != null ? (int[])raw_data.enemy_appearance_info.Clone() : new int[0];
+		wave_time = raw_data.wave_time;
 	}
 
 	public void Dispose()

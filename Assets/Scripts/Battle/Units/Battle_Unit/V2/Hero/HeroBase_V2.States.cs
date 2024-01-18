@@ -54,6 +54,10 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
+    public override void UnitStateReadyBegin()
+    {
+        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT);
+    }
     public override void UnitStateReady()
     {
         ChangeState(UNIT_STATES.SPAWN);
@@ -61,6 +65,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateIdle()
     {
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateStunBegin()
@@ -70,6 +75,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateStun()
     {
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateSleepBegin()
@@ -79,11 +85,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateSleep()
     {
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateFreezeBegin()
     {
-        //Skeleton.AnimationState.ClearTracks();
         var tracks = FindAllTrakcs();
         int len = tracks.Length;
         for (int i = 0; i < len; i++)
@@ -94,6 +100,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateFreeze()
     {
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateFreezeExit()
@@ -115,11 +122,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  attack check
 
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateAttack01()
     {
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
     public override void UnitStateMoveInBegin()
     {
@@ -153,6 +162,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             MoveRightTeam();
         }
         CalcDurationSkillTime();
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
     }
 
     public override void UnitStateWaveRunBegin()
@@ -171,7 +181,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateAttackReady01()
     {
-        bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(Time.deltaTime);
+        float dt = Time.deltaTime;
+        bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(dt);
         if (is_delay_finish)
         {
             FindApproachTargets();
@@ -182,8 +193,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             }
             ChangeState(UNIT_STATES.ATTACK_1);
         }
-
-        base.UnitStateAttackReady01();
+        Skill_Mng.CalcSpecialSkillCooltime(dt);
     }
 
     public override void UnitStateAttack01Begin()
@@ -197,6 +207,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         PlayAnimation(track, skill_action_name, false);
     }
+
+
 
 
     public override void UnitStateDeathBegin()

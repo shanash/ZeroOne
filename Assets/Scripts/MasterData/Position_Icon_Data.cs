@@ -1,26 +1,25 @@
-﻿[System.Serializable]
-public class Position_Icon_Data : System.IDisposable
+﻿public class Position_Icon_Data : System.IDisposable
 {
 	///	<summary>
 	///	포지션 타입
 	///	</summary>
-	public POSITION_TYPE position_type {get; set;}
+	public readonly POSITION_TYPE position_type;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon {get; set;}
+	public readonly string icon;
 
 	private bool disposed = false;
 
-	public Position_Icon_Data()
+	public Position_Icon_Data(Raw_Position_Icon_Data raw_data)
 	{
-		position_type = POSITION_TYPE.NONE;
-		name_kr = string.Empty;
-		icon = string.Empty;
+		position_type = raw_data.position_type;
+		name_kr = raw_data.name_kr;
+		icon = raw_data.icon;
 	}
 
 	public void Dispose()

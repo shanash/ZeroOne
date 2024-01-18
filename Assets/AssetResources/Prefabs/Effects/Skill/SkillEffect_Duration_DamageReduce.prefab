@@ -9,9 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8143556685297999257}
-  - component: {fileID: 3206980483214099579}
   - component: {fileID: -7842642534248229783}
-  - component: {fileID: 8877845939567261234}
   - component: {fileID: 326228837614658722}
   - component: {fileID: 7125685000321660793}
   - component: {fileID: -5878226447415428334}
@@ -35,21 +33,122 @@ Transform:
   m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6113031215319448469}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7842642534248229783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364876171350765119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d43d0d258105941849ef1a85810860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 2246963428833611515}
+--- !u!114 &326228837614658722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364876171350765119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 51
+--- !u!210 &7125685000321660793
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364876171350765119}
+  m_Enabled: 1
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 4
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &-5878226447415428334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364876171350765119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Is_Show_All_Properties: 0
+  Effect_Type: 3
+  Effect_Duration: 0
+  Is_Loop: 1
+  Projectile_Start_Pos_Type: 0
+  Projectile_Reach_Pos_Type: 3
+  Throwing_Type: 0
+  Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
+  Parabola: {fileID: 0}
+  Parabola_Height: 0
+  Mover: {fileID: 0}
+  Projectile_Velocity: 0
+  Use_Hide_Transforms: 0
+  Hide_Transforms: []
+  Hide_After_Delay_Time: 0
+--- !u!1 &2121607196000118907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6113031215319448469}
+  - component: {fileID: 2246963428833611515}
+  - component: {fileID: 2019867181626155960}
+  m_Layer: 0
+  m_Name: empty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6113031215319448469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121607196000118907}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
   - {fileID: 8969650567149978339}
   - {fileID: 2260959285899465660}
   - {fileID: 3918740177721324209}
   - {fileID: 9181730782896715369}
   - {fileID: 4854312880301119411}
   - {fileID: 1211482150857715138}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!198 &3206980483214099579
+  m_Father: {fileID: 8143556685297999257}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!198 &2246963428833611515
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
+  m_GameObject: {fileID: 2121607196000118907}
   serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
@@ -60,7 +159,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -4766,30 +4865,14 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &-7842642534248229783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6d43d0d258105941849ef1a85810860, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Particle_Effect: {fileID: 3206980483214099579}
-  Skel_Effect: {fileID: 0}
-  Mover: {fileID: 0}
-  Hide_Comp: {fileID: 0}
---- !u!199 &8877845939567261234
+--- !u!199 &2019867181626155960
 ParticleSystemRenderer:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
+  m_GameObject: {fileID: 2121607196000118907}
   m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4854,57 +4937,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &326228837614658722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ZOrder: 51
---- !u!210 &7125685000321660793
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
---- !u!114 &-5878226447415428334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 364876171350765119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Effect_Type: 3
-  Effect_Duration: 0
-  Is_Loop: 1
-  Projectile_Start_Pos_Type: 0
-  Projectile_Reach_Pos_Type: 3
-  Throwing_Type: 0
-  Curve: {fileID: 0}
-  Parabola: {fileID: 0}
-  Parabola_Height: 0
-  Mover: {fileID: 0}
-  Projectile_Velocity: 0
-  Hide_Transforms: []
-  Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!1 &2512643765737532440
 GameObject:
   m_ObjectHideFlags: 0
@@ -4936,7 +4968,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &3713549086706746685
 ParticleSystem:
@@ -4955,7 +4987,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -9858,7 +9890,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &4557946548700678917
 ParticleSystem:
@@ -9877,7 +9909,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -14753,7 +14785,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &4250871445354601046
 ParticleSystem:
@@ -14772,7 +14804,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -19648,7 +19680,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &6153020879986043210
 ParticleSystem:
@@ -19667,7 +19699,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -24485,7 +24517,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &2294686683991068418
 ParticleSystem:
@@ -24504,7 +24536,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -29380,7 +29412,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8143556685297999257}
+  m_Father: {fileID: 6113031215319448469}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &149521386851076723
 ParticleSystem:
@@ -29399,7 +29431,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 0
   startDelay:

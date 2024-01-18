@@ -64,6 +64,12 @@ public class Trans_Effect_Text : EffectBase
             }
         }
     }
+
+    public override void Show(bool show)
+    {
+        this.gameObject.SetActive(show);
+    }
+
     public override void Despawned()
     {
         Trans_Text.text = string.Empty;

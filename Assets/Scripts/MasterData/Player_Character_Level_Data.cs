@@ -1,31 +1,30 @@
-﻿[System.Serializable]
-public class Player_Character_Level_Data : System.IDisposable
+﻿public class Player_Character_Level_Data : System.IDisposable
 {
 	///	<summary>
 	///	ID
 	///	</summary>
-	public int player_character_level_id {get; set;}
+	public readonly int player_character_level_id;
 	///	<summary>
 	///	레벨
 	///	</summary>
-	public int level {get; set;}
+	public readonly int level;
 	///	<summary>
 	///	누적 경험치
 	///	</summary>
-	public double accum_exp {get; set;}
+	public readonly double accum_exp;
 	///	<summary>
 	///	필요 경험치
 	///	</summary>
-	public double need_exp {get; set;}
+	public readonly double need_exp;
 
 	private bool disposed = false;
 
-	public Player_Character_Level_Data()
+	public Player_Character_Level_Data(Raw_Player_Character_Level_Data raw_data)
 	{
-		player_character_level_id = 0;
-		level = 0;
-		accum_exp = 0;
-		need_exp = 0;
+		player_character_level_id = raw_data.player_character_level_id;
+		level = raw_data.level;
+		accum_exp = raw_data.accum_exp;
+		need_exp = raw_data.need_exp;
 	}
 
 	public void Dispose()

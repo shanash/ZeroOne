@@ -1,31 +1,30 @@
-﻿[System.Serializable]
-public class Me_Serifu_Data : System.IDisposable
+﻿public class Me_Serifu_Data : System.IDisposable
 {
 	///	<summary>
 	///	대사 인덱스
 	///	</summary>
-	public int serifu_id {get; set;}
+	public readonly int serifu_id;
 	///	<summary>
 	///	캐릭터 고유 아이디
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	말풍선 텍스트
 	///	</summary>
-	public string text_kr {get; set;}
+	public readonly string text_kr;
 	///	<summary>
 	///	오디오 클립 키
 	///	</summary>
-	public string audio_clip_key {get; set;}
+	public readonly string audio_clip_key;
 
 	private bool disposed = false;
 
-	public Me_Serifu_Data()
+	public Me_Serifu_Data(Raw_Me_Serifu_Data raw_data)
 	{
-		serifu_id = 0;
-		player_character_id = 0;
-		text_kr = string.Empty;
-		audio_clip_key = string.Empty;
+		serifu_id = raw_data.serifu_id;
+		player_character_id = raw_data.player_character_id;
+		text_kr = raw_data.text_kr;
+		audio_clip_key = raw_data.audio_clip_key;
 	}
 
 	public void Dispose()

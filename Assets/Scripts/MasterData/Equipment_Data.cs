@@ -1,105 +1,104 @@
-﻿[System.Serializable]
-public class Equipment_Data : System.IDisposable
+﻿public class Equipment_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 ID
 	///	</summary>
-	public int item_id {get; set;}
+	public readonly int item_id;
 	///	<summary>
 	///	이름 string ID
 	///	</summary>
-	public string name_id {get; set;}
+	public readonly string name_id;
 	///	<summary>
 	///	장비 타입
 	///	</summary>
-	public EQUIPMENT_TYPE equipment_type {get; set;}
+	public readonly EQUIPMENT_TYPE equipment_type;
 	///	<summary>
 	///	최대 중첩 갯수
 	///	</summary>
-	public int max_num {get; set;}
+	public readonly int max_num;
 	///	<summary>
 	///	방어력
 	///	</summary>
-	public int def {get; set;}
+	public readonly int def;
 	///	<summary>
 	///	최대HP
 	///	</summary>
-	public int max_hp {get; set;}
+	public readonly int max_hp;
 	///	<summary>
 	///	회피
 	///	</summary>
-	public int evasion {get; set;}
+	public readonly int evasion;
 	///	<summary>
 	///	HP 자동회복
 	///	</summary>
-	public int recover_hp {get; set;}
+	public readonly int recover_hp;
 	///	<summary>
 	///	HP 흡수
 	///	</summary>
-	public int drain_hp {get; set;}
+	public readonly int drain_hp;
 	///	<summary>
 	///	명중
 	///	</summary>
-	public int hit {get; set;}
+	public readonly int hit;
 	///	<summary>
 	///	마법 공격력
 	///	</summary>
-	public int matk {get; set;}
+	public readonly int matk;
 	///	<summary>
 	///	물리 공격력
 	///	</summary>
-	public int atk {get; set;}
+	public readonly int atk;
 	///	<summary>
 	///	마법 크리티컬
 	///	</summary>
-	public int hit_mcri {get; set;}
+	public readonly int hit_mcri;
 	///	<summary>
 	///	물리 크리티컬
 	///	</summary>
-	public int hit_cri {get; set;}
+	public readonly int hit_cri;
 	///	<summary>
 	///	회복량 상승
 	///	</summary>
-	public int heal_up {get; set;}
+	public readonly int heal_up;
 	///	<summary>
 	///	소비 시간(분)
 	///	소비 시간(기한)이 만료되면, 아이템이 사라짐
 	///	값이 0 이면, 소비 시간 없음
 	///	</summary>
-	public int expire_time {get; set;}
+	public readonly int expire_time;
 	///	<summary>
 	///	소비기한
 	///	소비 시간(기한)이 만료되면, 아이템이 사라짐
 	///	값이 0 이면, 소비 기한 없음
 	///	</summary>
-	public int schedule_id {get; set;}
+	public readonly int schedule_id;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Equipment_Data()
+	public Equipment_Data(Raw_Equipment_Data raw_data)
 	{
-		item_id = 0;
-		name_id = string.Empty;
-		equipment_type = EQUIPMENT_TYPE.NONE;
-		max_num = 0;
-		def = 0;
-		max_hp = 0;
-		evasion = 0;
-		recover_hp = 0;
-		drain_hp = 0;
-		hit = 0;
-		matk = 0;
-		atk = 0;
-		hit_mcri = 0;
-		hit_cri = 0;
-		heal_up = 0;
-		expire_time = 0;
-		schedule_id = 0;
-		icon_path = string.Empty;
+		item_id = raw_data.item_id;
+		name_id = raw_data.name_id;
+		equipment_type = raw_data.equipment_type;
+		max_num = raw_data.max_num;
+		def = raw_data.def;
+		max_hp = raw_data.max_hp;
+		evasion = raw_data.evasion;
+		recover_hp = raw_data.recover_hp;
+		drain_hp = raw_data.drain_hp;
+		hit = raw_data.hit;
+		matk = raw_data.matk;
+		atk = raw_data.atk;
+		hit_mcri = raw_data.hit_mcri;
+		hit_cri = raw_data.hit_cri;
+		heal_up = raw_data.heal_up;
+		expire_time = raw_data.expire_time;
+		schedule_id = raw_data.schedule_id;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

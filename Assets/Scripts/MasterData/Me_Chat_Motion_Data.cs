@@ -1,29 +1,30 @@
-﻿[System.Serializable]
-public class Me_Chat_Motion_Data : System.IDisposable
+﻿public class Me_Chat_Motion_Data : System.IDisposable
 {
 	///	<summary>
 	///	챗모션 id
 	///	</summary>
-	public int chat_motion_id {get; set;}
+	public readonly int chat_motion_id;
 	///	<summary>
 	///	캐릭터 고유 아이디
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	애니메이션 이름
 	///	</summary>
-	public string[] animation_name {get; set;}
+	public readonly string[] animation_name;
 	///	<summary>
 	///	대사 id
 	///	</summary>
-	public int[] serifu_ids {get; set;}
+	public readonly int[] serifu_ids;
 
 	private bool disposed = false;
 
-	public Me_Chat_Motion_Data()
+	public Me_Chat_Motion_Data(Raw_Me_Chat_Motion_Data raw_data)
 	{
-		chat_motion_id = 0;
-		player_character_id = 0;
+		chat_motion_id = raw_data.chat_motion_id;
+		player_character_id = raw_data.player_character_id;
+		animation_name = raw_data.animation_name != null ? (string[])raw_data.animation_name.Clone() : new string[0];
+		serifu_ids = raw_data.serifu_ids != null ? (int[])raw_data.serifu_ids.Clone() : new int[0];
 	}
 
 	public void Dispose()

@@ -1,56 +1,55 @@
-﻿[System.Serializable]
-public class Npc_Level_Stat_Data : System.IDisposable
+﻿public class Npc_Level_Stat_Data : System.IDisposable
 {
 	///	<summary>
 	///	스텟 인덱스
 	///	</summary>
-	public int npc_level_stat_id {get; set;}
+	public readonly int npc_level_stat_id;
 	///	<summary>
 	///	NPC Type
 	///	</summary>
-	public NPC_TYPE npc_type {get; set;}
+	public readonly NPC_TYPE npc_type;
 	///	<summary>
 	///	종족 타입
 	///	</summary>
-	public TRIBE_TYPE tribe_type {get; set;}
+	public readonly TRIBE_TYPE tribe_type;
 	///	<summary>
 	///	롤 타입
 	///	</summary>
-	public ROLE_TYPE role_type {get; set;}
+	public readonly ROLE_TYPE role_type;
 	///	<summary>
 	///	공격력 증가
 	///	</summary>
-	public double attack_inc {get; set;}
+	public readonly double attack_inc;
 	///	<summary>
 	///	방어력 증가
 	///	</summary>
-	public double defend_inc {get; set;}
+	public readonly double defend_inc;
 	///	<summary>
 	///	체력 증가
 	///	</summary>
-	public double hp_inc {get; set;}
+	public readonly double hp_inc;
 	///	<summary>
 	///	회피 증가
 	///	</summary>
-	public double evation_inc {get; set;}
+	public readonly double evation_inc;
 	///	<summary>
 	///	명중 증가
 	///	</summary>
-	public double accuracy_inc {get; set;}
+	public readonly double accuracy_inc;
 
 	private bool disposed = false;
 
-	public Npc_Level_Stat_Data()
+	public Npc_Level_Stat_Data(Raw_Npc_Level_Stat_Data raw_data)
 	{
-		npc_level_stat_id = 0;
-		npc_type = NPC_TYPE.NONE;
-		tribe_type = TRIBE_TYPE.NONE;
-		role_type = ROLE_TYPE.NONE;
-		attack_inc = 0;
-		defend_inc = 0;
-		hp_inc = 0;
-		evation_inc = 0;
-		accuracy_inc = 0;
+		npc_level_stat_id = raw_data.npc_level_stat_id;
+		npc_type = raw_data.npc_type;
+		tribe_type = raw_data.tribe_type;
+		role_type = raw_data.role_type;
+		attack_inc = raw_data.attack_inc;
+		defend_inc = raw_data.defend_inc;
+		hp_inc = raw_data.hp_inc;
+		evation_inc = raw_data.evation_inc;
+		accuracy_inc = raw_data.accuracy_inc;
 	}
 
 	public void Dispose()

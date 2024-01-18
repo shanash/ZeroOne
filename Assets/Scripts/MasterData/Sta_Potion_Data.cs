@@ -1,41 +1,40 @@
-﻿[System.Serializable]
-public class Sta_Potion_Data : System.IDisposable
+﻿public class Sta_Potion_Data : System.IDisposable
 {
 	///	<summary>
 	///	스테미너 회복 물약 id
 	///	</summary>
-	public int sta_potion_id {get; set;}
+	public readonly int sta_potion_id;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public string tooltip_text {get; set;}
+	public readonly string tooltip_text;
 	///	<summary>
 	///	판매가격
 	///	</summary>
-	public int sell_price {get; set;}
+	public readonly int sell_price;
 	///	<summary>
 	///	사용 효과
 	///	</summary>
-	public int use_effect {get; set;}
+	public readonly int use_effect;
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Sta_Potion_Data()
+	public Sta_Potion_Data(Raw_Sta_Potion_Data raw_data)
 	{
-		sta_potion_id = 0;
-		name_kr = string.Empty;
-		tooltip_text = string.Empty;
-		sell_price = 0;
-		use_effect = 0;
-		icon_path = string.Empty;
+		sta_potion_id = raw_data.sta_potion_id;
+		name_kr = raw_data.name_kr;
+		tooltip_text = raw_data.tooltip_text;
+		sell_price = raw_data.sell_price;
+		use_effect = raw_data.use_effect;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

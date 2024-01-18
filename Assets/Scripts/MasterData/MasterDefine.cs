@@ -455,6 +455,8 @@ public enum DURATION_EFFECT_TYPE
 	ATK_DOWN = 108,
 	/// <summary>109 방어력 감소</summary>
 	DEF_DOWN = 109,
+	/// <summary>110 공격력 방어력 스탯 교환</summary>
+	EXCHANGE_ATK_DEF = 110,
 }
 
 ///	<summary>
@@ -580,9 +582,9 @@ public enum LIMIT_TYPE
 }
 
 ///	<summary>
-///	재화 및 아이템 종류
+///	아이템 종류
 ///	</summary>
-public enum GOODS_TYPE
+public enum ITEM_TYPE_V2
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
@@ -610,8 +612,27 @@ public enum GOODS_TYPE
 	TICKET_REWARD_ALL = 11,
 	/// <summary>100 장비</summary>
 	EQUIPMENT = 100,
+	/// <summary>101 캐릭터</summary>
+	CHARACTER = 101,
 	/// <summary>1000 장비 조각</summary>
 	PIECE_EQUIPMENT = 1000,
+	/// <summary>1001 캐릭터 조각</summary>
+	PIECE_CHARACTER = 1001,
+	/// <summary>1002 아이템 조각</summary>
+	PIECE_ITEM = 1002,
+}
+
+///	<summary>
+///	재화 종류
+///	</summary>
+public enum GOODS_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>1 골드 (게임내 재화)</summary>
+	GOLD = 1,
+	/// <summary>2 다이아 (게임내 유료 재화)</summary>
+	DIA = 2,
 }
 
 ///	<summary>

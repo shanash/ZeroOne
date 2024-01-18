@@ -1,51 +1,50 @@
-﻿[System.Serializable]
-public class Zone_Data : System.IDisposable
+﻿public class Zone_Data : System.IDisposable
 {
 	///	<summary>
 	///	존 인덱스
 	///	</summary>
-	public int zone_id {get; set;}
+	public readonly int zone_id;
 	///	<summary>
 	///	존 명칭
 	///	</summary>
-	public string zone_name {get; set;}
+	public readonly string zone_name;
 	///	<summary>
 	///	속한 월드
 	///	</summary>
-	public int in_world_id {get; set;}
+	public readonly int in_world_id;
 	///	<summary>
 	///	오더링
 	///	</summary>
-	public int zone_ordering {get; set;}
+	public readonly int zone_ordering;
 	///	<summary>
 	///	존 난이도
 	///	</summary>
-	public STAGE_DIFFICULTY_TYPE zone_difficulty {get; set;}
+	public readonly STAGE_DIFFICULTY_TYPE zone_difficulty;
 	///	<summary>
 	///	존 이미지
 	///	</summary>
-	public string zone_img_path {get; set;}
+	public readonly string zone_img_path;
 	///	<summary>
 	///	존 설명
 	///	</summary>
-	public string zone_tooltip {get; set;}
+	public readonly string zone_tooltip;
 	///	<summary>
 	///	해금 조건
 	///	</summary>
-	public LIMIT_TYPE limit_type {get; set;}
+	public readonly LIMIT_TYPE limit_type;
 
 	private bool disposed = false;
 
-	public Zone_Data()
+	public Zone_Data(Raw_Zone_Data raw_data)
 	{
-		zone_id = 0;
-		zone_name = string.Empty;
-		in_world_id = 0;
-		zone_ordering = 0;
-		zone_difficulty = STAGE_DIFFICULTY_TYPE.NONE;
-		zone_img_path = string.Empty;
-		zone_tooltip = string.Empty;
-		limit_type = LIMIT_TYPE.NONE;
+		zone_id = raw_data.zone_id;
+		zone_name = raw_data.zone_name;
+		in_world_id = raw_data.in_world_id;
+		zone_ordering = raw_data.zone_ordering;
+		zone_difficulty = raw_data.zone_difficulty;
+		zone_img_path = raw_data.zone_img_path;
+		zone_tooltip = raw_data.zone_tooltip;
+		limit_type = raw_data.limit_type;
 	}
 
 	public void Dispose()

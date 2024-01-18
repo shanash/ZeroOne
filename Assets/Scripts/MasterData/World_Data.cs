@@ -1,21 +1,20 @@
-﻿[System.Serializable]
-public class World_Data : System.IDisposable
+﻿public class World_Data : System.IDisposable
 {
 	///	<summary>
 	///	월드 인덱스
 	///	</summary>
-	public int world_id {get; set;}
+	public readonly int world_id;
 	///	<summary>
 	///	월드 명칭
 	///	</summary>
-	public string world_name {get; set;}
+	public readonly string world_name;
 
 	private bool disposed = false;
 
-	public World_Data()
+	public World_Data(Raw_World_Data raw_data)
 	{
-		world_id = 0;
-		world_name = string.Empty;
+		world_id = raw_data.world_id;
+		world_name = raw_data.world_name;
 	}
 
 	public void Dispose()

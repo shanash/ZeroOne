@@ -1,85 +1,85 @@
-﻿[System.Serializable]
-public class Player_Character_Data : System.IDisposable
+﻿public class Player_Character_Data : System.IDisposable
 {
 	///	<summary>
 	///	캐릭터 고유 인덱스
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	캐릭터 명칭
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	태생 성급
 	///	</summary>
-	public int default_star {get; set;}
+	public readonly int default_star;
 	///	<summary>
 	///	역할군
 	///	</summary>
-	public ROLE_TYPE role_type {get; set;}
+	public readonly ROLE_TYPE role_type;
 	///	<summary>
 	///	캐릭터가 속한 종족
 	///	</summary>
-	public TRIBE_TYPE tribe_type {get; set;}
+	public readonly TRIBE_TYPE tribe_type;
 	///	<summary>
 	///	프로필 정보_나이
 	///	</summary>
-	public int profile_age {get; set;}
+	public readonly int profile_age;
 	///	<summary>
 	///	프로필 정보_생일
 	///	</summary>
-	public int[] profile_birthday {get; set;}
+	public readonly int[] profile_birthday;
 	///	<summary>
 	///	프로필 정보_키
 	///	</summary>
-	public int profile_high {get; set;}
+	public readonly int profile_high;
 	///	<summary>
 	///	프로필 정보_취미
 	///	</summary>
-	public string profile_habby {get; set;}
+	public readonly string profile_habby;
 	///	<summary>
 	///	전투 정보 인덱스
 	///	</summary>
-	public int battle_info_id {get; set;}
+	public readonly int battle_info_id;
 	///	<summary>
 	///	전투용 프리팹
 	///	</summary>
-	public string prefab_path {get; set;}
+	public readonly string prefab_path;
 	///	<summary>
 	///	결과 UI 프리팹
 	///	</summary>
-	public string sd_prefab_path {get; set;}
+	public readonly string sd_prefab_path;
 	///	<summary>
 	///	캐릭터 아이콘
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 	///	<summary>
 	///	캐릭터 일러스트
 	///	</summary>
-	public string Illustration_path {get; set;}
+	public readonly string Illustration_path;
 	///	<summary>
 	///	캐릭터 설명
 	///	</summary>
-	public string script {get; set;}
+	public readonly string script;
 
 	private bool disposed = false;
 
-	public Player_Character_Data()
+	public Player_Character_Data(Raw_Player_Character_Data raw_data)
 	{
-		player_character_id = 0;
-		name_kr = string.Empty;
-		default_star = 0;
-		role_type = ROLE_TYPE.NONE;
-		tribe_type = TRIBE_TYPE.NONE;
-		profile_age = 0;
-		profile_high = 0;
-		profile_habby = string.Empty;
-		battle_info_id = 0;
-		prefab_path = string.Empty;
-		sd_prefab_path = string.Empty;
-		icon_path = string.Empty;
-		Illustration_path = string.Empty;
-		script = string.Empty;
+		player_character_id = raw_data.player_character_id;
+		name_kr = raw_data.name_kr;
+		default_star = raw_data.default_star;
+		role_type = raw_data.role_type;
+		tribe_type = raw_data.tribe_type;
+		profile_age = raw_data.profile_age;
+		profile_birthday = raw_data.profile_birthday != null ? (int[])raw_data.profile_birthday.Clone() : new int[0];
+		profile_high = raw_data.profile_high;
+		profile_habby = raw_data.profile_habby;
+		battle_info_id = raw_data.battle_info_id;
+		prefab_path = raw_data.prefab_path;
+		sd_prefab_path = raw_data.sd_prefab_path;
+		icon_path = raw_data.icon_path;
+		Illustration_path = raw_data.Illustration_path;
+		script = raw_data.script;
 	}
 
 	public void Dispose()

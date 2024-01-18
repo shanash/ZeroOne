@@ -10,8 +10,6 @@ public class Damage_Normal_Effect_Text : EffectBase
     readonly float VELOCITY = 100f;
 
 
-
-
     public override void SetData(params object[] data)
     {
         if (data.Length != 1)
@@ -88,6 +86,11 @@ public class Damage_Normal_Effect_Text : EffectBase
                 UnusedEffect();
             }
         }
+    }
+
+    public override void Show(bool show)
+    {
+        this.gameObject.SetActive(show);
     }
 
     public override void Despawned()

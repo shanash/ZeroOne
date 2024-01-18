@@ -1,41 +1,40 @@
-﻿[System.Serializable]
-public class Character_Piece_Data : System.IDisposable
+﻿public class Character_Piece_Data : System.IDisposable
 {
 	///	<summary>
 	///	캐릭터 아이디
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public string tooltip_text {get; set;}
+	public readonly string tooltip_text;
 	///	<summary>
 	///	판매가격
 	///	</summary>
-	public int sell_price {get; set;}
+	public readonly int sell_price;
 	///	<summary>
 	///	완전체 필요 개수
 	///	</summary>
-	public int make_need {get; set;}
+	public readonly int make_need;
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Character_Piece_Data()
+	public Character_Piece_Data(Raw_Character_Piece_Data raw_data)
 	{
-		player_character_id = 0;
-		name_kr = string.Empty;
-		tooltip_text = string.Empty;
-		sell_price = 0;
-		make_need = 0;
-		icon_path = string.Empty;
+		player_character_id = raw_data.player_character_id;
+		name_kr = raw_data.name_kr;
+		tooltip_text = raw_data.tooltip_text;
+		sell_price = raw_data.sell_price;
+		make_need = raw_data.make_need;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

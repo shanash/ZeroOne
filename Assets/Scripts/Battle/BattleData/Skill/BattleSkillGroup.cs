@@ -1,5 +1,4 @@
 using Cysharp.Text;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Collections.Generic;
 
 public abstract class BattleSkillGroup : BattleDataBase
@@ -66,6 +65,7 @@ public abstract class BattleSkillGroup : BattleDataBase
     }
 
     public virtual double GetCooltime() {  return 0; }
+    public virtual double GetRemainCooltime() { return 0; }
 
     /// <summary>
     /// 스킬 액션 이름 반환

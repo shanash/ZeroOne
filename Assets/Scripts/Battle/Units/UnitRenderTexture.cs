@@ -39,6 +39,7 @@ public class UnitRenderTexture : SkeletonRenderTexture
             if (Sort_Group == null)
             {
                 Sort_Group = quad.AddComponent<SortingGroup>();
+                Sort_Group.sortingLayerName = "Unit";
             }
         }
 
@@ -85,6 +86,30 @@ public class UnitRenderTexture : SkeletonRenderTexture
         quadMeshRenderer.SetPropertyBlock(Property_Block);
 
         this.enabled = false;
+    }
+
+    public void SetAlphaAnimation(float alpha, float duration, bool render_enable)
+    {
+        StartCoroutine(StartAlphaAnimation(alpha, duration, render_enable));
+    }
+    IEnumerator StartAlphaAnimation(float alpha, float duration, bool render_enable)
+    {
+        if (render_enable)
+        {
+            this.enabled = true;
+        }
+        float delta = 0f;
+        while (delta < duration)
+        {
+            delta += Time.deltaTime;
+            this.color.a = Mathf.Lerp(this.color.a, alpha, delta / duration);
+            yield return null;
+        }
+        this.color.a = alpha;
+        if (!render_enable)
+        {
+            this.enabled = false;
+        }
     }
 
     public HeroBase_V2 GetHeroBase_V2()

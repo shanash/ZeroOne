@@ -1,80 +1,80 @@
-﻿[System.Serializable]
-public class Npc_Battle_Data : System.IDisposable
+﻿public class Npc_Battle_Data : System.IDisposable
 {
 	///	<summary>
 	///	전투 인덱스
 	///	</summary>
-	public int npc_battle_id {get; set;}
+	public readonly int npc_battle_id;
 	///	<summary>
 	///	접근 사거리
 	///	</summary>
-	public double approach {get; set;}
+	public readonly double approach;
 	///	<summary>
 	///	배치 위치
 	///	</summary>
-	public POSITION_TYPE position_type {get; set;}
+	public readonly POSITION_TYPE position_type;
 	///	<summary>
 	///	스킬 패턴
 	///	</summary>
-	public int[] skill_pattern {get; set;}
+	public readonly int[] skill_pattern;
 	///	<summary>
 	///	패시브
 	///	</summary>
-	public int passive_skill_group_id {get; set;}
+	public readonly int passive_skill_group_id;
 	///	<summary>
 	///	궁극기
 	///	</summary>
-	public int special_skill_group_id {get; set;}
+	public readonly int special_skill_group_id;
 	///	<summary>
 	///	레벨
 	///	</summary>
-	public int npc_level {get; set;}
+	public readonly int npc_level;
 	///	<summary>
 	///	체력
 	///	</summary>
-	public double hp {get; set;}
+	public readonly double hp;
 	///	<summary>
 	///	공격력
 	///	</summary>
-	public double attack {get; set;}
+	public readonly double attack;
 	///	<summary>
 	///	방어력
 	///	</summary>
-	public double defend {get; set;}
+	public readonly double defend;
 	///	<summary>
 	///	회피
 	///	</summary>
-	public double evasion {get; set;}
+	public readonly double evasion;
 	///	<summary>
 	///	명중
 	///	</summary>
-	public double accuracy {get; set;}
+	public readonly double accuracy;
 	///	<summary>
 	///	전투 이동 속도
 	///	</summary>
-	public double move_speed {get; set;}
+	public readonly double move_speed;
 	///	<summary>
 	///	전투 대사 인덱스
 	///	</summary>
-	public string attack_script {get; set;}
+	public readonly string attack_script;
 
 	private bool disposed = false;
 
-	public Npc_Battle_Data()
+	public Npc_Battle_Data(Raw_Npc_Battle_Data raw_data)
 	{
-		npc_battle_id = 0;
-		approach = 0;
-		position_type = POSITION_TYPE.NONE;
-		passive_skill_group_id = 0;
-		special_skill_group_id = 0;
-		npc_level = 0;
-		hp = 0;
-		attack = 0;
-		defend = 0;
-		evasion = 0;
-		accuracy = 0;
-		move_speed = 0;
-		attack_script = string.Empty;
+		npc_battle_id = raw_data.npc_battle_id;
+		approach = raw_data.approach;
+		position_type = raw_data.position_type;
+		skill_pattern = raw_data.skill_pattern != null ? (int[])raw_data.skill_pattern.Clone() : new int[0];
+		passive_skill_group_id = raw_data.passive_skill_group_id;
+		special_skill_group_id = raw_data.special_skill_group_id;
+		npc_level = raw_data.npc_level;
+		hp = raw_data.hp;
+		attack = raw_data.attack;
+		defend = raw_data.defend;
+		evasion = raw_data.evasion;
+		accuracy = raw_data.accuracy;
+		move_speed = raw_data.move_speed;
+		attack_script = raw_data.attack_script;
 	}
 
 	public void Dispose()

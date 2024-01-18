@@ -1,51 +1,50 @@
-﻿[System.Serializable]
-public class Me_Resource_Data : System.IDisposable
+﻿public class Me_Resource_Data : System.IDisposable
 {
 	///	<summary>
 	///	메모리얼 인덱스
 	///	</summary>
-	public int memorial_id {get; set;}
+	public readonly int memorial_id;
 	///	<summary>
 	///	캐릭터 고유 인덱스
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	캐릭터 프리팹 키
 	///	</summary>
-	public string actor_prefab_key {get; set;}
+	public readonly string actor_prefab_key;
 	///	<summary>
 	///	배경 프리팹 키
 	///	</summary>
-	public string background_prefab_key {get; set;}
+	public readonly string background_prefab_key;
 	///	<summary>
 	///	프리팹 키
 	///	</summary>
-	public string prefab_key {get; set;}
+	public readonly string prefab_key;
 	///	<summary>
 	///	인트로 키
 	///	</summary>
-	public string intro_key {get; set;}
+	public readonly string intro_key;
 	///	<summary>
 	///	시작 상태
 	///	</summary>
-	public int state_id {get; set;}
+	public readonly int state_id;
 	///	<summary>
 	///	순서
 	///	</summary>
-	public int order {get; set;}
+	public readonly int order;
 
 	private bool disposed = false;
 
-	public Me_Resource_Data()
+	public Me_Resource_Data(Raw_Me_Resource_Data raw_data)
 	{
-		memorial_id = 0;
-		player_character_id = 0;
-		actor_prefab_key = string.Empty;
-		background_prefab_key = string.Empty;
-		prefab_key = string.Empty;
-		intro_key = string.Empty;
-		state_id = 0;
-		order = 0;
+		memorial_id = raw_data.memorial_id;
+		player_character_id = raw_data.player_character_id;
+		actor_prefab_key = raw_data.actor_prefab_key;
+		background_prefab_key = raw_data.background_prefab_key;
+		prefab_key = raw_data.prefab_key;
+		intro_key = raw_data.intro_key;
+		state_id = raw_data.state_id;
+		order = raw_data.order;
 	}
 
 	public void Dispose()

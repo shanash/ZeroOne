@@ -1,36 +1,35 @@
-﻿[System.Serializable]
-public class Expendable_Item_Data : System.IDisposable
+﻿public class Expendable_Item_Data : System.IDisposable
 {
 	///	<summary>
 	///	소모용 아이템 id
 	///	</summary>
-	public int expendable_item_id {get; set;}
+	public readonly int expendable_item_id;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public string tooltip_text {get; set;}
+	public readonly string tooltip_text;
 	///	<summary>
 	///	판매가격
 	///	</summary>
-	public int sell_price {get; set;}
+	public readonly int sell_price;
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Expendable_Item_Data()
+	public Expendable_Item_Data(Raw_Expendable_Item_Data raw_data)
 	{
-		expendable_item_id = 0;
-		name_kr = string.Empty;
-		tooltip_text = string.Empty;
-		sell_price = 0;
-		icon_path = string.Empty;
+		expendable_item_id = raw_data.expendable_item_id;
+		name_kr = raw_data.name_kr;
+		tooltip_text = raw_data.tooltip_text;
+		sell_price = raw_data.sell_price;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

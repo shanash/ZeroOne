@@ -2,6 +2,7 @@ using Cysharp.Text;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -30,6 +31,9 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     [SerializeField, Tooltip("Life Bar Pos")]
     protected Transform Life_Bar_Pos;
+
+    [SerializeField, Tooltip("Shadow")]
+    protected SpriteRenderer Shadow;
 
     [SerializeField, Tooltip("Start Projectile Type")]
     protected List<Start_Projectile_Pos_Data> Start_Projectile_Transforms;
@@ -325,6 +329,14 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
+                Battle_Mng.AllResumeUnitWithoutHero(this);
+                Battle_Mng.GetEffectFactory().OnResumeAndShow();
+
+                List<HeroBase_V2> targets = new List<HeroBase_V2>();
+                targets.Add(this);
+                targets.AddRange(Normal_Attack_Target);
+                Battle_Mng.ShowAllUnitWithoutTargets(targets);
+
                 UnsetPlayableDirector();
                 var skill = GetSkillManager().GetSpecialSkillGroup();
                 if (skill != null)
@@ -394,17 +406,47 @@ public partial class HeroBase_V2 : UnitBase_V2
         Team_Type = Team_Mng.Team_Type;
     }
 
-    /// <summary>
-    /// 스켈레톤 알파값 수정
-    /// </summary>
-    /// <param name="alpha"></param>
-    public void SetAlpha(float alpha)
+    
+    public void SetAlphaAnimation(float alpha, float duration, bool render_enable)
     {
         if (Render_Texture == null)
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
         }
-        Render_Texture.color.a = alpha;
+        Render_Texture.SetAlphaAnimation(alpha, duration, render_enable);
+        ShadowAlphaAnimation(alpha, duration);
+        if (alpha == 0f)
+        {
+            Life_Bar.HideLifeBar();
+        }
+    }
+    public void UnitRenderTextureEnable(bool enable)
+    {
+        Render_Texture.enabled = enable;
+    }
+
+    protected void ShadowAlphaAnimation(float alpha, float duration)
+    {
+        if (Shadow == null)
+        {
+            return;
+        }
+        StartCoroutine(StartShadowAlphaAnimation(alpha, duration));
+    }
+    IEnumerator StartShadowAlphaAnimation(float alpha, float duration)
+    {
+        float delta = 0f;
+        var color = Shadow.color;
+        while (delta < duration)
+        {
+            delta += Time.deltaTime;
+            color.a = Mathf.Lerp(Shadow.color.a, alpha, delta / duration);
+            Shadow.color = color;
+            yield return null;
+        }
+
+        color.a = alpha;
+        Shadow.color = color;
     }
 
 
@@ -1367,21 +1409,45 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     public void SpecialSkillExec()
     {
+        var state = GetCurrentState();
+        if (state == UNIT_STATES.SKILL_1 || state == UNIT_STATES.SKILL_READY_1 || state == UNIT_STATES.SKILL_END)
+        {
+            return;
+        }
+
         //  여러가지 상황상 궁극기를 사용할 수 없는 상황을 체크
         //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
         var skill = GetSkillManager().GetSpecialSkillGroup();
-        //if (!skill.IsPrepareCooltime())
-        //{
-        //    return;
-        //}
+        if (skill == null)
+        {
+            return;
+        }
+        if (!skill.IsPrepareCooltime())
+        {
+            return;
+        }
         var target_skill = skill.GetFirstSkillData();
         if (target_skill != null)
         {
             FindTargets(target_skill);
         }
+        //  주인공 이외의 모든 캐릭 pause
+        Battle_Mng.AllPauseUnitWithoutHero(this);
+
+        //  진행중이던 이펙트 모두 숨기기
+        Battle_Mng.GetEffectFactory().OnPauseAndHide();
+
+        //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
+        List<HeroBase_V2> targets = new List<HeroBase_V2>();
+        targets.Add(this);
+        targets.AddRange(Normal_Attack_Target);
+        Battle_Mng.HideAllUnitWithoutTargets(targets);
 
         Skeleton.AnimationState.ClearTracks();
-        Skill_Mng.SetNextSkillPattern();
+        if (state == UNIT_STATES.ATTACK_READY_1 || state == UNIT_STATES.ATTACK_1 || state == UNIT_STATES.ATTACK_END)
+        {
+            Skill_Mng.SetNextSkillPattern();
+        }
         
         ChangeState(UNIT_STATES.SKILL_READY_1);
 

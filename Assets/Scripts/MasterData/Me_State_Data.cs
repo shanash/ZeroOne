@@ -1,35 +1,35 @@
-﻿[System.Serializable]
-public class Me_State_Data : System.IDisposable
+﻿public class Me_State_Data : System.IDisposable
 {
 	///	<summary>
 	///	상태 고유 아이디
 	///	</summary>
-	public int state_id {get; set;}
+	public readonly int state_id;
 	///	<summary>
 	///	캐릭터 고유 아이디
 	///	</summary>
-	public int player_character_id {get; set;}
+	public readonly int player_character_id;
 	///	<summary>
 	///	아이들 애니메이션 이름
 	///	</summary>
-	public string idle_animation_name {get; set;}
+	public readonly string idle_animation_name;
 	///	<summary>
 	///	대기시 자동재생될 반응
 	///	</summary>
-	public int[] bored_chatmotion_ids {get; set;}
+	public readonly int[] bored_chatmotion_ids;
 	///	<summary>
 	///	자동재생될 아이들 애니메이션 출력횟수
 	///	</summary>
-	public int bored_condition_count {get; set;}
+	public readonly int bored_condition_count;
 
 	private bool disposed = false;
 
-	public Me_State_Data()
+	public Me_State_Data(Raw_Me_State_Data raw_data)
 	{
-		state_id = 0;
-		player_character_id = 0;
-		idle_animation_name = string.Empty;
-		bored_condition_count = 0;
+		state_id = raw_data.state_id;
+		player_character_id = raw_data.player_character_id;
+		idle_animation_name = raw_data.idle_animation_name;
+		bored_chatmotion_ids = raw_data.bored_chatmotion_ids != null ? (int[])raw_data.bored_chatmotion_ids.Clone() : new int[0];
+		bored_condition_count = raw_data.bored_condition_count;
 	}
 
 	public void Dispose()

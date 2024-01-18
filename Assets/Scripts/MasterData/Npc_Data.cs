@@ -1,46 +1,45 @@
-﻿[System.Serializable]
-public class Npc_Data : System.IDisposable
+﻿public class Npc_Data : System.IDisposable
 {
 	///	<summary>
 	///	npc id
 	///	</summary>
-	public int npc_data_id {get; set;}
+	public readonly int npc_data_id;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	종족
 	///	</summary>
-	public TRIBE_TYPE tribe_type {get; set;}
+	public readonly TRIBE_TYPE tribe_type;
 	///	<summary>
 	///	npc 타입
 	///	</summary>
-	public NPC_TYPE npc_type {get; set;}
+	public readonly NPC_TYPE npc_type;
 	///	<summary>
 	///	전투 정보 인덱스
 	///	</summary>
-	public int npc_battle_id {get; set;}
+	public readonly int npc_battle_id;
 	///	<summary>
 	///	프리팹
 	///	</summary>
-	public string prefab_path {get; set;}
+	public readonly string prefab_path;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Npc_Data()
+	public Npc_Data(Raw_Npc_Data raw_data)
 	{
-		npc_data_id = 0;
-		name_kr = string.Empty;
-		tribe_type = TRIBE_TYPE.NONE;
-		npc_type = NPC_TYPE.NONE;
-		npc_battle_id = 0;
-		prefab_path = string.Empty;
-		icon_path = string.Empty;
+		npc_data_id = raw_data.npc_data_id;
+		name_kr = raw_data.name_kr;
+		tribe_type = raw_data.tribe_type;
+		npc_type = raw_data.npc_type;
+		npc_battle_id = raw_data.npc_battle_id;
+		prefab_path = raw_data.prefab_path;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

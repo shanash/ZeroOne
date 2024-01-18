@@ -5820,8 +5820,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7431480570141930048
@@ -5969,8 +5969,8 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7398527384412396415}
   m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &2322786060547746684
@@ -5987,13 +5987,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Skeleton: {fileID: 7431480570141930048}
   Life_Bar_Pos: {fileID: 961353610174853882}
-  Sd_Body_Transforms:
-  - Body_Type: 3
-    Trans: {fileID: 7271205155198806266}
-  - Body_Type: 2
-    Trans: {fileID: 878493846750774613}
-  - Body_Type: 1
-    Trans: {fileID: 70391649803749215}
+  Shadow: {fileID: 0}
+  Start_Projectile_Transforms: []
   Reach_Pos_Transforms:
   - Pos_Type: 3
     Trans: {fileID: 7271205155198806266}
@@ -6001,6 +5996,7 @@ MonoBehaviour:
     Trans: {fileID: 878493846750774613}
   - Pos_Type: 1
     Trans: {fileID: 70391649803749215}
+  Ultimate_Skill_Playable_Director: {fileID: 0}
 --- !u!1 &7467486625857937532
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,81 +1,82 @@
-﻿[System.Serializable]
-public class Npc_Skill_Duration_Data : System.IDisposable
+﻿public class Npc_Skill_Duration_Data : System.IDisposable
 {
 	///	<summary>
 	///	지속성 스킬 효과 인덱스
 	///	</summary>
-	public int npc_skill_duration_id {get; set;}
+	public readonly int npc_skill_duration_id;
 	///	<summary>
 	///	지속성 효과 타입
 	///	</summary>
-	public DURATION_EFFECT_TYPE duration_effect_type {get; set;}
+	public readonly DURATION_EFFECT_TYPE duration_effect_type;
 	///	<summary>
 	///	지속성 방식 타입
 	///	</summary>
-	public PERSISTENCE_TYPE persistence_type {get; set;}
+	public readonly PERSISTENCE_TYPE persistence_type;
 	///	<summary>
 	///	지속 시간
 	///	</summary>
-	public double time {get; set;}
+	public readonly double time;
 	///	<summary>
 	///	지속 횟수
 	///	</summary>
-	public int count {get; set;}
+	public readonly int count;
 	///	<summary>
 	///	반복 일회성 효과
 	///	</summary>
-	public int[] repeat_npc_onetime_ids {get; set;}
+	public readonly int[] repeat_npc_onetime_ids;
 	///	<summary>
 	///	반복 주기
 	///	</summary>
-	public double repeat_interval {get; set;}
+	public readonly double repeat_interval;
 	///	<summary>
 	///	종료 일회성 효과
 	///	</summary>
-	public int[] finish_npc_onetime_ids {get; set;}
+	public readonly int[] finish_npc_onetime_ids;
 	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
-	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
+	public readonly STAT_MULTIPLE_TYPE multiple_type;
 	///	<summary>
 	///	절대값
 	///	</summary>
-	public int value {get; set;}
+	public readonly int value;
 	///	<summary>
 	///	배율
 	///	</summary>
-	public double multiple {get; set;}
+	public readonly double multiple;
 	///	<summary>
 	///	확률
 	///	적용 확률
 	///	10000분율을 기준으로 한다.
 	///	</summary>
-	public double rate {get; set;}
+	public readonly double rate;
 	///	<summary>
 	///	이펙트 프리팹
 	///	</summary>
-	public string effect_path {get; set;}
+	public readonly string effect_path;
 	///	<summary>
 	///	중첩 가능
 	///	</summary>
-	public bool is_overlapable {get; set;}
+	public readonly bool is_overlapable;
 
 	private bool disposed = false;
 
-	public Npc_Skill_Duration_Data()
+	public Npc_Skill_Duration_Data(Raw_Npc_Skill_Duration_Data raw_data)
 	{
-		npc_skill_duration_id = 0;
-		duration_effect_type = DURATION_EFFECT_TYPE.NONE;
-		persistence_type = PERSISTENCE_TYPE.NONE;
-		time = 0;
-		count = 0;
-		repeat_interval = 0;
-		multiple_type = STAT_MULTIPLE_TYPE.NONE;
-		value = 0;
-		multiple = 0;
-		rate = 0;
-		effect_path = string.Empty;
-		is_overlapable = false;
+		npc_skill_duration_id = raw_data.npc_skill_duration_id;
+		duration_effect_type = raw_data.duration_effect_type;
+		persistence_type = raw_data.persistence_type;
+		time = raw_data.time;
+		count = raw_data.count;
+		repeat_npc_onetime_ids = raw_data.repeat_npc_onetime_ids != null ? (int[])raw_data.repeat_npc_onetime_ids.Clone() : new int[0];
+		repeat_interval = raw_data.repeat_interval;
+		finish_npc_onetime_ids = raw_data.finish_npc_onetime_ids != null ? (int[])raw_data.finish_npc_onetime_ids.Clone() : new int[0];
+		multiple_type = raw_data.multiple_type;
+		value = raw_data.value;
+		multiple = raw_data.multiple;
+		rate = raw_data.rate;
+		effect_path = raw_data.effect_path;
+		is_overlapable = raw_data.is_overlapable;
 	}
 
 	public void Dispose()

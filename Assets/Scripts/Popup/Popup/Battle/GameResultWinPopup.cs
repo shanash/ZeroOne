@@ -70,7 +70,6 @@ public class GameResultWinPopup : PopupBase
 
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
 
-
     public override void ShowPopup(params object[] data)
     {
         base.ShowPopup(data);

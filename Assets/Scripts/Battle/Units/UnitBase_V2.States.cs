@@ -57,6 +57,11 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
         return UNIT_STATES.NONE;
     }
 
+    public bool IsPreviousStatePause()
+    {
+        return GetPreviousState() == UNIT_STATES.PAUSE;
+    }
+
     public virtual void OnUpdate(float dt)
     {
         FSM?.UpdateState();

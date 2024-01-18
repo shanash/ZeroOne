@@ -1,31 +1,30 @@
-﻿[System.Serializable]
-public class Editor_Stage_Data : System.IDisposable
+﻿public class Editor_Stage_Data : System.IDisposable
 {
 	///	<summary>
 	///	스테이지 인덱스
 	///	</summary>
-	public int stage_id {get; set;}
+	public readonly int stage_id;
 	///	<summary>
 	///	스테이지 별 개수
 	///	</summary>
-	public int stage_star_count {get; set;}
+	public readonly int stage_star_count;
 	///	<summary>
 	///	스테이지 웨이브 개수
 	///	</summary>
-	public int stage_wave_count {get; set;}
+	public readonly int stage_wave_count;
 	///	<summary>
 	///	웨이브 연결 ID
 	///	</summary>
-	public int wave_group_id {get; set;}
+	public readonly int wave_group_id;
 
 	private bool disposed = false;
 
-	public Editor_Stage_Data()
+	public Editor_Stage_Data(Raw_Editor_Stage_Data raw_data)
 	{
-		stage_id = 0;
-		stage_star_count = 0;
-		stage_wave_count = 0;
-		wave_group_id = 0;
+		stage_id = raw_data.stage_id;
+		stage_star_count = raw_data.stage_star_count;
+		stage_wave_count = raw_data.stage_wave_count;
+		wave_group_id = raw_data.wave_group_id;
 	}
 
 	public void Dispose()

@@ -14,6 +14,9 @@ public class SkillEffectBase : EffectBase
 
     protected EffectComponent Effect_Comp;
 
+    protected RendererSortingZ Sorting_Z;
+
+
     public void SetBattleSendData(BATTLE_SEND_DATA d)
     {
         this.Send_Data = d;
@@ -289,11 +292,33 @@ public class SkillEffectBase : EffectBase
         }
     }
 
+    protected void CheckRenderSortingZ()
+    {
+        if (Sorting_Z == null)
+        {
+            Sorting_Z = GetComponent<RendererSortingZ>();
+        }
+    }
+
+    public override void Show(bool show)
+    {
+        CheckRenderSortingZ();
+        Sorting_Z.ShowGameObject(show);
+    }
+
     public override void Spawned()
     {
         base.Spawned();
         CheckEffectComponent();
+        CheckRenderSortingZ();
         Send_Data.Reset();
+    }
+
+    public override void Despawned()
+    {
+        base.Despawned();
+        CheckRenderSortingZ();
+        Sorting_Z.ResetSortingZ();
     }
 
 

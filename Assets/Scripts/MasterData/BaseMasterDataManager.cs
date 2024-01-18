@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class BaseMasterDataManager
 {
@@ -44,6 +44,11 @@ public class BaseMasterDataManager
 		private set;
 	}
 	protected List<Expendable_Item_Data> _Expendable_Item_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Goods_Data> _Goods_Data
 	{
 		get;
 		private set;
@@ -236,6 +241,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Sta_Potion_Data();
 		await LoadMaster_Favorite_Item_Data();
 		await LoadMaster_Expendable_Item_Data();
+		await LoadMaster_Goods_Data();
 		await LoadMaster_Item_Data();
 		await LoadMaster_Item_Piece_Data();
 		await LoadMaster_Equipment_Data();
@@ -284,247 +290,463 @@ public class BaseMasterDataManager
 	protected async Task LoadMaster_Editor_Stage_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Stage_Data");
-		_Editor_Stage_Data = JsonConvert.DeserializeObject<List<Editor_Stage_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Editor_Stage_Data>>(json);
+		_Editor_Stage_Data = new List<Editor_Stage_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Editor_Stage_Data.Add(new Editor_Stage_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Editor_Wave_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Wave_Data");
-		_Editor_Wave_Data = JsonConvert.DeserializeObject<List<Editor_Wave_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Editor_Wave_Data>>(json);
+		_Editor_Wave_Data = new List<Editor_Wave_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Editor_Wave_Data.Add(new Editor_Wave_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Type_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Type_Data");
-		_Item_Type_Data = JsonConvert.DeserializeObject<List<Item_Type_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Type_Data>>(json);
+		_Item_Type_Data = new List<Item_Type_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Type_Data.Add(new Item_Type_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Character_Piece_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Character_Piece_Data");
-		_Character_Piece_Data = JsonConvert.DeserializeObject<List<Character_Piece_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Character_Piece_Data>>(json);
+		_Character_Piece_Data = new List<Character_Piece_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Character_Piece_Data.Add(new Character_Piece_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Exp_Potion_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Exp_Potion_Data");
-		_Exp_Potion_Data = JsonConvert.DeserializeObject<List<Exp_Potion_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Exp_Potion_Data>>(json);
+		_Exp_Potion_Data = new List<Exp_Potion_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Exp_Potion_Data.Add(new Exp_Potion_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Sta_Potion_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Sta_Potion_Data");
-		_Sta_Potion_Data = JsonConvert.DeserializeObject<List<Sta_Potion_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Sta_Potion_Data>>(json);
+		_Sta_Potion_Data = new List<Sta_Potion_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Sta_Potion_Data.Add(new Sta_Potion_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Favorite_Item_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Favorite_Item_Data");
-		_Favorite_Item_Data = JsonConvert.DeserializeObject<List<Favorite_Item_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Favorite_Item_Data>>(json);
+		_Favorite_Item_Data = new List<Favorite_Item_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Favorite_Item_Data.Add(new Favorite_Item_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Expendable_Item_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
-		_Expendable_Item_Data = JsonConvert.DeserializeObject<List<Expendable_Item_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Expendable_Item_Data>>(json);
+		_Expendable_Item_Data = new List<Expendable_Item_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Expendable_Item_Data.Add(new Expendable_Item_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Goods_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Goods_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Goods_Data>>(json);
+		_Goods_Data = new List<Goods_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Goods_Data.Add(new Goods_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Data");
-		_Item_Data = JsonConvert.DeserializeObject<List<Item_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Data>>(json);
+		_Item_Data = new List<Item_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Data.Add(new Item_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Piece_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Piece_Data");
-		_Item_Piece_Data = JsonConvert.DeserializeObject<List<Item_Piece_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Piece_Data>>(json);
+		_Item_Piece_Data = new List<Item_Piece_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Piece_Data.Add(new Item_Piece_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Equipment_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Equipment_Data");
-		_Equipment_Data = JsonConvert.DeserializeObject<List<Equipment_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Equipment_Data>>(json);
+		_Equipment_Data = new List<Equipment_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Equipment_Data.Add(new Equipment_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Level_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Level_Data");
-		_Player_Level_Data = JsonConvert.DeserializeObject<List<Player_Level_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Level_Data>>(json);
+		_Player_Level_Data = new List<Player_Level_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Level_Data.Add(new Player_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Level_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Level_Data");
-		_Player_Character_Level_Data = JsonConvert.DeserializeObject<List<Player_Character_Level_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Level_Data>>(json);
+		_Player_Character_Level_Data = new List<Player_Character_Level_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Level_Data.Add(new Player_Character_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Resource_Data");
-		_Me_Resource_Data = JsonConvert.DeserializeObject<List<Me_Resource_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Resource_Data>>(json);
+		_Me_Resource_Data = new List<Me_Resource_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Resource_Data.Add(new Me_Resource_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_State_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_State_Data");
-		_Me_State_Data = JsonConvert.DeserializeObject<List<Me_State_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_State_Data>>(json);
+		_Me_State_Data = new List<Me_State_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_State_Data.Add(new Me_State_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Interaction_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Interaction_Data");
-		_Me_Interaction_Data = JsonConvert.DeserializeObject<List<Me_Interaction_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Interaction_Data>>(json);
+		_Me_Interaction_Data = new List<Me_Interaction_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Interaction_Data.Add(new Me_Interaction_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Chat_Motion_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Chat_Motion_Data");
-		_Me_Chat_Motion_Data = JsonConvert.DeserializeObject<List<Me_Chat_Motion_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Chat_Motion_Data>>(json);
+		_Me_Chat_Motion_Data = new List<Me_Chat_Motion_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Chat_Motion_Data.Add(new Me_Chat_Motion_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Serifu_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Serifu_Data");
-		_Me_Serifu_Data = JsonConvert.DeserializeObject<List<Me_Serifu_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Serifu_Data>>(json);
+		_Me_Serifu_Data = new List<Me_Serifu_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Serifu_Data.Add(new Me_Serifu_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Group()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Skill_Group");
-		_Npc_Skill_Group = JsonConvert.DeserializeObject<List<Npc_Skill_Group>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Group>>(json);
+		_Npc_Skill_Group = new List<Npc_Skill_Group>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Group.Add(new Npc_Skill_Group(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Skill_Data");
-		_Npc_Skill_Data = JsonConvert.DeserializeObject<List<Npc_Skill_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Data>>(json);
+		_Npc_Skill_Data = new List<Npc_Skill_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Data.Add(new Npc_Skill_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Onetime_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Skill_Onetime_Data");
-		_Npc_Skill_Onetime_Data = JsonConvert.DeserializeObject<List<Npc_Skill_Onetime_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Onetime_Data>>(json);
+		_Npc_Skill_Onetime_Data = new List<Npc_Skill_Onetime_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Onetime_Data.Add(new Npc_Skill_Onetime_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Duration_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Skill_Duration_Data");
-		_Npc_Skill_Duration_Data = JsonConvert.DeserializeObject<List<Npc_Skill_Duration_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Duration_Data>>(json);
+		_Npc_Skill_Duration_Data = new List<Npc_Skill_Duration_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Duration_Data.Add(new Npc_Skill_Duration_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Data");
-		_Npc_Data = JsonConvert.DeserializeObject<List<Npc_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Data>>(json);
+		_Npc_Data = new List<Npc_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Data.Add(new Npc_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Battle_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Battle_Data");
-		_Npc_Battle_Data = JsonConvert.DeserializeObject<List<Npc_Battle_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Battle_Data>>(json);
+		_Npc_Battle_Data = new List<Npc_Battle_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Battle_Data.Add(new Npc_Battle_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Level_Stat_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Npc_Level_Stat_Data");
-		_Npc_Level_Stat_Data = JsonConvert.DeserializeObject<List<Npc_Level_Stat_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Level_Stat_Data>>(json);
+		_Npc_Level_Stat_Data = new List<Npc_Level_Stat_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Level_Stat_Data.Add(new Npc_Level_Stat_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Group()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Skill_Group");
-		_Player_Character_Skill_Group = JsonConvert.DeserializeObject<List<Player_Character_Skill_Group>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Group>>(json);
+		_Player_Character_Skill_Group = new List<Player_Character_Skill_Group>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Group.Add(new Player_Character_Skill_Group(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Skill_Data");
-		_Player_Character_Skill_Data = JsonConvert.DeserializeObject<List<Player_Character_Skill_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Data>>(json);
+		_Player_Character_Skill_Data = new List<Player_Character_Skill_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Data.Add(new Player_Character_Skill_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Onetime_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Skill_Onetime_Data");
-		_Player_Character_Skill_Onetime_Data = JsonConvert.DeserializeObject<List<Player_Character_Skill_Onetime_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Onetime_Data>>(json);
+		_Player_Character_Skill_Onetime_Data = new List<Player_Character_Skill_Onetime_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Onetime_Data.Add(new Player_Character_Skill_Onetime_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Duration_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Skill_Duration_Data");
-		_Player_Character_Skill_Duration_Data = JsonConvert.DeserializeObject<List<Player_Character_Skill_Duration_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Duration_Data>>(json);
+		_Player_Character_Skill_Duration_Data = new List<Player_Character_Skill_Duration_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Duration_Data.Add(new Player_Character_Skill_Duration_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Data");
-		_Player_Character_Data = JsonConvert.DeserializeObject<List<Player_Character_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Data>>(json);
+		_Player_Character_Data = new List<Player_Character_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Data.Add(new Player_Character_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Battle_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Battle_Data");
-		_Player_Character_Battle_Data = JsonConvert.DeserializeObject<List<Player_Character_Battle_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Battle_Data>>(json);
+		_Player_Character_Battle_Data = new List<Player_Character_Battle_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Battle_Data.Add(new Player_Character_Battle_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Position_Icon_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Position_Icon_Data");
-		_Position_Icon_Data = JsonConvert.DeserializeObject<List<Position_Icon_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Position_Icon_Data>>(json);
+		_Position_Icon_Data = new List<Position_Icon_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Position_Icon_Data.Add(new Position_Icon_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Role_Icon_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Role_Icon_Data");
-		_Role_Icon_Data = JsonConvert.DeserializeObject<List<Role_Icon_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Role_Icon_Data>>(json);
+		_Role_Icon_Data = new List<Role_Icon_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Role_Icon_Data.Add(new Role_Icon_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_First_Reward_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/First_Reward_Data");
-		_First_Reward_Data = JsonConvert.DeserializeObject<List<First_Reward_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_First_Reward_Data>>(json);
+		_First_Reward_Data = new List<First_Reward_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_First_Reward_Data.Add(new First_Reward_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Repeat_Reward_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Repeat_Reward_Data");
-		_Repeat_Reward_Data = JsonConvert.DeserializeObject<List<Repeat_Reward_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Repeat_Reward_Data>>(json);
+		_Repeat_Reward_Data = new List<Repeat_Reward_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Repeat_Reward_Data.Add(new Repeat_Reward_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Star_Reward_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Star_Reward_Data");
-		_Star_Reward_Data = JsonConvert.DeserializeObject<List<Star_Reward_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Star_Reward_Data>>(json);
+		_Star_Reward_Data = new List<Star_Reward_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Star_Reward_Data.Add(new Star_Reward_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Reward_Set_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Reward_Set_Data");
-		_Reward_Set_Data = JsonConvert.DeserializeObject<List<Reward_Set_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Reward_Set_Data>>(json);
+		_Reward_Set_Data = new List<Reward_Set_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Reward_Set_Data.Add(new Reward_Set_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_World_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/World_Data");
-		_World_Data = JsonConvert.DeserializeObject<List<World_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_World_Data>>(json);
+		_World_Data = new List<World_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_World_Data.Add(new World_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Zone_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Zone_Data");
-		_Zone_Data = JsonConvert.DeserializeObject<List<Zone_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Zone_Data>>(json);
+		_Zone_Data = new List<Zone_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Zone_Data.Add(new Zone_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Stage_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Stage_Data");
-		_Stage_Data = JsonConvert.DeserializeObject<List<Stage_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Stage_Data>>(json);
+		_Stage_Data = new List<Stage_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Stage_Data.Add(new Stage_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Wave_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Wave_Data");
-		_Wave_Data = JsonConvert.DeserializeObject<List<Wave_Data>>(json);
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Wave_Data>>(json);
+		_Wave_Data = new List<Wave_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Wave_Data.Add(new Wave_Data(raw_data));
+		}
 	}
 
 	protected async void Check_Editor_Stage_Data()
@@ -588,6 +810,14 @@ public class BaseMasterDataManager
 		if(_Expendable_Item_Data == null)
 		{
 			await LoadMaster_Expendable_Item_Data();
+		}
+	}
+
+	protected async void Check_Goods_Data()
+	{
+		if(_Goods_Data == null)
+		{
+			await LoadMaster_Goods_Data();
 		}
 	}
 

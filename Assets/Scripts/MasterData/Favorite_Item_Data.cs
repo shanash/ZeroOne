@@ -1,41 +1,40 @@
-﻿[System.Serializable]
-public class Favorite_Item_Data : System.IDisposable
+﻿public class Favorite_Item_Data : System.IDisposable
 {
 	///	<summary>
 	///	인덱스
 	///	</summary>
-	public int favorite_item_id {get; set;}
+	public readonly int favorite_item_id;
 	///	<summary>
 	///	한글명
 	///	</summary>
-	public string item_name_kr {get; set;}
+	public readonly string item_name_kr;
 	///	<summary>
 	///	사용 효과
 	///	</summary>
-	public int use_effect {get; set;}
+	public readonly int use_effect;
 	///	<summary>
 	///	툴팁 TEXT
 	///	</summary>
-	public string item_tooltip_text {get; set;}
+	public readonly string item_tooltip_text;
 	///	<summary>
 	///	판매 가격
 	///	</summary>
-	public int sell_price {get; set;}
+	public readonly int sell_price;
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public string icon_path {get; set;}
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
-	public Favorite_Item_Data()
+	public Favorite_Item_Data(Raw_Favorite_Item_Data raw_data)
 	{
-		favorite_item_id = 0;
-		item_name_kr = string.Empty;
-		use_effect = 0;
-		item_tooltip_text = string.Empty;
-		sell_price = 0;
-		icon_path = string.Empty;
+		favorite_item_id = raw_data.favorite_item_id;
+		item_name_kr = raw_data.item_name_kr;
+		use_effect = raw_data.use_effect;
+		item_tooltip_text = raw_data.item_tooltip_text;
+		sell_price = raw_data.sell_price;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

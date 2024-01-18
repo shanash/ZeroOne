@@ -55,7 +55,7 @@ public class Hero_100001 : HeroBase_V2
                 }
                 else if (track.name.Equals("ActiveGroupCameraAnimationTrack"))
                 {
-                    //active_group.AddMember(this.transform, 1, 2);
+                    active_group_cam.Follow = active_group.transform;
                     int t_cnt = Normal_Attack_Target.Count;
                     float weight = 1f / t_cnt;
                     for (int i = 0; i < t_cnt; i++)
@@ -104,6 +104,13 @@ public class Hero_100001 : HeroBase_V2
         {
             character_cam.Follow = null;
         }
+
+        var active_group_cam = virtual_mng.GetActiveTargetGroupCamera();
+        if (active_group_cam != null)
+        {
+            active_group_cam.Follow = null;
+        }
+
 
         var active_target_group = virtual_mng.GetActiveTargetGroup();
         if (active_target_group != null)

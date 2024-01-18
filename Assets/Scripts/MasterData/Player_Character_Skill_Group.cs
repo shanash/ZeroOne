@@ -1,57 +1,56 @@
-﻿[System.Serializable]
-public class Player_Character_Skill_Group : System.IDisposable
+﻿public class Player_Character_Skill_Group : System.IDisposable
 {
 	///	<summary>
 	///	스킬 그룹 인덱스
 	///	</summary>
-	public int pc_skill_group_id {get; set;}
+	public readonly int pc_skill_group_id;
 	///	<summary>
 	///	스킬 이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	다음 스킬 사용 
 	///	가능 쿨타임
 	///	</summary>
-	public double skill_use_delay {get; set;}
+	public readonly double skill_use_delay;
 	///	<summary>
 	///	스킬 타입
 	///	</summary>
-	public SKILL_TYPE skill_type {get; set;}
+	public readonly SKILL_TYPE skill_type;
 	///	<summary>
 	///	스킬 설명
 	///	</summary>
-	public string script {get; set;}
+	public readonly string script;
 	///	<summary>
 	///	스킬 아이콘
 	///	</summary>
-	public string icon {get; set;}
+	public readonly string icon;
 	///	<summary>
 	///	액션
 	///	</summary>
-	public string action_name {get; set;}
+	public readonly string action_name;
 	///	<summary>
 	///	캐스팅 이펙트
 	///	</summary>
-	public string cast_effect_path {get; set;}
+	public readonly string cast_effect_path;
 	///	<summary>
 	///	이펙트 지속시간
 	///	</summary>
-	public double effect_duration {get; set;}
+	public readonly double effect_duration;
 
 	private bool disposed = false;
 
-	public Player_Character_Skill_Group()
+	public Player_Character_Skill_Group(Raw_Player_Character_Skill_Group raw_data)
 	{
-		pc_skill_group_id = 0;
-		name_kr = string.Empty;
-		skill_use_delay = 0;
-		skill_type = SKILL_TYPE.NONE;
-		script = string.Empty;
-		icon = string.Empty;
-		action_name = string.Empty;
-		cast_effect_path = string.Empty;
-		effect_duration = 0;
+		pc_skill_group_id = raw_data.pc_skill_group_id;
+		name_kr = raw_data.name_kr;
+		skill_use_delay = raw_data.skill_use_delay;
+		skill_type = raw_data.skill_type;
+		script = raw_data.script;
+		icon = raw_data.icon;
+		action_name = raw_data.action_name;
+		cast_effect_path = raw_data.cast_effect_path;
+		effect_duration = raw_data.effect_duration;
 	}
 
 	public void Dispose()

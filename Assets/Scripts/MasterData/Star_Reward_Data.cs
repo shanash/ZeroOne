@@ -1,41 +1,40 @@
-﻿[System.Serializable]
-public class Star_Reward_Data : System.IDisposable
+﻿public class Star_Reward_Data : System.IDisposable
 {
 	///	<summary>
 	///	보상 고유 인덱스
 	///	</summary>
-	public int star_reward_id {get; set;}
+	public readonly int star_reward_id;
 	///	<summary>
 	///	보상 그룹 아이디
 	///	</summary>
-	public int star_reward_group_id {get; set;}
+	public readonly int star_reward_group_id;
 	///	<summary>
 	///	별 포인트
 	///	</summary>
-	public int star_point {get; set;}
+	public readonly int star_point;
 	///	<summary>
 	///	타입
 	///	</summary>
-	public ITEM_TYPE item_type {get; set;}
+	public readonly ITEM_TYPE item_type;
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public int item_id {get; set;}
+	public readonly int item_id;
 	///	<summary>
 	///	지급 수량
 	///	</summary>
-	public int item_count {get; set;}
+	public readonly int item_count;
 
 	private bool disposed = false;
 
-	public Star_Reward_Data()
+	public Star_Reward_Data(Raw_Star_Reward_Data raw_data)
 	{
-		star_reward_id = 0;
-		star_reward_group_id = 0;
-		star_point = 0;
-		item_type = ITEM_TYPE.NONE;
-		item_id = 0;
-		item_count = 0;
+		star_reward_id = raw_data.star_reward_id;
+		star_reward_group_id = raw_data.star_reward_group_id;
+		star_point = raw_data.star_point;
+		item_type = raw_data.item_type;
+		item_id = raw_data.item_id;
+		item_count = raw_data.item_count;
 	}
 
 	public void Dispose()

@@ -37,7 +37,10 @@ public class Heal_Normal_Effect_Text : EffectBase
         }
     }
 
-
+    public override void Show(bool show)
+    {
+        this.gameObject.SetActive(show);
+    }
     public override void Despawned()
     {
         Heal_Text.text = "";

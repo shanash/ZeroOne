@@ -11,6 +11,7 @@ public enum SKILL_SLOT_EVENT_TYPE
     HITTED,                     //  피격
     LIFE_UPDATE,                //  체력 게이지 업데이트
     DURATION_SKILL_ICON_UPDATE, //  지속성 효과 아이콘 업데이트
+    COOLTIME_INIT,              //  쿨타임 최초 업데이트
 
     DEATH,                      //  죽었을 때
 
@@ -99,7 +100,15 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             {
                 return;
             }
-            Hero?.SpecialSkillExec();
+            var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
+            if (skill_group == null)
+            {
+                return;
+            }
+            if (skill_group.IsPrepareCooltime())
+            {
+                Hero?.SpecialSkillExec();
+            }
         }
         else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)
         {
@@ -135,6 +144,9 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             case SKILL_SLOT_EVENT_TYPE.DEATH:
                 UpdateDeath();
                 break;
+            case SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT:
+                UpdateCooltime();
+                break;
             default:
                 Debug.Assert(false);
                 break;
@@ -169,6 +181,39 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         UpdateLifeBar();
     }
 
+    void UpdateCooltime()
+    {
+        var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
+        if (skill_group == null)
+        {
+            return;
+        }
+        if (skill_group.IsPrepareCooltime())
+        {
+            if (!Skill_Ready.gameObject.activeSelf)
+            {
+                Skill_Ready.gameObject.SetActive(true);
+            }
+            if (Cooltime_Gauge.gameObject.activeSelf)
+            {
+                Cooltime_Gauge.gameObject.SetActive(false);
+            }
+            return;
+        }
+        if (Skill_Ready.gameObject.activeSelf)
+        {
+            Skill_Ready.gameObject.SetActive(false);
+        }
+        if (!Cooltime_Gauge.gameObject.activeSelf)
+        {
+            Cooltime_Gauge.gameObject.SetActive(true);
+        }
+        float cooltime = (float)skill_group.GetCooltime();
+        float remain_time = (float)skill_group.GetRemainCooltime();
+        float per = Mathf.Clamp01(remain_time / cooltime);
+        Cooltime_Gauge.fillAmount = (float)per;
+        Cooltime_Text.text = remain_time.ToString("N0");
+    }
 
     #endregion
 
@@ -216,6 +261,11 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         {
             return;
         }
-
+        var state = Hero.GetCurrentState();
+        if (state < UNIT_STATES.IDLE)
+        {
+            return;
+        }
+        UpdateCooltime();
     }
 }

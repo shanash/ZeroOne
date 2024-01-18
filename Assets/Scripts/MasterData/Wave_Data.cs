@@ -1,49 +1,51 @@
-﻿[System.Serializable]
-public class Wave_Data : System.IDisposable
+﻿public class Wave_Data : System.IDisposable
 {
 	///	<summary>
 	///	웨이브 그룹 ID
 	///	</summary>
-	public int wave_group_id {get; set;}
+	public readonly int wave_group_id;
 	///	<summary>
 	///	웨이브 진행 스테이지
 	///	</summary>
-	public int stage_id {get; set;}
+	public readonly int stage_id;
 	///	<summary>
 	///	웨이브 순서
 	///	</summary>
-	public int wave_sequence {get; set;}
+	public readonly int wave_sequence;
 	///	<summary>
 	///	웨이브에 출현하는
 	///	적 최대 마리 수
 	///	</summary>
-	public int enemy_appearance_count {get; set;}
+	public readonly int enemy_appearance_count;
 	///	<summary>
 	///	출현 적 정보
 	///	</summary>
-	public int[] enemy_appearance_info {get; set;}
+	public readonly int[] enemy_appearance_info;
 	///	<summary>
 	///	NPC 레벨 정보
 	///	</summary>
-	public int[] npc_levels {get; set;}
+	public readonly int[] npc_levels;
 	///	<summary>
 	///	NPC 스탯 증가 정보
 	///	</summary>
-	public int[] npc_stat_ids {get; set;}
+	public readonly int[] npc_stat_ids;
 	///	<summary>
 	///	웨이브 제한 시간
 	///	</summary>
-	public int wave_time {get; set;}
+	public readonly int wave_time;
 
 	private bool disposed = false;
 
-	public Wave_Data()
+	public Wave_Data(Raw_Wave_Data raw_data)
 	{
-		wave_group_id = 0;
-		stage_id = 0;
-		wave_sequence = 0;
-		enemy_appearance_count = 0;
-		wave_time = 0;
+		wave_group_id = raw_data.wave_group_id;
+		stage_id = raw_data.stage_id;
+		wave_sequence = raw_data.wave_sequence;
+		enemy_appearance_count = raw_data.enemy_appearance_count;
+		enemy_appearance_info = raw_data.enemy_appearance_info != null ? (int[])raw_data.enemy_appearance_info.Clone() : new int[0];
+		npc_levels = raw_data.npc_levels != null ? (int[])raw_data.npc_levels.Clone() : new int[0];
+		npc_stat_ids = raw_data.npc_stat_ids != null ? (int[])raw_data.npc_stat_ids.Clone() : new int[0];
+		wave_time = raw_data.wave_time;
 	}
 
 	public void Dispose()

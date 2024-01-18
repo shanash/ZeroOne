@@ -150,6 +150,16 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         Show_Coroutine = null;
     }
 
+    public void HideLifeBar()
+    {
+        if (Show_Coroutine != null)
+        {
+            StopCoroutine(Show_Coroutine);
+        }
+        Show_Coroutine = null;
+        Box.gameObject.SetActive(false);
+    }
+
     public void Spawned()
     {
         Life_Bar.fillAmount = 1f;

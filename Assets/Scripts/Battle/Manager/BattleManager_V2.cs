@@ -1,6 +1,7 @@
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
+using static ConstString;
 
 public partial class BattleManager_V2 : MonoBehaviour
 {
@@ -119,6 +120,56 @@ public partial class BattleManager_V2 : MonoBehaviour
     {
         return Used_Team_List.Find(x => x.Team_Type == team_type);
     }
+
+    public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets)
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].HideAllUnitWithoutTargets(targets);
+        }
+    }
+    public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].ShowAllUnitWithoutTargets(targets);
+        }
+    }
+    
+    public void AllPauseUnitWithoutHero(HeroBase_V2 hero)
+    {
+        int cnt = Used_Team_List.Count;
+        for(int i = 0;i < cnt;i++)
+        {
+            Used_Team_List[i].AllPauseTeamMembersWithoutHero(hero);
+        }
+    }
+
+    public void AllResumeUnitWithoutHero(HeroBase_V2 hero)
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].AllResumeTeamMembersWithoutHero(hero);
+        }
+    }
+
+
+    /// <summary>
+    /// 전투에서 사용했던 모든 오브젝트들 모두 제거<br/>
+    /// CustomUpdate 를 사용하는 오브젝트만
+    /// </summary>
+    public void ReleaseAllBattleObjects()
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].Dispose();
+        }
+    }
+
 
     /// <summary>
     /// 각 팀에 공통적인 상태를 변경시키기 위한 함수

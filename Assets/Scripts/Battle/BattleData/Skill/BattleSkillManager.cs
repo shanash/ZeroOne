@@ -138,7 +138,12 @@ public class BattleSkillManager : BattleDataBase
 
     public bool CalcSpecialSkillCooltime(float delta_time)
     {
-        return GetSpecialSkillGroup().CalcDelayTime(delta_time);
+        var special_skill = GetSpecialSkillGroup();
+        if (special_skill != null)
+        {
+            return special_skill.CalcDelayTime(delta_time);
+        }
+        return false;
     }
 
     /// <summary>

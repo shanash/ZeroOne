@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EffectBase : MonoBehaviour, IPoolableComponent
 {
+    [SerializeField, Tooltip("Particle Main")]
     protected ParticleSystem Particle_Effect;
 
     protected EffectFactory Factory;
@@ -31,6 +32,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Direction = (this.transform.position - this.Target_Position).normalized;
         this.Delta = 0f;
         Is_Action = true;
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Play();
+        }
     }
     public virtual void MoveTarget(Vector3 target, float duration)
     {
@@ -39,6 +44,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Direction = (this.transform.position - target).normalized;
         this.Delta = 0f;
         Is_Action = true;
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Play();
+        }
     }
 
     public virtual void MoveTarget(List<Vector3> path, float duration)
@@ -46,6 +55,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Duration = duration;
         this.Delta = 0f;
         Is_Action = true;
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Play();
+        }
     }
 
     public virtual void StartParticle(float duration, bool loop = false)
@@ -54,6 +67,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Delta = 0f;
         Is_Action = true;
         Is_Loop = loop;
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Play();
+        }
     }
 
     public virtual void StartParticle(Transform target, float duration, bool loop = false)
@@ -63,6 +80,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         this.Delta = 0f;
         Is_Action = true;
         Is_Loop = loop;
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Play();
+        }
     }
 
 
@@ -106,20 +127,22 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         {
             Particle_Effect.Play(true);
         }
+        
     }
+
+    public virtual void Show(bool show) { }
 
     public virtual void Spawned()
     {
-        if (Particle_Effect == null)
-        {
-            Particle_Effect = GetComponent<ParticleSystem>();
-        }
         Is_Action = false;
         Is_Loop = false;
     }
     public virtual void Despawned()
     {
-
+        if (Particle_Effect != null)
+        {
+            Particle_Effect.Stop();
+        }
     }
 
 

@@ -1,36 +1,35 @@
-﻿[System.Serializable]
-public class Role_Icon_Data : System.IDisposable
+﻿public class Role_Icon_Data : System.IDisposable
 {
 	///	<summary>
 	///	역할 타입
 	///	</summary>
-	public ROLE_TYPE role_type {get; set;}
+	public readonly ROLE_TYPE role_type;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr {get; set;}
+	public readonly string name_kr;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon {get; set;}
+	public readonly string icon;
 	///	<summary>
 	///	카드 아이콘
 	///	</summary>
-	public string card_icon {get; set;}
+	public readonly string card_icon;
 	///	<summary>
 	///	태그 bg
 	///	</summary>
-	public string tag_bg_path {get; set;}
+	public readonly string tag_bg_path;
 
 	private bool disposed = false;
 
-	public Role_Icon_Data()
+	public Role_Icon_Data(Raw_Role_Icon_Data raw_data)
 	{
-		role_type = ROLE_TYPE.NONE;
-		name_kr = string.Empty;
-		icon = string.Empty;
-		card_icon = string.Empty;
-		tag_bg_path = string.Empty;
+		role_type = raw_data.role_type;
+		name_kr = raw_data.name_kr;
+		icon = raw_data.icon;
+		card_icon = raw_data.card_icon;
+		tag_bg_path = raw_data.tag_bg_path;
 	}
 
 	public void Dispose()

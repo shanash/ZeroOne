@@ -155,10 +155,10 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region New Item Data
-    public Item_Data Get_ItemData(GOODS_TYPE gtype, int item_id)
+    public Item_Data Get_ItemData(ITEM_TYPE_V2 itype, int item_id)
     {
         Check_Item_Data();
-        return _Item_Data.Find(x => x.goods_type == gtype && x.item_id == item_id);
+        return _Item_Data.Find(x => x.item_type == itype && x.item_id == item_id);
     }
     public Item_Data Get_ItemData(int item_id)
     {
@@ -166,16 +166,10 @@ public class MasterDataManager : BaseMasterDataManager
         return _Item_Data.Find(x => x.item_id == item_id);
     }
 
-    public Item_Piece_Data Get_ItemPieceData(PIECE_TYPE ptype, int item_piece_id)
-    {
-        Check_Item_Piece_Data();
-        return _Item_Piece_Data.Find(x => x.piece_type == ptype && x.itempiece_id == item_piece_id);
-    }
-
     public Item_Piece_Data Get_ItemPieceData(int item_piece_id)
     {
         Check_Item_Piece_Data();
-        return _Item_Piece_Data.Find(x => x.itempiece_id == item_piece_id);
+        return _Item_Piece_Data.Find(x => x.item_piece_id == item_piece_id);
     }
     public Equipment_Data Get_EquipmentData(EQUIPMENT_TYPE etype, int equipment_id)
     {

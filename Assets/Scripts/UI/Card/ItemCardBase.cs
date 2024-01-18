@@ -8,7 +8,7 @@ public class ItemCardBase : UIBase
     protected Image Item_Icon;
 
 
-    protected ItemGoodsDataBase Item_Goods_Data;
+    protected ItemDataBase_V2 Item_Goods_Data;
     protected ItemDataBase Item_Data;
 
     public void SetItem(ITEM_TYPE itype, int item_id)
@@ -17,7 +17,7 @@ public class ItemCardBase : UIBase
         UpdateItemIcon();
     }
 
-    public void SetGoods(GOODS_TYPE gtype, int item_id)
+    public void SetGoods(ITEM_TYPE_V2 gtype, int item_id)
     {
 
     }

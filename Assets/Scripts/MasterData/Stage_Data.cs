@@ -1,66 +1,65 @@
-﻿[System.Serializable]
-public class Stage_Data : System.IDisposable
+﻿public class Stage_Data : System.IDisposable
 {
 	///	<summary>
 	///	스테이지 인덱스
 	///	</summary>
-	public int stage_id {get; set;}
+	public readonly int stage_id;
 	///	<summary>
 	///	지역 id
 	///	</summary>
-	public int zone_id {get; set;}
+	public readonly int zone_id;
 	///	<summary>
 	///	스테이지 넘버링
 	///	</summary>
-	public int stage_ordering {get; set;}
+	public readonly int stage_ordering;
 	///	<summary>
 	///	스테이지 명칭
 	///	</summary>
-	public string stage_name {get; set;}
+	public readonly string stage_name;
 	///	<summary>
 	///	사용 스태미나
 	///	</summary>
-	public int use_stamina {get; set;}
+	public readonly int use_stamina;
 	///	<summary>
 	///	클리어 시 캐릭터 경험치
 	///	</summary>
-	public int character_exp {get; set;}
+	public readonly int character_exp;
 	///	<summary>
 	///	호감도 경험치
 	///	</summary>
-	public int destiny_exp {get; set;}
+	public readonly int destiny_exp;
 	///	<summary>
 	///	지급 골드
 	///	</summary>
-	public int gold {get; set;}
+	public readonly int gold;
 	///	<summary>
 	///	초회 보상
 	///	</summary>
-	public int first_reward_group_id {get; set;}
+	public readonly int first_reward_group_id;
 	///	<summary>
 	///	통상 보상
 	///	</summary>
-	public int repeat_reward_group_id {get; set;}
+	public readonly int repeat_reward_group_id;
 	///	<summary>
 	///	별 보상
 	///	</summary>
-	public int star_reward_group_id {get; set;}
+	public readonly int star_reward_group_id;
 
 	private bool disposed = false;
 
-	public Stage_Data()
+	public Stage_Data(Raw_Stage_Data raw_data)
 	{
-		stage_id = 0;
-		zone_id = 0;
-		stage_ordering = 0;
-		stage_name = string.Empty;
-		use_stamina = 0;
-		character_exp = 0;
-		destiny_exp = 0;
-		gold = 0;
-		first_reward_group_id = 0;
-		repeat_reward_group_id = 0;
-		star_reward_group_id = 0;
+		stage_id = raw_data.stage_id;
+		zone_id = raw_data.zone_id;
+		stage_ordering = raw_data.stage_ordering;
+		stage_name = raw_data.stage_name;
+		use_stamina = raw_data.use_stamina;
+		character_exp = raw_data.character_exp;
+		destiny_exp = raw_data.destiny_exp;
+		gold = raw_data.gold;
+		first_reward_group_id = raw_data.first_reward_group_id;
+		repeat_reward_group_id = raw_data.repeat_reward_group_id;
+		star_reward_group_id = raw_data.star_reward_group_id;
 	}
 
 	public void Dispose()

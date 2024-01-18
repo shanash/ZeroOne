@@ -43,7 +43,16 @@ public partial class TeamManager_V2 : IDisposable
             disposed = true;
         }
     }
-    protected virtual void ResetTeamManager() { }
+    protected virtual void ResetTeamManager() 
+    {
+        int cnt = Used_Members.Count;
+        var pool = GameObjectPoolManager.Instance;
+        for (int i = 0; i < cnt; i++)
+        {
+            pool.UnusedGameObject(Used_Members[i].gameObject);
+        }
+        Used_Members.Clear();
+    }
 
     public void SetHeroContainer(Transform hero_parent)
     {
@@ -324,6 +333,57 @@ public partial class TeamManager_V2 : IDisposable
         for (int i = 0; i < cnt; i++)
         {
             Used_Members[i].RevertState();
+        }
+    }
+
+    public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets) 
+    {
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            if (!targets.Contains(member))
+            {
+                member.SetAlphaAnimation(0f, 0.5f, true);
+            }
+        }
+    }
+
+    public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
+    {
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            if (!targets.Contains(member))
+            {
+                member.SetAlphaAnimation(1f, 0.5f, false);
+            }
+        }
+    }
+
+    public void AllPauseTeamMembersWithoutHero(HeroBase_V2 hero)
+    {
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            if (!object.ReferenceEquals(member, hero))
+            {
+                member.ChangeState(UNIT_STATES.PAUSE);
+            }
+        }
+    }
+    public void AllResumeTeamMembersWithoutHero(HeroBase_V2 hero)
+    {
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = Used_Members[i];
+            if (!object.ReferenceEquals(member, hero))
+            {
+                member.RevertState();
+            }
         }
     }
 

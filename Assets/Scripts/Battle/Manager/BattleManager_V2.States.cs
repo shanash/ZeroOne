@@ -9,7 +9,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 {
     protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 
-    float Wave_Run_Delta;
+    float Game_Over_Delta;
 
     private void Awake()
     {
@@ -226,7 +226,6 @@ public partial class BattleManager_V2 : MonoBehaviour
         if (all_death_team != null)
         {
             var win_team = FindTeamManager(all_death_team.Team_Type == TEAM_TYPE.LEFT ? TEAM_TYPE.RIGHT : TEAM_TYPE.LEFT);
-            win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
 
             if (win_team.Team_Type == TEAM_TYPE.LEFT)
             {
@@ -333,22 +332,41 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateGameOverWinBegin()
     {
+        var win_team = FindTeamManager(TEAM_TYPE.LEFT);
+        win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
+
+        Game_Over_Delta = 1f;
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
         {
             popup.ShowPopup();
         });
     }
-    public virtual void GameStateGameOverWin() { }
+    public virtual void GameStateGameOverWin() 
+    {
+        Game_Over_Delta -= Time.deltaTime;
+        if (Game_Over_Delta < 0f)
+        {
+            ReleaseAllBattleObjects();
+        }
+    }
     public virtual void GameStateGameOverWinExit() { }
 
     public virtual void GameStateGameOverLoseBegin()
     {
+        Game_Over_Delta = 1f;
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
         {
             popup.ShowPopup();
         });
     }
-    public virtual void GameStateGameOverLose() { }
+    public virtual void GameStateGameOverLose() 
+    {
+        Game_Over_Delta -= Time.deltaTime;
+        if (Game_Over_Delta < 0f)
+        {
+            ReleaseAllBattleObjects();
+        }
+    }
     public virtual void GameStateGameOverLoseExit() { }
 
     public virtual void GameStateEndBegin() { }

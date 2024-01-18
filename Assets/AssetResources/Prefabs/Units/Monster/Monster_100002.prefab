@@ -1242,8 +1242,8 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3050367892590207401}
   m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &8866691750203301539
@@ -1260,13 +1260,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Skeleton: {fileID: 2979264494943935514}
   Life_Bar_Pos: {fileID: 4600545368838119301}
-  Sd_Body_Transforms:
-  - Body_Type: 3
-    Trans: {fileID: 8432321661140738510}
-  - Body_Type: 2
-    Trans: {fileID: 969807788552481343}
-  - Body_Type: 1
-    Trans: {fileID: 1242651526393654051}
+  Shadow: {fileID: 889782450305103814}
+  Start_Projectile_Transforms: []
   Reach_Pos_Transforms:
   - Pos_Type: 3
     Trans: {fileID: 8432321661140738510}
@@ -1274,6 +1269,7 @@ MonoBehaviour:
     Trans: {fileID: 969807788552481343}
   - Pos_Type: 1
     Trans: {fileID: 1242651526393654051}
+  Ultimate_Skill_Playable_Director: {fileID: 0}
 --- !u!1 &3161505097256455106
 GameObject:
   m_ObjectHideFlags: 0

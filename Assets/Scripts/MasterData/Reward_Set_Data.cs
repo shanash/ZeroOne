@@ -1,51 +1,52 @@
-﻿[System.Serializable]
-public class Reward_Set_Data : System.IDisposable
+﻿public class Reward_Set_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 ID
 	///	</summary>
-	public int reward_id {get; set;}
+	public readonly int reward_id;
 	///	<summary>
 	///	보상 타입
 	///	</summary>
-	public GOODS_TYPE goods_type {get; set;}
+	public readonly REWARD_TYPE reward_type;
 	///	<summary>
 	///	변수1
 	///	</summary>
-	public int var1 {get; set;}
+	public readonly int var1;
 	///	<summary>
 	///	변수2
 	///	</summary>
-	public int var2 {get; set;}
+	public readonly int var2;
 	///	<summary>
 	///	출현 타입
+	///	0: drop_per 칼럼을 해당 행의 보상 출현 성공률로 사용
+	///	1: drop_per 칼럼을 같은 reward_id 내에서 출현 비중으로 사용
 	///	</summary>
-	public int drop_type {get; set;}
+	public readonly int drop_type;
 	///	<summary>
 	///	출현확률
 	///	</summary>
-	public int drop_per {get; set;}
+	public readonly int drop_per;
 	///	<summary>
 	///	노출 여부
 	///	</summary>
-	public bool is_use {get; set;}
+	public readonly bool is_use;
 	///	<summary>
 	///	보상 노출 순서
 	///	</summary>
-	public int sort_order {get; set;}
+	public readonly int sort_order;
 
 	private bool disposed = false;
 
-	public Reward_Set_Data()
+	public Reward_Set_Data(Raw_Reward_Set_Data raw_data)
 	{
-		reward_id = 0;
-		goods_type = GOODS_TYPE.NONE;
-		var1 = 0;
-		var2 = 0;
-		drop_type = 0;
-		drop_per = 0;
-		is_use = false;
-		sort_order = 0;
+		reward_id = raw_data.reward_id;
+		reward_type = raw_data.reward_type;
+		var1 = raw_data.var1;
+		var2 = raw_data.var2;
+		drop_type = raw_data.drop_type;
+		drop_per = raw_data.drop_per;
+		is_use = raw_data.is_use;
+		sort_order = raw_data.sort_order;
 	}
 
 	public void Dispose()
@@ -68,7 +69,7 @@ public class Reward_Set_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[reward_id] = <color=yellow>{0}</color>", reward_id).AppendLine();
-		sb.AppendFormat("[goods_type] = <color=yellow>{0}</color>", goods_type).AppendLine();
+		sb.AppendFormat("[reward_type] = <color=yellow>{0}</color>", reward_type).AppendLine();
 		sb.AppendFormat("[var1] = <color=yellow>{0}</color>", var1).AppendLine();
 		sb.AppendFormat("[var2] = <color=yellow>{0}</color>", var2).AppendLine();
 		sb.AppendFormat("[drop_type] = <color=yellow>{0}</color>", drop_type).AppendLine();
