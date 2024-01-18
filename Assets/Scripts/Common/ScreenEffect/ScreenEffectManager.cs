@@ -8,6 +8,12 @@ public enum ScreenEffect
     NONE = 0,
     FADE_IN,
     FADE_OUT,
+    FLASH, // 특정색(밝은색)으로 잠깐동안 깜박이게한다. 강력한 공격이나 폭발시 사용
+    VIGNETTE, // 가장자리를 어둡게 해서 중앙에 초점을 맞춤
+    GLOW, // 화면에 특정 좌표에 발광효과를 추가
+    LETTER_BOX, // 화면 상단과 하단에 검은 막대를 추가
+    DAMAGE_INDICATOR, // 데미지 받았을때 주변이 빨갛게 변한다
+    BLUR, // 메뉴나 다이얼로그가 활성화될때 카메라를 흐리게 한다
     MAX,
 }
 
