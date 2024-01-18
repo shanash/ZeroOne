@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemDataBase_V2 : IDisposable
 {
-    public ITEM_TYPE_V2 Goods_Type { get; protected set; } = ITEM_TYPE_V2.NONE;
+    public ITEM_TYPE_V2 Item_Type { get; protected set; } = ITEM_TYPE_V2.NONE;
 
     public int Item_ID { get; protected set; } = 0;
     public int Item_Count { get; protected set; } = 0;
@@ -39,7 +39,7 @@ public class ItemDataBase_V2 : IDisposable
 
     protected virtual void Init() 
     {
-        Goods_Type = ITEM_TYPE_V2.NONE;
+        Item_Type = ITEM_TYPE_V2.NONE;
         Item_ID = 0;
         Item_Count = 0;
     }
@@ -48,7 +48,7 @@ public class ItemDataBase_V2 : IDisposable
 
     public virtual void SetItem(ITEM_TYPE_V2 gtype, int item_id)
     {
-        Goods_Type = gtype;
+        Item_Type = gtype;
         Item_ID = item_id;
     }
 

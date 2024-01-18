@@ -7,8 +7,6 @@ public class ItemCardBase : UIBase
     [SerializeField, Tooltip("Item Icon")]
     protected Image Item_Icon;
 
-
-    protected ItemDataBase_V2 Item_Goods_Data;
     protected ItemDataBase Item_Data;
 
     public void SetItem(ITEM_TYPE itype, int item_id)

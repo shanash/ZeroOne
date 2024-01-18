@@ -155,6 +155,18 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region New Item Data
+
+    public Goods_Data Get_GoodsData(GOODS_TYPE gtype)
+    {
+        Check_Goods_Data();
+        return _Goods_Data.Find(x => x.goods_type == gtype);
+    }
+    public IReadOnlyCollection<Goods_Data> Get_GoodsDataList()
+    {
+        Check_Goods_Data();
+        return _Goods_Data;
+    }
+
     public Item_Data Get_ItemData(ITEM_TYPE_V2 itype, int item_id)
     {
         Check_Item_Data();
@@ -183,12 +195,11 @@ public class MasterDataManager : BaseMasterDataManager
         return _Equipment_Data.Find(x => x.item_id == equipment_id);
     }
 
-    public void Get_RewardSetDataList(int reward_id, ref List<Reward_Set_Data> list)
+
+    public IReadOnlyCollection<Reward_Set_Data> Get_RewardSetDataList(int reward_id)
     {
         Check_Reward_Set_Data();
-        list.Clear();
-        list.AddRange(_Reward_Set_Data.FindAll(x => x.reward_id == reward_id));
-        list.Sort((a, b) => a.sort_order.CompareTo(b.sort_order));
+        return _Reward_Set_Data.FindAll(x => x.reward_id == reward_id && x.is_use);
     }
 
     #endregion
