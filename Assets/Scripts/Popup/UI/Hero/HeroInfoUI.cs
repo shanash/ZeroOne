@@ -50,11 +50,16 @@ public class HeroInfoUI : PopupBase
     [SerializeField, Tooltip("Hero Basic Info Box")]
     HeroInfoBox Hero_Info_Box;
 
+    List<UserHeroData> User_Hero_Datas;
+    int Current_Hero_Data_Index;
     BattleUnitData User_Hero_Battle_Data;
 
     protected override void Initialize()
     {
         base.Initialize();
+
+        User_Hero_Datas = null;
+        Current_Hero_Data_Index = -1;
 
         User_Hero_Battle_Data = null;
         Hero_Info_Box.SetHeroData(null);
@@ -64,26 +69,39 @@ public class HeroInfoUI : PopupBase
     {
         base.ShowPopup(data);
 
-        if (data.Length != 1 || data[0] is not BattleUnitData)
+        if (data.Length != 2 || data[0] is not List<UserHeroData> || data[1] is not int)
         {
             Debug.Assert(false, $"잘못된 HeroInfoUI 팝업 호출!!");
             HidePopup();
             return;
         }
 
-        User_Hero_Battle_Data = data[0] as BattleUnitData;
-        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
+        User_Hero_Datas = data[0] as List<UserHeroData>;
+        Current_Hero_Data_Index = (int)data[1];
 
         FixedUpdatePopup();
-        Refresh();
     }
 
-    public void Refresh()
+    protected override void FixedUpdatePopup()
     {
+        Title.text = ConstString.HeroInfoUI.TITLE;
+
+        UpdatePopup();
+    }
+
+    public override void UpdatePopup()
+    {
+        base.UpdatePopup();
+        var user_hero_data = User_Hero_Datas[Current_Hero_Data_Index];
+
+        User_Hero_Battle_Data = new BattlePcData();
+        User_Hero_Battle_Data.SetUnitID(user_hero_data.Player_Character_ID.Get(), user_hero_data.Player_Character_Num);
+
+        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
+
         var Hero_Base_Data = (Player_Character_Data)User_Hero_Battle_Data.GetUnitData();
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
 
-        Title.text = ConstString.HeroInfoUI.TITLE;
 
         Level_Text.text = $"LV. {User_Hero_Battle_Data.GetLevel()}";
         Name_Text.text = Hero_Base_Data.name_kr;
@@ -149,16 +167,24 @@ public class HeroInfoUI : PopupBase
         PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
     }
 
-    protected override void FixedUpdatePopup()
+    public void OnClickLeft()
     {
-        var skill_manager = new BattleSkillManager();
-        skill_manager.SetPlayerCharacterSkillGroups(User_Hero_Battle_Data.GetSkillPattern());
-        skill_manager.SetPlayerCharacterSpecialSkillGroup(User_Hero_Battle_Data.GetSpecialSkillID());
-
-        foreach(var skill_group in skill_manager.Skill_Groups)
+        Current_Hero_Data_Index--;
+        if (Current_Hero_Data_Index < 0)
         {
-            //PreloadSprite(skill_group.GetSkillIconPath());
+            Current_Hero_Data_Index = User_Hero_Datas.Count -1;
         }
+
+        UpdatePopup();
     }
 
+    public void OnClickRight()
+    {
+        Current_Hero_Data_Index++;
+        if (Current_Hero_Data_Index == User_Hero_Datas.Count)
+        {
+            Current_Hero_Data_Index = 0;
+        }
+        UpdatePopup();
+    }
 }

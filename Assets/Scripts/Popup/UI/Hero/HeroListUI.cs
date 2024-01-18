@@ -19,12 +19,14 @@ public class HeroListUI : PopupBase
     [SerializeField, Tooltip("Filter Arrow Image's RectTransform By Sort Direction")]
     RectTransform Filter_Sort_Direction_Image;
 
+    List<UserHeroData> User_Hero_Datas;
     CHARACTER_SORT Filter_Type;
     bool Is_Ascended_Sort;
 
     protected override void Initialize()
     {
         base.Initialize();
+        User_Hero_Datas = null;
         Filter_Type = CHARACTER_SORT.NAME;
         Is_Ascended_Sort = true;
     }
@@ -35,25 +37,30 @@ public class HeroListUI : PopupBase
 
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         FixedUpdatePopup();
-        UpdatePopup();
     }
 
     protected override void FixedUpdatePopup()
     {
         Title.text = ConstString.HeroListUI.TITLE;
+        UpdatePopup();
+    }
+
+    public override void UpdatePopup()
+    {
+        base.UpdatePopup();
 
         Character_LIst_View.Clear();
 
         const int column_count = 5;
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
-        List<UserHeroData> user_hero_list = new List<UserHeroData>();
-        hero_mng.GetUserHeroDataList(ref user_hero_list);
+        User_Hero_Datas = new List<UserHeroData>();
+        hero_mng.GetUserHeroDataList(ref User_Hero_Datas);
 
         switch (Filter_Type)
         {
             case CHARACTER_SORT.NAME:
-                user_hero_list.Sort((a, b) =>
+                User_Hero_Datas.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
@@ -62,17 +69,17 @@ public class HeroListUI : PopupBase
                 });
                 break;
             case CHARACTER_SORT.LEVEL_CHARACTER:
-                user_hero_list.Sort((a, b) =>
+                User_Hero_Datas.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
                     a.GetLevel().CompareTo(b.GetLevel()) :
                     b.GetLevel().CompareTo(a.GetLevel());
                 });
-                user_hero_list.Sort((a, b) => a.GetLevel().CompareTo(b.GetLevel()));
+                User_Hero_Datas.Sort((a, b) => a.GetLevel().CompareTo(b.GetLevel()));
                 break;
             case CHARACTER_SORT.STAR:
-                user_hero_list.Sort((a, b) =>
+                User_Hero_Datas.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
@@ -98,7 +105,7 @@ public class HeroListUI : PopupBase
 
         //  가로 컬럼 5개(보유중인 영웅 리스트 불러오기)
         int start = 0;
-        int hero_count = user_hero_list.Count;
+        int hero_count = User_Hero_Datas.Count;
         int rows = hero_count / column_count;
         if (hero_count % column_count > 0)
         {
@@ -114,16 +121,22 @@ public class HeroListUI : PopupBase
 
             if (start + column_count < hero_count)
             {
-                new_data.SetUserHeroDataList(user_hero_list.GetRange(start, column_count));
+                new_data.SetUserHeroDataList(User_Hero_Datas.GetRange(start, column_count));
             }
             else
             {
-                new_data.SetUserHeroDataList(user_hero_list.GetRange(start, hero_count - start));
+                new_data.SetUserHeroDataList(User_Hero_Datas.GetRange(start, hero_count - start));
             }
             Character_LIst_View.InsertData(new_data);
         }
 
         UpdateFilterType();
+    }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        Initialize();
     }
 
     /// <summary>
@@ -134,12 +147,11 @@ public class HeroListUI : PopupBase
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        var PC_Battle_Data = new BattlePcData();
-        PC_Battle_Data.SetUnitID(hero.User_Data.GetPlayerCharacterID(), hero.User_Data.Player_Character_Num);
+        int index = User_Hero_Datas.IndexOf(hero.User_Data);
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", (popup) =>
         {
-            popup.ShowPopup(PC_Battle_Data);
+            popup.ShowPopup(User_Hero_Datas, index);
         });
     }
 
@@ -168,6 +180,6 @@ public class HeroListUI : PopupBase
 
         Is_Ascended_Sort = !Is_Ascended_Sort;
 
-        FixedUpdatePopup();
+        UpdatePopup();
     }
 }

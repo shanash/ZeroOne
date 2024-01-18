@@ -1,4 +1,3 @@
-using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +13,6 @@ public class LobbyManager : MonoBehaviour
 
     [SerializeField, Tooltip("Fade in Box")]
     RectTransform Fade_In_Box;
-
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
 
     Producer pd;
 

@@ -73,6 +73,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
         Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
 
+        // TODO: 아이콘은 일단 제대로 값이 다 채워질때까지 표시하지 않습니다
+        /*
         int i = 0;
 
         for (SKILL_TYPE type = SKILL_TYPE.SKILL_01; type <= SKILL_TYPE.SPECIAL_SKILL; type++)
@@ -88,6 +90,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
             });
             i++;
         }
+        */
     }
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)

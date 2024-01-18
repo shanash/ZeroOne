@@ -1,7 +1,7 @@
 public class BattlePcData : BattleUnitData
 {
-    Player_Character_Data Data;
-    Player_Character_Battle_Data Battle_Data;
+    public Player_Character_Data Data { get; private set; }
+    public Player_Character_Battle_Data Battle_Data { get; private set; }
 
     UserHeroData User_Data;
 
@@ -16,11 +16,10 @@ public class BattlePcData : BattleUnitData
         int pc_id = unit_ids[0];
         int pc_num = unit_ids[1];
 
-        var m = MasterDataManager.Instance;
-        Data = m.Get_PlayerCharacterData(pc_id);
-        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
-
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
+
+        Data = User_Data.Hero_Data;
+        Battle_Data = User_Data.Battle_Data;
 
         return this;
     }
