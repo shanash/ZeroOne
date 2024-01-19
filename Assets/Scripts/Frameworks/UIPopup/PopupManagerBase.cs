@@ -120,6 +120,7 @@ namespace FluffyDuck.UI
         [Obsolete]
         public void Add(string path, System.Action<PopupBase> cb)
         {
+            Debug.LogWarning($"Obsolete : Add(string path, POPUP_TYPE type, System.Action<PopupBase> cb)를 호출해주세요");
             Add(path, POPUP_TYPE.FULLPAGE_TYPE, cb);
         }
 
