@@ -382,7 +382,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            //Debug.Log($"{animation_name} => {evt_name}");
             var skill = GetSkillManager().GetSpecialSkillGroup();
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
@@ -1425,7 +1424,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        var target_skill = skill.GetFirstSkillData();
+        var target_skill = skill.GetSpecialSkillTargetSkill();
         if (target_skill != null)
         {
             FindTargets(target_skill);

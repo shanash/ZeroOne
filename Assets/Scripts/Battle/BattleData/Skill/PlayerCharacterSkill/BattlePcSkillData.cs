@@ -128,15 +128,7 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     {
         return Data.trigger_effect_path;
     }
-    //public override PROJECTILE_TYPE GetProjectileType()
-    //{
-    //    return Data.projectile_type;
-    //}
     
-    //public override double GetProjectileSpeed()
-    //{
-    //    return Data.projectile_speed;
-    //}
 
     public override EFFECT_COUNT_TYPE GetEffectCountType()
     {
@@ -200,6 +192,11 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
             return Data.second_target_range;
         }
         return 0;
+    }
+
+    public override int GetSkillID()
+    {
+        return Data.pc_skill_id;
     }
 
     #endregion

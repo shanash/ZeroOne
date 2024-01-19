@@ -66,6 +66,8 @@ public class BattleSkillDataFactory
                         return typeof(BattlePcOnetimeSkillData_Damage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattlePcOnetimeSkillData_LifeRecovery);
+                    case ONETIME_EFFECT_TYPE.NONE_EFFECT:
+                        return typeof(BattlePcOnetimeSkillData);
                     default:
                         Debug.Assert(false, "PC 일회성 스킬데이터가 정상적이지 않습니다!!!");
                         return typeof(BattlePcOnetimeSkillData);
@@ -79,6 +81,8 @@ public class BattleSkillDataFactory
                         return typeof(BattleNpcOnetimeSkillData_Damage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattleNpcOnetimeSkillData_LifeRecovery);
+                    case ONETIME_EFFECT_TYPE.NONE_EFFECT:
+                        return typeof(BattleNpcOnetimeSkillData);
                     default:
                         Debug.Assert(false, "NPC 일회성 스킬데이터가 정상적이지 않습니다!!!");
                         return typeof(BattleNpcOnetimeSkillData);

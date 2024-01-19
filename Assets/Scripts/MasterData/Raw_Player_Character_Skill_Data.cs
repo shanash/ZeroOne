@@ -21,7 +21,6 @@ public class Raw_Player_Character_Skill_Data : System.IDisposable
 	public int[] second_target_duration_effect_ids {get; set;}
 	public string event_name {get; set;}
 	public string trigger_effect_path {get; set;}
-	public string empty_effect_path {get; set;}
 
 	private bool disposed = false;
 
@@ -38,7 +37,6 @@ public class Raw_Player_Character_Skill_Data : System.IDisposable
 		max_second_target_count = 0;
 		event_name = string.Empty;
 		trigger_effect_path = string.Empty;
-		empty_effect_path = string.Empty;
 	}
 
 	public void Dispose()

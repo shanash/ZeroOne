@@ -55,6 +55,16 @@ public abstract class BattleSkillGroup : BattleDataBase
         return null;
     }
 
+    protected virtual int GetSpecialSkillTargetSkillID()
+    {
+        return 0;
+    }
+
+    public BattleSkillData GetSpecialSkillTargetSkill()
+    {
+        return Battle_Skill_Data_List.Find(x => x.GetSkillID() == GetSpecialSkillTargetSkillID());
+    }
+
     /// <summary>
     /// 본 스킬의 선 쿨타임 시간을 지정한다(공격 대기 시간)
     /// </summary>

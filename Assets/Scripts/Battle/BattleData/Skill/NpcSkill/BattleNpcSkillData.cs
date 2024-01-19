@@ -117,16 +117,10 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
         return Data.trigger_effect_path;
     }
 
-    //public override PROJECTILE_TYPE GetProjectileType()
-    //{
-    //    return Data.projectile_type;
-    //}
-
-    //public override double GetProjectileSpeed()
-    //{
-    //    return Data.projectile_speed;
-    //}
-
+    public override int GetSkillID()
+    {
+        return Data.npc_skill_id;
+    }
     public override EFFECT_COUNT_TYPE GetEffectCountType()
     {
         return Data.effect_count_type;

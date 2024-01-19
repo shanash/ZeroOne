@@ -17,6 +17,11 @@
 	///	</summary>
 	public readonly SKILL_TYPE skill_type;
 	///	<summary>
+	///	궁극기 타겟 스킬 id
+	///	궁극기 사용시 타겟팅을 먼저 해야 하는데, 해당 타겟을 위한 스킬 ID
+	///	</summary>
+	public readonly int target_skill_id;
+	///	<summary>
 	///	스킬 아이콘
 	///	</summary>
 	public readonly string icon;
@@ -37,6 +42,7 @@
 		name_kr = raw_data.name_kr;
 		skill_use_delay = raw_data.skill_use_delay;
 		skill_type = raw_data.skill_type;
+		target_skill_id = raw_data.target_skill_id;
 		icon = raw_data.icon;
 		action_name = raw_data.action_name;
 		cast_effect_path = raw_data.cast_effect_path;
@@ -65,6 +71,7 @@
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[skill_use_delay] = <color=yellow>{0}</color>", skill_use_delay).AppendLine();
 		sb.AppendFormat("[skill_type] = <color=yellow>{0}</color>", skill_type).AppendLine();
+		sb.AppendFormat("[target_skill_id] = <color=yellow>{0}</color>", target_skill_id).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[action_name] = <color=yellow>{0}</color>", action_name).AppendLine();
 		sb.AppendFormat("[cast_effect_path] = <color=yellow>{0}</color>", cast_effect_path).AppendLine();

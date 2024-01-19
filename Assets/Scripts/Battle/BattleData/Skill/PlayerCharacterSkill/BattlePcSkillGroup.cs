@@ -74,4 +74,9 @@ public class BattlePcSkillGroup : BattleSkillGroup
         return Skill_Group.cast_effect_path;
     }
 
+    protected override int GetSpecialSkillTargetSkillID()
+    {
+        return Skill_Group.target_skill_id;
+    }
+
 }

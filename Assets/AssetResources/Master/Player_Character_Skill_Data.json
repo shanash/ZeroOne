@@ -15,7 +15,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100001
+      10000101
     ],
     "duration_effect_ids": [
       0
@@ -44,7 +44,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100002
+      10000201
     ],
     "duration_effect_ids": [
       0
@@ -73,7 +73,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100003
+      10000301
     ],
     "duration_effect_ids": [
       0
@@ -102,7 +102,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100102
+      10000401
     ],
     "duration_effect_ids": [
       0
@@ -131,7 +131,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100004
+      10010101
     ],
     "duration_effect_ids": [
       0
@@ -142,7 +142,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "hit"
+    "event_name": "shoot"
   },
   {
     "pc_skill_id": 100102,
@@ -160,7 +160,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100005
+      10010201
     ],
     "duration_effect_ids": [
       0
@@ -171,10 +171,39 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "hit"
+    "event_name": "shoot"
   },
   {
     "pc_skill_id": 100103,
+    "pc_skill_group_id": 100103,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 1,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      10010301
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "effect"
+  },
+  {
+    "pc_skill_id": 100104,
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -191,22 +220,21 @@
       34
     ],
     "onetime_effect_ids": [
-      100006
+      10010302
     ],
     "duration_effect_ids": [
       0
     ],
     "second_target_onetime_effect_ids": [
-      100007
+      10010303
     ],
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "hit",
-    "empty_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/Laila/SkillEffect_Laila_Skill_2_Hit_All_Round"
+    "event_name": "shoot"
   },
   {
-    "pc_skill_id": 100104,
+    "pc_skill_id": 100105,
     "pc_skill_group_id": 100104,
     "target_type": 1,
     "target_rule_type": 2,
@@ -221,7 +249,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100202
+      10010401
     ],
     "duration_effect_ids": [
       0

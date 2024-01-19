@@ -7,6 +7,7 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 	public string name_kr {get; set;}
 	public double skill_use_delay {get; set;}
 	public SKILL_TYPE skill_type {get; set;}
+	public int target_skill_id {get; set;}
 	public string icon {get; set;}
 	public string action_name {get; set;}
 	public string cast_effect_path {get; set;}
@@ -18,6 +19,7 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 		npc_skill_group_id = 0;
 		name_kr = string.Empty;
 		skill_type = SKILL_TYPE.NONE;
+		target_skill_id = 0;
 		icon = string.Empty;
 		action_name = string.Empty;
 		cast_effect_path = string.Empty;

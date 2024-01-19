@@ -426,6 +426,8 @@ public enum ONETIME_EFFECT_TYPE
 	DAMAGE = 1,
 	/// <summary>2 체력 회복</summary>
 	LIFE_RECOVERY = 2,
+	/// <summary>3 빈 이펙트(일회성 효과는 없음)</summary>
+	NONE_EFFECT = 3,
 }
 
 ///	<summary>

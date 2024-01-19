@@ -83,10 +83,6 @@
 	///	이펙트 패스 정보가 있는 경우 해당 이펙트를 이용하여 트리거를 발생하는 방식을 적용한다.
 	///	</summary>
 	public readonly string trigger_effect_path;
-	///	<summary>
-	///	빈 이펙트 프리팹
-	///	</summary>
-	public readonly string empty_effect_path;
 
 	private bool disposed = false;
 
@@ -110,7 +106,6 @@
 		second_target_duration_effect_ids = raw_data.second_target_duration_effect_ids != null ? (int[])raw_data.second_target_duration_effect_ids.Clone() : new int[0];
 		event_name = raw_data.event_name;
 		trigger_effect_path = raw_data.trigger_effect_path;
-		empty_effect_path = raw_data.empty_effect_path;
 	}
 
 	public void Dispose()
@@ -196,7 +191,6 @@
 
 		sb.AppendFormat("[event_name] = <color=yellow>{0}</color>", event_name).AppendLine();
 		sb.AppendFormat("[trigger_effect_path] = <color=yellow>{0}</color>", trigger_effect_path).AppendLine();
-		sb.AppendFormat("[empty_effect_path] = <color=yellow>{0}</color>", empty_effect_path).AppendLine();
 		return sb.ToString();
 	}
 }

@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -69,5 +70,10 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     public override string GetSkillCastEffectPath()
     {
         return Skill_Group.cast_effect_path;
+    }
+
+    protected override int GetSpecialSkillTargetSkillID()
+    {
+        return Skill_Group.target_skill_id;
     }
 }
