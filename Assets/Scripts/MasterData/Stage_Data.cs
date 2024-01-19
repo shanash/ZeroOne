@@ -33,13 +33,13 @@
 	///	</summary>
 	public readonly int gold;
 	///	<summary>
-	///	초회 보상
-	///	</summary>
-	public readonly int first_reward_group_id;
-	///	<summary>
 	///	통상 보상
 	///	</summary>
 	public readonly int repeat_reward_group_id;
+	///	<summary>
+	///	초회 보상
+	///	</summary>
+	public readonly int first_reward_group_id;
 	///	<summary>
 	///	별 보상
 	///	</summary>
@@ -57,8 +57,8 @@
 		character_exp = raw_data.character_exp;
 		destiny_exp = raw_data.destiny_exp;
 		gold = raw_data.gold;
-		first_reward_group_id = raw_data.first_reward_group_id;
 		repeat_reward_group_id = raw_data.repeat_reward_group_id;
+		first_reward_group_id = raw_data.first_reward_group_id;
 		star_reward_group_id = raw_data.star_reward_group_id;
 	}
 
@@ -89,8 +89,8 @@
 		sb.AppendFormat("[character_exp] = <color=yellow>{0}</color>", character_exp).AppendLine();
 		sb.AppendFormat("[destiny_exp] = <color=yellow>{0}</color>", destiny_exp).AppendLine();
 		sb.AppendFormat("[gold] = <color=yellow>{0}</color>", gold).AppendLine();
-		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
+		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[star_reward_group_id] = <color=yellow>{0}</color>", star_reward_group_id).AppendLine();
 		return sb.ToString();
 	}

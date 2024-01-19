@@ -9,7 +9,19 @@ public class Reward_GoodsData : RewardDataBase
 
     protected override void InitData()
     {
-        
+        Data = new GoodsDataBase();
+        if (Reward.reward_type == REWARD_TYPE.GOLD)
+        {
+            Data.SetGoods(GOODS_TYPE.GOLD);
+        }
+        else if (Reward.reward_type == REWARD_TYPE.DIA)
+        {
+            Data.SetGoods(GOODS_TYPE.DIA);
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
     }
 
     public override object GetRewardItemData()
@@ -19,6 +31,10 @@ public class Reward_GoodsData : RewardDataBase
 
     public override string GetRewardItemIconPath()
     {
-        return Data.GetGoodsIconPath();
+        if (Data != null)
+        {
+            return Data.GetGoodsIconPath();
+        }
+        return null;
     }
 }

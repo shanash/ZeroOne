@@ -26,8 +26,6 @@ public class BattleNpcSkillGroup : BattleSkillGroup
             Battle_Skill_Data_List.Add(battle_skill);
         }
 
-
-
         //  첫번째 스킬, 최초 1회에 한하여 선쿨타임이 없음
         if (Skill_Order == 0)
         {
@@ -71,9 +69,5 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     public override string GetSkillCastEffectPath()
     {
         return Skill_Group.cast_effect_path;
-    }
-    public override float GetSkillCastEffectDuration()
-    {
-        return (float)Skill_Group.effect_duration;
     }
 }

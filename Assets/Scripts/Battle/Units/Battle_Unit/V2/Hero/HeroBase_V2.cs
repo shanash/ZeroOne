@@ -552,7 +552,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected virtual void SpawnSkillCastEffect(BattleSkillGroup skill_grp)
     {
         string effect_path = skill_grp.GetSkillCastEffectPath();
-        float duration = skill_grp.GetSkillCastEffectDuration();
         if (string.IsNullOrEmpty(effect_path))
         {
             return;
@@ -571,7 +570,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             eff.transform.position = this.transform.position;
         }
         
-        eff.StartParticle(duration);
+        eff.StartParticle(ec.Effect_Duration);
     }
 
     /// <summary>

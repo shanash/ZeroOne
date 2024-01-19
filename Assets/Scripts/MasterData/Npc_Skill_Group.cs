@@ -28,10 +28,6 @@
 	///	캐스팅 이펙트
 	///	</summary>
 	public readonly string cast_effect_path;
-	///	<summary>
-	///	이펙트 지속시간
-	///	</summary>
-	public readonly double effect_duration;
 
 	private bool disposed = false;
 
@@ -44,7 +40,6 @@
 		icon = raw_data.icon;
 		action_name = raw_data.action_name;
 		cast_effect_path = raw_data.cast_effect_path;
-		effect_duration = raw_data.effect_duration;
 	}
 
 	public void Dispose()
@@ -73,7 +68,6 @@
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[action_name] = <color=yellow>{0}</color>", action_name).AppendLine();
 		sb.AppendFormat("[cast_effect_path] = <color=yellow>{0}</color>", cast_effect_path).AppendLine();
-		sb.AppendFormat("[effect_duration] = <color=yellow>{0}</color>", effect_duration).AppendLine();
 		return sb.ToString();
 	}
 }

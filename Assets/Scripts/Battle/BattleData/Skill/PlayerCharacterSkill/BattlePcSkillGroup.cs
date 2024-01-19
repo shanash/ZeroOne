@@ -74,8 +74,4 @@ public class BattlePcSkillGroup : BattleSkillGroup
         return Skill_Group.cast_effect_path;
     }
 
-    public override float GetSkillCastEffectDuration()
-    {
-        return (float)Skill_Group.effect_duration;
-    }
 }

@@ -47,6 +47,10 @@ public partial class TeamManager_V2 : IDisposable
     {
         int cnt = Used_Members.Count;
         var pool = GameObjectPoolManager.Instance;
+        if (pool == null)
+        {
+            return;
+        }
         for (int i = 0; i < cnt; i++)
         {
             pool.UnusedGameObject(Used_Members[i].gameObject);

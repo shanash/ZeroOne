@@ -2,6 +2,7 @@ using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -157,43 +158,51 @@ public class StageInfoPopup : PopupBase
         string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/RewardItemCard";
 
         //  first reward list
-        List<First_Reward_Data> first_reward_data_list = new List<First_Reward_Data>();
-        m.Get_FirstRewardDataList(Stage.first_reward_group_id, ref first_reward_data_list);
-        cnt = first_reward_data_list.Count;
+        var f_reward_data_list = m.Get_RewardSetDataList(Stage.first_reward_group_id);
+        cnt = f_reward_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var item_data = first_reward_data_list[i];
+            var reward_data = f_reward_data_list.ToList()[i];
+            if (!reward_data.is_use)
+            {
+                continue;
+            }
             var obj = pool.GetGameObject(reward_prefab, First_Reward_List_View.content);
             var reward_item = obj.GetComponent<RewardItemCard>();
-            reward_item.SetItem(item_data.item_type, item_data.item_id);
+            reward_item.SetRewardSetData(reward_data);
             Used_Reward_Item_List.Add(reward_item);
         }
 
-
         //  star reward list
-        List<Star_Reward_Data> star_reward_data_list = new List<Star_Reward_Data>();
-        m.Get_StarRewardDataList(Stage.star_reward_group_id, ref star_reward_data_list);
+        var star_reward_data_list = m.Get_RewardSetDataList(Stage.star_reward_group_id);
         cnt = star_reward_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var item_data = star_reward_data_list[i];
+            var reward_data = star_reward_data_list.ToList()[i];
+            if (!reward_data.is_use)
+            {
+                continue;
+            }
             var obj = pool.GetGameObject(reward_prefab, First_Reward_List_View.content);
             var reward_item = obj.GetComponent<RewardItemCard>();
-            reward_item.SetItem(item_data.item_type, item_data.item_id);
+            reward_item.SetRewardSetData(reward_data);
             Used_Reward_Item_List.Add(reward_item);
         }
 
 
         //  repeat reward list
-        List<Repeat_Reward_Data> repeat_reward_data_list = new List<Repeat_Reward_Data>();
-        m.Get_RepeatRewardDataList(Stage.repeat_reward_group_id, ref repeat_reward_data_list);
+        var repeat_reward_data_list = m.Get_RewardSetDataList(Stage.repeat_reward_group_id);
         cnt = repeat_reward_data_list.Count;
-        for (int i = 0; i < cnt; i++)
+        for(int i = 0;i < cnt;i++)
         {
-            var item_data = repeat_reward_data_list[i];
+            var reward_data = repeat_reward_data_list.ToList()[i];
+            if (!reward_data.is_use)
+            {
+                continue;
+            }
             var obj = pool.GetGameObject(reward_prefab, Repeat_Reward_List_View.content);
             var reward_item = obj.GetComponent<RewardItemCard>();
-            reward_item.SetItem(item_data.item_type, item_data.item_id);
+            reward_item.SetRewardSetData(reward_data);
             Used_Reward_Item_List.Add(reward_item);
         }
 

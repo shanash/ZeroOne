@@ -743,11 +743,11 @@ public enum REWARD_TYPE
 	EXP_CHARACTER = 6,
 	/// <summary>7 캐릭터</summary>
 	CHARACTER = 7,
-	/// <summary>6 장비</summary>
+	/// <summary>8 장비</summary>
 	EQUIPMENT = 8,
-	/// <summary>근원 전달 횟수(플레이어 보유)</summary>
+	/// <summary>9 근원 전달 횟수(플레이어 보유)</summary>
 	SEND_ESSENCE = 9,
-	/// <summary>근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
+	/// <summary>10 근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
 	GET_ESSENCE = 10,
 	/// <summary>101 플레이어 경험치 물약</summary>
 	EXP_POTION_P = 101,
@@ -773,8 +773,10 @@ public enum REWARD_TYPE
 	PIECE_EQUIPMENT = 111,
 	/// <summary>112 캐릭터 조각</summary>
 	PIECE_CHARACTER = 112,
+	/// <summary>113 아이템 조각</summary>
+	PIECE_ITEM = 113,
 	/// <summary>113 스킬 경험치 아이템</summary>
-	EXP_SKILL = 113,
+	EXP_SKILL = 114,
 }
 
 ///	<summary>

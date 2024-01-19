@@ -8,7 +8,8 @@ public class SkillEffect_Pierce_Splash : SkillEffectBase
 {
     public override void StartParticle(float duration, bool loop = false)
     {
-        base.StartParticle(duration, loop);
+        var ec = GetEffectComponent();
+        base.StartParticle(ec.Effect_Duration, loop);
 
         if (Send_Data.Skill.GetSecondTargetRuleType() == SECOND_TARGET_RULE_TYPE.NONE)
         {

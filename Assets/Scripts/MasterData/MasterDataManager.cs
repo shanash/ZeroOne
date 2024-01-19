@@ -199,7 +199,7 @@ public class MasterDataManager : BaseMasterDataManager
     public IReadOnlyCollection<Reward_Set_Data> Get_RewardSetDataList(int reward_id)
     {
         Check_Reward_Set_Data();
-        return _Reward_Set_Data.FindAll(x => x.reward_id == reward_id && x.is_use);
+        return _Reward_Set_Data.FindAll(x => x.reward_id == reward_id);
     }
 
     #endregion
@@ -528,14 +528,14 @@ public class MasterDataManager : BaseMasterDataManager
     /// <summary>
     /// 각 스테이지별로 지정된 웨이브의 그룹id로 해당 웨이브 데이터 리스트를 찾아 반환
     /// </summary>
-    /// <param name="wave_group_id"></param>
+    /// <param name="stage_id"></param>
     /// <param name="list"></param>
-    public void Get_WaveDataList(int wave_group_id, ref List<Wave_Data> list)
+    public void Get_WaveDataList(int stage_id, ref List<Wave_Data> list)
     {
 
         Check_Wave_Data();
         list.Clear();
-        list.AddRange(_Wave_Data.FindAll(x => x.wave_group_id == wave_group_id));
+        list.AddRange(_Wave_Data.FindAll(x => x.stage_id == stage_id));
         //  wave_sequence 오름 차순 정렬
         list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
     }

@@ -11,8 +11,8 @@ public class Raw_Stage_Data : System.IDisposable
 	public int character_exp {get; set;}
 	public int destiny_exp {get; set;}
 	public int gold {get; set;}
-	public int first_reward_group_id {get; set;}
 	public int repeat_reward_group_id {get; set;}
+	public int first_reward_group_id {get; set;}
 	public int star_reward_group_id {get; set;}
 
 	private bool disposed = false;
@@ -27,8 +27,8 @@ public class Raw_Stage_Data : System.IDisposable
 		character_exp = 0;
 		destiny_exp = 0;
 		gold = 0;
-		first_reward_group_id = 0;
 		repeat_reward_group_id = 0;
+		first_reward_group_id = 0;
 		star_reward_group_id = 0;
 	}
 

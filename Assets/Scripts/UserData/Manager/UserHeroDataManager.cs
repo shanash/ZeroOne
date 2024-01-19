@@ -98,9 +98,16 @@ public class UserHeroDataManager : ManagerBase
             }
             arr.Add(jdata);
         }
-        json[NODE_HERO_DATA_LIST] = arr;
+        if (arr.IsArray && arr.Count > 0)
+        {
+            json[NODE_HERO_DATA_LIST] = arr;
+        }
+        if (json.Keys.Count > 0)
+        {
+            return json;
+        }
 
-        return json;
+        return null;
     }
 
     public override bool Deserialized(JsonData json)

@@ -174,8 +174,6 @@ public abstract class BattleSkillGroup : BattleDataBase
 
     public abstract string GetSkillCastEffectPath();
 
-    public abstract float GetSkillCastEffectDuration();
-
     public virtual string GetSkillIconPath() { return "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy"; }
 
     public override string ToString()

@@ -202,9 +202,15 @@ public class UserMemorialDataManager : ManagerBase
             }
             arr.Add(jdata);
         }
-        json[NODE_MEMORIAL_DATA_LIST] = arr;
-
-        return json;
+        if (arr.IsArray && arr.Count > 0)
+        {
+            json[NODE_MEMORIAL_DATA_LIST] = arr;
+        }
+        if(json.Keys.Count > 0)
+        {
+            return json;
+        }
+        return null;
     }
 
     public override bool Deserialized(JsonData json)

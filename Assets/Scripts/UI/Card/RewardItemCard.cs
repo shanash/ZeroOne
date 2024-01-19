@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RewardItemCard : ItemCardBase
+public class RewardItemCard : RewardCardBase
 {
     [SerializeField, Tooltip("Recv Complete Check Box")]
     protected RectTransform Recv_Complete;
@@ -14,7 +14,6 @@ public class RewardItemCard : ItemCardBase
         Recv_Complete.gameObject.SetActive(complete);
     }
 
-
     public override void Spawned()
     {
         base.Spawned();
@@ -22,7 +21,5 @@ public class RewardItemCard : ItemCardBase
 
         this.transform.localScale = Init_Scale;
     }
-
-
 
 }

@@ -250,7 +250,10 @@ public class UserDeckData : UserDataBase
             }
             heroes_arr.Add(jdata);
         }
-        json[NODE_DECK_HEROES] = heroes_arr;
+        if (heroes_arr.IsArray && heroes_arr.Count > 0)
+        {
+            json[NODE_DECK_HEROES] = heroes_arr;
+        }
 
         return json;
     }

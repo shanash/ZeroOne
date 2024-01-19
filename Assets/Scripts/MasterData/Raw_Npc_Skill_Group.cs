@@ -10,7 +10,6 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 	public string icon {get; set;}
 	public string action_name {get; set;}
 	public string cast_effect_path {get; set;}
-	public double effect_duration {get; set;}
 
 	private bool disposed = false;
 

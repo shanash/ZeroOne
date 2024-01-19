@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using FluffyDuck.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +12,28 @@ public class RewardCardBase : UIBase
     public void SetRewardSetData(Reward_Set_Data d)
     {
         Data = CreateRewardData(d);
+        UpdateRewardItemIcon();
+    }
+
+    protected void UpdateRewardItemIcon()
+    {
+        if (Reward_Item_Icon == null)
+        {
+            return;
+        }
+        string icon_path = Data.GetRewardItemIconPath();
+        if (!string.IsNullOrEmpty(icon_path)) 
+        {
+            CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.GetRewardItemIconPath(), (spr) =>
+            {
+                Reward_Item_Icon.sprite = spr;
+            });
+        }
+        else
+        {
+            bool a = false;
+        }
+        
     }
 
     RewardDataBase CreateRewardData(Reward_Set_Data data)
@@ -31,13 +51,13 @@ public class RewardCardBase : UIBase
                 Debug.Assert(false);
                 break;
             case REWARD_TYPE.FAVORITE:
-                Debug.Assert(false);
+                Debug.Assert(false);    //  클라이언트에서 사용하지 않는 보상 타입
                 break;
             case REWARD_TYPE.EXP_PLAYER:
-                Debug.Assert(false);
+                reward = new Reward_ItemData();
                 break;
             case REWARD_TYPE.EXP_CHARACTER:
-                Debug.Assert(false);
+                reward = new Reward_ItemData();
                 break;
             case REWARD_TYPE.CHARACTER:
                 reward = new Reward_ItemData();
