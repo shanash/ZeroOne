@@ -1,7 +1,7 @@
 using UnityEngine;
 using FluffyDuck.Util;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace FluffyDuck.UI
 {
@@ -110,41 +110,80 @@ namespace FluffyDuck.UI
         }
 
         /// <summary>
+        /// [부모를 다시 붙이는 문제때문에 타입을 명시하는 메소드로 변경]
         /// 비동기 팝업 추가
         /// 팝업의 타입에 따라 각기 다른 컨테이너에 담는다.
         /// 팝업을 생성한후 콜백에 전달
         /// </summary>
         /// <param name="path"></param>
         /// <param name="cb"></param>
+        [Obsolete]
         public void Add(string path, System.Action<PopupBase> cb)
         {
+            Add(path, POPUP_TYPE.FULLPAGE_TYPE, cb);
+        }
+
+        /// <summary>
+        /// 비동기 팝업 추가
+        /// 팝업의 타입에 따라 각기 다른 컨테이너에 담는다.
+        /// 팝업을 생성한후 콜백에 전달
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="type"></param>
+        /// <param name="cb"></param>
+        public void Add(string path, POPUP_TYPE type, System.Action<PopupBase> cb)
+        {
             RectTransform container = Container.FullPage_Container;
+            switch (type)
+            {
+                case POPUP_TYPE.FULLPAGE_TYPE:
+                    container = Container.FullPage_Container;
+                    break;
+                case POPUP_TYPE.DIALOG_TYPE:
+                    container = Container.Dialog_Container;
+                    break;
+                case POPUP_TYPE.MODAL_TYPE:
+                    container = Container.Modal_Container; ;
+                    break;
+                case POPUP_TYPE.NOTI_TYPE:
+                    container = Container.Noti_Container;
+                    break;
+                default:
+                    container = Container.FullPage_Container;
+                    Debug.Assert(false);
+                    break;
+            }
 
             AddPopup(path, container, (popup) =>
             {
                 if (popup != null)
                 {
+                    RectTransform rt_type = Container.FullPage_Container;
                     switch (popup.GetPopupType())
                     {
                         case POPUP_TYPE.FULLPAGE_TYPE:
-                            container = Container.FullPage_Container;
+                            rt_type = Container.FullPage_Container;
                             break;
                         case POPUP_TYPE.DIALOG_TYPE:
-                            container = Container.Dialog_Container;
+                            rt_type = Container.Dialog_Container;
                             break;
                         case POPUP_TYPE.MODAL_TYPE:
-                            container = Container.Modal_Container; ;
+                            rt_type = Container.Modal_Container; ;
                             break;
                         case POPUP_TYPE.NOTI_TYPE:
-                            container = Container.Noti_Container;
+                            rt_type = Container.Noti_Container;
                             break;
                         default:
-                            container = Container.FullPage_Container;
+                            rt_type = Container.FullPage_Container;
                             Debug.Assert(false);
                             break;
                     }
-                    popup.transform.SetParent(container);
-                    popup.transform.localScale = Vector3.one;
+
+                    if (rt_type != container)
+                    {
+                        Debug.LogWarning($"입력한 타입과 맞지 않습니다. 입력 타입 : {type}, 프리팹 타입 : {popup.GetPopupType()}");
+                        popup.transform.SetParent(rt_type);
+                    }
 
                     //  최근 추가된 팝업이 가장 위에 오도록
                     popup.gameObject.GetComponent<RectTransform>().SetAsLastSibling();
