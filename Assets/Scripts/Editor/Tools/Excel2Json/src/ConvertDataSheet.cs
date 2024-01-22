@@ -79,7 +79,7 @@ namespace Excel2Json
                 if (is_csharp_make)
                 {
                     MakeCSharpFile(col_info, table_name, csharp_output_dir, use_raw_cs_file);
-                    if (!use_raw_cs_file)
+                    if (use_raw_cs_file)
                     {
                         MakeCSharpRawFile(col_info, table_name, csharp_output_dir);
                     }
@@ -253,7 +253,7 @@ namespace Excel2Json
             try
             {
                 // 타입에 따라 셀 값을 처리
-                switch (info.type.Replace("*", "").ToLower())
+                switch (info.type.ToLower())
                 {
                     case "int":
                         return JToken.FromObject(cell.GetValue<int>());
@@ -304,7 +304,7 @@ namespace Excel2Json
 
             foreach (var element in elements)
             {
-                switch (info.type.Replace("*", "").ToLower())
+                switch (info.type.ToLower())
                 {
                     case "int[]":
                         array.Add(JToken.FromObject(int.Parse(element.Trim())));
@@ -341,20 +341,12 @@ namespace Excel2Json
         /// <param name="col_info_list"></param>
         /// <param name="data_table_name"></param>
         /// <param name="output_dir"></param>
-        static void MakeCSharpFile(List<ColumnInfo> col_info_list, string data_table_name, string output_dir, bool use_raw)
+        static void MakeCSharpFile(List<ColumnInfo> col_info_list, string data_table_name, string output_dir, bool use_raw_cs_file)
         {
             StringBuilder sb = new StringBuilder();
 
-            // using namespace
-            if (!use_raw)
-            {
-                sb.AppendLine("using FluffyDuck.Util;");
-                sb.AppendLine("using System.Linq;");
-                sb.AppendLine();
-            }
-
             //  class declare
-            if (use_raw)
+            if (!use_raw_cs_file)
             {
                 sb.AppendLine("[System.Serializable]");
             }
@@ -366,10 +358,6 @@ namespace Excel2Json
             for (int i = 0; i < col_info_list.Count; i++)
             {
                 ColumnInfo info = col_info_list[i];
-                bool is_secure_var = info.type.Contains('*');
-                string origin_type = info.type.Replace("*", "");
-                string base_type = origin_type.Replace("[]", "");
-
                 if (info.is_ref)
                 {
                     continue;
@@ -399,44 +387,28 @@ namespace Excel2Json
                 }
 
                 sb.AppendLine("\t///\t</summary>");
+                //sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
 
-                if (use_raw)
+                if (use_raw_cs_file)
                 {
-                    sb.AppendLine($"\tpublic {origin_type} {info.key} {get_set_str}");
+                    sb.AppendLine($"\tpublic readonly {info.type} {info.key};");
                 }
                 else
                 {
-                    if (!info.is_array)
-                    {
-                        sb.AppendLine($"\tpublic {base_type} {info.key} => _{info.key}{(is_secure_var ? ".Get()" : "")};");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"\tpublic {base_type}[] {info.key} => _{info.key}{(is_secure_var ? ".Select(item => item.Get()).ToArray()" : "")};");
-                    }
-
-                    if (is_secure_var)
-                    {
-                        sb.AppendLine($"\tSecureVar<{base_type}>{(info.is_array ? "[]" : "")} _{info.key};");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"\t{origin_type} _{info.key};");
-                    }
+                    sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
                 }
-                sb.AppendLine();
             }
-            sb.AppendLine("\tprivate bool disposed = false;");
             sb.AppendLine();
+            sb.AppendLine("\tprivate bool disposed = false;").AppendLine();
 
             //  constructer
-            if (use_raw)
+            if (use_raw_cs_file)
             {
-                sb.AppendLine($"\tpublic {data_table_name}()");
+                sb.AppendLine($"\tpublic {data_table_name}(Raw_{data_table_name} raw_data)");
             }
             else
             {
-                sb.AppendLine($"\tpublic {data_table_name}(Raw_{data_table_name} raw_data)");
+                sb.AppendLine($"\tpublic {data_table_name}()");
             }
 
             sb.AppendLine("\t{");
@@ -445,47 +417,48 @@ namespace Excel2Json
             for (int i = 0; i < col_info_list.Count; i++)
             {
                 ColumnInfo info = col_info_list[i];
-                bool is_secure_var = info.type.Contains('*');
-                string origin_type = info.type.Replace("*", "");
-                string base_type = info.type.Replace("[]", "");
-
                 if (info.is_ref)
                 {
                     continue;
                 }
 
-                if (use_raw)
+                if (info.type == "int")
                 {
-                    sb.AppendLine($"\t\t{info.key} = default;");
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = 0;");
                 }
-                else if (origin_type == "int" || origin_type == "double")
+                else if (info.type == "string")
                 {
-                    sb.AppendLine(is_secure_var
-                        ? $"\t\t_{info.key} = new SecureVar<{origin_type}>(raw_data.{info.key});"
-                        : $"\t\t_{info.key} = raw_data.{info.key};");
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = string.Empty;");
                 }
-                else if (origin_type == "bool" || origin_type == "string")
+                else if (info.type == "bool")
                 {
-                    sb.AppendLine($"\t\t_{info.key} = raw_data.{info.key};");
+                    sb.AppendLine(use_raw_cs_file
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = false;");
+                }
+                else if (info.type == "double")
+                {
+                    sb.AppendLine(use_raw_cs_file 
+                        ? $"\t\t{info.key} = raw_data.{info.key};" 
+                        : $"\t\t{info.key} = 0;");
                 }
                 else if (info.is_enum)
                 {
                     if (!info.is_array)
                     {
-                        sb.AppendLine($"\t\t_{info.key} = raw_data.{info.key};");
+                        sb.AppendLine(use_raw_cs_file
+                            ? $"\t\t{info.key} = raw_data.{info.key};" 
+                            : $"\t\t{info.key} = {info.type}.{info.init_value};");
                     }
                 }
 
-                if (!use_raw && info.is_array)
+                if (use_raw_cs_file && info.is_array)
                 {
-                    if (IsRecreatableSecureVar(info.type))
-                    {
-                        sb.AppendLine($"\t\t_{info.key} = SecureVar<{base_type}>.CreateSecureArray(raw_data.{info.key});");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"\t\t_{info.key} = raw_data.{info.key}.ToArray();");
-                    }
+                    sb.AppendLine($"\t\t{info.key} = raw_data.{info.key} != null ? ({info.type})raw_data.{info.key}.Clone() : new {info.type.Replace("[]", "")}[0];");
                 }
             }
 
@@ -586,9 +559,7 @@ namespace Excel2Json
                     continue;
                 }
 
-                string origin_type = info.type.Replace("*", "");
-
-                sb.AppendLine($"\tpublic {origin_type} {info.key} {get_set_str}");
+                sb.AppendLine($"\tpublic {info.type} {info.key} {get_set_str}");
             }
             sb.AppendLine();
             sb.AppendLine("\tprivate bool disposed = false;").AppendLine();
@@ -600,20 +571,19 @@ namespace Excel2Json
             for (int i = 0; i < col_info_list.Count; i++)
             {
                 ColumnInfo info = col_info_list[i];
-                string origin_type = info.type.Replace("*", "");
                 if (info.is_ref)
                 {
                     continue;
                 }
-                if (origin_type == "int")
+                if (info.type == "int")
                 {
                     sb.AppendLine($"\t\t{info.key} = 0;");
                 }
-                else if (origin_type == "string")
+                else if (info.type == "string")
                 {
                     sb.AppendLine($"\t\t{info.key} = string.Empty;");
                 }
-                else if (origin_type == "bool")
+                else if (info.type == "bool")
                 {
                     sb.AppendLine($"\t\t{info.key} = false;");
                 }
@@ -653,11 +623,6 @@ namespace Excel2Json
             string filename = string.Format("{0}.cs", $"Raw_{data_table_name}");
             string path = Path.Combine(output_dir, filename);
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
-        }
-
-        static bool IsRecreatableSecureVar(string type)
-        {
-            return type.Contains("*int") || type.Contains("*float") || type.Contains("*double");
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Excel2Json
 
     public static class Program
     {
-        const string VERSION = "Excel2Json Ver.1.5.2";
+        public const bool USE_RAW_CS_FILE = true;
+        const string VERSION = "Excel2Json Ver.1.5.1";
 
         public static void Main(params string[] args)
         {
@@ -43,7 +44,6 @@ namespace Excel2Json
             PARAM_TYPE encrypt_type = PARAM_TYPE.NONE;
             string encrypt_password = string.Empty;
 
-            bool use_raw = false;
 
             //  check help type
             for (int i = 0; i < args.Length; i++)
@@ -142,10 +142,6 @@ namespace Excel2Json
                         encrypt_type = PARAM_TYPE.ENCRYPT_ENABLE;
                     }
                 }
-                else if (arg == "-raw")
-                {
-                    use_raw = true;
-                }
             }
 
             if (output_type != PARAM_TYPE.OUTPUT_DIR)
@@ -181,7 +177,7 @@ namespace Excel2Json
                         if (ext == ".xlsx" && !is_backup_file)
                         {
                             Logger.Log($"Convert => {fname}");
-                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, use_raw, ref master_table_columns, ref master_enum_data_list);
+                            ExcelApp.ReadExcelData(fname, output_path, is_csharp_make, csharp_output_dir, is_encrypt, encrypt_password, ref master_table_columns, ref master_enum_data_list);
                         }
                     }
 
@@ -218,13 +214,15 @@ namespace Excel2Json
             
             if (is_csharp_make && master_table_columns.Count > 0)
             {
-                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt, use_raw);
+                ExcelApp.MakeLoadBaseMasterData(master_table_columns, csharp_output_dir, is_encrypt, USE_RAW_CS_FILE);
             }
 
             if (is_csharp_make && master_enum_data_list.Count > 0)
             {
                 ExcelApp.MakeMasterDefine(master_enum_data_list, csharp_output_dir);
             }
+            
+
         }
 
         private static void Usage()
@@ -257,7 +255,6 @@ namespace Excel2Json
             Logger.Log("-o : The path to the directory where the Json file will be created. The name of the Json file is created with the name of the sheet.");
             Logger.Log("-cs : Generate C#(Csharp) file with key, data type of Json file.");
             Logger.Log("-pw : Encrypt the json file. Please enter your password. (Version C#6)");
-            Logger.Log("-raw : Use raw data directly in the game. If not set, data will be converted into a structured class.");
             Logger.Log("-h/-help : Help Menual");
             Logger.Log("==================================================");
         }

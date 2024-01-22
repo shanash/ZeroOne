@@ -13,11 +13,10 @@ namespace FluffyDuck.Util
         T data;
         string encryptKey = string.Empty;
 
-        public SecureVar(T val = default)
+        public SecureVar()
         {
             string key = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8);
             SetKey(key);
-            Set(val);
         }
 
         public void Set(T val)
@@ -58,16 +57,6 @@ namespace FluffyDuck.Util
         public bool IsSetKey()
         {
             return !string.IsNullOrEmpty(encryptKey);
-        }
-
-        public static SecureVar<T>[] CreateSecureArray(T[] data)
-        {
-            var secureArray = new SecureVar<T>[data.Length];
-            for (int i = 0; i < data.Length; i++)
-            {
-                secureArray[i] = new SecureVar<T>(data[i]);
-            }
-            return secureArray;
         }
     }
 

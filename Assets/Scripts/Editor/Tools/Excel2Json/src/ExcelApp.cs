@@ -12,7 +12,7 @@ namespace Excel2Json
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
 
-        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, bool use_raw, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
+        public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
         {
             string tempPath = Path.GetTempFileName(); // 임시 파일 경로 생성
 
@@ -45,7 +45,7 @@ namespace Excel2Json
                             }
                             else
                             {
-                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, use_raw);
+                                ConvertDataSheet.ConvertSheet(ws, output_dir, is_csharp_make, csharp_output_dir, is_encrypt, enc_password, ref master_table_columns, Program.USE_RAW_CS_FILE);
                             }
                         }
                     }
@@ -161,7 +161,7 @@ namespace Excel2Json
         /// <param name="master_table_columns"></param>
         /// <param name="output_dir"></param>
         /// <param name="is_encrypt"></param>
-        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt, bool use_raw)
+        public static void MakeLoadBaseMasterData(Dictionary<string, List<ColumnInfo>> master_table_columns, string output_dir, bool is_encrypt, bool use_raw_cs_file)
         {
             StringBuilder sb = new StringBuilder();
             const string mng_name = "BaseMasterDataManager";
@@ -186,7 +186,7 @@ namespace Excel2Json
                 }
             }
             sb.AppendLine("using Newtonsoft.Json;");
-            if (!use_raw)
+            if (use_raw_cs_file)
             {
                 sb.AppendLine("using System.Linq;");
             }
@@ -259,29 +259,29 @@ namespace Excel2Json
                     {
                         sb.AppendLine($"\t\tstring data = LoadJsonData(\"Master/{table.Key}\");");
                         sb.AppendLine("\t\tstring decrypt = ForestJ.Util.Security.AESDecrypt256(data);");
-                        if (use_raw)
+                        if (use_raw_cs_file)
                         {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
                         }
                         else
                         {
-                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
                         }
                     }
                     else
                     {
                         sb.AppendLine($"\t\tstring data = LoadJsonData(\"Master/{table.Key}\");");
-                        if (use_raw)
-                        {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(data);");
-                        }
-                        else
+                        if (use_raw_cs_file)
                         {
                             sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(data);");
                         }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(data);");
+                        }
                     }
 
-                    if (!use_raw)
+                    if (use_raw_cs_file)
                     {
                         sb.AppendLine($"\t\t_{table.Key} = raw_data_list.Select(raw_data => new {table.Key}(raw_data)).ToList();");
                     }
@@ -311,31 +311,35 @@ namespace Excel2Json
                     {
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
                         sb.AppendLine("\t\tstring decrypt = FluffyDuck.Util.Security.AESDecrypt256(json);");
-                        if (use_raw)
+                        if (use_raw_cs_file)
                         {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
+                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
                         }
                         else
                         {
-                            sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(decrypt);");
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(decrypt);");
                         }
                     }
                     else
                     {
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
-                        if (use_raw)
-                        {
-                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");
-                        }
-                        else
+                        if (use_raw_cs_file)
                         {
                             sb.AppendLine($"\t\tvar raw_data_list = JsonConvert.DeserializeObject<List<Raw_{table.Key}>>(json);");
                         }
+                        else
+                        {
+                            sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");
+                        }
                     }
 
-                    if (!use_raw)
+                    if (use_raw_cs_file)
                     {
-                        sb.AppendLine($"\t\t_{table.Key} = raw_data_list.Select(raw_data => new {table.Key}(raw_data)).ToList();");
+                        sb.AppendLine($"\t\t_{table.Key} = new List<{table.Key}>();");
+                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
+                        sb.AppendLine("\t\t{");
+                        sb.AppendLine($"\t\t\t_{table.Key}.Add(new {table.Key}(raw_data));");
+                        sb.AppendLine("\t\t}");
                     }
                     sb.AppendLine("\t}");
                     sb.AppendLine();
@@ -359,11 +363,18 @@ namespace Excel2Json
                 //  class declare end
                 sb.AppendLine("}");
 
+
             }
+
 
             string filename = string.Format("{0}.cs", mng_name);
             string path = Path.Combine(output_dir, filename);
             File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
         }
+
+        
+
+
+
     }
 }
