@@ -320,13 +320,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
-        Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
+        Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.CLICK, bounding_box);
         if (Current_Interaction == null)
         {
             return;
         }
 
-        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.TOUCH, bounding_box);
+        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.CLICK, bounding_box);
 
         FSM.ChangeState(ACTOR_STATES.REACT);
     }
@@ -345,13 +345,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
-        Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
+        Current_Interaction = GetInteractionData(TOUCH_GESTURE_TYPE.DOUBLE_CLICK, bounding_box);
         if (Current_Interaction == null)
         {
             return;
         }
 
-        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, bounding_box);
+        SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DOUBLE_CLICK, bounding_box);
 
         FSM.ChangeState(ACTOR_STATES.REACT);
     }
@@ -443,6 +443,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnNade(ICursorInteractable obj, Vector2 position, Vector2 delta, int state)
     {
+        /*
         bool isNadeValid = FSM.CurrentTransitionID == ACTOR_STATES.NADE && state >= 1;
         bool isIdleValid = FSM.CurrentTransitionID == ACTOR_STATES.IDLE && state == 0;
 
@@ -486,6 +487,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 Dragged_Canvas_Position = Vector2.zero;
                 break;
         }
+        */
     }
     #endregion
 

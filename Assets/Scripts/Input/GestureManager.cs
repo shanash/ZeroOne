@@ -22,7 +22,7 @@ public class GestureManager : Singleton<GestureManager>
     Coroutine Wait_For_Double_Touch = null;
     Vector2 Last_TouchPosition = Vector2.zero;
 
-    bool Is_Nade_State = false;
+    //bool Is_Nade_State = false;
     ICollection<ICursorInteractable> Nade_Components = null;
 
     public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2, int> OnGestureDetected;
@@ -65,10 +65,12 @@ public class GestureManager : Singleton<GestureManager>
         TouchDown_Components = new ReadOnlyCollection<ICursorInteractable>((IList<ICursorInteractable>)components);
 
         // 터치 다운 이벤트 발생
+        /*
         foreach (var component in components)
         {
             OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOWN, component, position, 0);
         }
+        */
     }
 
     /// <summary>
@@ -82,11 +84,13 @@ public class GestureManager : Singleton<GestureManager>
         {
             return;
         }
+        /*
         // 터치 업 이벤트 발생
         foreach (var component in components)
         {
             OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.UP, component, position, 0);
         }
+        */
 
         if (IsDragging)
         {
@@ -99,6 +103,7 @@ public class GestureManager : Singleton<GestureManager>
             IsDragging = false;
         }
 
+        /*
         if (Is_Nade_State)
         {
             foreach (var component in Nade_Components)
@@ -110,6 +115,7 @@ public class GestureManager : Singleton<GestureManager>
             Is_Nade_State = false;
             Nade_Components = null;
         }
+        */
     }
 
     private void HandleTap(Vector2 position, ICollection<ICursorInteractable> components)
@@ -133,7 +139,7 @@ public class GestureManager : Singleton<GestureManager>
                 foreach (var component in components)
                 {
                     OnDoubleTap(component);
-                    OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_TOUCH, component, position, 0);
+                    OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_CLICK, component, position, 0);
                 }
             }
             else
@@ -159,6 +165,7 @@ public class GestureManager : Singleton<GestureManager>
 
         if (phase == InputActionPhase.Performed)
         {
+            /*
             Is_Nade_State = true;
             Nade_Components = components;
             foreach (var component in components)
@@ -166,6 +173,7 @@ public class GestureManager : Singleton<GestureManager>
                 OnNade?.Invoke(component, position, Vector2.zero, 0);
                 OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.NADE, component, Vector2.zero, 1);
             }
+            */
         }
     }
 
@@ -209,7 +217,7 @@ public class GestureManager : Singleton<GestureManager>
                 OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DRAG, TouchDown_Components[i], drag_origin, Drag_Id);
             }
         }
-
+        /*
         if (Is_Nade_State)
         {
             foreach (var component in Nade_Components)
@@ -218,6 +226,7 @@ public class GestureManager : Singleton<GestureManager>
                 OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.NADE, component, drag_origin, 1);
             }
         }
+        */
     }
 
     IEnumerator WaitForPossibleDoubleTouch(Vector2 position, ICursorInteractable[] matched_components)
@@ -228,7 +237,7 @@ public class GestureManager : Singleton<GestureManager>
         {
             foreach (var component in matched_components)
             {
-                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.TOUCH, component, position, 0);
+                OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.CLICK, component, position, 0);
                 OnTap?.Invoke(component);
             }
         }
