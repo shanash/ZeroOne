@@ -1,33 +1,25 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class L2d_Skin_Ani_State_Data : System.IDisposable
+﻿public class L2d_Skin_Ani_State_Data : System.IDisposable
 {
 	///	<summary>
 	///	상태 id
 	///	</summary>
-	public int state_id => _state_id;
-	int _state_id;
-
+	public readonly int state_id;
 	///	<summary>
 	///	기본 idle 애니 ID
 	///	</summary>
-	public int base_ani_id => _base_ani_id;
-	int _base_ani_id;
-
+	public readonly int base_ani_id;
 	///	<summary>
 	///	interaction_group_id
 	///	</summary>
-	public int interaction_group_id => _interaction_group_id;
-	int _interaction_group_id;
+	public readonly int interaction_group_id;
 
 	private bool disposed = false;
 
 	public L2d_Skin_Ani_State_Data(Raw_L2d_Skin_Ani_State_Data raw_data)
 	{
-		_state_id = raw_data.state_id;
-		_base_ani_id = raw_data.base_ani_id;
-		_interaction_group_id = raw_data.interaction_group_id;
+		state_id = raw_data.state_id;
+		base_ani_id = raw_data.base_ani_id;
+		interaction_group_id = raw_data.interaction_group_id;
 	}
 
 	public void Dispose()

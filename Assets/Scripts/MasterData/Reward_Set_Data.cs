@@ -1,70 +1,52 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Reward_Set_Data : System.IDisposable
+﻿public class Reward_Set_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 ID
 	///	</summary>
-	public int reward_id => _reward_id;
-	int _reward_id;
-
+	public readonly int reward_id;
 	///	<summary>
 	///	보상 타입
 	///	</summary>
-	public REWARD_TYPE reward_type => _reward_type;
-	REWARD_TYPE _reward_type;
-
+	public readonly REWARD_TYPE reward_type;
 	///	<summary>
 	///	변수1
 	///	</summary>
-	public int var1 => _var1;
-	int _var1;
-
+	public readonly int var1;
 	///	<summary>
 	///	변수2
 	///	</summary>
-	public int var2 => _var2;
-	int _var2;
-
+	public readonly int var2;
 	///	<summary>
 	///	출현 타입
 	///	0: drop_per 칼럼을 해당 행의 보상 출현 성공률로 사용
 	///	1: drop_per 칼럼을 같은 reward_id 내에서 출현 비중으로 사용
 	///	</summary>
-	public int drop_type => _drop_type;
-	int _drop_type;
-
+	public readonly int drop_type;
 	///	<summary>
 	///	출현확률
 	///	</summary>
-	public int drop_per => _drop_per;
-	int _drop_per;
-
+	public readonly int drop_per;
 	///	<summary>
 	///	노출 여부
 	///	</summary>
-	public bool is_use => _is_use;
-	bool _is_use;
-
+	public readonly bool is_use;
 	///	<summary>
 	///	보상 노출 순서
 	///	</summary>
-	public int sort_order => _sort_order;
-	int _sort_order;
+	public readonly int sort_order;
 
 	private bool disposed = false;
 
 	public Reward_Set_Data(Raw_Reward_Set_Data raw_data)
 	{
-		_reward_id = raw_data.reward_id;
-		_reward_type = raw_data.reward_type;
-		_var1 = raw_data.var1;
-		_var2 = raw_data.var2;
-		_drop_type = raw_data.drop_type;
-		_drop_per = raw_data.drop_per;
-		_is_use = raw_data.is_use;
-		_sort_order = raw_data.sort_order;
+		reward_id = raw_data.reward_id;
+		reward_type = raw_data.reward_type;
+		var1 = raw_data.var1;
+		var2 = raw_data.var2;
+		drop_type = raw_data.drop_type;
+		drop_per = raw_data.drop_per;
+		is_use = raw_data.is_use;
+		sort_order = raw_data.sort_order;
 	}
 
 	public void Dispose()

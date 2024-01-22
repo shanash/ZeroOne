@@ -1,26 +1,20 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class World_Data : System.IDisposable
+﻿public class World_Data : System.IDisposable
 {
 	///	<summary>
 	///	월드 인덱스
 	///	</summary>
-	public int world_id => _world_id;
-	int _world_id;
-
+	public readonly int world_id;
 	///	<summary>
 	///	월드 명칭
 	///	</summary>
-	public string world_name => _world_name;
-	string _world_name;
+	public readonly string world_name;
 
 	private bool disposed = false;
 
 	public World_Data(Raw_World_Data raw_data)
 	{
-		_world_id = raw_data.world_id;
-		_world_name = raw_data.world_name;
+		world_id = raw_data.world_id;
+		world_name = raw_data.world_name;
 	}
 
 	public void Dispose()

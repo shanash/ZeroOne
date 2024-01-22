@@ -1,54 +1,40 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Item_Type_Data : System.IDisposable
+﻿public class Item_Type_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 타입
 	///	</summary>
-	public ITEM_TYPE item_type => _item_type;
-	ITEM_TYPE _item_type;
-
+	public readonly ITEM_TYPE item_type;
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr => _name_kr;
-	string _name_kr;
-
+	public readonly string name_kr;
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public string tooltip_text => _tooltip_text;
-	string _tooltip_text;
-
+	public readonly string tooltip_text;
 	///	<summary>
 	///	판매 가능 여부
 	///	</summary>
-	public bool sellable => _sellable;
-	bool _sellable;
-
+	public readonly bool sellable;
 	///	<summary>
 	///	최대 보유 한도
 	///	</summary>
-	public double max_bounds => _max_bounds;
-	double _max_bounds;
-
+	public readonly double max_bounds;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon_path => _icon_path;
-	string _icon_path;
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
 	public Item_Type_Data(Raw_Item_Type_Data raw_data)
 	{
-		_item_type = raw_data.item_type;
-		_name_kr = raw_data.name_kr;
-		_tooltip_text = raw_data.tooltip_text;
-		_sellable = raw_data.sellable;
-		_max_bounds = raw_data.max_bounds;
-		_icon_path = raw_data.icon_path;
+		item_type = raw_data.item_type;
+		name_kr = raw_data.name_kr;
+		tooltip_text = raw_data.tooltip_text;
+		sellable = raw_data.sellable;
+		max_bounds = raw_data.max_bounds;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

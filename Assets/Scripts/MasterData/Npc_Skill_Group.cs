@@ -1,69 +1,51 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Npc_Skill_Group : System.IDisposable
+﻿public class Npc_Skill_Group : System.IDisposable
 {
 	///	<summary>
 	///	npc 스킬 그룹 인덱스
 	///	</summary>
-	public int npc_skill_group_id => _npc_skill_group_id;
-	int _npc_skill_group_id;
-
+	public readonly int npc_skill_group_id;
 	///	<summary>
 	///	스킬 이름
 	///	</summary>
-	public string name_kr => _name_kr;
-	string _name_kr;
-
+	public readonly string name_kr;
 	///	<summary>
 	///	쿨타임
 	///	</summary>
-	public double skill_use_delay => _skill_use_delay;
-	double _skill_use_delay;
-
+	public readonly double skill_use_delay;
 	///	<summary>
 	///	스킬 타입
 	///	</summary>
-	public SKILL_TYPE skill_type => _skill_type;
-	SKILL_TYPE _skill_type;
-
+	public readonly SKILL_TYPE skill_type;
 	///	<summary>
 	///	궁극기 타겟 스킬 id
 	///	궁극기 사용시 타겟팅을 먼저 해야 하는데, 해당 타겟을 위한 스킬 ID
 	///	</summary>
-	public int target_skill_id => _target_skill_id;
-	int _target_skill_id;
-
+	public readonly int target_skill_id;
 	///	<summary>
 	///	스킬 아이콘
 	///	</summary>
-	public string icon => _icon;
-	string _icon;
-
+	public readonly string icon;
 	///	<summary>
 	///	액션
 	///	</summary>
-	public string action_name => _action_name;
-	string _action_name;
-
+	public readonly string action_name;
 	///	<summary>
 	///	캐스팅 이펙트
 	///	</summary>
-	public string cast_effect_path => _cast_effect_path;
-	string _cast_effect_path;
+	public readonly string cast_effect_path;
 
 	private bool disposed = false;
 
 	public Npc_Skill_Group(Raw_Npc_Skill_Group raw_data)
 	{
-		_npc_skill_group_id = raw_data.npc_skill_group_id;
-		_name_kr = raw_data.name_kr;
-		_skill_use_delay = raw_data.skill_use_delay;
-		_skill_type = raw_data.skill_type;
-		_target_skill_id = raw_data.target_skill_id;
-		_icon = raw_data.icon;
-		_action_name = raw_data.action_name;
-		_cast_effect_path = raw_data.cast_effect_path;
+		npc_skill_group_id = raw_data.npc_skill_group_id;
+		name_kr = raw_data.name_kr;
+		skill_use_delay = raw_data.skill_use_delay;
+		skill_type = raw_data.skill_type;
+		target_skill_id = raw_data.target_skill_id;
+		icon = raw_data.icon;
+		action_name = raw_data.action_name;
+		cast_effect_path = raw_data.cast_effect_path;
 	}
 
 	public void Dispose()

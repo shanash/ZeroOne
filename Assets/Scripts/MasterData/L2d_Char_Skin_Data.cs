@@ -1,40 +1,30 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class L2d_Char_Skin_Data : System.IDisposable
+﻿public class L2d_Char_Skin_Data : System.IDisposable
 {
 	///	<summary>
 	///	L2d 스킨 아이디
 	///	</summary>
-	public int l2d_id => _l2d_id;
-	int _l2d_id;
-
+	public readonly int l2d_id;
 	///	<summary>
 	///	스킨 프리팹 경로
 	///	</summary>
-	public string l2d_skin_path => _l2d_skin_path;
-	string _l2d_skin_path;
-
+	public readonly string l2d_skin_path;
 	///	<summary>
 	///	스킨 전용 배경 경로
 	///	</summary>
-	public string l2d_bg_path => _l2d_bg_path;
-	string _l2d_bg_path;
-
+	public readonly string l2d_bg_path;
 	///	<summary>
 	///	스킨 전용 인트로 경로
 	///	</summary>
-	public string l2d_intro_path => _l2d_intro_path;
-	string _l2d_intro_path;
+	public readonly string l2d_intro_path;
 
 	private bool disposed = false;
 
 	public L2d_Char_Skin_Data(Raw_L2d_Char_Skin_Data raw_data)
 	{
-		_l2d_id = raw_data.l2d_id;
-		_l2d_skin_path = raw_data.l2d_skin_path;
-		_l2d_bg_path = raw_data.l2d_bg_path;
-		_l2d_intro_path = raw_data.l2d_intro_path;
+		l2d_id = raw_data.l2d_id;
+		l2d_skin_path = raw_data.l2d_skin_path;
+		l2d_bg_path = raw_data.l2d_bg_path;
+		l2d_intro_path = raw_data.l2d_intro_path;
 	}
 
 	public void Dispose()

@@ -1,68 +1,50 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Zone_Data : System.IDisposable
+﻿public class Zone_Data : System.IDisposable
 {
 	///	<summary>
 	///	존 인덱스
 	///	</summary>
-	public int zone_id => _zone_id;
-	int _zone_id;
-
+	public readonly int zone_id;
 	///	<summary>
 	///	존 명칭
 	///	</summary>
-	public string zone_name => _zone_name;
-	string _zone_name;
-
+	public readonly string zone_name;
 	///	<summary>
 	///	속한 월드
 	///	</summary>
-	public int in_world_id => _in_world_id;
-	int _in_world_id;
-
+	public readonly int in_world_id;
 	///	<summary>
 	///	오더링
 	///	</summary>
-	public int zone_ordering => _zone_ordering;
-	int _zone_ordering;
-
+	public readonly int zone_ordering;
 	///	<summary>
 	///	존 난이도
 	///	</summary>
-	public STAGE_DIFFICULTY_TYPE zone_difficulty => _zone_difficulty;
-	STAGE_DIFFICULTY_TYPE _zone_difficulty;
-
+	public readonly STAGE_DIFFICULTY_TYPE zone_difficulty;
 	///	<summary>
 	///	존 이미지
 	///	</summary>
-	public string zone_img_path => _zone_img_path;
-	string _zone_img_path;
-
+	public readonly string zone_img_path;
 	///	<summary>
 	///	존 설명
 	///	</summary>
-	public string zone_tooltip => _zone_tooltip;
-	string _zone_tooltip;
-
+	public readonly string zone_tooltip;
 	///	<summary>
 	///	해금 조건
 	///	</summary>
-	public LIMIT_TYPE limit_type => _limit_type;
-	LIMIT_TYPE _limit_type;
+	public readonly LIMIT_TYPE limit_type;
 
 	private bool disposed = false;
 
 	public Zone_Data(Raw_Zone_Data raw_data)
 	{
-		_zone_id = raw_data.zone_id;
-		_zone_name = raw_data.zone_name;
-		_in_world_id = raw_data.in_world_id;
-		_zone_ordering = raw_data.zone_ordering;
-		_zone_difficulty = raw_data.zone_difficulty;
-		_zone_img_path = raw_data.zone_img_path;
-		_zone_tooltip = raw_data.zone_tooltip;
-		_limit_type = raw_data.limit_type;
+		zone_id = raw_data.zone_id;
+		zone_name = raw_data.zone_name;
+		in_world_id = raw_data.in_world_id;
+		zone_ordering = raw_data.zone_ordering;
+		zone_difficulty = raw_data.zone_difficulty;
+		zone_img_path = raw_data.zone_img_path;
+		zone_tooltip = raw_data.zone_tooltip;
+		limit_type = raw_data.limit_type;
 	}
 
 	public void Dispose()

@@ -1,112 +1,82 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Npc_Skill_Duration_Data : System.IDisposable
+﻿public class Npc_Skill_Duration_Data : System.IDisposable
 {
 	///	<summary>
 	///	지속성 스킬 효과 인덱스
 	///	</summary>
-	public int npc_skill_duration_id => _npc_skill_duration_id;
-	int _npc_skill_duration_id;
-
+	public readonly int npc_skill_duration_id;
 	///	<summary>
 	///	지속성 효과 타입
 	///	</summary>
-	public DURATION_EFFECT_TYPE duration_effect_type => _duration_effect_type;
-	DURATION_EFFECT_TYPE _duration_effect_type;
-
+	public readonly DURATION_EFFECT_TYPE duration_effect_type;
 	///	<summary>
 	///	지속성 방식 타입
 	///	</summary>
-	public PERSISTENCE_TYPE persistence_type => _persistence_type;
-	PERSISTENCE_TYPE _persistence_type;
-
+	public readonly PERSISTENCE_TYPE persistence_type;
 	///	<summary>
 	///	지속 시간
 	///	</summary>
-	public double time => _time;
-	double _time;
-
+	public readonly double time;
 	///	<summary>
 	///	지속 횟수
 	///	</summary>
-	public int count => _count;
-	int _count;
-
+	public readonly int count;
 	///	<summary>
 	///	반복 일회성 효과
 	///	</summary>
-	public int[] repeat_npc_onetime_ids => _repeat_npc_onetime_ids;
-	int[] _repeat_npc_onetime_ids;
-
+	public readonly int[] repeat_npc_onetime_ids;
 	///	<summary>
 	///	반복 주기
 	///	</summary>
-	public double repeat_interval => _repeat_interval;
-	double _repeat_interval;
-
+	public readonly double repeat_interval;
 	///	<summary>
 	///	종료 일회성 효과
 	///	</summary>
-	public int[] finish_npc_onetime_ids => _finish_npc_onetime_ids;
-	int[] _finish_npc_onetime_ids;
-
+	public readonly int[] finish_npc_onetime_ids;
 	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
-	public STAT_MULTIPLE_TYPE multiple_type => _multiple_type;
-	STAT_MULTIPLE_TYPE _multiple_type;
-
+	public readonly STAT_MULTIPLE_TYPE multiple_type;
 	///	<summary>
 	///	절대값
 	///	</summary>
-	public int value => _value;
-	int _value;
-
+	public readonly int value;
 	///	<summary>
 	///	배율
 	///	</summary>
-	public double multiple => _multiple;
-	double _multiple;
-
+	public readonly double multiple;
 	///	<summary>
 	///	확률
 	///	적용 확률
 	///	10000분율을 기준으로 한다.
 	///	</summary>
-	public double rate => _rate;
-	double _rate;
-
+	public readonly double rate;
 	///	<summary>
 	///	이펙트 프리팹
 	///	</summary>
-	public string effect_path => _effect_path;
-	string _effect_path;
-
+	public readonly string effect_path;
 	///	<summary>
 	///	중첩 가능
 	///	</summary>
-	public bool is_overlapable => _is_overlapable;
-	bool _is_overlapable;
+	public readonly bool is_overlapable;
 
 	private bool disposed = false;
 
 	public Npc_Skill_Duration_Data(Raw_Npc_Skill_Duration_Data raw_data)
 	{
-		_npc_skill_duration_id = raw_data.npc_skill_duration_id;
-		_duration_effect_type = raw_data.duration_effect_type;
-		_persistence_type = raw_data.persistence_type;
-		_time = raw_data.time;
-		_count = raw_data.count;
-		_repeat_npc_onetime_ids = raw_data.repeat_npc_onetime_ids.ToArray();
-		_repeat_interval = raw_data.repeat_interval;
-		_finish_npc_onetime_ids = raw_data.finish_npc_onetime_ids.ToArray();
-		_multiple_type = raw_data.multiple_type;
-		_value = raw_data.value;
-		_multiple = raw_data.multiple;
-		_rate = raw_data.rate;
-		_effect_path = raw_data.effect_path;
-		_is_overlapable = raw_data.is_overlapable;
+		npc_skill_duration_id = raw_data.npc_skill_duration_id;
+		duration_effect_type = raw_data.duration_effect_type;
+		persistence_type = raw_data.persistence_type;
+		time = raw_data.time;
+		count = raw_data.count;
+		repeat_npc_onetime_ids = raw_data.repeat_npc_onetime_ids != null ? (int[])raw_data.repeat_npc_onetime_ids.Clone() : new int[0];
+		repeat_interval = raw_data.repeat_interval;
+		finish_npc_onetime_ids = raw_data.finish_npc_onetime_ids != null ? (int[])raw_data.finish_npc_onetime_ids.Clone() : new int[0];
+		multiple_type = raw_data.multiple_type;
+		value = raw_data.value;
+		multiple = raw_data.multiple;
+		rate = raw_data.rate;
+		effect_path = raw_data.effect_path;
+		is_overlapable = raw_data.is_overlapable;
 	}
 
 	public void Dispose()

@@ -1,75 +1,55 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Npc_Level_Stat_Data : System.IDisposable
+﻿public class Npc_Level_Stat_Data : System.IDisposable
 {
 	///	<summary>
 	///	스텟 인덱스
 	///	</summary>
-	public int npc_level_stat_id => _npc_level_stat_id;
-	int _npc_level_stat_id;
-
+	public readonly int npc_level_stat_id;
 	///	<summary>
 	///	NPC Type
 	///	</summary>
-	public NPC_TYPE npc_type => _npc_type;
-	NPC_TYPE _npc_type;
-
+	public readonly NPC_TYPE npc_type;
 	///	<summary>
 	///	종족 타입
 	///	</summary>
-	public TRIBE_TYPE tribe_type => _tribe_type;
-	TRIBE_TYPE _tribe_type;
-
+	public readonly TRIBE_TYPE tribe_type;
 	///	<summary>
 	///	롤 타입
 	///	</summary>
-	public ROLE_TYPE role_type => _role_type;
-	ROLE_TYPE _role_type;
-
+	public readonly ROLE_TYPE role_type;
 	///	<summary>
 	///	공격력 증가
 	///	</summary>
-	public double attack_inc => _attack_inc;
-	double _attack_inc;
-
+	public readonly double attack_inc;
 	///	<summary>
 	///	방어력 증가
 	///	</summary>
-	public double defend_inc => _defend_inc;
-	double _defend_inc;
-
+	public readonly double defend_inc;
 	///	<summary>
 	///	체력 증가
 	///	</summary>
-	public double hp_inc => _hp_inc;
-	double _hp_inc;
-
+	public readonly double hp_inc;
 	///	<summary>
 	///	회피 증가
 	///	</summary>
-	public double evation_inc => _evation_inc;
-	double _evation_inc;
-
+	public readonly double evation_inc;
 	///	<summary>
 	///	명중 증가
 	///	</summary>
-	public double accuracy_inc => _accuracy_inc;
-	double _accuracy_inc;
+	public readonly double accuracy_inc;
 
 	private bool disposed = false;
 
 	public Npc_Level_Stat_Data(Raw_Npc_Level_Stat_Data raw_data)
 	{
-		_npc_level_stat_id = raw_data.npc_level_stat_id;
-		_npc_type = raw_data.npc_type;
-		_tribe_type = raw_data.tribe_type;
-		_role_type = raw_data.role_type;
-		_attack_inc = raw_data.attack_inc;
-		_defend_inc = raw_data.defend_inc;
-		_hp_inc = raw_data.hp_inc;
-		_evation_inc = raw_data.evation_inc;
-		_accuracy_inc = raw_data.accuracy_inc;
+		npc_level_stat_id = raw_data.npc_level_stat_id;
+		npc_type = raw_data.npc_type;
+		tribe_type = raw_data.tribe_type;
+		role_type = raw_data.role_type;
+		attack_inc = raw_data.attack_inc;
+		defend_inc = raw_data.defend_inc;
+		hp_inc = raw_data.hp_inc;
+		evation_inc = raw_data.evation_inc;
+		accuracy_inc = raw_data.accuracy_inc;
 	}
 
 	public void Dispose()

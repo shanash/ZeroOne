@@ -1,142 +1,104 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Equipment_Data : System.IDisposable
+﻿public class Equipment_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 ID
 	///	</summary>
-	public int item_id => _item_id;
-	int _item_id;
-
+	public readonly int item_id;
 	///	<summary>
 	///	이름 string ID
 	///	</summary>
-	public string name_id => _name_id;
-	string _name_id;
-
+	public readonly string name_id;
 	///	<summary>
 	///	장비 타입
 	///	</summary>
-	public EQUIPMENT_TYPE equipment_type => _equipment_type;
-	EQUIPMENT_TYPE _equipment_type;
-
+	public readonly EQUIPMENT_TYPE equipment_type;
 	///	<summary>
 	///	최대 중첩 갯수
 	///	</summary>
-	public int max_num => _max_num;
-	int _max_num;
-
+	public readonly int max_num;
 	///	<summary>
 	///	방어력
 	///	</summary>
-	public int def => _def;
-	int _def;
-
+	public readonly int def;
 	///	<summary>
 	///	최대HP
 	///	</summary>
-	public int max_hp => _max_hp;
-	int _max_hp;
-
+	public readonly int max_hp;
 	///	<summary>
 	///	회피
 	///	</summary>
-	public int evasion => _evasion;
-	int _evasion;
-
+	public readonly int evasion;
 	///	<summary>
 	///	HP 자동회복
 	///	</summary>
-	public int recover_hp => _recover_hp;
-	int _recover_hp;
-
+	public readonly int recover_hp;
 	///	<summary>
 	///	HP 흡수
 	///	</summary>
-	public int drain_hp => _drain_hp;
-	int _drain_hp;
-
+	public readonly int drain_hp;
 	///	<summary>
 	///	명중
 	///	</summary>
-	public int hit => _hit;
-	int _hit;
-
+	public readonly int hit;
 	///	<summary>
 	///	마법 공격력
 	///	</summary>
-	public int matk => _matk;
-	int _matk;
-
+	public readonly int matk;
 	///	<summary>
 	///	물리 공격력
 	///	</summary>
-	public int atk => _atk;
-	int _atk;
-
+	public readonly int atk;
 	///	<summary>
 	///	마법 크리티컬
 	///	</summary>
-	public int hit_mcri => _hit_mcri;
-	int _hit_mcri;
-
+	public readonly int hit_mcri;
 	///	<summary>
 	///	물리 크리티컬
 	///	</summary>
-	public int hit_cri => _hit_cri;
-	int _hit_cri;
-
+	public readonly int hit_cri;
 	///	<summary>
 	///	회복량 상승
 	///	</summary>
-	public int heal_up => _heal_up;
-	int _heal_up;
-
+	public readonly int heal_up;
 	///	<summary>
 	///	소비 시간(분)
 	///	소비 시간(기한)이 만료되면, 아이템이 사라짐
 	///	값이 0 이면, 소비 시간 없음
 	///	</summary>
-	public int expire_time => _expire_time;
-	int _expire_time;
-
+	public readonly int expire_time;
 	///	<summary>
 	///	소비기한
 	///	소비 시간(기한)이 만료되면, 아이템이 사라짐
 	///	값이 0 이면, 소비 기한 없음
 	///	</summary>
-	public int schedule_id => _schedule_id;
-	int _schedule_id;
-
+	public readonly int schedule_id;
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public string icon_path => _icon_path;
-	string _icon_path;
+	public readonly string icon_path;
 
 	private bool disposed = false;
 
 	public Equipment_Data(Raw_Equipment_Data raw_data)
 	{
-		_item_id = raw_data.item_id;
-		_name_id = raw_data.name_id;
-		_equipment_type = raw_data.equipment_type;
-		_max_num = raw_data.max_num;
-		_def = raw_data.def;
-		_max_hp = raw_data.max_hp;
-		_evasion = raw_data.evasion;
-		_recover_hp = raw_data.recover_hp;
-		_drain_hp = raw_data.drain_hp;
-		_hit = raw_data.hit;
-		_matk = raw_data.matk;
-		_atk = raw_data.atk;
-		_hit_mcri = raw_data.hit_mcri;
-		_hit_cri = raw_data.hit_cri;
-		_heal_up = raw_data.heal_up;
-		_expire_time = raw_data.expire_time;
-		_schedule_id = raw_data.schedule_id;
-		_icon_path = raw_data.icon_path;
+		item_id = raw_data.item_id;
+		name_id = raw_data.name_id;
+		equipment_type = raw_data.equipment_type;
+		max_num = raw_data.max_num;
+		def = raw_data.def;
+		max_hp = raw_data.max_hp;
+		evasion = raw_data.evasion;
+		recover_hp = raw_data.recover_hp;
+		drain_hp = raw_data.drain_hp;
+		hit = raw_data.hit;
+		matk = raw_data.matk;
+		atk = raw_data.atk;
+		hit_mcri = raw_data.hit_mcri;
+		hit_cri = raw_data.hit_cri;
+		heal_up = raw_data.heal_up;
+		expire_time = raw_data.expire_time;
+		schedule_id = raw_data.schedule_id;
+		icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

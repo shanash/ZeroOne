@@ -1,40 +1,30 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Me_Chat_Motion_Data : System.IDisposable
+﻿public class Me_Chat_Motion_Data : System.IDisposable
 {
 	///	<summary>
 	///	챗모션 id
 	///	</summary>
-	public int chat_motion_id => _chat_motion_id;
-	int _chat_motion_id;
-
+	public readonly int chat_motion_id;
 	///	<summary>
 	///	캐릭터 고유 아이디
 	///	</summary>
-	public int player_character_id => _player_character_id;
-	int _player_character_id;
-
+	public readonly int player_character_id;
 	///	<summary>
 	///	애니메이션 이름
 	///	</summary>
-	public string[] animation_name => _animation_name;
-	string[] _animation_name;
-
+	public readonly string[] animation_name;
 	///	<summary>
 	///	대사 id
 	///	</summary>
-	public int[] serifu_ids => _serifu_ids;
-	int[] _serifu_ids;
+	public readonly int[] serifu_ids;
 
 	private bool disposed = false;
 
 	public Me_Chat_Motion_Data(Raw_Me_Chat_Motion_Data raw_data)
 	{
-		_chat_motion_id = raw_data.chat_motion_id;
-		_player_character_id = raw_data.player_character_id;
-		_animation_name = raw_data.animation_name.ToArray();
-		_serifu_ids = raw_data.serifu_ids.ToArray();
+		chat_motion_id = raw_data.chat_motion_id;
+		player_character_id = raw_data.player_character_id;
+		animation_name = raw_data.animation_name != null ? (string[])raw_data.animation_name.Clone() : new string[0];
+		serifu_ids = raw_data.serifu_ids != null ? (int[])raw_data.serifu_ids.Clone() : new int[0];
 	}
 
 	public void Dispose()

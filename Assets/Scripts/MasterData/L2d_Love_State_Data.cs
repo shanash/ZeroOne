@@ -1,33 +1,25 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class L2d_Love_State_Data : System.IDisposable
+﻿public class L2d_Love_State_Data : System.IDisposable
 {
 	///	<summary>
 	///	상호작용이 진행되는 L2d 스킨 아이디
 	///	</summary>
-	public int l2d_id => _l2d_id;
-	int _l2d_id;
-
+	public readonly int l2d_id;
 	///	<summary>
 	///	캐릭터 호감도 타입
 	///	</summary>
-	public LOVE_LEVEL_TYPE love_level_type => _love_level_type;
-	LOVE_LEVEL_TYPE _love_level_type;
-
+	public readonly LOVE_LEVEL_TYPE love_level_type;
 	///	<summary>
 	///	기본 상태 아이디
 	///	</summary>
-	public int state_id => _state_id;
-	int _state_id;
+	public readonly int state_id;
 
 	private bool disposed = false;
 
 	public L2d_Love_State_Data(Raw_L2d_Love_State_Data raw_data)
 	{
-		_l2d_id = raw_data.l2d_id;
-		_love_level_type = raw_data.love_level_type;
-		_state_id = raw_data.state_id;
+		l2d_id = raw_data.l2d_id;
+		love_level_type = raw_data.love_level_type;
+		state_id = raw_data.state_id;
 	}
 
 	public void Dispose()

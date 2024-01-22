@@ -1,69 +1,51 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Wave_Data : System.IDisposable
+﻿public class Wave_Data : System.IDisposable
 {
 	///	<summary>
 	///	웨이브 ID
 	///	</summary>
-	public int wave_id => _wave_id;
-	int _wave_id;
-
+	public readonly int wave_id;
 	///	<summary>
 	///	웨이브 진행 스테이지
 	///	</summary>
-	public int stage_id => _stage_id;
-	int _stage_id;
-
+	public readonly int stage_id;
 	///	<summary>
 	///	웨이브 순서
 	///	</summary>
-	public int wave_sequence => _wave_sequence;
-	int _wave_sequence;
-
+	public readonly int wave_sequence;
 	///	<summary>
 	///	웨이브에 출현하는
 	///	적 최대 마리 수
 	///	</summary>
-	public int enemy_appearance_count => _enemy_appearance_count;
-	int _enemy_appearance_count;
-
+	public readonly int enemy_appearance_count;
 	///	<summary>
 	///	출현 적 정보
 	///	</summary>
-	public int[] enemy_appearance_info => _enemy_appearance_info;
-	int[] _enemy_appearance_info;
-
+	public readonly int[] enemy_appearance_info;
 	///	<summary>
 	///	NPC 레벨 정보
 	///	</summary>
-	public int[] npc_levels => _npc_levels;
-	int[] _npc_levels;
-
+	public readonly int[] npc_levels;
 	///	<summary>
 	///	NPC 스탯 증가 정보
 	///	</summary>
-	public int[] npc_stat_ids => _npc_stat_ids;
-	int[] _npc_stat_ids;
-
+	public readonly int[] npc_stat_ids;
 	///	<summary>
 	///	웨이브 제한 시간
 	///	</summary>
-	public int wave_time => _wave_time;
-	int _wave_time;
+	public readonly int wave_time;
 
 	private bool disposed = false;
 
 	public Wave_Data(Raw_Wave_Data raw_data)
 	{
-		_wave_id = raw_data.wave_id;
-		_stage_id = raw_data.stage_id;
-		_wave_sequence = raw_data.wave_sequence;
-		_enemy_appearance_count = raw_data.enemy_appearance_count;
-		_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
-		_npc_levels = raw_data.npc_levels.ToArray();
-		_npc_stat_ids = raw_data.npc_stat_ids.ToArray();
-		_wave_time = raw_data.wave_time;
+		wave_id = raw_data.wave_id;
+		stage_id = raw_data.stage_id;
+		wave_sequence = raw_data.wave_sequence;
+		enemy_appearance_count = raw_data.enemy_appearance_count;
+		enemy_appearance_info = raw_data.enemy_appearance_info != null ? (int[])raw_data.enemy_appearance_info.Clone() : new int[0];
+		npc_levels = raw_data.npc_levels != null ? (int[])raw_data.npc_levels.Clone() : new int[0];
+		npc_stat_ids = raw_data.npc_stat_ids != null ? (int[])raw_data.npc_stat_ids.Clone() : new int[0];
+		wave_time = raw_data.wave_time;
 	}
 
 	public void Dispose()

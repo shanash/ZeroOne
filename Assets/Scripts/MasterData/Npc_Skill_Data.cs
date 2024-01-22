@@ -1,145 +1,107 @@
-﻿using FluffyDuck.Util;
-using System.Linq;
-
-public class Npc_Skill_Data : System.IDisposable
+﻿public class Npc_Skill_Data : System.IDisposable
 {
 	///	<summary>
 	///	스킬 인덱스
 	///	</summary>
-	public int npc_skill_id => _npc_skill_id;
-	int _npc_skill_id;
-
+	public readonly int npc_skill_id;
 	///	<summary>
 	///	스킬 그룹 ID
 	///	</summary>
-	public int npc_skill_group_id => _npc_skill_group_id;
-	int _npc_skill_group_id;
-
+	public readonly int npc_skill_group_id;
 	///	<summary>
 	///	타겟 팀
 	///	0 : 아군
 	///	1 : 적군
 	///	</summary>
-	public TARGET_TYPE target_type => _target_type;
-	TARGET_TYPE _target_type;
-
+	public readonly TARGET_TYPE target_type;
 	///	<summary>
 	///	타겟룰
 	///	</summary>
-	public TARGET_RULE_TYPE target_rule_type => _target_rule_type;
-	TARGET_RULE_TYPE _target_rule_type;
-
+	public readonly TARGET_RULE_TYPE target_rule_type;
 	///	<summary>
 	///	타겟 순서
 	///	순서는 0부터 시작
 	///	순서가 필요한 타겟룰에서만 사용
 	///	</summary>
-	public int target_order => _target_order;
-	int _target_order;
-
+	public readonly int target_order;
 	///	<summary>
 	///	타겟수
 	///	</summary>
-	public int target_count => _target_count;
-	int _target_count;
-
+	public readonly int target_count;
 	///	<summary>
 	///	타겟 범위
 	///	</summary>
-	public double target_range => _target_range;
-	double _target_range;
-
+	public readonly double target_range;
 	///	<summary>
 	///	이펙트 카운트 타입
 	///	</summary>
-	public EFFECT_COUNT_TYPE effect_count_type => _effect_count_type;
-	EFFECT_COUNT_TYPE _effect_count_type;
-
+	public readonly EFFECT_COUNT_TYPE effect_count_type;
 	///	<summary>
 	///	세컨 타겟 룰
 	///	</summary>
-	public SECOND_TARGET_RULE_TYPE second_target_rule => _second_target_rule;
-	SECOND_TARGET_RULE_TYPE _second_target_rule;
-
+	public readonly SECOND_TARGET_RULE_TYPE second_target_rule;
 	///	<summary>
 	///	세컨 타겟 카운트
 	///	</summary>
-	public int max_second_target_count => _max_second_target_count;
-	int _max_second_target_count;
-
+	public readonly int max_second_target_count;
 	///	<summary>
 	///	세컨 타겟 반경
 	///	</summary>
-	public double second_target_range => _second_target_range;
-	double _second_target_range;
-
+	public readonly double second_target_range;
 	///	<summary>
 	///	효과 비중
 	///	힛 횟수에 따라 비중 조절
 	///	총 합이 100이 되어야 한다.
 	///	실제 애니메이션의 이벤트 횟수보다 배열의 수가 많으면 안된다.
 	///	</summary>
-	public int[] effect_weight => _effect_weight;
-	int[] _effect_weight;
-
+	public readonly int[] effect_weight;
 	///	<summary>
 	///	일회성 효과
 	///	</summary>
-	public int[] onetime_effect_ids => _onetime_effect_ids;
-	int[] _onetime_effect_ids;
-
+	public readonly int[] onetime_effect_ids;
 	///	<summary>
 	///	지속성 효과
 	///	</summary>
-	public int[] duration_effect_ids => _duration_effect_ids;
-	int[] _duration_effect_ids;
-
+	public readonly int[] duration_effect_ids;
 	///	<summary>
 	///	세컨 타겟용 일회성 효과
 	///	</summary>
-	public int[] second_target_onetime_effect_ids => _second_target_onetime_effect_ids;
-	int[] _second_target_onetime_effect_ids;
-
+	public readonly int[] second_target_onetime_effect_ids;
 	///	<summary>
 	///	세컨 타겟용 지속성 효과
 	///	</summary>
-	public int[] second_target_duration_effect_ids => _second_target_duration_effect_ids;
-	int[] _second_target_duration_effect_ids;
-
+	public readonly int[] second_target_duration_effect_ids;
 	///	<summary>
 	///	이벤트 이름
 	///	</summary>
-	public string event_name => _event_name;
-	string _event_name;
-
+	public readonly string event_name;
 	///	<summary>
 	///	트리거 이펙트 프리팹
 	///	</summary>
-	public string trigger_effect_path => _trigger_effect_path;
-	string _trigger_effect_path;
+	public readonly string trigger_effect_path;
 
 	private bool disposed = false;
 
 	public Npc_Skill_Data(Raw_Npc_Skill_Data raw_data)
 	{
-		_npc_skill_id = raw_data.npc_skill_id;
-		_npc_skill_group_id = raw_data.npc_skill_group_id;
-		_target_type = raw_data.target_type;
-		_target_rule_type = raw_data.target_rule_type;
-		_target_order = raw_data.target_order;
-		_target_count = raw_data.target_count;
-		_target_range = raw_data.target_range;
-		_effect_count_type = raw_data.effect_count_type;
-		_second_target_rule = raw_data.second_target_rule;
-		_max_second_target_count = raw_data.max_second_target_count;
-		_second_target_range = raw_data.second_target_range;
-		_effect_weight = raw_data.effect_weight.ToArray();
-		_onetime_effect_ids = raw_data.onetime_effect_ids.ToArray();
-		_duration_effect_ids = raw_data.duration_effect_ids.ToArray();
-		_second_target_onetime_effect_ids = raw_data.second_target_onetime_effect_ids.ToArray();
-		_second_target_duration_effect_ids = raw_data.second_target_duration_effect_ids.ToArray();
-		_event_name = raw_data.event_name;
-		_trigger_effect_path = raw_data.trigger_effect_path;
+		npc_skill_id = raw_data.npc_skill_id;
+		npc_skill_group_id = raw_data.npc_skill_group_id;
+		target_type = raw_data.target_type;
+		target_rule_type = raw_data.target_rule_type;
+		target_order = raw_data.target_order;
+		target_count = raw_data.target_count;
+		target_range = raw_data.target_range;
+		effect_count_type = raw_data.effect_count_type;
+		second_target_rule = raw_data.second_target_rule;
+		max_second_target_count = raw_data.max_second_target_count;
+		second_target_range = raw_data.second_target_range;
+		effect_weight = raw_data.effect_weight != null ? (int[])raw_data.effect_weight.Clone() : new int[0];
+		onetime_effect_ids = raw_data.onetime_effect_ids != null ? (int[])raw_data.onetime_effect_ids.Clone() : new int[0];
+		duration_effect_ids = raw_data.duration_effect_ids != null ? (int[])raw_data.duration_effect_ids.Clone() : new int[0];
+		second_target_onetime_effect_ids = raw_data.second_target_onetime_effect_ids != null ? (int[])raw_data.second_target_onetime_effect_ids.Clone() : new int[0];
+		second_target_duration_effect_ids = raw_data.second_target_duration_effect_ids != null ? (int[])raw_data.second_target_duration_effect_ids.Clone() : new int[0];
+		event_name = raw_data.event_name;
+		trigger_effect_path = raw_data.trigger_effect_path;
 	}
 
 	public void Dispose()
