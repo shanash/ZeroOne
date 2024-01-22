@@ -17,10 +17,25 @@ public class UserGoodsDataManager : ManagerBase
 
     public override void InitDataManager()
     {
-        
+        if (User_Goods_Data_List.Count > 0)
+        {
+            return;
+        }
+        DummyDataSetting();
     }
 
-    void DummyDataSetting() { }
+    void DummyDataSetting() 
+    {
+        //  gold
+        {
+            AddUserGoodsCount(GOODS_TYPE.GOLD, 1000);
+        }
+        //  dia
+        {
+            AddUserGoodsCount(GOODS_TYPE.DIA, 100);
+        }
+
+    }
 
     public UserGoodsData FindUserGoods(GOODS_TYPE gtype)
     {

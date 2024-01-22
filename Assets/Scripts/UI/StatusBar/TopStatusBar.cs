@@ -1,11 +1,33 @@
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
+
+enum TOP_STATUS_TYPE
+{
+    NONE = 0,
+    STAMINA,
+}
 
 public class TopStatusBar : MonoBehaviour
 {
     [SerializeField, Tooltip("Top Status Bar Goods Items")]
-    List<TopStatusBarGoodsItem> Goods_Item_List;
+    List<TopStatusBarGoodsBase> Goods_Item_List;
+
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        
+    }
+
+    void UpdateEventCallback(UPDATE_EVENT_TYPE etype)
+    {
+
+    }
+
 
     public void OnClickBack()
     {

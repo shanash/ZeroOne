@@ -6,6 +6,12 @@ namespace FluffyDuck.Util
     public enum UPDATE_EVENT_TYPE
     {
         NONE = 0,
+
+        UPDATE_TOP_STATUS_BAR_ALL = 101,
+        UPDATE_TOP_STATUS_BAR_GOLD,
+        UPDATE_TOP_STATUS_BAR_DIA,
+        UPDATE_TOP_STATUS_BAR_STAMINA,
+        UPDATE_TOP_STATUS_BAR_ETC,
     }
 
     public class UpdateEventDispatcher : MonoSingleton<UpdateEventDispatcher>
