@@ -20,10 +20,10 @@ public class HeroInfoBoxEssence : MonoBehaviour
     //전달반응
     [SerializeField]
     TMP_Text TransferReaction_Subject;
-
+    /*
     [SerializeField]
     TMP_Text[] 
-
+    */
     public void OnClickBuffDetailButton()
     {
 
