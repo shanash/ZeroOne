@@ -535,9 +535,11 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region L2D Character
+    /*
     public L2d_Char_Skin_Data Get_L2DCharSkinData(int char_skin_id)
     {
         return _L2d_Char_Skin_Data.Find(x => x.l2d_id == char_skin_id);
     }
+    */
     #endregion
 }

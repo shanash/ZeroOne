@@ -2,6 +2,8 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using ClosedXML.Excel;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+
 
 #if UNITY_5_3_OR_NEWER
 using System.Collections.Generic;
@@ -248,6 +250,25 @@ namespace Excel2Json
             return sheetData;
         }
 
+        static T GetValue<T>(IXLCell cell)
+        {
+            object result = default;
+            if (cell.CachedValue.IsNumber)
+            {
+                result = Convert.ChangeType(cell.CachedValue.GetNumber(), typeof(T));
+            }
+            else if (cell.CachedValue.IsBoolean)
+            {
+                result = Convert.ChangeType(cell.CachedValue.GetBoolean(), typeof(T));
+            }
+            else if (cell.CachedValue.IsText)
+            {
+                result = Convert.ChangeType(cell.CachedValue.GetText(), typeof(T));
+            }
+
+            return (T)result;
+        }
+
         static JToken ProcessSingleCell(IXLCell cell, ColumnInfo info)
         {
             try
@@ -256,13 +277,13 @@ namespace Excel2Json
                 switch (info.type.ToLower())
                 {
                     case "int":
-                        return JToken.FromObject(cell.GetValue<int>());
+                        return JToken.FromObject(GetValue<int>(cell));
                     case "bool":
-                        return JToken.FromObject(cell.GetValue<bool>());
+                        return JToken.FromObject(GetValue<bool>(cell));
                     case "string":
-                        return JToken.FromObject(cell.GetValue<string>());
+                        return JToken.FromObject(GetValue<string>(cell));
                     case "double":
-                        return JToken.FromObject(cell.GetValue<double>());
+                        return JToken.FromObject(GetValue<double>(cell));
                     // 기타 데이터 타입에 대한 처리 필요
                     default:
                         if (info.is_enum)
@@ -297,7 +318,7 @@ namespace Excel2Json
 
         static JArray ProcessArrayCell(IXLCell cell, ColumnInfo info)
         {
-            var cellValue = cell.GetValue<string>();
+            var cellValue = GetValue<string>(cell);
             cellValue = Regex.Replace(cellValue, @"[\[\]]", "");
             var elements = cellValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             JArray array = new JArray();
