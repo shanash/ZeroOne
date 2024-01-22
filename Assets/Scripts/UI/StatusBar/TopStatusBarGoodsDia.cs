@@ -1,18 +1,19 @@
+using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TopStatusBarGoodsDia : MonoBehaviour
+public class TopStatusBarGoodsDia : TopStatusBarGoodsBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void UpdateGoodsItem()
     {
-        
+        var mng = GameData.Instance.GetUserGoodsDataManager();
+        double cnt = mng.GetGoodsCount(GOODS_TYPE.DIA);
+        Goods_Count.text = cnt.ToString("N0");
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void ClickCallback()
     {
-        
+        CommonUtils.ShowToast("다이아 구매 준비중", TOAST_BOX_LENGTH.SHORT);
     }
 }

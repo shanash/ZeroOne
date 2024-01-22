@@ -1,0 +1,73 @@
+﻿public class Charge_Value_Data : System.IDisposable
+{
+	///	<summary>
+	///	보상 타입
+	///	</summary>
+	public readonly REWARD_TYPE reward_type;
+	///	<summary>
+	///	충전 타입
+	///	</summary>
+	public readonly CHARGE_TYPE charge_type;
+	///	<summary>
+	///	충전 수량
+	///	charge_type이
+	///	max 값까지 올리는 유형이 아니라, 지정 수량만큼 올리는 타입일 경우에만 사용
+	///	ex] 6분에 1만큼(지정 수치) 올린다.
+	///	</summary>
+	public readonly int charge_count;
+	///	<summary>
+	///	충전 주기 타입
+	///	</summary>
+	public readonly REPEAT_TYPE repeat_type;
+	///	<summary>
+	///	충전 주기 Var
+	///	repeat_type이 지정된 분 마다 올리는 타입일 경우 사용
+	///	ex] 6분마다
+	///	</summary>
+	public readonly int repeat_time;
+	///	<summary>
+	///	데이터 사용 여부
+	///	</summary>
+	public readonly bool Use_Charge_Data;
+
+	private bool disposed = false;
+
+	public Charge_Value_Data(Raw_Charge_Value_Data raw_data)
+	{
+		reward_type = raw_data.reward_type;
+		charge_type = raw_data.charge_type;
+		charge_count = raw_data.charge_count;
+		repeat_type = raw_data.repeat_type;
+		repeat_time = raw_data.repeat_time;
+		Use_Charge_Data = raw_data.Use_Charge_Data;
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		System.GC.SuppressFinalize(this);
+	}
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposed)
+		{
+			if (disposing)
+			{
+				// todo dispose resouces
+			}
+			disposed = true;
+		}
+	}
+	public override string ToString()
+	{
+		System.Text.StringBuilder sb = new System.Text.StringBuilder();
+		sb.AppendFormat("[reward_type] = <color=yellow>{0}</color>", reward_type).AppendLine();
+		sb.AppendFormat("[charge_type] = <color=yellow>{0}</color>", charge_type).AppendLine();
+		sb.AppendFormat("[charge_count] = <color=yellow>{0}</color>", charge_count).AppendLine();
+		sb.AppendFormat("[repeat_type] = <color=yellow>{0}</color>", repeat_type).AppendLine();
+		sb.AppendFormat("[repeat_time] = <color=yellow>{0}</color>", repeat_time).AppendLine();
+		sb.AppendFormat("[Use_Charge_Data] = <color=yellow>{0}</color>", Use_Charge_Data).AppendLine();
+		return sb.ToString();
+	}
+}
+

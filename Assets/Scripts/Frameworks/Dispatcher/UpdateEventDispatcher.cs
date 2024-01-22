@@ -11,7 +11,7 @@ namespace FluffyDuck.Util
         UPDATE_TOP_STATUS_BAR_GOLD,
         UPDATE_TOP_STATUS_BAR_DIA,
         UPDATE_TOP_STATUS_BAR_STAMINA,
-        UPDATE_TOP_STATUS_BAR_ETC,
+        UPDATE_TOP_STATUS_BAR_SOURCE,
     }
 
     public class UpdateEventDispatcher : MonoSingleton<UpdateEventDispatcher>

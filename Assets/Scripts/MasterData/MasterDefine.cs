@@ -791,7 +791,7 @@ public enum REWARD_TYPE
 	PIECE_CHARACTER = 112,
 	/// <summary>113 아이템 조각</summary>
 	PIECE_ITEM = 113,
-	/// <summary>113 스킬 경험치 아이템</summary>
+	/// <summary>114 스킬 경험치 아이템</summary>
 	EXP_SKILL = 114,
 }
 

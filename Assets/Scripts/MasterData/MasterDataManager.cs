@@ -29,11 +29,18 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Player_Level_Data();
         return _Player_Level_Data.Find(x => x.level == lv);
     }
-    public Player_Level_Data Get_PlayerLevelDataByAccumExp(int accum_exp)
+    public Player_Level_Data Get_PlayerLevelDataByAccumExp(double accum_exp)
     {
         Check_Player_Level_Data();
         var list = _Player_Level_Data.OrderBy(x => x.level).ToList();
         return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
+    public int Get_PlayerLevelMaxLevel()
+    {
+        Check_Player_Level_Data();
+        int max_lv = _Player_Level_Data.Max(x => x.level);
+        return max_lv;
     }
 
     public Player_Character_Level_Data Get_PlayerCharacterLevelData(int lv)
@@ -42,7 +49,7 @@ public class MasterDataManager : BaseMasterDataManager
         return _Player_Character_Level_Data.Find(x => x.level == lv);
     }
 
-    public Player_Character_Level_Data Get_PlayerCharacterLevelDataByAccumExp(int accum_exp)
+    public Player_Character_Level_Data Get_PlayerCharacterLevelDataByAccumExp(double accum_exp)
     {
         Check_Player_Character_Level_Data();
         var list = _Player_Character_Level_Data.OrderBy(x => x.level).ToList();
@@ -51,108 +58,7 @@ public class MasterDataManager : BaseMasterDataManager
 
     #endregion
 
-    #region Item
-    /// <summary>
-    /// 아이템 타입 데이터 반환
-    /// </summary>
-    /// <param name="itype"></param>
-    /// <returns></returns>
-    public Item_Type_Data Get_ItemTypeData(ITEM_TYPE itype)
-    {
-        Check_Item_Type_Data();
-        return _Item_Type_Data.Find(x => x.item_type == itype);
-    }
-    /// <summary>
-    /// 캐릭터 조각 데이터 반환
-    /// </summary>
-    /// <param name="player_character_id"></param>
-    /// <returns></returns>
-    public Character_Piece_Data Get_CharacterPieceData(int player_character_id)
-    {
-        Check_Character_Piece_Data();
-
-        return _Character_Piece_Data.Find(x => x.player_character_id == player_character_id);
-    }
-    /// <summary>
-    /// 경험치 물약 데이터 반환
-    /// </summary>
-    /// <param name="exp_potion_id"></param>
-    /// <returns></returns>
-    public Exp_Potion_Data Get_ExpPotionData(int exp_potion_id)
-    {
-        Check_Exp_Potion_Data();
-        return _Exp_Potion_Data.Find(x => x.exp_potion_id == exp_potion_id);
-    }
-    /// <summary>
-    /// 스태미너 물약 데이터 반환
-    /// </summary>
-    /// <param name="sta_potion_id"></param>
-    /// <returns></returns>
-    public Sta_Potion_Data Get_StaPotionData(int sta_potion_id)
-    {
-        Check_Sta_Potion_Data();
-        return _Sta_Potion_Data.Find(x => x.sta_potion_id == sta_potion_id);
-    }
-
-    /// <summary>
-    /// 소비성 아이템 데이터 반환
-    /// </summary>
-    /// <param name="expendable_item_id"></param>
-    /// <returns></returns>
-    public Expendable_Item_Data Get_ExpendableItemData(int expendable_item_id)
-    {
-        Check_Expendable_Item_Data();
-        return _Expendable_Item_Data.Find(x => x.expendable_item_id == expendable_item_id);
-    }
-    /// <summary>
-    /// 호감도 아이템 데이터 반환
-    /// </summary>
-    /// <param name="favorite_item_id"></param>
-    /// <returns></returns>
-    public Favorite_Item_Data Get_FavoriteItemData(int favorite_item_id)
-    {
-        Check_Favorite_Item_Data();
-        return _Favorite_Item_Data.Find(x => x.favorite_item_id == favorite_item_id);
-    }
-    /// <summary>
-    /// 초회 보상 그룹 데이터 반환
-    /// </summary>
-    /// <param name="first_reward_group_id"></param>
-    /// <param name="list"></param>
-    public void Get_FirstRewardDataList(int first_reward_group_id, ref List<First_Reward_Data> list)
-    {
-        Check_First_Reward_Data();
-        list.Clear();
-        list.AddRange(_First_Reward_Data.FindAll(x => x.first_reward_group_id == first_reward_group_id));
-        list.Sort((a, b) => a.first_reward_id.CompareTo(b.first_reward_id));
-    }
-    /// <summary>
-    /// 반복 보상 그룹 데이터 반환
-    /// </summary>
-    /// <param name="repeat_reward_group_id"></param>
-    /// <param name="list"></param>
-    public void Get_RepeatRewardDataList(int repeat_reward_group_id, ref List<Repeat_Reward_Data> list)
-    {
-        Check_Repeat_Reward_Data();
-        list.Clear();
-        list.AddRange(_Repeat_Reward_Data.FindAll(x => x.repeat_reward_group_id == repeat_reward_group_id));
-        list.Sort((a, b) => a.repeat_reward_id.CompareTo(b.repeat_reward_id));
-    }
-    /// <summary>
-    /// 별 보상 그룹 데이터 반환
-    /// </summary>
-    /// <param name="star_reward_group_id"></param>
-    /// <param name="list"></param>
-    public void Get_StarRewardDataList(int star_reward_group_id, ref List<Star_Reward_Data> list)
-    {
-        Check_Star_Reward_Data();
-        list.Clear();
-        list.AddRange(_Star_Reward_Data.FindAll(x => x.star_reward_group_id == star_reward_group_id));
-        list.Sort((a, b) => a.star_reward_id.CompareTo(b.star_reward_id));
-    }
-
-
-    #endregion
+   
 
     #region New Item Data
 
@@ -200,6 +106,17 @@ public class MasterDataManager : BaseMasterDataManager
     {
         Check_Reward_Set_Data();
         return _Reward_Set_Data.FindAll(x => x.reward_id == reward_id);
+    }
+
+    public Charge_Value_Data Get_ChargeValueData(REWARD_TYPE rtype)
+    {
+        Check_Charge_Value_Data();
+        return _Charge_Value_Data.Find(x => x.reward_type == rtype);
+    }
+    public IReadOnlyCollection<Charge_Value_Data> Get_ChargeValueDataList()
+    {
+        Check_Charge_Value_Data();
+        return _Charge_Value_Data.FindAll(x => x.Use_Charge_Data);
     }
 
     #endregion

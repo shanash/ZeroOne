@@ -8,42 +8,17 @@ using System.Linq;
 public class BaseMasterDataManager
 {
 
+	protected List<Charge_Value_Data> _Charge_Value_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Editor_Stage_Data> _Editor_Stage_Data
 	{
 		get;
 		private set;
 	}
 	protected List<Editor_Wave_Data> _Editor_Wave_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Item_Type_Data> _Item_Type_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Character_Piece_Data> _Character_Piece_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Exp_Potion_Data> _Exp_Potion_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Sta_Potion_Data> _Sta_Potion_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Favorite_Item_Data> _Favorite_Item_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Expendable_Item_Data> _Expendable_Item_Data
 	{
 		get;
 		private set;
@@ -193,21 +168,6 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
-	protected List<First_Reward_Data> _First_Reward_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Repeat_Reward_Data> _Repeat_Reward_Data
-	{
-		get;
-		private set;
-	}
-	protected List<Star_Reward_Data> _Star_Reward_Data
-	{
-		get;
-		private set;
-	}
 	protected List<Reward_Set_Data> _Reward_Set_Data
 	{
 		get;
@@ -248,14 +208,9 @@ public class BaseMasterDataManager
 
 	private async void InitLoadMasterData()
 	{
+		await LoadMaster_Charge_Value_Data();
 		await LoadMaster_Editor_Stage_Data();
 		await LoadMaster_Editor_Wave_Data();
-		await LoadMaster_Item_Type_Data();
-		await LoadMaster_Character_Piece_Data();
-		await LoadMaster_Exp_Potion_Data();
-		await LoadMaster_Sta_Potion_Data();
-		await LoadMaster_Favorite_Item_Data();
-		await LoadMaster_Expendable_Item_Data();
 		await LoadMaster_Goods_Data();
 		await LoadMaster_Item_Data();
 		await LoadMaster_Item_Piece_Data();
@@ -285,9 +240,6 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Battle_Data();
 		await LoadMaster_Position_Icon_Data();
 		await LoadMaster_Role_Icon_Data();
-		await LoadMaster_First_Reward_Data();
-		await LoadMaster_Repeat_Reward_Data();
-		await LoadMaster_Star_Reward_Data();
 		await LoadMaster_Reward_Set_Data();
 		await LoadMaster_World_Data();
 		await LoadMaster_Zone_Data();
@@ -304,6 +256,17 @@ public class BaseMasterDataManager
 		return txt_asset.text;
 	}
 
+
+	protected async Task LoadMaster_Charge_Value_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Charge_Value_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Charge_Value_Data>>(json);
+		_Charge_Value_Data = new List<Charge_Value_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Charge_Value_Data.Add(new Charge_Value_Data(raw_data));
+		}
+	}
 
 	protected async Task LoadMaster_Editor_Stage_Data()
 	{
@@ -324,72 +287,6 @@ public class BaseMasterDataManager
 		foreach (var raw_data in raw_data_list)
 		{
 			_Editor_Wave_Data.Add(new Editor_Wave_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Item_Type_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Type_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Type_Data>>(json);
-		_Item_Type_Data = new List<Item_Type_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Item_Type_Data.Add(new Item_Type_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Character_Piece_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Character_Piece_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Character_Piece_Data>>(json);
-		_Character_Piece_Data = new List<Character_Piece_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Character_Piece_Data.Add(new Character_Piece_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Exp_Potion_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Exp_Potion_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Exp_Potion_Data>>(json);
-		_Exp_Potion_Data = new List<Exp_Potion_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Exp_Potion_Data.Add(new Exp_Potion_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Sta_Potion_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Sta_Potion_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Sta_Potion_Data>>(json);
-		_Sta_Potion_Data = new List<Sta_Potion_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Sta_Potion_Data.Add(new Sta_Potion_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Favorite_Item_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Favorite_Item_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Favorite_Item_Data>>(json);
-		_Favorite_Item_Data = new List<Favorite_Item_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Favorite_Item_Data.Add(new Favorite_Item_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Expendable_Item_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Expendable_Item_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Expendable_Item_Data>>(json);
-		_Expendable_Item_Data = new List<Expendable_Item_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Expendable_Item_Data.Add(new Expendable_Item_Data(raw_data));
 		}
 	}
 
@@ -712,39 +609,6 @@ public class BaseMasterDataManager
 		}
 	}
 
-	protected async Task LoadMaster_First_Reward_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/First_Reward_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_First_Reward_Data>>(json);
-		_First_Reward_Data = new List<First_Reward_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_First_Reward_Data.Add(new First_Reward_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Repeat_Reward_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Repeat_Reward_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Repeat_Reward_Data>>(json);
-		_Repeat_Reward_Data = new List<Repeat_Reward_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Repeat_Reward_Data.Add(new Repeat_Reward_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Star_Reward_Data()
-	{
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Star_Reward_Data");
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Star_Reward_Data>>(json);
-		_Star_Reward_Data = new List<Star_Reward_Data>();
-		foreach (var raw_data in raw_data_list)
-		{
-			_Star_Reward_Data.Add(new Star_Reward_Data(raw_data));
-		}
-	}
-
 	protected async Task LoadMaster_Reward_Set_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Reward_Set_Data");
@@ -800,6 +664,14 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async void Check_Charge_Value_Data()
+	{
+		if(_Charge_Value_Data == null)
+		{
+			await LoadMaster_Charge_Value_Data();
+		}
+	}
+
 	protected async void Check_Editor_Stage_Data()
 	{
 		if(_Editor_Stage_Data == null)
@@ -813,54 +685,6 @@ public class BaseMasterDataManager
 		if(_Editor_Wave_Data == null)
 		{
 			await LoadMaster_Editor_Wave_Data();
-		}
-	}
-
-	protected async void Check_Item_Type_Data()
-	{
-		if(_Item_Type_Data == null)
-		{
-			await LoadMaster_Item_Type_Data();
-		}
-	}
-
-	protected async void Check_Character_Piece_Data()
-	{
-		if(_Character_Piece_Data == null)
-		{
-			await LoadMaster_Character_Piece_Data();
-		}
-	}
-
-	protected async void Check_Exp_Potion_Data()
-	{
-		if(_Exp_Potion_Data == null)
-		{
-			await LoadMaster_Exp_Potion_Data();
-		}
-	}
-
-	protected async void Check_Sta_Potion_Data()
-	{
-		if(_Sta_Potion_Data == null)
-		{
-			await LoadMaster_Sta_Potion_Data();
-		}
-	}
-
-	protected async void Check_Favorite_Item_Data()
-	{
-		if(_Favorite_Item_Data == null)
-		{
-			await LoadMaster_Favorite_Item_Data();
-		}
-	}
-
-	protected async void Check_Expendable_Item_Data()
-	{
-		if(_Expendable_Item_Data == null)
-		{
-			await LoadMaster_Expendable_Item_Data();
 		}
 	}
 
@@ -1093,30 +917,6 @@ public class BaseMasterDataManager
 		if(_Role_Icon_Data == null)
 		{
 			await LoadMaster_Role_Icon_Data();
-		}
-	}
-
-	protected async void Check_First_Reward_Data()
-	{
-		if(_First_Reward_Data == null)
-		{
-			await LoadMaster_First_Reward_Data();
-		}
-	}
-
-	protected async void Check_Repeat_Reward_Data()
-	{
-		if(_Repeat_Reward_Data == null)
-		{
-			await LoadMaster_Repeat_Reward_Data();
-		}
-	}
-
-	protected async void Check_Star_Reward_Data()
-	{
-		if(_Star_Reward_Data == null)
-		{
-			await LoadMaster_Star_Reward_Data();
 		}
 	}
 

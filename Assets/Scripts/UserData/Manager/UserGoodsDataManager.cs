@@ -12,7 +12,12 @@ public class UserGoodsDataManager : ManagerBase
 
     protected override void Destroy()
     {
-        
+        int cnt = User_Goods_Data_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            User_Goods_Data_List[i].Dispose();
+        }
+        User_Goods_Data_List.Clear();
     }
 
     public override void InitDataManager()
@@ -40,6 +45,16 @@ public class UserGoodsDataManager : ManagerBase
     public UserGoodsData FindUserGoods(GOODS_TYPE gtype)
     {
         return User_Goods_Data_List.Find(x => x.Goods_Type == gtype);
+    }
+
+    public double GetGoodsCount(GOODS_TYPE gtype)
+    {
+        var goods = FindUserGoods(gtype);
+        if (goods != null)
+        {
+            return goods.GetCount();
+        }
+        return 0;
     }
 
     public bool IsUsableGoodsCount(GOODS_TYPE gtype, int cnt)

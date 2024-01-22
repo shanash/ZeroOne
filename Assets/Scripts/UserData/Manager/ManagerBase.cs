@@ -8,7 +8,7 @@ public enum USER_DATA_MANAGER_TYPE
 {
     NONE = 0,
 
-    USER_GAME_INFO_DATA_MANAGER,               //  사용자 플레이어 데이터
+    USER_PLAYER_INFO_DATA_MANAGER,               //  사용자 플레이어 데이터
     USER_HERO_DATA_MANAGER,                 //  사용자 획득 영웅 데이터
     USER_DECK_DATA_MANAGER,                 //  사용자 영웅의 덱 세팅 데이터(각 게임 타입 및 덱의 최대 개수만큼 보유)
     USER_MEMORIAL_DATA_MANAGER,

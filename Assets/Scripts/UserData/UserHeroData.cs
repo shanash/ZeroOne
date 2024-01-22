@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
 using FluffyDuck.Util;
 
 public class UserHeroData : UserDataBase
@@ -5,7 +6,7 @@ public class UserHeroData : UserDataBase
     public SecureVar<int> Player_Character_ID { get; protected set; } = null;
     public int Player_Character_Num { get; protected set; } = 0;
     public SecureVar<int> Level { get; protected set; } = null;
-    public SecureVar<int> Exp { get; protected set; } = null;
+    public SecureVar<double> Exp { get; protected set; } = null;
 
     public SecureVar<int> Star_Grade { get; protected set; } = null;
 
@@ -15,6 +16,8 @@ public class UserHeroData : UserDataBase
 
     public Player_Character_Data Hero_Data { get; private set; }
     public Player_Character_Battle_Data Battle_Data { get; private set; }
+
+    Player_Character_Level_Data Lv_Data;
 
     public UserHeroData() : base() { }
 
@@ -41,7 +44,7 @@ public class UserHeroData : UserDataBase
         }
         if (Exp == null)
         {
-            Exp = new SecureVar<int>();
+            Exp = new SecureVar<double>();
         }
         if (Star_Grade == null)
         {
@@ -101,7 +104,12 @@ public class UserHeroData : UserDataBase
     {
         return Level.Get();
     }
-    public int GetExp()
+    void SetLevel(int lv)
+    {
+        Level.Set(lv);
+        Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(GetLevel());
+    }
+    public double GetExp()
     {
         return Exp.Get();
     }
@@ -126,6 +134,85 @@ public class UserHeroData : UserDataBase
         SetLobbyChoiceNumber(0);
     }
 
+    public ERROR_CODE AddExp(double xp)
+    {
+        ERROR_CODE code = ERROR_CODE.FAILED;
+
+        if (xp < 0)
+        {
+            return code;
+        }
+        if (IsMaxLevel())
+        {
+            double _exp = GetExp();
+            _exp += xp;
+
+            //  level check
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelDataByAccumExp(_exp);
+            if (lv_data == null)
+            {
+                return code;
+            }
+            if (GetLevel() < lv_data.level)
+            {
+                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                SetLevel(lv_data.level);
+            }
+            else
+            {
+                code = ERROR_CODE.SUCCESS;
+            }
+            Exp.Set(_exp);
+            Is_Update_Data = true;
+        }
+        else
+        {
+            code = ERROR_CODE.NOT_WORK;
+        }
+
+        return code;
+    }
+
+    bool IsMaxLevel()
+    {
+        var pinfo = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+
+        return pinfo.GetLevel() <= GetLevel();
+    }
+    /// <summary>
+    /// 다음 레벨업에 필요한 경험치
+    /// </summary>
+    /// <returns></returns>
+    public double GetNextExp()
+    {
+        if (Lv_Data == null)
+        {
+            Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(GetLevel());
+        }
+        return Lv_Data.need_exp;
+    }
+    /// <summary>
+    /// 현재 경험치
+    /// </summary>
+    /// <returns></returns>
+    public double GetLevelExp()
+    {
+        if (Lv_Data == null)
+        {
+            Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(GetLevel());
+        }
+        return GetExp() - Lv_Data.accum_exp;
+    }
+    /// <summary>
+    /// 현재 경험치 진행률
+    /// </summary>
+    /// <returns></returns>
+    public float GetExpPercetage()
+    {
+        float lv_exp = (float)GetLevelExp();
+        float need_exp = (float)GetNextExp();
+        return lv_exp / need_exp;
+    }
     public override LitJson.JsonData Serialized()
     {
         var json = new LitJson.JsonData();
@@ -165,7 +252,7 @@ public class UserHeroData : UserDataBase
             }
             if (json.ContainsKey(NODE_EXP))
             {
-                Exp.Set(ParseInt(json, NODE_EXP));
+                Exp.Set(ParseDouble(json, NODE_EXP));
             }
             if (json.ContainsKey(NODE_STAR_GRADE))
             {

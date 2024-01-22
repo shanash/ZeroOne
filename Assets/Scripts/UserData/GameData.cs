@@ -18,7 +18,7 @@ public class GameData : Singleton<GameData>
     {
         //  player data
         {
-            var mng = new UserGameInfoDataManager(USER_DATA_MANAGER_TYPE.USER_GAME_INFO_DATA_MANAGER);
+            var mng = new UserPlayerInfoDataManager(USER_DATA_MANAGER_TYPE.USER_PLAYER_INFO_DATA_MANAGER);
             if (!mng.Load())
             {
                 mng.InitDataManager();
@@ -90,9 +90,9 @@ public class GameData : Singleton<GameData>
         return (T)User_Data_Manager_List.Find(x => x.GetManagerType() == utype);
     }
 
-    public UserGameInfoDataManager GetUserGameInfoDataManager()
+    public UserPlayerInfoDataManager GetUserGameInfoDataManager()
     {
-        return FindUserDataManager<UserGameInfoDataManager>(USER_DATA_MANAGER_TYPE.USER_GAME_INFO_DATA_MANAGER);
+        return FindUserDataManager<UserPlayerInfoDataManager>(USER_DATA_MANAGER_TYPE.USER_PLAYER_INFO_DATA_MANAGER);
     }
     public UserHeroDataManager GetUserHeroDataManager()
     {

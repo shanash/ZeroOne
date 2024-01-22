@@ -80,7 +80,8 @@ public class BattlePcData : BattleUnitData
     {
         if (Battle_Data != null)
         {
-            return Battle_Data.m_attack;
+            double att = Battle_Data.m_attack;
+            return att;
         }
         return 0;
     }

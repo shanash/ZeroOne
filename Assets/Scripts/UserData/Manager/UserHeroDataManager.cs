@@ -10,8 +10,6 @@ public class UserHeroDataManager : ManagerBase
     {
     }
 
-
-
     protected override void Destroy()
     {
         int cnt = User_Hero_Data_List.Count;

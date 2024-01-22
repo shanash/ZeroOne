@@ -46,6 +46,8 @@ public class UserDataBase : IDisposable
     public virtual void InitUpdateData() { Is_Update_Data = false; }
     public void SetUpdateData(bool is_update) { Is_Update_Data = is_update; }
 
+    public virtual ERROR_CODE CheckDateChange() { return ERROR_CODE.NOT_WORK; }
+
     public virtual LitJson.JsonData Serialized() { return null; }
     public virtual bool Deserialized(LitJson.JsonData json) { return false; }
 
