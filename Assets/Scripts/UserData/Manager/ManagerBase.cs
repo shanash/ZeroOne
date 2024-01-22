@@ -14,6 +14,9 @@ public enum USER_DATA_MANAGER_TYPE
     USER_MEMORIAL_DATA_MANAGER,
 
     USER_STORY_STAGE_DATA_MANAGER,          //  기본 스토리 스테이지 데이터 매니져
+
+    USER_GOODS_DATA_MANAGER,
+    USER_ITEM_DATA_MANAGER,
 }
 
 public class ManagerBase : IDisposable
