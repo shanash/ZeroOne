@@ -1,5 +1,7 @@
 using System.Text;
 using ClosedXML.Excel;
+using System.Diagnostics;
+
 #if UNITY_5_3_OR_NEWER
 using System;
 using System.IO;
@@ -14,13 +16,13 @@ namespace Excel2Json
 
         public static void ReadExcelData(string path, string output_dir, bool is_csharp_make, string csharp_output_dir, bool is_encrypt, string enc_password, ref Dictionary<string, List<ColumnInfo>> master_table_columns, ref List<EnumData> result_enum_list)
         {
-            string tempPath = Path.GetTempFileName(); // 임시 파일 경로 생성
-
+            //string tempPath = Path.GetTempFileName(); // 임시 파일 경로 생성
+            //Logger.Log($"tempPath : {tempPath}");
             try
             {
-                File.Copy(path, tempPath, true); // 원본 파일을 임시 파일로 복사
+                //File.Copy(path, tempPath, true); // 원본 파일을 임시 파일로 복사
 
-                using (FileStream fileStream = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
                     // 나머지 작업을 fileStream을 사용하여 수행
                     using (var workbook = new XLWorkbook(fileStream))
@@ -57,10 +59,12 @@ namespace Excel2Json
             }
             finally
             {
+                /*
                 if (File.Exists(tempPath))
                 {
                     File.Delete(tempPath); // 임시 파일 삭제
                 }
+                */
             }
         }
 
