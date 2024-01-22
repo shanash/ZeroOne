@@ -353,7 +353,7 @@ public enum TEAM_TYPE
 ///	</summary>
 public enum TOUCH_BODY_TYPE
 {
-	/// <summary>NONE</summary>
+	/// <summary>캐릭터 클릭이지만, 퍼즐 클릭이 아님</summary>
 	NONE = 0,
 	/// <summary>1 몸체</summary>
 	BODY = 1,
@@ -367,20 +367,38 @@ public enum TOUCH_BODY_TYPE
 	PELVIS = 5,
 	/// <summary>6 다리</summary>
 	LEG = 6,
-	/// <summary>7 뿔</summary>
-	HORN = 7,
-	/// <summary>8 브라</summary>
-	BRA = 8,
-	/// <summary>9 팬티</summary>
-	PANTY = 9,
-	/// <summary>10 귀</summary>
-	EAR = 10,
-	/// <summary>11 얼굴</summary>
-	FACE = 11,
-	/// <summary>12 엉덩이</summary>
-	HIP = 12,
-	/// <summary>13 장난감</summary>
-	TOY = 13,
+	/// <summary>7 눈</summary>
+	EYE = 7,
+	/// <summary>8 코</summary>
+	NOSE = 8,
+	/// <summary>9 귀</summary>
+	EAR = 9,
+	/// <summary>10 볼</summary>
+	CHEEK = 10,
+	/// <summary>11 턱</summary>
+	JAW = 11,
+	/// <summary>12 이마</summary>
+	BROW = 12,
+	/// <summary>13 얼굴</summary>
+	FACE = 13,
+	/// <summary>14 엉덩이</summary>
+	HIP = 14,
+	/// <summary>15 브라</summary>
+	BRA = 15,
+	/// <summary>16 팬티</summary>
+	PANTY = 16,
+	/// <summary>17 뿔</summary>
+	HORN = 17,
+	/// <summary>18 꼬리</summary>
+	TOY = 18,
+	/// <summary>19 기타 소품 및 의상 1</summary>
+	PROP_1 = 19,
+	/// <summary>20 기타 소품 및 의상 2</summary>
+	PROP_2 = 20,
+	/// <summary>21 기타 소품 및 의상 3</summary>
+	PROP_3 = 21,
+	/// <summary>22 기타 소품 및 의상 4</summary>
+	PROP_4 = 22,
 }
 
 ///	<summary>
@@ -390,18 +408,14 @@ public enum TOUCH_GESTURE_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>1 누른 즉시</summary>
-	DOWN = 1,
-	/// <summary>2 뗀 즉시</summary>
-	UP = 2,
-	/// <summary>3 터치</summary>
-	TOUCH = 3,
-	/// <summary>4 더블터치</summary>
-	DOUBLE_TOUCH = 4,
-	/// <summary>5 드래그</summary>
-	DRAG = 5,
-	/// <summary>6 쓰다듬기</summary>
-	NADE = 6,
+	/// <summary>1 OnClick</summary>
+	CLICK = 1,
+	/// <summary>2 DoubleClick</summary>
+	DOUBLE_CLICK = 2,
+	/// <summary>3 PushDown(누른 채로 1초 이상)</summary>
+	PUSH_DOWN = 3,
+	/// <summary>4 Drag</summary>
+	DRAG = 4,
 }
 
 ///	<summary>
@@ -792,6 +806,25 @@ public enum EFFECT_COUNT_TYPE
 	SINGLE_EFFECT = 1,
 	/// <summary>각 타겟에 개별적으로 발현되는 이펙트</summary>
 	EACH_TARGET_EFFECT = 2,
+}
+
+///	<summary>
+///	캐릭터 상태 타입
+///	</summary>
+public enum LOVE_LEVEL_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>1 어색함</summary>
+	NORMAL = 1,
+	/// <summary>2 친근함</summary>
+	FRIENDLINESS = 2,
+	/// <summary>3 절친함</summary>
+	CLOSENESS = 3,
+	/// <summary>4 좋아함</summary>
+	LIKE = 4,
+	/// <summary>5 사랑함</summary>
+	LOVE = 5,
 }
 
 ///	<summary>
