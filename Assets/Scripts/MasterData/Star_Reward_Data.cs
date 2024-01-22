@@ -1,40 +1,54 @@
-﻿public class Star_Reward_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Star_Reward_Data : System.IDisposable
 {
 	///	<summary>
 	///	보상 고유 인덱스
 	///	</summary>
-	public readonly int star_reward_id;
+	public int star_reward_id => _star_reward_id;
+	int _star_reward_id;
+
 	///	<summary>
 	///	보상 그룹 아이디
 	///	</summary>
-	public readonly int star_reward_group_id;
+	public int star_reward_group_id => _star_reward_group_id;
+	int _star_reward_group_id;
+
 	///	<summary>
 	///	별 포인트
 	///	</summary>
-	public readonly int star_point;
+	public int star_point => _star_point;
+	int _star_point;
+
 	///	<summary>
 	///	타입
 	///	</summary>
-	public readonly ITEM_TYPE item_type;
+	public ITEM_TYPE item_type => _item_type;
+	ITEM_TYPE _item_type;
+
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public readonly int item_id;
+	public int item_id => _item_id;
+	int _item_id;
+
 	///	<summary>
 	///	지급 수량
 	///	</summary>
-	public readonly int item_count;
+	public int item_count => _item_count;
+	int _item_count;
 
 	private bool disposed = false;
 
 	public Star_Reward_Data(Raw_Star_Reward_Data raw_data)
 	{
-		star_reward_id = raw_data.star_reward_id;
-		star_reward_group_id = raw_data.star_reward_group_id;
-		star_point = raw_data.star_point;
-		item_type = raw_data.item_type;
-		item_id = raw_data.item_id;
-		item_count = raw_data.item_count;
+		_star_reward_id = raw_data.star_reward_id;
+		_star_reward_group_id = raw_data.star_reward_group_id;
+		_star_point = raw_data.star_point;
+		_item_type = raw_data.item_type;
+		_item_id = raw_data.item_id;
+		_item_count = raw_data.item_count;
 	}
 
 	public void Dispose()

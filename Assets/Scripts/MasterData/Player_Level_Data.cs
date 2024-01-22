@@ -1,31 +1,41 @@
-﻿public class Player_Level_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Player_Level_Data : System.IDisposable
 {
 	///	<summary>
 	///	ID
 	///	사용자 레벨 ID
 	///	</summary>
-	public readonly int player_level_id;
+	public int player_level_id => _player_level_id;
+	int _player_level_id;
+
 	///	<summary>
 	///	레벨
 	///	</summary>
-	public readonly int level;
+	public int level => _level;
+	int _level;
+
 	///	<summary>
 	///	누적 경험치
 	///	</summary>
-	public readonly double accum_exp;
+	public double accum_exp => _accum_exp;
+	double _accum_exp;
+
 	///	<summary>
 	///	필요 경험치
 	///	</summary>
-	public readonly double need_exp;
+	public double need_exp => _need_exp;
+	double _need_exp;
 
 	private bool disposed = false;
 
 	public Player_Level_Data(Raw_Player_Level_Data raw_data)
 	{
-		player_level_id = raw_data.player_level_id;
-		level = raw_data.level;
-		accum_exp = raw_data.accum_exp;
-		need_exp = raw_data.need_exp;
+		_player_level_id = raw_data.player_level_id;
+		_level = raw_data.level;
+		_accum_exp = raw_data.accum_exp;
+		_need_exp = raw_data.need_exp;
 	}
 
 	public void Dispose()

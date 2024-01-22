@@ -1,40 +1,54 @@
-﻿public class Player_Character_Skill_Onetime_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Player_Character_Skill_Onetime_Data : System.IDisposable
 {
 	///	<summary>
 	///	일회성 스킬 효과 인덱스
 	///	</summary>
-	public readonly int pc_skill_onetime_id;
+	public int pc_skill_onetime_id => _pc_skill_onetime_id;
+	int _pc_skill_onetime_id;
+
 	///	<summary>
 	///	일회성 효과 타입
 	///	</summary>
-	public readonly ONETIME_EFFECT_TYPE onetime_effect_type;
+	public ONETIME_EFFECT_TYPE onetime_effect_type => _onetime_effect_type;
+	ONETIME_EFFECT_TYPE _onetime_effect_type;
+
 	///	<summary>
 	///	스탯 멀티플 타입
 	///	</summary>
-	public readonly STAT_MULTIPLE_TYPE multiple_type;
+	public STAT_MULTIPLE_TYPE multiple_type => _multiple_type;
+	STAT_MULTIPLE_TYPE _multiple_type;
+
 	///	<summary>
 	///	절대값
 	///	</summary>
-	public readonly int value;
+	public int value => _value;
+	int _value;
+
 	///	<summary>
 	///	배율
 	///	</summary>
-	public readonly double multiple;
+	public double multiple => _multiple;
+	double _multiple;
+
 	///	<summary>
 	///	이펙트 프리팹
 	///	</summary>
-	public readonly string effect_path;
+	public string effect_path => _effect_path;
+	string _effect_path;
 
 	private bool disposed = false;
 
 	public Player_Character_Skill_Onetime_Data(Raw_Player_Character_Skill_Onetime_Data raw_data)
 	{
-		pc_skill_onetime_id = raw_data.pc_skill_onetime_id;
-		onetime_effect_type = raw_data.onetime_effect_type;
-		multiple_type = raw_data.multiple_type;
-		value = raw_data.value;
-		multiple = raw_data.multiple;
-		effect_path = raw_data.effect_path;
+		_pc_skill_onetime_id = raw_data.pc_skill_onetime_id;
+		_onetime_effect_type = raw_data.onetime_effect_type;
+		_multiple_type = raw_data.multiple_type;
+		_value = raw_data.value;
+		_multiple = raw_data.multiple;
+		_effect_path = raw_data.effect_path;
 	}
 
 	public void Dispose()

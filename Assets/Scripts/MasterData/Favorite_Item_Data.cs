@@ -1,40 +1,54 @@
-﻿public class Favorite_Item_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Favorite_Item_Data : System.IDisposable
 {
 	///	<summary>
 	///	인덱스
 	///	</summary>
-	public readonly int favorite_item_id;
+	public int favorite_item_id => _favorite_item_id;
+	int _favorite_item_id;
+
 	///	<summary>
 	///	한글명
 	///	</summary>
-	public readonly string item_name_kr;
+	public string item_name_kr => _item_name_kr;
+	string _item_name_kr;
+
 	///	<summary>
 	///	사용 효과
 	///	</summary>
-	public readonly int use_effect;
+	public int use_effect => _use_effect;
+	int _use_effect;
+
 	///	<summary>
 	///	툴팁 TEXT
 	///	</summary>
-	public readonly string item_tooltip_text;
+	public string item_tooltip_text => _item_tooltip_text;
+	string _item_tooltip_text;
+
 	///	<summary>
 	///	판매 가격
 	///	</summary>
-	public readonly int sell_price;
+	public int sell_price => _sell_price;
+	int _sell_price;
+
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public readonly string icon_path;
+	public string icon_path => _icon_path;
+	string _icon_path;
 
 	private bool disposed = false;
 
 	public Favorite_Item_Data(Raw_Favorite_Item_Data raw_data)
 	{
-		favorite_item_id = raw_data.favorite_item_id;
-		item_name_kr = raw_data.item_name_kr;
-		use_effect = raw_data.use_effect;
-		item_tooltip_text = raw_data.item_tooltip_text;
-		sell_price = raw_data.sell_price;
-		icon_path = raw_data.icon_path;
+		_favorite_item_id = raw_data.favorite_item_id;
+		_item_name_kr = raw_data.item_name_kr;
+		_use_effect = raw_data.use_effect;
+		_item_tooltip_text = raw_data.item_tooltip_text;
+		_sell_price = raw_data.sell_price;
+		_icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

@@ -1,40 +1,54 @@
-﻿public class Character_Piece_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Character_Piece_Data : System.IDisposable
 {
 	///	<summary>
 	///	캐릭터 아이디
 	///	</summary>
-	public readonly int player_character_id;
+	public int player_character_id => _player_character_id;
+	int _player_character_id;
+
 	///	<summary>
 	///	이름
 	///	</summary>
-	public readonly string name_kr;
+	public string name_kr => _name_kr;
+	string _name_kr;
+
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public readonly string tooltip_text;
+	public string tooltip_text => _tooltip_text;
+	string _tooltip_text;
+
 	///	<summary>
 	///	판매가격
 	///	</summary>
-	public readonly int sell_price;
+	public int sell_price => _sell_price;
+	int _sell_price;
+
 	///	<summary>
 	///	완전체 필요 개수
 	///	</summary>
-	public readonly int make_need;
+	public int make_need => _make_need;
+	int _make_need;
+
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public readonly string icon_path;
+	public string icon_path => _icon_path;
+	string _icon_path;
 
 	private bool disposed = false;
 
 	public Character_Piece_Data(Raw_Character_Piece_Data raw_data)
 	{
-		player_character_id = raw_data.player_character_id;
-		name_kr = raw_data.name_kr;
-		tooltip_text = raw_data.tooltip_text;
-		sell_price = raw_data.sell_price;
-		make_need = raw_data.make_need;
-		icon_path = raw_data.icon_path;
+		_player_character_id = raw_data.player_character_id;
+		_name_kr = raw_data.name_kr;
+		_tooltip_text = raw_data.tooltip_text;
+		_sell_price = raw_data.sell_price;
+		_make_need = raw_data.make_need;
+		_icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

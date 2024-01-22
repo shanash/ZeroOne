@@ -1,35 +1,47 @@
-﻿public class Role_Icon_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Role_Icon_Data : System.IDisposable
 {
 	///	<summary>
 	///	역할 타입
 	///	</summary>
-	public readonly ROLE_TYPE role_type;
+	public ROLE_TYPE role_type => _role_type;
+	ROLE_TYPE _role_type;
+
 	///	<summary>
 	///	이름
 	///	</summary>
-	public readonly string name_kr;
+	public string name_kr => _name_kr;
+	string _name_kr;
+
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public readonly string icon;
+	public string icon => _icon;
+	string _icon;
+
 	///	<summary>
 	///	카드 아이콘
 	///	</summary>
-	public readonly string card_icon;
+	public string card_icon => _card_icon;
+	string _card_icon;
+
 	///	<summary>
 	///	태그 bg
 	///	</summary>
-	public readonly string tag_bg_path;
+	public string tag_bg_path => _tag_bg_path;
+	string _tag_bg_path;
 
 	private bool disposed = false;
 
 	public Role_Icon_Data(Raw_Role_Icon_Data raw_data)
 	{
-		role_type = raw_data.role_type;
-		name_kr = raw_data.name_kr;
-		icon = raw_data.icon;
-		card_icon = raw_data.card_icon;
-		tag_bg_path = raw_data.tag_bg_path;
+		_role_type = raw_data.role_type;
+		_name_kr = raw_data.name_kr;
+		_icon = raw_data.icon;
+		_card_icon = raw_data.card_icon;
+		_tag_bg_path = raw_data.tag_bg_path;
 	}
 
 	public void Dispose()

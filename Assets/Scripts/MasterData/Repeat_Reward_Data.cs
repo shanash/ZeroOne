@@ -1,40 +1,54 @@
-﻿public class Repeat_Reward_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Repeat_Reward_Data : System.IDisposable
 {
 	///	<summary>
 	///	보상 고유 인덱스
 	///	</summary>
-	public readonly int repeat_reward_id;
+	public int repeat_reward_id => _repeat_reward_id;
+	int _repeat_reward_id;
+
 	///	<summary>
 	///	보상 그룹 아이디
 	///	</summary>
-	public readonly int repeat_reward_group_id;
+	public int repeat_reward_group_id => _repeat_reward_group_id;
+	int _repeat_reward_group_id;
+
 	///	<summary>
 	///	타입
 	///	</summary>
-	public readonly ITEM_TYPE item_type;
+	public ITEM_TYPE item_type => _item_type;
+	ITEM_TYPE _item_type;
+
 	///	<summary>
 	///	아이템 인덱스
 	///	</summary>
-	public readonly int item_id;
+	public int item_id => _item_id;
+	int _item_id;
+
 	///	<summary>
 	///	최소 수량
 	///	</summary>
-	public readonly int min_count;
+	public int min_count => _min_count;
+	int _min_count;
+
 	///	<summary>
 	///	최대 수량
 	///	</summary>
-	public readonly int max_count;
+	public int max_count => _max_count;
+	int _max_count;
 
 	private bool disposed = false;
 
 	public Repeat_Reward_Data(Raw_Repeat_Reward_Data raw_data)
 	{
-		repeat_reward_id = raw_data.repeat_reward_id;
-		repeat_reward_group_id = raw_data.repeat_reward_group_id;
-		item_type = raw_data.item_type;
-		item_id = raw_data.item_id;
-		min_count = raw_data.min_count;
-		max_count = raw_data.max_count;
+		_repeat_reward_id = raw_data.repeat_reward_id;
+		_repeat_reward_group_id = raw_data.repeat_reward_group_id;
+		_item_type = raw_data.item_type;
+		_item_id = raw_data.item_id;
+		_min_count = raw_data.min_count;
+		_max_count = raw_data.max_count;
 	}
 
 	public void Dispose()

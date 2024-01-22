@@ -1,35 +1,47 @@
-﻿public class Expendable_Item_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Expendable_Item_Data : System.IDisposable
 {
 	///	<summary>
 	///	소모용 아이템 id
 	///	</summary>
-	public readonly int expendable_item_id;
+	public int expendable_item_id => _expendable_item_id;
+	int _expendable_item_id;
+
 	///	<summary>
 	///	이름
 	///	</summary>
-	public readonly string name_kr;
+	public string name_kr => _name_kr;
+	string _name_kr;
+
 	///	<summary>
 	///	툴팁
 	///	</summary>
-	public readonly string tooltip_text;
+	public string tooltip_text => _tooltip_text;
+	string _tooltip_text;
+
 	///	<summary>
 	///	판매가격
 	///	</summary>
-	public readonly int sell_price;
+	public int sell_price => _sell_price;
+	int _sell_price;
+
 	///	<summary>
 	///	아이콘 경로
 	///	</summary>
-	public readonly string icon_path;
+	public string icon_path => _icon_path;
+	string _icon_path;
 
 	private bool disposed = false;
 
 	public Expendable_Item_Data(Raw_Expendable_Item_Data raw_data)
 	{
-		expendable_item_id = raw_data.expendable_item_id;
-		name_kr = raw_data.name_kr;
-		tooltip_text = raw_data.tooltip_text;
-		sell_price = raw_data.sell_price;
-		icon_path = raw_data.icon_path;
+		_expendable_item_id = raw_data.expendable_item_id;
+		_name_kr = raw_data.name_kr;
+		_tooltip_text = raw_data.tooltip_text;
+		_sell_price = raw_data.sell_price;
+		_icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

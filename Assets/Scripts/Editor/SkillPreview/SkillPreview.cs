@@ -1,5 +1,4 @@
 using FluffyDuck.Util;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -33,20 +32,16 @@ public class SkillPreview : EditorWindow
     /// </summary>
     List<string> Unit_Choice_Drop_Down_Menu_List = new List<string>();
 
-
     /// <summary>
     /// 유닛 썸네일
     /// </summary>
     Texture Unit_Thumbnail;
 
-
     bool Show_Skill_Info;
     SKILL_TYPE Skill_Type = SKILL_TYPE.NONE;
     SKILL_TYPE Prev_Skill_Type = SKILL_TYPE.NONE;
 
-
     BattleManager_V2 Skill_Preview_Battle_Mng;
-
 
     static bool Is_Enable = false;
     /// <summary>

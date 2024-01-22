@@ -1,65 +1,89 @@
-﻿public class Stage_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Stage_Data : System.IDisposable
 {
 	///	<summary>
 	///	스테이지 인덱스
 	///	</summary>
-	public readonly int stage_id;
+	public int stage_id => _stage_id;
+	int _stage_id;
+
 	///	<summary>
 	///	지역 id
 	///	</summary>
-	public readonly int zone_id;
+	public int zone_id => _zone_id;
+	int _zone_id;
+
 	///	<summary>
 	///	스테이지 넘버링
 	///	</summary>
-	public readonly int stage_ordering;
+	public int stage_ordering => _stage_ordering;
+	int _stage_ordering;
+
 	///	<summary>
 	///	스테이지 명칭
 	///	</summary>
-	public readonly string stage_name;
+	public string stage_name => _stage_name;
+	string _stage_name;
+
 	///	<summary>
 	///	사용 스태미나
 	///	</summary>
-	public readonly int use_stamina;
+	public int use_stamina => _use_stamina;
+	int _use_stamina;
+
 	///	<summary>
 	///	클리어 시 캐릭터 경험치
 	///	</summary>
-	public readonly int character_exp;
+	public int character_exp => _character_exp;
+	int _character_exp;
+
 	///	<summary>
 	///	호감도 경험치
 	///	</summary>
-	public readonly int destiny_exp;
+	public int destiny_exp => _destiny_exp;
+	int _destiny_exp;
+
 	///	<summary>
 	///	지급 골드
 	///	</summary>
-	public readonly int gold;
+	public int gold => _gold;
+	int _gold;
+
 	///	<summary>
 	///	통상 보상
 	///	</summary>
-	public readonly int repeat_reward_group_id;
+	public int repeat_reward_group_id => _repeat_reward_group_id;
+	int _repeat_reward_group_id;
+
 	///	<summary>
 	///	초회 보상
 	///	</summary>
-	public readonly int first_reward_group_id;
+	public int first_reward_group_id => _first_reward_group_id;
+	int _first_reward_group_id;
+
 	///	<summary>
 	///	별 보상
 	///	</summary>
-	public readonly int star_reward_group_id;
+	public int star_reward_group_id => _star_reward_group_id;
+	int _star_reward_group_id;
 
 	private bool disposed = false;
 
 	public Stage_Data(Raw_Stage_Data raw_data)
 	{
-		stage_id = raw_data.stage_id;
-		zone_id = raw_data.zone_id;
-		stage_ordering = raw_data.stage_ordering;
-		stage_name = raw_data.stage_name;
-		use_stamina = raw_data.use_stamina;
-		character_exp = raw_data.character_exp;
-		destiny_exp = raw_data.destiny_exp;
-		gold = raw_data.gold;
-		repeat_reward_group_id = raw_data.repeat_reward_group_id;
-		first_reward_group_id = raw_data.first_reward_group_id;
-		star_reward_group_id = raw_data.star_reward_group_id;
+		_stage_id = raw_data.stage_id;
+		_zone_id = raw_data.zone_id;
+		_stage_ordering = raw_data.stage_ordering;
+		_stage_name = raw_data.stage_name;
+		_use_stamina = raw_data.use_stamina;
+		_character_exp = raw_data.character_exp;
+		_destiny_exp = raw_data.destiny_exp;
+		_gold = raw_data.gold;
+		_repeat_reward_group_id = raw_data.repeat_reward_group_id;
+		_first_reward_group_id = raw_data.first_reward_group_id;
+		_star_reward_group_id = raw_data.star_reward_group_id;
 	}
 
 	public void Dispose()

@@ -1,85 +1,117 @@
-﻿public class Player_Character_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Player_Character_Data : System.IDisposable
 {
 	///	<summary>
 	///	캐릭터 고유 인덱스
 	///	</summary>
-	public readonly int player_character_id;
+	public int player_character_id => _player_character_id;
+	int _player_character_id;
+
 	///	<summary>
 	///	캐릭터 명칭
 	///	</summary>
-	public readonly string name_kr;
+	public string name_kr => _name_kr;
+	string _name_kr;
+
 	///	<summary>
 	///	태생 성급
 	///	</summary>
-	public readonly int default_star;
+	public int default_star => _default_star;
+	int _default_star;
+
 	///	<summary>
 	///	역할군
 	///	</summary>
-	public readonly ROLE_TYPE role_type;
+	public ROLE_TYPE role_type => _role_type;
+	ROLE_TYPE _role_type;
+
 	///	<summary>
 	///	캐릭터가 속한 종족
 	///	</summary>
-	public readonly TRIBE_TYPE tribe_type;
+	public TRIBE_TYPE tribe_type => _tribe_type;
+	TRIBE_TYPE _tribe_type;
+
 	///	<summary>
 	///	프로필 정보_나이
 	///	</summary>
-	public readonly int profile_age;
+	public int profile_age => _profile_age;
+	int _profile_age;
+
 	///	<summary>
 	///	프로필 정보_생일
 	///	</summary>
-	public readonly int[] profile_birthday;
+	public int[] profile_birthday => _profile_birthday;
+	int[] _profile_birthday;
+
 	///	<summary>
 	///	프로필 정보_키
 	///	</summary>
-	public readonly int profile_high;
+	public int profile_high => _profile_high;
+	int _profile_high;
+
 	///	<summary>
 	///	프로필 정보_취미
 	///	</summary>
-	public readonly string profile_habby;
+	public string profile_habby => _profile_habby;
+	string _profile_habby;
+
 	///	<summary>
 	///	전투 정보 인덱스
 	///	</summary>
-	public readonly int battle_info_id;
+	public int battle_info_id => _battle_info_id;
+	int _battle_info_id;
+
 	///	<summary>
 	///	전투용 프리팹
 	///	</summary>
-	public readonly string prefab_path;
+	public string prefab_path => _prefab_path;
+	string _prefab_path;
+
 	///	<summary>
 	///	결과 UI 프리팹
 	///	</summary>
-	public readonly string sd_prefab_path;
+	public string sd_prefab_path => _sd_prefab_path;
+	string _sd_prefab_path;
+
 	///	<summary>
 	///	캐릭터 아이콘
 	///	</summary>
-	public readonly string icon_path;
+	public string icon_path => _icon_path;
+	string _icon_path;
+
 	///	<summary>
 	///	캐릭터 일러스트
 	///	</summary>
-	public readonly string Illustration_path;
+	public string Illustration_path => _Illustration_path;
+	string _Illustration_path;
+
 	///	<summary>
 	///	캐릭터 설명
 	///	</summary>
-	public readonly string script;
+	public string script => _script;
+	string _script;
 
 	private bool disposed = false;
 
 	public Player_Character_Data(Raw_Player_Character_Data raw_data)
 	{
-		player_character_id = raw_data.player_character_id;
-		name_kr = raw_data.name_kr;
-		default_star = raw_data.default_star;
-		role_type = raw_data.role_type;
-		tribe_type = raw_data.tribe_type;
-		profile_age = raw_data.profile_age;
-		profile_birthday = raw_data.profile_birthday != null ? (int[])raw_data.profile_birthday.Clone() : new int[0];
-		profile_high = raw_data.profile_high;
-		profile_habby = raw_data.profile_habby;
-		battle_info_id = raw_data.battle_info_id;
-		prefab_path = raw_data.prefab_path;
-		sd_prefab_path = raw_data.sd_prefab_path;
-		icon_path = raw_data.icon_path;
-		Illustration_path = raw_data.Illustration_path;
-		script = raw_data.script;
+		_player_character_id = raw_data.player_character_id;
+		_name_kr = raw_data.name_kr;
+		_default_star = raw_data.default_star;
+		_role_type = raw_data.role_type;
+		_tribe_type = raw_data.tribe_type;
+		_profile_age = raw_data.profile_age;
+		_profile_birthday = raw_data.profile_birthday.ToArray();
+		_profile_high = raw_data.profile_high;
+		_profile_habby = raw_data.profile_habby;
+		_battle_info_id = raw_data.battle_info_id;
+		_prefab_path = raw_data.prefab_path;
+		_sd_prefab_path = raw_data.sd_prefab_path;
+		_icon_path = raw_data.icon_path;
+		_Illustration_path = raw_data.Illustration_path;
+		_script = raw_data.script;
 	}
 
 	public void Dispose()

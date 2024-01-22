@@ -14,7 +14,6 @@ public class Raw_Me_Interaction_Data : System.IDisposable
 	public int[] chat_motion_ids {get; set;}
 	public int[] condition_state_ids {get; set;}
 	public int change_state_id {get; set;}
-	public string[] parameters {get; set;}
 
 	private bool disposed = false;
 

@@ -37,7 +37,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected Bone Balloon; // 말풍선 위치 본
 
     Producer Producer;
-    List<Me_Interaction_Data>[,] Touch_Type_Interactions;
+    //List<Me_Interaction_Data>[,] Touch_Type_Interactions;
     Me_Interaction_Data Current_Interaction;
 
     protected Dictionary<int, Me_Chat_Motion_Data> Chat_Motions;
@@ -504,6 +504,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     Me_Interaction_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
     {
+        /*
         var interaction_datas = Touch_Type_Interactions[(int)type, (int)bounding_box.GetTouchBodyType()];
 
         if (interaction_datas == null || interaction_datas.Count == 0)
@@ -533,6 +534,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             Debug.LogError($"Current_State_Id : {Current_State_Id}");
             Debug.LogException(e);
         }
+        */
         return null;
     }
 
@@ -581,7 +583,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
 
         Producer = pd;
-        Touch_Type_Interactions = MasterDataManager.Instance.Get_MemorialInteraction(me_data.player_character_id);
+        //Touch_Type_Interactions = MasterDataManager.Instance.Get_MemorialInteraction(me_data.player_character_id);
         Chat_Motions = MasterDataManager.Instance.Get_MemorialChatMotion(me_data.player_character_id);
         Serifues = MasterDataManager.Instance.Get_MemorialSerifu(me_data.player_character_id);
 
@@ -619,7 +621,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Face = null;
         Balloon = null;
         Producer = null;
-        Touch_Type_Interactions = null;
+        //Touch_Type_Interactions = null;
         Current_Interaction = null;
         Chat_Motions = null;
         Serifues = null;
