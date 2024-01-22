@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using FluffyDuck.Util;
 using TMPro;
 using UnityEngine;
@@ -29,16 +30,43 @@ public class GameResultPlayerCharacterInfo : UIBase
     UIHeroBase SD_Hero;
     UserHeroData User_Data;
 
+    int Before_Lv;
+    double Before_Need_Exp;
+    float Before_Exp_Percent;
+
     public void SetUserHeroData(UserHeroData ud)
     {
         User_Data = ud;
+
+        Before_Lv = User_Data.GetLevel();
+        Before_Need_Exp = User_Data.GetNextExp();
+        Before_Exp_Percent = User_Data.GetExpPercetage();
+        SpawnSDHero();
+
         FixedUpdateInfo();
+    }
+
+    /// <summary>
+    /// 경험치 추가 후 게이지 업데이트
+    /// </summary>
+    public void UpdateAddExpHeroInfo()
+    {
+
     }
 
     void FixedUpdateInfo()
     {
-        SpawnSDHero();
+        //  before lv info
+        Level_Text.text = Before_Lv.ToString();
+        //  exp per
+        Level_Exp_Slider.value = Before_Exp_Percent;
+        //  need exp
+        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", Before_Need_Exp);
     }
+
+    /// <summary>
+    /// UI용 SD 캐릭터 불러오기
+    /// </summary>
     void SpawnSDHero()
     {
         var obj = GameObjectPoolManager.Instance.GetGameObject(User_Data.GetPlayerCharacterData().sd_prefab_path, SD_Position);
@@ -48,13 +76,12 @@ public class GameResultPlayerCharacterInfo : UIBase
     }
 
 
-
-
     public override void Despawned()
     {
         if (SD_Hero != null)
         {
             GameObjectPoolManager.Instance.UnusedGameObject(SD_Hero.gameObject);
         }
+        SD_Hero = null;
     }
 }

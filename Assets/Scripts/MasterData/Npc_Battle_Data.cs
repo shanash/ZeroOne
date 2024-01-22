@@ -25,10 +25,6 @@
 	///	</summary>
 	public readonly int special_skill_group_id;
 	///	<summary>
-	///	레벨
-	///	</summary>
-	public readonly int npc_level;
-	///	<summary>
 	///	체력
 	///	</summary>
 	public readonly double hp;
@@ -67,7 +63,6 @@
 		skill_pattern = raw_data.skill_pattern != null ? (int[])raw_data.skill_pattern.Clone() : new int[0];
 		passive_skill_group_id = raw_data.passive_skill_group_id;
 		special_skill_group_id = raw_data.special_skill_group_id;
-		npc_level = raw_data.npc_level;
 		hp = raw_data.hp;
 		attack = raw_data.attack;
 		defend = raw_data.defend;
@@ -112,7 +107,6 @@
 
 		sb.AppendFormat("[passive_skill_group_id] = <color=yellow>{0}</color>", passive_skill_group_id).AppendLine();
 		sb.AppendFormat("[special_skill_group_id] = <color=yellow>{0}</color>", special_skill_group_id).AppendLine();
-		sb.AppendFormat("[npc_level] = <color=yellow>{0}</color>", npc_level).AppendLine();
 		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
 		sb.AppendFormat("[attack] = <color=yellow>{0}</color>", attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();

@@ -17,6 +17,7 @@ public enum USER_DATA_MANAGER_TYPE
 
     USER_GOODS_DATA_MANAGER,
     USER_ITEM_DATA_MANAGER,
+    USER_CHARGE_ITEM_DATA_MANAGER,
 }
 
 public class ManagerBase : IDisposable

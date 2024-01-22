@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class UserChargeItemData : UserDataBase
 
     protected SecureVar<int> Count = null;
 
-    public string Last_Usd_Dt { get; private set; } = string.Empty;
+    public string Last_Used_Dt { get; private set; } = string.Empty;
 
     protected Charge_Value_Data Data;
 
@@ -19,6 +20,8 @@ public class UserChargeItemData : UserDataBase
     {
         InitSecureVars();
         Count.Set(0);
+        Charge_Item_Type = REWARD_TYPE.NONE;
+        Last_Used_Dt = string.Empty;
     }
 
     protected override void InitSecureVars()
@@ -29,9 +32,16 @@ public class UserChargeItemData : UserDataBase
         }
     }
 
+    public void SetRewardType(REWARD_TYPE rtype)
+    {
+        Charge_Item_Type = rtype;
+        InitMasterData();
+        Is_Update_Data = true;
+    }
+
     protected override void InitMasterData()
     {
-        
+        Data = MasterDataManager.Instance.Get_ChargeValueData(Charge_Item_Type);
     }
 
     public int GetCount()
@@ -78,9 +88,23 @@ public class UserChargeItemData : UserDataBase
 
     public virtual int GetMaxBound()
     {
-        return 0;
+        return 10;
     }
 
 
+    public override JsonData Serialized()
+    {
+        return base.Serialized();
+    }
+    public override bool Deserialized(JsonData json)
+    {
+        return base.Deserialized(json);
+    }
 
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_CHARGE_ITEM_TYPE = "ctype";
+    protected const string NODE_COUNT = "cnt";
+    protected const string NODE_LAST_USED_DT = "lastdt";
 }

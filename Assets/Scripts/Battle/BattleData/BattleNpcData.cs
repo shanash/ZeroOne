@@ -6,6 +6,8 @@ public class BattleNpcData : BattleUnitData
 
     Npc_Battle_Data Battle_Data;
 
+    Npc_Level_Stat_Data Stat_Data;
+
     public BattleNpcData() : base(CHARACTER_TYPE.NPC) { }
 
 

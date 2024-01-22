@@ -9,7 +9,6 @@ public class Raw_Npc_Battle_Data : System.IDisposable
 	public int[] skill_pattern {get; set;}
 	public int passive_skill_group_id {get; set;}
 	public int special_skill_group_id {get; set;}
-	public int npc_level {get; set;}
 	public double hp {get; set;}
 	public double attack {get; set;}
 	public double defend {get; set;}
@@ -26,7 +25,6 @@ public class Raw_Npc_Battle_Data : System.IDisposable
 		position_type = POSITION_TYPE.NONE;
 		passive_skill_group_id = 0;
 		special_skill_group_id = 0;
-		npc_level = 0;
 		attack_script = string.Empty;
 	}
 

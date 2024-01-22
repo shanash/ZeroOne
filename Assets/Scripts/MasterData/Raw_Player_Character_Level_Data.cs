@@ -3,7 +3,6 @@
 [System.Serializable]
 public class Raw_Player_Character_Level_Data : System.IDisposable
 {
-	public int player_character_level_id {get; set;}
 	public int level {get; set;}
 	public double accum_exp {get; set;}
 	public double need_exp {get; set;}
@@ -12,7 +11,6 @@ public class Raw_Player_Character_Level_Data : System.IDisposable
 
 	public Raw_Player_Character_Level_Data()
 	{
-		player_character_level_id = 0;
 		level = 0;
 	}
 

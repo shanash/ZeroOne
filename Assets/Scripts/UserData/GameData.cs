@@ -45,6 +45,16 @@ public class GameData : Singleton<GameData>
             User_Data_Manager_List.Add(mng);
         }
 
+        //  charge item data
+        {
+            var mng = new UserChargeItemDataManager(USER_DATA_MANAGER_TYPE.USER_CHARGE_ITEM_DATA_MANAGER);
+            if (!mng.Load())
+            {
+                mng.InitDataManager();
+            }
+            User_Data_Manager_List.Add(mng);
+        }
+
         //  hero data
         {
             var mng = new UserHeroDataManager(USER_DATA_MANAGER_TYPE.USER_HERO_DATA_MANAGER);
@@ -118,5 +128,9 @@ public class GameData : Singleton<GameData>
     public UserItemDataManager GetUserItemDataManager()
     {
         return FindUserDataManager<UserItemDataManager>(USER_DATA_MANAGER_TYPE.USER_ITEM_DATA_MANAGER);
+    }
+    public UserChargeItemDataManager GetUserChargeItemDataManager()
+    {
+        return FindUserDataManager<UserChargeItemDataManager>(USER_DATA_MANAGER_TYPE.USER_CHARGE_ITEM_DATA_MANAGER);
     }
 }
