@@ -187,6 +187,14 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
 
+    public virtual void SetBattleUnitData(BattleUnitData unit_dt)
+    {
+        Unit_Data = unit_dt;
+        Skill_Mng = new BattleSkillManager();
+        Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
+
+    }
 
     public virtual void SetBattleUnitDataID(params int[] unit_ids)
     {

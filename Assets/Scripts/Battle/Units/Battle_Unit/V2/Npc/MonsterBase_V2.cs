@@ -2,18 +2,28 @@ using UnityEngine;
 
 public class MonsterBase_V2 : HeroBase_V2
 {
-    public override void SetBattleUnitDataID(params int[] unit_ids)
+    //public override void SetBattleUnitDataID(params int[] unit_ids)
+    //{
+    //    if (unit_ids.Length < 1)
+    //    {
+    //        return;
+    //    }
+    //    int npc_id = unit_ids[0];
+    //    Unit_Data = new BattleNpcData();
+    //    Unit_Data.SetUnitID(npc_id);
+
+    //    Skill_Mng = new BattleSkillManager();
+    //    Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
+    //}
+
+    public override void SetBattleUnitData(BattleUnitData unit_dt)
     {
-        if (unit_ids.Length < 1)
-        {
-            return;
-        }
-        int npc_id = unit_ids[0];
-        Unit_Data = new BattleNpcData();
-        Unit_Data.SetUnitID(npc_id);
+        
+        Unit_Data = unit_dt;
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
+
     }
 
     public BattleUnitData GetNpcData()

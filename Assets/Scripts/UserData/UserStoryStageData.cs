@@ -6,10 +6,9 @@ public class UserStoryStageData : UserDataBase
 {
     public int Stage_ID { get; protected set; } = 0;
 
-    public SecureVar<int> Challenage_Count { get; protected set; } = null;
-    public SecureVar<int> Win_Count { get; protected set; } = null;
-
-    public SecureVar<int> Star_Point { get; protected set; } = null;
+    SecureVar<int> Challenage_Count = null;
+    SecureVar<int> Win_Count = null;
+    SecureVar<int> Star_Point = null;
 
 
     Stage_Data Data;

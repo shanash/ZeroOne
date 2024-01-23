@@ -1,6 +1,8 @@
 // TODO: 팩토리로 생성 가능할듯
 public abstract class BattleUnitData : BattleDataBase
 {
+    protected int Level;
+
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
 
     protected BattleUnitData(CHARACTER_TYPE ctype) : base()
@@ -23,11 +25,23 @@ public abstract class BattleUnitData : BattleDataBase
     public virtual int GetUnitNum() { return 0; }
 
     /// <summary>
+    /// 유닛의 레벨 설정
+    /// </summary>
+    /// <param name="lv"></param>
+    /// <returns></returns>
+    public abstract void SetLevel(int lv);
+
+    /// <summary>
     /// 유닛의 레벨 반환
     /// </summary>
     /// <returns></returns>
     public abstract int GetLevel();
 
+    /// <summary>
+    /// 유닛의 레벨 스텟 데이터 아이디
+    /// </summary>
+    /// <param name="stat_id"></param>
+    public abstract void SetStatDataID(int stat_id);
     /// <summary>
     /// 유닛의 기본 데이터 반환
     /// </summary>

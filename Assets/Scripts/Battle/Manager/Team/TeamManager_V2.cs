@@ -46,15 +46,15 @@ public partial class TeamManager_V2 : IDisposable
     protected virtual void ResetTeamManager() 
     {
         int cnt = Used_Members.Count;
-        var pool = GameObjectPoolManager.Instance;
-        if (pool == null)
-        {
-            return;
-        }
-        for (int i = 0; i < cnt; i++)
-        {
-            pool.UnusedGameObject(Used_Members[i].gameObject);
-        }
+        //var pool = GameObjectPoolManager.Instance;
+        //if (pool == null)
+        //{
+        //    return;
+        //}
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    pool.UnusedGameObject(Used_Members[i].gameObject);
+        //}
         Used_Members.Clear();
     }
 
@@ -126,10 +126,15 @@ public partial class TeamManager_V2 : IDisposable
             UserHeroDeckMountData user_deck_hero = hero_list[i];
             UserHeroData user_data = user_deck_hero.GetUserHeroData();
 
+            var unit_data = new BattlePcData();
+            unit_data.SetUnitID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
+            unit_data.SetLevel(user_data.GetLevel());
+
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
             hero.SetTeamManager(this);
-            hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
+            //hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
+            hero.SetBattleUnitData(unit_data);
             hero.SetDeckOrder(i);
             hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
@@ -235,19 +240,31 @@ public partial class TeamManager_V2 : IDisposable
 
         int len = wdata.enemy_appearance_info.Length;
 
+        var lv_list = wdata.npc_levels;
+        var stat_list = wdata.npc_stat_ids;
+
         //  battle npc data
         for (int i = 0; i < len; i++)
         {
             var npc = new BattleNpcData();
             npc.SetUnitID(wdata.enemy_appearance_info[i]);
 
+            if (i < lv_list.Length)
+            {
+                npc.SetLevel(lv_list[i]);
+            }
+            if (i < stat_list.Length)
+            {
+                npc.SetStatDataID(stat_list[i]);
+            }
+
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 
-            monster.SetBattleUnitDataID(npc.GetUnitID());
+            //monster.SetBattleUnitDataID(npc.GetUnitID());
+            monster.SetBattleUnitData(npc);
 
-            //monster.SetFlipX(true);
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
@@ -313,7 +330,8 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     public void RecoveryLifeWaveEndMembers()
     {
-        Used_Members.ForEach(x => x.WaveEndRecoveryLife());
+        var member_list = GetAliveMembers();
+        member_list.ForEach(x => x.WaveEndRecoveryLife());
     }
 
     /// <summary>
@@ -322,10 +340,11 @@ public partial class TeamManager_V2 : IDisposable
     /// <param name="trans"></param>
     public void ChangeStateTeamMembers(UNIT_STATES trans)
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Used_Members[i].ChangeState(trans);
+            member_list[i].ChangeState(trans);
         }
     }
     /// <summary>
@@ -333,19 +352,22 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     public void RevertStateTeamMembers()
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
+        
         for (int i = 0; i < cnt; i++)
         {
-            Used_Members[i].RevertState();
+            member_list[i].RevertState();
         }
     }
 
     public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets) 
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var member = Used_Members[i];
+            var member = member_list[i];
             if (!targets.Contains(member))
             {
                 member.SetAlphaAnimation(0f, 0.5f, true);
@@ -355,10 +377,11 @@ public partial class TeamManager_V2 : IDisposable
 
     public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var member = Used_Members[i];
+            var member = member_list[i];
             if (!targets.Contains(member))
             {
                 member.SetAlphaAnimation(1f, 0.5f, false);
@@ -368,10 +391,11 @@ public partial class TeamManager_V2 : IDisposable
 
     public void AllPauseTeamMembersWithoutHero(HeroBase_V2 hero)
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var member = Used_Members[i];
+            var member = member_list[i];
             if (!object.ReferenceEquals(member, hero))
             {
                 member.ChangeState(UNIT_STATES.PAUSE);
@@ -380,10 +404,11 @@ public partial class TeamManager_V2 : IDisposable
     }
     public void AllResumeTeamMembersWithoutHero(HeroBase_V2 hero)
     {
-        int cnt = Used_Members.Count;
+        var member_list = GetAliveMembers();
+        int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var member = Used_Members[i];
+            var member = member_list[i];
             if (!object.ReferenceEquals(member, hero))
             {
                 member.RevertState();
@@ -403,7 +428,8 @@ public partial class TeamManager_V2 : IDisposable
 
     public bool IsAllMembersState(UNIT_STATES trans)
     {
-        return !Used_Members.Exists(x => x.GetCurrentState() != trans);
+        var member_list = GetAliveMembers();
+        return !member_list.Exists(x => x.GetCurrentState() != trans);
     }
 
     public void GetHeroPrefabsPath(ref List<string> list)

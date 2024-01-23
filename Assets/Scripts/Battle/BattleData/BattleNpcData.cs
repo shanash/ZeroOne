@@ -45,10 +45,18 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
 
-
+    public override void SetLevel(int lv)
+    {
+        Level = lv;
+    }
     public override int GetLevel()
     {
-        return 1;
+        return Level;
+    }
+
+    public override void SetStatDataID(int stat_id)
+    {
+        Stat_Data = MasterDataManager.Instance.Get_NpcLevelStatData(stat_id);
     }
 
 

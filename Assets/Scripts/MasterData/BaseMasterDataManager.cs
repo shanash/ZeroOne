@@ -58,12 +58,27 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Player_Level_Data> _Player_Level_Data
 	{
 		get;
 		private set;
 	}
 	protected List<Player_Character_Level_Data> _Player_Character_Level_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Player_Character_Skill_Level_Data> _Player_Character_Skill_Level_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Max_Bound_Info_Data> _Max_Bound_Info_Data
 	{
 		get;
 		private set;
@@ -218,8 +233,11 @@ public class BaseMasterDataManager
 		await LoadMaster_L2d_Char_Skin_Data();
 		await LoadMaster_L2d_Love_State_Data();
 		await LoadMaster_L2d_Skin_Ani_State_Data();
+		await LoadMaster_L2d_Interaction_Base_Data();
 		await LoadMaster_Player_Level_Data();
 		await LoadMaster_Player_Character_Level_Data();
+		await LoadMaster_Player_Character_Skill_Level_Data();
+		await LoadMaster_Max_Bound_Info_Data();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
 		await LoadMaster_Me_Interaction_Data();
@@ -367,6 +385,17 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async Task LoadMaster_L2d_Interaction_Base_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/L2d_Interaction_Base_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Interaction_Base_Data>>(json);
+		_L2d_Interaction_Base_Data = new List<L2d_Interaction_Base_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_L2d_Interaction_Base_Data.Add(new L2d_Interaction_Base_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_Player_Level_Data()
 	{
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Level_Data");
@@ -386,6 +415,28 @@ public class BaseMasterDataManager
 		foreach (var raw_data in raw_data_list)
 		{
 			_Player_Character_Level_Data.Add(new Player_Character_Level_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Player_Character_Skill_Level_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Skill_Level_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Level_Data>>(json);
+		_Player_Character_Skill_Level_Data = new List<Player_Character_Skill_Level_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Level_Data.Add(new Player_Character_Skill_Level_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Max_Bound_Info_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Max_Bound_Info_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Max_Bound_Info_Data>>(json);
+		_Max_Bound_Info_Data = new List<Max_Bound_Info_Data>();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Max_Bound_Info_Data.Add(new Max_Bound_Info_Data(raw_data));
 		}
 	}
 
@@ -744,6 +795,14 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async void Check_L2d_Interaction_Base_Data()
+	{
+		if(_L2d_Interaction_Base_Data == null)
+		{
+			await LoadMaster_L2d_Interaction_Base_Data();
+		}
+	}
+
 	protected async void Check_Player_Level_Data()
 	{
 		if(_Player_Level_Data == null)
@@ -757,6 +816,22 @@ public class BaseMasterDataManager
 		if(_Player_Character_Level_Data == null)
 		{
 			await LoadMaster_Player_Character_Level_Data();
+		}
+	}
+
+	protected async void Check_Player_Character_Skill_Level_Data()
+	{
+		if(_Player_Character_Skill_Level_Data == null)
+		{
+			await LoadMaster_Player_Character_Skill_Level_Data();
+		}
+	}
+
+	protected async void Check_Max_Bound_Info_Data()
+	{
+		if(_Max_Bound_Info_Data == null)
+		{
+			await LoadMaster_Max_Bound_Info_Data();
 		}
 	}
 

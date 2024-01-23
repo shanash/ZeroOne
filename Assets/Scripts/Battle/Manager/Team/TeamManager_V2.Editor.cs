@@ -41,7 +41,8 @@ public partial class TeamManager_V2
             if (hero != null)
             {
                 hero.SetTeamManager(this);
-                hero.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
+                hero.SetBattleUnitData(unit);
+                //hero.SetBattleUnitDataID(unit.GetUnitID(), unit.GetUnitNum());
                 hero.SetDeckOrder(0);
                 hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
                 AddMember(hero);
@@ -67,11 +68,13 @@ public partial class TeamManager_V2
             var npc = new BattleNpcData();
             npc.SetUnitID(wdata.enemy_appearance_info[i]);
 
+
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 
-            monster.SetBattleUnitDataID(npc.GetUnitID());
+            //monster.SetBattleUnitDataID(npc.GetUnitID());
+            monster.SetBattleUnitData(npc);
 
             monster.SetFlipX(true);
             monster.SetDeckOrder(i);

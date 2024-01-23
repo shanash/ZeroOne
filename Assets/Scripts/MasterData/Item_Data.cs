@@ -22,6 +22,7 @@
 	public readonly int int_var1;
 	///	<summary>
 	///	int 파라메터
+	///	경험치 물약일 경우, 물약 1개를 사용하는데 필요한 비용(골드)값이 입력
 	///	</summary>
 	public readonly int int_var2;
 	///	<summary>

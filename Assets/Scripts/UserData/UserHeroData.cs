@@ -3,12 +3,12 @@ using FluffyDuck.Util;
 
 public class UserHeroData : UserDataBase
 {
-    public SecureVar<int> Player_Character_ID { get; protected set; } = null;
+    SecureVar<int> Player_Character_ID = null;
     public int Player_Character_Num { get; protected set; } = 0;
-    public SecureVar<int> Level { get; protected set; } = null;
-    public SecureVar<double> Exp { get; protected set; } = null;
+    SecureVar<int> Level = null;
+    SecureVar<double> Exp = null;
 
-    public SecureVar<int> Star_Grade { get; protected set; } = null;
+    SecureVar<int> Star_Grade = null;
 
     public int Lobby_Choice_Num { get; protected set; } = 0;
 
@@ -69,6 +69,11 @@ public class UserHeroData : UserDataBase
         }
     }
 
+    public int GetPlayerCharacterID()
+    {
+        return Player_Character_ID.Get();
+    }
+
     public Player_Character_Data GetPlayerCharacterData()
     {
         return Hero_Data;
@@ -96,10 +101,7 @@ public class UserHeroData : UserDataBase
         return GetPlayerCharacterID() == hero_data_id && Player_Character_Num == hero_data_num;
     }
 
-    public int GetPlayerCharacterID()
-    {
-        return Player_Character_ID.Get();
-    }
+    
     public int GetLevel()
     {
         return Level.Get();

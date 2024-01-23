@@ -95,7 +95,7 @@ public class HeroInfoUI : PopupBase
         var user_hero_data = User_Hero_Datas[Current_Hero_Data_Index];
 
         User_Hero_Battle_Data = new BattlePcData();
-        User_Hero_Battle_Data.SetUnitID(user_hero_data.Player_Character_ID.Get(), user_hero_data.Player_Character_Num);
+        User_Hero_Battle_Data.SetUnitID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
 
         Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
 

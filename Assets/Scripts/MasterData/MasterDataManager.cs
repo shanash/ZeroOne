@@ -24,6 +24,19 @@ public class MasterDataManager : BaseMasterDataManager
     public bool IsLoaded { get { return is_init_load; } }
 
     #region Level
+
+    public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelData(int lv)
+    {
+        Check_Player_Character_Skill_Level_Data();
+        return _Player_Character_Skill_Level_Data.Find(x => x.level == lv);
+    }
+    public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelDataByAccumExp(double accum_exp)
+    {
+        Check_Player_Character_Skill_Level_Data();
+        var list = _Player_Character_Skill_Level_Data.OrderBy(x => x.level).ToList();
+        return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
     public Player_Level_Data Get_PlayerLevelData(int lv)
     {
         Check_Player_Level_Data();

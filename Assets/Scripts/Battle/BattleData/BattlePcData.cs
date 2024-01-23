@@ -47,10 +47,18 @@ public class BattlePcData : BattleUnitData
     {
         return Battle_Data;
     }
-
+    public override void SetLevel(int lv)
+    {
+        
+    }
     public override int GetLevel()
     {
         return User_Data.GetLevel();
+    }
+
+    public override void SetStatDataID(int stat_id)
+    {
+
     }
 
     public override object GetUserUnitData()
