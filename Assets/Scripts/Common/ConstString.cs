@@ -60,7 +60,8 @@ public static class ConstString
 
     public static class StatusPopup
     {
-        public const string TITLE = "능력치 상세정보";
+        public const string ABILITY_TITLE = "능력치 상세정보";
+        public const string ESSENCE_TITLE = "상세정보";
     }
 
     public static class Message

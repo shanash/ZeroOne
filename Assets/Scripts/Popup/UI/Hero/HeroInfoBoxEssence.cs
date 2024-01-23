@@ -169,9 +169,18 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickBuffDetailButton()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            var data_list = MasterDataManager.Instance.Get_EssenceStatusDataRange(1, 100);
+
+            List<StatusItemData> status_list = new List<StatusItemData>();
+
+            foreach (var data in data_list)
+            {
+                status_list.Add(new StatusItemData(data.essence_charge_per.ToPercentage(), data.ToStringForUI()));
+            }
+
+            popup.ShowPopup(ConstString.StatusPopup.ESSENCE_TITLE, status_list);
         });
     }
 

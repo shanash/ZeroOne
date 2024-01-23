@@ -110,9 +110,24 @@ public class HeroInfoBoxBasic : MonoBehaviour
     public void OnClickStatusDetailButon()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(Unit_Data);
+            List<StatusItemData> status_list = new List<StatusItemData>
+            {
+                new StatusItemData(ConstString.Hero.COMBAT_POWER, Unit_Data.GetCombatPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.LIFE_POINT, Unit_Data.GetLifePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Unit_Data.GetAttackDamagePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Unit_Data.GetMagicDamagePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Unit_Data.GetAttackDefensePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Unit_Data.GetMagicDefensePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Unit_Data.GetApproachDistance().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Unit_Data.GetAttackRecovery().ToPercentage()),
+                new StatusItemData(ConstString.Hero.EVASION_POINT, Unit_Data.GetEvationPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ACCURACY_POINT, Unit_Data.GetAccuracyPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Unit_Data.GetAutoRecoveryLife().ToPercentage())
+            };
+
+            popup.ShowPopup(ConstString.StatusPopup.ABILITY_TITLE, status_list);
         });
     }
 

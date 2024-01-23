@@ -13,55 +13,39 @@ public class StatusPopup : PopupBase
     [SerializeField]
     StatusTextUI Status_Base;
 
-    BattleUnitData Data;
-    List<StatusTextUI> Statuses;
-
     [SerializeField, Tooltip("Status List View")]
     InfiniteScroll Status_LIst_View;
+
+    List<StatusItemData> Datas;
 
     protected override void Initialize()
     {
         base.Initialize();
-        Data = null;
-        Statuses = new List<StatusTextUI>();
+        Datas = null;
     }
 
     public override void ShowPopup(params object[] data)
     {
         base.ShowPopup(data);
 
-        if (data.Length != 1 || data[0] is not BattleUnitData)
+        if (data.Length != 2 || data[0] is not string || data[1] is not List<StatusItemData>)
         {
             Debug.Assert(false, $"잘못된 ProfilePopup 팝업 호출!!");
             HidePopup();
             return;
         }
 
-        Data = data[0] as BattleUnitData;
+        Title.text = data[0] as string;
+        Datas = data[1] as List<StatusItemData>;
 
         FixedUpdatePopup();
     }
 
     protected override void FixedUpdatePopup()
     {
-        Title.text = ConstString.StatusPopup.TITLE;
-
         Status_LIst_View.Clear();
 
-        Queue<StatusItemData> status_queue = new Queue<StatusItemData>();
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.COMBAT_POWER, Data.GetCombatPoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.LIFE_POINT, Data.GetLifePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Data.GetAttackDamagePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Data.GetMagicDamagePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Data.GetAttackDefensePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Data.GetMagicDefensePoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Data.GetApproachDistance().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Data.GetAttackRecovery().ToPercentage()));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.EVASION_POINT, Data.GetEvationPoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.ACCURACY_POINT, Data.GetAccuracyPoint().ToString("N0")));
-        status_queue.Enqueue(new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Data.GetAutoRecoveryLife().ToPercentage()));
-
-        while (status_queue.TryDequeue(out StatusItemData data))
+        foreach (var data in Datas)
         {
             Status_LIst_View.InsertData(data);
         }
