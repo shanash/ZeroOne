@@ -18,7 +18,7 @@ public class EssenceTransferPopup : PopupBase
     {
         Initialize();
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
+        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.DIALOG_TYPE);
     }
 
     public void OnClickHomeButton()
