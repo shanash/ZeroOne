@@ -230,9 +230,9 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferEssenceButton()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceTransferPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup();
         });
     }
 }
