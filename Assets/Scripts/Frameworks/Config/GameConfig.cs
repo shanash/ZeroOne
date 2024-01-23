@@ -47,6 +47,10 @@ namespace FluffyDuck.Util
             {
                 SaveStringValue(key_str, (string)val);
             }
+            else
+            {
+                Debug.Assert(false);
+            }
         }
         void SaveIntValue(string key, int val)
         {

@@ -12,6 +12,8 @@ public class EffectFactory : MonoBehaviour
 
     List<EffectBase> Used_Effect_List = new List<EffectBase>();
 
+    float Effect_Speed_Multiple = 1f;
+
     public EffectBase CreateEffect(string path)
     {
         return CreateEffect(path, this.transform);
@@ -25,6 +27,7 @@ public class EffectFactory : MonoBehaviour
         var obj = pool.GetGameObject(path, parent);
         effect = obj.GetComponent<EffectBase>();
         effect.SetEffectFactory(this);
+        effect.SetEffectSpeedMultiple(Effect_Speed_Multiple);
         Used_Effect_List.Add(effect);
         return effect;
     }
@@ -33,6 +36,16 @@ public class EffectFactory : MonoBehaviour
     {
         Used_Effect_List.Remove(obj);
         GameObjectPoolManager.Instance.UnusedGameObject(obj.gameObject);
+    }
+
+    public void SetEffectSpeedMultiple(float multiple)
+    {
+        Effect_Speed_Multiple = multiple;
+        int cnt = Used_Effect_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Effect_List[i].SetEffectSpeedMultiple(multiple);
+        }
     }
 
     public Transform GetLeftCenter() { return Left_Center; }

@@ -9,6 +9,9 @@ public class BattleSkillManager : BattleDataBase
     int Skill_Pattern_Order;
     List<BattleSkillGroup> _Skill_Groups;
 
+    
+
+
     public IReadOnlyList<BattleSkillGroup> Skill_Groups => _Skill_Groups.AsReadOnly();
 
     protected override void Reset()

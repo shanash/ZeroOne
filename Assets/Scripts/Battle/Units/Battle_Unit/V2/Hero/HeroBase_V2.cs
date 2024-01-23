@@ -180,6 +180,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     public delegate void Skill_Slot_Event_Delegate(SKILL_SLOT_EVENT_TYPE evt_type);
     public event Skill_Slot_Event_Delegate Slot_Events;
 
+    /// <summary>
+    /// 게임 배속
+    /// </summary>
+    protected float Battle_Speed_Multiple = 1f;
 
     /// <summary>
     /// 게임 타입
@@ -196,22 +200,36 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-    public virtual void SetBattleUnitDataID(params int[] unit_ids)
+    //public virtual void SetBattleUnitDataID(params int[] unit_ids)
+    //{
+    //    if (unit_ids.Length < 2)
+    //    {
+    //        Debug.Assert(false);
+    //    }
+    //    int pc_id = unit_ids[0];
+    //    int pc_num = unit_ids[1];
+
+    //    Unit_Data = new BattlePcData();
+    //    Unit_Data.SetUnitID(pc_id, pc_num);
+
+
+    //    Skill_Mng = new BattleSkillManager();
+    //    Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+    //    Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
+    //}
+
+    public void SetBattleSpeed(float speed)
     {
-        if (unit_ids.Length < 2)
+        Battle_Speed_Multiple = speed;
+        var tracks = FindAllTrakcs();
+        if (tracks != null && tracks.Length > 0)
         {
-            Debug.Assert(false);
+            for (int i = 0; i < tracks.Length; i++)
+            {
+                var t = tracks[i];
+                t.TimeScale = Battle_Speed_Multiple;
+            }
         }
-        int pc_id = unit_ids[0];
-        int pc_num = unit_ids[1];
-
-        Unit_Data = new BattlePcData();
-        Unit_Data.SetUnitID(pc_id, pc_num);
-
-
-        Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
     }
 
 
@@ -282,6 +300,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected virtual void SpineAnimationStart(TrackEntry entry) 
     {
         string animation_name = entry.Animation.Name;
+        entry.TimeScale = Battle_Speed_Multiple;
 
         UNIT_STATES state = GetCurrentState();
         if (state == UNIT_STATES.ATTACK_1)
@@ -809,7 +828,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             int len = all_tracks.Length;
             for (int i = 0; i < len; i++)
             {
-                all_tracks[i].TimeScale = 1f;
+                all_tracks[i].TimeScale = Battle_Speed_Multiple;
             }
         }
     }
@@ -1188,7 +1207,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             };
 
             var state = GetCurrentState();
-            float dt = Time.deltaTime;
+            float dt = Time.deltaTime * Battle_Speed_Multiple;
             Remove_Reserved_Duration_Data_List.Clear();
             for (int i = 0; i < Used_Battle_Duration_Data_List.Count; i++)
             {
@@ -1296,8 +1315,6 @@ public partial class HeroBase_V2 : UnitBase_V2
                 Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
             }
         }
-
-
     }
 
 
@@ -1361,12 +1378,12 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        float move = (float)Move_Speed * Time.deltaTime;
+        float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x += move;
         if (Is_Reposition)
         {
-            float zmove = (float)Move_Speed * Time.deltaTime;
+            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
             pos.z += zmove;
         }
         this.transform.localPosition = pos;
@@ -1385,12 +1402,12 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        float move = (float)Move_Speed * Time.deltaTime;
+        float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x -= move;
         if (Is_Reposition)
         {
-            float zmove = (float)Move_Speed * Time.deltaTime;
+            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
             pos.z += zmove;
         }
         this.transform.localPosition = pos;
@@ -1400,12 +1417,12 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void WaveRunLeftTeam()
     {
-        float move = (float)Move_Speed * Time.deltaTime;
+        float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x += move;
         if (Is_Reposition)
         {
-            float zmove = (float)Move_Speed * Time.deltaTime;
+            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
             pos.z += zmove;
         }
         this.transform.localPosition = pos;

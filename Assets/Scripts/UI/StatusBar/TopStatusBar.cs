@@ -41,6 +41,10 @@ public class TopStatusBar : MonoBehaviour
     private void OnDisable()
     {
         var evt_dispatcher = UpdateEventDispatcher.Instance;
+        if (evt_dispatcher == null)
+        {
+            return;
+        }
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL, UpdateEventCallback);
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA, UpdateEventCallback);
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_GOLD, UpdateEventCallback);

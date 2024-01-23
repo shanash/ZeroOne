@@ -1,96 +1,132 @@
-﻿public class Player_Character_Battle_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Player_Character_Battle_Data : System.IDisposable
 {
 	///	<summary>
 	///	전투 인덱스
 	///	</summary>
-	public readonly int battle_info_id;
+	public int battle_info_id => _battle_info_id;
+	int _battle_info_id;
+
 	///	<summary>
 	///	접근 사거리
 	///	</summary>
-	public readonly double approach;
+	public double approach => _approach;
+	double _approach;
+
 	///	<summary>
 	///	배치 위치
 	///	</summary>
-	public readonly POSITION_TYPE position_type;
+	public POSITION_TYPE position_type => _position_type;
+	POSITION_TYPE _position_type;
+
 	///	<summary>
 	///	스킬 패턴
 	///	pc_group_skill_id를 사용한다.
 	///	</summary>
-	public readonly int[] skill_pattern;
+	public int[] skill_pattern => _skill_pattern;
+	int[] _skill_pattern;
+
 	///	<summary>
 	///	패시브
 	///	</summary>
-	public readonly int passive_skill_group_id;
+	public int passive_skill_group_id => _passive_skill_group_id;
+	int _passive_skill_group_id;
+
 	///	<summary>
 	///	궁극기
 	///	</summary>
-	public readonly int special_skill_group_id;
+	public int special_skill_group_id => _special_skill_group_id;
+	int _special_skill_group_id;
+
 	///	<summary>
 	///	체력
 	///	</summary>
-	public readonly double hp;
+	public double hp => _hp;
+	double _hp;
+
 	///	<summary>
 	///	물리 공격력
 	///	</summary>
-	public readonly double attack;
+	public double attack => _attack;
+	double _attack;
+
 	///	<summary>
 	///	마법 공격력
 	///	</summary>
-	public readonly double m_attack;
+	public double m_attack => _m_attack;
+	double _m_attack;
+
 	///	<summary>
 	///	물리 방어력
 	///	</summary>
-	public readonly double defend;
+	public double defend => _defend;
+	double _defend;
+
 	///	<summary>
 	///	마법_방어력
 	///	</summary>
-	public readonly double m_defend;
+	public double m_defend => _m_defend;
+	double _m_defend;
+
 	///	<summary>
 	///	회복량
 	///	</summary>
-	public readonly double attack_recovery;
+	public double attack_recovery => _attack_recovery;
+	double _attack_recovery;
+
 	///	<summary>
 	///	회피
 	///	</summary>
-	public readonly double evasion;
+	public double evasion => _evasion;
+	double _evasion;
+
 	///	<summary>
 	///	명중
 	///	</summary>
-	public readonly double accuracy;
+	public double accuracy => _accuracy;
+	double _accuracy;
+
 	///	<summary>
 	///	자동 회복
 	///	</summary>
-	public readonly double auto_recovery;
+	public double auto_recovery => _auto_recovery;
+	double _auto_recovery;
+
 	///	<summary>
 	///	전투 이동 속도
 	///	</summary>
-	public readonly double move_speed;
+	public double move_speed => _move_speed;
+	double _move_speed;
+
 	///	<summary>
 	///	전투 대사 인덱스
 	///	</summary>
-	public readonly string attack_script;
+	public string attack_script => _attack_script;
+	string _attack_script;
 
 	private bool disposed = false;
 
 	public Player_Character_Battle_Data(Raw_Player_Character_Battle_Data raw_data)
 	{
-		battle_info_id = raw_data.battle_info_id;
-		approach = raw_data.approach;
-		position_type = raw_data.position_type;
-		skill_pattern = raw_data.skill_pattern != null ? (int[])raw_data.skill_pattern.Clone() : new int[0];
-		passive_skill_group_id = raw_data.passive_skill_group_id;
-		special_skill_group_id = raw_data.special_skill_group_id;
-		hp = raw_data.hp;
-		attack = raw_data.attack;
-		m_attack = raw_data.m_attack;
-		defend = raw_data.defend;
-		m_defend = raw_data.m_defend;
-		attack_recovery = raw_data.attack_recovery;
-		evasion = raw_data.evasion;
-		accuracy = raw_data.accuracy;
-		auto_recovery = raw_data.auto_recovery;
-		move_speed = raw_data.move_speed;
-		attack_script = raw_data.attack_script;
+		_battle_info_id = raw_data.battle_info_id;
+		_approach = raw_data.approach;
+		_position_type = raw_data.position_type;
+		_skill_pattern = raw_data.skill_pattern.ToArray();
+		_passive_skill_group_id = raw_data.passive_skill_group_id;
+		_special_skill_group_id = raw_data.special_skill_group_id;
+		_hp = raw_data.hp;
+		_attack = raw_data.attack;
+		_m_attack = raw_data.m_attack;
+		_defend = raw_data.defend;
+		_m_defend = raw_data.m_defend;
+		_attack_recovery = raw_data.attack_recovery;
+		_evasion = raw_data.evasion;
+		_accuracy = raw_data.accuracy;
+		_auto_recovery = raw_data.auto_recovery;
+		_move_speed = raw_data.move_speed;
+		_attack_script = raw_data.attack_script;
 	}
 
 	public void Dispose()

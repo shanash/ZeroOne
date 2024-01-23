@@ -75,7 +75,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     {
         if (Is_Action)
         {
-            Delta += Time.deltaTime;
+            Delta += Time.deltaTime * Effect_Speed_Multiple;
 
             var pos = this.transform.localPosition;
             pos.y += VELOCITY * Time.deltaTime;

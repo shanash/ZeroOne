@@ -23,6 +23,10 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     protected float Delta;
     protected float Duration;
+    /// <summary>
+    /// 전투 배속에 따른 속도 배율
+    /// </summary>
+    protected float Effect_Speed_Multiple = 1f;
 
     public virtual void MoveTarget(Transform target, float duration)
     {
@@ -34,6 +38,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
+            var main = Particle_Effect.main;
+            main.simulationSpeed = Effect_Speed_Multiple;
             Particle_Effect.Play();
         }
     }
@@ -46,6 +52,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
+            var main = Particle_Effect.main;
+            main.simulationSpeed = Effect_Speed_Multiple;
             Particle_Effect.Play();
         }
     }
@@ -57,6 +65,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
+            var main = Particle_Effect.main;
+            main.simulationSpeed = Effect_Speed_Multiple;
             Particle_Effect.Play();
         }
     }
@@ -69,6 +79,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Loop = loop;
         if (Particle_Effect != null)
         {
+            var main = Particle_Effect.main;
+            main.simulationSpeed = Effect_Speed_Multiple;
             Particle_Effect.Play();
         }
     }
@@ -82,10 +94,23 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Loop = loop;
         if (Particle_Effect != null)
         {
+            var main = Particle_Effect.main;
+            main.simulationSpeed = Effect_Speed_Multiple;
             Particle_Effect.Play();
         }
     }
-
+    public void SetEffectSpeedMultiple(float multiple)
+    {
+        Effect_Speed_Multiple = multiple;
+        if (Is_Action)
+        {
+            if (Particle_Effect != null)
+            {
+                var main = Particle_Effect.main;
+                main.simulationSpeed = Effect_Speed_Multiple;
+            }
+        }
+    }
 
 
     public void SetFinishCallback(System.Action<EffectBase> cb)

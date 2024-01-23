@@ -1,35 +1,47 @@
-﻿public class Me_State_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Me_State_Data : System.IDisposable
 {
 	///	<summary>
 	///	상태 고유 아이디
 	///	</summary>
-	public readonly int state_id;
+	public int state_id => _state_id;
+	int _state_id;
+
 	///	<summary>
 	///	캐릭터 고유 아이디
 	///	</summary>
-	public readonly int player_character_id;
+	public int player_character_id => _player_character_id;
+	int _player_character_id;
+
 	///	<summary>
 	///	아이들 애니메이션 이름
 	///	</summary>
-	public readonly string idle_animation_name;
+	public string idle_animation_name => _idle_animation_name;
+	string _idle_animation_name;
+
 	///	<summary>
 	///	대기시 자동재생될 반응
 	///	</summary>
-	public readonly int[] bored_chatmotion_ids;
+	public int[] bored_chatmotion_ids => _bored_chatmotion_ids;
+	int[] _bored_chatmotion_ids;
+
 	///	<summary>
 	///	자동재생될 아이들 애니메이션 출력횟수
 	///	</summary>
-	public readonly int bored_condition_count;
+	public int bored_condition_count => _bored_condition_count;
+	int _bored_condition_count;
 
 	private bool disposed = false;
 
 	public Me_State_Data(Raw_Me_State_Data raw_data)
 	{
-		state_id = raw_data.state_id;
-		player_character_id = raw_data.player_character_id;
-		idle_animation_name = raw_data.idle_animation_name;
-		bored_chatmotion_ids = raw_data.bored_chatmotion_ids != null ? (int[])raw_data.bored_chatmotion_ids.Clone() : new int[0];
-		bored_condition_count = raw_data.bored_condition_count;
+		_state_id = raw_data.state_id;
+		_player_character_id = raw_data.player_character_id;
+		_idle_animation_name = raw_data.idle_animation_name;
+		_bored_chatmotion_ids = raw_data.bored_chatmotion_ids.ToArray();
+		_bored_condition_count = raw_data.bored_condition_count;
 	}
 
 	public void Dispose()

@@ -65,7 +65,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateIdle()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateStunBegin()
@@ -75,7 +75,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateStun()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateSleepBegin()
@@ -85,7 +85,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateSleep()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateFreezeBegin()
@@ -100,7 +100,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateFreeze()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateFreezeExit()
@@ -122,13 +122,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  attack check
 
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateAttack01()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
     public override void UnitStateMoveInBegin()
     {
@@ -162,7 +162,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             MoveRightTeam();
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime);
+        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateWaveRunBegin()
@@ -181,7 +181,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateAttackReady01()
     {
-        float dt = Time.deltaTime;
+        float dt = Time.deltaTime * Battle_Speed_Multiple;
         bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(dt);
         if (is_delay_finish)
         {

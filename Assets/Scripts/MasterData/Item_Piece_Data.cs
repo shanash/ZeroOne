@@ -1,53 +1,71 @@
-﻿public class Item_Piece_Data : System.IDisposable
+﻿using FluffyDuck.Util;
+using System.Linq;
+
+public class Item_Piece_Data : System.IDisposable
 {
 	///	<summary>
 	///	아이템 ID
 	///	</summary>
-	public readonly int item_piece_id;
+	public int item_piece_id => _item_piece_id;
+	int _item_piece_id;
+
 	///	<summary>
 	///	이름 string ID
 	///	</summary>
-	public readonly string name_id;
+	public string name_id => _name_id;
+	string _name_id;
+
 	///	<summary>
 	///	조각낼 대상 아이디
 	///	</summary>
-	public readonly int target_id;
+	public int target_id => _target_id;
+	int _target_id;
+
 	///	<summary>
 	///	최대 중첩 갯수
 	///	</summary>
-	public readonly int max_num;
+	public int max_num => _max_num;
+	int _max_num;
+
 	///	<summary>
 	///	1개 제작을 하기 위한 수량
 	///	</summary>
-	public readonly int make_count;
+	public int make_count => _make_count;
+	int _make_count;
+
 	///	<summary>
 	///	소비 시간(분)
 	///	값이 0 이면, 소비 시간 없음
 	///	</summary>
-	public readonly int expire_time;
+	public int expire_time => _expire_time;
+	int _expire_time;
+
 	///	<summary>
 	///	소비기한
 	///	> scheduleTable과 연결
 	///	> 값이 0 이면, 소비 기한 없음
 	///	</summary>
-	public readonly int expire_schedule_id;
+	public int expire_schedule_id => _expire_schedule_id;
+	int _expire_schedule_id;
+
 	///	<summary>
 	///	아이콘
 	///	</summary>
-	public readonly string icon_path;
+	public string icon_path => _icon_path;
+	string _icon_path;
 
 	private bool disposed = false;
 
 	public Item_Piece_Data(Raw_Item_Piece_Data raw_data)
 	{
-		item_piece_id = raw_data.item_piece_id;
-		name_id = raw_data.name_id;
-		target_id = raw_data.target_id;
-		max_num = raw_data.max_num;
-		make_count = raw_data.make_count;
-		expire_time = raw_data.expire_time;
-		expire_schedule_id = raw_data.expire_schedule_id;
-		icon_path = raw_data.icon_path;
+		_item_piece_id = raw_data.item_piece_id;
+		_name_id = raw_data.name_id;
+		_target_id = raw_data.target_id;
+		_max_num = raw_data.max_num;
+		_make_count = raw_data.make_count;
+		_expire_time = raw_data.expire_time;
+		_expire_schedule_id = raw_data.expire_schedule_id;
+		_icon_path = raw_data.icon_path;
 	}
 
 	public void Dispose()

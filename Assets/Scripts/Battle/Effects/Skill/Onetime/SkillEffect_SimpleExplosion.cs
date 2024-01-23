@@ -11,14 +11,7 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
     public override void StartParticle(float duration, bool loop)
     {
         var ec = GetEffectComponent();
-        if (ec != null )
-        {
-            base.StartParticle(ec.Effect_Duration, loop);
-        }
-        else
-        {
-            base.StartParticle(duration, loop);
-        }
+        base.StartParticle(ec.Effect_Duration, loop);
 
         Send_Data.Onetime?.ExecSkill(Send_Data);
     }
@@ -27,7 +20,7 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
     {
         if (Is_Action)
         {
-            Delta += Time.deltaTime;
+            Delta += Time.deltaTime * Effect_Speed_Multiple;
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

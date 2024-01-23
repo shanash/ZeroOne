@@ -8,8 +8,10 @@ namespace FluffyDuck.Util
         SOUND_FX_VOLUME = 101,
         SOUND_VOICE_VOLUME = 102,
 
+        BATTLE_SPEED_TYPE = 111,
 
         CHARACTER_FILTER_TYPE = 201,
         SORT_ORDER_TYPE = 202,
+
     }
 }

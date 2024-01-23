@@ -36,13 +36,21 @@ public class BattleUIManager_V2 : MonoBehaviour
     UIButtonBase Menu_Btn;
     [SerializeField, Tooltip("Auto Btn")]
     UIButtonBase Auto_Btn;
+    
     [SerializeField, Tooltip("Fast Btn")]
     UIButtonBase Fast_Btn;
+    [SerializeField, Tooltip("Fast Speed")]
+    TMP_Text Fast_Speed;
 
     /// <summary>
     /// 체력 게이지 
     /// </summary>
     List<LifeBarNode> Used_Life_Bar_List = new List<LifeBarNode>();
+
+    private void Start()
+    {
+        UpdateFastSpeed();
+    }
 
     private void Update()
     {
@@ -62,6 +70,20 @@ public class BattleUIManager_V2 : MonoBehaviour
                 Battle_Mng.ChangeState(GAME_STATES.PAUSE);
             }
 
+        }
+    }
+
+    void UpdateFastSpeed()
+    {
+        BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
+        Fast_Speed.gameObject.SetActive(speed_type != BATTLE_SPEED_TYPE.NORMAL_TYPE);
+        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
+        {
+            Fast_Speed.text = "x1.5";
+        }
+        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        {
+            Fast_Speed.text = "x2";
         }
     }
 
@@ -132,6 +154,24 @@ public class BattleUIManager_V2 : MonoBehaviour
     public void OnClickFastPlay()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        int speed_type = GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
+        speed_type += 1;
+        if (speed_type > (int)BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        {
+            speed_type = (int)BATTLE_SPEED_TYPE.NORMAL_TYPE;
+        }
+        GameConfig.Instance.SetGameConfig<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, speed_type);
+        UpdateFastSpeed();
+        float speed = 1f;
+        if (speed_type == (int)BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
+        {
+            speed = 1.5f;
+        }
+        else if (speed_type == (int)BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        {
+            speed = 2f;
+        }
+        Battle_Mng.SetBattleFastSpeed(speed);
     }
     #endregion
 }

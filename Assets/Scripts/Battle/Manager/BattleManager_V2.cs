@@ -26,6 +26,8 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     protected BattleDungeonData Dungeon_Data;
 
+    protected float Battle_Speed_Multiple = 1f;
+
 
     public VirtualCineManager GetVirtualCineManager()
     {
@@ -48,7 +50,32 @@ public partial class BattleManager_V2 : MonoBehaviour
     protected void InitBattleField()
     {
         CreateBattleField();
-        //CreateTeamManagers();
+
+        BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
+        float speed = 1f;
+        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
+        {
+            speed = 1.5f;
+        }
+        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        {
+            speed = 2f;
+        }
+        SetBattleFastSpeed(speed);
+    }
+
+    public void SetBattleFastSpeed(float speed)
+    {
+        Battle_Speed_Multiple = speed;
+        //  team speed
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].SetBattleSpeed(speed);
+        }
+        //  effect speed
+        GetEffectFactory().SetEffectSpeedMultiple(Battle_Speed_Multiple);
+
     }
 
     protected void CreateBattleField()
@@ -78,6 +105,8 @@ public partial class BattleManager_V2 : MonoBehaviour
         right_team.SetGameType(Game_Type);
         right_team.SetBattleDungeonData(Dungeon_Data);
         Used_Team_List.Add(right_team);
+
+       
     }
 
     /// <summary>

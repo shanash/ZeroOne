@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserHeroSkillDataManager : MonoBehaviour
+public class UserHeroSkillDataManager : ManagerBase
 {
-    // Start is called before the first frame update
-    void Start()
+    List<UserHeroSkillData> User_Hero_Skill_Data_List = new List<UserHeroSkillData>();
+    public UserHeroSkillDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

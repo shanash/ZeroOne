@@ -8,7 +8,12 @@ public enum GAME_TYPE
 
     STORY_MODE,                         //  스토리 모드
 }
-
+public enum BATTLE_SPEED_TYPE
+{
+    NORMAL_TYPE = 0,                //  x1
+    FAST_SPEED_1_5,                 //  x1.5
+    FAST_SPEED_2,                   //  x2
+}
 public enum TEAM_POSITION_TYPE
 {
     NONE = -1,

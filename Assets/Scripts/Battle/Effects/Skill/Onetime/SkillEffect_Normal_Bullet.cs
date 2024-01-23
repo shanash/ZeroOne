@@ -19,7 +19,7 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
             switch (ec.Throwing_Type)
             {
                 case THROWING_TYPE.LINEAR:
-                    ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+                    ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration / Effect_Speed_Multiple);
                     ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
                     break;
                 case THROWING_TYPE.PARABOLA:
@@ -30,23 +30,23 @@ public class SkillEffect_Normal_Bullet : SkillEffectBase
                         if (dist < 5)
                         {
                             height = ec.Parabola_Height * 0.2f;
-                            velocity = ec.Projectile_Velocity * 0.5f;
+                            velocity = ec.Projectile_Velocity * 0.5f * Effect_Speed_Multiple;
                         }
                         else if(dist < 10)
                         {
                             height = ec.Parabola_Height * 0.5f;
-                            velocity = ec.Projectile_Velocity * 0.7f;
+                            velocity = ec.Projectile_Velocity * 0.7f * Effect_Speed_Multiple;
                         }
                         else
                         {
                             height = ec.Parabola_Height;
-                            velocity = ec.Projectile_Velocity;
+                            velocity = ec.Projectile_Velocity * Effect_Speed_Multiple;
                         }
                         ec.Parabola.Move(this.transform.position, target.position, height, velocity, MoveEndCallback);
                     }
                     break;
                 case THROWING_TYPE.BEZIER:
-                    ec.Curve.Move(this.transform.position, target, duration, ec.Start_Curve_Dist, ec.End_Curve_Dist, MoveEndCallback);
+                    ec.Curve.Move(this.transform.position, target, duration / Effect_Speed_Multiple, ec.Start_Curve_Dist, ec.End_Curve_Dist, MoveEndCallback);
                     break;
                 default:
                     Debug.Assert(false);

@@ -18,6 +18,11 @@ public partial class TeamManager_V2 : IDisposable
 
     protected BattleDungeonData Dungeon;
 
+    /// <summary>
+    /// 게임 배속
+    /// </summary>
+    protected float Battle_Speed_Multiple = 1f;
+
     private bool disposed = false;
 
     public TeamManager_V2(TEAM_TYPE ttype)
@@ -56,6 +61,16 @@ public partial class TeamManager_V2 : IDisposable
         //    pool.UnusedGameObject(Used_Members[i].gameObject);
         //}
         Used_Members.Clear();
+    }
+
+    public void SetBattleSpeed(float speed)
+    {
+        Battle_Speed_Multiple = speed;
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Members[i].SetBattleSpeed(speed);
+        }
     }
 
     public void SetHeroContainer(Transform hero_parent)
@@ -135,6 +150,7 @@ public partial class TeamManager_V2 : IDisposable
             hero.SetTeamManager(this);
             //hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
             hero.SetBattleUnitData(unit_data);
+            hero.SetBattleSpeed(Battle_Speed_Multiple);
             hero.SetDeckOrder(i);
             hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
@@ -264,6 +280,7 @@ public partial class TeamManager_V2 : IDisposable
 
             //monster.SetBattleUnitDataID(npc.GetUnitID());
             monster.SetBattleUnitData(npc);
+            monster.SetBattleSpeed(Battle_Speed_Multiple);
 
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);

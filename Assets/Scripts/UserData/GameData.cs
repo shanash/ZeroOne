@@ -75,6 +75,16 @@ public class GameData : Singleton<GameData>
             User_Data_Manager_List.Add(mng);
         }
 
+        //  hero skill data
+        {
+            var mng = new UserHeroSkillDataManager(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
+            if (!mng.Load())
+            {
+                mng.InitDataManager();
+            }
+            User_Data_Manager_List.Add(mng);
+        }
+
         //  memorial data
         {
             var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
@@ -132,5 +142,9 @@ public class GameData : Singleton<GameData>
     public UserChargeItemDataManager GetUserChargeItemDataManager()
     {
         return FindUserDataManager<UserChargeItemDataManager>(USER_DATA_MANAGER_TYPE.USER_CHARGE_ITEM_DATA_MANAGER);
+    }
+    public UserHeroSkillDataManager GetUserHeroSkillDataManager()
+    {
+        return FindUserDataManager<UserHeroSkillDataManager>(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
     }
 }

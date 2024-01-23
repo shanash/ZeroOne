@@ -13,7 +13,7 @@ public class SkillEffectCast : SkillEffectBase
     {
         if (Is_Action)
         {
-            Delta += Time.deltaTime;
+            Delta += Time.deltaTime * Effect_Speed_Multiple;
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);
