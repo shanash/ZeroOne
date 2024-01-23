@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
@@ -19,6 +19,11 @@ public class BaseMasterDataManager
 		private set;
 	}
 	protected List<Editor_Wave_Data> _Editor_Wave_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Essence_Status_Data> _Essence_Status_Data
 	{
 		get;
 		private set;
@@ -226,6 +231,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Charge_Value_Data();
 		await LoadMaster_Editor_Stage_Data();
 		await LoadMaster_Editor_Wave_Data();
+		await LoadMaster_Essence_Status_Data();
 		await LoadMaster_Goods_Data();
 		await LoadMaster_Item_Data();
 		await LoadMaster_Item_Piece_Data();
@@ -294,6 +300,13 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Editor_Wave_Data");
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Editor_Wave_Data>>(json);
 		_Editor_Wave_Data = raw_data_list.Select(raw_data => new Editor_Wave_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Essence_Status_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Essence_Status_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Essence_Status_Data>>(json);
+		_Essence_Status_Data = raw_data_list.Select(raw_data => new Essence_Status_Data(raw_data)).ToList();
 	}
 
 	protected async Task LoadMaster_Goods_Data()
@@ -576,6 +589,14 @@ public class BaseMasterDataManager
 		if(_Editor_Wave_Data == null)
 		{
 			await LoadMaster_Editor_Wave_Data();
+		}
+	}
+
+	protected async void Check_Essence_Status_Data()
+	{
+		if(_Essence_Status_Data == null)
+		{
+			await LoadMaster_Essence_Status_Data();
 		}
 	}
 

@@ -19,6 +19,9 @@ public class HeroInfoBox : MonoBehaviour
     [SerializeField, Tooltip("Hero Info Box LevelUp")]
     HeroInfoBoxLevelUp Hero_Info_Box_LevelUp;
 
+    [SerializeField, Tooltip("Hero Essence Info")]
+    HeroInfoBoxEssence Hero_Info_Box_Essence;
+
     BattleUnitData User_Hero_Data;
 
     public void SetHeroData(BattleUnitData data)
@@ -44,6 +47,7 @@ public class HeroInfoBox : MonoBehaviour
     {
         Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
         Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_Essence.SetHeroData(User_Hero_Data);
     }
 
     public void OnBlocked(Gpm.Ui.Tab tab)

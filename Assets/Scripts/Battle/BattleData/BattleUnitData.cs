@@ -66,25 +66,15 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual double GetCombatPoint()
     {
-        var hp = GetLifePoint();
-        var ap = GetAttackDamagePoint();
-        var dp = GetAttackDefensePoint();
-        var al = GetAutoRecoveryLife();
-        var ep = GetEvationPoint();
-        var ar = GetAttackRecovery();
-        var acp = GetAccuracyPoint();
-        var sum_skills_level = GetSumSkillsLevel();
-
-        var cp =
-            hp * 0.1f
-            + (ap + dp) * 4.5f
-            + al * 0.1f
-            + ep * 6f
-            + ar * 4.5f
-            + acp * 2f
-            + sum_skills_level * 10f;
-
-        return cp;
+        return GameCalc.GetCombatPoint(
+            GetLifePoint(),
+            GetAttackDamagePoint(),
+            GetAttackDefensePoint(),
+            GetAutoRecoveryLife(),
+            GetEvationPoint(),
+            GetAttackRecovery(),
+            GetAccuracyPoint(),
+            GetSumSkillsLevel());
     }
 
     /// <summary>

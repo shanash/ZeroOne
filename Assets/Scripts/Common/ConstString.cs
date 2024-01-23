@@ -1,14 +1,19 @@
 public static class ConstString
 {
+    public static string FormatPlus(int value) => $"+{value}";
+
     public class Hero
     {
         public static string FormatHeroAge(int age) => $"{age}세";
         public static string FormatHeroBirthday(int[] birthdate) => $"{birthdate[0]}월 {birthdate[1]}일";
         public static string FormatHeroHeight(int height) => $"{height}cm";
+        public static string FormatLimitLoveLevel(int level) => $"호감도 레벨 {LOVE_LEVEL[level]}을 달성해야 선택할 수 있습니다";
+
 
         public static readonly string[] TRIBES = { "NONE", "인간", "엘프", "수인", "안드로이드", "악마", "천사" };
         public static readonly string[] ROLE = { "NONE", "탱커", "딜러", "서포터", "힐러" };
         public static readonly string[] SORT_FILLTER = { "이름", "레벨", "성급", "인연 레벨", "스킬 레벨", "궁극 스킬 레벨", "공격력", "방어력", "사정거리", "호감도" };
+        public static readonly string[] LOVE_LEVEL = { "LOVE_LV1", "LOVE_LV2", "LOVE_LV3", "LOVE_LV4", "LOVE_LV5" };
 
         public const string COMBAT_POWER = "전투력";
         public const string LIFE_POINT = "체력";
@@ -37,6 +42,12 @@ public static class ConstString
         public const string ADVANCE_SKILL = "스킬 강화";
         public const string ADVANCE_EQUIPMENT = "장비 강화";
         public const string ADVANCE_WEAPON = "무기 강화";
+
+        public const string ESSENCE_TRANSFER_PERCENT = "근원 전달 달성률";
+        public const string ESSENCE_TRANSFER_REACTION = "전달 반응";
+        public const string ESSENCE_FOUND_SPOT = "스팟 발견";
+        public const string ESSENCE_SKIP = "스킵하기";
+        public const string ESSENCE_TRANSFER = "근원 전달";
     }
 
     public static class ProfilePopup

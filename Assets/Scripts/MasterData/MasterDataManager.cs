@@ -71,8 +71,6 @@ public class MasterDataManager : BaseMasterDataManager
 
     #endregion
 
-   
-
     #region New Item Data
 
     public Goods_Data Get_GoodsData(GOODS_TYPE gtype)
@@ -554,5 +552,24 @@ public class MasterDataManager : BaseMasterDataManager
         return _L2d_Char_Skin_Data.Find(x => x.l2d_id == char_skin_id);
     }
     */
+    #endregion
+
+    #region Essence Transfer
+    public Essence_Status_Data Get_EssenceStatusData(int essence_transfer_percent)
+    {
+        return _Essence_Status_Data.Find(x => x.essence_charge_per == essence_transfer_percent);
+    }
+
+    public List<Essence_Status_Data> Get_EssenceStatusDataRange(int esssence_transfer_percent_start, int essence_transfer_percent_target)
+    {
+        List<Essence_Status_Data> list = new List<Essence_Status_Data>();
+        for (int i = esssence_transfer_percent_start; i <= essence_transfer_percent_target; i++)
+        {
+            var data = _Essence_Status_Data.Find(x => x.essence_charge_per == i);
+            list.Add(data);
+        }
+
+        return list;
+    }
     #endregion
 }
