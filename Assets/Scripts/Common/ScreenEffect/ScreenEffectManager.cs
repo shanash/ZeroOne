@@ -22,11 +22,14 @@ public class ScreenEffectManager : Singleton<ScreenEffectManager>
     ScreenEffectUIContainer Container;
     Queue<(ScreenEffect effect, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> Sequence_Actions;
 
+    Queue<Action> Re_Sequence_Actions;
+
     ScreenEffectManager() { }
 
     protected override void Initialize()
     {
-        Sequence_Actions = new Queue<(ScreenEffect effect, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> ();
+        Sequence_Actions = new Queue<(ScreenEffect effect, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)>();
+        Re_Sequence_Actions = new Queue<Action>();
         Container = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Canvas_ScreenEffect", null).GetComponent<ScreenEffectUIContainer>();
     }
 
@@ -39,6 +42,9 @@ public class ScreenEffectManager : Singleton<ScreenEffectManager>
                 break;
             case ScreenEffect.FADE_IN:
                 FadeIn(cb, duration, pre_delay, post_delay, ease);
+                break;
+            case ScreenEffect.DAMAGE_INDICATOR:
+
                 break;
         }
     }
@@ -55,16 +61,25 @@ public class ScreenEffectManager : Singleton<ScreenEffectManager>
 
     public void FadeOut(Action cb, float fade_duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
     {
-        Container.Cover_Image.color = new Color(0, 0, 0, 0);
-        Container.Cover_Image_EaseAlpha.SetEasing(ease, pre_delay, fade_duration, post_delay);
-        Container.Cover_Image_EaseAlpha.StartEasing(1.0f, cb);
+        ChangeCoverAlpha(new Color(0, 0, 0, 0), 1f, cb, fade_duration, pre_delay, post_delay, ease);
     }
 
     public void FadeIn(Action cb, float fade_duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
     {
-        Container.Cover_Image.color = new Color(0, 0, 0, 1);
+        ChangeCoverAlpha(new Color(0, 0, 0, 1), 0f, cb, fade_duration, pre_delay, post_delay, ease);
+    }
+
+    void ChangeCoverAlpha(Color origin_color, float dest_alpha,  Action cb, float fade_duration, float pre_delay, float post_delay, EasingFunction.Ease ease)
+    {
+        Container.Cover_Image.color = origin_color;
         Container.Cover_Image_EaseAlpha.SetEasing(ease, pre_delay, fade_duration, post_delay);
-        Container.Cover_Image_EaseAlpha.StartEasing(0.0f, cb);
+        Container.Cover_Image_EaseAlpha.StartEasing(dest_alpha, cb);
+    }
+
+    public void ShowDamageEffect(Action cb, float fade_duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
+    {
+        Container.Cover_Image.color = new Color(1, 0, 0, 0);
+        Container.Cover_Image_EaseAlpha.SetEasing(ease, pre_delay, fade_duration, post_delay);
     }
 
     void StartSequenceRemainActions(Queue<(ScreenEffect effect, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> actions)
