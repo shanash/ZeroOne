@@ -18,8 +18,8 @@ public class Me_Chat_Motion_Data : System.IDisposable
 	///	<summary>
 	///	애니메이션 이름
 	///	</summary>
-	public string[] animation_name => _animation_name;
-	string[] _animation_name;
+	public string animation_name => _animation_name;
+	string _animation_name;
 
 	///	<summary>
 	///	대사 id
@@ -33,7 +33,7 @@ public class Me_Chat_Motion_Data : System.IDisposable
 	{
 		_chat_motion_id = raw_data.chat_motion_id;
 		_player_character_id = raw_data.player_character_id;
-		_animation_name = raw_data.animation_name.ToArray();
+		_animation_name = raw_data.animation_name;
 		_serifu_ids = raw_data.serifu_ids.ToArray();
 	}
 
@@ -59,16 +59,7 @@ public class Me_Chat_Motion_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[chat_motion_id] = <color=yellow>{0}</color>", chat_motion_id).AppendLine();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
-		sb.AppendLine("[animation_name]");
-		if(animation_name != null)
-		{
-			cnt = animation_name.Length;
-			for(int i = 0; i< cnt; i++)
-			{
-				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", animation_name[i]).AppendLine();
-			}
-		}
-
+		sb.AppendFormat("[animation_name] = <color=yellow>{0}</color>", animation_name).AppendLine();
 		sb.AppendLine("[serifu_ids]");
 		if(serifu_ids != null)
 		{

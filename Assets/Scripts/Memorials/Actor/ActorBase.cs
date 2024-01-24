@@ -4,6 +4,8 @@ using Spine.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
@@ -29,7 +31,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     ////////////////////////// 상태
     protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
-    protected int Current_State_Id;
     KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int> Gesture_Touch_Counts;
     protected int Idle_Played_Count;
 
@@ -40,7 +41,15 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     //List<Me_Interaction_Data>[,] Touch_Type_Interactions;
     Me_Interaction_Data Current_Interaction;
 
-    protected Dictionary<int, Me_Chat_Motion_Data> Chat_Motions;
+    Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> LoveStates;
+    LOVE_LEVEL_TYPE Current_Love_Level_Type;
+
+
+    Dictionary<int, L2d_Skin_Ani_State_Data> SkinAniStates;
+    Dictionary<int, List<L2d_Interaction_Base_Data>> Interaction_Bases;
+    protected Dictionary<int, Me_Chat_Motion_Data> Idle_Chat_Motions;
+    protected Dictionary<int, Me_Chat_Motion_Data> Reaction_Chat_Motions;
+
     protected int Current_Chat_Motion_Id;
     protected int Current_Serifu_Index;
     protected int Current_Balloon_ID = -1; // 표시되어 있는 말풍선 아이디
@@ -59,6 +68,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     bool Is_Quit = false;
 
     protected abstract Spine.AnimationState AnimationState { get; }
+
+    protected int Current_State_Id { get; set; }
 
     // 상태 ID에 기반한 상태 데이터를 가져옵니다
     protected IdleAnimationData Current_State_Data
@@ -158,7 +169,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
         else if (FSM.CurrentTransitionID == ACTOR_STATES.REACT)
         {
-            if (react_track_entries.Contains(entry))
+            if (react_track_entry == entry)
             {
                 if (entry.TrackIndex != IDLE_BASE_TRACK)
                 {
@@ -169,11 +180,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     AnimationStateComp.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true);
                 }
 
-                react_track_entries.Remove(entry);
-            }
-
-            if (react_track_entries.Count == 0)
-            {
+                react_track_entry = null;
                 FSM.ChangeState(ACTOR_STATES.IDLE);
             }
         }
@@ -210,7 +217,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 }
 
                 Current_Serifu_Index++;
-                var serifu = GetSerifuData(Chat_Motions[Current_Chat_Motion_Id], Current_Serifu_Index);
+                var serifu = GetSerifuData(Reaction_Chat_Motions[Current_Chat_Motion_Id], Current_Serifu_Index);
                 if (serifu == null)
                 {
                     Debug.LogWarning($"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
@@ -569,7 +576,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         GestureManager.Instance.OnDrag -= OnDrag;
     }
 
-    bool Initialize(Producer pd, Me_Resource_Data me_data)
+    bool Initialize(Producer pd, L2d_Char_Skin_Data skin_data, LOVE_LEVEL_TYPE love_level)
     {
         SkeletonAnimation = GetComponent<ISkeletonAnimation>();
         AnimationStateComp = GetComponent<IAnimationStateComponent>();
@@ -588,9 +595,37 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
 
         Producer = pd;
+
+        LoveStates = MasterDataManager.Instance.Get_L2D_LoveStates(skin_data.l2d_id);
+
+        var state_ids = LoveStates.Values.Select(x => x.state_id).Distinct().ToList();
+        SkinAniStates = MasterDataManager.Instance.Get_L2D_SkinAniStates(state_ids);
+
+        var idle_ani_ids = SkinAniStates.Values.Select(x => x.base_ani_id).Distinct().ToList();
+        Idle_Chat_Motions = MasterDataManager.Instance.Get_AniData(idle_ani_ids);
+
+        var interaction_group_ids = SkinAniStates.Values.Select(x => x.interaction_group_id).Distinct().ToList();
+        Interaction_Bases = MasterDataManager.Instance.Get_L2D_InteractionBases(interaction_group_ids);
+
+        var reaction_ani_ids = Interaction_Bases.Values
+            .SelectMany(interaction_base_data_list =>
+                interaction_base_data_list.Select(data => data.reaction_ani_id)
+                .Concat(interaction_base_data_list.Select(data => data.reaction_facial_id)))
+            .ToList();
+        Reaction_Chat_Motions = MasterDataManager.Instance.Get_AniData(reaction_ani_ids);
+
+        var serifu_ids = Reaction_Chat_Motions.Values.SelectMany(chat_motion_data => chat_motion_data.serifu_ids).ToList();
+
+        Serifues = MasterDataManager.Instance.Get_SerifuData(serifu_ids);
+        
+        foreach (var serifu in Serifues.Values)
+        {
+            Debug.Log(serifu.audio_clip_key);
+        }
+
         //Touch_Type_Interactions = MasterDataManager.Instance.Get_MemorialInteraction(me_data.player_character_id);
-        Chat_Motions = MasterDataManager.Instance.Get_MemorialChatMotion(me_data.player_character_id);
-        Serifues = MasterDataManager.Instance.Get_MemorialSerifu(me_data.player_character_id);
+        //Chat_Motions = MasterDataManager.Instance.Get_MemorialChatMotion(me_data.player_character_id);
+        //Serifues = MasterDataManager.Instance.Get_MemorialSerifu(me_data.player_character_id);
 
         List<string> audio_keys = Serifues.Values
             .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_key))
@@ -599,16 +634,17 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         AudioManager.Instance.PreloadAudioClipsAsync(audio_keys, null);
 
-        var state_animation_data = MasterDataManager.Instance.Get_MemorialStateAnimation(me_data.player_character_id);
-        Idle_Animation_Datas = state_animation_data.ToDictionary(
-                data => data.Key,
-                data => new IdleAnimationData
-                {
-                    Animation_Idle_Name = data.Value.Idle_Animation_Name,
-                    Bored_Chatmotion_Ids = data.Value.Bored_Chatmotion_Ids,
-                    Bored_Count = data.Value.Bored_Condition_Count
-                });
-        Current_State_Id = me_data.state_id;
+        Idle_Animation_Datas = SkinAniStates.ToDictionary(
+            data => data.Key,
+            data => new IdleAnimationData
+            {
+                Animation_Idle_Name = Idle_Chat_Motions[data.Value.base_ani_id].animation_name,
+                Bored_Chatmotion_Ids = null,
+                Bored_Count = 0
+            });
+
+        Current_Love_Level_Type = love_level;
+        Current_State_Id = LoveStates[Current_Love_Level_Type].state_id;
 
         Gesture_Touch_Counts = default;
 
@@ -620,7 +656,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     void InitField()
     {
         Idle_Animation_Datas = null;
-        Current_State_Id = -1;
+        Current_Love_Level_Type = LOVE_LEVEL_TYPE.NONE;
         Idle_Played_Count = 0;
         Gesture_Touch_Counts = default;
         Face = null;
@@ -628,7 +664,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Producer = null;
         //Touch_Type_Interactions = null;
         Current_Interaction = null;
-        Chat_Motions = null;
+        Idle_Chat_Motions = null;
+        Reaction_Chat_Motions = null;
         Serifues = null;
         Drag_Track_Entry = null;
         Current_Chat_Motion_Id = -1;

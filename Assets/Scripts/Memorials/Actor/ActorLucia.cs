@@ -11,7 +11,7 @@ public class ActorLucia : ActorBase
         // 루시아가 브라 잡고 있을때 브라끈을 풀면 풀린상태 유지
         if (Current_Chat_Motion_Id == 1200002015 || Current_Chat_Motion_Id == 1200002016)
         {
-            react_track_entries.Clear();
+            react_track_entry = null;
         }
 
         // 맨가슴 보여서 부끄러워지는 상태로 이동하는 리액션일때 왼쪽 브라끈 애니메이션을 비워줘야

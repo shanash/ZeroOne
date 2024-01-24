@@ -7,7 +7,7 @@ public abstract partial class ActorBase : MonoBehaviour
     protected StateSystemBase<ACTOR_STATES> FSM = null;
 
     // 플레이되는 리액션 애니메이션 트랙들이 모두 종료되고서야 IDLE로 돌아가도록 하기 위해 체크할 트랙을 담아놓는다
-    protected List<TrackEntry> react_track_entries = new List<TrackEntry>();
+    protected TrackEntry react_track_entry = null;
 
     TrackEntry te_vert;
     TrackEntry te_horz;
@@ -90,25 +90,22 @@ public abstract partial class ActorBase : MonoBehaviour
     public virtual void ActorStateReactBegin()
     {
         // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
-        var chat_motion_data = Chat_Motions[Current_Chat_Motion_Id];
-        foreach (string anim_name in chat_motion_data.animation_name)
+        var chat_motion_data = Reaction_Chat_Motions[Current_Chat_Motion_Id];
+        if (!TryGetTrackNum(chat_motion_data.animation_name, out int track_num))
         {
-            if (!TryGetTrackNum(anim_name, out int track_num))
-            {
-                throw new InvalidTrackException(track_num);
-            }
-
-            var te = AnimationStateComp.AnimationState.SetAnimation(track_num, anim_name, false);
-
-            // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
-            if (IDLE_BASE_TRACK == track_num)
-            {
-                te.MixDuration = 0.2f;
-            }
-
-            // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
-            react_track_entries.Add(te);
+            throw new InvalidTrackException(track_num);
         }
+
+        var te = AnimationStateComp.AnimationState.SetAnimation(track_num, chat_motion_data.animation_name, false);
+
+        // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
+        if (IDLE_BASE_TRACK == track_num)
+        {
+            te.MixDuration = 0.2f;
+        }
+
+        // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
+        react_track_entry = te;
         Current_Serifu_Index = -1;
 
         // 연속 제스쳐 카운트 갯수 하나 증가
@@ -145,7 +142,7 @@ public abstract partial class ActorBase : MonoBehaviour
             Current_State_Id = Current_Interaction.change_state_id;
         }
 
-        react_track_entries.Clear();
+        react_track_entry = null;
         Current_Chat_Motion_Id = -1;
     }
 

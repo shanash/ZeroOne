@@ -24,14 +24,14 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	///	<summary>
 	///	터치 반응 애니 id
 	///	</summary>
-	public int[] reaction_ani_id => _reaction_ani_id;
-	int[] _reaction_ani_id;
+	public int reaction_ani_id => _reaction_ani_id;
+	int _reaction_ani_id;
 
 	///	<summary>
 	///	터치 반응 페이셜 id
 	///	</summary>
-	public int[] reaction_facial_id => _reaction_facial_id;
-	int[] _reaction_facial_id;
+	public int reaction_facial_id => _reaction_facial_id;
+	int _reaction_facial_id;
 
 	///	<summary>
 	///	애니 재생 후, 변환될 상태 id
@@ -46,8 +46,8 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 		_interaction_group_id = raw_data.interaction_group_id;
 		_touch_type_01 = raw_data.touch_type_01;
 		_gescure_type_01 = raw_data.gescure_type_01;
-		_reaction_ani_id = raw_data.reaction_ani_id.ToArray();
-		_reaction_facial_id = raw_data.reaction_facial_id.ToArray();
+		_reaction_ani_id = raw_data.reaction_ani_id;
+		_reaction_facial_id = raw_data.reaction_facial_id;
 		_after_state_id = raw_data.after_state_id;
 	}
 
@@ -69,31 +69,12 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	}
 	public override string ToString()
 	{
-		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[interaction_group_id] = <color=yellow>{0}</color>", interaction_group_id).AppendLine();
 		sb.AppendFormat("[touch_type_01] = <color=yellow>{0}</color>", touch_type_01).AppendLine();
 		sb.AppendFormat("[gescure_type_01] = <color=yellow>{0}</color>", gescure_type_01).AppendLine();
-		sb.AppendLine("[reaction_ani_id]");
-		if(reaction_ani_id != null)
-		{
-			cnt = reaction_ani_id.Length;
-			for(int i = 0; i< cnt; i++)
-			{
-				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", reaction_ani_id[i]).AppendLine();
-			}
-		}
-
-		sb.AppendLine("[reaction_facial_id]");
-		if(reaction_facial_id != null)
-		{
-			cnt = reaction_facial_id.Length;
-			for(int i = 0; i< cnt; i++)
-			{
-				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", reaction_facial_id[i]).AppendLine();
-			}
-		}
-
+		sb.AppendFormat("[reaction_ani_id] = <color=yellow>{0}</color>", reaction_ani_id).AppendLine();
+		sb.AppendFormat("[reaction_facial_id] = <color=yellow>{0}</color>", reaction_facial_id).AppendLine();
 		sb.AppendFormat("[after_state_id] = <color=yellow>{0}</color>", after_state_id).AppendLine();
 		return sb.ToString();
 	}
