@@ -14,8 +14,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     const string FACE_BONE_NAME = "touch_center";
     const string BALLOON_BONE_NAME = "balloon";
 
-    [SerializeField]
-    protected SkeletonAnimation Skeleton;
+    protected ISkeletonAnimation SkeletonAnimation;
+    protected IAnimationStateComponent AnimationStateComp;
 
     // 입모양 애니메이션
     [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
@@ -57,6 +57,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     float Elapsed_Time_For_Mouth_Open = 0;
 
     bool Is_Quit = false;
+
+    protected abstract Spine.AnimationState AnimationState { get; }
 
     // 상태 ID에 기반한 상태 데이터를 가져옵니다
     protected IdleAnimationData Current_State_Data
@@ -160,11 +162,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             {
                 if (entry.TrackIndex != IDLE_BASE_TRACK)
                 {
-                    Skeleton.AnimationState.SetEmptyAnimation(entry.TrackIndex, 0);
+                    AnimationStateComp.AnimationState.SetEmptyAnimation(entry.TrackIndex, 0);
                 }
                 else
                 {
-                    Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true);
+                    AnimationStateComp.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true);
                 }
 
                 react_track_entries.Remove(entry);
@@ -247,12 +249,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// </summary>
     protected void AddSkeletonEventListener()
     {
-        if (Skeleton != null)
+        if (AnimationStateComp != null)
         {
-            Skeleton.AnimationState.Start += SpineAnimationStart;
-            Skeleton.AnimationState.Complete += SpineAnimationComplete;
-            Skeleton.AnimationState.End += SpineAnimationEnd;
-            Skeleton.AnimationState.Event += SpineAnimationEvent;
+            AnimationStateComp.AnimationState.Start += SpineAnimationStart;
+            AnimationStateComp.AnimationState.Complete += SpineAnimationComplete;
+            AnimationStateComp.AnimationState.End += SpineAnimationEnd;
+            AnimationStateComp.AnimationState.Event += SpineAnimationEvent;
         }
     }
 
@@ -261,12 +263,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// </summary>
     protected void RemoveSkeletonEventListener()
     {
-        if (Skeleton != null)
+        if (AnimationStateComp != null)
         {
-            Skeleton.AnimationState.Start -= SpineAnimationStart;
-            Skeleton.AnimationState.Complete -= SpineAnimationComplete;
-            Skeleton.AnimationState.End -= SpineAnimationEnd;
-            Skeleton.AnimationState.Event -= SpineAnimationEvent;
+            AnimationStateComp.AnimationState.Start -= SpineAnimationStart;
+            AnimationStateComp.AnimationState.Complete -= SpineAnimationComplete;
+            AnimationStateComp.AnimationState.End -= SpineAnimationEnd;
+            AnimationStateComp.AnimationState.Event -= SpineAnimationEvent;
         }
     }
 
@@ -283,7 +285,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     {
                         return;
                     }
-                    te = Skeleton.AnimationState.SetAnimation(MOUTH_TRACK, Current_Mouth_Anim_Name, false);
+                    te = AnimationStateComp.AnimationState.SetAnimation(MOUTH_TRACK, Current_Mouth_Anim_Name, false);
                     te.MixDuration = 0.2f;
                     te.Alpha = 0;
                     Dest_Mouth_Alpha = 0;
@@ -569,7 +571,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     bool Initialize(Producer pd, Me_Resource_Data me_data)
     {
-        if (Skeleton == null)
+        SkeletonAnimation = GetComponent<ISkeletonAnimation>();
+        AnimationStateComp = GetComponent<IAnimationStateComponent>();
+
+        if (SkeletonAnimation == null || AnimationStateComp == null)
         {
             Debug.Assert(false, $"프리팹 {this.GetType()} 컴포넌트의 인스펙터에 SkeletonAnimation이 없습니다");
             return false;
@@ -699,10 +704,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns></returns>
     public Attachment FindAttachment(string slot_name, string attachment_name)
     {
-        var slot = Skeleton.Skeleton.FindSlot(slot_name);
+        var slot = SkeletonAnimation.Skeleton.FindSlot(slot_name);
         if (slot != null)
         {
-            return Skeleton.Skeleton.GetAttachment(slot_name, attachment_name);
+            return SkeletonAnimation.Skeleton.GetAttachment(slot_name, attachment_name);
         }
         return null;
     }
@@ -726,7 +731,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// </summary>
     void UpdateFaceAnimationDirection(float multiple_value, ref TrackEntry track1, ref TrackEntry track2, params string[] anim_names)
     {
-        Vector3 face_world_pos = Face.GetWorldPosition(Skeleton.transform);
+        Vector3 face_world_pos = Face.GetWorldPosition(this.transform);
         Vector2 face_screen_pos = Camera.main.WorldToScreenPoint(face_world_pos);
         Vector2 dest_direction = CalculateDesiredDirection(face_screen_pos, multiple_value);
 
@@ -784,7 +789,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 track.Alpha = 0;
             }
             TryGetTrackNum(animation_name, out var num);
-            track = Skeleton.AnimationState.SetAnimation(num, animation_name, false);
+            track = AnimationStateComp.AnimationState.SetAnimation(num, animation_name, false);
             track.MixDuration = 0;
         }
 
@@ -816,7 +821,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns></returns>
     public Vector3 GetBalloonWorldPosition()
     {
-        return Balloon.GetWorldPosition(Skeleton.transform);
+        return Balloon.GetWorldPosition(this.transform);
     }
 
     /// <summary>
@@ -826,7 +831,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns></returns>
     public Slot FindSlot(string slot_name)
     {
-        return Skeleton.Skeleton.FindSlot(slot_name);
+        return SkeletonAnimation.Skeleton.FindSlot(slot_name);
     }
 
     /// <summary>
@@ -836,7 +841,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns>찾은 트랙엔트리</returns>
     public TrackEntry FindTrack(int track)
     {
-        return Skeleton.AnimationState.GetCurrent(track);
+        return AnimationStateComp.AnimationState.GetCurrent(track);
     }
 
     /// <summary>
@@ -846,12 +851,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns>찾은 본</returns>
     public Bone FindBone(string bone_name)
     {
-        return Skeleton.Skeleton.FindBone(bone_name);
+        return SkeletonAnimation.Skeleton.FindBone(bone_name);
     }
 
     public void Pause(bool val)
     {
-        Skeleton.AnimationState.TimeScale = val ? 0 : 1;
+        AnimationStateComp.AnimationState.TimeScale = val ? 0 : 1;
         if (val)
         {
 

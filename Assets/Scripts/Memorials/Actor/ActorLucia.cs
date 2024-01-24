@@ -1,5 +1,8 @@
+using Spine;
+
 public class ActorLucia : ActorBase
 {
+    protected override AnimationState AnimationState => throw new System.NotImplementedException();
     public override void ActorStateReactBegin()
     {
         base.ActorStateReactBegin();
@@ -15,13 +18,13 @@ public class ActorLucia : ActorBase
         // 루시아가 자연스럽게 브라끈을 끌어당깁니다.
         if (Current_Chat_Motion_Id == 1200002018)
         {
-            Skeleton.AnimationState.SetEmptyAnimation(21, 0);
+            AnimationState.SetEmptyAnimation(21, 0);
         }
 
         // 본래 상태로 돌아오는 리액션을 할 때 아이들 애니메이션을 자연스럽게 본래 상태로 되돌립니다.
         if (Current_Chat_Motion_Id == 1200002021)
         {
-            Skeleton.AnimationState.SetAnimation(0, "00_idle_01", true).MixDuration = 1.0f;
+            AnimationState.SetAnimation(0, "00_idle_01", true).MixDuration = 1.0f;
         }
     }
 }

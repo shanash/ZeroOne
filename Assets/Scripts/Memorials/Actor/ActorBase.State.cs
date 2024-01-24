@@ -83,7 +83,7 @@ public abstract partial class ActorBase : MonoBehaviour
 
         if (need_set_anim)
         {
-            Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
+            AnimationStateComp.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
         }
     }
 
@@ -98,7 +98,7 @@ public abstract partial class ActorBase : MonoBehaviour
                 throw new InvalidTrackException(track_num);
             }
 
-            var te = Skeleton.AnimationState.SetAnimation(track_num, anim_name, false);
+            var te = AnimationStateComp.AnimationState.SetAnimation(track_num, anim_name, false);
 
             // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
             if (IDLE_BASE_TRACK == track_num)
@@ -156,20 +156,20 @@ public abstract partial class ActorBase : MonoBehaviour
             throw new InvalidTrackException(track_num);
         }
 
-        Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Current_Interaction.drag_animation_name, false);
+        Drag_Track_Entry = AnimationStateComp.AnimationState.SetAnimation(track_num, Current_Interaction.drag_animation_name, false);
         Drag_Track_Entry.MixDuration = 0.0f;
         Drag_Track_Entry.TimeScale = 0.0f;
     }
 
     public virtual void ActorStateDragEnd()
     {
-        Skeleton.AnimationState.SetEmptyAnimation(Drag_Track_Entry.TrackIndex, 0.0f);
+        AnimationStateComp.AnimationState.SetEmptyAnimation(Drag_Track_Entry.TrackIndex, 0.0f);
     }
 
     public virtual void ActorStateNadeBegin()
     {
-        Skeleton.AnimationState.SetAnimation(30, "30_nade_in", false).MixDuration = 0.2f;
-        Skeleton.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
+        AnimationStateComp.AnimationState.SetAnimation(30, "30_nade_in", false).MixDuration = 0.2f;
+        AnimationStateComp.AnimationState.AddAnimation(30, "30_nade_idle", true, 0);
 
         te_horz = FindTrack(31);
         te_vert = FindTrack(32);
@@ -194,10 +194,10 @@ public abstract partial class ActorBase : MonoBehaviour
             mix_duration = 0.2f;
         }
 
-        Skeleton.AnimationState.SetAnimation(30, "30_nade_out", false).MixDuration = mix_duration;
-        Skeleton.AnimationState.AddEmptyAnimation(30, 0.2f, 0.0f);
-        Skeleton.AnimationState.SetEmptyAnimation(31, 0);
-        Skeleton.AnimationState.SetEmptyAnimation(32, 0);
+        AnimationStateComp.AnimationState.SetAnimation(30, "30_nade_out", false).MixDuration = mix_duration;
+        AnimationStateComp.AnimationState.AddEmptyAnimation(30, 0.2f, 0.0f);
+        AnimationStateComp.AnimationState.SetEmptyAnimation(31, 0);
+        AnimationStateComp.AnimationState.SetEmptyAnimation(32, 0);
 
         Dragged_Canvas_Position = Vector2.zero;
     }
@@ -220,7 +220,7 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateEyeTrakerEnd()
     {
-        Skeleton.AnimationState.SetEmptyAnimation(10, 0);
-        Skeleton.AnimationState.SetEmptyAnimation(11, 0);
+        AnimationStateComp.AnimationState.SetEmptyAnimation(10, 0);
+        AnimationStateComp.AnimationState.SetEmptyAnimation(11, 0);
     }
 }

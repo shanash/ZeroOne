@@ -158,28 +158,31 @@ public class ActorBaseInspector : Editor
                                 }
                                 break;
                             case PointAttachment pt:
-                                Transform ptTransform = utilityBone.transform.Find("[Point]" + pt.Name);
-
-                                if (ptTransform != null)
+                                if (skel != null)
                                 {
-                                    PointFollower pf = ptTransform.GetComponent<PointFollower>();
-                                    pf.slotName = pt.Name;
-                                    pf.pointAttachmentName = pt.Name;
-                                    pf.skeletonRenderer = _Actor.GetComponent<SkeletonRenderer>();
-                                }
-                                else
-                                {
-                                    GameObject go = new GameObject("[Point]" + pt.Name);
-                                    Transform tf = go.transform;
-                                    tf.parent = utilityBone.transform;
-                                    tf.localPosition = Vector3.zero;
-                                    tf.localRotation = Quaternion.identity;
-                                    tf.localScale = Vector3.one;
+                                    Transform ptTransform = utilityBone.transform.Find("[Point]" + pt.Name);
 
-                                    PointFollower pf = go.AddComponent<PointFollower>();
-                                    pf.slotName = pt.Name;
-                                    pf.pointAttachmentName = pt.Name;
-                                    pf.skeletonRenderer = skel;
+                                    if (ptTransform != null)
+                                    {
+                                        PointFollower pf = ptTransform.GetComponent<PointFollower>();
+                                        pf.slotName = pt.Name;
+                                        pf.pointAttachmentName = pt.Name;
+                                        pf.skeletonRenderer = _Actor.GetComponent<SkeletonRenderer>();
+                                    }
+                                    else
+                                    {
+                                        GameObject go = new GameObject("[Point]" + pt.Name);
+                                        Transform tf = go.transform;
+                                        tf.parent = utilityBone.transform;
+                                        tf.localPosition = Vector3.zero;
+                                        tf.localRotation = Quaternion.identity;
+                                        tf.localScale = Vector3.one;
+
+                                        PointFollower pf = go.AddComponent<PointFollower>();
+                                        pf.slotName = pt.Name;
+                                        pf.pointAttachmentName = pt.Name;
+                                        pf.skeletonRenderer = skel;
+                                    }
                                 }
                                 break;
                         }
