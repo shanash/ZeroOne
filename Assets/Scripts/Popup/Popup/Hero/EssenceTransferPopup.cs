@@ -14,6 +14,20 @@ public class EssenceTransferPopup : PopupBase
         base.Initialize();
     }
 
+    public override void Despawned()
+    {
+        base.Despawned();
+
+        //TODO:테스트가 필요함
+        /*
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        */
+        Screen.orientation = ScreenOrientation.AutoRotation;
+    }
+
     public void OnClickBackButton()
     {
         Initialize();
