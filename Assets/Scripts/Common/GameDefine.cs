@@ -104,6 +104,11 @@ public class GameDefine : MonoBehaviour
     public static readonly int MAX_LOBBY_CHARACTER_COUNT = 10;
 
 
+    public static readonly float GAME_SPEED_DEFAULT = 1f;
+    public static readonly float GAME_SPEED_1_5 = 1.3f;
+    public static readonly float GAME_SPEED_2 = 1.4f;
+
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()
     {
@@ -117,5 +122,123 @@ public class GameDefine : MonoBehaviour
     {
         gameObject.hideFlags = HideFlags.HideAndDontSave;
         DontDestroyOnLoad(gameObject);
+    }
+    /// <summary>
+    /// 테이블 데이터에 지정되어 있는 문자열 ID를 이용하여 각 언어 타입별로 구분하여 문자열 반환
+    /// </summary>
+    /// <param name="str_id"></param>
+    /// <returns></returns>
+    public static string GetLocalizeString(string str_id)
+    {
+        var lang = Application.systemLanguage;
+        var splits = str_id.Split("_");
+        if (splits.Length == 0)
+            return string.Empty;
+        string table_name = splits[0].ToLower();
+
+        string find_string = string.Empty;
+        var m = MasterDataManager.Instance;
+        if (table_name.Equals("system"))
+        {
+            var lang_data = m.Get_SystemLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else if (table_name.Equals("character") || table_name.Equals("monster"))
+        {
+            var lang_data = m.Get_CharacterLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else if (table_name.Equals("skill"))
+        {
+            var lang_data = m.Get_SkillLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else if (table_name.Equals("item"))
+        {
+            var lang_data = m.Get_ItemLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else if (table_name.Equals("dialog"))
+        {
+            var lang_data = m.Get_DialogLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else if (table_name.Equals("story"))
+        {
+            var lang_data = m.Get_StoryLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
+
+        return find_string;
     }
 }

@@ -1,5 +1,6 @@
 using FluffyDuck.Util;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class EffectBase : MonoBehaviour, IPoolableComponent
@@ -38,8 +39,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
-            var main = Particle_Effect.main;
-            main.simulationSpeed = Effect_Speed_Multiple;
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
             Particle_Effect.Play();
         }
     }
@@ -52,8 +52,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
-            var main = Particle_Effect.main;
-            main.simulationSpeed = Effect_Speed_Multiple;
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
             Particle_Effect.Play();
         }
     }
@@ -65,50 +64,65 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Is_Action = true;
         if (Particle_Effect != null)
         {
-            var main = Particle_Effect.main;
-            main.simulationSpeed = Effect_Speed_Multiple;
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
             Particle_Effect.Play();
         }
     }
 
     public virtual void StartParticle(float duration, bool loop = false)
     {
-        this.Duration = duration;
+        this.Duration = duration / Effect_Speed_Multiple;
         this.Delta = 0f;
         Is_Action = true;
         Is_Loop = loop;
         if (Particle_Effect != null)
         {
-            var main = Particle_Effect.main;
-            main.simulationSpeed = Effect_Speed_Multiple;
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
             Particle_Effect.Play();
         }
+        
     }
 
     public virtual void StartParticle(Transform target, float duration, bool loop = false)
     {
         this.Target_Transform = target;
-        this.Duration = duration;
+        this.Duration = duration / Effect_Speed_Multiple;
         this.Delta = 0f;
         Is_Action = true;
         Is_Loop = loop;
         if (Particle_Effect != null)
         {
-            var main = Particle_Effect.main;
-            main.simulationSpeed = Effect_Speed_Multiple;
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
             Particle_Effect.Play();
         }
     }
-    public void SetEffectSpeedMultiple(float multiple)
+
+    protected void SetParticleAllSpeedMultiple(ParticleSystem obj, float speed_multiple)
+    {
+        if (obj != null)
+        {
+            var children = obj.GetComponentsInChildren<ParticleSystem>();
+            if (children != null && children.Length > 0)
+            {
+                int cnt = children.Length;
+                for (int i = 0; i < cnt; i++)
+                {
+                    ParticleSystem child = children[i];
+                    var main = child.main;
+                    main.simulationSpeed = speed_multiple;
+                }
+            }
+            
+            
+        }
+    }
+
+    public virtual void SetEffectSpeedMultiple(float multiple)
     {
         Effect_Speed_Multiple = multiple;
         if (Is_Action)
         {
-            if (Particle_Effect != null)
-            {
-                var main = Particle_Effect.main;
-                main.simulationSpeed = Effect_Speed_Multiple;
-            }
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
         }
     }
 
@@ -156,7 +170,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
     }
 
     public virtual void Show(bool show) { }
-
+    
     public virtual void Spawned()
     {
         Is_Action = false;

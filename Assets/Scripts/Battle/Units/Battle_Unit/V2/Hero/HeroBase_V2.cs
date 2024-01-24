@@ -183,12 +183,17 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 게임 배속
     /// </summary>
-    protected float Battle_Speed_Multiple = 1f;
+    protected float Battle_Speed_Multiple = GameDefine.GAME_SPEED_DEFAULT;
 
     /// <summary>
     /// 게임 타입
     /// </summary>
     protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
+
+    /// <summary>
+    /// 전투 시작 시 최초 시작 위치
+    /// </summary>
+    protected Vector3 Team_Field_Position = Vector3.zero;
 
 
     public virtual void SetBattleUnitData(BattleUnitData unit_dt)
@@ -200,23 +205,16 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-    //public virtual void SetBattleUnitDataID(params int[] unit_ids)
-    //{
-    //    if (unit_ids.Length < 2)
-    //    {
-    //        Debug.Assert(false);
-    //    }
-    //    int pc_id = unit_ids[0];
-    //    int pc_num = unit_ids[1];
+    public void SetTeamFieldPosition(Vector3 pos) 
+    { 
+        Team_Field_Position = pos;
+        this.transform.localPosition = Team_Field_Position;
+    }
 
-    //    Unit_Data = new BattlePcData();
-    //    Unit_Data.SetUnitID(pc_id, pc_num);
-
-
-    //    Skill_Mng = new BattleSkillManager();
-    //    Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-    //    Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
-    //}
+    public void ResetTeamFieldPosition()
+    {
+        SetTeamFieldPosition(Team_Field_Position);
+    }
 
     public void SetBattleSpeed(float speed)
     {
@@ -230,12 +228,37 @@ public partial class HeroBase_V2 : UnitBase_V2
                 t.TimeScale = Battle_Speed_Multiple;
             }
         }
+
+        if (Ultimate_Skill_Playable_Director != null)
+        {
+            if (Ultimate_Skill_Playable_Director.playableGraph.IsValid())
+            {
+                Ultimate_Skill_Playable_Director.playableGraph.GetRootPlayable(0).SetSpeed(Battle_Speed_Multiple);
+            }
+            
+        }
     }
 
 
     public void SetDeckOrder(int order)
     {
         Deck_Order = order;
+    }
+
+    protected virtual void StartPlayableDirector()
+    {
+        if (Ultimate_Skill_Playable_Director == null)
+        {
+            return;
+        }
+        Ultimate_Skill_Playable_Director.Play();
+        if (Ultimate_Skill_Playable_Director.playableGraph.IsValid())
+        {
+            Ultimate_Skill_Playable_Director.playableGraph.GetRootPlayable(0).SetSpeed(Battle_Speed_Multiple);
+        }
+        //  궁극기 캐스팅 이펙트
+        var skill = GetSkillManager().GetSpecialSkillGroup();
+        SpawnSkillCastEffect(skill);
     }
 
     protected virtual void SetPlayableDirector() { }
@@ -313,7 +336,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            bool a = false;
+            //var skill = GetSkillManager().GetSpecialSkillGroup();
+            //if (animation_name.Equals(skill.GetSkillActionName()))
+            //{
+            //    SpawnSkillCastEffect(skill);
+            //}
         }
 
     }
@@ -326,6 +353,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         string animation_name = entry.Animation.Name;
 
         UNIT_STATES state = GetCurrentState();
+        if (state == UNIT_STATES.PAUSE)
+        {
+            return;
+        }
+
         if (state == UNIT_STATES.DEATH)
         {
             if (animation_name.Equals("1_death") || animation_name.Equals("00_death"))
@@ -828,7 +860,10 @@ public partial class HeroBase_V2 : UnitBase_V2
             int len = all_tracks.Length;
             for (int i = 0; i < len; i++)
             {
-                all_tracks[i].TimeScale = Battle_Speed_Multiple;
+                var track = all_tracks[i];
+                if (track == null)
+                    continue;
+                track.TimeScale = Battle_Speed_Multiple;
             }
         }
     }
@@ -1432,8 +1467,13 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     public void SpecialSkillExec()
     {
+        var battle_state = Battle_Mng.GetCurrentState();
+        if (battle_state != GAME_STATES.PLAYING)
+        {
+            return;
+        }
         var state = GetCurrentState();
-        if (state == UNIT_STATES.SKILL_1 || state == UNIT_STATES.SKILL_READY_1 || state == UNIT_STATES.SKILL_END)
+        if (state == UNIT_STATES.SKILL_1 || state == UNIT_STATES.SKILL_READY_1 || state == UNIT_STATES.SKILL_END || state == UNIT_STATES.ULTIMATE_PAUSE)
         {
             return;
         }

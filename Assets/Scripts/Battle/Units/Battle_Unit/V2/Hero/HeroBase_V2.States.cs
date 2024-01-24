@@ -30,6 +30,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         FSM.AddTransition(new UnitStateWaveRun_V2());
         FSM.AddTransition(new UnitStatePause_V2());
+        FSM.AddTransition(new UnitStateUltimatePause_V2());
 
         FSM.AddTransition(new UnitStateWin_V2());
         FSM.AddTransition(new UnitStateLose_V2());

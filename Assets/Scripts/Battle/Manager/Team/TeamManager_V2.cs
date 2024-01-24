@@ -148,7 +148,6 @@ public partial class TeamManager_V2 : IDisposable
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
             hero.SetTeamManager(this);
-            //hero.SetBattleUnitDataID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
             hero.SetBattleUnitData(unit_data);
             hero.SetBattleSpeed(Battle_Speed_Multiple);
             hero.SetDeckOrder(i);
@@ -156,71 +155,140 @@ public partial class TeamManager_V2 : IDisposable
 
             AddMember(hero);
         }
-
         LeftTeamPosition();
+    }
+
+    public void LeftTeamResetPosition()
+    {
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Members[i].ResetTeamFieldPosition();
+        }
     }
 
     /// <summary>
     /// Left 팀 최초 포지션 설정
     /// </summary>
-    public void LeftTeamPosition()
+    void LeftTeamPosition()
     {
-        int cnt = Used_Members.Count;
-        float size = 20f;
+        float field_size = 16f;
+        List<Vector3> front_pos_list = new List<Vector3>();
+        front_pos_list.Add(new Vector3(0, 0, 0));
+        front_pos_list.Add(new Vector3(0, 0, 2.5f));
+        front_pos_list.Add(new Vector3(0, 0, 5f));
+        front_pos_list.Add(new Vector3(0, 0, 7.5f));
+        front_pos_list.Add(new Vector3(0, 0, 10f));
 
-        float offset_z = 0f;
-        float offset_x = -size;
-        float interval = 2f;
-        float position_offset = 0f;
+        List<Vector3> middle_pos_list = new List<Vector3>();
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 0));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 2.5f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 5f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 7.5f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 10f));
 
-        for (int i = 0; i < cnt; i++)
+        List<Vector3> back_pos_list = new List<Vector3>();
+        back_pos_list.Add(new Vector3(-5, 0, 0));
+        back_pos_list.Add(new Vector3(-5, 0, 2.5f));
+        back_pos_list.Add(new Vector3(-5, 0, 5f));
+        back_pos_list.Add(new Vector3(-5, 0, 7.5f));
+        back_pos_list.Add(new Vector3(-5, 0, 10f));
+       
+        for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)
         {
-            var member = Used_Members[i];
-            position_offset = (int)member.GetPositionType() * interval;
+            List<Vector3> pos_list = null;
+            switch (p)
+            {
+                case POSITION_TYPE.FRONT:
+                    pos_list = front_pos_list;
+                    break;
+                case POSITION_TYPE.MIDDLE:
+                    pos_list = middle_pos_list;
+                    break;
+                case POSITION_TYPE.BACK:
+                    pos_list = back_pos_list;
+                    break;
+            }
+            if (pos_list == null)
+            {
+                continue;
+            }
 
-            float distance = member.GetApproachDistance();
-
-            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
-            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
-            Debug.Assert(same_positions.Count > 0);
-
-            int find_index = same_positions.IndexOf(member);
-
-            member.transform.localPosition = new Vector3(offset_x - position_offset, 0, offset_z + (find_index * 1.5f));
+            var members = Used_Members.FindAll(x => x.GetPositionType() == p);
+            for (int i = 0; i < members.Count; i++)
+            {
+                var mem = members[i];
+                if (i < pos_list.Count)
+                {
+                    Vector3 pos = pos_list[i];
+                    pos.x -= field_size;
+                    mem.SetTeamFieldPosition(pos);
+                }
+            }
         }
+
     }
 
 
-
+    
     /// <summary>
     /// Right 팀 최초 포지션 설정
     /// </summary>
-    public void RightTeamPosition()
+    void RightTeamPosition()
     {
-        int cnt = Used_Members.Count;
-        float size = 20f;
+        float field_size = 16f;
+        List<Vector3> front_pos_list = new List<Vector3>();
+        front_pos_list.Add(new Vector3(0, 0, 0));
+        front_pos_list.Add(new Vector3(0, 0, 2.5f));
+        front_pos_list.Add(new Vector3(0, 0, 5f));
+        front_pos_list.Add(new Vector3(0, 0, 7.5f));
+        front_pos_list.Add(new Vector3(0, 0, 10f));
 
-        float offset_z = 0f;
-        float offset_x = size;
-        float interval = 2f;
-        float position_offset = 0f;
+        List<Vector3> middle_pos_list = new List<Vector3>();
+        middle_pos_list.Add(new Vector3(2.5f, 0, 0));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 2.5f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 5f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 7.5f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 10f));
 
-        for (int i = 0; i < cnt; i++)
+        List<Vector3> back_pos_list = new List<Vector3>();
+        back_pos_list.Add(new Vector3(5, 0, 0));
+        back_pos_list.Add(new Vector3(5, 0, 2.5f));
+        back_pos_list.Add(new Vector3(5, 0, 5f));
+        back_pos_list.Add(new Vector3(5, 0, 7.5f));
+        back_pos_list.Add(new Vector3(5, 0, 10f));
+
+        for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)
         {
-            var member = Used_Members[i];
-            position_offset = (int)member.GetPositionType() * interval;
+            List<Vector3> pos_list = null;
+            switch (p)
+            {
+                case POSITION_TYPE.FRONT:
+                    pos_list = front_pos_list;
+                    break;
+                case POSITION_TYPE.MIDDLE:
+                    pos_list = middle_pos_list;
+                    break;
+                case POSITION_TYPE.BACK:
+                    pos_list = back_pos_list;
+                    break;
+            }
+            if (pos_list == null)
+            {
+                continue;
+            }
 
-            float distance = member.GetApproachDistance();
-
-            List<HeroBase_V2> same_positions = Used_Members.FindAll(x => x.GetPositionType() == member.GetPositionType());
-            same_positions.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
-            Debug.Assert(same_positions.Count > 0);
-
-            int find_index = same_positions.IndexOf(member);
-
-            Debug.Log($"Find Index {find_index}");
-
-            member.transform.localPosition = new Vector3(offset_x + position_offset, 0, offset_z + (find_index * 1.5f));
+            var members = Used_Members.FindAll(x => x.GetPositionType() == p);
+            for (int i = 0; i < members.Count; i++)
+            {
+                var mem = members[i];
+                if (i < pos_list.Count)
+                {
+                    Vector3 pos = pos_list[i];
+                    pos.x += field_size;
+                    mem.SetTeamFieldPosition(pos);
+                }
+            }
         }
 
     }
@@ -415,7 +483,7 @@ public partial class TeamManager_V2 : IDisposable
             var member = member_list[i];
             if (!object.ReferenceEquals(member, hero))
             {
-                member.ChangeState(UNIT_STATES.PAUSE);
+                member.ChangeState(UNIT_STATES.ULTIMATE_PAUSE);
             }
         }
     }
@@ -512,14 +580,25 @@ public partial class TeamManager_V2 : IDisposable
 
         //  battle data
         var bdata = m.Get_PlayerCharacterBattleData(pc_data.battle_info_id);
+        
+
         if (bdata != null)
         {
-            int grp_cnt = bdata.skill_pattern.Length;
+            List<int> skill_group_ids = new List<int>();
+            skill_group_ids.AddRange(bdata.skill_pattern);
+            skill_group_ids.Add(bdata.special_skill_group_id);
+
+            int grp_cnt = skill_group_ids.Count;
 
             for (int g = 0; g < grp_cnt; g++)
             {
+                int gid = skill_group_ids[g];
+                if (gid == 0)
+                {
+                    continue;
+                }
                 //  skill group
-                var skill_group = m.Get_PlayerCharacterSkillGroupData(bdata.skill_pattern[g]);
+                var skill_group = m.Get_PlayerCharacterSkillGroupData(gid);
                 if (skill_group == null)
                 {
                     Debug.Assert(false);

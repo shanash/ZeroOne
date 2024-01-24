@@ -33,6 +33,10 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
 
     public void ChangeState(UNIT_STATES trans)
     {
+        if (IsPause() || IsUltimatePause())
+        {
+            return;
+        }
         FSM?.ChangeState(trans);
     }
 
@@ -55,6 +59,16 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
             return FSM.PreviousTransitionID;
         }
         return UNIT_STATES.NONE;
+    }
+
+    public bool IsPause()
+    {
+        return GetCurrentState() == UNIT_STATES.PAUSE;
+    }
+
+    public bool IsUltimatePause()
+    {
+        return GetCurrentState() == UNIT_STATES.ULTIMATE_PAUSE;
     }
 
     public bool IsPreviousStatePause()
@@ -170,6 +184,15 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     public virtual void UnitStateBind() { }
     public virtual void UnitStateBindExit() { }
 
+    public virtual void UnitStateUltimatePauseBegin() 
+    { 
+        OnPause();
+    }
+    public virtual void UnitStateUltimatePause() { }
+    public virtual void UnitStateUltimatePauseExit() 
+    {
+        OnResume();
+    }
 
     public virtual void UnitStatePauseBegin()
     {

@@ -26,7 +26,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     protected BattleDungeonData Dungeon_Data;
 
-    protected float Battle_Speed_Multiple = 1f;
+    protected float Battle_Speed_Multiple = GameDefine.GAME_SPEED_DEFAULT;
 
 
     public VirtualCineManager GetVirtualCineManager()
@@ -52,14 +52,14 @@ public partial class BattleManager_V2 : MonoBehaviour
         CreateBattleField();
 
         BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
-        float speed = 1f;
+        float speed = GameDefine.GAME_SPEED_DEFAULT;
         if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
         {
-            speed = 1.5f;
+            speed = GameDefine.GAME_SPEED_1_5;
         }
         else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_2)
         {
-            speed = 2f;
+            speed = GameDefine.GAME_SPEED_2;
         }
         SetBattleFastSpeed(speed);
     }

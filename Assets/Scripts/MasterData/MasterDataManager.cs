@@ -572,4 +572,37 @@ public class MasterDataManager : BaseMasterDataManager
         return list;
     }
     #endregion
+
+    #region Language String Data
+    public System_Lang_Data Get_SystemLangData(string str_id)
+    {
+        Check_System_Lang_Data();
+        return _System_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    public Character_Lang_Data Get_CharacterLangData(string str_id)
+    {
+        Check_Character_Lang_Data();
+        return _Character_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    public Skill_Lang_Data Get_SkillLangData(string str_id)
+    {
+        Check_Skill_Lang_Data();
+        return _Skill_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    public Item_Lang_Data Get_ItemLangData(string str_id)
+    {
+        Check_Item_Lang_Data();
+        return _Item_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    public Dialog_Lang_Data Get_DialogLangData(string str_id)
+    {
+        Check_Dialog_Lang_Data();
+        return _Dialog_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    public Story_Lang_Data Get_StoryLangData(string str_id)
+    {
+        Check_Story_Lang_Data();
+        return _Story_Lang_Data.Find(x => x.string_id.Equals(str_id));
+    }
+    #endregion
 }

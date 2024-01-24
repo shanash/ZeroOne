@@ -13,7 +13,7 @@ public class SkillEffect_Missile : SkillEffectBase
     {
         base.MoveTarget(target, duration);
         var ec = GetEffectComponent();
-        ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration);
+        ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration / Effect_Speed_Multiple);
         ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
         
     }

@@ -20,7 +20,7 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
     {
         if (Is_Action)
         {
-            Delta += Time.deltaTime * Effect_Speed_Multiple;
+            Delta += Time.deltaTime;
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

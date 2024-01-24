@@ -22,6 +22,17 @@ public class SkillEffectBase : EffectBase
         this.Send_Data = d;
     }
 
+    public override void SetEffectSpeedMultiple(float multiple)
+    {
+        base.SetEffectSpeedMultiple(multiple);
+
+        var ec = GetEffectComponent();
+        if (ec != null)
+        {
+            this.Duration = ec.Effect_Duration / Effect_Speed_Multiple;
+        }
+    }
+
 
 
     /// <summary>

@@ -199,12 +199,14 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateWaveInfoBegin()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Battle/WaveInfoUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Battle/WaveInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(WaveInfoCloseCallback);
             Wave_Data wdata = (Wave_Data)Dungeon_Data.GetWaveData();
             popup.ShowPopup(wdata, 1f);
         });
+
+        
     }
     public virtual void GameStateWaveInfo() { }
     public virtual void GameStateWaveInfoExit() { }
@@ -260,7 +262,7 @@ public partial class BattleManager_V2 : MonoBehaviour
             if (my_team != null)
             {
                 my_team.ChangeStateTeamMembers(UNIT_STATES.IDLE);
-                my_team.LeftTeamPosition();
+                my_team.LeftTeamResetPosition();
             }
 
             var enemy_team = FindTeamManager(TEAM_TYPE.RIGHT);

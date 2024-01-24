@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 public class Hero_100001 : HeroBase_V2
@@ -65,6 +66,7 @@ public class Hero_100001 : HeroBase_V2
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, active_group_cam.GetComponent<Animator>());
                 }
             }
+            
             else if (track is CinemachineTrack)
             {
                 Ultimate_Skill_Playable_Director.SetGenericBinding(track, brain_cam);
@@ -92,7 +94,7 @@ public class Hero_100001 : HeroBase_V2
             }
         }
 
-        Ultimate_Skill_Playable_Director.Play();
+        StartPlayableDirector();
     }
 
     protected override void UnsetPlayableDirector()

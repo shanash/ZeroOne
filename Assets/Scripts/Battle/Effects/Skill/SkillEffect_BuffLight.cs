@@ -10,7 +10,7 @@ public class SkillEffect_BuffLight : SkillEffectBase
         base.MoveTarget(target, duration);
 
         var ec = GetEffectComponent();
-        ec.Curve?.Move(this.transform.position, target, duration, ec.Start_Curve_Dist, ec.End_Curve_Dist, CurveMoveEndCallback);
+        ec.Curve?.Move(this.transform.position, target, duration / Effect_Speed_Multiple, ec.Start_Curve_Dist, ec.End_Curve_Dist, CurveMoveEndCallback);
 
     }
 

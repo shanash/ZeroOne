@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 public class Hero_100002 : HeroBase_V2
@@ -76,7 +77,7 @@ public class Hero_100002 : HeroBase_V2
             }
         }
 
-        Ultimate_Skill_Playable_Director.Play();
+        StartPlayableDirector();
     }
     protected override void UnsetPlayableDirector()
     {

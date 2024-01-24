@@ -213,6 +213,36 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<System_Lang_Data> _System_Lang_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Character_Lang_Data> _Character_Lang_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Skill_Lang_Data> _Skill_Lang_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Item_Lang_Data> _Item_Lang_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Dialog_Lang_Data> _Dialog_Lang_Data
+	{
+		get;
+		private set;
+	}
+	protected List<Story_Lang_Data> _Story_Lang_Data
+	{
+		get;
+		private set;
+	}
 
 
 	protected bool is_init_load = false;
@@ -269,6 +299,12 @@ public class BaseMasterDataManager
 		await LoadMaster_Zone_Data();
 		await LoadMaster_Stage_Data();
 		await LoadMaster_Wave_Data();
+		await LoadMaster_System_Lang_Data();
+		await LoadMaster_Character_Lang_Data();
+		await LoadMaster_Skill_Lang_Data();
+		await LoadMaster_Item_Lang_Data();
+		await LoadMaster_Dialog_Lang_Data();
+		await LoadMaster_Story_Lang_Data();
 		is_init_load = true;
 	}
 
@@ -566,6 +602,48 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Wave_Data");
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Wave_Data>>(json);
 		_Wave_Data = raw_data_list.Select(raw_data => new Wave_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_System_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/System_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_System_Lang_Data>>(json);
+		_System_Lang_Data = raw_data_list.Select(raw_data => new System_Lang_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Character_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Character_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Character_Lang_Data>>(json);
+		_Character_Lang_Data = raw_data_list.Select(raw_data => new Character_Lang_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Skill_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Skill_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Skill_Lang_Data>>(json);
+		_Skill_Lang_Data = raw_data_list.Select(raw_data => new Skill_Lang_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Item_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Item_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Lang_Data>>(json);
+		_Item_Lang_Data = raw_data_list.Select(raw_data => new Item_Lang_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Dialog_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Dialog_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Dialog_Lang_Data>>(json);
+		_Dialog_Lang_Data = raw_data_list.Select(raw_data => new Dialog_Lang_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Story_Lang_Data()
+	{
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Story_Lang_Data");
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Story_Lang_Data>>(json);
+		_Story_Lang_Data = raw_data_list.Select(raw_data => new Story_Lang_Data(raw_data)).ToList();
 	}
 
 	protected async void Check_Charge_Value_Data()
@@ -893,6 +971,54 @@ public class BaseMasterDataManager
 		if(_Wave_Data == null)
 		{
 			await LoadMaster_Wave_Data();
+		}
+	}
+
+	protected async void Check_System_Lang_Data()
+	{
+		if(_System_Lang_Data == null)
+		{
+			await LoadMaster_System_Lang_Data();
+		}
+	}
+
+	protected async void Check_Character_Lang_Data()
+	{
+		if(_Character_Lang_Data == null)
+		{
+			await LoadMaster_Character_Lang_Data();
+		}
+	}
+
+	protected async void Check_Skill_Lang_Data()
+	{
+		if(_Skill_Lang_Data == null)
+		{
+			await LoadMaster_Skill_Lang_Data();
+		}
+	}
+
+	protected async void Check_Item_Lang_Data()
+	{
+		if(_Item_Lang_Data == null)
+		{
+			await LoadMaster_Item_Lang_Data();
+		}
+	}
+
+	protected async void Check_Dialog_Lang_Data()
+	{
+		if(_Dialog_Lang_Data == null)
+		{
+			await LoadMaster_Dialog_Lang_Data();
+		}
+	}
+
+	protected async void Check_Story_Lang_Data()
+	{
+		if(_Story_Lang_Data == null)
+		{
+			await LoadMaster_Story_Lang_Data();
 		}
 	}
 
