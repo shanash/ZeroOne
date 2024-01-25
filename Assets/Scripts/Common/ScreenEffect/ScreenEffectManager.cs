@@ -18,19 +18,26 @@ public enum ScreenEffect
     MAX,
 }
 
-public class ScreenEffectManager : Singleton<ScreenEffectManager>
+public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
 {
     ScreenEffectUIContainer Container;
     Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> Sequence_Actions;
     bool DoingSequenceActions;
 
-    ScreenEffectManager() { }
+    protected override bool ResetInstanceOnChangeScene => true;
+    protected override bool Is_DontDestroyOnLoad => true;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void CallInstance()
+    {
+        _ = Instance;
+    }
 
     protected override void Initialize()
     {
         DoingSequenceActions = false;
         Sequence_Actions = new Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)>();
-        Container = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Canvas_ScreenEffect", null).GetComponent<ScreenEffectUIContainer>();
+        Container = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Canvas_ScreenEffect", this.transform).GetComponent<ScreenEffectUIContainer>();
     }
 
     public void StartAction(ScreenEffect effect, Action cb = null, float duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
