@@ -34,6 +34,7 @@ public enum TARGET_REACH_POS_TYPE
 
     LEFT_TEAM_CENTER,         //  아군 팀 중앙
     RIGHT_TEAM_CENTER,      //  상대 팀(적군) 중앙
+    WORLD_ZERO,             //  월드 0,0
 }
 
 

@@ -22,6 +22,11 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         public CAMERA_TYPE Camera_Type;
         public CinemachineVirtualCamera Camera;
         public CinemachineTargetGroup Target_Group;
+
+        public Vector3 Init_Transform_Position;
+        public Vector3 Init_Transform_Rotation;
+        public Vector3 Init_Follow_Offset;
+        public float Init_FOV;
     }
 
     const int RELEASE_PRIORITY = 9;
@@ -35,19 +40,6 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     [SerializeField, Tooltip("Virtual Camera List")]
     List<VIRTUAL_CAMERA_DATA> Virtual_Camera_List;
     
-
-    [SerializeField, Tooltip("Init Camera Transform Position")]
-    Vector3 Init_Transform_Position;
-
-    [SerializeField, Tooltip("Init Camera Transform Rotateion")]
-    Vector3 Init_Transform_Rotation;
-
-    [SerializeField, Tooltip("Init Follow Offset")]
-    Vector3 Init_Follow_Offset;
-
-    [SerializeField, Tooltip("Inti FOV")]
-    float Init_FOV;
-
 
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
 
@@ -116,21 +108,21 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
             var cam_data = Virtual_Camera_List[i];
 
             //  init trans position
-            cam_data.Camera.transform.position = Init_Transform_Position;
+            cam_data.Camera.transform.position = cam_data.Init_Transform_Position;
 
             //  init trans rotation
-            cam_data.Camera.transform.rotation = Quaternion.Euler(Init_Transform_Rotation);
+            cam_data.Camera.transform.rotation = Quaternion.Euler(cam_data.Init_Transform_Rotation);
 
             //  follow Offset
             CinemachineTransposer transposer = cam_data.Camera.GetCinemachineComponent<CinemachineTransposer>();
             if (transposer != null)
             {
-                transposer.m_FollowOffset = Init_Follow_Offset;
+                transposer.m_FollowOffset = cam_data.Init_Follow_Offset;
             }
 
             //  init fov
             var lens_setting = cam_data.Camera.m_Lens;
-            lens_setting.OrthographicSize = Init_FOV;
+            lens_setting.OrthographicSize = cam_data.Init_FOV;
             cam_data.Camera.m_Lens = lens_setting;
         }
 

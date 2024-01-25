@@ -9,6 +9,8 @@ public class EffectFactory : MonoBehaviour
     Transform Left_Center;
     [SerializeField, Tooltip("Right Center")]
     Transform Right_Center;
+    [SerializeField, Tooltip("World Zero")]
+    Transform World_Zero;
 
     List<EffectBase> Used_Effect_List = new List<EffectBase>();
 
@@ -50,6 +52,8 @@ public class EffectFactory : MonoBehaviour
 
     public Transform GetLeftCenter() { return Left_Center; }
     public Transform GetRightCenter() { return Right_Center; }
+
+    public Transform GetWorldZero() { return World_Zero; }
 
     public void OnPauseAndHide()
     {

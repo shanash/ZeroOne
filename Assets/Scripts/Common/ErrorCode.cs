@@ -2,9 +2,7 @@ public enum ERROR_CODE
 {
     SUCCESS = 100,
     LEVEL_UP_SUCCESS = 110,
-    MERGE_SUCCESS = 120,
-    MERGE_FAILED,
-    MERGE_DESTROY,
+
     NOT_EFFECT_SUCCESS = 130,
     FAILED = 400,
 
@@ -15,7 +13,7 @@ public enum ERROR_CODE
     NOT_ENOUGH_GOLD,                                                                //  금화 부족
     NOT_ENOUGH_SOUL_STONE,                                                          //  다이아 부족
     NOT_ENOUGH_SKILL_CARD,
-    NOT_ENOUGHT_PARTNER,
+    NOT_ENOUGH_PARTNER,
     NOT_ENOUGH_PET,
     NOT_ENOUGH_WEAPON,
     NOT_ENOUGH_SHIELD,

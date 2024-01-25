@@ -51,6 +51,11 @@ public class UserHeroDataManager : ManagerBase
         list.AddRange(User_Hero_Data_List);
     }
 
+    public IReadOnlyList<UserHeroData> GetUserHeroDataList()
+    {
+        return User_Hero_Data_List;
+    }
+
     public UserHeroData FindUserHeroData(UserHeroDeckMountData h)
     {
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == h.Player_Character_ID && x.Player_Character_Num == h.Player_Character_Num); ;

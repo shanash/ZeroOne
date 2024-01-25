@@ -60,7 +60,7 @@ public class UserGoodsData : UserDataBase
     /// </summary>
     /// <param name="cnt"></param>
     /// <returns></returns>
-    public bool IsEnableAdGoodsCount(int cnt)
+    public bool IsEnableAddGoodsCount(int cnt)
     {
         bool is_enable = true;
         if (GetMaxBound() > 0)
@@ -95,7 +95,7 @@ public class UserGoodsData : UserDataBase
         {
             if (!over_apply)
             {
-                if (!IsEnableAdGoodsCount(cnt))
+                if (!IsEnableAddGoodsCount(cnt))
                 {
                     return ERROR_CODE.OVER_MAX_ITEM_BOUND;
                 }

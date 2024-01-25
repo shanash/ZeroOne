@@ -154,6 +154,10 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 return factory.GetRightCenter();
             }
+            else if (ptype == TARGET_REACH_POS_TYPE.WORLD_ZERO)
+            {
+                return factory.GetWorldZero();
+            }
             return null;
         }
         else

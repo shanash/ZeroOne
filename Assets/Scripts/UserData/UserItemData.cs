@@ -103,6 +103,47 @@ public class UserItemData : UserDataBase
         return Count.Get();
     }
 
+    public ERROR_CODE AddItemCount(double add_cnt)
+    {
+        ERROR_CODE code = ERROR_CODE.FAILED;
+        if (add_cnt < 0)
+        {
+            return code;
+        }
+        double cnt = GetCount();
+        cnt += add_cnt;
+        Count.Set(cnt);
+        Is_Update_Data = true;
+        return ERROR_CODE.SUCCESS;
+    }
+    public ERROR_CODE UseItemCount(double use_cnt)
+    {
+        ERROR_CODE code = ERROR_CODE.FAILED;
+
+        if (!IsUsableItemCount(use_cnt))
+        {
+            return ERROR_CODE.NOT_ENOUGH_ITEM;
+        }
+        if (use_cnt > 0)
+        {
+            double cnt = GetCount();
+            cnt -= use_cnt;
+            Count.Set(cnt);
+            Is_Update_Data = true;
+            return ERROR_CODE.SUCCESS;
+        }
+
+        return ERROR_CODE.FAILED;
+    }
+    public bool IsUsableItemCount(double cnt)
+    {
+        if (cnt < 0)
+        {
+            return false;
+        }
+        return GetCount() >= cnt;
+    }
+
     public override JsonData Serialized()
     {
         var json = new JsonData();
