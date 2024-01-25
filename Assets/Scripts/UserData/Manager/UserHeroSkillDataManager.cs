@@ -30,7 +30,7 @@ public class UserHeroSkillDataManager : ManagerBase
         return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);   
     }
 
-    public void AddUserHeroSkillGroups(int player_character_id, int player_character_num, int[] skill_pattern)
+    public void AddUserHeroSkillGroups(UserHeroData hero, int[] skill_pattern)
     {
         var m = MasterDataManager.Instance;
         int cnt = skill_pattern.Length;
@@ -51,8 +51,23 @@ public class UserHeroSkillDataManager : ManagerBase
             {
                 continue;
             }
-            AddUserHeroSkillData(player_character_id, player_character_num, skill_data.pc_skill_group_id);
+            AddUserHeroSkillData(hero, skill_data.pc_skill_group_id);
         }
+    }
+    
+
+    public UserHeroSkillData AddUserHeroSkillData(UserHeroData user_hero, int skill_group_id)
+    {
+        var skill = FindUserHeroSkillData(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num, skill_group_id);
+        if (skill == null)
+        {
+            skill = new UserHeroSkillData();
+            skill.SetSkillGroupID(user_hero, skill_group_id);
+            User_Hero_Skill_Data_List.Add(skill);
+            Is_Update_Data = true;
+        }
+
+        return skill;
     }
 
     public UserHeroSkillData AddUserHeroSkillData(int player_character_id, int player_character_num, int skill_group_id)

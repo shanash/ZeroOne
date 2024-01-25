@@ -89,11 +89,7 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Item_Data();
         return _Item_Data.Find(x => x.item_type == itype && x.item_id == item_id);
     }
-    public Item_Data Get_ItemData(int item_id)
-    {
-        Check_Item_Data();
-        return _Item_Data.Find(x => x.item_id == item_id);
-    }
+    
     public IReadOnlyList<Item_Data> Get_ItemDataListByItemType(ITEM_TYPE_V2 itype)
     {
         Check_Item_Data();

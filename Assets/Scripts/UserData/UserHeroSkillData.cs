@@ -96,11 +96,26 @@ public class UserHeroSkillData : UserDataBase
         InitMasterData();
         Is_Update_Data = true;
     }
+
+    public void SetSkillGroupID(UserHeroData hero, int skill_grp_id)
+    {
+        Hero_Data = hero;
+        Player_Character_ID.Set(Hero_Data.GetPlayerCharacterID());
+        Player_Character_Num.Set(Hero_Data.Player_Character_Num);
+        InitMasterData();
+        Is_Update_Data = true;
+    }
+
     protected override void InitMasterData()
     {
-        var mng = GameData.Instance.GetUserHeroDataManager();
-        Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
         Data = MasterDataManager.Instance.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
+
+        var mng = GameData.Instance.GetUserHeroDataManager();
+        if (mng != null)
+        {
+            Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
+        }
+
     }
 
     public int GetSkillGroupID() { return Skill_Group_ID.Get(); }  
@@ -134,7 +149,7 @@ public class UserHeroSkillData : UserDataBase
     /// <param name="use_list"></param>
     public void AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
     {
-        int cnt = use_list.Count;
+        var m = MasterDataManager.Instance;
         //  ID 높은 순으로(ID 높은것이 경험치 양이 많음)
         use_list.Sort((a, b) => b.Item_ID.CompareTo(a.Item_ID));
 
@@ -146,6 +161,24 @@ public class UserHeroSkillData : UserDataBase
         result.Used_Gold = 0;
 
         result.Used_Items = new List<USE_SKILL_EXP_ITEM_DATA>();
+
+        int cnt = use_list.Count;
+        double sum_exp = 0;
+        double sum_gold = 0;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use_data = use_list[i];
+            var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
+
+            sum_exp = 0;
+            sum_gold = 0;
+            for (int c = 0; c < use_data.Use_Count; c++)
+            {
+                sum_exp += item_data.int_var1;
+                sum_gold += item_data.int_var2;
+            }
+        }
+
     }
     /// <summary>
     /// 경험치 증가 시뮬레이션.<br/>

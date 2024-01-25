@@ -69,11 +69,10 @@ public class UserHeroData : UserDataBase
             Star_Grade.Set(Hero_Data.default_star);
         }
 
-        //  hero skill data init
-        var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
-        skill_mng.AddUserHeroSkillGroups(GetPlayerCharacterID(), Player_Character_Num, Battle_Data.skill_pattern);
 
     }
+
+
 
     public int GetPlayerCharacterID()
     {

@@ -66,7 +66,7 @@ public class UserHeroDataManager : ManagerBase
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
 
-    UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
+    public UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
     {
         if (hero_data_id == 0)
         {
@@ -79,6 +79,13 @@ public class UserHeroDataManager : ManagerBase
             hero.SetPlayerCharacterDataID(hero_data_id, hero_data_num);
             User_Hero_Data_List.Add(hero);
             Is_Update_Data = true;
+
+            //  hero skill data init
+            var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
+            if (skill_mng != null)
+            {
+                skill_mng.AddUserHeroSkillGroups(hero, hero.GetPlayerCharacterBattleData().skill_pattern);
+            }
         }
 
         return hero;

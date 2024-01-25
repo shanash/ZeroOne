@@ -121,21 +121,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         return sum;
     }
-    //[Obsolete]
-    ///// <summary>
-    ///// body 타입에 따른 좌표 정보 반환
-    ///// </summary>
-    ///// <param name="btype"></param>
-    ///// <returns></returns>
-    //protected Transform GetBodyTypeTransform(SD_BODY_TYPE btype)
-    //{
-    //    if (Sd_Body_Transforms.Exists(x => x.Body_Type == btype))
-    //    {
-    //        return Sd_Body_Transforms.Find(x => x.Body_Type == btype).Trans;
-    //    }
-    //    return null;
-    //}
-
+    
     /// <summary>
     /// 도착 pos type에 따른 좌표 정보 반환
     /// </summary>
