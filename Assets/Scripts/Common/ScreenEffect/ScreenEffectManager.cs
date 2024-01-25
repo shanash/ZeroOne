@@ -9,8 +9,8 @@ public enum ScreenEffect
     FADE_IN,
     FADE_OUT,
     DAMAGE_INDICATOR, // 데미지 받았을때 주변이 빨갛게 변한다
+    FLASH, // 특정색(밝은색)으로 잠깐동안 깜박이게한다. 강력한 공격이나 폭발시 사용
 
-    //FLASH, // 특정색(밝은색)으로 잠깐동안 깜박이게한다. 강력한 공격이나 폭발시 사용
     //VIGNETTE, // 가장자리를 어둡게 해서 중앙에 초점을 맞춤
     //GLOW, // 화면에 특정 좌표에 발광효과를 추가
     //LETTER_BOX, // 화면 상단과 하단에 검은 막대를 추가
@@ -52,6 +52,10 @@ public class ScreenEffectManager : Singleton<ScreenEffectManager>
             case ScreenEffect.DAMAGE_INDICATOR:
                 Sequence_Actions.Enqueue((InnerActionType.CHANGE_COVER_ALPHA, (new Color(1, 0, 0, 0), 1f), cb, duration/2, pre_delay, 0, ease)); // 빨간색 알파 0 -> 1
                 Sequence_Actions.Enqueue((InnerActionType.CHANGE_COVER_ALPHA, (new Color(1, 0, 0, 1), 0f), cb, duration/2, 0, post_delay, ease)); // 빨간색 알파 1 -> 0
+                break;
+            case ScreenEffect.FLASH:
+                Sequence_Actions.Enqueue((InnerActionType.CHANGE_COVER_ALPHA, (new Color(1, 1, 1, 0), 1f), cb, duration / 2, pre_delay, 0, ease)); // 하얀색 알파 0 -> 1
+                Sequence_Actions.Enqueue((InnerActionType.CHANGE_COVER_ALPHA, (new Color(1, 1, 1, 1), 0f), cb, duration / 2, 0, post_delay, ease)); // 하얀색 알파 1 -> 0
                 break;
         }
     }
