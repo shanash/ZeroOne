@@ -88,18 +88,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     }
 
     #region MonoBehaviour Methods
-    void OnEnable()
-    {
-        AddGestureEventListener();
-        AddSkeletonEventListener();
-    }
 
     void OnApplicationQuit()
     {
         Is_Quit = true;
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         if (!Is_Quit)
         {
@@ -107,6 +102,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             RemoveSkeletonEventListener();
         }
     }
+
+    float[] vertex_buffer = null;
 
     void Update()
     {
@@ -580,6 +577,24 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     {
         SkeletonAnimation = GetComponent<ISkeletonAnimation>();
         AnimationStateComp = GetComponent<IAnimationStateComponent>();
+
+        AddGestureEventListener();
+        AddSkeletonEventListener();
+
+        // Spine캐릭터가 화면안에 들어가도록 배율을 곱해줍니다
+        if (SkeletonAnimation is SkeletonGraphic)
+        {
+            // 일단 UI의 경우에만 고려합니다.. 그 외의 경우에 대해서는 기획도 없고, 나중에 생각합시다.
+            var rt = this.transform as RectTransform;
+            rt.anchoredPosition = Vector2.zero;
+            if (!rt.sizeDelta.y.Equals(GameDefine.SCREEN_BASE_HEIGHT))
+            {
+                // 배율을 구해서 어라?
+                // 이거 기획이 나오면 다시 만듭시다..  TODO:
+                float scale_multiple_value = GameDefine.SCREEN_BASE_HEIGHT / rt.sizeDelta.y;
+                rt.localScale = new Vector3(scale_multiple_value, scale_multiple_value, 1);
+            }
+        }
 
         if (SkeletonAnimation == null || AnimationStateComp == null)
         {

@@ -104,7 +104,7 @@ public class ActorBaseInspector : Editor
                         switch (attachment)
                         {
                             case BoundingBoxAttachment box:
-                                Transform bbTransform = utilityBone.transform.Find("[BoundingBox]" + box.Name); // Use FindChild in older versions of Unity.
+                                Transform bbTransform = utilityBone.transform.Find($"[BoundingBox]{box.Name}"); // Use FindChild in older versions of Unity.
                                 if (bbTransform != null)
                                 {
                                     PolygonCollider2D originalCollider = bbTransform.GetComponent<PolygonCollider2D>();
@@ -115,7 +115,15 @@ public class ActorBaseInspector : Editor
                                 }
                                 else
                                 {
-                                    PolygonCollider2D newPolygonCollider = SkeletonUtility.AddBoundingBoxGameObject(null, box, slot, utilityBone.transform);
+                                    GameObject go = (utilityBone.transform is RectTransform) ? new GameObject($"[BoundingBox]{box.Name}", typeof(RectTransform)) : new GameObject($"[BoundingBox]{box.Name}");
+
+                                    Transform got = go.transform;
+                                    got.parent = utilityBone.transform;
+                                    got.localPosition = Vector3.zero;
+                                    got.localRotation = Quaternion.identity;
+                                    got.localScale = (utilityBone.transform is RectTransform) ? new Vector3(100, 100, 1) : Vector3.one;
+
+                                    PolygonCollider2D newPolygonCollider = SkeletonUtility.AddBoundingBoxAsComponent(box, slot, go); //SkeletonUtility.AddBoundingBoxGameObject($"[BoundingBox]{box.Name}", box, slot, utilityBone.transform);
                                     bbTransform = newPolygonCollider.transform;
                                 }
 
