@@ -78,7 +78,7 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Goods_Data();
         return _Goods_Data.Find(x => x.goods_type == gtype);
     }
-    public IReadOnlyCollection<Goods_Data> Get_GoodsDataList()
+    public IReadOnlyList<Goods_Data> Get_GoodsDataList()
     {
         Check_Goods_Data();
         return _Goods_Data;
@@ -93,6 +93,17 @@ public class MasterDataManager : BaseMasterDataManager
     {
         Check_Item_Data();
         return _Item_Data.Find(x => x.item_id == item_id);
+    }
+    public IReadOnlyList<Item_Data> Get_ItemDataListByItemType(ITEM_TYPE_V2 itype)
+    {
+        Check_Item_Data();
+        return _Item_Data.FindAll(x => x.item_type == itype);
+    }
+
+    public IReadOnlyList<Item_Data> Get_ItemDataList()
+    {
+        Check_Item_Data();
+        return _Item_Data;
     }
 
     public Item_Piece_Data Get_ItemPieceData(int item_piece_id)
@@ -113,7 +124,7 @@ public class MasterDataManager : BaseMasterDataManager
     }
 
 
-    public IReadOnlyCollection<Reward_Set_Data> Get_RewardSetDataList(int reward_id)
+    public IReadOnlyList<Reward_Set_Data> Get_RewardSetDataList(int reward_id)
     {
         Check_Reward_Set_Data();
         return _Reward_Set_Data.FindAll(x => x.reward_id == reward_id);
@@ -124,7 +135,7 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Charge_Value_Data();
         return _Charge_Value_Data.Find(x => x.reward_type == rtype);
     }
-    public IReadOnlyCollection<Charge_Value_Data> Get_ChargeValueDataList()
+    public IReadOnlyList<Charge_Value_Data> Get_ChargeValueDataList()
     {
         Check_Charge_Value_Data();
         return _Charge_Value_Data.FindAll(x => x.Use_Charge_Data);

@@ -549,14 +549,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Brain_Cam: {fileID: 519420033}
-  Stage_Cam: {fileID: 2144958734}
-  Landscape_Cam: {fileID: 970180365}
-  Free_Cam: {fileID: 2080687448}
-  Character_Cam: {fileID: 992849983}
-  Target_Group: {fileID: 93154601}
-  Target_Group_Cam: {fileID: 65955376}
-  Active_Target_Group: {fileID: 827208258}
-  Active_Target_Group_Cam: {fileID: 1594655792}
+  Virtual_Camera_List:
+  - Camera_Type: 1
+    Camera: {fileID: 2144958734}
+    Target_Group: {fileID: 0}
+  - Camera_Type: 2
+    Camera: {fileID: 970180365}
+    Target_Group: {fileID: 0}
+  - Camera_Type: 3
+    Camera: {fileID: 2080687448}
+    Target_Group: {fileID: 0}
+  - Camera_Type: 4
+    Camera: {fileID: 992849983}
+    Target_Group: {fileID: 0}
+  - Camera_Type: 5
+    Camera: {fileID: 65955376}
+    Target_Group: {fileID: 93154601}
+  - Camera_Type: 6
+    Camera: {fileID: 1594655792}
+    Target_Group: {fileID: 827208258}
+  Init_Transform_Position: {x: 0, y: 10, z: -22}
+  Init_Transform_Rotation: {x: 20, y: 0, z: 0}
+  Init_Follow_Offset: {x: 0, y: 0, z: -10}
+  Init_FOV: 25
 --- !u!320 &296271138
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -1463,7 +1478,7 @@ Transform:
   m_GameObject: {fileID: 992849981}
   serializedVersion: 2
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 8.933982, z: -20.160208}
+  m_LocalPosition: {x: 0, y: 10, z: -22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

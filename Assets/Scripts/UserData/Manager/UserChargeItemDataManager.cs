@@ -32,7 +32,7 @@ public class UserChargeItemDataManager : ManagerBase
         int cnt = charge_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var charge_item = charge_data_list.ToList()[i];
+            var charge_item = charge_data_list[i];
             AddUserChargeItemData(charge_item.reward_type);
         }
         

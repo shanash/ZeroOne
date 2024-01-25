@@ -162,7 +162,7 @@ public class StageInfoPopup : PopupBase
         cnt = f_reward_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var reward_data = f_reward_data_list.ToList()[i];
+            var reward_data = f_reward_data_list[i];
             if (!reward_data.is_use)
             {
                 continue;
@@ -178,7 +178,7 @@ public class StageInfoPopup : PopupBase
         cnt = star_reward_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var reward_data = star_reward_data_list.ToList()[i];
+            var reward_data = star_reward_data_list[i];
             if (!reward_data.is_use)
             {
                 continue;
@@ -195,7 +195,7 @@ public class StageInfoPopup : PopupBase
         cnt = repeat_reward_data_list.Count;
         for(int i = 0;i < cnt;i++)
         {
-            var reward_data = repeat_reward_data_list.ToList()[i];
+            var reward_data = repeat_reward_data_list[i];
             if (!reward_data.is_use)
             {
                 continue;

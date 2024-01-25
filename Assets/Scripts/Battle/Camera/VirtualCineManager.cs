@@ -1,9 +1,29 @@
 using Cinemachine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VirtualCineManager : MonoBehaviour, IEventTrigger
 {
+    public enum CAMERA_TYPE
+    {
+        NONE = 0,
+        STAGE_CAM,
+        LANDSCAPE_CAM,
+        FREE_CAM,
+        CHARACTER_CAM,
+        TARGET_GROUP_CAM,
+        ACTIVE_TARGET_GROUP_CAM,
+    }
+    [Serializable]
+    public struct VIRTUAL_CAMERA_DATA
+    {
+        public CAMERA_TYPE Camera_Type;
+        public CinemachineVirtualCamera Camera;
+        public CinemachineTargetGroup Target_Group;
+    }
+
     const int RELEASE_PRIORITY = 9;
     const int FOCUS_PRIORITY = 100;
 
@@ -12,31 +32,21 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     [SerializeField, Tooltip("Camera Brain")]
     CinemachineBrain Brain_Cam;
 
-    [SerializeField, Tooltip("Stage Camera")]
-    CinemachineVirtualCamera Stage_Cam;
+    [SerializeField, Tooltip("Virtual Camera List")]
+    List<VIRTUAL_CAMERA_DATA> Virtual_Camera_List;
+    
 
-    [SerializeField, Tooltip("Landscape Camera")]
-    CinemachineVirtualCamera Landscape_Cam;
+    [SerializeField, Tooltip("Init Camera Transform Position")]
+    Vector3 Init_Transform_Position;
 
-    [SerializeField, Tooltip("Free Camera")]
-    CinemachineVirtualCamera Free_Cam;
+    [SerializeField, Tooltip("Init Camera Transform Rotateion")]
+    Vector3 Init_Transform_Rotation;
 
+    [SerializeField, Tooltip("Init Follow Offset")]
+    Vector3 Init_Follow_Offset;
 
-    [SerializeField, Tooltip("Character Camera")]
-    CinemachineVirtualCamera Character_Cam;
-
-    [SerializeField, Tooltip("Target Group")]
-    CinemachineTargetGroup Target_Group;
-
-    [SerializeField, Tooltip("Target Group Camera")]
-    CinemachineVirtualCamera Target_Group_Cam;
-
-
-    [SerializeField, Tooltip("Active Target Group")]
-    CinemachineTargetGroup Active_Target_Group;
-
-    [SerializeField, Tooltip("Active Target Group Camera")]
-    CinemachineVirtualCamera Active_Target_Group_Cam;
+    [SerializeField, Tooltip("Inti FOV")]
+    float Init_FOV;
 
 
     public CinemachineVirtualCamera ActiveVirtualCamera { get { return Brain_Cam.ActiveVirtualCamera as CinemachineVirtualCamera; } }
@@ -55,104 +65,165 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         transform.position = ORIGIN_POS;
     }
 
+
     public CinemachineBrain GetBrainCam() { return Brain_Cam; }
 
-    public CinemachineVirtualCamera GetStageCamera() { return Stage_Cam; }
-    public CinemachineVirtualCamera GetLandscapeCamera() { return Landscape_Cam; }
-    public CinemachineVirtualCamera GetFreeCamera() { return Free_Cam; }
-    public CinemachineVirtualCamera GetCharacterCamera() { return Character_Cam; }
-    public CinemachineVirtualCamera GetActiveTargetGroupCamera() { return Active_Target_Group_Cam; }
-    public CinemachineTargetGroup GetActiveTargetGroup() { return Active_Target_Group; }
-
-
-    
-    public void FocusCharacter(GameObject unit)
+    VIRTUAL_CAMERA_DATA FindCameraData(CAMERA_TYPE ctype)
     {
-        Brain_Cam.m_DefaultBlend.m_Time = 0.5f;
-        Character_Cam.Follow = unit.transform;
-        Character_Cam.m_Priority = FOCUS_PRIORITY;
+        return Virtual_Camera_List.Find(x => x.Camera_Type == ctype);
     }
 
-    public void ReleaseCharacterCam()
+    CinemachineVirtualCamera FindCamera(CAMERA_TYPE ctype)
     {
-        Character_Cam.Follow = null;
-        Character_Cam.m_Priority = RELEASE_PRIORITY;
+        if (Virtual_Camera_List.Exists(x => x.Camera_Type == ctype))
+        {
+            return FindCameraData(ctype).Camera;
+        }
+        return null;
     }
 
-    public void SetAngleView(float angle)
+    CinemachineTargetGroup FindTargetGroup(CAMERA_TYPE ctype)
     {
-        Brain_Cam.m_DefaultBlend.m_Time = 1f;
-        Vector3 ang = Stage_Cam.transform.rotation.eulerAngles;
-        ang.x = angle;
-
-        var pos = Stage_Cam.transform.position;
-        if (angle == 60f)
+        if (Virtual_Camera_List.Exists(x => x.Camera_Type == ctype))
         {
-            pos.y = 70f;
-            pos.z = -41f;
+            return FindCameraData(ctype).Target_Group;
         }
-        else if (angle == 45f)
-        {
-            pos.y = 59f;
-            pos.z = -60f;
-        }
-        else if (angle == 30f)
-        {
-            pos.y = 43f;
-            pos.z = -75f;
-        }
-        else if (angle == 20f)
-        {
-            pos.y = 32f;
-            pos.z = -42f;
-        }
-
-        StartCoroutine(StartAngleUpdate(ang, pos));
+        return null;
     }
 
-    IEnumerator StartAngleUpdate(Vector3 angle, Vector3 pos)
+
+    public CinemachineVirtualCamera GetStageCamera() 
     {
-        float duration = 1f;
-        float delta = 0f;
-        while (delta < duration)
+        return FindCamera(CAMERA_TYPE.STAGE_CAM);
+    }
+    public CinemachineVirtualCamera GetLandscapeCamera() 
+    {
+        return FindCamera(CAMERA_TYPE.LANDSCAPE_CAM);
+    }
+    public CinemachineVirtualCamera GetFreeCamera() { return FindCamera(CAMERA_TYPE.FREE_CAM); }
+    public CinemachineVirtualCamera GetCharacterCamera() { return FindCamera(CAMERA_TYPE.CHARACTER_CAM); }
+    public CinemachineVirtualCamera GetActiveTargetGroupCamera() { return FindCamera(CAMERA_TYPE.ACTIVE_TARGET_GROUP_CAM); }
+    public CinemachineTargetGroup GetActiveTargetGroup() { return FindTargetGroup(CAMERA_TYPE.ACTIVE_TARGET_GROUP_CAM); }
+
+    /// <summary>
+    /// Follow Offset / FOV 등 카메라 연출 전 초기화가 필요한 부분 초기화
+    /// </summary>
+    public void ResetVirtualCameraEtcVars()
+    {
+        int cnt = Virtual_Camera_List.Count;
+        for (int i = 0; i < cnt; i++)
         {
-            delta += Time.deltaTime;
-            Stage_Cam.transform.rotation = Quaternion.Euler(Vector3.Lerp(Stage_Cam.transform.rotation.eulerAngles, angle, delta));
-            Stage_Cam.transform.position = Vector3.Lerp(Stage_Cam.transform.position, pos, delta);
-            yield return null;
-            if (delta > duration)
+            var cam_data = Virtual_Camera_List[i];
+
+            //  init trans position
+            cam_data.Camera.transform.position = Init_Transform_Position;
+
+            //  init trans rotation
+            cam_data.Camera.transform.rotation = Quaternion.Euler(Init_Transform_Rotation);
+
+            //  follow Offset
+            CinemachineTransposer transposer = cam_data.Camera.GetCinemachineComponent<CinemachineTransposer>();
+            if (transposer != null)
             {
-                break;
+                transposer.m_FollowOffset = Init_Follow_Offset;
             }
+
+            //  init fov
+            var lens_setting = cam_data.Camera.m_Lens;
+            lens_setting.OrthographicSize = Init_FOV;
+            cam_data.Camera.m_Lens = lens_setting;
         }
+
+
     }
 
-    public void AddTarget(Transform target)
-    {
-        Target_Group.AddMember(target, 1, 10);
-    }
+    //public void FocusCharacter(GameObject unit)
+    //{
+    //    Brain_Cam.m_DefaultBlend.m_Time = 0.5f;
+    //    Character_Cam.Follow = unit.transform;
+    //    Character_Cam.m_Priority = FOCUS_PRIORITY;
+    //}
 
-    public void ClearTarget()
-    {
-        int len = Target_Group.m_Targets.Length;
-        for (int i = len - 1; i >= 0; i--)
-        {
-            var t = Target_Group.m_Targets[i].target;
-            Target_Group.RemoveMember(t);
-        }
-    }
+    //public void ReleaseCharacterCam()
+    //{
+    //    Character_Cam.Follow = null;
+    //    Character_Cam.m_Priority = RELEASE_PRIORITY;
+    //}
 
-    public void SetGroupView()
-    {
-        Brain_Cam.m_DefaultBlend.m_Time = 1f;
-        Target_Group_Cam.Priority = FOCUS_PRIORITY;
-    }
+    //public void SetAngleView(float angle)
+    //{
+    //    Brain_Cam.m_DefaultBlend.m_Time = 1f;
+    //    Vector3 ang = Stage_Cam.transform.rotation.eulerAngles;
+    //    ang.x = angle;
 
-    public void ReleaseGroupView()
-    {
-        Target_Group_Cam.Priority = RELEASE_PRIORITY;
-        ClearTarget();
-    }
+    //    var pos = Stage_Cam.transform.position;
+    //    if (angle == 60f)
+    //    {
+    //        pos.y = 70f;
+    //        pos.z = -41f;
+    //    }
+    //    else if (angle == 45f)
+    //    {
+    //        pos.y = 59f;
+    //        pos.z = -60f;
+    //    }
+    //    else if (angle == 30f)
+    //    {
+    //        pos.y = 43f;
+    //        pos.z = -75f;
+    //    }
+    //    else if (angle == 20f)
+    //    {
+    //        pos.y = 32f;
+    //        pos.z = -42f;
+    //    }
+
+    //    StartCoroutine(StartAngleUpdate(ang, pos));
+    //}
+
+    //IEnumerator StartAngleUpdate(Vector3 angle, Vector3 pos)
+    //{
+    //    float duration = 1f;
+    //    float delta = 0f;
+    //    while (delta < duration)
+    //    {
+    //        delta += Time.deltaTime;
+    //        Stage_Cam.transform.rotation = Quaternion.Euler(Vector3.Lerp(Stage_Cam.transform.rotation.eulerAngles, angle, delta));
+    //        Stage_Cam.transform.position = Vector3.Lerp(Stage_Cam.transform.position, pos, delta);
+    //        yield return null;
+    //        if (delta > duration)
+    //        {
+    //            break;
+    //        }
+    //    }
+    //}
+
+    //public void AddTarget(Transform target)
+    //{
+    //    Target_Group.AddMember(target, 1, 10);
+    //}
+
+    //public void ClearTarget()
+    //{
+    //    int len = Target_Group.m_Targets.Length;
+    //    for (int i = len - 1; i >= 0; i--)
+    //    {
+    //        var t = Target_Group.m_Targets[i].target;
+    //        Target_Group.RemoveMember(t);
+    //    }
+    //}
+
+    //public void SetGroupView()
+    //{
+    //    Brain_Cam.m_DefaultBlend.m_Time = 1f;
+    //    Target_Group_Cam.Priority = FOCUS_PRIORITY;
+    //}
+
+    //public void ReleaseGroupView()
+    //{
+    //    Target_Group_Cam.Priority = RELEASE_PRIORITY;
+    //    ClearTarget();
+    //}
 
     /// <summary>
     /// VirtualCineManager를 흔듭니다.

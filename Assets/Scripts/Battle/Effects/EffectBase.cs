@@ -1,6 +1,5 @@
 using FluffyDuck.Util;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class EffectBase : MonoBehaviour, IPoolableComponent

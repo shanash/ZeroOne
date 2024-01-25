@@ -251,6 +251,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
+
+        Battle_Mng.GetVirtualCineManager().ResetVirtualCameraEtcVars();
+
         Ultimate_Skill_Playable_Director.Play();
         if (Ultimate_Skill_Playable_Director.playableGraph.IsValid())
         {
@@ -1465,7 +1468,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 궁극기 시전 요청
     /// </summary>
-    public void SpecialSkillExec()
+    public virtual void SpecialSkillExec()
     {
         var battle_state = Battle_Mng.GetCurrentState();
         if (battle_state != GAME_STATES.PLAYING)

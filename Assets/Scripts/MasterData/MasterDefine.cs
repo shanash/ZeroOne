@@ -552,39 +552,6 @@ public enum SKILL_TYPE
 }
 
 ///	<summary>
-///	아이템의 종류 타입
-///	</summary>
-public enum ITEM_TYPE
-{
-	/// <summary>NONE</summary>
-	NONE = 0,
-	/// <summary>1 금화(게임내 사용되는 재화)</summary>
-	GOLD = 1,
-	/// <summary>2 보석(게임내 사용되는 유료 재화)</summary>
-	DIA = 2,
-	/// <summary>3 던전 입장 티켓</summary>
-	DUNGEON_TICKET = 3,
-	/// <summary>4 캐릭터 조각</summary>
-	CHARACTER_PIECE = 4,
-	/// <summary>5 경험치 물약</summary>
-	EXP_POTION = 5,
-	/// <summary>6 스테미나 회복 물약</summary>
-	STA_POTION = 6,
-	/// <summary>7 사용하지 않음</summary>
-	MEMORIAL_ITEM = 7,
-	/// <summary>8 캐릭터 완전체</summary>
-	CHARACTER = 8,
-	/// <summary>9 각종 소모용 아이템</summary>
-	EXPENDABLE_ITEM = 9,
-	/// <summary>10 장비</summary>
-	EQUIPMENT_ITEM = 10,
-	/// <summary>11 호감도 아이템</summary>
-	FAVORITE_ITEM = 11,
-	/// <summary>12 스태미나</summary>
-	STAMINA = 12,
-}
-
-///	<summary>
 ///	해금 종류 타입
 ///	</summary>
 public enum LIMIT_TYPE
