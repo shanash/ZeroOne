@@ -1,4 +1,5 @@
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using UnityEngine;
 
 public class EssenceTransferPopup : PopupBase
@@ -9,9 +10,18 @@ public class EssenceTransferPopup : PopupBase
     [SerializeField, Tooltip("화면을 세로로 돌리는 버튼")]
     GameObject ToVerticalButton;
 
+    Producer pd;
+
     protected override void Initialize()
     {
+        pd = null;
         base.Initialize();
+    }
+    public override void Spawned()
+    {
+        base.Spawned();
+
+        pd = Factory.Instantiate<Producer>(1010001, MEMORIAL_TYPE.MEMORIAL);
     }
 
     public override void Despawned()

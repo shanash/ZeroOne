@@ -1,7 +1,13 @@
+using FluffyDuck.Util;
 using UnityEngine;
 
-public class PopupContainer : MonoBehaviour
+public class PopupContainer : MonoBehaviour, IPoolableComponent
 {
+    [SerializeField, Tooltip("UI용 Page 팝업 캔버스")]
+    Canvas _FullPage_Canvas;
+    [SerializeField, Tooltip("기타등등 팝업 캔버스")]
+    Canvas _Etcs_Canvas;
+
     [SerializeField, Tooltip("UI용 Page 팝업 컨테이너. 팝업 중 가장 하위에 있는 컨테이너")]
     RectTransform _FullPage_Container;
     [SerializeField, Tooltip("일반적인 팝업 컨테이너. UI 보다 상위에 있다.")]
@@ -15,4 +21,16 @@ public class PopupContainer : MonoBehaviour
     public RectTransform Dialog_Container => _Dialog_Container;
     public RectTransform Modal_Container => _Modal_Container;
     public RectTransform Noti_Container => _Noti_Container;
+
+    public void Despawned()
+    {
+    }
+
+    public void Spawned()
+    {
+        _FullPage_Canvas.worldCamera = Camera.main;
+        _FullPage_Canvas.sortingLayerName = "Popup";
+        _Etcs_Canvas.worldCamera = Camera.main;
+        _Etcs_Canvas.sortingLayerName = "Popup";
+    }
 }
