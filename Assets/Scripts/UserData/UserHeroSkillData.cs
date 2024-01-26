@@ -54,6 +54,7 @@ public class UserHeroSkillData : UserDataBase
 
     UserHeroData Hero_Data;
     Player_Character_Skill_Group Data;
+    Player_Character_Skill_Level_Data Level_Data;
 
     public UserHeroSkillData() : base() { }
 
@@ -107,14 +108,21 @@ public class UserHeroSkillData : UserDataBase
 
     protected override void InitMasterData()
     {
-        Data = MasterDataManager.Instance.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
+        var m = MasterDataManager.Instance;
+        Data = m.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
+        Level_Data = m.Get_PlayerCharacterSkillLevelData(GetLevel());
 
         var mng = GameData.Instance.GetUserHeroDataManager();
         if (mng != null)
         {
             Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
         }
+    }
 
+    void SetLevel(int lv)
+    {
+        Level.Set(lv);
+        Level_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(lv);
     }
 
     public int GetSkillGroupID() { return Skill_Group_ID.Get(); }  
@@ -139,6 +147,12 @@ public class UserHeroSkillData : UserDataBase
     public bool IsMaxLevel()
     {
         return GetLevel() >= GetMaxLevel();
+    }
+
+
+    ERROR_CODE AddExp(double exp)
+    {
+        return ERROR_CODE.SUCCESS;
     }
     /// <summary>
     /// 경험치 아이템 사용으로 아이템 증가<br/>
@@ -194,6 +208,12 @@ public class UserHeroSkillData : UserDataBase
             result.Code = ERROR_CODE.NOT_ENOUGH_ITEM;
             return result;
         }
+
+        //  재화 및 아이템 소모
+
+
+        //  경험치 증가 및 레벨업
+
 
         return result;
     }

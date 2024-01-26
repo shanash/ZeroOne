@@ -95,7 +95,11 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
             Particle_Effect.Play();
         }
     }
-
+    /// <summary>
+    /// 해당 오브젝트 내의 모든 파티클을 찾아서 배속을 조절한다.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="speed_multiple"></param>
     protected void SetParticleAllSpeedMultiple(ParticleSystem obj, float speed_multiple)
     {
         if (obj != null)
@@ -111,7 +115,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
                     main.simulationSpeed = speed_multiple;
                 }
             }
-            
+            //  경우에 따라 애니메이터가 있을 수 있음. 
             var animator = obj.GetComponent<Animator>();
             if (animator != null)
             {

@@ -63,16 +63,14 @@ public class UserHeroData : UserDataBase
         var m = MasterDataManager.Instance;
         Hero_Data = m.Get_PlayerCharacterData(GetPlayerCharacterID());
         Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id);
+        Lv_Data = m.Get_PlayerCharacterLevelData(GetLevel());
 
         if (GetStarGrade() == 0)
         {
             Star_Grade.Set(Hero_Data.default_star);
         }
 
-
     }
-
-
 
     public int GetPlayerCharacterID()
     {
@@ -114,7 +112,7 @@ public class UserHeroData : UserDataBase
     void SetLevel(int lv)
     {
         Level.Set(lv);
-        Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(GetLevel());
+        Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(lv);
     }
     public double GetExp()
     {

@@ -105,8 +105,8 @@ public class GameDefine : MonoBehaviour
 
 
     public static readonly float GAME_SPEED_DEFAULT = 1f;
-    public static readonly float GAME_SPEED_1_5 = 1.3f;
-    public static readonly float GAME_SPEED_2 = 1.4f;
+    public static readonly float GAME_SPEED_1_5 = 1.5f;
+    public static readonly float GAME_SPEED_2 = 2f;
 
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
