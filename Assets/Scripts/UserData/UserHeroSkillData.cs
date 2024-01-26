@@ -146,9 +146,10 @@ public class UserHeroSkillData : UserDataBase
     /// 사용된 아이템 정보 및 소모된 골드수를 반환
     /// </summary>
     /// <param name="use_list"></param>
-    public void AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
+    public USE_SKILL_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
     {
         var goods_mng = GameData.Instance.GetUserGoodsDataManager();
+        var item_mng = GameData.Instance.GetUserItemDataManager();
         var m = MasterDataManager.Instance;
         //  ID 높은 순으로(ID 높은것이 경험치 양이 많음)
         use_list.Sort((a, b) => b.Item_ID.CompareTo(a.Item_ID));
@@ -162,8 +163,39 @@ public class UserHeroSkillData : UserDataBase
 
         //  시뮬레이션 결과를 받아온다.
         var result_simulate = GetCalcSimulateExp(use_list);
-        
+        //  성공이 아니면 바로 반환
+        if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        {
+            result.Code = result_simulate.Code;
+            return result;
+        }
+        //  금화가 충분한지 체크
+        bool is_usable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
+        if (!is_usable_gold)
+        {
+            result.Code = ERROR_CODE.NOT_ENOUGH_GOLD;
+            return result;
+        }
+        bool is_usable_item = true;
+        int cnt = use_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use = use_list[i];
+            //  해당 아이템이 충분한지 체크
+            if (!item_mng.IsUsableItemCount(use.Item_Type, use.Item_ID, use.Use_Count))
+            {
+                is_usable_item = false;
+                break;
+            }
+        }
+        //  아이템이 충분하지 않음
+        if (!is_usable_item)
+        {
+            result.Code = ERROR_CODE.NOT_ENOUGH_ITEM;
+            return result;
+        }
 
+        return result;
     }
     /// <summary>
     /// 경험치 증가 시뮬레이션.<br/>

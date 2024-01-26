@@ -68,7 +68,7 @@ public class UserGoodsDataManager : ManagerBase
         return 0;
     }
 
-    public bool IsUsableGoodsCount(GOODS_TYPE gtype, int cnt)
+    public bool IsUsableGoodsCount(GOODS_TYPE gtype, double cnt)
     {
         var goods = FindUserGoods(gtype);
         if (goods != null)

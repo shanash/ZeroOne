@@ -112,6 +112,11 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
                 }
             }
             
+            var animator = obj.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.speed = speed_multiple;
+            }
             
         }
     }

@@ -60,7 +60,7 @@ public class UserGoodsData : UserDataBase
     /// </summary>
     /// <param name="cnt"></param>
     /// <returns></returns>
-    public bool IsEnableAddGoodsCount(int cnt)
+    public bool IsEnableAddGoodsCount(double cnt)
     {
         bool is_enable = true;
         if (GetMaxBound() > 0)
@@ -74,7 +74,7 @@ public class UserGoodsData : UserDataBase
         return is_enable;
     }
 
-    public bool IsUsableGoodsCount(int cnt)
+    public bool IsUsableGoodsCount(double cnt)
     {
         if (cnt < 0)
         {
@@ -88,7 +88,7 @@ public class UserGoodsData : UserDataBase
     /// <param name="cnt"></param>
     /// <param name="over_apply">max bound를 무시하고 추가 가능한 경우 추가</param>
     /// <returns></returns>
-    public ERROR_CODE AddGoodsCount(int cnt, bool over_apply = true)
+    public ERROR_CODE AddGoodsCount(double cnt, bool over_apply = true)
     {
         ERROR_CODE code = ERROR_CODE.SUCCESS;
         if (cnt >= 0)
@@ -123,7 +123,7 @@ public class UserGoodsData : UserDataBase
         return code;
     }
 
-    public ERROR_CODE UseGoods(int cnt)
+    public ERROR_CODE UseGoods(double cnt)
     {
         if (!IsUsableGoodsCount(cnt))
         {
