@@ -22,6 +22,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         return true;
     }
 
+    bool Initialize(int memorial_id, MEMORIAL_TYPE type)
+    {
+        return Initialize(memorial_id, type, null);
+    }
+
     async Task InitializeAsync(L2d_Char_Skin_Data data, MEMORIAL_TYPE type, Transform parent)
     {
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
@@ -29,6 +34,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         if (!string.IsNullOrEmpty(data.l2d_bg_path))
         {
             Background = await MonoFactory.CreateAsync<Background>(data.l2d_bg_path, Stage.Background_Parent, data);
+        }
+
+        if (type == MEMORIAL_TYPE.MEMORIAL)
+        {
+            GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }
     }
 
