@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -6,17 +7,6 @@ namespace FluffyDuck.EditorUtil.UpperMenu
 {
     public static class FluffyDuck
     {
-        [MenuItem("FluffyDuck/Convert Excel To Json _%#j")]
-        static void ConvertExcelToJson()
-        {
-            Excel2Json.Program.Main(
-                "-d", "Android/ExcelData",
-                "-o", "Assets/AssetResources/Master",
-                "-cs", "Assets/Scripts/MasterData");
-
-            AssetDatabase.Refresh();
-        }
-
         [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor _%#/", false, 0)]
         static void BuildLauncher_BuildAssetForLocalEditor()
         {
@@ -118,7 +108,39 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
 
+        [MenuItem("FluffyDuck/Clear Persistent Data _%#c", false, 50)]
+        static void ClearUserData()
+        {
+            string persistent_folder_path = $"{UnityEngine.Application.persistentDataPath}";
 
+            try
+            {
+                string[] files = System.IO.Directory.GetFiles(persistent_folder_path);
+
+                foreach (string file in files)
+                {
+                    System.IO.File.Delete(file);
+                    UnityEngine.Debug.Log($"Deleted file: {file}");
+                }
+
+                UnityEngine.Debug.Log("All Persistent Datas have been deleted.");
+            }
+            catch (System.Exception ex)
+            {
+                UnityEngine.Debug.LogException(ex);
+            }
+        }
+
+        [MenuItem("FluffyDuck/Convert Excel To Json _%#j", false, 200)]
+        static void ConvertExcelToJson()
+        {
+            Excel2Json.Program.Main(
+                "-d", "Android/ExcelData",
+                "-o", "Assets/AssetResources/Master",
+                "-cs", "Assets/Scripts/MasterData");
+
+            AssetDatabase.Refresh();
+        }
     }
 }
 #endif
