@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1976370885860943399}
+  - component: {fileID: 5243340095542743487}
   - component: {fileID: 855170884881277490}
   - component: {fileID: 9174389527612858425}
   m_Layer: 0
@@ -54,6 +55,27 @@ Transform:
   - {fileID: 4413641179069605212}
   m_Father: {fileID: 2142457831749288261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &5243340095542743487
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486167275501862580}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 303196d73e678c84ab3bbfaa24e108d2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!199 &855170884881277490
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -29612,7 +29634,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2142457831749288261}
-  - component: {fileID: 4508419769436018596}
   - component: {fileID: 1207938443353952117}
   - component: {fileID: 9158344945477563604}
   - component: {fileID: 7295073034821278121}
@@ -29640,27 +29661,6 @@ Transform:
   - {fileID: 1976370885860943399}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &4508419769436018596
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1993488418330309216}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 303196d73e678c84ab3bbfaa24e108d2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1207938443353952117
 MonoBehaviour:
   m_ObjectHideFlags: 0

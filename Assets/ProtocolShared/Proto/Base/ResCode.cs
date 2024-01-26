@@ -8,6 +8,7 @@ namespace ProtocolShared.Proto.Base
         EmptyBody = 3,
         NullResponse = 4,
         JsonParseFailed = 5,
+        DuplicationRequest = 6,
 
         // Http Status 값
         OK = 200, // 성공
