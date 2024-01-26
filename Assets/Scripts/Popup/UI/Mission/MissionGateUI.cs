@@ -6,7 +6,7 @@ public class MissionGateUI : PopupBase
     public void OnClickMainMission()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/SelectStageUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/SelectStageUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
             var mng = GameData.Instance.GetUserStoryStageDataManager();
 
@@ -17,7 +17,7 @@ public class MissionGateUI : PopupBase
     public void OnClickSpecialMission()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -25,7 +25,7 @@ public class MissionGateUI : PopupBase
     public void OnClickSearch()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -33,7 +33,7 @@ public class MissionGateUI : PopupBase
     public void OnClickDungeon()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -41,7 +41,7 @@ public class MissionGateUI : PopupBase
     public void OnClickClanBattle()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -49,7 +49,7 @@ public class MissionGateUI : PopupBase
     public void OnClickBossBattle()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });

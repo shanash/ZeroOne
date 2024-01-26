@@ -250,7 +250,7 @@ public class StageInfoPopup : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         HidePopup(() =>
         {
-            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", (popup) =>
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
                 popup.ShowPopup(GAME_TYPE.STORY_MODE, Stage.stage_id);
             });

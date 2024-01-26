@@ -2,6 +2,7 @@ using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserHeroSkillData : UserDataBase
@@ -42,6 +43,7 @@ public class UserHeroSkillData : UserDataBase
         public int Result_Lv;               //  경험치 아이템 사용 후 결과 레벨
         public double Result_Accum_Exp;     //  경험치 아이템 사용 후 최종 경험치(누적 경험치)
 
+        public double Add_Exp;              //  증가된 경험치
         public double Used_Gold;            //  소모된 골드
     }
 
@@ -148,16 +150,89 @@ public class UserHeroSkillData : UserDataBase
     {
         return GetLevel() >= GetMaxLevel();
     }
-
-
-    ERROR_CODE AddExp(double exp)
+    /// <summary>
+    /// 다음 레벨업에 필요한 경험치
+    /// </summary>
+    /// <returns></returns>
+    public double GetNextExp()
     {
-        return ERROR_CODE.SUCCESS;
+        if (Level_Data == null)
+        {
+            Level_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(GetLevel());
+        }
+        return Level_Data.need_exp;
     }
     /// <summary>
+    /// 현재 레벨의 경험치
+    /// </summary>
+    /// <returns></returns>
+    public double GetLevelExp()
+    {
+        if (Level_Data == null)
+        {
+            Level_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(GetLevel());
+        }
+        return GetExp() - Level_Data.accum_exp;
+    }
+    /// <summary>
+    /// 현재 레벨의 경험치 진행률 
+    /// </summary>
+    /// <returns></returns>
+    public float GetExpPercentage()
+    {
+        float lv_exp = (float)GetLevelExp();
+        float need_exp = (float)GetNextExp();
+        return lv_exp / need_exp;
+    }
+
+    /// <summary>
+    /// 경험치 증가 및 레벨업 체크
+    /// </summary>
+    /// <param name="xp"></param>
+    /// <returns></returns>
+    ERROR_CODE AddExp(double xp)
+    {
+        ERROR_CODE code = ERROR_CODE.FAILED;
+        if (xp < 0)
+        {
+            return code;
+        }
+
+        if (!IsMaxLevel())
+        {
+            double exp = GetExp();
+            exp += xp;
+
+            //  level check
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelDataByAccumExp(exp);
+            if (lv_data != null)
+            {
+                return code;
+            }
+            if (GetLevel() < lv_data.level)
+            {
+                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                SetLevel(lv_data.level);
+            }
+            else
+            {
+                code = ERROR_CODE.SUCCESS;
+            }
+            Exp.Set(exp);
+            Is_Update_Data = true;
+        }
+        else
+        {
+            code = ERROR_CODE.ALREADY_COMPLETE;
+        }
+
+        return code;
+    }
+
+    /// <summary>
     /// 경험치 아이템 사용으로 아이템 증가<br/>
-    /// 큰 경험치 아이템부터 사용하며, 최대 레벨을 초과할 경우 더이상 아이템 사용을 하지 않도록 한다.<br/>
-    /// 사용된 아이템 정보 및 소모된 골드수를 반환
+    /// 이 함수는 결정된 아이템 및 재화 사용의 결과를 알려주기만 함.<br/>
+    /// 최적의 시뮬레이션은 적용 전에 별도의 로직을 거쳐 알아내야 함
     /// </summary>
     /// <param name="use_list"></param>
     public USE_SKILL_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
@@ -173,6 +248,7 @@ public class UserHeroSkillData : UserDataBase
         result.Code = ERROR_CODE.FAILED;
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
+        result.Add_Exp = 0;
         result.Used_Gold = 0;
 
         //  시뮬레이션 결과를 받아온다.
@@ -183,12 +259,23 @@ public class UserHeroSkillData : UserDataBase
             result.Code = result_simulate.Code;
             return result;
         }
+        //  증가된 경험치가 없거나, 필요 금화량이 0일경우 아무일도 하지 않도록(예외 상황임)
+        if (result_simulate.Add_Exp == 0 || result_simulate.Need_Gold == 0)
+        {
+            result.Code = ERROR_CODE.NOT_WORK;
+            return result;
+        }
+        
         //  금화가 충분한지 체크
         bool is_usable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
         if (!is_usable_gold)
         {
             result.Code = ERROR_CODE.NOT_ENOUGH_GOLD;
             return result;
+        }
+        else
+        {
+            result.Used_Gold = result_simulate.Need_Gold;
         }
         bool is_usable_item = true;
         int cnt = use_list.Count;
@@ -208,12 +295,22 @@ public class UserHeroSkillData : UserDataBase
             result.Code = ERROR_CODE.NOT_ENOUGH_ITEM;
             return result;
         }
+        else
+        {
+            result.Add_Exp = result_simulate.Add_Exp;
+        }
 
         //  재화 및 아이템 소모
-
+        goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, result.Used_Gold);
+        cnt = use_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use = use_list[i];
+            item_mng.UseItemCount(use.Item_Type, use.Item_ID, use.Use_Count);
+        }
 
         //  경험치 증가 및 레벨업
-
+        result.Code = AddExp(result_simulate.Add_Exp);
 
         return result;
     }

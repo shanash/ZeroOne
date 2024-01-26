@@ -186,7 +186,7 @@ public class PartySettingPopup : PopupBase
             {
                 if (code == ERROR_CODE.NOT_EXIST_EMPTY_SLOT)
                 {
-                    PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+                    PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                     {
                         popup.ShowPopup(1.5f, "슬롯에 빈 자리가 없습니다.");
                     });
@@ -228,7 +228,7 @@ public class PartySettingPopup : PopupBase
     public void OnClickFilterPopup()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/FilterPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/FilterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(() =>
             {
@@ -261,7 +261,7 @@ public class PartySettingPopup : PopupBase
             //  덱에 영웅들이 세팅되어 있는지 여부 체크
             if (!user_deck.IsExistHeroInDeck())
             {
-                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                 {
                     popup.ShowPopup(2f, "파티 영웅을 지정해 주세요.");
                 });

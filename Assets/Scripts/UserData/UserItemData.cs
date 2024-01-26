@@ -118,7 +118,6 @@ public class UserItemData : UserDataBase
     }
     public ERROR_CODE UseItemCount(double use_cnt)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
 
         if (!IsUsableItemCount(use_cnt))
         {

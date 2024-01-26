@@ -147,7 +147,7 @@ public class UserHeroData : UserDataBase
         {
             return code;
         }
-        if (IsMaxLevel())
+        if (!IsMaxLevel())
         {
             double _exp = GetExp();
             _exp += xp;
@@ -172,7 +172,7 @@ public class UserHeroData : UserDataBase
         }
         else
         {
-            code = ERROR_CODE.NOT_WORK;
+            code = ERROR_CODE.ALREADY_MAX_LEVEL;
         }
 
         return code;

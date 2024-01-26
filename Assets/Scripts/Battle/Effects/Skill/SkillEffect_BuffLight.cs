@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class SkillEffect_BuffLight : SkillEffectBase
 {
-    readonly float START_CURVE_DIST = 3f;
-
     public override void MoveTarget(Transform target, float duration)
     {
         base.MoveTarget(target, duration);

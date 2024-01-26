@@ -117,7 +117,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             Vector2 pos = this.transform.position;
             pos += Tooltip_Upper_Pos;
 
-            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", (popup) =>
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
                 popup.ShowPopup(0, pos);
             });

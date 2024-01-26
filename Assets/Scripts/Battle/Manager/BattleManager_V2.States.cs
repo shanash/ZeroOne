@@ -313,7 +313,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     {
         TeamMembersChangeState(UNIT_STATES.PAUSE);
         GetEffectFactory().OnPause();
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattlePausePopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattlePausePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(() =>
             {
@@ -338,7 +338,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
 
         Game_Over_Delta = 1f;
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });
@@ -356,7 +356,7 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateGameOverLoseBegin()
     {
         Game_Over_Delta = 1f;
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });

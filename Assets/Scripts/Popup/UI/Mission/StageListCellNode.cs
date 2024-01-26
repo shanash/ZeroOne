@@ -81,7 +81,7 @@ public class StageListCellNode : InfiniteScrollItem
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             var data = (StageListData)this.scrollData;
 

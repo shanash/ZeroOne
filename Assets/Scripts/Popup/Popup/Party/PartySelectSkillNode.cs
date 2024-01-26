@@ -58,7 +58,7 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
     public void OnPointerClick(PointerEventData eventData)
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup(0, (Vector2)transform.position);
         });

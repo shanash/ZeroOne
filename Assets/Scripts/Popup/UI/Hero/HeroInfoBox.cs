@@ -1,3 +1,4 @@
+using FluffyDuck.UI;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -53,7 +54,7 @@ public class HeroInfoBox : MonoBehaviour
     public void OnBlocked(Gpm.Ui.Tab tab)
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });

@@ -29,11 +29,6 @@ public class RewardCardBase : UIBase
                 Reward_Item_Icon.sprite = spr;
             });
         }
-        else
-        {
-            bool a = false;
-        }
-        
     }
 
     RewardDataBase CreateRewardData(Reward_Set_Data data)

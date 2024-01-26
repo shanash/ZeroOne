@@ -15,6 +15,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     protected Vector3 Direction;
 
+    protected List<ParticleSystem> All_Particle_List = new List<ParticleSystem>();
+
     public bool Is_Action { get; protected set; } = false;
 
     public bool Is_Loop { get; protected set; } = false;
@@ -104,16 +106,23 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
     {
         if (obj != null)
         {
-            var children = obj.GetComponentsInChildren<ParticleSystem>();
-            if (children != null && children.Length > 0)
+            //var children = obj.GetComponentsInChildren<ParticleSystem>();
+            //if (children != null && children.Length > 0)
+            //{
+            //    int cnt = children.Length;
+            //    for (int i = 0; i < cnt; i++)
+            //    {
+            //        ParticleSystem child = children[i];
+            //        var main = child.main;
+            //        main.simulationSpeed = speed_multiple;
+            //    }
+            //}
+            int cnt = All_Particle_List.Count;
+            for (int i = 0; i < cnt; i++)
             {
-                int cnt = children.Length;
-                for (int i = 0; i < cnt; i++)
-                {
-                    ParticleSystem child = children[i];
-                    var main = child.main;
-                    main.simulationSpeed = speed_multiple;
-                }
+                var child = All_Particle_List[i];
+                var main = child.main;
+                main.simulationSpeed = speed_multiple;
             }
             //  경우에 따라 애니메이터가 있을 수 있음. 
             var animator = obj.GetComponent<Animator>();
@@ -133,7 +142,18 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
             SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
         }
     }
-
+    /// <summary>
+    /// 모든 파티클 재생이 완료되었는지 체크
+    /// </summary>
+    /// <returns></returns>
+    protected bool CheckParticleComplete()
+    {
+        if (All_Particle_List.Count == 0)
+        {
+            return false;
+        }
+        return !All_Particle_List.Exists(x => x.isPlaying && x.IsAlive());
+    }
 
     public void SetFinishCallback(System.Action<EffectBase> cb)
     {
@@ -178,11 +198,23 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
     }
 
     public virtual void Show(bool show) { }
+
     
+
     public virtual void Spawned()
     {
         Is_Action = false;
         Is_Loop = false;
+        //  모든 파티클 컴포넌트를 리스트에 담아둔다
+        if (Particle_Effect != null)
+        {
+            var list = Particle_Effect.GetComponentsInChildren<ParticleSystem>();
+            if (list != null)
+            {
+                All_Particle_List.Clear();
+                All_Particle_List.AddRange(list);
+            }
+        }
     }
     public virtual void Despawned()
     {

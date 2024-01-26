@@ -149,7 +149,7 @@ public class HeroListUI : PopupBase
 
         int index = User_Hero_Datas.IndexOf(hero.User_Data);
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
             popup.ShowPopup(User_Hero_Datas, index);
         });
@@ -163,7 +163,7 @@ public class HeroListUI : PopupBase
     public void OnClickFilterPopup()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/FilterPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/FilterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(() =>
             {

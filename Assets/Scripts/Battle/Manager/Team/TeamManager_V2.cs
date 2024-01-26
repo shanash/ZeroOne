@@ -523,7 +523,6 @@ public partial class TeamManager_V2 : IDisposable
         {
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
                 //  nothing
-                bool a = false;
                 break;
             case GAME_TYPE.EDITOR_SKILL_EDIT_MODE:
                 break;

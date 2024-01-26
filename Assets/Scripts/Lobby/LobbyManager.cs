@@ -1,3 +1,4 @@
+using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,7 +55,7 @@ public class LobbyManager : MonoBehaviour
     public void OnClickChangeCharacter()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });
@@ -78,7 +79,7 @@ public class LobbyManager : MonoBehaviour
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });
@@ -88,7 +89,7 @@ public class LobbyManager : MonoBehaviour
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup(GAME_TYPE.NONE, 0);
         });
@@ -99,7 +100,7 @@ public class LobbyManager : MonoBehaviour
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         //CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -108,7 +109,7 @@ public class LobbyManager : MonoBehaviour
     public void OnClickSearch()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -116,7 +117,7 @@ public class LobbyManager : MonoBehaviour
     public void OnClickShop()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -126,7 +127,7 @@ public class LobbyManager : MonoBehaviour
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
@@ -135,7 +136,7 @@ public class LobbyManager : MonoBehaviour
     public void OnClickPlay()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });

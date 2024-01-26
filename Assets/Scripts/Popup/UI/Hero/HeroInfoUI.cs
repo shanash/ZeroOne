@@ -145,7 +145,7 @@ public class HeroInfoUI : PopupBase
     public void OnClickProfileButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/ProfilePopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/ProfilePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup((Player_Character_Data)User_Hero_Battle_Data.GetUnitData());
         });
@@ -154,7 +154,7 @@ public class HeroInfoUI : PopupBase
     public void OnClickMemorialButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });

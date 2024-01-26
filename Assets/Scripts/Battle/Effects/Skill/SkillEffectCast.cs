@@ -13,6 +13,14 @@ public class SkillEffectCast : SkillEffectBase
     {
         if (Is_Action)
         {
+            if (CheckParticleComplete())
+            {
+                Finish_Callback?.Invoke(this);
+                UnusedEffect();
+                return;
+                //Debug.Log($"파티클 종료 {gameObject.name} [{Delta}]");
+            }
+
             Delta += Time.deltaTime;
             if (Delta > Duration)
             {

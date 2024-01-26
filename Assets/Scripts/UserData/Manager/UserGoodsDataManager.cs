@@ -90,7 +90,7 @@ public class UserGoodsDataManager : ManagerBase
         return goods;
     }
 
-    public ERROR_CODE AddUserGoodsCount(GOODS_TYPE gtype, int cnt)
+    public ERROR_CODE AddUserGoodsCount(GOODS_TYPE gtype, double cnt)
     {
         UserGoodsData goods = FindUserGoods(gtype);
         if (goods == null)
@@ -101,7 +101,7 @@ public class UserGoodsDataManager : ManagerBase
         return goods.AddGoodsCount(cnt);
     }
 
-    public ERROR_CODE UseGoodsCount(GOODS_TYPE gtype, int cnt)
+    public ERROR_CODE UseGoodsCount(GOODS_TYPE gtype, double cnt)
     {
         if (cnt < 0)
         {

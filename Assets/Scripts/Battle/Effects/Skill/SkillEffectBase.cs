@@ -34,7 +34,6 @@ public class SkillEffectBase : EffectBase
     }
 
 
-
     /// <summary>
     /// 세컨 타겟 스킬<br/>
     /// 기준 타겟을 포함하여 새로운 타겟을 설정하고, 해당 타겟에 2차 일회성 효과를 적용한다.
