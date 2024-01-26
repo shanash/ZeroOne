@@ -612,26 +612,43 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     protected virtual void SpawnSkillCastEffect(BattleSkillGroup skill_grp)
     {
-        string effect_path = skill_grp.GetSkillCastEffectPath();
-        if (string.IsNullOrEmpty(effect_path))
+        string[] effect_paths = skill_grp.GetSkillCastEffectPath();
+        if (effect_paths == null)
         {
             return;
         }
-
-        var factory = Battle_Mng.GetEffectFactory();
-        var eff = (SkillEffectBase)factory.CreateEffect(effect_path);
-        var ec = eff.GetEffectComponent();
-        if (ec != null)
-        {
-            var tran = GetReachPosTypeTransform(eff.GetEffectComponent().Projectile_Reach_Pos_Type);
-            eff.transform.position = tran.position;
-        }
-        else
-        {
-            eff.transform.position = this.transform.position;
-        }
         
-        eff.StartParticle(ec.Effect_Duration);
+        var factory = Battle_Mng.GetEffectFactory();
+        int cnt = effect_paths.Length;
+        for (int i = 0; i < cnt; i++)
+        {
+            string e_path = effect_paths[i];
+            if (string.IsNullOrEmpty(e_path))
+            {
+                continue;
+            }
+            var eff = (SkillEffectBase)factory.CreateEffect(e_path);
+            var ec = eff.GetEffectComponent();
+            if (ec != null)
+            {
+                var tran = GetReachPosTypeTransform(eff.GetEffectComponent().Projectile_Reach_Pos_Type);
+                eff.transform.position = tran.position;
+            }
+            else
+            {
+                eff.transform.position = this.transform.position;
+            }
+
+            eff.StartParticle(ec.Effect_Duration);
+
+            var animator = eff.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.speed = Battle_Speed_Multiple;
+            }
+        }
+
+        
     }
 
     /// <summary>

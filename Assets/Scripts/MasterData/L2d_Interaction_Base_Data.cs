@@ -46,8 +46,10 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 		_interaction_group_id = raw_data.interaction_group_id;
 		_touch_type_01 = raw_data.touch_type_01;
 		_gescure_type_01 = raw_data.gescure_type_01;
-		_reaction_ani_id = raw_data.reaction_ani_id.ToArray();
-		_reaction_facial_id = raw_data.reaction_facial_id.ToArray();
+		if(raw_data.reaction_ani_id != null)
+			_reaction_ani_id = raw_data.reaction_ani_id.ToArray();
+		if(raw_data.reaction_facial_id != null)
+			_reaction_facial_id = raw_data.reaction_facial_id.ToArray();
 		_after_state_id = raw_data.after_state_id;
 	}
 

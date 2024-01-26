@@ -605,10 +605,18 @@ public partial class TeamManager_V2 : IDisposable
                     continue;
                 }
                 //  skill group cast effect
-                if (!string.IsNullOrEmpty(skill_group.cast_effect_path) && !list.Contains(skill_group.cast_effect_path))
+                if (skill_group.cast_effect_path != null)
                 {
-                    list.Add(skill_group.cast_effect_path);
+                    for (int c = 0; c < skill_group.cast_effect_path.Length; c++)
+                    {
+                        string cast_path = skill_group.cast_effect_path[c];
+                        if (!string.IsNullOrEmpty(cast_path) && !list.Contains(cast_path))
+                        {
+                            list.Add(cast_path);
+                        }
+                    }
                 }
+                
                 //  skill list
                 m.Get_PlayerCharacterSkillDataListBySkillGroup(skill_group.pc_skill_group_id, ref skill_list);
                 int skill_cnt = skill_list.Count;

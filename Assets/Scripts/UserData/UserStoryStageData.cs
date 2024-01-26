@@ -20,9 +20,9 @@ public class UserStoryStageData : UserDataBase
     {
         InitSecureVars();
         Stage_ID = 0;
-        Challenage_Count.Set(0);
-        Win_Count.Set(0);
-        Star_Point.Set(0);
+        //Challenage_Count.Set(0);
+        //Win_Count.Set(0);
+        //Star_Point.Set(0);
     }
 
     protected override void InitSecureVars()

@@ -129,7 +129,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected Transform GetReachPosTypeTransform(TARGET_REACH_POS_TYPE ptype)
     {
-        if (ptype == TARGET_REACH_POS_TYPE.RIGHT_TEAM_CENTER || ptype == TARGET_REACH_POS_TYPE.LEFT_TEAM_CENTER)
+        if (ptype >= TARGET_REACH_POS_TYPE.LEFT_TEAM_CENTER)
         {
             var factory = Battle_Mng.GetEffectFactory();
             if (ptype == TARGET_REACH_POS_TYPE.LEFT_TEAM_CENTER)

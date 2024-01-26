@@ -41,7 +41,8 @@ public class Editor_Wave_Data : System.IDisposable
 		_wave_group_id = raw_data.wave_group_id;
 		_wave_sequence = raw_data.wave_sequence;
 		_enemy_appearance_count = raw_data.enemy_appearance_count;
-		_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
+		if(raw_data.enemy_appearance_info != null)
+			_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
 		_wave_time = raw_data.wave_time;
 	}
 

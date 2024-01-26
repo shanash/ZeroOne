@@ -103,7 +103,8 @@ public class Player_Character_Data : System.IDisposable
 		_role_type = raw_data.role_type;
 		_tribe_type = raw_data.tribe_type;
 		_profile_age = raw_data.profile_age;
-		_profile_birthday = raw_data.profile_birthday.ToArray();
+		if(raw_data.profile_birthday != null)
+			_profile_birthday = raw_data.profile_birthday.ToArray();
 		_profile_high = raw_data.profile_high;
 		_profile_habby = raw_data.profile_habby;
 		_battle_info_id = raw_data.battle_info_id;

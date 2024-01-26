@@ -137,11 +137,16 @@ public class Player_Character_Skill_Data : System.IDisposable
 		_second_target_rule = raw_data.second_target_rule;
 		_max_second_target_count = raw_data.max_second_target_count;
 		_second_target_range = raw_data.second_target_range;
-		_effect_weight = raw_data.effect_weight.ToArray();
-		_onetime_effect_ids = raw_data.onetime_effect_ids.ToArray();
-		_duration_effect_ids = raw_data.duration_effect_ids.ToArray();
-		_second_target_onetime_effect_ids = raw_data.second_target_onetime_effect_ids.ToArray();
-		_second_target_duration_effect_ids = raw_data.second_target_duration_effect_ids.ToArray();
+		if(raw_data.effect_weight != null)
+			_effect_weight = raw_data.effect_weight.ToArray();
+		if(raw_data.onetime_effect_ids != null)
+			_onetime_effect_ids = raw_data.onetime_effect_ids.ToArray();
+		if(raw_data.duration_effect_ids != null)
+			_duration_effect_ids = raw_data.duration_effect_ids.ToArray();
+		if(raw_data.second_target_onetime_effect_ids != null)
+			_second_target_onetime_effect_ids = raw_data.second_target_onetime_effect_ids.ToArray();
+		if(raw_data.second_target_duration_effect_ids != null)
+			_second_target_duration_effect_ids = raw_data.second_target_duration_effect_ids.ToArray();
 		_event_name = raw_data.event_name;
 		_trigger_effect_path = raw_data.trigger_effect_path;
 	}

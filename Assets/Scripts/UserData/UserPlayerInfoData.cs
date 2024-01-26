@@ -18,8 +18,8 @@ public class UserPlayerInfoData : UserDataBase
     {
         InitSecureVars();
         Nickname = string.Empty;
-        Level.Set(1);
-        Exp.Set(0);
+        //Level.Set(1);
+        //Exp.Set(0);
     }
 
     protected override void Destroy()
@@ -31,7 +31,7 @@ public class UserPlayerInfoData : UserDataBase
     {
         if (Level == null)
         {
-            Level = new SecureVar<int>();
+            Level = new SecureVar<int>(1);
         }
         if (Exp == null)
         {

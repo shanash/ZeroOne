@@ -20,7 +20,7 @@ public class UserItemData : UserDataBase
         InitSecureVars();
         Item_Type = ITEM_TYPE_V2.NONE;
         Item_ID = 0;
-        Count.Set(0);
+        //Count.Set(0);
     }
 
     protected override void InitSecureVars()

@@ -67,7 +67,7 @@ public class BattleNpcSkillGroup : BattleSkillGroup
         return SKILL_TYPE.NONE;
     }
 
-    public override string GetSkillCastEffectPath()
+    public override string[] GetSkillCastEffectPath()
     {
         return Skill_Group.cast_effect_path;
     }

@@ -19,7 +19,7 @@ public class UserChargeItemData : UserDataBase
     protected override void Reset()
     {
         InitSecureVars();
-        Count.Set(0);
+        //Count.Set(0);
         Charge_Item_Type = REWARD_TYPE.NONE;
         Last_Used_Dt = string.Empty;
     }

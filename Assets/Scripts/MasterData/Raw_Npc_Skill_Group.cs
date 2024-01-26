@@ -10,7 +10,7 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 	public int target_skill_id {get; set;}
 	public string icon {get; set;}
 	public string action_name {get; set;}
-	public string cast_effect_path {get; set;}
+	public string[] cast_effect_path {get; set;}
 
 	private bool disposed = false;
 
@@ -22,7 +22,6 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 		target_skill_id = 0;
 		icon = string.Empty;
 		action_name = string.Empty;
-		cast_effect_path = string.Empty;
 	}
 
 	public void Dispose()

@@ -182,7 +182,7 @@ public abstract class BattleSkillGroup : BattleDataBase
 
     public abstract SKILL_TYPE GetSkillType();
 
-    public abstract string GetSkillCastEffectPath();
+    public abstract string[] GetSkillCastEffectPath();
 
     public virtual string GetSkillIconPath() { return "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy"; }
 

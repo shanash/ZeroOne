@@ -33,8 +33,10 @@ public class Me_Chat_Motion_Data : System.IDisposable
 	{
 		_chat_motion_id = raw_data.chat_motion_id;
 		_player_character_id = raw_data.player_character_id;
-		_animation_name = raw_data.animation_name.ToArray();
-		_serifu_ids = raw_data.serifu_ids.ToArray();
+		if(raw_data.animation_name != null)
+			_animation_name = raw_data.animation_name.ToArray();
+		if(raw_data.serifu_ids != null)
+			_serifu_ids = raw_data.serifu_ids.ToArray();
 	}
 
 	public void Dispose()

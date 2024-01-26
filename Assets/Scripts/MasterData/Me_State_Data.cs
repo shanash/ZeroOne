@@ -40,7 +40,8 @@ public class Me_State_Data : System.IDisposable
 		_state_id = raw_data.state_id;
 		_player_character_id = raw_data.player_character_id;
 		_idle_animation_name = raw_data.idle_animation_name;
-		_bored_chatmotion_ids = raw_data.bored_chatmotion_ids.ToArray();
+		if(raw_data.bored_chatmotion_ids != null)
+			_bored_chatmotion_ids = raw_data.bored_chatmotion_ids.ToArray();
 		_bored_condition_count = raw_data.bored_condition_count;
 	}
 

@@ -34,6 +34,7 @@ public class Hero_100002 : HeroBase_V2
         var stage_cam = virtual_cam.GetStageCamera();
 
         var character_cam = virtual_cam.GetCharacterCamera();
+        var free_cam = virtual_cam.GetFreeCamera();
 
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
@@ -66,6 +67,10 @@ public class Hero_100002 : HeroBase_V2
                             if (shot.DisplayName.Equals("CharacterCamera"))
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, character_cam);
+                            }
+                            if (shot.DisplayName.Equals("FreeCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, free_cam);
                             }
                             else if (shot.DisplayName.Equals("StageCamera"))
                             {

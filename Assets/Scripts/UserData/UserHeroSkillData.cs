@@ -43,8 +43,6 @@ public class UserHeroSkillData : UserDataBase
         public double Result_Accum_Exp;     //  경험치 아이템 사용 후 최종 경험치(누적 경험치)
 
         public double Used_Gold;            //  소모된 골드
-
-        public List<USE_SKILL_EXP_ITEM_DATA> Used_Items;    //  소모된 경험치 아이템
     }
 
 
@@ -76,7 +74,7 @@ public class UserHeroSkillData : UserDataBase
         }
         if (Skill_Group_ID == null)
         {
-            Skill_Group_ID = new SecureVar<int>(0);
+            Skill_Group_ID = new SecureVar<int>();
         }
         if (Level == null)
         {
@@ -84,7 +82,7 @@ public class UserHeroSkillData : UserDataBase
         }
         if (Exp == null)
         {
-            Exp = new SecureVar<double>(0);
+            Exp = new SecureVar<double>();
         }
     }
 
@@ -100,6 +98,7 @@ public class UserHeroSkillData : UserDataBase
     public void SetSkillGroupID(UserHeroData hero, int skill_grp_id)
     {
         Hero_Data = hero;
+        Skill_Group_ID.Set(skill_grp_id);
         Player_Character_ID.Set(Hero_Data.GetPlayerCharacterID());
         Player_Character_Num.Set(Hero_Data.Player_Character_Num);
         InitMasterData();
@@ -149,6 +148,7 @@ public class UserHeroSkillData : UserDataBase
     /// <param name="use_list"></param>
     public void AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
     {
+        var goods_mng = GameData.Instance.GetUserGoodsDataManager();
         var m = MasterDataManager.Instance;
         //  ID 높은 순으로(ID 높은것이 경험치 양이 많음)
         use_list.Sort((a, b) => b.Item_ID.CompareTo(a.Item_ID));
@@ -160,24 +160,9 @@ public class UserHeroSkillData : UserDataBase
         result.Result_Accum_Exp = GetExp();
         result.Used_Gold = 0;
 
-        result.Used_Items = new List<USE_SKILL_EXP_ITEM_DATA>();
-
-        int cnt = use_list.Count;
-        double sum_exp = 0;
-        double sum_gold = 0;
-        for (int i = 0; i < cnt; i++)
-        {
-            var use_data = use_list[i];
-            var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
-
-            sum_exp = 0;
-            sum_gold = 0;
-            for (int c = 0; c < use_data.Use_Count; c++)
-            {
-                sum_exp += item_data.int_var1;
-                sum_gold += item_data.int_var2;
-            }
-        }
+        //  시뮬레이션 결과를 받아온다.
+        var result_simulate = GetCalcSimulateExp(use_list);
+        
 
     }
     /// <summary>

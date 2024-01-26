@@ -88,7 +88,8 @@ public class Npc_Battle_Data : System.IDisposable
 		_npc_battle_id = raw_data.npc_battle_id;
 		_approach = raw_data.approach;
 		_position_type = raw_data.position_type;
-		_skill_pattern = raw_data.skill_pattern.ToArray();
+		if(raw_data.skill_pattern != null)
+			_skill_pattern = raw_data.skill_pattern.ToArray();
 		_passive_skill_group_id = raw_data.passive_skill_group_id;
 		_special_skill_group_id = raw_data.special_skill_group_id;
 		_hp = raw_data.hp;

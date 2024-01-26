@@ -18,7 +18,7 @@ public class UserGoodsData : UserDataBase
     {
         InitSecureVars();
         Goods_Type = GOODS_TYPE.NONE;
-        Count.Set(0);
+        //Count.Set(0);
     }
 
     protected override void InitSecureVars()

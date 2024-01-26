@@ -25,10 +25,10 @@ public class UserHeroData : UserDataBase
     {
         InitSecureVars();
         Player_Character_Num = 0;
-        Player_Character_ID.Set(0);
-        Level.Set(1);
-        Exp.Set(0);
-        Star_Grade.Set(0);
+        //Player_Character_ID.Set(0);
+        //Level.Set(1);
+        //Exp.Set(0);
+        //Star_Grade.Set(0);
         Lobby_Choice_Num = 0;
         Is_Choice_Lobby = false;
     }
@@ -40,7 +40,7 @@ public class UserHeroData : UserDataBase
         }
         if (Level == null)
         {
-            Level = new SecureVar<int>();
+            Level = new SecureVar<int>(1);
         }
         if (Exp == null)
         {

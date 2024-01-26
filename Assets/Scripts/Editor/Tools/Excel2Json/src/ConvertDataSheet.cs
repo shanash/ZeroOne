@@ -491,7 +491,8 @@ namespace Excel2Json
                     }
                     else
                     {
-                        sb.AppendLine($"\t\t_{info.key} = raw_data.{info.key}.ToArray();");
+                        sb.AppendLine($"\t\tif(raw_data.{info.key} != null)");
+                        sb.AppendLine($"\t\t\t_{info.key} = raw_data.{info.key}.ToArray();");
                     }
                 }
             }

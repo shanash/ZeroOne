@@ -56,8 +56,8 @@ public class Player_Character_Skill_Group : System.IDisposable
 	///	<summary>
 	///	캐스팅 이펙트
 	///	</summary>
-	public string cast_effect_path => _cast_effect_path;
-	string _cast_effect_path;
+	public string[] cast_effect_path => _cast_effect_path;
+	string[] _cast_effect_path;
 
 	private bool disposed = false;
 
@@ -71,7 +71,8 @@ public class Player_Character_Skill_Group : System.IDisposable
 		_target_skill_id = raw_data.target_skill_id;
 		_icon = raw_data.icon;
 		_action_name = raw_data.action_name;
-		_cast_effect_path = raw_data.cast_effect_path;
+		if(raw_data.cast_effect_path != null)
+			_cast_effect_path = raw_data.cast_effect_path.ToArray();
 	}
 
 	public void Dispose()
@@ -92,6 +93,7 @@ public class Player_Character_Skill_Group : System.IDisposable
 	}
 	public override string ToString()
 	{
+		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[pc_skill_group_id] = <color=yellow>{0}</color>", pc_skill_group_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
@@ -101,7 +103,16 @@ public class Player_Character_Skill_Group : System.IDisposable
 		sb.AppendFormat("[target_skill_id] = <color=yellow>{0}</color>", target_skill_id).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[action_name] = <color=yellow>{0}</color>", action_name).AppendLine();
-		sb.AppendFormat("[cast_effect_path] = <color=yellow>{0}</color>", cast_effect_path).AppendLine();
+		sb.AppendLine("[cast_effect_path]");
+		if(cast_effect_path != null)
+		{
+			cnt = cast_effect_path.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", cast_effect_path[i]).AppendLine();
+			}
+		}
+
 		return sb.ToString();
 	}
 }

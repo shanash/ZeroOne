@@ -113,7 +113,8 @@ public class Player_Character_Battle_Data : System.IDisposable
 		_battle_info_id = raw_data.battle_info_id;
 		_approach = raw_data.approach;
 		_position_type = raw_data.position_type;
-		_skill_pattern = raw_data.skill_pattern.ToArray();
+		if(raw_data.skill_pattern != null)
+			_skill_pattern = raw_data.skill_pattern.ToArray();
 		_passive_skill_group_id = raw_data.passive_skill_group_id;
 		_special_skill_group_id = raw_data.special_skill_group_id;
 		_hp = raw_data.hp;

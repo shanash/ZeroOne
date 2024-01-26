@@ -60,9 +60,12 @@ public class Wave_Data : System.IDisposable
 		_stage_id = raw_data.stage_id;
 		_wave_sequence = raw_data.wave_sequence;
 		_enemy_appearance_count = raw_data.enemy_appearance_count;
-		_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
-		_npc_levels = raw_data.npc_levels.ToArray();
-		_npc_stat_ids = raw_data.npc_stat_ids.ToArray();
+		if(raw_data.enemy_appearance_info != null)
+			_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
+		if(raw_data.npc_levels != null)
+			_npc_levels = raw_data.npc_levels.ToArray();
+		if(raw_data.npc_stat_ids != null)
+			_npc_stat_ids = raw_data.npc_stat_ids.ToArray();
 		_wave_time = raw_data.wave_time;
 	}
 

@@ -34265,6 +34265,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5227805977203692602}
   - component: {fileID: 947216519429298459}
+  - component: {fileID: 3804408475174844185}
+  - component: {fileID: 3980456546395507787}
+  - component: {fileID: 1734932214064175219}
   m_Layer: 0
   m_Name: SkillEffect_Laila_Ultimate_Cutscene_01
   m_TagString: Untagged
@@ -34317,6 +34320,44 @@ MonoBehaviour:
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
+--- !u!114 &3804408475174844185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6282705674960415196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 70
+--- !u!210 &3980456546395507787
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6282705674960415196}
+  m_Enabled: 1
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &1734932214064175219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6282705674960415196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9afc975f1e0f3143bb35a13d6935615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 9197936109285126147}
 --- !u!1 &6767317862171595402
 GameObject:
   m_ObjectHideFlags: 0

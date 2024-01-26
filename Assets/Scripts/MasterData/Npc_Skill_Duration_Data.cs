@@ -98,9 +98,11 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 		_persistence_type = raw_data.persistence_type;
 		_time = raw_data.time;
 		_count = raw_data.count;
-		_repeat_npc_onetime_ids = raw_data.repeat_npc_onetime_ids.ToArray();
+		if(raw_data.repeat_npc_onetime_ids != null)
+			_repeat_npc_onetime_ids = raw_data.repeat_npc_onetime_ids.ToArray();
 		_repeat_interval = raw_data.repeat_interval;
-		_finish_npc_onetime_ids = raw_data.finish_npc_onetime_ids.ToArray();
+		if(raw_data.finish_npc_onetime_ids != null)
+			_finish_npc_onetime_ids = raw_data.finish_npc_onetime_ids.ToArray();
 		_multiple_type = raw_data.multiple_type;
 		_value = raw_data.value;
 		_multiple = raw_data.multiple;

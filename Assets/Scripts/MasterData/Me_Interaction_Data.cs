@@ -81,8 +81,10 @@ public class Me_Interaction_Data : System.IDisposable
 		_condition_min_gesture_count = raw_data.condition_min_gesture_count;
 		_condition_max_gesture_count = raw_data.condition_max_gesture_count;
 		_drag_animation_name = raw_data.drag_animation_name;
-		_chat_motion_ids = raw_data.chat_motion_ids.ToArray();
-		_condition_state_ids = raw_data.condition_state_ids.ToArray();
+		if(raw_data.chat_motion_ids != null)
+			_chat_motion_ids = raw_data.chat_motion_ids.ToArray();
+		if(raw_data.condition_state_ids != null)
+			_condition_state_ids = raw_data.condition_state_ids.ToArray();
 		_change_state_id = raw_data.change_state_id;
 	}
 
