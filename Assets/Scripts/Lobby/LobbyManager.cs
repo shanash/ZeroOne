@@ -30,7 +30,7 @@ public class LobbyManager : MonoBehaviour
         pmng.SetRootOnEnter(LobbyRootOnEnter);
         pmng.SetRootOnExit(LobbyRootOnExit);
 
-        pd = Factory.Instantiate<Producer>(10000200, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+        pd = Factory.Instantiate<Producer>(1010051, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
     }
 

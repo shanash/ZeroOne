@@ -537,6 +537,29 @@ public class MasterDataManager : BaseMasterDataManager
             .ToDictionary(x => x.chat_motion_id, x => x);
     }
 
+    public Me_Chat_Motion_Data Get_MemorialChatMotion_(int chat_motion_id)
+    {
+        return _Me_Chat_Motion_Data
+            .Find(x => x.chat_motion_id == chat_motion_id);
+    }
+
+    public Dictionary<int, Me_Chat_Motion_Data> Get_AniData(List<int> animation_ids)
+    {
+        return animation_ids
+            .Select(chat_motion_id => _Me_Chat_Motion_Data.Find(data => data.chat_motion_id == chat_motion_id))
+            .Where(x => x != null)
+            .Distinct()
+            .ToDictionary(data => data.chat_motion_id, data => data);
+    }
+
+    public Dictionary<int, Me_Serifu_Data> Get_SerifuData(List<int> serifu_ids)
+    {
+        return serifu_ids
+            .Select(serifu_id => _Me_Serifu_Data.Find(serifu_data => serifu_data.serifu_id == serifu_id))
+            .Distinct()
+            .ToDictionary(serifu_data => serifu_data.serifu_id, serifu_data => serifu_data);
+    }
+
     public Dictionary<int, Me_Serifu_Data> Get_MemorialSerifu(int player_character_id)
     {
         return _Me_Serifu_Data
@@ -553,12 +576,56 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region L2D Character
-    /*
     public L2d_Char_Skin_Data Get_L2DCharSkinData(int char_skin_id)
     {
         return _L2d_Char_Skin_Data.Find(x => x.l2d_id == char_skin_id);
     }
-    */
+
+    public Dictionary<int, (string Idle_Animation_Name, int[] Bored_Chatmotion_Ids, int Bored_Condition_Count)> Get_L2DCharStateAnimations(int char_skin_id)
+    {
+        return _L2d_Love_State_Data
+            .Where(love_state => love_state.l2d_id == char_skin_id)
+            .Select(love_state => new
+            {
+                state_id = love_state.state_id,
+                ani_state = _L2d_Skin_Ani_State_Data.FirstOrDefault(x => x.state_id == love_state.state_id)
+            })
+            .Where(x => x.ani_state != null)
+            .Select(x => new
+            {
+                x.state_id,
+                chat_motion_data = Get_MemorialChatMotion_(x.ani_state.base_ani_id)
+            })
+            .ToDictionary(
+                x => x.state_id,
+                x => (x.chat_motion_data.animation_name, new int[0], 0)
+            );
+    }
+
+    public Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> Get_L2D_LoveStates(int char_skin_id)
+    {
+        return _L2d_Love_State_Data
+            .FindAll(x => x.l2d_id == char_skin_id)
+            .ToDictionary(x => x.love_level_type, x => x);
+    }
+
+    public Dictionary<int, L2d_Skin_Ani_State_Data> Get_L2D_SkinAniStates(List<int> state_ids)
+    {
+        return state_ids
+            .Select(state_id => _L2d_Skin_Ani_State_Data.Find(x => x.state_id == state_id))
+            .Where(skin_ani_state_data => skin_ani_state_data != null)
+            .Distinct()
+            .ToDictionary(skin_ani_state_data => skin_ani_state_data.state_id, skin_ani_state_data => skin_ani_state_data);
+    }
+
+    public Dictionary<int, List<L2d_Interaction_Base_Data>> Get_L2D_InteractionBases(List<int> interaction_group_ids)
+    {
+        return interaction_group_ids
+            .ToDictionary(
+                id => id,
+                id => _L2d_Interaction_Base_Data.FindAll(x => x.interaction_group_id == id)
+            );
+    }
     #endregion
 
     #region Essence Transfer
