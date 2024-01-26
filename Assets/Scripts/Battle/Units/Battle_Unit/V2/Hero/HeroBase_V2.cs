@@ -1121,8 +1121,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     void SpawnQueueEffect(Effect_Queue_Data edata)
     {
         var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path, UI_Mng.GetDamageContainer());
-        var rt = effect.transform as RectTransform;
-        rt.anchoredPosition3D = RectTransformUtility.WorldToScreenPoint(Camera.main, edata.Target_Position.position);
+        (effect.transform as RectTransform).anchoredPosition3D = RectTransformUtility.WorldToScreenPoint(Camera.main, edata.Target_Position.position);
         effect.SetData(edata.Data);
         effect.StartParticle(edata.Duration);
     }
