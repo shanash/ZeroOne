@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Shake2D : MonoBehaviour
 {
-    Coroutine Shake_Coroutine;
+    Coroutine Shake_Coroutine = null;
 
     public void Shake(float duration, float shake_force, System.Action<object> cb)
     {
@@ -16,20 +16,18 @@ public class Shake2D : MonoBehaviour
 
     IEnumerator ShakeCoroutine(float duration, float shake_force, System.Action<object> cb)
     {
-        Vector2 origin_pos = this.transform.position;
+        var rt = this.transform as RectTransform;
+        Vector2 origin_pos = rt.anchoredPosition;
         float delta = 0f;
         while (delta < duration)
         {
-            this.transform.position = origin_pos + Random.insideUnitCircle * shake_force;
+            rt.anchoredPosition = origin_pos + Random.insideUnitCircle * shake_force;
             delta += Time.smoothDeltaTime;
             yield return null;
         }
-        this.transform.position = origin_pos;
+        rt.anchoredPosition3D = origin_pos;
         cb?.Invoke(this);
 
         Shake_Coroutine = null;
-        yield break;
-
     }
-
 }
