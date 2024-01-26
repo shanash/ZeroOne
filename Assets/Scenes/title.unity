@@ -489,10 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Brain_Cam: {fileID: 519420033}
-  Stage_Cam: {fileID: 2144958734}
-  Character_Cam: {fileID: 992849983}
-  Target_Group: {fileID: 93154601}
-  Target_Group_Cam: {fileID: 65955376}
+  Virtual_Camera_List: []
 --- !u!320 &296271138
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -1039,7 +1036,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 605032503
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1542,9 +1539,9 @@ Canvas:
   m_GameObject: {fileID: 626533044}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
+  m_PlaneDistance: 0.1001
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1553,7 +1550,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -707213165
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &626533048
