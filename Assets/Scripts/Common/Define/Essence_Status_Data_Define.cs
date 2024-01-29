@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class Essence_Status_Data_Define
 {
     public static string ToStringForUI(this Essence_Status_Data value)
