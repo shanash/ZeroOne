@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 
 [System.Serializable]
 public class Raw_Npc_Skill_Onetime_Data : System.IDisposable

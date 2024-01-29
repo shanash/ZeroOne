@@ -1,23 +1,40 @@
 
 using FluffyDuck.Util;
+using System.Runtime.Serialization;
 
 public class UserHeroData : UserDataBase
 {
+    /// <summary>
+    /// 캐릭터 아이디
+    /// </summary>
     SecureVar<int> Player_Character_ID = null;
+    /// <summary>
+    /// 캐릭터 고유 번호(서버측에서 발급)
+    /// </summary>
     public int Player_Character_Num { get; protected set; } = 0;
+    /// <summary>
+    /// 레벨
+    /// </summary>
     SecureVar<int> Level = null;
+    /// <summary>
+    /// 누적 경험치
+    /// </summary>
     SecureVar<double> Exp = null;
-
+    /// <summary>
+    /// 성급
+    /// </summary>
     SecureVar<int> Star_Grade = null;
 
     public int Lobby_Choice_Num { get; protected set; } = 0;
 
     public bool Is_Choice_Lobby { get; protected set; } = false;
 
+
     public Player_Character_Data Hero_Data { get; private set; }
     public Player_Character_Battle_Data Battle_Data { get; private set; }
 
     Player_Character_Level_Data Lv_Data;
+    Star_Upgrade_Data Star_Data;
 
     public UserHeroData() : base() { }
 
@@ -25,10 +42,6 @@ public class UserHeroData : UserDataBase
     {
         InitSecureVars();
         Player_Character_Num = 0;
-        //Player_Character_ID.Set(0);
-        //Level.Set(1);
-        //Exp.Set(0);
-        //Star_Grade.Set(0);
         Lobby_Choice_Num = 0;
         Is_Choice_Lobby = false;
     }
@@ -62,13 +75,14 @@ public class UserHeroData : UserDataBase
     {
         var m = MasterDataManager.Instance;
         Hero_Data = m.Get_PlayerCharacterData(GetPlayerCharacterID());
-        Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id);
+        
         Lv_Data = m.Get_PlayerCharacterLevelData(GetLevel());
-
         if (GetStarGrade() == 0)
         {
             Star_Grade.Set(Hero_Data.default_star);
         }
+        Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id, GetStarGrade());
+        Star_Data = m.Get_StarUpgradeData(GetStarGrade());
     }
 
     public int GetPlayerCharacterID()
@@ -126,6 +140,94 @@ public class UserHeroData : UserDataBase
     {
         Star_Grade.Set(grade);
         //  등급에 맞는 Battle_Data를 다시 찾아야 함. 수정 필요.
+        var m = MasterDataManager.Instance;
+        Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id, grade);
+        Star_Data = m.Get_StarUpgradeData(grade);
+    }
+
+    /// <summary>
+    /// 성급 강화 요청
+    /// </summary>
+    /// <returns></returns>
+    public ERROR_CODE SetStarGradeUp()
+    {
+        //  이미 최대 성급 레벨입니다.
+        if (IsMaxStarGrade())
+        {
+            return ERROR_CODE.ALREADY_MAX_LEVEL;
+        }
+        var goods_mng = GameData.Instance.GetUserGoodsDataManager();
+        var item_mng = GameData.Instance.GetUserItemDataManager();
+
+        //  현재 성급에서 상위 성급으로 진급시 필요한 캐릭터 조각 수 체크
+        int need_piece_count = GetNeedPiece();
+        if (need_piece_count == 0 || !item_mng.IsUsableItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), need_piece_count))
+        {
+            //  캐릭터 조각이 부족합니다.
+            return ERROR_CODE.NOT_ENOUGH_ITEM;
+        }
+
+        //  필요 골드 체크
+        double need_gold = GetNeedGold();
+        if (need_gold == 0 || !goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, need_gold))
+        {
+            //  골드가 부족합니다.
+            return ERROR_CODE.NOT_ENOUGH_GOLD;
+        }
+
+        //  캐릭터 조각 소모
+        ERROR_CODE piece_use_result = item_mng.UseItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), need_piece_count);
+        if (piece_use_result != ERROR_CODE.SUCCESS)
+        {
+            return piece_use_result;
+        }
+        //  필요 골드 소모
+        ERROR_CODE gold_use_result = goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, need_gold);
+        if (gold_use_result != ERROR_CODE.SUCCESS)
+        {
+            return gold_use_result;
+        }
+
+        //  성급 상승
+        int next_star_grade = GetStarGrade() + 1;
+        SetStarGrade(next_star_grade);
+
+        return ERROR_CODE.SUCCESS;
+    }
+
+    
+    /// <summary>
+    /// 최대 성급인지 반환
+    /// </summary>
+    /// <returns></returns>
+    public bool IsMaxStarGrade()
+    {
+        const int max_star_grade = 5;
+        return GetStarGrade() >= max_star_grade;
+    }
+    /// <summary>
+    /// 성급 강화에 필요한 캐릭터 조각
+    /// </summary>
+    /// <returns></returns>
+    public int GetNeedPiece()
+    {
+        if (Star_Data != null)
+        {
+            return Star_Data.need_char_piece;
+        }
+        return 0;
+    }
+    /// <summary>
+    /// 성급 강화에 필요한 골드
+    /// </summary>
+    /// <returns></returns>
+    public double GetNeedGold()
+    {
+        if (Star_Data != null)
+        {
+            return Star_Data.need_gold;
+        }
+        return 0;
     }
 
     public POSITION_TYPE GetPositionType()
@@ -142,7 +244,11 @@ public class UserHeroData : UserDataBase
     {
         SetLobbyChoiceNumber(0);
     }
-
+    /// <summary>
+    /// 캐릭터 경험치 추가
+    /// </summary>
+    /// <param name="xp"></param>
+    /// <returns></returns>
     public ERROR_CODE AddExp(double xp)
     {
         ERROR_CODE code = ERROR_CODE.FAILED;
@@ -289,10 +395,8 @@ public class UserHeroData : UserDataBase
 
         InitMasterData();
 
-
         return true;
     }
-
 
     //-------------------------------------------------------------------------
     // Json Node Name

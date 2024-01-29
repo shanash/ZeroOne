@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 
 [System.Serializable]
 public class Raw_Stage_Data : System.IDisposable

@@ -1,5 +1,8 @@
-﻿using FluffyDuck.Util;
+﻿#if UNITY_5_3_OR_NEWER
+using FluffyDuck.Util;
+#endif
 using System.Linq;
+#nullable disable
 
 public class Player_Character_Battle_Data : System.IDisposable
 {
@@ -8,6 +11,12 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public int battle_info_id => _battle_info_id;
 	int _battle_info_id;
+
+	///	<summary>
+	///	별성 정보
+	///	</summary>
+	public int star_grade => _star_grade;
+	int _star_grade;
 
 	///	<summary>
 	///	접근 사거리
@@ -111,6 +120,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 	public Player_Character_Battle_Data(Raw_Player_Character_Battle_Data raw_data)
 	{
 		_battle_info_id = raw_data.battle_info_id;
+		_star_grade = raw_data.star_grade;
 		_approach = raw_data.approach;
 		_position_type = raw_data.position_type;
 		if(raw_data.skill_pattern != null)
@@ -151,6 +161,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[battle_info_id] = <color=yellow>{0}</color>", battle_info_id).AppendLine();
+		sb.AppendFormat("[star_grade] = <color=yellow>{0}</color>", star_grade).AppendLine();
 		sb.AppendFormat("[approach] = <color=yellow>{0}</color>", approach).AppendLine();
 		sb.AppendFormat("[position_type] = <color=yellow>{0}</color>", position_type).AppendLine();
 		sb.AppendLine("[skill_pattern]");

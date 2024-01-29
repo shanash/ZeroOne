@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 
 [System.Serializable]
 public class Raw_Me_Chat_Motion_Data : System.IDisposable

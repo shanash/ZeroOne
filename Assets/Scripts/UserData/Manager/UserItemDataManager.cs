@@ -53,9 +53,51 @@ public class UserItemDataManager : ManagerBase
         var item = FindUserItem(itype, item_id);
         if (item == null)
         {
-            item = new UserItemData();
-            item.SetItemType(itype, item_id);
-            User_Item_Data_List.Add(item);
+            switch (itype)
+            {
+                case ITEM_TYPE_V2.EXP_POTION_P:
+                case ITEM_TYPE_V2.EXP_POTION_C:
+                case ITEM_TYPE_V2.STA_POTION:
+                case ITEM_TYPE_V2.FAVORITE_ITEM:
+                case ITEM_TYPE_V2.EXP_SKILL:
+                case ITEM_TYPE_V2.STAGE_SKIP:
+                case ITEM_TYPE_V2.TICKET_DUNGEON:
+                case ITEM_TYPE_V2.EQ_GROWUP:
+                    item = new UserItem_NormalItemData();
+                    break;
+                case ITEM_TYPE_V2.TICKET_REWARD_SELECT:
+                    Debug.Assert(false);
+                    break;
+                case ITEM_TYPE_V2.TICKET_REWARD_RANDOM:
+                    Debug.Assert(false);
+                    break;
+                case ITEM_TYPE_V2.TICKET_REWARD_ALL:
+                    Debug.Assert(false);
+                    break;
+                case ITEM_TYPE_V2.EQUIPMENT:
+                    Debug.Assert(false);
+                    break;
+                case ITEM_TYPE_V2.CHARACTER:
+                    Debug.Assert(false);
+                    break;
+                case ITEM_TYPE_V2.PIECE_EQUIPMENT:
+                    item = new UserItem_EquipmentPieceData();
+                    break;
+                case ITEM_TYPE_V2.PIECE_CHARACTER:
+                    item = new UserItem_CharacterPieceData();
+                    break;
+                case ITEM_TYPE_V2.PIECE_ITEM:
+                    item = new UserItem_NormalItemPieceData();
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            if (item != null)
+            {
+                item.SetItemType(itype, item_id);
+                User_Item_Data_List.Add(item);
+            }
         }
         return item;
     }

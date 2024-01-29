@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 
 [System.Serializable]
 public class Raw_Max_Bound_Info_Data : System.IDisposable

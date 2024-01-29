@@ -168,15 +168,22 @@ namespace Excel2Json
 
             //  include package
             sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("#if UNITY_5_3_OR_NEWER");
             sb.AppendLine("using UnityEngine;");
+            sb.AppendLine("#endif");
             if (USE_ADDRESSABLE_ASSETS)
             {
                 if (is_encrypt)
                 {
+                    sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                     sb.AppendLine("using FluffyDuck.Util;");
+                    sb.AppendLine("#endif");
                 }
                 sb.AppendLine("using System.Threading.Tasks;");
+                sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                 sb.AppendLine("using UnityEngine.AddressableAssets;");
+                sb.AppendLine("#endif");
+                sb.AppendLine("#nullable disable");
             }
             else
             {
@@ -292,6 +299,7 @@ namespace Excel2Json
             }
             else
             {
+                sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                 //  LoadJsonDataAsync
                 sb.AppendLine("\tasync Task<string> LoadJsonDataAsync(string path)");
                 sb.AppendLine("\t{");              //  LoadJsonData begin
@@ -301,6 +309,16 @@ namespace Excel2Json
                 sb.AppendLine();
                 sb.AppendLine("\t}");              //  LoadJsonData end
                 sb.AppendLine().AppendLine();
+                sb.AppendLine("#else");
+                sb.AppendLine("\tasync Task<string> LoadJsonDataAsync(string path)");
+                sb.AppendLine("\t{");              //  LoadJsonData begin
+                sb.AppendLine("\t\tusing (var reader = new StreamReader(path))");
+                sb.AppendLine("\t\t{");
+                sb.AppendLine("\t\t\treturn await reader.ReadToEndAsync();");
+                sb.AppendLine("\t\t}");
+                sb.AppendLine("\t}");              //  LoadJsonData end
+                sb.AppendLine().AppendLine();
+                sb.AppendLine("#endif");
 
                 //  load master funcs
                 foreach (var table in master_table_columns)
@@ -309,7 +327,12 @@ namespace Excel2Json
                     sb.AppendLine("\t{");
                     if (is_encrypt)
                     {
+                        sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
+                        sb.AppendLine("#else");
+                        sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"../Master/{table.Key}.json\");");
+                        sb.AppendLine("#endif");
+
                         sb.AppendLine("\t\tstring decrypt = FluffyDuck.Util.Security.AESDecrypt256(json);");
                         if (use_raw)
                         {
@@ -322,7 +345,11 @@ namespace Excel2Json
                     }
                     else
                     {
+                        sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                         sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"Assets/AssetResources/Master/{table.Key}\");");
+                        sb.AppendLine("#else");
+                        sb.AppendLine($"\t\tstring json = await LoadJsonDataAsync(\"../Master/{table.Key}.json\");");
+                        sb.AppendLine("#endif");
                         if (use_raw)
                         {
                             sb.AppendLine($"\t\t_{table.Key} = JsonConvert.DeserializeObject<List<{table.Key}>>(json);");

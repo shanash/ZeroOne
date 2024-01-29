@@ -8,10 +8,8 @@ public class UserItemData : UserDataBase
 {
     public ITEM_TYPE_V2 Item_Type { get; private set; } = ITEM_TYPE_V2.NONE;
     public int Item_ID { get; private set; } = 0;
-    SecureVar<double> Count = null;
+    protected SecureVar<double> Count = null;
 
-    
-    Item_Data Data = null;
 
     public UserItemData() : base() { }
 
@@ -20,7 +18,6 @@ public class UserItemData : UserDataBase
         InitSecureVars();
         Item_Type = ITEM_TYPE_V2.NONE;
         Item_ID = 0;
-        //Count.Set(0);
     }
 
     protected override void InitSecureVars()
@@ -38,65 +35,71 @@ public class UserItemData : UserDataBase
         InitMasterData();
     }
 
-    protected override void InitMasterData()
-    {
-        var m = MasterDataManager.Instance;
+    //protected override void InitMasterData()
+    //{
+    //    var m = MasterDataManager.Instance;
         
-        switch (Item_Type)
-        {
-            case ITEM_TYPE_V2.EXP_POTION_P:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.EXP_POTION_C:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.STA_POTION:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.FAVORITE_ITEM:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.EXP_SKILL:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.STAGE_SKIP:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.TICKET_DUNGEON:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.EQ_GROWUP:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            case ITEM_TYPE_V2.TICKET_REWARD_SELECT:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.TICKET_REWARD_RANDOM:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.TICKET_REWARD_ALL:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.EQUIPMENT:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.CHARACTER:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.PIECE_EQUIPMENT:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.PIECE_CHARACTER:
-                Debug.Assert(false);
-                break;
-            case ITEM_TYPE_V2.PIECE_ITEM:
-                Data = m.Get_ItemData(Item_Type, Item_ID);
-                break;
-            default:
-                Debug.Assert(false);
-                break;
-        }
-    }
+    //    switch (Item_Type)
+    //    {
+    //        case ITEM_TYPE_V2.EXP_POTION_P:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.EXP_POTION_C:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.STA_POTION:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.FAVORITE_ITEM:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.EXP_SKILL:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.STAGE_SKIP:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.TICKET_DUNGEON:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.EQ_GROWUP:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        case ITEM_TYPE_V2.TICKET_REWARD_SELECT:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.TICKET_REWARD_RANDOM:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.TICKET_REWARD_ALL:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.EQUIPMENT:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.CHARACTER:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.PIECE_EQUIPMENT:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.PIECE_CHARACTER:
+    //            Debug.Assert(false);
+    //            break;
+    //        case ITEM_TYPE_V2.PIECE_ITEM:
+    //            Data = m.Get_ItemData(Item_Type, Item_ID);
+    //            break;
+    //        default:
+    //            Debug.Assert(false);
+    //            break;
+    //    }
+    //}
+
+    /// <summary>
+    /// 각 아이템 데이터 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual object GetItemData() {  return null; }
 
     public double GetCount()
     {
@@ -123,7 +126,7 @@ public class UserItemData : UserDataBase
         {
             return ERROR_CODE.NOT_ENOUGH_ITEM;
         }
-        if (use_cnt > 0)
+        if (use_cnt >= 0)
         {
             double cnt = GetCount();
             cnt -= use_cnt;

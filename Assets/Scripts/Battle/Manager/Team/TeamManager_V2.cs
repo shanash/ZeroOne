@@ -569,7 +569,7 @@ public partial class TeamManager_V2 : IDisposable
             Player_Character_Data hdata = hero.GetUserHeroData().GetPlayerCharacterData();
             if (hdata != null)
             {
-                GetPcSkillEffectPrefabPath(hdata, ref list);
+                GetPcSkillEffectPrefabPath(hero.GetUserHeroData(), ref list);
             }
         }
     }
@@ -579,8 +579,9 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     /// <param name="hero"></param>
     /// <param name="list"></param>
-    protected void GetPcSkillEffectPrefabPath(Player_Character_Data pc_data, ref List<string> list)
+    protected void GetPcSkillEffectPrefabPath(UserHeroData user_data, ref List<string> list)
     {
+        var pc_data = user_data.GetPlayerCharacterData();
         var m = MasterDataManager.Instance;
         List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();
 
@@ -596,8 +597,7 @@ public partial class TeamManager_V2 : IDisposable
         }
 
         //  battle data
-        var bdata = m.Get_PlayerCharacterBattleData(pc_data.battle_info_id);
-        
+        var bdata = user_data.GetPlayerCharacterBattleData();
 
         if (bdata != null)
         {

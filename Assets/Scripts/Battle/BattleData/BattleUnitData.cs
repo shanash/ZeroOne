@@ -30,12 +30,17 @@ public abstract class BattleUnitData : BattleDataBase
     /// <param name="lv"></param>
     /// <returns></returns>
     public abstract void SetLevel(int lv);
-
+    
     /// <summary>
     /// 유닛의 레벨 반환
     /// </summary>
     /// <returns></returns>
     public abstract int GetLevel();
+    /// <summary>
+    /// 유닛의 성급 반환
+    /// </summary>
+    /// <returns></returns>
+    public abstract int GetStarGrade();
 
     /// <summary>
     /// 유닛의 레벨 스텟 데이터 아이디
@@ -59,6 +64,8 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual object GetUserUnitData() {  return null; }
+
+    
 
     /// <summary>
     /// 전투력 포인트

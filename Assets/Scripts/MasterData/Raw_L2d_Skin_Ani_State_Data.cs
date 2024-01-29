@@ -1,4 +1,5 @@
-﻿
+﻿#nullable disable
+
 
 [System.Serializable]
 public class Raw_L2d_Skin_Ani_State_Data : System.IDisposable

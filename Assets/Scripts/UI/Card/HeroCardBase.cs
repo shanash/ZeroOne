@@ -93,7 +93,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     {
         var m = MasterDataManager.Instance;
         Data = m.Get_PlayerCharacterData(hero_data_id);
-        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id);
+        Battle_Data = m.Get_PlayerCharacterBattleData(Data.battle_info_id, Data.default_star);
 
         UpdateCardBase();
     }

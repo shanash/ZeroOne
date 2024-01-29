@@ -56,17 +56,32 @@ public class UserHeroDataManager : ManagerBase
         return User_Hero_Data_List;
     }
 
+    /// <summary>
+    /// 사용자 캐릭터 데이터 찾기(덱 정보롤 찾기) - 아직 사용하지 않음
+    /// </summary>
+    /// <param name="h"></param>
+    /// <returns></returns>
     public UserHeroData FindUserHeroData(UserHeroDeckMountData h)
     {
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == h.Player_Character_ID && x.Player_Character_Num == h.Player_Character_Num); ;
     }
-
+    /// <summary>
+    /// 사용자 캐릭터 데이터 찾기(id/num 으로 찾기)
+    /// </summary>
+    /// <param name="hero_data_id"></param>
+    /// <param name="hero_data_num"></param>
+    /// <returns></returns>
     public UserHeroData FindUserHeroData(int hero_data_id, int hero_data_num)
     {
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
-
-    public UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
+    /// <summary>
+    /// 사용자 캐릭터 데이터 추가
+    /// </summary>
+    /// <param name="hero_data_id"></param>
+    /// <param name="hero_data_num"></param>
+    /// <returns></returns>
+    UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
     {
         if (hero_data_id == 0)
         {
@@ -82,14 +97,12 @@ public class UserHeroDataManager : ManagerBase
 
             //  hero skill data init
             var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
-            if (skill_mng != null)
-            {
-                skill_mng.AddUserHeroSkillGroups(hero, hero.GetPlayerCharacterBattleData().skill_pattern);
-            }
+            skill_mng?.AddUserHeroSkillGroups(hero, hero.GetPlayerCharacterBattleData().skill_pattern);
         }
 
         return hero;
     }
+
 
     public override LitJson.JsonData Serialized()
     {

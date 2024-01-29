@@ -9,6 +9,47 @@ public class UIHeroBase : UnitBase_V2
 
     public void PlayAnimation(HERO_PLAY_ANIMATION_TYPE ani_type)
     {
+        try
+        {
+            switch (ani_type)
+            {
+                case HERO_PLAY_ANIMATION_TYPE.NONE:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.PREPARE_01:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.IDLE_01:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.IDLE_02:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.RUN_01:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.DAMAGE_02:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.DAMAGE_03:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.STUN:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.DEATH_01:
+                    break;
+                case HERO_PLAY_ANIMATION_TYPE.WIN_01:
+                    {
+
+                        Skeleton.AnimationState.SetAnimation(1, "1_win", false);
+                        Skeleton.AnimationState.AddAnimation(1, "1_idle", true, 0);
+                    }
+                    break;
+            }
+        }
+        catch (System.Exception e)
+        {
+            PlayAnimationV2(ani_type);
+        }
+        
+    }
+    public void PlayAnimationV2(HERO_PLAY_ANIMATION_TYPE ani_type)
+    {
         switch (ani_type)
         {
             case HERO_PLAY_ANIMATION_TYPE.NONE:
@@ -33,8 +74,9 @@ public class UIHeroBase : UnitBase_V2
                 break;
             case HERO_PLAY_ANIMATION_TYPE.WIN_01:
                 {
-                    Skeleton.AnimationState.SetAnimation(1, "1_win", false);
-                    Skeleton.AnimationState.AddAnimation(1, "1_idle", true, 0);
+
+                    Skeleton.AnimationState.SetAnimation(0, "00_win", false);
+                    Skeleton.AnimationState.AddAnimation(0, "00_win_loop", true, 0);
                 }
                 break;
         }

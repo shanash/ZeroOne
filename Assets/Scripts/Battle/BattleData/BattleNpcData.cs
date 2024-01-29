@@ -53,7 +53,10 @@ public class BattleNpcData : BattleUnitData
     {
         return Level;
     }
-
+    public override int GetStarGrade()
+    {
+        return 1;
+    }
     public override void SetStatDataID(int stat_id)
     {
         Stat_Data = MasterDataManager.Instance.Get_NpcLevelStatData(stat_id);

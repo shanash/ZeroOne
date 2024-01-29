@@ -1,5 +1,8 @@
-﻿using FluffyDuck.Util;
+﻿#if UNITY_5_3_OR_NEWER
+using FluffyDuck.Util;
+#endif
 using System.Linq;
+#nullable disable
 
 public class L2d_Char_Skin_Data : System.IDisposable
 {

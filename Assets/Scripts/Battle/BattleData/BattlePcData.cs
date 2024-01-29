@@ -55,6 +55,10 @@ public class BattlePcData : BattleUnitData
     {
         return User_Data.GetLevel();
     }
+    public override int GetStarGrade()
+    {
+        return User_Data.GetStarGrade();
+    }
 
     public override void SetStatDataID(int stat_id)
     {

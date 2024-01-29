@@ -355,8 +355,12 @@ namespace Excel2Json
             // using namespace
             if (!use_raw)
             {
+                // 서버는 FluffyDuck.Util 사용하지 않음
+                sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                 sb.AppendLine("using FluffyDuck.Util;");
+                sb.AppendLine("#endif");
                 sb.AppendLine("using System.Linq;");
+                sb.AppendLine("#nullable disable");
                 sb.AppendLine();
             }
 
@@ -576,6 +580,7 @@ namespace Excel2Json
             StringBuilder sb = new StringBuilder();
 
             //  include package
+            sb.AppendLine("#nullable disable");
             sb.AppendLine().AppendLine();
 
             sb.AppendLine("[System.Serializable]");

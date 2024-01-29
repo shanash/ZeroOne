@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#nullable disable
 
 public class MasterDataManager : BaseMasterDataManager
 {
@@ -163,15 +164,38 @@ public class MasterDataManager : BaseMasterDataManager
         list.Clear();
         list.AddRange(_Player_Character_Data);
     }
+    ///// <summary>
+    ///// 플레이어 캐릭터의 전투 정보
+    ///// </summary>
+    ///// <param name="battle_info_id"></param>
+    ///// <returns></returns>
+    //public Player_Character_Battle_Data Get_PlayerCharacterBattleData(int battle_info_id)
+    //{
+    //    Check_Player_Character_Battle_Data();
+    //    return _Player_Character_Battle_Data.Find(x => x.battle_info_id == battle_info_id);
+    //}
+
     /// <summary>
-    /// 플레이어 캐릭터의 전투 정보
+    /// 플레이어 캐릭터 전투 정보
     /// </summary>
     /// <param name="battle_info_id"></param>
+    /// <param name="star_grade"></param>
     /// <returns></returns>
-    public Player_Character_Battle_Data Get_PlayerCharacterBattleData(int battle_info_id)
+    public Player_Character_Battle_Data Get_PlayerCharacterBattleData(int battle_info_id, int star_grade)
     {
         Check_Player_Character_Battle_Data();
-        return _Player_Character_Battle_Data.Find(x => x.battle_info_id == battle_info_id);
+        return _Player_Character_Battle_Data.Find(x => x.battle_info_id == battle_info_id && x.star_grade == star_grade);
+    }
+
+    /// <summary>
+    /// 성급 강화 데이터 반환
+    /// </summary>
+    /// <param name="cur_star_grade"></param>
+    /// <returns></returns>
+    public Star_Upgrade_Data Get_StarUpgradeData(int cur_star_grade)
+    {
+        Check_Star_Upgrade_Data();
+        return _Star_Upgrade_Data.Find(x => x.current_star_grade == cur_star_grade);
     }
 
     /// <summary>
