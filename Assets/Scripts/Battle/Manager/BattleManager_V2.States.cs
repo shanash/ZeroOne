@@ -336,11 +336,11 @@ public partial class BattleManager_V2 : MonoBehaviour
     {
         var win_team = FindTeamManager(TEAM_TYPE.LEFT);
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
-
+        UI_Mng.ShowBattleUI(false);
         Game_Over_Delta = 1f;
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup();
+            popup.ShowPopup(this, Dungeon_Data);
         });
     }
     public virtual void GameStateGameOverWin() 
@@ -356,9 +356,10 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateGameOverLoseBegin()
     {
         Game_Over_Delta = 1f;
+        UI_Mng.ShowBattleUI(false);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup();
+            popup.ShowPopup(this, Dungeon_Data);
         });
     }
     public virtual void GameStateGameOverLose() 

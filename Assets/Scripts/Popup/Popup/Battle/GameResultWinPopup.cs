@@ -1,14 +1,17 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameResultWinPopup : PopupBase
 {
-    [Header("Result Popup Vars")]
     [Space()]
+    [Header("Result Popup Vars")]
     [SerializeField, Tooltip("Backlight Ease Alpha")]
     UIEaseCanvasGroupAlpha Backlight_Ease;
 
@@ -19,6 +22,7 @@ public class GameResultWinPopup : PopupBase
     UIEaseCanvasGroupAlpha Result_Info_Container;
 
     [Space()]
+    [Header("Star")]
     [SerializeField, Tooltip("Stars Container Ease Slide")]
     UIEaseSlide Stars_Container_Ease_Slide;
 
@@ -32,13 +36,32 @@ public class GameResultWinPopup : PopupBase
     List<UIEaseCanvasGroupAlpha> Complete_Mission_Star_Ease_Alpha_List;
 
     [Space()]
+    [Header("Player Info")]
     [SerializeField, Tooltip("Player Info Ease Slide")]
     UIEaseSlide Player_Info_Ease_Slide;
     [SerializeField, Tooltip("Player Info Ease Alpha")]
     UIEaseCanvasGroupAlpha Player_Info_Ease_Alpha;
 
+    [SerializeField, Tooltip("Player Lv Title")]
+    TMP_Text Player_Lv_Title;
+    [SerializeField, Tooltip("Player Lv Text")]
+    TMP_Text Player_Lv;
 
+    [SerializeField, Tooltip("Player Exp Gauge")]
+    Slider Player_Exp_Gauge;
+    [SerializeField, Tooltip("Player Exp Title")]
+    TMP_Text Player_Exp_Title;
+    [SerializeField, Tooltip("Player Exp")]
+    TMP_Text Player_Exp;
+
+    [SerializeField, Tooltip("Stage Reward Icon")]
+    Image Stage_Reward_Icon;
+    [SerializeField, Tooltip("Stage Reward Gold")]
+    TMP_Text Stage_Reward_Gold_Count;
+
+    
     [Space()]
+    [Header("Character Info")]
     [SerializeField, Tooltip("Character Info Ease Alpha")]
     UIEaseCanvasGroupAlpha Character_Info_Ease_Alpha;
     [SerializeField, Tooltip("Character Info Ease Slide")]
@@ -47,13 +70,17 @@ public class GameResultWinPopup : PopupBase
     [SerializeField, Tooltip("Character Info Container")]
     RectTransform Character_Info_Container;
 
+    
     [Space()]
+    [Header("Next Btn")]
     [SerializeField, Tooltip("Next Btn Ease Alpha")]
     UIEaseCanvasGroupAlpha Next_Btn_Ease_Alpha;
     [SerializeField, Tooltip("Next Btn Ease Slide")]
     UIEaseSlide Next_Btn_Ease_Slide;
 
+    
     [Space()]
+    [Header("Reward Info")]
     [SerializeField, Tooltip("Reward Info Container")]
     RectTransform Reward_Info_Container;
 
@@ -63,19 +90,31 @@ public class GameResultWinPopup : PopupBase
     [SerializeField, Tooltip("Reward Box Ease Scale")]
     UIEaseScale Reward_Box_Ease_Scale;
 
+    
     [Space()]
+    [Header("Reward Btn")]
     [SerializeField, Tooltip("Reward Btn Container Ease Slide")]
     UIEaseSlide Reward_Btn_Container_Ease_Slide;
 
 
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
 
+    BattleManager_V2 Battle_Mng;
+    BattleDungeonData Dungeon;
+
     public override void ShowPopup(params object[] data)
     {
+        if (data.Length != 2)
+        {
+            HidePopup();
+            return;
+        }
+        Battle_Mng = (BattleManager_V2)data[0];
+        Dungeon = (BattleDungeonData)data[1];
+
         base.ShowPopup(data);
         SetEnableEscKeyExit(false);
         InitAssets();
-
     }
 
     void InitAssets()
@@ -111,7 +150,7 @@ public class GameResultWinPopup : PopupBase
     protected override void FixedUpdatePopup()
     {
         //  player info
-
+        BeforePlayerInfo();
 
         //  character info
 
@@ -163,27 +202,82 @@ public class GameResultWinPopup : PopupBase
         Stars_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, StarContainerEaseComplete);
         Star_Container_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
-
+    /// <summary>
+    /// 별 등급 등장 애니 완료<br/>
+    /// 몇개의 별 등급을 받을지 확인 후 해당 수 만큼의 별 도장 꽝꽝!!
+    /// </summary>
     void StarContainerEaseComplete()
     {
-        StartCoroutine(ShowStars(2));
+        //  최대 별 갯수 3개
+        int star_count = 3;
+        var team_mng = Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
+        if (team_mng != null)
+        {
+            //  팀원 1명 죽을때마다 별 1개 감소
+            int total_members = team_mng.GetTotalMemberCount();
+            int alive_members = team_mng.GetAliveMemberCount();
+            star_count = 3 - (total_members - alive_members);
+            //  클리어시 최소 별 1개 지급
+            if (star_count < 1)
+            {
+                star_count = 1;
+            }
+        }
+        StartCoroutine(ShowStarsImpact(star_count));
     }
-
-    void ShowStarComplete()
+    /// <summary>
+    /// 별 도장 애니 완료<br/>
+    /// 플레이어 정보 및 캐릭터 등장 애니 시작
+    /// </summary>
+    void ShowStarImpactComplete()
     {
         Player_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Player_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Character_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, CharacterInfoEaseComplete);
         Character_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
+    /// <summary>
+    /// 경험치 획득 전 플레이어 정보 업데이트
+    /// </summary>
+    void BeforePlayerInfo()
+    {
+        var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+        int before_lv = player_data.GetLevel();
+        float before_exp_per = player_data.GetExpPercentage();
 
+        int gain_player_exp = Dungeon.GetPlayerExp();
+        //int gain_character_exp = Dungeon.GetPlayerCharacterExp();
+        //int gain_destiny_exp = Dungeon.GetPlayerCharacterDestinyExp();
+        int gain_default_gold = Dungeon.GetDefaultClearReward();
+
+        Player_Lv.text = before_lv.ToString();
+        Player_Exp_Gauge.value = before_exp_per;
+        Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
+        Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
+    }
+    /// <summary>
+    /// 경험치 획득 후 플레이어 정보 업데이트
+    /// </summary>
+    void AfterPlayerInfo()
+    {
+
+    }
+    
+    /// <summary>
+    /// 캐릭터 등장 애니 완료<br/>
+    /// 버튼 등장 애니 요청
+    /// </summary>
     void CharacterInfoEaseComplete()
     {
         Next_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Next_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
-
-    IEnumerator ShowStars(int cnt)
+    /// <summary>
+    /// 별 도장 애니
+    /// </summary>
+    /// <param name="cnt"></param>
+    /// <returns></returns>
+    IEnumerator ShowStarsImpact(int cnt)
     {
         if (cnt > 3)
         {
@@ -197,7 +291,7 @@ public class GameResultWinPopup : PopupBase
             alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
             yield return new WaitForSeconds(0.2f);
         }
-        ShowStarComplete();
+        ShowStarImpactComplete();
     }
 
 
@@ -222,7 +316,9 @@ public class GameResultWinPopup : PopupBase
         SceneManager.LoadScene("home");
 
     }
-
+    /// <summary>
+    /// 결과 정보를 숨기고 보상 컨테이너를 보여주기 위해 요청
+    /// </summary>
     void ResultInfoContainerCallback()
     {
         Reward_Info_Container.gameObject.SetActive(true);

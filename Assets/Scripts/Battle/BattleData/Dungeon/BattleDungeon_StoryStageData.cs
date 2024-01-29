@@ -8,8 +8,6 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
 
     public BattleDungeon_StoryStageData() : base(GAME_TYPE.STORY_MODE) { }
 
-
-
     public override void SetDungeonID(int dungeon_id)
     {
         var m = MasterDataManager.Instance;
@@ -19,7 +17,6 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         var mng = GameData.Instance.GetUserStoryStageDataManager();
         User_Data = mng.FindUserStoryStageData(Stage.stage_id);
     }
-
 
 
     /// <summary>
@@ -81,5 +78,40 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         }
     }
 
+
+    public override int GetPlayerExp()
+    {
+        if (Stage != null)
+        {
+            return Stage.use_stamina;
+        }
+        return 0;
+    }
+
+    public override int GetPlayerCharacterExp()
+    {
+        if (Stage != null)
+        {
+            return Stage.character_exp;
+        }
+        return 0;
+    }
+    public override int GetPlayerCharacterDestinyExp()
+    {
+        if (Stage != null)
+        {
+            return Stage.destiny_exp;
+        }
+        return 0;
+    }
+
+    public override int GetDefaultClearReward()
+    {
+        if (Stage != null)
+        {
+            return Stage.gold;
+        }
+        return 0;
+    }
 
 }

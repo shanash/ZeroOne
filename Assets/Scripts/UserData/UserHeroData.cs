@@ -69,7 +69,6 @@ public class UserHeroData : UserDataBase
         {
             Star_Grade.Set(Hero_Data.default_star);
         }
-
     }
 
     public int GetPlayerCharacterID()
@@ -122,6 +121,11 @@ public class UserHeroData : UserDataBase
     public int GetStarGrade()
     {
         return Star_Grade.Get();
+    }
+    public void SetStarGrade(int grade)
+    {
+        Star_Grade.Set(grade);
+        //  등급에 맞는 Battle_Data를 다시 찾아야 함. 수정 필요.
     }
 
     public POSITION_TYPE GetPositionType()
@@ -207,6 +211,16 @@ public class UserHeroData : UserDataBase
             Lv_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(GetLevel());
         }
         return GetExp() - Lv_Data.accum_exp;
+    }
+    /// <summary>
+    /// 다음 레벨까지 남은 경험치
+    /// </summary>
+    /// <returns></returns>
+    public double GetRemainNextExp()
+    {
+        double next_exp = GetNextExp();
+        double cur_exp = GetLevelExp();
+        return next_exp - cur_exp;
     }
     /// <summary>
     /// 현재 경험치 진행률

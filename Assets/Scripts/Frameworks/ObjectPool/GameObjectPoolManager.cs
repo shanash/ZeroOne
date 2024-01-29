@@ -287,7 +287,7 @@ namespace FluffyDuck.Util
                     all_tasks.Add(tid);
                 }
             }
-
+            total_cnt = all_tasks.Count;
             callback?.Invoke(total_cnt - all_tasks.Count, total_cnt);
 
             while (all_tasks.Count > 0)

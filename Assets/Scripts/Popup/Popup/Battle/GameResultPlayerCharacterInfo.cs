@@ -31,16 +31,21 @@ public class GameResultPlayerCharacterInfo : UIBase
     UserHeroData User_Data;
 
     int Before_Lv;
-    double Before_Need_Exp;
     float Before_Exp_Percent;
+    double Before_Remain_Need_Exp;
+
+    int After_Lv;
+    float After_Exp_Percent;
+    double After_Remain_Need_Remain;
 
     public void SetUserHeroData(UserHeroData ud)
     {
         User_Data = ud;
 
         Before_Lv = User_Data.GetLevel();
-        Before_Need_Exp = User_Data.GetNextExp();
         Before_Exp_Percent = User_Data.GetExpPercetage();
+        Before_Remain_Need_Exp = User_Data.GetRemainNextExp();
+
         SpawnSDHero();
 
         FixedUpdateInfo();
@@ -49,7 +54,7 @@ public class GameResultPlayerCharacterInfo : UIBase
     /// <summary>
     /// 경험치 추가 후 게이지 업데이트
     /// </summary>
-    public void UpdateAddExpHeroInfo()
+    public void AfterAddExpHeroInfo(int char_xp, int destiny_xp)
     {
 
     }
@@ -61,7 +66,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         //  exp per
         Level_Exp_Slider.value = Before_Exp_Percent;
         //  need exp
-        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", Before_Need_Exp);
+        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", Before_Remain_Need_Exp);
     }
 
     /// <summary>
@@ -72,7 +77,10 @@ public class GameResultPlayerCharacterInfo : UIBase
         var obj = GameObjectPoolManager.Instance.GetGameObject(User_Data.GetPlayerCharacterData().sd_prefab_path, SD_Position);
         obj.transform.localPosition = Vector2.zero;
         SD_Hero = obj.GetComponent<UIHeroBase>();
-        SD_Hero.PlayAnimation(HERO_PLAY_ANIMATION_TYPE.WIN_01);
+        MainThreadDispatcher.Instance.AddAction(() =>
+        {
+            SD_Hero.PlayAnimation(HERO_PLAY_ANIMATION_TYPE.WIN_01);
+        });
     }
 
 

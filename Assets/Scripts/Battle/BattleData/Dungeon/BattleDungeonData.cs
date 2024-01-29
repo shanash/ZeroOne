@@ -140,4 +140,33 @@ public class BattleDungeonData : BattleDataBase
             }
         }
     }
+
+
+    /// <summary>
+    /// 해당 던전 완료시 획득 가능한 플레이어 경험치<br/>
+    /// 일반 스테이지 : use_stamina
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetPlayerExp() { return 0; }
+
+    /// <summary>
+    /// 해당 던전 완료시 획득 가능한 캐릭터 경험치<br/>
+    /// 일반 스테이지 : character_exp
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetPlayerCharacterExp() { return 0; }
+
+    /// <summary>
+    /// 해당 던전 클리어 시 획득 가능한 캐릭터 호감도 경험치<br/>
+    /// 일반 스테이지 : destiny_exp
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetPlayerCharacterDestinyExp() { return 0; }
+
+    /// <summary>
+    /// 해당 던전 클리어시 획득 가능한 기본 보상<br/>
+    /// 일반 스테이지 : 골드
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetDefaultClearReward() { return 0; }
 }

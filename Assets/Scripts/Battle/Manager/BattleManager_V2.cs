@@ -192,11 +192,11 @@ public partial class BattleManager_V2 : MonoBehaviour
     /// </summary>
     public void ReleaseAllBattleObjects()
     {
-        int cnt = Used_Team_List.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            Used_Team_List[i].Dispose();
-        }
+        //int cnt = Used_Team_List.Count;
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    Used_Team_List[i].Dispose();
+        //}
     }
 
 

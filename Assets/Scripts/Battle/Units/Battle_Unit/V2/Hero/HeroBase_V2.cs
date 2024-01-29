@@ -1579,8 +1579,13 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override string ToString()
     {
+        var state = GetCurrentState();
         var sb = ZString.CreateStringBuilder();
-        sb.AppendFormat("Team Type : <color=#ffffff>[{0}]</color>", Team_Type);
+        sb.AppendLine($"{nameof(Team_Type)} : <color=#ffffff>[{Team_Type}]</color>");
+        sb.AppendLine($"{nameof(Life)} => {Life}");
+        sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
+        sb.AppendLine($"{nameof(state)} => {state}");
+
         return sb.ToString();
     }
 

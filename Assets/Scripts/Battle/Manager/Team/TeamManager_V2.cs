@@ -18,6 +18,9 @@ public partial class TeamManager_V2 : IDisposable
 
     protected BattleDungeonData Dungeon;
 
+    protected int Total_Member_Count;
+    protected int Alive_Member_Count;
+
     /// <summary>
     /// 게임 배속
     /// </summary>
@@ -134,7 +137,8 @@ public partial class TeamManager_V2 : IDisposable
         var hero_list = deck.GetDeckHeroes();
 
         int cnt = hero_list.Count;
-
+        Total_Member_Count = cnt;
+        Alive_Member_Count = cnt;
 
         for (int i = 0; i < cnt; i++)
         {
@@ -324,6 +328,10 @@ public partial class TeamManager_V2 : IDisposable
 
         int len = wdata.enemy_appearance_info.Length;
 
+        Total_Member_Count = len;
+        Alive_Member_Count = len;
+
+
         var lv_list = wdata.npc_levels;
         var stat_list = wdata.npc_stat_ids;
 
@@ -509,6 +517,16 @@ public partial class TeamManager_V2 : IDisposable
     {
         GameObjectPoolManager.Instance.UnusedGameObject(hero.gameObject);
         Used_Members.Remove(hero);
+        Alive_Member_Count = Used_Members.Count;
+    }
+
+    public int GetTotalMemberCount()
+    {
+        return Total_Member_Count;
+    }
+    public int GetAliveMemberCount()
+    {
+        return Alive_Member_Count;
     }
 
     public bool IsAllMembersState(UNIT_STATES trans)

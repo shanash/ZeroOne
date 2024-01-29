@@ -75,6 +75,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateStun()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         CalcDurationSkillTime();
         Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
@@ -85,6 +90,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateSleep()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         CalcDurationSkillTime();
         Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
@@ -100,6 +110,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateFreeze()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         CalcDurationSkillTime();
         Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
@@ -120,6 +135,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateBind()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         //  attack check
 
         CalcDurationSkillTime();
@@ -128,6 +148,11 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override void UnitStateAttack01()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         CalcDurationSkillTime();
         Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
@@ -182,6 +207,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateAttackReady01()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         float dt = Time.deltaTime * Battle_Speed_Multiple;
         bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(dt);
         if (is_delay_finish)
@@ -208,9 +238,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         PlayAnimation(track, skill_action_name, false);
     }
-
-
-
 
     public override void UnitStateDeathBegin()
     {
