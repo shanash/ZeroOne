@@ -153,7 +153,7 @@ public class MasterDataManager : BaseMasterDataManager
     public Max_Bound_Info_Data Get_MaxBoundInfoData(REWARD_TYPE rtype)
     {
         Check_Max_Bound_Info_Data();
-        return _Max_Bound_Info_Data.Find(x => x.reward_type == rtype);
+        return _Max_Bound_Info_Data[rtype];
     }
     #endregion
 
