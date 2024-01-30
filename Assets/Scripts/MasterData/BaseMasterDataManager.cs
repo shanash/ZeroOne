@@ -14,352 +14,401 @@ using System.Linq;
 public class BaseMasterDataManager
 {
 
-	///	 _Charge_Value_Data
-	///	 key_1 REWARD_TYPE : reward_type
+	///	<summary>
+	///	 <b>key_1 REWARD_TYPE : reward_type </b><br/>
+	///	</summary>
 	protected Dictionary<REWARD_TYPE, Charge_Value_Data> _Charge_Value_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Editor_Stage_Data
-	///	 key_1 int : stage_id
+	} = new Dictionary<REWARD_TYPE, Charge_Value_Data>();
+	///	<summary>
+	///	 <b>key_1 int : stage_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Editor_Stage_Data> _Editor_Stage_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Editor_Wave_Data
-	///	 key_1 int : wave_group_id
-	///	 key_2 int : wave_sequence
+	} = new Dictionary<int, Editor_Stage_Data>();
+	///	<summary>
+	///	 <b>key_1 int : wave_group_id </b><br/>
+	///	 <b>key_2 int : wave_sequence </b><br/>
+	///	</summary>
 	protected Dictionary<Tuple<int, int>, Editor_Wave_Data> _Editor_Wave_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Essence_Status_Data
-	///	 key_1 int : essence_charge_per
+	} = new Dictionary<Tuple<int, int>, Editor_Wave_Data>();
+	///	<summary>
+	///	 <b>key_1 int : essence_charge_per </b><br/>
+	///	</summary>
 	protected Dictionary<int, Essence_Status_Data> _Essence_Status_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Goods_Data
-	///	 key_1 GOODS_TYPE : goods_type
+	} = new Dictionary<int, Essence_Status_Data>();
+	///	<summary>
+	///	 <b>key_1 GOODS_TYPE : goods_type </b><br/>
+	///	</summary>
 	protected Dictionary<GOODS_TYPE, Goods_Data> _Goods_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Item_Data
-	///	 key_1 int : item_id
+	} = new Dictionary<GOODS_TYPE, Goods_Data>();
+	///	<summary>
+	///	 <b>key_1 int : item_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Item_Data> _Item_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Item_Piece_Data
-	///	 key_1 int : item_piece_id
+	} = new Dictionary<int, Item_Data>();
+	///	<summary>
+	///	 <b>key_1 int : item_piece_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Item_Piece_Data> _Item_Piece_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Equipment_Data
-	///	 key_1 int : item_id
+	} = new Dictionary<int, Item_Piece_Data>();
+	///	<summary>
+	///	 <b>key_1 int : item_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Equipment_Data> _Equipment_Data
 	{
 		get;
 		private set;
-	}
-	///	 _L2d_Char_Skin_Data
-	///	 key_1 int : l2d_id
+	} = new Dictionary<int, Equipment_Data>();
+	///	<summary>
+	///	 <b>key_1 int : l2d_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, L2d_Char_Skin_Data> _L2d_Char_Skin_Data
 	{
 		get;
 		private set;
-	}
-	///	 _L2d_Love_State_Data
-	///	 key_1 int : l2d_id
+	} = new Dictionary<int, L2d_Char_Skin_Data>();
+	///	<summary>
+	///	 <b>key_1 int : l2d_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, L2d_Love_State_Data> _L2d_Love_State_Data
 	{
 		get;
 		private set;
-	}
-	///	 _L2d_Skin_Ani_State_Data
-	///	 key_1 int : state_id
+	} = new Dictionary<int, L2d_Love_State_Data>();
+	///	<summary>
+	///	 <b>key_1 int : state_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, L2d_Skin_Ani_State_Data> _L2d_Skin_Ani_State_Data
 	{
 		get;
 		private set;
-	}
-	///	 _L2d_Interaction_Base_Data
-	///	 key_1 int : interaction_group_id
-	///	 key_2 TOUCH_BODY_TYPE : touch_type_01
+	} = new Dictionary<int, L2d_Skin_Ani_State_Data>();
+	///	<summary>
+	///	 <b>key_1 int : interaction_group_id </b><br/>
+	///	 <b>key_2 TOUCH_BODY_TYPE : touch_type_01 </b><br/>
+	///	</summary>
 	protected Dictionary<Tuple<int, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Level_Data
-	///	 key_1 int : level
+	} = new Dictionary<Tuple<int, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data>();
+	///	<summary>
+	///	 <b>key_1 int : level </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Level_Data> _Player_Level_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Level_Data
-	///	 key_1 int : level
+	} = new Dictionary<int, Player_Level_Data>();
+	///	<summary>
+	///	 <b>key_1 int : level </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Level_Data> _Player_Character_Level_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Skill_Level_Data
-	///	 key_1 int : level
+	} = new Dictionary<int, Player_Character_Level_Data>();
+	///	<summary>
+	///	 <b>key_1 int : level </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Skill_Level_Data> _Player_Character_Skill_Level_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Love_Level_Data
-	///	 key_1 int : level
+	} = new Dictionary<int, Player_Character_Skill_Level_Data>();
+	///	<summary>
+	///	 <b>key_1 int : level </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Love_Level_Data> _Player_Character_Love_Level_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Max_Bound_Info_Data
-	///	 key_1 REWARD_TYPE : reward_type
+	} = new Dictionary<int, Player_Character_Love_Level_Data>();
+	///	<summary>
+	///	 <b>key_1 REWARD_TYPE : reward_type </b><br/>
+	///	</summary>
 	protected Dictionary<REWARD_TYPE, Max_Bound_Info_Data> _Max_Bound_Info_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Me_Resource_Data
-	///	 key_1 int : memorial_id
+	} = new Dictionary<REWARD_TYPE, Max_Bound_Info_Data>();
+	///	<summary>
+	///	 <b>key_1 int : memorial_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Me_Resource_Data> _Me_Resource_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Me_State_Data
-	///	 key_1 int : state_id
+	} = new Dictionary<int, Me_Resource_Data>();
+	///	<summary>
+	///	 <b>key_1 int : state_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Me_State_Data> _Me_State_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Me_Interaction_Data
-	///	 key_1 int : interaction_id
+	} = new Dictionary<int, Me_State_Data>();
+	///	<summary>
+	///	 <b>key_1 int : interaction_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Me_Interaction_Data> _Me_Interaction_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Me_Chat_Motion_Data
-	///	 key_1 int : chat_motion_id
+	} = new Dictionary<int, Me_Interaction_Data>();
+	///	<summary>
+	///	 <b>key_1 int : chat_motion_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Me_Chat_Motion_Data> _Me_Chat_Motion_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Me_Serifu_Data
-	///	 key_1 int : serifu_id
+	} = new Dictionary<int, Me_Chat_Motion_Data>();
+	///	<summary>
+	///	 <b>key_1 int : serifu_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Me_Serifu_Data> _Me_Serifu_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Skill_Group
-	///	 key_1 int : npc_skill_group_id
+	} = new Dictionary<int, Me_Serifu_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_skill_group_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Skill_Group> _Npc_Skill_Group
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Skill_Data
-	///	 key_1 int : npc_skill_id
+	} = new Dictionary<int, Npc_Skill_Group>();
+	///	<summary>
+	///	 <b>key_1 int : npc_skill_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Skill_Data> _Npc_Skill_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Skill_Onetime_Data
-	///	 key_1 int : npc_skill_onetime_id
+	} = new Dictionary<int, Npc_Skill_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_skill_onetime_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Skill_Onetime_Data> _Npc_Skill_Onetime_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Skill_Duration_Data
-	///	 key_1 int : npc_skill_duration_id
+	} = new Dictionary<int, Npc_Skill_Onetime_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_skill_duration_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Skill_Duration_Data> _Npc_Skill_Duration_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Data
-	///	 key_1 int : npc_data_id
+	} = new Dictionary<int, Npc_Skill_Duration_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_data_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Data> _Npc_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Battle_Data
-	///	 key_1 int : npc_battle_id
+	} = new Dictionary<int, Npc_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_battle_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Battle_Data> _Npc_Battle_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Npc_Level_Stat_Data
-	///	 key_1 int : npc_level_stat_id
+	} = new Dictionary<int, Npc_Battle_Data>();
+	///	<summary>
+	///	 <b>key_1 int : npc_level_stat_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Npc_Level_Stat_Data> _Npc_Level_Stat_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Skill_Group
-	///	 key_1 int : pc_skill_group_id
+	} = new Dictionary<int, Npc_Level_Stat_Data>();
+	///	<summary>
+	///	 <b>key_1 int : pc_skill_group_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Skill_Group> _Player_Character_Skill_Group
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Skill_Data
-	///	 key_1 int : pc_skill_id
+	} = new Dictionary<int, Player_Character_Skill_Group>();
+	///	<summary>
+	///	 <b>key_1 int : pc_skill_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Skill_Data> _Player_Character_Skill_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Skill_Onetime_Data
-	///	 key_1 int : pc_skill_onetime_id
+	} = new Dictionary<int, Player_Character_Skill_Data>();
+	///	<summary>
+	///	 <b>key_1 int : pc_skill_onetime_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Skill_Onetime_Data> _Player_Character_Skill_Onetime_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Skill_Duration_Data
-	///	 key_1 int : pc_skill_duration_id
+	} = new Dictionary<int, Player_Character_Skill_Onetime_Data>();
+	///	<summary>
+	///	 <b>key_1 int : pc_skill_duration_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Skill_Duration_Data> _Player_Character_Skill_Duration_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Data
-	///	 key_1 int : player_character_id
+	} = new Dictionary<int, Player_Character_Skill_Duration_Data>();
+	///	<summary>
+	///	 <b>key_1 int : player_character_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Player_Character_Data> _Player_Character_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Player_Character_Battle_Data
-	///	 key_1 int : battle_info_id
-	///	 key_2 int : star_grade
+	} = new Dictionary<int, Player_Character_Data>();
+	///	<summary>
+	///	 <b>key_1 int : battle_info_id </b><br/>
+	///	 <b>key_2 int : star_grade </b><br/>
+	///	</summary>
 	protected Dictionary<Tuple<int, int>, Player_Character_Battle_Data> _Player_Character_Battle_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Position_Icon_Data
-	///	 key_1 POSITION_TYPE : position_type
+	} = new Dictionary<Tuple<int, int>, Player_Character_Battle_Data>();
+	///	<summary>
+	///	 <b>key_1 POSITION_TYPE : position_type </b><br/>
+	///	</summary>
 	protected Dictionary<POSITION_TYPE, Position_Icon_Data> _Position_Icon_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Role_Icon_Data
-	///	 key_1 ROLE_TYPE : role_type
+	} = new Dictionary<POSITION_TYPE, Position_Icon_Data>();
+	///	<summary>
+	///	 <b>key_1 ROLE_TYPE : role_type </b><br/>
+	///	</summary>
 	protected Dictionary<ROLE_TYPE, Role_Icon_Data> _Role_Icon_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Reward_Set_Data
-	///	 key_1 int : reward_id
+	} = new Dictionary<ROLE_TYPE, Role_Icon_Data>();
+	///	<summary>
+	///	 <b>key_1 int : reward_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Reward_Set_Data> _Reward_Set_Data
 	{
 		get;
 		private set;
-	}
-	///	 _World_Data
-	///	 key_1 int : world_id
+	} = new Dictionary<int, Reward_Set_Data>();
+	///	<summary>
+	///	 <b>key_1 int : world_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, World_Data> _World_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Zone_Data
-	///	 key_1 int : zone_id
+	} = new Dictionary<int, World_Data>();
+	///	<summary>
+	///	 <b>key_1 int : zone_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Zone_Data> _Zone_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Stage_Data
-	///	 key_1 int : stage_id
+	} = new Dictionary<int, Zone_Data>();
+	///	<summary>
+	///	 <b>key_1 int : stage_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Stage_Data> _Stage_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Wave_Data
-	///	 key_1 int : wave_id
+	} = new Dictionary<int, Stage_Data>();
+	///	<summary>
+	///	 <b>key_1 int : wave_id </b><br/>
+	///	</summary>
 	protected Dictionary<int, Wave_Data> _Wave_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Star_Upgrade_Data
-	///	 key_1 int : current_star_grade
+	} = new Dictionary<int, Wave_Data>();
+	///	<summary>
+	///	 <b>key_1 int : current_star_grade </b><br/>
+	///	</summary>
 	protected Dictionary<int, Star_Upgrade_Data> _Star_Upgrade_Data
 	{
 		get;
 		private set;
-	}
-	///	 _System_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<int, Star_Upgrade_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, System_Lang_Data> _System_Lang_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Character_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<string, System_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Character_Lang_Data> _Character_Lang_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Skill_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<string, Character_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Skill_Lang_Data> _Skill_Lang_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Item_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<string, Skill_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Item_Lang_Data> _Item_Lang_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Dialog_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<string, Item_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Dialog_Lang_Data> _Dialog_Lang_Data
 	{
 		get;
 		private set;
-	}
-	///	 _Story_Lang_Data
-	///	 key_1 string : string_id
+	} = new Dictionary<string, Dialog_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Story_Lang_Data> _Story_Lang_Data
 	{
 		get;
 		private set;
-	}
+	} = new Dictionary<string, Story_Lang_Data>();
 
 
 	protected bool is_init_load = false;

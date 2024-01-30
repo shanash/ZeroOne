@@ -295,7 +295,8 @@ namespace Excel2Json
                 sb.AppendLine("\t{");
                 sb.AppendLine("\t\tget;");
                 sb.AppendLine("\t\tprivate set;");
-                sb.AppendLine("\t}");  //  var close
+                sb.Append("\t} ");  //  var close
+                sb.AppendLine($"= new Dictionary<{hash_key.name}, {table.Key}>();");
             }
             sb.AppendLine();
             sb.AppendLine();
