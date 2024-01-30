@@ -17,7 +17,6 @@ public class UserDataBase : IDisposable, ICloneable
         Reset();
     }
 
-
     public void Dispose()
     {
         Dispose(true);

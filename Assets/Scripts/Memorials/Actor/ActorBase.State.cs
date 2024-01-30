@@ -111,7 +111,7 @@ public abstract partial class ActorBase : MonoBehaviour
         // 연속 제스쳐 카운트 갯수 하나 증가
         if (Current_Interaction != null)
         {
-            var key = (Current_Interaction.touch_gesture_type, Current_Interaction.touch_body_type);
+            var key = (Current_Interaction.gescure_type_01, Current_Interaction.touch_type_01);
             if (!Gesture_Touch_Counts.Key.Equals(key))
             {
                 Gesture_Touch_Counts = new KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int>(key, 1);
@@ -137,9 +137,9 @@ public abstract partial class ActorBase : MonoBehaviour
     {
         DisappearBalloon();
 
-        if (Current_Interaction != null && Current_Interaction.change_state_id != 0)
+        if (Current_Interaction != null && Current_Interaction.after_state_id != 0)
         {
-            Current_State_Id = Current_Interaction.change_state_id;
+            Current_State_Id = Current_Interaction.after_state_id;
         }
 
         react_track_entry = null;
@@ -148,6 +148,7 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateDragBegin()
     {
+        /*
         if (!TryGetTrackNum(Current_Interaction.drag_animation_name, out int track_num))
         {
             throw new InvalidTrackException(track_num);
@@ -156,6 +157,7 @@ public abstract partial class ActorBase : MonoBehaviour
         Drag_Track_Entry = Skeleton.AnimationState.SetAnimation(track_num, Current_Interaction.drag_animation_name, false);
         Drag_Track_Entry.MixDuration = 0.0f;
         Drag_Track_Entry.TimeScale = 0.0f;
+        */
     }
 
     public virtual void ActorStateDragEnd()

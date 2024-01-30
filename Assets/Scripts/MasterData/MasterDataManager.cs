@@ -654,13 +654,9 @@ public class MasterDataManager : BaseMasterDataManager
             .ToDictionary(skin_ani_state_data => skin_ani_state_data.state_id, skin_ani_state_data => skin_ani_state_data);
     }
 
-    public Dictionary<int, List<L2d_Interaction_Base_Data>> Get_L2D_InteractionBases(List<int> interaction_group_ids)
+    public List<L2d_Interaction_Base_Data> Get_L2D_InteractionBases(List<int> interaction_group_ids)
     {
-        return interaction_group_ids
-            .ToDictionary(
-                id => id,
-                id => _L2d_Interaction_Base_Data.FindAll(x => x.interaction_group_id == id)
-            );
+        return interaction_group_ids.SelectMany(id => _L2d_Interaction_Base_Data.FindAll(x => x.interaction_group_id == id)).ToList();
     }
     #endregion
 

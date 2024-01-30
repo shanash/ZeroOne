@@ -39,14 +39,14 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     Producer Producer;
     //List<Me_Interaction_Data>[,] Touch_Type_Interactions;
-    Me_Interaction_Data Current_Interaction;
+    L2d_Interaction_Base_Data Current_Interaction;
 
     Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> LoveStates;
     LOVE_LEVEL_TYPE Current_Love_Level_Type;
 
 
     Dictionary<int, L2d_Skin_Ani_State_Data> SkinAniStates;
-    Dictionary<int, List<L2d_Interaction_Base_Data>> Interaction_Bases;
+    List<L2d_Interaction_Base_Data> Interaction_Bases;
     protected Dictionary<int, Me_Chat_Motion_Data> Idle_Chat_Motions;
     protected Dictionary<int, Me_Chat_Motion_Data> Reaction_Chat_Motions;
 
@@ -375,6 +375,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         switch (comp)
         {
+            /*
             case SpineBoundingBox bounding_box:
                 var data = GetInteractionData(TOUCH_GESTURE_TYPE.DRAG, bounding_box);
 
@@ -429,6 +430,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     }
                 }
                 break;
+            */
             case Background:
                 Dragged_Canvas_Position = position;
 
@@ -508,10 +510,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         return Gesture_Touch_Counts.Value;
     }
 
-    Me_Interaction_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
+    L2d_Interaction_Base_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
     {
         Debug.Log($"type : {type}, boundingBox : {bounding_box}");
-        /*
+        var item = Interaction_Bases.Find(interaction => interaction.touch_type_01 == bounding_box.GetTouchBodyType() && interaction.gescure_type_01 == type);
+
+        if (item == null)
+        {
+            return null;
+        }
+
+        return item;
+
+            /*
         var interaction_datas = Touch_Type_Interactions[(int)type, (int)bounding_box.GetTouchBodyType()];
 
         if (interaction_datas == null || interaction_datas.Count == 0)
@@ -541,21 +552,24 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             Debug.LogError($"Current_State_Id : {Current_State_Id}");
             Debug.LogException(e);
         }
-        */
-        return null;
+            */
+        //return null;
     }
 
-    void SetReactionData(Me_Interaction_Data data, TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
+    void SetReactionData(L2d_Interaction_Base_Data data, TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
     {
         if (data == null)
         {
             return;
         }
-
+        Current_Interaction = data;
+        Current_Chat_Motion_Id = data.reaction_ani_id;
+        /*
         int index = GetConsecutiveGestureCount(type, bounding_box.GetTouchBodyType()) % data.chat_motion_ids.Length;
 
         Current_Interaction = data;
         Current_Chat_Motion_Id = data.chat_motion_ids[index];
+        */
     }
 
     protected void AddGestureEventListener()
@@ -602,11 +616,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         var interaction_group_ids = SkinAniStates.Values.Select(x => x.interaction_group_id).Distinct().ToList();
         Interaction_Bases = MasterDataManager.Instance.Get_L2D_InteractionBases(interaction_group_ids);
 
-        var reaction_ani_ids = Interaction_Bases.Values
-            .SelectMany(interaction_base_data_list =>
-                interaction_base_data_list.Select(data => data.reaction_ani_id)
-                .Concat(interaction_base_data_list.Select(data => data.reaction_facial_id)))
-            .ToList();
+        var reaction_ani_ids = Interaction_Bases.Select(i => i.reaction_ani_id).ToList();
         Reaction_Chat_Motions = MasterDataManager.Instance.Get_AniData(reaction_ani_ids);
 
         var serifu_ids = Reaction_Chat_Motions.Values.SelectMany(chat_motion_data => chat_motion_data.serifu_ids).ToList();
@@ -636,6 +646,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         Lazy_Init(ACTOR_STATES.IDLE);
 
+        AddGestureEventListener();
+        AddSkeletonEventListener();
         return true;
     }
 
@@ -882,7 +894,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Skeleton.AnimationState.TimeScale = val ? 0 : 1;
         if (val)
         {
-
+            RemoveSkeletonEventListener();
+            RemoveGestureEventListener();
+        }
+        else
+        {
+            AddSkeletonEventListener();
+            AddGestureEventListener();
         }
     }
 

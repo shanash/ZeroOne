@@ -39,9 +39,8 @@ public class UserHeroData : UserDataBase
 
     public bool Is_Choice_Lobby { get; protected set; } = false;
 
-
-    public Player_Character_Data Hero_Data { get; private set; }
-    public Player_Character_Battle_Data Battle_Data { get; private set; }
+    public Player_Character_Data Hero_Data { get; private set; } = null;
+    public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
 
     Player_Character_Level_Data Lv_Data;
     Player_Character_Love_Level_Data Love_Lv_Data;
@@ -58,24 +57,20 @@ public class UserHeroData : UserDataBase
         Lobby_Choice_Num = 0;
         Is_Choice_Lobby = false;
     }
+
     protected override void InitSecureVars()
     {
-        if (Player_Character_ID == null)
-        {
-            Player_Character_ID = new SecureVar<int>();
-        }
-        if (Level == null)
-        {
-            Level = new SecureVar<int>(1);
-        }
-        if (Exp == null)
-        {
-            Exp = new SecureVar<double>();
-        }
-        if (Star_Grade == null)
-        {
-            Star_Grade = new SecureVar<int>();
-        }
+        if (Player_Character_ID == null)    Player_Character_ID = new SecureVar<int>();
+        else                                Player_Character_ID.Set(0);
+
+        if (Level == null)                  Level = new SecureVar<int>(1);
+        else                                Level.Set(1);
+
+        if (Exp == null)                    Exp = new SecureVar<double>();
+        else                                Exp.Set(0);
+
+        if (Star_Grade == null)             Star_Grade = new SecureVar<int>();
+        else                                Star_Grade.Set(0);
         if (Love_Level == null)
         {
             Love_Level = new SecureVar<int>();
@@ -122,6 +117,7 @@ public class UserHeroData : UserDataBase
     {
         return Battle_Data;
     }
+
     /// <summary>
     /// 접근 거리
     /// </summary>
@@ -135,6 +131,7 @@ public class UserHeroData : UserDataBase
     {
         return IsEquals(ud.GetPlayerCharacterID(), ud.Player_Character_Num);
     }
+
     public bool IsEquals(int hero_data_id, int hero_data_num)
     {
         return GetPlayerCharacterID() == hero_data_id && Player_Character_Num == hero_data_num;
@@ -145,6 +142,7 @@ public class UserHeroData : UserDataBase
     {
         return Level.Get();
     }
+
     void SetLevel(int lv)
     {
         Level.Set(lv);
@@ -218,6 +216,7 @@ public class UserHeroData : UserDataBase
         }
         return Lv_Data.need_exp;
     }
+
     /// <summary>
     /// 현재 경험치
     /// </summary>
@@ -230,6 +229,7 @@ public class UserHeroData : UserDataBase
         }
         return GetExp() - Lv_Data.accum_exp;
     }
+
     /// <summary>
     /// 다음 레벨까지 남은 경험치
     /// </summary>
@@ -563,5 +563,4 @@ public class UserHeroData : UserDataBase
     protected const string NODE_STAR_GRADE = "star";
     protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
     protected const string NODE_IS_CHOICE = "choice";
-
 }

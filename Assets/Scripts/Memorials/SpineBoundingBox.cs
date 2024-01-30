@@ -133,8 +133,7 @@ public class SpineBoundingBox : MonoBehaviour, ICursorInteractable
     {
         var sb = ZString.CreateStringBuilder();
 
-        sb.AppendFormat("{0} <color=yellow>[{1}]</color>\n", nameof(Body_Type), Body_Type.ToString());
-        sb.AppendFormat("{0} <color=yellow>[{1}]</color>", nameof(Attach_Slot), Attach_Slot.Attachment.Name);
+        sb.AppendFormat("{0} <color=yellow>[{1}]</color>", nameof(Body_Type), Body_Type.ToString());
 
         return sb.ToString();
     }

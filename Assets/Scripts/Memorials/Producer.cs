@@ -51,4 +51,14 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     {
         Actor.Pause(false);
     }
+
+    public void Release()
+    {
+        GameObject.Destroy(Actor.gameObject);
+        if (Background != null)
+        {
+            GameObject.Destroy(Background.gameObject);
+        }
+        GameObject.Destroy(Stage.gameObject);
+    }
 }

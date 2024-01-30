@@ -1,41 +1,56 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EssenceTransferPopup : PopupBase
 {
     [SerializeField, Tooltip("화면을 가로로 돌리는 버튼")]
-    GameObject ToHorizontalButton;
+    GameObject ToHorizontalButton = null;
 
     [SerializeField, Tooltip("화면을 세로로 돌리는 버튼")]
-    GameObject ToVerticalButton;
+    GameObject ToVerticalButton = null;
 
-    Producer pd;
+    [SerializeField]
+    Canvas canvas = null;
 
-    protected override void Initialize()
-    {
-        pd = null;
-        base.Initialize();
-    }
+    [SerializeField]
+    RawImage Chara_Image = null;
+
+    RenderTexture Chara_Texture = null;
+    Producer pd = null;
+
     public override void Spawned()
     {
         base.Spawned();
 
+        Chara_Texture = new RenderTexture(1920, GameDefine.SCREEN_BASE_HEIGHT, 16);
+        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
+        over_cam.targetTexture = Chara_Texture;
+        Chara_Image.texture = Chara_Texture;
+        InputCanvas.Instance.RenderImage = Chara_Image;
+        InputCanvas.Instance.RenderCamera = over_cam;
+
         pd = Factory.Instantiate<Producer>(1010001, MEMORIAL_TYPE.MEMORIAL);
+        GestureManager.Instance.Enable = true;
     }
 
     public override void Despawned()
     {
-        base.Despawned();
+        try
+        {
+            GestureManager.Instance.Enable = false;
+            base.Despawned();
 
-        //TODO:테스트가 필요함
-        /*
-        Screen.autorotateToLandscapeLeft = true;
-        Screen.autorotateToLandscapeRight = true;
-        Screen.autorotateToPortrait = false;
-        Screen.autorotateToPortraitUpsideDown = false;
-        */
-        Screen.orientation = ScreenOrientation.AutoRotation;
+            pd.Release();
+
+            Screen.orientation = ScreenOrientation.AutoRotation;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
     }
 
     public void OnClickBackButton()
