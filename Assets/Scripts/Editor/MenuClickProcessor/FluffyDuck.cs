@@ -117,8 +117,6 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             }
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
-
-
     }
 }
 #endif

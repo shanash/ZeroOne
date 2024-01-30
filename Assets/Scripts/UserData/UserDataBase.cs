@@ -17,7 +17,6 @@ public class UserDataBase : IDisposable
         Reset();
     }
 
-
     public void Dispose()
     {
         Dispose(true);

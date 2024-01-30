@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// 유저 입력을 총괄하는 캔버스
@@ -38,6 +40,11 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     // 같은 오브젝트 안에서 버튼다운-> 버튼업이 되어 정상적으로 오브젝트를 클릭한 것
     private ReadOnlyCollection<ICursorInteractable> _Focus_Components = null;
 
+    private GraphicRaycaster graphicRaycaster = null;
+    private EventSystem eventSystem = null;
+    UnityEngine.InputSystem.InputAction Tap_Action = null;
+    UnityEngine.InputSystem.InputAction Hold_Action = null;
+
     public bool Enable
     {
         get => _Enable;
@@ -56,6 +63,9 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     // 뎁스가 겹쳐있는 여러 오브젝트가 클릭가능하게 할 것인가
     bool _Is_Multiple_Input { get; set; } = false;
     protected override bool _Is_DontDestroyOnLoad { get { return true; } }
+
+    public Camera RenderCamera { get; set; } = null;
+    public RawImage RenderImage { get; set; } = null;
 
     int Input_Down_Hold_Reference
     {
@@ -80,13 +90,14 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
         _ = InputCanvas.Instance;
     }
 
-    UnityEngine.InputSystem.InputAction Tap_Action = null;
-    UnityEngine.InputSystem.InputAction Hold_Action = null;
-
     protected override void OnAwake()
     {
         Hold_Action = _PlayerInput.actions.FindAction("Hold");
         Tap_Action = _PlayerInput.actions.FindAction("Tap");
+
+        // GraphicRaycaster 및 EventSystem 참조를 가져옵니다.
+        graphicRaycaster = GetComponent<GraphicRaycaster>();
+        eventSystem = GetComponent<EventSystem>();
     }
 
     #region Input System Methods
@@ -263,17 +274,50 @@ public class InputCanvas : MonoBehaviourSingleton<InputCanvas>
     #endregion
 
     #region Methods
+    List<ICursorInteractable> GetUIInteractablesAtPosition(Vector2 position)
+    {
+        PointerEventData pointerData = new PointerEventData(eventSystem) { position = position };
+        List<RaycastResult> results = new List<RaycastResult>();
+        graphicRaycaster.Raycast(pointerData, results);
+
+        List<ICursorInteractable> interactables = new List<ICursorInteractable>();
+        foreach (RaycastResult result in results)
+        {
+            ICursorInteractable interactable = result.gameObject.GetComponent<ICursorInteractable>();
+            if (interactable != null)
+            {
+                interactables.Add(interactable);
+            }
+        }
+        return interactables;
+    }
+
     /// <summary>
     /// 커서의 위치에 ICursor 컴포넌트들이 있는지 확인해서 가져옵니다
     /// </summary>
     /// <returns>ICursorInteractable Array</returns>
     ICursorInteractable[] GetRayCastHittedCursorInteractable()
     {
+        // UI 상에서 ICursorInteractable 객체들을 찾습니다.
+        List<ICursorInteractable> uiInteractables = GetUIInteractablesAtPosition(_Cursor.Position);
+        if (uiInteractables.Count > 0)
+        {
+            // UI 요소가 터치되었다면, 해당 요소들을 반환합니다.
+            if (!_Is_Multiple_Input)
+            {
+                return new ICursorInteractable[] { uiInteractables[0] };
+            }
+
+            return uiInteractables.ToArray();
+        }
+
+        RaycastHit2D[] hits = null;
+
         Vector3 mpos = _Cursor.Position;
         mpos.z = -Camera.main.transform.position.z;
         mpos = Camera.main.ScreenToWorldPoint(mpos);
+        hits = Physics2D.RaycastAll(mpos, Vector2.zero);
 
-        var hits = Physics2D.RaycastAll(mpos, Vector2.zero);
         int hit_cnt = hits.Length;
         List<ICursorInteractable> components = new List<ICursorInteractable>();
         for (int i = 0; i < hit_cnt; i++)

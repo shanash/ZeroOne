@@ -102,7 +102,6 @@ public class HeroInfoUI : PopupBase
         var Hero_Base_Data = (Player_Character_Data)User_Hero_Battle_Data.GetUnitData();
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
 
-
         Level_Text.text = $"LV. {User_Hero_Battle_Data.GetLevel()}";
         Name_Text.text = Hero_Base_Data.name_kr;
 
