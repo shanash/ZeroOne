@@ -114,4 +114,9 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         return 0;
     }
 
+    public override object GetDungeonData()
+    {
+        return Stage;
+    }
+
 }

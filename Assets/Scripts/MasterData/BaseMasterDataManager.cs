@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 #if UNITY_5_3_OR_NEWER
 using UnityEngine.AddressableAssets;
 #endif
+using System;
 #nullable disable
 using Newtonsoft.Json;
 using System.Linq;
@@ -13,247 +14,348 @@ using System.Linq;
 public class BaseMasterDataManager
 {
 
-	protected List<Charge_Value_Data> _Charge_Value_Data
+	///	 _Charge_Value_Data
+	///	 key_1 REWARD_TYPE : reward_type
+	protected Dictionary<REWARD_TYPE, Charge_Value_Data> _Charge_Value_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Editor_Stage_Data> _Editor_Stage_Data
+	///	 _Editor_Stage_Data
+	///	 key_1 int : stage_id
+	protected Dictionary<int, Editor_Stage_Data> _Editor_Stage_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Editor_Wave_Data> _Editor_Wave_Data
+	///	 _Editor_Wave_Data
+	///	 key_1 int : wave_group_id
+	///	 key_2 int : wave_sequence
+	protected Dictionary<Tuple<int, int>, Editor_Wave_Data> _Editor_Wave_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Essence_Status_Data> _Essence_Status_Data
+	///	 _Essence_Status_Data
+	///	 key_1 int : essence_charge_per
+	protected Dictionary<int, Essence_Status_Data> _Essence_Status_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Goods_Data> _Goods_Data
+	///	 _Goods_Data
+	///	 key_1 GOODS_TYPE : goods_type
+	protected Dictionary<GOODS_TYPE, Goods_Data> _Goods_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Item_Data> _Item_Data
+	///	 _Item_Data
+	///	 key_1 int : item_id
+	protected Dictionary<int, Item_Data> _Item_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Item_Piece_Data> _Item_Piece_Data
+	///	 _Item_Piece_Data
+	///	 key_1 int : item_piece_id
+	protected Dictionary<int, Item_Piece_Data> _Item_Piece_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Equipment_Data> _Equipment_Data
+	///	 _Equipment_Data
+	///	 key_1 int : item_id
+	protected Dictionary<int, Equipment_Data> _Equipment_Data
 	{
 		get;
 		private set;
 	}
-	protected List<L2d_Char_Skin_Data> _L2d_Char_Skin_Data
+	///	 _L2d_Char_Skin_Data
+	///	 key_1 int : l2d_id
+	protected Dictionary<int, L2d_Char_Skin_Data> _L2d_Char_Skin_Data
 	{
 		get;
 		private set;
 	}
-	protected List<L2d_Love_State_Data> _L2d_Love_State_Data
+	///	 _L2d_Love_State_Data
+	///	 key_1 int : l2d_id
+	protected Dictionary<int, L2d_Love_State_Data> _L2d_Love_State_Data
 	{
 		get;
 		private set;
 	}
-	protected List<L2d_Skin_Ani_State_Data> _L2d_Skin_Ani_State_Data
+	///	 _L2d_Skin_Ani_State_Data
+	///	 key_1 int : state_id
+	protected Dictionary<int, L2d_Skin_Ani_State_Data> _L2d_Skin_Ani_State_Data
 	{
 		get;
 		private set;
 	}
-	protected List<L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
+	///	 _L2d_Interaction_Base_Data
+	///	 key_1 int : interaction_group_id
+	///	 key_2 TOUCH_BODY_TYPE : touch_type_01
+	protected Dictionary<Tuple<int, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Level_Data> _Player_Level_Data
+	///	 _Player_Level_Data
+	///	 key_1 int : level
+	protected Dictionary<int, Player_Level_Data> _Player_Level_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Level_Data> _Player_Character_Level_Data
+	///	 _Player_Character_Level_Data
+	///	 key_1 int : level
+	protected Dictionary<int, Player_Character_Level_Data> _Player_Character_Level_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Skill_Level_Data> _Player_Character_Skill_Level_Data
+	///	 _Player_Character_Skill_Level_Data
+	///	 key_1 int : level
+	protected Dictionary<int, Player_Character_Skill_Level_Data> _Player_Character_Skill_Level_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Love_Level_Data> _Player_Character_Love_Level_Data
+	///	 _Player_Character_Love_Level_Data
+	///	 key_1 int : level
+	protected Dictionary<int, Player_Character_Love_Level_Data> _Player_Character_Love_Level_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Max_Bound_Info_Data> _Max_Bound_Info_Data
+	///	 _Max_Bound_Info_Data
+	///	 key_1 REWARD_TYPE : reward_type
+	protected Dictionary<REWARD_TYPE, Max_Bound_Info_Data> _Max_Bound_Info_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Me_Resource_Data> _Me_Resource_Data
+	///	 _Me_Resource_Data
+	///	 key_1 int : memorial_id
+	protected Dictionary<int, Me_Resource_Data> _Me_Resource_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Me_State_Data> _Me_State_Data
+	///	 _Me_State_Data
+	///	 key_1 int : state_id
+	protected Dictionary<int, Me_State_Data> _Me_State_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Me_Interaction_Data> _Me_Interaction_Data
+	///	 _Me_Interaction_Data
+	///	 key_1 int : interaction_id
+	protected Dictionary<int, Me_Interaction_Data> _Me_Interaction_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Me_Chat_Motion_Data> _Me_Chat_Motion_Data
+	///	 _Me_Chat_Motion_Data
+	///	 key_1 int : chat_motion_id
+	protected Dictionary<int, Me_Chat_Motion_Data> _Me_Chat_Motion_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Me_Serifu_Data> _Me_Serifu_Data
+	///	 _Me_Serifu_Data
+	///	 key_1 int : serifu_id
+	protected Dictionary<int, Me_Serifu_Data> _Me_Serifu_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Skill_Group> _Npc_Skill_Group
+	///	 _Npc_Skill_Group
+	///	 key_1 int : npc_skill_group_id
+	protected Dictionary<int, Npc_Skill_Group> _Npc_Skill_Group
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Skill_Data> _Npc_Skill_Data
+	///	 _Npc_Skill_Data
+	///	 key_1 int : npc_skill_id
+	protected Dictionary<int, Npc_Skill_Data> _Npc_Skill_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Skill_Onetime_Data> _Npc_Skill_Onetime_Data
+	///	 _Npc_Skill_Onetime_Data
+	///	 key_1 int : npc_skill_onetime_id
+	protected Dictionary<int, Npc_Skill_Onetime_Data> _Npc_Skill_Onetime_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Skill_Duration_Data> _Npc_Skill_Duration_Data
+	///	 _Npc_Skill_Duration_Data
+	///	 key_1 int : npc_skill_duration_id
+	protected Dictionary<int, Npc_Skill_Duration_Data> _Npc_Skill_Duration_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Data> _Npc_Data
+	///	 _Npc_Data
+	///	 key_1 int : npc_data_id
+	protected Dictionary<int, Npc_Data> _Npc_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Battle_Data> _Npc_Battle_Data
+	///	 _Npc_Battle_Data
+	///	 key_1 int : npc_battle_id
+	protected Dictionary<int, Npc_Battle_Data> _Npc_Battle_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Npc_Level_Stat_Data> _Npc_Level_Stat_Data
+	///	 _Npc_Level_Stat_Data
+	///	 key_1 int : npc_level_stat_id
+	protected Dictionary<int, Npc_Level_Stat_Data> _Npc_Level_Stat_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Skill_Group> _Player_Character_Skill_Group
+	///	 _Player_Character_Skill_Group
+	///	 key_1 int : pc_skill_group_id
+	protected Dictionary<int, Player_Character_Skill_Group> _Player_Character_Skill_Group
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Skill_Data> _Player_Character_Skill_Data
+	///	 _Player_Character_Skill_Data
+	///	 key_1 int : pc_skill_id
+	protected Dictionary<int, Player_Character_Skill_Data> _Player_Character_Skill_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Skill_Onetime_Data> _Player_Character_Skill_Onetime_Data
+	///	 _Player_Character_Skill_Onetime_Data
+	///	 key_1 int : pc_skill_onetime_id
+	protected Dictionary<int, Player_Character_Skill_Onetime_Data> _Player_Character_Skill_Onetime_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Skill_Duration_Data> _Player_Character_Skill_Duration_Data
+	///	 _Player_Character_Skill_Duration_Data
+	///	 key_1 int : pc_skill_duration_id
+	protected Dictionary<int, Player_Character_Skill_Duration_Data> _Player_Character_Skill_Duration_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Data> _Player_Character_Data
+	///	 _Player_Character_Data
+	///	 key_1 int : player_character_id
+	protected Dictionary<int, Player_Character_Data> _Player_Character_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Player_Character_Battle_Data> _Player_Character_Battle_Data
+	///	 _Player_Character_Battle_Data
+	///	 key_1 int : battle_info_id
+	///	 key_2 int : star_grade
+	protected Dictionary<Tuple<int, int>, Player_Character_Battle_Data> _Player_Character_Battle_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Position_Icon_Data> _Position_Icon_Data
+	///	 _Position_Icon_Data
+	///	 key_1 POSITION_TYPE : position_type
+	protected Dictionary<POSITION_TYPE, Position_Icon_Data> _Position_Icon_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Role_Icon_Data> _Role_Icon_Data
+	///	 _Role_Icon_Data
+	///	 key_1 ROLE_TYPE : role_type
+	protected Dictionary<ROLE_TYPE, Role_Icon_Data> _Role_Icon_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Reward_Set_Data> _Reward_Set_Data
+	///	 _Reward_Set_Data
+	///	 key_1 int : reward_id
+	protected Dictionary<int, Reward_Set_Data> _Reward_Set_Data
 	{
 		get;
 		private set;
 	}
-	protected List<World_Data> _World_Data
+	///	 _World_Data
+	///	 key_1 int : world_id
+	protected Dictionary<int, World_Data> _World_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Zone_Data> _Zone_Data
+	///	 _Zone_Data
+	///	 key_1 int : zone_id
+	protected Dictionary<int, Zone_Data> _Zone_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Stage_Data> _Stage_Data
+	///	 _Stage_Data
+	///	 key_1 int : stage_id
+	protected Dictionary<int, Stage_Data> _Stage_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Wave_Data> _Wave_Data
+	///	 _Wave_Data
+	///	 key_1 int : wave_id
+	protected Dictionary<int, Wave_Data> _Wave_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Star_Upgrade_Data> _Star_Upgrade_Data
+	///	 _Star_Upgrade_Data
+	///	 key_1 int : current_star_grade
+	protected Dictionary<int, Star_Upgrade_Data> _Star_Upgrade_Data
 	{
 		get;
 		private set;
 	}
-	protected List<System_Lang_Data> _System_Lang_Data
+	///	 _System_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, System_Lang_Data> _System_Lang_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Character_Lang_Data> _Character_Lang_Data
+	///	 _Character_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, Character_Lang_Data> _Character_Lang_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Skill_Lang_Data> _Skill_Lang_Data
+	///	 _Skill_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, Skill_Lang_Data> _Skill_Lang_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Item_Lang_Data> _Item_Lang_Data
+	///	 _Item_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, Item_Lang_Data> _Item_Lang_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Dialog_Lang_Data> _Dialog_Lang_Data
+	///	 _Dialog_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, Dialog_Lang_Data> _Dialog_Lang_Data
 	{
 		get;
 		private set;
 	}
-	protected List<Story_Lang_Data> _Story_Lang_Data
+	///	 _Story_Lang_Data
+	///	 key_1 string : string_id
+	protected Dictionary<string, Story_Lang_Data> _Story_Lang_Data
 	{
 		get;
 		private set;
@@ -354,7 +456,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Charge_Value_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Charge_Value_Data>>(json);
-		_Charge_Value_Data = raw_data_list.Select(raw_data => new Charge_Value_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Charge_Value_Data.Add(raw_data.reward_type, new Charge_Value_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Editor_Stage_Data()
@@ -365,7 +470,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Editor_Stage_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Editor_Stage_Data>>(json);
-		_Editor_Stage_Data = raw_data_list.Select(raw_data => new Editor_Stage_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Editor_Stage_Data.Add(raw_data.stage_id, new Editor_Stage_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Editor_Wave_Data()
@@ -376,7 +484,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Editor_Wave_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Editor_Wave_Data>>(json);
-		_Editor_Wave_Data = raw_data_list.Select(raw_data => new Editor_Wave_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Editor_Wave_Data.Add(new Tuple<int, int>(raw_data.wave_group_id, raw_data.wave_sequence), new Editor_Wave_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Essence_Status_Data()
@@ -387,7 +498,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Essence_Status_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Essence_Status_Data>>(json);
-		_Essence_Status_Data = raw_data_list.Select(raw_data => new Essence_Status_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Essence_Status_Data.Add(raw_data.essence_charge_per, new Essence_Status_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Goods_Data()
@@ -398,7 +512,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Goods_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Goods_Data>>(json);
-		_Goods_Data = raw_data_list.Select(raw_data => new Goods_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Goods_Data.Add(raw_data.goods_type, new Goods_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Data()
@@ -409,7 +526,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Item_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Data>>(json);
-		_Item_Data = raw_data_list.Select(raw_data => new Item_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Data.Add(raw_data.item_id, new Item_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Piece_Data()
@@ -420,7 +540,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Item_Piece_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Piece_Data>>(json);
-		_Item_Piece_Data = raw_data_list.Select(raw_data => new Item_Piece_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Piece_Data.Add(raw_data.item_piece_id, new Item_Piece_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Equipment_Data()
@@ -431,7 +554,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Equipment_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Equipment_Data>>(json);
-		_Equipment_Data = raw_data_list.Select(raw_data => new Equipment_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Equipment_Data.Add(raw_data.item_id, new Equipment_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_L2d_Char_Skin_Data()
@@ -442,7 +568,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/L2d_Char_Skin_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Char_Skin_Data>>(json);
-		_L2d_Char_Skin_Data = raw_data_list.Select(raw_data => new L2d_Char_Skin_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_L2d_Char_Skin_Data.Add(raw_data.l2d_id, new L2d_Char_Skin_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_L2d_Love_State_Data()
@@ -453,7 +582,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/L2d_Love_State_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Love_State_Data>>(json);
-		_L2d_Love_State_Data = raw_data_list.Select(raw_data => new L2d_Love_State_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_L2d_Love_State_Data.Add(raw_data.l2d_id, new L2d_Love_State_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_L2d_Skin_Ani_State_Data()
@@ -464,7 +596,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/L2d_Skin_Ani_State_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Skin_Ani_State_Data>>(json);
-		_L2d_Skin_Ani_State_Data = raw_data_list.Select(raw_data => new L2d_Skin_Ani_State_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_L2d_Skin_Ani_State_Data.Add(raw_data.state_id, new L2d_Skin_Ani_State_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_L2d_Interaction_Base_Data()
@@ -475,7 +610,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/L2d_Interaction_Base_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Interaction_Base_Data>>(json);
-		_L2d_Interaction_Base_Data = raw_data_list.Select(raw_data => new L2d_Interaction_Base_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_L2d_Interaction_Base_Data.Add(new Tuple<int, TOUCH_BODY_TYPE>(raw_data.interaction_group_id, raw_data.touch_type_01), new L2d_Interaction_Base_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Level_Data()
@@ -486,7 +624,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Level_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Level_Data>>(json);
-		_Player_Level_Data = raw_data_list.Select(raw_data => new Player_Level_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Level_Data.Add(raw_data.level, new Player_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Level_Data()
@@ -497,7 +638,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Level_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Level_Data>>(json);
-		_Player_Character_Level_Data = raw_data_list.Select(raw_data => new Player_Character_Level_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Level_Data.Add(raw_data.level, new Player_Character_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Level_Data()
@@ -508,7 +652,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Skill_Level_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Level_Data>>(json);
-		_Player_Character_Skill_Level_Data = raw_data_list.Select(raw_data => new Player_Character_Skill_Level_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Level_Data.Add(raw_data.level, new Player_Character_Skill_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Love_Level_Data()
@@ -519,7 +666,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Love_Level_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Love_Level_Data>>(json);
-		_Player_Character_Love_Level_Data = raw_data_list.Select(raw_data => new Player_Character_Love_Level_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Love_Level_Data.Add(raw_data.level, new Player_Character_Love_Level_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Max_Bound_Info_Data()
@@ -530,7 +680,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Max_Bound_Info_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Max_Bound_Info_Data>>(json);
-		_Max_Bound_Info_Data = raw_data_list.Select(raw_data => new Max_Bound_Info_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Max_Bound_Info_Data.Add(raw_data.reward_type, new Max_Bound_Info_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Resource_Data()
@@ -541,7 +694,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Me_Resource_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Resource_Data>>(json);
-		_Me_Resource_Data = raw_data_list.Select(raw_data => new Me_Resource_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Resource_Data.Add(raw_data.memorial_id, new Me_Resource_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_State_Data()
@@ -552,7 +708,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Me_State_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_State_Data>>(json);
-		_Me_State_Data = raw_data_list.Select(raw_data => new Me_State_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_State_Data.Add(raw_data.state_id, new Me_State_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Interaction_Data()
@@ -563,7 +722,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Me_Interaction_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Interaction_Data>>(json);
-		_Me_Interaction_Data = raw_data_list.Select(raw_data => new Me_Interaction_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Interaction_Data.Add(raw_data.interaction_id, new Me_Interaction_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Chat_Motion_Data()
@@ -574,7 +736,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Me_Chat_Motion_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Chat_Motion_Data>>(json);
-		_Me_Chat_Motion_Data = raw_data_list.Select(raw_data => new Me_Chat_Motion_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Chat_Motion_Data.Add(raw_data.chat_motion_id, new Me_Chat_Motion_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Me_Serifu_Data()
@@ -585,7 +750,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Me_Serifu_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Serifu_Data>>(json);
-		_Me_Serifu_Data = raw_data_list.Select(raw_data => new Me_Serifu_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Me_Serifu_Data.Add(raw_data.serifu_id, new Me_Serifu_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Group()
@@ -596,7 +764,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Skill_Group.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Group>>(json);
-		_Npc_Skill_Group = raw_data_list.Select(raw_data => new Npc_Skill_Group(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Group.Add(raw_data.npc_skill_group_id, new Npc_Skill_Group(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Data()
@@ -607,7 +778,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Skill_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Data>>(json);
-		_Npc_Skill_Data = raw_data_list.Select(raw_data => new Npc_Skill_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Data.Add(raw_data.npc_skill_id, new Npc_Skill_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Onetime_Data()
@@ -618,7 +792,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Skill_Onetime_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Onetime_Data>>(json);
-		_Npc_Skill_Onetime_Data = raw_data_list.Select(raw_data => new Npc_Skill_Onetime_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Onetime_Data.Add(raw_data.npc_skill_onetime_id, new Npc_Skill_Onetime_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Skill_Duration_Data()
@@ -629,7 +806,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Skill_Duration_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Skill_Duration_Data>>(json);
-		_Npc_Skill_Duration_Data = raw_data_list.Select(raw_data => new Npc_Skill_Duration_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Skill_Duration_Data.Add(raw_data.npc_skill_duration_id, new Npc_Skill_Duration_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Data()
@@ -640,7 +820,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Data>>(json);
-		_Npc_Data = raw_data_list.Select(raw_data => new Npc_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Data.Add(raw_data.npc_data_id, new Npc_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Battle_Data()
@@ -651,7 +834,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Battle_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Battle_Data>>(json);
-		_Npc_Battle_Data = raw_data_list.Select(raw_data => new Npc_Battle_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Battle_Data.Add(raw_data.npc_battle_id, new Npc_Battle_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Npc_Level_Stat_Data()
@@ -662,7 +848,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Npc_Level_Stat_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Npc_Level_Stat_Data>>(json);
-		_Npc_Level_Stat_Data = raw_data_list.Select(raw_data => new Npc_Level_Stat_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Npc_Level_Stat_Data.Add(raw_data.npc_level_stat_id, new Npc_Level_Stat_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Group()
@@ -673,7 +862,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Skill_Group.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Group>>(json);
-		_Player_Character_Skill_Group = raw_data_list.Select(raw_data => new Player_Character_Skill_Group(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Group.Add(raw_data.pc_skill_group_id, new Player_Character_Skill_Group(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Data()
@@ -684,7 +876,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Skill_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Data>>(json);
-		_Player_Character_Skill_Data = raw_data_list.Select(raw_data => new Player_Character_Skill_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Data.Add(raw_data.pc_skill_id, new Player_Character_Skill_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Onetime_Data()
@@ -695,7 +890,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Skill_Onetime_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Onetime_Data>>(json);
-		_Player_Character_Skill_Onetime_Data = raw_data_list.Select(raw_data => new Player_Character_Skill_Onetime_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Onetime_Data.Add(raw_data.pc_skill_onetime_id, new Player_Character_Skill_Onetime_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Skill_Duration_Data()
@@ -706,7 +904,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Skill_Duration_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Duration_Data>>(json);
-		_Player_Character_Skill_Duration_Data = raw_data_list.Select(raw_data => new Player_Character_Skill_Duration_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Skill_Duration_Data.Add(raw_data.pc_skill_duration_id, new Player_Character_Skill_Duration_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Data()
@@ -717,7 +918,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Data>>(json);
-		_Player_Character_Data = raw_data_list.Select(raw_data => new Player_Character_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Data.Add(raw_data.player_character_id, new Player_Character_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Player_Character_Battle_Data()
@@ -728,7 +932,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Player_Character_Battle_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Battle_Data>>(json);
-		_Player_Character_Battle_Data = raw_data_list.Select(raw_data => new Player_Character_Battle_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Battle_Data.Add(new Tuple<int, int>(raw_data.battle_info_id, raw_data.star_grade), new Player_Character_Battle_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Position_Icon_Data()
@@ -739,7 +946,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Position_Icon_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Position_Icon_Data>>(json);
-		_Position_Icon_Data = raw_data_list.Select(raw_data => new Position_Icon_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Position_Icon_Data.Add(raw_data.position_type, new Position_Icon_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Role_Icon_Data()
@@ -750,7 +960,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Role_Icon_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Role_Icon_Data>>(json);
-		_Role_Icon_Data = raw_data_list.Select(raw_data => new Role_Icon_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Role_Icon_Data.Add(raw_data.role_type, new Role_Icon_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Reward_Set_Data()
@@ -761,7 +974,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Reward_Set_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Reward_Set_Data>>(json);
-		_Reward_Set_Data = raw_data_list.Select(raw_data => new Reward_Set_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Reward_Set_Data.Add(raw_data.reward_id, new Reward_Set_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_World_Data()
@@ -772,7 +988,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/World_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_World_Data>>(json);
-		_World_Data = raw_data_list.Select(raw_data => new World_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_World_Data.Add(raw_data.world_id, new World_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Zone_Data()
@@ -783,7 +1002,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Zone_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Zone_Data>>(json);
-		_Zone_Data = raw_data_list.Select(raw_data => new Zone_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Zone_Data.Add(raw_data.zone_id, new Zone_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Stage_Data()
@@ -794,7 +1016,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Stage_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Stage_Data>>(json);
-		_Stage_Data = raw_data_list.Select(raw_data => new Stage_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Stage_Data.Add(raw_data.stage_id, new Stage_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Wave_Data()
@@ -805,7 +1030,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Wave_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Wave_Data>>(json);
-		_Wave_Data = raw_data_list.Select(raw_data => new Wave_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Wave_Data.Add(raw_data.wave_id, new Wave_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Star_Upgrade_Data()
@@ -816,7 +1044,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Star_Upgrade_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Star_Upgrade_Data>>(json);
-		_Star_Upgrade_Data = raw_data_list.Select(raw_data => new Star_Upgrade_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Star_Upgrade_Data.Add(raw_data.current_star_grade, new Star_Upgrade_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_System_Lang_Data()
@@ -827,7 +1058,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/System_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_System_Lang_Data>>(json);
-		_System_Lang_Data = raw_data_list.Select(raw_data => new System_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_System_Lang_Data.Add(raw_data.string_id, new System_Lang_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Character_Lang_Data()
@@ -838,7 +1072,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Character_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Character_Lang_Data>>(json);
-		_Character_Lang_Data = raw_data_list.Select(raw_data => new Character_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Character_Lang_Data.Add(raw_data.string_id, new Character_Lang_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Skill_Lang_Data()
@@ -849,7 +1086,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Skill_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Skill_Lang_Data>>(json);
-		_Skill_Lang_Data = raw_data_list.Select(raw_data => new Skill_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Skill_Lang_Data.Add(raw_data.string_id, new Skill_Lang_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Item_Lang_Data()
@@ -860,7 +1100,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Item_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Item_Lang_Data>>(json);
-		_Item_Lang_Data = raw_data_list.Select(raw_data => new Item_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Item_Lang_Data.Add(raw_data.string_id, new Item_Lang_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Dialog_Lang_Data()
@@ -871,7 +1114,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Dialog_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Dialog_Lang_Data>>(json);
-		_Dialog_Lang_Data = raw_data_list.Select(raw_data => new Dialog_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Dialog_Lang_Data.Add(raw_data.string_id, new Dialog_Lang_Data(raw_data));
+		}
 	}
 
 	protected async Task LoadMaster_Story_Lang_Data()
@@ -882,7 +1128,10 @@ public class BaseMasterDataManager
 		string json = await LoadJsonDataAsync("../Master/Story_Lang_Data.json");
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Story_Lang_Data>>(json);
-		_Story_Lang_Data = raw_data_list.Select(raw_data => new Story_Lang_Data(raw_data)).ToList();
+		foreach (var raw_data in raw_data_list)
+		{
+			_Story_Lang_Data.Add(raw_data.string_id, new Story_Lang_Data(raw_data));
+		}
 	}
 
 	protected async void Check_Charge_Value_Data()

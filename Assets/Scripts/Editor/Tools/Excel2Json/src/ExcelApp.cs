@@ -1,5 +1,10 @@
+using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using ClosedXML.Excel;
+using Irony.Parsing;
+using System.Linq;
+
 #if UNITY_5_3_OR_NEWER
 using System;
 using System.IO;
@@ -8,6 +13,17 @@ using System.Collections.Generic;
 
 namespace Excel2Json
 {
+    class KeyInfo
+    {
+        public string key_type = string.Empty;
+        public string key_value = string.Empty;
+    }
+    class HashKey
+    {
+        public string name = string.Empty;
+        public Dictionary<int, KeyInfo> keys = new Dictionary<int, KeyInfo>();
+    }
+
     class ExcelApp
     {
         static bool USE_ADDRESSABLE_ASSETS = true;
@@ -183,6 +199,8 @@ namespace Excel2Json
                 sb.AppendLine("#if UNITY_5_3_OR_NEWER");
                 sb.AppendLine("using UnityEngine.AddressableAssets;");
                 sb.AppendLine("#endif");
+                sb.AppendLine("using System;");
+                
                 sb.AppendLine("#nullable disable");
             }
             else
@@ -204,11 +222,75 @@ namespace Excel2Json
             sb.AppendLine("{");
             sb.AppendLine();
 
+            Dictionary<string, HashKey> table_hash_key = new Dictionary<string, HashKey>();
+
             //  declare variables
             foreach (var table in master_table_columns)
             {
+                HashKey hash_key = new HashKey();
+
+                foreach (var data in table.Value)
+                {
+                    var keyStartIndex = data.hash_key.IndexOf("key");
+                    if (keyStartIndex != -1)
+                    {
+                        Match match = Regex.Match(data.hash_key, @"\d+");
+
+                        if (match.Success)
+                        {
+                            int number = int.Parse(match.Value);
+
+                            if (number > 0)
+                            {
+                                hash_key.keys.Add(number, new KeyInfo() { key_type = data.type, key_value = data.key });
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("hash key number is not found : ex) key_1");
+                        }
+                    }
+                }
+
+                hash_key.keys.OrderBy(x => x.Key);
+
+                string hash_key_type = "";
+                if (hash_key.keys.Count <= 0)
+                {
+                    throw new Exception($"hash key is not found table : {table.Key} ex) key_1");
+                }
+                else
+                {
+                    foreach (var key in hash_key.keys)
+                    {
+                        if (hash_key_type.Length > 0)
+                            hash_key_type += ", ";
+
+                        hash_key_type += key.Value.key_type;
+                    }
+
+                    if (hash_key.keys.Count > 1)
+                    {
+                        hash_key_type = $"Tuple<{hash_key_type}>";
+                    }
+
+                    hash_key.name = hash_key_type;
+                    table_hash_key.Add(table.Key, hash_key);
+                }
+
+                if (hash_key.name == string.Empty)
+                {
+                    throw new Exception("hash key is not found : ex) key_1");
+                }
+
                 //  define var
-                sb.AppendLine($"\tprotected List<{table.Key}> _{table.Key}");
+                sb.AppendLine($"\t///\t _{table.Key}");
+                foreach (var item in hash_key.keys)
+                {
+                    sb.AppendLine($"\t///\t key_{item.Key} {item.Value.key_type} : {item.Value.key_value}");
+                }
+                // sb.AppendLine($"\tprotected List<{table.Key}> _{table.Key}");
+                sb.AppendLine($"\tprotected Dictionary<{hash_key.name}, {table.Key}> _{table.Key}");
                 sb.AppendLine("\t{");
                 sb.AppendLine("\t\tget;");
                 sb.AppendLine("\t\tprivate set;");
@@ -217,10 +299,8 @@ namespace Excel2Json
             sb.AppendLine();
             sb.AppendLine();
 
-
             //  init load vars
             sb.AppendLine("\tprotected bool is_init_load = false;").AppendLine();
-
 
             //  construct
             sb.AppendLine($"\tprotected {mng_name}()");
@@ -290,7 +370,45 @@ namespace Excel2Json
 
                     if (!use_raw)
                     {
-                        sb.AppendLine($"\t\t_{table.Key} = raw_data_list.Select(raw_data => new {table.Key}(raw_data)).ToList();");
+                        var hash_key = table_hash_key[table.Key];
+
+                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
+                        sb.AppendLine("\t\t{");
+
+                        string key_string = "";
+
+                        if (hash_key.keys.Count == 0)
+                        {
+                            throw new Exception("not found key");
+                        }
+                        else if (hash_key.keys.Count == 1)
+                        {
+                            foreach (var item in hash_key.keys)
+                            {
+                                key_string = $"raw_data.{item.Value.key_value}";
+                            }
+                        }
+                        else
+                        {
+                            string key = "new Tuple<";
+                            string value = "";
+
+                            foreach (var item in hash_key.keys)
+                            {
+                                if (value != string.Empty)
+                                {
+                                    key += ", ";
+                                    value += ", ";
+                                }
+                                key += item.Value.key_type;
+                                value += $"raw_data.{item.Value.key_value}";
+                            }
+                            key_string = $"{key}>({value})";
+                        }
+
+                        sb.AppendLine($"\t\t\t_{table.Key}.Add({key_string}, new {table.Key}(raw_data));");
+
+                        sb.AppendLine("\t\t}");
                     }
 
                     sb.AppendLine("\t}").AppendLine();
@@ -362,7 +480,45 @@ namespace Excel2Json
 
                     if (!use_raw)
                     {
-                        sb.AppendLine($"\t\t_{table.Key} = raw_data_list.Select(raw_data => new {table.Key}(raw_data)).ToList();");
+                        var hash_key = table_hash_key[table.Key];
+
+                        sb.AppendLine($"\t\tforeach (var raw_data in raw_data_list)");
+                        sb.AppendLine("\t\t{");
+
+                        string key_string = "";
+
+                        if (hash_key.keys.Count == 0)
+                        {
+                            throw new Exception("not found key");
+                        }
+                        else if (hash_key.keys.Count == 1)
+                        {
+                            foreach (var item in hash_key.keys)
+                            {
+                                key_string = $"raw_data.{item.Value.key_value}";
+                            }
+                        }
+                        else
+                        {
+                            string key = "new Tuple<";
+                            string value = "";
+
+                            foreach (var item in hash_key.keys)
+                            {
+                                if (value != string.Empty)
+                                {
+                                    key += ", ";
+                                    value += ", ";
+                                }
+                                key += item.Value.key_type;
+                                value += $"raw_data.{item.Value.key_value}";
+                            }
+                            key_string = $"{key}>({value})";
+                        }
+
+                        sb.AppendLine($"\t\t\t_{table.Key}.Add({key_string}, new {table.Key}(raw_data));");
+
+                        sb.AppendLine("\t\t}");
                     }
                     sb.AppendLine("\t}");
                     sb.AppendLine();

@@ -15,6 +15,7 @@ namespace Excel2Json
 {
     class ColumnInfo
     {
+        public string hash_key = string.Empty;
         public string key;
         public string key_name;
         public string type;
@@ -160,6 +161,18 @@ namespace Excel2Json
                         }
                         else
                         {
+                            int keyStartIndex = s.IndexOf("key");
+                            if (keyStartIndex != -1)
+                            {
+                                int colonIndex = s.IndexOf(":", keyStartIndex);
+                                if (colonIndex != -1)
+                                {
+                                    string result = s.Substring(keyStartIndex, colonIndex - keyStartIndex + 1);
+                                    s = s.Replace(result, "");
+                                    info.hash_key = result;
+                                }
+                            }
+
                             if (s.ToLower().IndexOf("enum:") != -1)
                             {
                                 string[] split = s.Split(':');

@@ -78,5 +78,10 @@ public class BattleDungeon_SkillPreviewEditorData : BattleDungeonData
         }
     }
 
+    public override object GetDungeonData()
+    {
+        return Stage;
+    }
+
 
 }
