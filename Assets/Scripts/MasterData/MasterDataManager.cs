@@ -150,6 +150,11 @@ public class MasterDataManager : BaseMasterDataManager
         return _Charge_Value_Data.Values.ToList().FindAll(x => x.Use_Charge_Data);
     }
 
+    public Max_Bound_Info_Data Get_MaxBoundInfoData(REWARD_TYPE rtype)
+    {
+        Check_Max_Bound_Info_Data();
+        return _Max_Bound_Info_Data.Find(x => x.reward_type == rtype);
+    }
     #endregion
 
     #region Player Character
