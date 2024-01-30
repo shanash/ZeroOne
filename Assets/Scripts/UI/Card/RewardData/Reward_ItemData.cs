@@ -61,7 +61,8 @@ public class Reward_ItemData : RewardDataBase
                 Data.SetItem(ITEM_TYPE_V2.TICKET_DUNGEON, Reward.var1);
                 break;
             case REWARD_TYPE.EQ_GROWUP:
-                Debug.Assert(false);
+                Data = new ItemData_ItemData_V2();
+                Data.SetItem(ITEM_TYPE_V2.EQ_GROWUP, Reward.var1);
                 break;
             case REWARD_TYPE.TICKET_REWARD_SELECT:
                 Debug.Assert(false);

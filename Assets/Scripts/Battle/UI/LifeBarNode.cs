@@ -20,28 +20,42 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Life Bar")]
     Image Life_Bar;
 
+    [SerializeField, Tooltip("Duration Icon Container")]
+    RectTransform Duration_Icon_Container;
+
+    RectTransform This_Rect;
+
     Transform Target_Transform;
 
     Coroutine Flush_Coroutine;
 
     Coroutine Show_Coroutine;
 
-    public void SetBarColor(TEAM_TYPE ttype)
-    {
-        if (ttype == TEAM_TYPE.LEFT)
-        {
-            Life_Bar.color = "00FF00".ToRGBFromHex();
-        }
-        else
-        {
-            Life_Bar.color = "FFAA00".ToRGBFromHex();
-        }
+    //public void SetBarColor(TEAM_TYPE ttype)
+    //{
+    //    if (ttype == TEAM_TYPE.LEFT)
+    //    {
+    //        Life_Bar.color = "00FF00".ToRGBFromHex();
+    //    }
+    //    else
+    //    {
+    //        Life_Bar.color = "FFAA00".ToRGBFromHex();
+    //    }
 
+    //    if (Show_Coroutine != null)
+    //    {
+    //        StopCoroutine(Show_Coroutine);
+    //    }
+    //    Show_Coroutine = StartCoroutine(StartShowLifeBar(5f));
+    //}
+
+    public void ShowLifeBar(float duration)
+    {
         if (Show_Coroutine != null)
         {
             StopCoroutine(Show_Coroutine);
         }
-        Show_Coroutine = StartCoroutine(ShowLifeBar(5f));
+        Show_Coroutine = StartCoroutine(StartShowLifeBar(duration));
     }
 
     public void SetTargetTransform(Transform t)
@@ -61,7 +75,9 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         if (Target_Transform != null)
         {
             Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, Target_Transform.position);
-            this.transform.position = pos;
+            //this.transform.position = pos;
+            //(this.transform as RectTransform).anchoredPosition3D = pos;
+            This_Rect.anchoredPosition3D = pos;
         }
     }
 
@@ -74,7 +90,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         {
             StopCoroutine(Show_Coroutine);
         }
-        Show_Coroutine = StartCoroutine(ShowLifeBar(2f));
+        Show_Coroutine = StartCoroutine(StartShowLifeBar(2f));
     }
 
     public void SetShieldPercent(float per)
@@ -142,7 +158,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         Flush_Coroutine = null;
     }
 
-    IEnumerator ShowLifeBar(float delay)
+    IEnumerator StartShowLifeBar(float delay)
     {
         Box.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
@@ -165,6 +181,10 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         Life_Bar.fillAmount = 1f;
         Life_Red_Back_Bar.fillAmount = 1f;
         Life_Shield_Bar.fillAmount = 1f;
+        if (This_Rect == null)
+        {
+            This_Rect = GetComponent<RectTransform>();
+        }
     }
 
     public void Despawned()

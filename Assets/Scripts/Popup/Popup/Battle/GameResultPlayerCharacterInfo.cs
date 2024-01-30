@@ -54,8 +54,8 @@ public class GameResultPlayerCharacterInfo : UIBase
     IEnumerator StartLevelUp(int char_exp)
     {
         int before_lv = User_Data.GetLevel();
-        float before_xp_percent = User_Data.GetExpPercetage();
-        double before_remain_need_xp = User_Data.GetRemainNextExp();
+        //float before_xp_percent = User_Data.GetExpPercetage();
+        //double before_remain_need_xp = User_Data.GetRemainNextExp();
 
         var result_code = User_Data.AddExp(char_exp);
         if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
@@ -89,8 +89,14 @@ public class GameResultPlayerCharacterInfo : UIBase
                     break;
                 }
             }
-            yield return wait;
+            else
+            {
+                yield return wait;
+            }
         }
+        //  need exp
+        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", after_remain_need_xp);
+
 
         //  남은 경험치 게이지 이동
         duration = 1f;
@@ -108,8 +114,6 @@ public class GameResultPlayerCharacterInfo : UIBase
     IEnumerator StartLoveLevelUp(int destiny_exp)
     {
         int before_love_lv = User_Data.GetLoveLevel();
-        float before_love_exp_per = User_Data.GetLoveExpPercetage();
-        double before_remain_need_love_xp = User_Data.GetRemainNextLoveExp();
 
         var result_code = User_Data.AddLoveExp(destiny_exp);
         if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
@@ -142,9 +146,14 @@ public class GameResultPlayerCharacterInfo : UIBase
                     break;
                 }
             }
-            yield return wait;
+            else
+            {
+                yield return wait;
+            }
         }
 
+        //  before love need exp
+        Love_Exp_Text.text = ZString.Format("앞으로 {0:N0}", after_remain_need_love_xp);
         //  남은 경험치 게이지 이동
         duration = 1f;
         delta = 0f;

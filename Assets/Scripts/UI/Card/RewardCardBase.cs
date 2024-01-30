@@ -103,7 +103,7 @@ public class RewardCardBase : UIBase
                 reward = new Reward_ItemData();
                 break;
             case REWARD_TYPE.EXP_SKILL:
-                Debug.Assert(false);
+                reward = new Reward_ItemData();
                 break;
             default:
                 Debug.Assert(false);

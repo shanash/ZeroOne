@@ -90,6 +90,9 @@ public class GameResultWinPopup : PopupBase
     [SerializeField, Tooltip("Reward Box Ease Scale")]
     UIEaseScale Reward_Box_Ease_Scale;
 
+    [SerializeField, Tooltip("Reward List View")]
+    ScrollRect Reward_List_View;
+
     
     [Space()]
     [Header("Reward Btn")]
@@ -98,6 +101,8 @@ public class GameResultWinPopup : PopupBase
 
 
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
+
+    List<RewardItemCard> Used_Reward_Item_List = new List<RewardItemCard>();
 
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
@@ -362,9 +367,6 @@ public class GameResultWinPopup : PopupBase
     public void OnClickGameResultOK()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        //  todo go home / next stage
-        //HidePopup();
-
         Result_Info_Container.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, ResultInfoContainerCallback);
     }
 
@@ -392,6 +394,42 @@ public class GameResultWinPopup : PopupBase
 
     void RewardBoxEaseComplete()
     {
+        var m = MasterDataManager.Instance;
+        var pool = GameObjectPoolManager.Instance;
+        //  보상 추가
+        string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/RewardItemCard";
+        var stage = (Stage_Data)Dungeon.GetDungeonData();
+
+        int rand = 0;
+
+        //  first reward list
+        var f_reward_data_list = m.Get_RewardSetDataList(stage.first_reward_group_id);
+        int cnt = f_reward_data_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var reward_data = f_reward_data_list[i];
+            if (reward_data.drop_type == 0)
+            {
+
+            }
+            else 
+            {
+
+            }
+            //var obj = pool.GetGameObject(reward_prefab, Reward_List_View.content);
+            //var reward_item = obj.GetComponent<RewardItemCard>();
+            //reward_item.SetRewardSetData(reward_data);
+            //Used_Reward_Item_List.Add(reward_item);
+        }
+
+        //  star reward list
+        var star_reward_data_list = m.Get_RewardSetDataList(stage.star_reward_group_id);
+
+        //  repeat reward list
+        var repeat_reward_data_list = m.Get_RewardSetDataList(stage.repeat_reward_group_id);
+
+
+        //  버튼 컨테이너 들어오기
         Reward_Btn_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 

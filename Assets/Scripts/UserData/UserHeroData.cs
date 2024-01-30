@@ -73,7 +73,7 @@ public class UserHeroData : UserDataBase
         else                                Star_Grade.Set(0);
         if (Love_Level == null)
         {
-            Love_Level = new SecureVar<int>();
+            Love_Level = new SecureVar<int>(1);
         }
         if (Love_Exp == null)
         {
@@ -501,6 +501,8 @@ public class UserHeroData : UserDataBase
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;
         json[NODE_LEVEL] = GetLevel();
         json[NODE_EXP] = GetExp();
+        json[NODE_LOVE_LEVEL] = GetLoveLevel();
+        json[NODE_LOVE_EXP] = GetLoveExp();
         json[NODE_STAR_GRADE] = GetStarGrade();
         json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
@@ -534,6 +536,14 @@ public class UserHeroData : UserDataBase
             {
                 Exp.Set(ParseDouble(json, NODE_EXP));
             }
+            if (json.ContainsKey(NODE_LOVE_LEVEL))
+            {
+                Love_Level.Set(ParseInt(json, NODE_LOVE_LEVEL));
+            }
+            if (json.ContainsKey(NODE_LOVE_EXP))
+            {
+                Love_Exp.Set(ParseDouble(json, NODE_LOVE_EXP));
+            }
             if (json.ContainsKey(NODE_STAR_GRADE))
             {
                 Star_Grade.Set(ParseInt(json, NODE_STAR_GRADE));
@@ -560,6 +570,8 @@ public class UserHeroData : UserDataBase
     protected const string NODE_PLAYER_CHARACTER_NUM = "pnum";
     protected const string NODE_LEVEL = "lv";
     protected const string NODE_EXP = "xp";
+    protected const string NODE_LOVE_LEVEL = "lolv";
+    protected const string NODE_LOVE_EXP = "loxp";
     protected const string NODE_STAR_GRADE = "star";
     protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
     protected const string NODE_IS_CHOICE = "choice";

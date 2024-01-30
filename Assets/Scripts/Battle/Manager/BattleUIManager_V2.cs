@@ -96,11 +96,16 @@ public class BattleUIManager_V2 : MonoBehaviour
     public LifeBarNode AddLifeBarNode(Transform t, TEAM_TYPE ttype)
     {
         var pool = GameObjectPoolManager.Instance;
-        var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/LifeBarNode", HP_Bar_Container);
+        string prefab_name = "Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode";
+        if (ttype == TEAM_TYPE.RIGHT)
+        {
+            prefab_name = "Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode";
+        }
+        var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
         var life = obj.GetComponent<LifeBarNode>();
-        life.SetBarColor(ttype);
+        //life.SetBarColor(ttype);
+        life.ShowLifeBar(5f);
         life.SetTargetTransform(t);
-
 
         Used_Life_Bar_List.Add(life);
         return life;
