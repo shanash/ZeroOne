@@ -283,12 +283,13 @@ namespace Excel2Json
                     throw new Exception("hash key is not found : ex) key_1");
                 }
 
-                //  define var
-                sb.AppendLine($"\t///\t _{table.Key}");
+                sb.AppendLine("\t///\t<summary>");
                 foreach (var item in hash_key.keys)
                 {
-                    sb.AppendLine($"\t///\t key_{item.Key} {item.Value.key_type} : {item.Value.key_value}");
+                    sb.AppendLine($"\t///\t <b>key_{item.Key} {item.Value.key_type} : {item.Value.key_value} </b><br/>");
                 }
+                sb.AppendLine("\t///\t</summary>");
+                //  define var
                 // sb.AppendLine($"\tprotected List<{table.Key}> _{table.Key}");
                 sb.AppendLine($"\tprotected Dictionary<{hash_key.name}, {table.Key}> _{table.Key}");
                 sb.AppendLine("\t{");
