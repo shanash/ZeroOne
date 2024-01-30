@@ -123,7 +123,7 @@ public class GameResultWinPopup : PopupBase
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultPlayerCharacterInfo");
 
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+        var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
         var hero_list = deck.GetDeckHeroes();
 
         for (int i = 0; i < hero_list.Count; i++)
@@ -153,7 +153,6 @@ public class GameResultWinPopup : PopupBase
         BeforePlayerInfo();
 
         //  character info
-
         AddPlayerInfoNodes();
 
         //  backlight 밝아지기
@@ -170,7 +169,7 @@ public class GameResultWinPopup : PopupBase
     {
         var pool = GameObjectPoolManager.Instance;
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+        var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
         var hero_list = deck.GetDeckHeroes();
         int cnt = hero_list.Count;
         for (int i = 0; i < cnt; i++)
@@ -231,6 +230,7 @@ public class GameResultWinPopup : PopupBase
     /// </summary>
     void ShowStarImpactComplete()
     {
+        AfterPlayerInfo();
         Player_Info_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Player_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Character_Info_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, CharacterInfoEaseComplete);
@@ -246,8 +246,6 @@ public class GameResultWinPopup : PopupBase
         float before_exp_per = player_data.GetExpPercentage();
 
         int gain_player_exp = Dungeon.GetPlayerExp();
-        //int gain_character_exp = Dungeon.GetPlayerCharacterExp();
-        //int gain_destiny_exp = Dungeon.GetPlayerCharacterDestinyExp();
         int gain_default_gold = Dungeon.GetDefaultClearReward();
 
         Player_Lv.text = before_lv.ToString();
@@ -260,15 +258,81 @@ public class GameResultWinPopup : PopupBase
     /// </summary>
     void AfterPlayerInfo()
     {
-
+        //  gauge up
+        StartCoroutine(StartAfterPlayerInfo());
     }
-    
+
+    IEnumerator StartAfterPlayerInfo()
+    {
+        var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+        int before_lv = player_data.GetLevel();
+        int gain_player_exp = Dungeon.GetPlayerExp();
+        var result_code = player_data.AddExp(gain_player_exp);
+        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        {
+            yield break;
+        }
+
+        int after_lv = player_data.GetLevel();
+        int fullcharge_count = after_lv - before_lv;
+
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  풀 챠지 횟수
+        while (loop_count < fullcharge_count)
+        {
+            delta += Time.deltaTime;
+            
+            Player_Exp_Gauge.value = Mathf.Lerp(Player_Exp_Gauge.value, 1f, delta / duration);
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Player_Exp_Gauge.value = 0f;
+                ++loop_count;
+                Player_Lv.text = (before_lv + loop_count).ToString();
+
+                if (loop_count >= fullcharge_count)
+                {
+                    break;
+                }
+            }
+            yield return wait;
+        }
+
+        //  남은 경험치 게이지 이동
+        duration = 1f;
+        delta = 0f;
+        float last_exp = player_data.GetExpPercentage();
+        if (last_exp > 0f)
+        {
+            while (delta < duration)
+            {
+                delta += Time.deltaTime;
+                Player_Exp_Gauge.value = Mathf.Lerp(Player_Exp_Gauge.value, last_exp, delta / duration);
+                yield return wait;
+            }
+        }
+    }
+
     /// <summary>
     /// 캐릭터 등장 애니 완료<br/>
     /// 버튼 등장 애니 요청
     /// </summary>
     void CharacterInfoEaseComplete()
     {
+        //  캐릭 경험치 / 호감도 경험치 증가
+        int character_exp = Dungeon.GetPlayerCharacterExp();
+        int destiny_exp = Dungeon.GetPlayerCharacterDestinyExp();
+
+        int cnt = Used_Player_Character_Info_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var player_info = Used_Player_Character_Info_List[i];
+            player_info.AfterAddExpHeroInfo(character_exp, destiny_exp);
+        }
+        //  save data 필요
         Next_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Next_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }

@@ -1,5 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.Util;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,43 +31,158 @@ public class GameResultPlayerCharacterInfo : UIBase
     UIHeroBase SD_Hero;
     UserHeroData User_Data;
 
-    int Before_Lv;
-    float Before_Exp_Percent;
-    double Before_Remain_Need_Exp;
-
-    int After_Lv;
-    float After_Exp_Percent;
-    double After_Remain_Need_Remain;
-
     public void SetUserHeroData(UserHeroData ud)
     {
         User_Data = ud;
 
-        Before_Lv = User_Data.GetLevel();
-        Before_Exp_Percent = User_Data.GetExpPercetage();
-        Before_Remain_Need_Exp = User_Data.GetRemainNextExp();
-
         SpawnSDHero();
-
+        
         FixedUpdateInfo();
     }
+
 
     /// <summary>
     /// 경험치 추가 후 게이지 업데이트
     /// </summary>
-    public void AfterAddExpHeroInfo(int char_xp, int destiny_xp)
+    public void AfterAddExpHeroInfo(int char_exp, int destiny_exp)
     {
+        StartCoroutine(StartLevelUp(char_exp));
 
+        StartCoroutine(StartLoveLevelUp(destiny_exp));
+    }
+
+    IEnumerator StartLevelUp(int char_exp)
+    {
+        int before_lv = User_Data.GetLevel();
+        float before_xp_percent = User_Data.GetExpPercetage();
+        double before_remain_need_xp = User_Data.GetRemainNextExp();
+
+        var result_code = User_Data.AddExp(char_exp);
+        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        {
+            yield break;
+        }
+
+        int after_lv = User_Data.GetLevel();
+        float after_xp_percent = User_Data.GetExpPercetage();
+        double after_remain_need_xp = User_Data.GetRemainNextExp();
+
+        int fullcharge_count = after_lv - before_lv;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  풀 차지 횟수
+        while (loop_count < fullcharge_count)
+        {
+            delta += Time.deltaTime;
+
+            Level_Exp_Slider.value = Mathf.Lerp(Level_Exp_Slider.value, 1f, delta / duration);
+            if (delta > duration)
+            {
+                delta = 0f;
+                Level_Exp_Slider.value = 0f;
+                ++loop_count;
+                Level_Text.text = (before_lv + loop_count).ToString();
+                if (loop_count >= fullcharge_count)
+                {
+                    break;
+                }
+            }
+            yield return wait;
+        }
+
+        //  남은 경험치 게이지 이동
+        duration = 1f;
+        delta = 0f;
+        if (after_xp_percent > 0f)
+        {
+            while (delta < duration)
+            {
+                delta += Time.deltaTime;
+                Level_Exp_Slider.value = Mathf.Lerp(Level_Exp_Slider.value, after_xp_percent, delta / duration);
+                yield return wait;
+            }
+        }
+    }
+    IEnumerator StartLoveLevelUp(int destiny_exp)
+    {
+        int before_love_lv = User_Data.GetLoveLevel();
+        float before_love_exp_per = User_Data.GetLoveExpPercetage();
+        double before_remain_need_love_xp = User_Data.GetRemainNextLoveExp();
+
+        var result_code = User_Data.AddLoveExp(destiny_exp);
+        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        {
+            yield break;
+        }
+
+        int after_love_lv = User_Data.GetLoveLevel();
+        float after_love_exp_per = User_Data.GetLoveExpPercetage();
+        double after_remain_need_love_xp = User_Data.GetRemainNextLoveExp();
+
+        int fullcharge_count = after_love_lv - before_love_lv;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  풀 챠치 횟수
+        while (loop_count < fullcharge_count)
+        {
+            delta += Time.deltaTime;
+            Love_Exp_Slider.value = Mathf.Lerp(Love_Exp_Slider.value, 1f, delta / duration);
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Love_Exp_Slider.value = 0f;
+                ++loop_count;
+                Love_Level_Text.text = (before_love_lv + loop_count).ToString();
+                if (loop_count >= fullcharge_count)
+                {
+                    break;
+                }
+            }
+            yield return wait;
+        }
+
+        //  남은 경험치 게이지 이동
+        duration = 1f;
+        delta = 0f;
+        if (after_love_exp_per > 0f)
+        {
+            while (delta < duration)
+            {
+                delta += Time.deltaTime;
+                Love_Exp_Slider.value = Mathf.Lerp(Love_Exp_Slider.value, after_love_exp_per, delta / duration);
+                yield return wait;
+            }
+        }
     }
 
     void FixedUpdateInfo()
     {
+        int before_lv = User_Data.GetLevel();
+        float before_xp_percent = User_Data.GetExpPercetage();
+        double before_remain_need_xp = User_Data.GetRemainNextExp();
+
+        int before_love_lv = User_Data.GetLoveLevel();
+        float before_love_exp_per = User_Data.GetLoveExpPercetage();
+        double before_remain_need_love_xp = User_Data.GetRemainNextLoveExp();
+
         //  before lv info
-        Level_Text.text = Before_Lv.ToString();
+        Level_Text.text = before_lv.ToString();
         //  exp per
-        Level_Exp_Slider.value = Before_Exp_Percent;
+        Level_Exp_Slider.value = before_xp_percent;
         //  need exp
-        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", Before_Remain_Need_Exp);
+        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", before_remain_need_xp);
+
+        //  before love lv 
+        Love_Level_Text.text = before_love_lv.ToString();
+        //  before love exp
+        Love_Exp_Slider.value = before_love_exp_per;
+        //  before love need exp
+        Love_Exp_Text.text = ZString.Format("앞으로 {0:N0}", before_remain_need_love_xp);
+
     }
 
     /// <summary>

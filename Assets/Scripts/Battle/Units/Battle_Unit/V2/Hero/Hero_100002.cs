@@ -35,6 +35,7 @@ public class Hero_100002 : HeroBase_V2
 
         var character_cam = virtual_cam.GetCharacterCamera();
         var free_cam = virtual_cam.GetFreeCamera();
+        var land_cam = virtual_cam.GetLandscapeCamera();
 
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
@@ -52,6 +53,10 @@ public class Hero_100002 : HeroBase_V2
                     character_cam.Follow = this.transform;
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, character_cam.GetComponent<Animator>());
                 }
+                else if (track.name.Equals("LandscapeCameraAnimationTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, land_cam.GetComponent<Animator>());
+                }
             }
             else if (track is CinemachineTrack)
             {
@@ -68,13 +73,17 @@ public class Hero_100002 : HeroBase_V2
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, character_cam);
                             }
-                            if (shot.DisplayName.Equals("FreeCamera"))
+                            else if (shot.DisplayName.Equals("FreeCamera"))
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, free_cam);
                             }
                             else if (shot.DisplayName.Equals("StageCamera"))
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, stage_cam);
+                            }
+                            else if (shot.DisplayName.Equals("LandscapeCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, land_cam);
                             }
                         }
                     }

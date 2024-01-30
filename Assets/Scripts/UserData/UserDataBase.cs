@@ -1,7 +1,7 @@
 using System;
 
 
-public class UserDataBase : IDisposable
+public class UserDataBase : IDisposable, ICloneable
 {
     /// <summary>
     /// 갱신된 데이터가 있을 경우 True로 변환. 
@@ -82,4 +82,7 @@ public class UserDataBase : IDisposable
         }
         return ret;
     }
+
+    //  데이터 복제
+    public virtual object Clone() { return null; }
 }

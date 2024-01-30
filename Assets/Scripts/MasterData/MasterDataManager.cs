@@ -70,6 +70,18 @@ public class MasterDataManager : BaseMasterDataManager
         return list.FindLast(x => x.accum_exp <= accum_exp);
     }
 
+    public Player_Character_Love_Level_Data Get_PlayerCharacterLoveLevelData(int lv)
+    {
+        Check_Player_Character_Love_Level_Data();
+        return _Player_Character_Love_Level_Data.Find(x => x.level == lv);
+    }
+    public Player_Character_Love_Level_Data Get_PlayerCharacterLoveLevelDataByAccumExp(double accum_exp)
+    {
+        Check_Player_Character_Love_Level_Data();
+        var list = _Player_Character_Love_Level_Data.OrderBy(x => x.level).ToList();
+        return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
     #endregion
 
     #region New Item Data

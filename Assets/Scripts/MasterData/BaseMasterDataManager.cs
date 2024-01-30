@@ -88,6 +88,11 @@ public class BaseMasterDataManager
 		get;
 		private set;
 	}
+	protected List<Player_Character_Love_Level_Data> _Player_Character_Love_Level_Data
+	{
+		get;
+		private set;
+	}
 	protected List<Max_Bound_Info_Data> _Max_Bound_Info_Data
 	{
 		get;
@@ -283,6 +288,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Level_Data();
 		await LoadMaster_Player_Character_Level_Data();
 		await LoadMaster_Player_Character_Skill_Level_Data();
+		await LoadMaster_Player_Character_Love_Level_Data();
 		await LoadMaster_Max_Bound_Info_Data();
 		await LoadMaster_Me_Resource_Data();
 		await LoadMaster_Me_State_Data();
@@ -503,6 +509,17 @@ public class BaseMasterDataManager
 #endif
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Skill_Level_Data>>(json);
 		_Player_Character_Skill_Level_Data = raw_data_list.Select(raw_data => new Player_Character_Skill_Level_Data(raw_data)).ToList();
+	}
+
+	protected async Task LoadMaster_Player_Character_Love_Level_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Love_Level_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Player_Character_Love_Level_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Love_Level_Data>>(json);
+		_Player_Character_Love_Level_Data = raw_data_list.Select(raw_data => new Player_Character_Love_Level_Data(raw_data)).ToList();
 	}
 
 	protected async Task LoadMaster_Max_Bound_Info_Data()
@@ -985,6 +1002,14 @@ public class BaseMasterDataManager
 		if(_Player_Character_Skill_Level_Data == null)
 		{
 			await LoadMaster_Player_Character_Skill_Level_Data();
+		}
+	}
+
+	protected async void Check_Player_Character_Love_Level_Data()
+	{
+		if(_Player_Character_Love_Level_Data == null)
+		{
+			await LoadMaster_Player_Character_Love_Level_Data();
 		}
 	}
 
