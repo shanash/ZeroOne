@@ -399,6 +399,10 @@ namespace Excel2Json
                     continue;
                 }
                 sb.AppendLine("\t///\t<summary>");
+                if (!string.IsNullOrEmpty(info.hash_key))
+                {
+                    sb.AppendLine($"\t///\t<b>{info.hash_key.Replace(":", "")}</b><br/>");
+                }
                 if (!string.IsNullOrEmpty(info.key_name))
                 {
                     string[] knames = info.key_name.Trim().Split('\n');
