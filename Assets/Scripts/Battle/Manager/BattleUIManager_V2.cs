@@ -161,21 +161,13 @@ public class BattleUIManager_V2 : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         int speed_type = GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
         speed_type += 1;
-        if (speed_type > (int)BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        if (speed_type > GameDefine.GAME_SPEEDS.Count -1)
         {
             speed_type = (int)BATTLE_SPEED_TYPE.NORMAL_TYPE;
         }
         GameConfig.Instance.SetGameConfig<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, speed_type);
         UpdateFastSpeed();
-        float speed = GameDefine.GAME_SPEED_DEFAULT;
-        if (speed_type == (int)BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
-        {
-            speed = GameDefine.GAME_SPEED_1_5;
-        }
-        else if (speed_type == (int)BATTLE_SPEED_TYPE.FAST_SPEED_2)
-        {
-            speed = GameDefine.GAME_SPEED_2;
-        }
+        float speed = GameDefine.GAME_SPEEDS[(BATTLE_SPEED_TYPE)speed_type];
         Battle_Mng.SetBattleFastSpeed(speed);
     }
     #endregion

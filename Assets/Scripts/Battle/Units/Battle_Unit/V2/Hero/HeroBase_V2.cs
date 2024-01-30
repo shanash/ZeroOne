@@ -183,7 +183,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 게임 배속
     /// </summary>
-    protected float Battle_Speed_Multiple = GameDefine.GAME_SPEED_DEFAULT;
+    protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
     /// <summary>
     /// 게임 타입

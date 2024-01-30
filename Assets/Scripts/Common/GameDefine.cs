@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GAME_TYPE
@@ -103,10 +104,12 @@ public class GameDefine : MonoBehaviour
     /// </summary>
     public static readonly int MAX_LOBBY_CHARACTER_COUNT = 10;
 
-
-    public static readonly float GAME_SPEED_DEFAULT = 1f;
-    public static readonly float GAME_SPEED_1_5 = 1.5f;
-    public static readonly float GAME_SPEED_2 = 2f;
+    public static readonly Dictionary<BATTLE_SPEED_TYPE, float> GAME_SPEEDS = new Dictionary<BATTLE_SPEED_TYPE, float>
+    {
+        { BATTLE_SPEED_TYPE.NORMAL_TYPE, 1f },
+        { BATTLE_SPEED_TYPE.FAST_SPEED_1_5, 1.5f },
+        { BATTLE_SPEED_TYPE.FAST_SPEED_2, 2f },
+    };
 
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

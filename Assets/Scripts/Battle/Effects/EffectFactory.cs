@@ -14,7 +14,7 @@ public class EffectFactory : MonoBehaviour
 
     List<EffectBase> Used_Effect_List = new List<EffectBase>();
 
-    float Effect_Speed_Multiple = GameDefine.GAME_SPEED_DEFAULT;
+    float Effect_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
     public EffectBase CreateEffect(string path)
     {
