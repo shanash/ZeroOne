@@ -7,6 +7,7 @@ using System.Linq;
 public class Star_Upgrade_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	업그레이드 이전 별성
 	///	</summary>
 	public int current_star_grade => _current_star_grade;

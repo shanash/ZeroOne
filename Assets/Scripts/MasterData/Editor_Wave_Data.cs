@@ -7,12 +7,14 @@ using System.Linq;
 public class Editor_Wave_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	웨이브 그룹 ID
 	///	</summary>
 	public int wave_group_id => _wave_group_id;
 	int _wave_group_id;
 
 	///	<summary>
+	///	<b>key_2</b><br/>
 	///	웨이브 순서
 	///	</summary>
 	public int wave_sequence => _wave_sequence;

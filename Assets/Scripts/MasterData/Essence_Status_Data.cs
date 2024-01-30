@@ -7,6 +7,7 @@ using System.Linq;
 public class Essence_Status_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	도달 전달률
 	///	</summary>
 	public int essence_charge_per => _essence_charge_per;

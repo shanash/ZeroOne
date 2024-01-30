@@ -7,6 +7,7 @@ using System.Linq;
 public class Npc_Level_Stat_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	스텟 인덱스
 	///	</summary>
 	public int npc_level_stat_id => _npc_level_stat_id;

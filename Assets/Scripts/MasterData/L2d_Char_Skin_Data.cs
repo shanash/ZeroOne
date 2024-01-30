@@ -7,6 +7,7 @@ using System.Linq;
 public class L2d_Char_Skin_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	L2d 스킨 아이디
 	///	</summary>
 	public int l2d_id => _l2d_id;

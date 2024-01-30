@@ -7,10 +7,17 @@ using System.Linq;
 public class Reward_Set_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	아이템 ID
 	///	</summary>
 	public int reward_id => _reward_id;
 	int _reward_id;
+
+	///	<summary>
+	///	아이템 그룹 ID
+	///	</summary>
+	public int reward_group_id => _reward_group_id;
+	int _reward_group_id;
 
 	///	<summary>
 	///	보상 타입
@@ -61,6 +68,7 @@ public class Reward_Set_Data : System.IDisposable
 	public Reward_Set_Data(Raw_Reward_Set_Data raw_data)
 	{
 		_reward_id = raw_data.reward_id;
+		_reward_group_id = raw_data.reward_group_id;
 		_reward_type = raw_data.reward_type;
 		_var1 = raw_data.var1;
 		_var2 = raw_data.var2;
@@ -90,6 +98,7 @@ public class Reward_Set_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[reward_id] = <color=yellow>{0}</color>", reward_id).AppendLine();
+		sb.AppendFormat("[reward_group_id] = <color=yellow>{0}</color>", reward_group_id).AppendLine();
 		sb.AppendFormat("[reward_type] = <color=yellow>{0}</color>", reward_type).AppendLine();
 		sb.AppendFormat("[var1] = <color=yellow>{0}</color>", var1).AppendLine();
 		sb.AppendFormat("[var2] = <color=yellow>{0}</color>", var2).AppendLine();

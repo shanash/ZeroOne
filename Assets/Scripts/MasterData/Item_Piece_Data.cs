@@ -7,6 +7,7 @@ using System.Linq;
 public class Item_Piece_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	아이템 ID
 	///	</summary>
 	public int item_piece_id => _item_piece_id;

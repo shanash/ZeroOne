@@ -7,6 +7,7 @@ using System.Linq;
 public class Role_Icon_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	역할 타입
 	///	</summary>
 	public ROLE_TYPE role_type => _role_type;

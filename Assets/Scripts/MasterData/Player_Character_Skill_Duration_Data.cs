@@ -7,6 +7,7 @@ using System.Linq;
 public class Player_Character_Skill_Duration_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	지속성 스킬 효과 인덱스
 	///	</summary>
 	public int pc_skill_duration_id => _pc_skill_duration_id;

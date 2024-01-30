@@ -7,6 +7,7 @@ using System.Linq;
 public class Max_Bound_Info_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	재화 타입
 	///	</summary>
 	public REWARD_TYPE reward_type => _reward_type;

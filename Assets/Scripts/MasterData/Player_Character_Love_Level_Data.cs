@@ -7,6 +7,7 @@ using System.Linq;
 public class Player_Character_Love_Level_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	레벨
 	///	</summary>
 	public int level => _level;

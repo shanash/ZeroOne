@@ -7,6 +7,7 @@ using System.Linq;
 public class World_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	월드 인덱스
 	///	</summary>
 	public int world_id => _world_id;

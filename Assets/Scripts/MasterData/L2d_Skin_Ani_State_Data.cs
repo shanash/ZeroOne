@@ -7,6 +7,7 @@ using System.Linq;
 public class L2d_Skin_Ani_State_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	상태 id
 	///	</summary>
 	public int state_id => _state_id;

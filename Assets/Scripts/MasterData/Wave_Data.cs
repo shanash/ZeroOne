@@ -7,6 +7,7 @@ using System.Linq;
 public class Wave_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	웨이브 ID
 	///	</summary>
 	public int wave_id => _wave_id;

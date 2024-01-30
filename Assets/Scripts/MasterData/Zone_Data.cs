@@ -7,6 +7,7 @@ using System.Linq;
 public class Zone_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	존 인덱스
 	///	</summary>
 	public int zone_id => _zone_id;

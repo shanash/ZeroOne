@@ -7,6 +7,7 @@ using System.Linq;
 public class Player_Character_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	캐릭터 고유 인덱스
 	///	</summary>
 	public int player_character_id => _player_character_id;

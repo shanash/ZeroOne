@@ -7,12 +7,7 @@ using System.Linq;
 public class Item_Lang_Data : System.IDisposable
 {
 	///	<summary>
-	///	인덱스 ID
-	///	</summary>
-	public int index_id => _index_id;
-	int _index_id;
-
-	///	<summary>
+	///	<b>key_1</b><br/>
 	///	string ID
 	///	</summary>
 	public string string_id => _string_id;
@@ -40,7 +35,6 @@ public class Item_Lang_Data : System.IDisposable
 
 	public Item_Lang_Data(Raw_Item_Lang_Data raw_data)
 	{
-		_index_id = raw_data.index_id;
 		_string_id = raw_data.string_id;
 		_kor = raw_data.kor;
 		_eng = raw_data.eng;
@@ -66,7 +60,6 @@ public class Item_Lang_Data : System.IDisposable
 	public override string ToString()
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
-		sb.AppendFormat("[index_id] = <color=yellow>{0}</color>", index_id).AppendLine();
 		sb.AppendFormat("[string_id] = <color=yellow>{0}</color>", string_id).AppendLine();
 		sb.AppendFormat("[kor] = <color=yellow>{0}</color>", kor).AppendLine();
 		sb.AppendFormat("[eng] = <color=yellow>{0}</color>", eng).AppendLine();

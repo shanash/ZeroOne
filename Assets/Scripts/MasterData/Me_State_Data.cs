@@ -7,6 +7,7 @@ using System.Linq;
 public class Me_State_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	상태 고유 아이디
 	///	</summary>
 	public int state_id => _state_id;

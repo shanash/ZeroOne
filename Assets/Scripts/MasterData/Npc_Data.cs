@@ -7,6 +7,7 @@ using System.Linq;
 public class Npc_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	npc id
 	///	</summary>
 	public int npc_data_id => _npc_data_id;

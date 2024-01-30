@@ -7,6 +7,7 @@ using System.Linq;
 public class Me_Resource_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	메모리얼 인덱스
 	///	</summary>
 	public int memorial_id => _memorial_id;

@@ -7,6 +7,7 @@ using System.Linq;
 public class Me_Interaction_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	인터렉션 아이디
 	///	</summary>
 	public int interaction_id => _interaction_id;

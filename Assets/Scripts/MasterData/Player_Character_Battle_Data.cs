@@ -7,12 +7,14 @@ using System.Linq;
 public class Player_Character_Battle_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	전투 인덱스
 	///	</summary>
 	public int battle_info_id => _battle_info_id;
 	int _battle_info_id;
 
 	///	<summary>
+	///	<b>key_2</b><br/>
 	///	별성 정보
 	///	</summary>
 	public int star_grade => _star_grade;

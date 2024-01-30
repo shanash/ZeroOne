@@ -7,6 +7,7 @@ using System.Linq;
 public class Player_Character_Skill_Group : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	스킬 그룹 인덱스
 	///	</summary>
 	public int pc_skill_group_id => _pc_skill_group_id;

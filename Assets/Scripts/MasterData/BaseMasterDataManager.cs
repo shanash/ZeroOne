@@ -88,7 +88,7 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<int, L2d_Char_Skin_Data>();
 	///	<summary>
-	///	 <b>key_1 int : l2d_id </b><br/>
+	///	 <b>key_1 int : id </b><br/>
 	///	</summary>
 	protected Dictionary<int, L2d_Love_State_Data> _L2d_Love_State_Data
 	{
@@ -633,7 +633,7 @@ public class BaseMasterDataManager
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Love_State_Data>>(json);
 		foreach (var raw_data in raw_data_list)
 		{
-			_L2d_Love_State_Data.Add(raw_data.l2d_id, new L2d_Love_State_Data(raw_data));
+			_L2d_Love_State_Data.Add(raw_data.id, new L2d_Love_State_Data(raw_data));
 		}
 	}
 

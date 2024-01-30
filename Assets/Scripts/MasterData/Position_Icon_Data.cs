@@ -7,6 +7,7 @@ using System.Linq;
 public class Position_Icon_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	포지션 타입
 	///	</summary>
 	public POSITION_TYPE position_type => _position_type;

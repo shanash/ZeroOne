@@ -7,12 +7,14 @@ using System.Linq;
 public class L2d_Interaction_Base_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	interaction_group_id
 	///	</summary>
 	public int interaction_group_id => _interaction_group_id;
 	int _interaction_group_id;
 
 	///	<summary>
+	///	<b>key_2</b><br/>
 	///	터치 부위 타입
 	///	</summary>
 	public TOUCH_BODY_TYPE touch_type_01 => _touch_type_01;

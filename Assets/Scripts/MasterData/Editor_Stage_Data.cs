@@ -7,6 +7,7 @@ using System.Linq;
 public class Editor_Stage_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	스테이지 인덱스
 	///	</summary>
 	public int stage_id => _stage_id;

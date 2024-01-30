@@ -7,6 +7,7 @@ using System.Linq;
 public class Charge_Value_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	보상 타입
 	///	</summary>
 	public REWARD_TYPE reward_type => _reward_type;

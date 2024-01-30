@@ -7,6 +7,7 @@ using System.Linq;
 public class Npc_Skill_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	스킬 인덱스
 	///	</summary>
 	public int npc_skill_id => _npc_skill_id;

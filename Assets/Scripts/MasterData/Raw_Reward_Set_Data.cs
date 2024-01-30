@@ -5,6 +5,7 @@
 public class Raw_Reward_Set_Data : System.IDisposable
 {
 	public int reward_id {get; set;}
+	public int reward_group_id {get; set;}
 	public REWARD_TYPE reward_type {get; set;}
 	public int var1 {get; set;}
 	public int var2 {get; set;}
@@ -18,6 +19,7 @@ public class Raw_Reward_Set_Data : System.IDisposable
 	public Raw_Reward_Set_Data()
 	{
 		reward_id = 0;
+		reward_group_id = 0;
 		reward_type = REWARD_TYPE.NONE;
 		var1 = 0;
 		var2 = 0;

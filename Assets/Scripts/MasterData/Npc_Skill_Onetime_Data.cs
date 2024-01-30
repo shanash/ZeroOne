@@ -7,6 +7,7 @@ using System.Linq;
 public class Npc_Skill_Onetime_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	일회성 스킬 효과 인덱스
 	///	</summary>
 	public int npc_skill_onetime_id => _npc_skill_onetime_id;

@@ -7,6 +7,7 @@ using System.Linq;
 public class Goods_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	재화 타입
 	///	</summary>
 	public GOODS_TYPE goods_type => _goods_type;

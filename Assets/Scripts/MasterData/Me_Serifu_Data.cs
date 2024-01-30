@@ -7,6 +7,7 @@ using System.Linq;
 public class Me_Serifu_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	대사 인덱스
 	///	</summary>
 	public int serifu_id => _serifu_id;

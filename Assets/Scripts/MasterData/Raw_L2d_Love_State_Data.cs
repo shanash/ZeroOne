@@ -4,6 +4,7 @@
 [System.Serializable]
 public class Raw_L2d_Love_State_Data : System.IDisposable
 {
+	public int id {get; set;}
 	public int l2d_id {get; set;}
 	public LOVE_LEVEL_TYPE love_level_type {get; set;}
 	public int state_id {get; set;}
@@ -12,6 +13,7 @@ public class Raw_L2d_Love_State_Data : System.IDisposable
 
 	public Raw_L2d_Love_State_Data()
 	{
+		id = 0;
 		l2d_id = 0;
 		love_level_type = LOVE_LEVEL_TYPE.NONE;
 		state_id = 0;

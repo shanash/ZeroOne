@@ -7,6 +7,7 @@ using System.Linq;
 public class Me_Chat_Motion_Data : System.IDisposable
 {
 	///	<summary>
+	///	<b>key_1</b><br/>
 	///	챗모션 id
 	///	</summary>
 	public int chat_motion_id => _chat_motion_id;
