@@ -99,7 +99,7 @@ public class UserChargeItemDataManager : ManagerBase
                     var jdata = arr[i];
 
                     int charge_item_type = 0;
-                    if (int.TryParse(jdata[NODE_CHARGE_ITEM_DATA_LIST].ToString(), out charge_item_type))
+                    if (int.TryParse(jdata[NODE_CHARGE_ITEM_TYPE].ToString(), out charge_item_type))
                     {
                         UserChargeItemData item = FindUserChargeItemData((REWARD_TYPE)charge_item_type);
                         if (item != null)

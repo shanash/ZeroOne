@@ -338,10 +338,14 @@ public class UserChargeItemData : UserDataBase
         if (json.ContainsKey(NODE_LAST_USED_DT))
         {
             Last_Used_Dt = ParseString(json, NODE_LAST_USED_DT);
+            if (!string.IsNullOrEmpty(Last_Used_Dt))
+            {
+                Last_Used_Date = DateTime.Parse(Last_Used_Dt);
+            }
         }
 
         InitMasterData();
-
+        CheckDateAndTimeChange();
         return true;
     }
 

@@ -33,7 +33,11 @@ public class TopStatusBarGoodsStamina : TopStatusBarGoodsBase
 
     public override void UpdateGoodsItem()
     {
-        Goods_Count.text = "10/10";
+        if (Charge_Item == null)
+        {
+            return;
+        }
+        //Goods_Count.text = "10/10";
         int max_bound = Charge_Item.GetMaxBound();
         int cnt = Charge_Item.GetCount();
 

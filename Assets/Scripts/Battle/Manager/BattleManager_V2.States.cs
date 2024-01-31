@@ -206,8 +206,6 @@ public partial class BattleManager_V2 : MonoBehaviour
             Wave_Data wdata = (Wave_Data)Dungeon_Data.GetWaveData();
             popup.ShowPopup(wdata, 1f);
         });
-
-        
     }
     public virtual void GameStateWaveInfo() { }
     public virtual void GameStateWaveInfoExit() { }
