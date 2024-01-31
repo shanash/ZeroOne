@@ -103,6 +103,14 @@ public class MasterDataManager : BaseMasterDataManager
         return _Item_Data.Values.ToList().Find(x => x.item_type == itype && x.item_id == item_id);
     }
     
+    public Item_Data Get_ItemData(int item_id)
+    {
+        Check_Item_Data();
+        Item_Data item;
+        _Item_Data.TryGetValue(item_id, out item);
+        return item; 
+    }
+
     public IReadOnlyList<Item_Data> Get_ItemDataListByItemType(ITEM_TYPE_V2 itype)
     {
         Check_Item_Data();

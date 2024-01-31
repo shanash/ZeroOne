@@ -16,6 +16,12 @@ public class TopStatusBarGoodsBase : MonoBehaviour, IPointerDownHandler, IPointe
 
     Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
 
+    private void Start()
+    {
+        InitStatusBar();
+    }
+
+    protected virtual void InitStatusBar() { }
 
     /// <summary>
     /// 상태바 아이콘 클릭 이벤트 콜백
@@ -41,6 +47,7 @@ public class TopStatusBarGoodsBase : MonoBehaviour, IPointerDownHandler, IPointe
     }
 
     public TOP_STATUS_TYPE GetTopStatusType() { return Status_Type; }
+
 
     
 }

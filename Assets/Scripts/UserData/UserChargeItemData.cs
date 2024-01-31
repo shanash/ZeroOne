@@ -3,7 +3,6 @@ using LitJson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 public class UserChargeItemData : UserDataBase
@@ -21,6 +20,8 @@ public class UserChargeItemData : UserDataBase
     /// </summary>
     public string Last_Used_Dt { get; private set; } = string.Empty;
 
+    DateTime Last_Used_Date;
+
     protected Charge_Value_Data Data;
     protected Max_Bound_Info_Data Max_Bound_Data;
 
@@ -31,6 +32,7 @@ public class UserChargeItemData : UserDataBase
         InitSecureVars();
         Charge_Item_Type = REWARD_TYPE.NONE;
         Last_Used_Dt = string.Empty;
+        Last_Used_Date = DateTime.MinValue;
     }
 
     protected override void InitSecureVars()
@@ -88,6 +90,11 @@ public class UserChargeItemData : UserDataBase
         {
             int item_count = GetCount();
             item_count += cnt;
+            if (item_count > GetMaxBound())
+            {
+                Last_Used_Date = DateTime.MinValue;
+                Last_Used_Dt = string.Empty;
+            }
             Count.Set(item_count);
 
             Is_Update_Data = true;
@@ -105,14 +112,39 @@ public class UserChargeItemData : UserDataBase
 
         if (use_cnt > 0)
         {
-
+            CheckDateAndTimeChange();
+            int item_cnt = GetCount();
+            item_cnt -= use_cnt;
+            Count.Set(item_cnt);
+            if (Last_Used_Date == DateTime.MinValue)
+            {
+                var now = DateTime.Now.ToLocalTime();
+                Last_Used_Date = now;
+                Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
+            }
+            Is_Update_Data = true;
+            return ERROR_CODE.SUCCESS;
         }
         return ERROR_CODE.FAILED;
     }
 
     public ERROR_CODE FullChargeItem()
     {
-        return ERROR_CODE.FAILED;
+        int cnt = GetCount();
+        if (cnt > GetMaxBound())
+        {
+            return ERROR_CODE.NOT_WORK;
+        }
+
+        cnt = GetMaxBound();
+        Count.Set(cnt);
+
+        Last_Used_Date = DateTime.MinValue;
+        Last_Used_Dt = string.Empty;
+
+        Is_Update_Data = true;
+
+        return ERROR_CODE.SUCCESS;
     }
 
     public bool IsUsableChargeItemCount(int use_cnt)
@@ -124,37 +156,193 @@ public class UserChargeItemData : UserDataBase
         return GetCount() >= use_cnt;
     }
 
-    //public override ERROR_CODE CheckDateChange()
-    //{
-    //    ERROR_CODE code = ERROR_CODE.NOT_WORK;
+    DateTime GetLastUseDateTime()
+    {
+        return Last_Used_Date;
+    }
 
-    //    int now_count = GetCount();
-    //    if (GetMaxBound() != 0 && now_count > GetMaxBound())
-    //    {
-    //        //  not work
-    //        return code;
-    //    }
-    //    var now = DateTime.Now.ToLocalTime();
-    //    if (!string.IsNullOrEmpty(Last_Used_Dt))
-    //    {
-    //        var last_dt = DateTime.Parse(Last_Used_Dt);
-    //        if (last_dt.Date < now.Date)
-    //        {
+    
 
-    //        }
-    //    }
-    //    return code;
-    //}
+    public override ERROR_CODE CheckDateAndTimeChange()
+    {
+        ERROR_CODE code = ERROR_CODE.NOT_WORK;
 
+        if (Data.repeat_type == REPEAT_TYPE.REPEAT_MIN)
+        {
+            return CheckMinutes();
+        }
+        else if (Data.repeat_type == REPEAT_TYPE.REPEAT_DAY)
+        {
+            return CheckDays();
+        }
+        else if (Data.repeat_type == REPEAT_TYPE.REPEAT_WEEK)
+        {
+            return CheckWeeks();
+        }
+        else if (Data.repeat_type == REPEAT_TYPE.REPEAT_MONTH)
+        {
+            return CheckMonths();
+        }
+        else if (Data.repeat_type == REPEAT_TYPE.REPEAT_YEAR)
+        {
+            return CheckYears();
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
+
+        return code;
+    }
+
+    /// <summary>
+    /// 다음 쿨타임까지 남은 시간 반환
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    public TimeSpan GetRemainChargeTime()
+    {
+        if (IsFullCharged())
+        {
+            return TimeSpan.Zero;
+        }
+
+        var now = DateTime.Now.ToLocalTime();
+        ERROR_CODE result = CheckDateAndTimeChange();
+
+        TimeSpan cooltime = TimeSpan.FromSeconds(GetRepeatTime());
+        TimeSpan subtract = now - Last_Used_Date;
+        return cooltime - subtract;
+    }
+
+    /// <summary>
+    /// 반복 주기 시간
+    /// </summary>
+    /// <returns></returns>
+    int GetRepeatTime()
+    {
+        int repeat_time = 0;
+        switch (Data.repeat_type)
+        {
+            case REPEAT_TYPE.REPEAT_MIN:
+                repeat_time = Data.repeat_time * 60;
+                break;
+            case REPEAT_TYPE.REPEAT_DAY:
+                repeat_time = Data.repeat_time * 60 * 60 * 24;
+                break;
+            case REPEAT_TYPE.REPEAT_WEEK:
+                repeat_time = Data.repeat_time * 60 * 60 * 24 * 7;
+                break;
+            case REPEAT_TYPE.REPEAT_MONTH:
+                repeat_time = Data.repeat_time * 60 * 60 * 24 * 7 * 28;
+                break;
+            case REPEAT_TYPE.REPEAT_YEAR:
+                repeat_time = Data.repeat_time * 60 * 60 * 24 * 7 * 365;
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+        return repeat_time;
+    }
+
+    /// <summary>
+    /// 반복 주기 체크(n분)
+    /// </summary>
+    ERROR_CODE CheckMinutes()
+    {
+        ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        int repeat_time = GetRepeatTime();
+        int now_count = GetCount();
+        if (GetMaxBound() != 0 && now_count > GetMaxBound())
+        {
+            //  not work
+            return code;
+        }
+        var now = DateTime.Now.ToLocalTime();
+        var last = GetLastUseDateTime();
+        if (last == DateTime.MinValue)
+        {
+            Last_Used_Date = now;
+            Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
+            Is_Update_Data = true;
+            return ERROR_CODE.SUCCESS;
+        }
+
+        var total_time = now - last;
+        int charge_cnt = (int)total_time.TotalSeconds / repeat_time * Data.charge_count;
+        if (charge_cnt > 0)
+        {
+            int cur_cnt = GetCount();
+            cur_cnt += charge_cnt;
+            if (cur_cnt > GetMaxBound())
+            {
+                cur_cnt = GetMaxBound();
+                Count.Set(cur_cnt);
+                Last_Used_Date = DateTime.MinValue;
+                Last_Used_Dt = string.Empty;
+            }
+            else
+            {
+                Count.Set(cur_cnt);
+                Last_Used_Date = last.AddSeconds(charge_cnt * repeat_time);
+                Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
+            }
+            Is_Update_Data = true;
+            code = ERROR_CODE.SUCCESS;
+        }
+
+        return code;
+    }
+    /// <summary>
+    /// 반복 주기 체크(n일)
+    /// </summary>
+    ERROR_CODE CheckDays() { return ERROR_CODE.NOT_WORK; }
+    /// <summary>
+    /// 반복 주기 체크(n주간)
+    /// </summary>
+    ERROR_CODE CheckWeeks() { return ERROR_CODE.NOT_WORK; }
+    /// <summary>
+    /// 반복 주기 체크(n개월)
+    /// </summary>
+    ERROR_CODE CheckMonths() { return ERROR_CODE.NOT_WORK; }
+    /// <summary>
+    /// 반복 주기 체크(n년)
+    /// </summary>
+    ERROR_CODE CheckYears() { return ERROR_CODE.NOT_WORK; }
 
 
     public override JsonData Serialized()
     {
-        return base.Serialized();
+        var json = new JsonData();
+
+        json[NODE_CHARGE_ITEM_TYPE] = (int)Charge_Item_Type;
+        json[NODE_COUNT] = GetCount();
+        json[NODE_LAST_USED_DT] = Last_Used_Dt;
+
+        return json;
     }
     public override bool Deserialized(JsonData json)
     {
-        return base.Deserialized(json);
+        if (json == null) return false;
+
+        InitSecureVars();
+        if (json.ContainsKey(NODE_CHARGE_ITEM_TYPE))
+        {
+            Charge_Item_Type = (REWARD_TYPE)ParseInt(json, NODE_CHARGE_ITEM_TYPE);
+        }
+        if (json.ContainsKey(NODE_COUNT))
+        {
+            Count.Set(ParseInt(json, NODE_COUNT));
+        }
+        if (json.ContainsKey(NODE_LAST_USED_DT))
+        {
+            Last_Used_Dt = ParseString(json, NODE_LAST_USED_DT);
+        }
+
+        InitMasterData();
+
+        return true;
     }
 
     //-------------------------------------------------------------------------
