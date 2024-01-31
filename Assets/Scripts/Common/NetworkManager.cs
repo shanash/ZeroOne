@@ -54,7 +54,7 @@ public class NetworkManager : Singleton<NetworkManager>
     /// </summary>
     /// <param name="mac_address">개발디바이스의 맥 어드레스</param>
     /// <param name="callback">콜백</param>
-    public void RequestDevLogin(Action<ResponseData<DevLoginResponse>> callback)
+    public void RequestDevLogin(Action<ResponseData<LoginResponse>> callback)
     {
         string mac_address = GetMacAddress();
         if (string.IsNullOrEmpty(mac_address))
@@ -66,12 +66,12 @@ public class NetworkManager : Singleton<NetworkManager>
             HttpMethod.POST,
             "account/login/dev",
             new DevLoginRequest { macAddress = mac_address },
-            (ResponseData<DevLoginResponse> res) =>
+            (ResponseData<LoginResponse> res) =>
             {
                 User_Id = res.Data.userId;
                 Access_Token = res.Data.accessToken;
                 Refresh_Token = res.Data.refreshToken;
-                Client.SetToken(res.Data.accessToken, res.Data.refreshToken);
+                Client.SetTokenInfo($"{Base_Uri}account/login/refreshtoken", res.Data.accessToken, res.Data.refreshToken);
 
                 callback(res);
             });

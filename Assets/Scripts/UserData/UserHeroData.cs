@@ -495,6 +495,10 @@ public class UserHeroData : UserDataBase
     
     public override LitJson.JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new LitJson.JsonData();
 
         json[NODE_PLAYER_CHARACTER_ID] = GetPlayerCharacterID();

@@ -77,6 +77,10 @@ public class UserMemorialData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return false;
+        }
         var json = new LitJson.JsonData();
         json[NODE_MEMORIAL_ID] = Memorial_ID;
         json[NODE_PLAYER_CHARACTER_ID] = Player_Character_ID;

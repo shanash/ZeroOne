@@ -9,6 +9,11 @@ namespace ProtocolShared.Proto.Base
         NullResponse = 4,
         JsonParseFailed = 5,
         DuplicationRequest = 6,
+        ExpiredAccessToken = 7,
+        ExpiredRefrashToken = 8,
+        ExceededRetryCount = 9,
+        ValidateFailedAccessToken = 10,
+        ValidateFailedRefreshToken = 11,
 
         // Http Status 값
         OK = 200, // 성공
@@ -63,5 +68,9 @@ namespace ProtocolShared.Proto.Base
         GatewayTimeout = 504, // 게이트웨이 또는 프록시 역할을 하는 서버가 그 뒷단의 서버로부터 응답을 기다리다 타임아웃이 발생하였다.
         HTTPVersionNotSupported = 505, // 클라이언트가 요청에 사용한 HTTP 버전을 서버가 지원하지 않는다.
         InsufficientStorage = 507, // (WebDAV) 서버에 저장 공간 부족으로 처리에 실패하였다.
+
+        NeedCreateUser = 10001, // 유저를 생성해야 함.
+        DuplicationName = 10002, // 유저를 생성해야 함.
+        NotFoundItem = 10003, // 아이템을 찾을수 없음.
     }
 }

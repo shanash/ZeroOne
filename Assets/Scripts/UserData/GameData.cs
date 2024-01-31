@@ -149,4 +149,14 @@ public class GameData : Singleton<GameData>
     {
         return FindUserDataManager<UserHeroSkillDataManager>(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
     }
+
+
+    public void Save()
+    {
+        int cnt = User_Data_Manager_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            User_Data_Manager_List[i].Save();
+        }
+    }
 }

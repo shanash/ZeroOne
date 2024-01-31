@@ -230,6 +230,10 @@ public class UserDeckData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new JsonData();
 
         var heroes_arr = new JsonData();

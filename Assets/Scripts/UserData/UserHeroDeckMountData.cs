@@ -43,6 +43,7 @@ public class UserHeroDeckMountData : UserDataBase
         Player_Character_Num = player_character_num;
 
         InitMasterData();
+        Is_Update_Data = true;
         return this;
     }
 
@@ -50,7 +51,7 @@ public class UserHeroDeckMountData : UserDataBase
     {
         var hero_mng = GameData.Instance.GetUserHeroDataManager();
         User_Hero_Data = hero_mng.FindUserHeroData(Player_Character_ID, Player_Character_Num);
-        Is_Update_Data = true;
+        
     }
 
     public void SetLeader(bool leader)
@@ -64,6 +65,10 @@ public class UserHeroDeckMountData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new JsonData();
         json[NODE_PLAYER_CHARACTER_ID] = Player_Character_ID;
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;

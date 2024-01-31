@@ -55,9 +55,29 @@ public class UserChargeItemDataManager : ManagerBase
         return item;
     }
 
+    /// <summary>
+    /// 해당 아이템 사용 가능 여부
+    /// </summary>
+    /// <param name="rtype"></param>
+    /// <param name="cnt"></param>
+    /// <returns></returns>
+    public bool IsUsableChargeItemCount(REWARD_TYPE rtype, int cnt)
+    {
+        var item = FindUserChargeItemData(rtype);
+        if (item != null)
+        {
+            return item.IsUsableChargeItemCount(cnt);
+        }
+        return false;
+    }
+
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new JsonData();
 
         var arr = new JsonData();

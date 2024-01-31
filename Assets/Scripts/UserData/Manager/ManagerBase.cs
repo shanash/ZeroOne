@@ -93,6 +93,7 @@ public class ManagerBase : IDisposable
         {
             return;
         }
+
         LitJson.JsonWriter writer = new LitJson.JsonWriter();
         writer.PrettyPrint = true;
 

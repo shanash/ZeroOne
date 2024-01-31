@@ -35,65 +35,7 @@ public class UserItemData : UserDataBase
         InitMasterData();
     }
 
-    //protected override void InitMasterData()
-    //{
-    //    var m = MasterDataManager.Instance;
-        
-    //    switch (Item_Type)
-    //    {
-    //        case ITEM_TYPE_V2.EXP_POTION_P:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.EXP_POTION_C:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.STA_POTION:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.FAVORITE_ITEM:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.EXP_SKILL:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.STAGE_SKIP:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.TICKET_DUNGEON:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.EQ_GROWUP:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        case ITEM_TYPE_V2.TICKET_REWARD_SELECT:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.TICKET_REWARD_RANDOM:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.TICKET_REWARD_ALL:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.EQUIPMENT:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.CHARACTER:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.PIECE_EQUIPMENT:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.PIECE_CHARACTER:
-    //            Debug.Assert(false);
-    //            break;
-    //        case ITEM_TYPE_V2.PIECE_ITEM:
-    //            Data = m.Get_ItemData(Item_Type, Item_ID);
-    //            break;
-    //        default:
-    //            Debug.Assert(false);
-    //            break;
-    //    }
-    //}
+    
 
     /// <summary>
     /// 각 아이템 데이터 반환
@@ -148,6 +90,10 @@ public class UserItemData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return false;
+        }
         var json = new JsonData();
 
         json[NODE_ITEM_TYPE] = (int)Item_Type;

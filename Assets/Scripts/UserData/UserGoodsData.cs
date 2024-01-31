@@ -18,7 +18,6 @@ public class UserGoodsData : UserDataBase
     {
         InitSecureVars();
         Goods_Type = GOODS_TYPE.NONE;
-        //Count.Set(0);
     }
 
     protected override void InitSecureVars()
@@ -143,6 +142,10 @@ public class UserGoodsData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new JsonData();
         json[NODE_GOODS_TYPE] = (int)Goods_Type;
         json[NODE_COUNT] = GetCount();

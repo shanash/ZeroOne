@@ -18,8 +18,6 @@ public class UserPlayerInfoData : UserDataBase
     {
         InitSecureVars();
         Nickname = string.Empty;
-        //Level.Set(1);
-        //Exp.Set(0);
     }
 
     protected override void Destroy()
@@ -42,7 +40,6 @@ public class UserPlayerInfoData : UserDataBase
     protected override void InitMasterData()
     {
         Lv_Data = MasterDataManager.Instance.Get_PlayerLevelData(GetLevel());
-        Is_Update_Data = true;
     }
 
     public int GetLevel()
@@ -152,6 +149,10 @@ public class UserPlayerInfoData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return false;
+        }
         var json = new LitJson.JsonData();
 
         json[NODE_PLAYER_NICKNAME] = Nickname;

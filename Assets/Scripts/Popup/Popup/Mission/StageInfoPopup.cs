@@ -247,6 +247,13 @@ public class StageInfoPopup : PopupBase
 
     public void OnClickEntrance()
     {
+        int need_stamina = Stage.use_stamina;
+        if (!GameData.Instance.GetUserChargeItemDataManager().IsUsableChargeItemCount(REWARD_TYPE.STAMINA, need_stamina))
+        {
+            CommonUtils.ShowToast("스테미너가 부족합니다.", TOAST_BOX_LENGTH.SHORT);
+            return;
+        }
+
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         HidePopup(() =>
         {

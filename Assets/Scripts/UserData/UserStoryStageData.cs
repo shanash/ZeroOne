@@ -20,9 +20,6 @@ public class UserStoryStageData : UserDataBase
     {
         InitSecureVars();
         Stage_ID = 0;
-        //Challenage_Count.Set(0);
-        //Win_Count.Set(0);
-        //Star_Point.Set(0);
     }
 
     protected override void InitSecureVars()
@@ -45,6 +42,7 @@ public class UserStoryStageData : UserDataBase
     {
         Stage_ID = stage_id;
         InitMasterData();
+        Is_Update_Data = true;
 
     }
     protected override void InitMasterData()
@@ -52,7 +50,31 @@ public class UserStoryStageData : UserDataBase
         var m = MasterDataManager.Instance;
         Data = m.Get_StageData(Stage_ID);
         Zone = m.Get_ZoneData(Data.zone_id);
+    }
+
+    public void AddChallenageCount()
+    {
+        int cnt = GetChallengeCount();
+        cnt += 1;
+        Challenage_Count.Set(cnt);
         Is_Update_Data = true;
+    }
+
+    public void AddWinCount()
+    {
+        int cnt = GetWinCount();
+        cnt += 1;
+        Win_Count.Set(cnt);
+        Is_Update_Data = true;
+    }
+    public void SetStarPoint(int pt)
+    {
+        int star_point = GetStarPoint();
+        if (star_point < pt)
+        {
+            Star_Point.Set(pt);
+            Is_Update_Data = true;
+        }
     }
 
     public int GetChallengeCount()
@@ -139,6 +161,10 @@ public class UserStoryStageData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return false;
+        }
         var json = new LitJson.JsonData();
 
         json[NODE_STAGE_ID] = Stage_ID;
@@ -175,7 +201,6 @@ public class UserStoryStageData : UserDataBase
                 Star_Point.Set(ParseInt(json, NODE_STAR_POINT));
             }
         }
-
 
         InitMasterData();
 

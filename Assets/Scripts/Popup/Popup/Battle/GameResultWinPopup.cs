@@ -3,6 +3,7 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -126,6 +127,7 @@ public class GameResultWinPopup : PopupBase
     {
         List<string> asset_list = new List<string>();
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultPlayerCharacterInfo");
+        asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup");
 
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
@@ -154,6 +156,14 @@ public class GameResultWinPopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
+        //  일단 스테미너 사용 완료 하자.
+        int cost_stamina = Dungeon.GetPlayerExp();
+        var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+        if (stamina_item != null)
+        {
+            stamina_item.UseChargeItem(cost_stamina);
+        }
+
         //  player info
         BeforePlayerInfo();
 
@@ -279,14 +289,14 @@ public class GameResultWinPopup : PopupBase
         }
 
         int after_lv = player_data.GetLevel();
-        int fullcharge_count = after_lv - before_lv;
+        int gauge_full_count = after_lv - before_lv;
 
         float duration = 1f;
         float delta = 0f;
         var wait = new WaitForSeconds(0.01f);
         int loop_count = 0;
-        //  풀 챠지 횟수
-        while (loop_count < fullcharge_count)
+        //  게이지 풀 횟수
+        while (loop_count < gauge_full_count)
         {
             delta += Time.deltaTime;
             
@@ -298,7 +308,7 @@ public class GameResultWinPopup : PopupBase
                 ++loop_count;
                 Player_Lv.text = (before_lv + loop_count).ToString();
 
-                if (loop_count >= fullcharge_count)
+                if (loop_count >= gauge_full_count)
                 {
                     break;
                 }
@@ -318,6 +328,15 @@ public class GameResultWinPopup : PopupBase
                 Player_Exp_Gauge.value = Mathf.Lerp(Player_Exp_Gauge.value, last_exp, delta / duration);
                 yield return wait;
             }
+        }
+
+        if (result_code == ERROR_CODE.LEVEL_UP_SUCCESS)
+        {
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            {
+                popup.ShowPopup();
+            });
+            
         }
     }
 
@@ -397,41 +416,230 @@ public class GameResultWinPopup : PopupBase
         var m = MasterDataManager.Instance;
         var pool = GameObjectPoolManager.Instance;
         //  보상 추가
-        string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/RewardItemCard";
+        string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/BattleRewardItemCard";
         var stage = (Stage_Data)Dungeon.GetDungeonData();
 
-        int rand = 0;
-
-        //  first reward list
+        //  first reward list (첫번째 보상인지 여부 체크 필요)
         var f_reward_data_list = m.Get_RewardSetDataList(stage.first_reward_group_id);
-        int cnt = f_reward_data_list.Count;
-        for (int i = 0; i < cnt; i++)
+        DROP_TYPE drop_type = DROP_TYPE.NONE;
+        if (f_reward_data_list.Count > 0)
         {
-            var reward_data = f_reward_data_list[i];
-            if (reward_data.drop_type == 0)
+            drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
+            if (drop_type == DROP_TYPE.DROP_EACH)
             {
-
+                DropTypeEachReward(reward_prefab, f_reward_data_list);
             }
-            else 
+            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
             {
-
+                DropTypeWeightReward(reward_prefab, f_reward_data_list);
             }
-            //var obj = pool.GetGameObject(reward_prefab, Reward_List_View.content);
-            //var reward_item = obj.GetComponent<RewardItemCard>();
-            //reward_item.SetRewardSetData(reward_data);
-            //Used_Reward_Item_List.Add(reward_item);
+            else
+            {
+                Debug.Assert(false);
+            }
         }
 
-        //  star reward list
+        //  star reward list - (이미 별 보상을 받았는지 체크 필요)
         var star_reward_data_list = m.Get_RewardSetDataList(stage.star_reward_group_id);
+        if (star_reward_data_list.Count > 0)
+        {
+            drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
+            if (drop_type == DROP_TYPE.DROP_EACH)
+            {
+                DropTypeEachReward(reward_prefab, star_reward_data_list);
+            }
+            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+            {
+                DropTypeWeightReward(reward_prefab, star_reward_data_list);
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
+        }
 
         //  repeat reward list
         var repeat_reward_data_list = m.Get_RewardSetDataList(stage.repeat_reward_group_id);
+        if (repeat_reward_data_list.Count > 0)
+        {
+            drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
+            if (drop_type == DROP_TYPE.DROP_EACH)
+            {
+                DropTypeEachReward(reward_prefab, repeat_reward_data_list);
+            }
+            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+            {
+                DropTypeWeightReward(reward_prefab, repeat_reward_data_list);
+            }
+            else
+            {
+                Debug.Assert(false);
+            }
+        }
 
 
         //  버튼 컨테이너 들어오기
         Reward_Btn_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
+    /// <summary>
+    /// 각각의 아이템 드랍 확률에 따라 드랍한다.
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <param name="list"></param>
+    void DropTypeEachReward(string prefab, IReadOnlyList<Reward_Set_Data> list)
+    {
+        int cnt = list.Count;
+        var pool = GameObjectPoolManager.Instance;
+        for (int i = 0; i < cnt; i++)
+        {
+            var reward_data = list[i];
+            int r = Random.Range(0, 1000000);
+            if (r < reward_data.drop_per)
+            {
+                var obj = pool.GetGameObject(prefab, Reward_List_View.content);
+                var item = obj.GetComponent<RewardItemCard>();
+                item.SetRewardSetData(reward_data);
+                Used_Reward_Item_List.Add(item);
+
+                //  보상 지급
+                int reward_cnt = AddUserItemReward(reward_data);
+                item.SetCount(reward_cnt);
+            }
+        }
+    }
+    /// <summary>
+    /// 모든 아이템의 드랍 비중을 합하여 랜덤한 비중 확률로 1개의 아이템만 드랍한다.
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <param name="list"></param>
+    void DropTypeWeightReward(string prefab, IReadOnlyList<Reward_Set_Data> list)
+    {
+        int cnt = list.Count;
+        int max = list.Sum(x => x.drop_per);
+        int sum = 0;
+        var pool = GameObjectPoolManager.Instance;
+        for (int i = 0; i < cnt; i++)
+        {
+            var reward_data = list[i];
+            sum += reward_data.drop_per;
+            int r = Random.Range(0, max);
+            if (r < sum)
+            {
+                var obj = pool.GetGameObject(prefab, Reward_List_View.content);
+                var item = obj.GetComponent<RewardItemCard>();
+                item.SetRewardSetData(reward_data);
+                Used_Reward_Item_List.Add(item);
+
+                //  보상 지급
+                int reward_cnt = AddUserItemReward(reward_data);
+                item.SetCount(reward_cnt);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 실제 사용자 데이터에 지급하는 아이템/재화
+    /// </summary>
+    /// <param name="reward"></param>
+    int AddUserItemReward(Reward_Set_Data reward)
+    {
+        var gd = GameData.Instance;
+        var item_mng = gd.GetUserItemDataManager();     //  각종 아이템 및 조각 아이템
+        var goods_mng = gd.GetUserGoodsDataManager();   //  재화
+        int item_count = 0;
+
+        switch (reward.reward_type)
+        {
+            case REWARD_TYPE.GOLD:
+                item_count = Random.Range(reward.var1, reward.var2);
+                goods_mng.AddUserGoodsCount(GOODS_TYPE.GOLD, item_count);
+                break;
+            case REWARD_TYPE.DIA:
+                item_count = Random.Range(reward.var1, reward.var2);
+                goods_mng.AddUserGoodsCount(GOODS_TYPE.DIA, item_count);
+                break;
+            case REWARD_TYPE.STAMINA:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.FAVORITE:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.EXP_PLAYER:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.EXP_CHARACTER:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.CHARACTER:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.EQUIPMENT:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.SEND_ESSENCE:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.GET_ESSENCE:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.EXP_POTION_P:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_POTION_P, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.EXP_POTION_C:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_POTION_C, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.STA_POTION:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.STA_POTION, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.FAVORITE_ITEM:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.STAGE_SKIP:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.TICKET_DUNGEON:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.EQ_GROWUP:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.TICKET_REWARD_SELECT:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.TICKET_REWARD_RANDOM:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.TICKET_REWARD_ALL:
+                Debug.Assert(false);
+                break;
+            case REWARD_TYPE.PIECE_EQUIPMENT:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.PIECE_EQUIPMENT, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.PIECE_CHARACTER:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.PIECE_ITEM:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.PIECE_ITEM, reward.var1, reward.var2);
+                break;
+            case REWARD_TYPE.EXP_SKILL:
+                item_count = reward.var2;
+                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_SKILL, reward.var1, reward.var2);
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+
+        return item_count;
+    }
+
 
     public override void Despawned()
     {
