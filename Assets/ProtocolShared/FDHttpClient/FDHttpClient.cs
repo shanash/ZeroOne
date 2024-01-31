@@ -6,7 +6,7 @@ using System.Threading;
 using ProtocolShared.Proto.Base;
 using System.Net.Http;
 
-#nullable enable
+#nullable disable
 
 
 namespace ProtocolShared.FDHttpClient
@@ -21,8 +21,6 @@ namespace ProtocolShared.FDHttpClient
 
     public class FDHttpClient
     {
-        //private static string? _accessToken = null;
-        //private static string? _refeshToken = null;
         // private HttpClient? _httpClient = null;
         public FDHttpClient()
         {
@@ -43,29 +41,38 @@ namespace ProtocolShared.FDHttpClient
         //    return client;
         //}
 
-        public async Task HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod, Action<ResponseData<T>> onComplete) where T : class
+        public string _accessToken = null;
+        public string _refrashToken = null;
+
+        public void SetToken(string accessToken, string refrashToken)
         {
-            ResponseData<T> res = await HttpRequest<T, U>(url, token, data, httpMethod);
+            _accessToken = accessToken;
+            _refrashToken = refrashToken;
+        }
+
+        public async Task HttpRequest<T, U>(string url, U data, HttpMethod httpMethod, Action<ResponseData<T>> onComplete) where T : class
+        {
+            ResponseData<T> res = await HttpRequest<T, U>(url, data, httpMethod);
 
             onComplete?.Invoke(res);
         }
 
-        public async Task<ResponseData<T>> HttpRequest<T, U>(string url, string? token, U? data, HttpMethod httpMethod) where T : class
+        public async Task<ResponseData<T>> HttpRequest<T, U>(string url, U data, HttpMethod httpMethod) where T : class
         {
             try
             {
                 //TODO:이후에 필드에 저장해놓고 재활용하는 걸 시간날때...ㅋ
                 HttpClient httpClient = new HttpClient();
 
-                if (token != null)
+                if (_accessToken != null)
                 {
                     if (false == httpClient.DefaultRequestHeaders.Contains("Authorization"))
                     {
-                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + _accessToken);
                     }
                 }
 
-                HttpResponseMessage? response = null;
+                HttpResponseMessage response = null;
                 CancellationTokenSource cancellation = new CancellationTokenSource();
                 cancellation.CancelAfter(10000);
 

@@ -71,6 +71,7 @@ public class NetworkManager : Singleton<NetworkManager>
                 User_Id = res.Data.userId;
                 Access_Token = res.Data.accessToken;
                 Refresh_Token = res.Data.refreshToken;
+                Client.SetToken(res.Data.accessToken, res.Data.refreshToken);
 
                 callback(res);
             });
@@ -118,7 +119,7 @@ public class NetworkManager : Singleton<NetworkManager>
 
                 ResponseData<TResponse> response = await Client.HttpRequest<TResponse, TRequest>(
                     $"{Base_Uri}{((Method_Path[0].Equals('/')) ? Method_Path[1..] : Method_Path)}",
-                    null, request, Method);
+                    request, Method);
 
                 if (response.ResCode != ResCode.Successed
                     && ((int)response.ResCode < 200 || (int)response.ResCode >= 300))
