@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
+/// <summary>
+/// 라일라
+/// </summary>
 public class Hero_100002 : HeroBase_V2
 {
 

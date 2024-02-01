@@ -13,9 +13,6 @@ public class BattleUIManager_V2 : MonoBehaviour
     [SerializeField, Tooltip("HP Bar Container")]
     RectTransform HP_Bar_Container;
 
-    [SerializeField, Tooltip("Damage Container")]
-    RectTransform Damage_Container;
-
     [SerializeField, Tooltip("Box")]
     RectTransform Box_Rect;
 
@@ -118,11 +115,6 @@ public class BattleUIManager_V2 : MonoBehaviour
     {
         Used_Life_Bar_List.Remove(bar);
         GameObjectPoolManager.Instance.UnusedGameObject(bar.gameObject);
-    }
-
-    public RectTransform GetDamageContainer()
-    {
-        return Damage_Container;
     }
 
     /// <summary>

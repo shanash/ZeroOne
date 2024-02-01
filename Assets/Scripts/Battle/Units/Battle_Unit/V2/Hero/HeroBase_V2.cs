@@ -748,7 +748,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     {
                         target_pos.z = target_trans.position.z;
                         effect.transform.position = target_pos;
-                        effect.StartParticle(ec.Effect_Duration, ec.Is_Loop);
+                        effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
                     }
                     else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
                     {
@@ -1031,13 +1031,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (Life <= 0)
         {
             Life = 0;
-            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", Life_Bar_Pos, dmg, 1f);
+            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect", Life_Bar_Pos, dmg, 1f);
             UpdateLifeBar();
             ChangeState(UNIT_STATES.DEATH);
             return;
         }
 
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text", Life_Bar_Pos, dmg, 1f);
+        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect", Life_Bar_Pos, dmg, 1f);
         UpdateLifeBar();
 
         Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
@@ -1063,7 +1063,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             Life = Max_Life;
         }
 
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text", Life_Bar_Pos, recovery_hp, 1f);
+        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos, recovery_hp, 1f);
         UpdateLifeBar();
     }
 
@@ -1120,8 +1120,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="edata"></param>
     void SpawnQueueEffect(Effect_Queue_Data edata)
     {
-        var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path, UI_Mng.GetDamageContainer());
-        (effect.transform as RectTransform).anchoredPosition3D = RectTransformUtility.WorldToScreenPoint(Camera.main, edata.Target_Position.position);
+        //var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path, UI_Mng.GetDamageContainer());
+        var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path);
+        //(effect.transform as RectTransform).anchoredPosition3D = RectTransformUtility.WorldToScreenPoint(Camera.main, edata.Target_Position.position);
+        effect.transform.position = edata.Target_Position.position;
         effect.SetData(edata.Data);
         effect.StartParticle(edata.Duration);
     }
@@ -1152,7 +1154,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 {
                     Used_Battle_Duration_Data_List.Add(duration_skill);
                     
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
                 }
                 else
                 {
@@ -1180,7 +1182,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     Used_Battle_Duration_Data_List.Add(duration_skill);
                     
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
 
                 }
                 Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);

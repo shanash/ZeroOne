@@ -15,7 +15,7 @@ public class SkillEffect_AllRound : SkillEffectBase
     }
     private void Update()
     {
-        if (Is_Action)
+        if (Is_Action && !Is_Pause)
         {
             Delta += Time.deltaTime;
             if (Delta > Duration)

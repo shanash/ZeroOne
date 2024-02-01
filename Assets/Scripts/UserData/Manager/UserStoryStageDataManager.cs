@@ -70,6 +70,7 @@ public class UserStoryStageDataManager : ManagerBase
     {
         Current_Zone_ID = zone_id;
         Current_Zone = MasterDataManager.Instance.Get_ZoneData(Current_Zone_ID);
+        Is_Update_Data = true;
     }
 
     public STAGE_DIFFICULTY_TYPE GetCurrentStageDifficultyType()
@@ -130,6 +131,52 @@ public class UserStoryStageDataManager : ManagerBase
             Is_Update_Data = true;
         }
         return stage;
+    }
+
+    public void SetStageStarPoint(int stage_id, int star_pt)
+    {
+        var stage = FindUserStoryStageData(stage_id);
+        if (stage != null)
+        {
+            stage.SetStarPoint(star_pt);
+        }
+    }
+
+    /// <summary>
+    /// 스테이지 클리어 요청.<br/>
+    /// 스테이지 클리어시 다음 스테이지를 오픈해주는 역할 필요.<br/>
+    /// 마지막 스테이지인 경우(다음 스테이지가 없을 경우) 게임데이터 로딩(초기화)시 마지막 스테이지 체크 후 다음 스테이지 오픈 여부 판단 필요<br/>
+    /// </summary>
+    /// <param name="stage_id"></param>
+    public ERROR_CODE StoryStageWin(int stage_id)
+    {
+        var stage = FindUserStoryStageData(stage_id);
+        if (stage == null)
+        {
+            return ERROR_CODE.FAILED;
+        }
+        stage.AddWinCount();
+
+        OpenNextStage(stage_id);
+
+        return ERROR_CODE.SUCCESS;
+    }
+
+
+
+    /// <summary>
+    /// 다음 스테이지 오픈
+    /// </summary>
+    /// <param name="stage_id"></param>
+    void OpenNextStage(int stage_id)
+    {
+        var m = MasterDataManager.Instance;
+        var next_stage = m.Get_NextStageData(stage_id);
+        if (next_stage == null)
+        {
+            return;
+        }
+        AddUserStoryStageData(next_stage.stage_id);
     }
 
 

@@ -103,7 +103,7 @@ public class GameResultWinPopup : PopupBase
 
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
 
-    List<RewardItemCard> Used_Reward_Item_List = new List<RewardItemCard>();
+    List<BattleRewardItemCard> Used_Reward_Item_List = new List<BattleRewardItemCard>();
 
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
@@ -128,6 +128,7 @@ public class GameResultWinPopup : PopupBase
         List<string> asset_list = new List<string>();
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultPlayerCharacterInfo");
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/BattleRewardItemCard");
 
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
@@ -223,6 +224,16 @@ public class GameResultWinPopup : PopupBase
     void StarContainerEaseComplete()
     {
         //  최대 별 갯수 3개
+        int star_count = GetCalcStarPoint();
+        StartCoroutine(ShowStarsImpact(star_count));
+    }
+
+    /// <summary>
+    /// 전투 종료 시점에서 별 획득 계산
+    /// </summary>
+    /// <returns></returns>
+    int GetCalcStarPoint()
+    {
         int star_count = 3;
         var team_mng = Battle_Mng.FindTeamManager(TEAM_TYPE.LEFT);
         if (team_mng != null)
@@ -237,8 +248,9 @@ public class GameResultWinPopup : PopupBase
                 star_count = 1;
             }
         }
-        StartCoroutine(ShowStarsImpact(star_count));
+        return star_count;
     }
+
     /// <summary>
     /// 별 도장 애니 완료<br/>
     /// 플레이어 정보 및 캐릭터 등장 애니 시작
@@ -267,6 +279,9 @@ public class GameResultWinPopup : PopupBase
         Player_Exp_Gauge.value = before_exp_per;
         Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
         Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
+
+        //  금화 획득
+        GameData.Instance.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gain_default_gold);
     }
     /// <summary>
     /// 경험치 획득 후 플레이어 정보 업데이트
@@ -336,7 +351,8 @@ public class GameResultWinPopup : PopupBase
             {
                 popup.ShowPopup();
             });
-            
+            var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+            stamina_item.FullChargeItem();
         }
     }
 
@@ -420,41 +436,48 @@ public class GameResultWinPopup : PopupBase
         var stage = (Stage_Data)Dungeon.GetDungeonData();
 
         //  first reward list (첫번째 보상인지 여부 체크 필요)
-        var f_reward_data_list = m.Get_RewardSetDataList(stage.first_reward_group_id);
-        DROP_TYPE drop_type = DROP_TYPE.NONE;
-        if (f_reward_data_list.Count > 0)
+        if (!Dungeon.IsClearedDungeon())
         {
-            drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
-            if (drop_type == DROP_TYPE.DROP_EACH)
+            var f_reward_data_list = m.Get_RewardSetDataList(stage.first_reward_group_id);
+            if (f_reward_data_list.Count > 0)
             {
-                DropTypeEachReward(reward_prefab, f_reward_data_list);
-            }
-            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
-            {
-                DropTypeWeightReward(reward_prefab, f_reward_data_list);
-            }
-            else
-            {
-                Debug.Assert(false);
+                DROP_TYPE drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
+                if (drop_type == DROP_TYPE.DROP_EACH)
+                {
+                    DropTypeEachReward(reward_prefab, f_reward_data_list);
+                }
+                else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+                {
+                    DropTypeWeightReward(reward_prefab, f_reward_data_list);
+                }
+                else
+                {
+                    Debug.Assert(false);
+                }
             }
         }
 
         //  star reward list - (이미 별 보상을 받았는지 체크 필요)
-        var star_reward_data_list = m.Get_RewardSetDataList(stage.star_reward_group_id);
-        if (star_reward_data_list.Count > 0)
+        int star_point = GetCalcStarPoint();
+        //  아직 별보상을 받지 않은 상태라면..(별 3개 보상만 있음)
+        if (Dungeon.GetStarPoint() < 3 && star_point == 3)
         {
-            drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
-            if (drop_type == DROP_TYPE.DROP_EACH)
+            var star_reward_data_list = m.Get_RewardSetDataList(stage.star_reward_group_id);
+            if (star_reward_data_list.Count > 0)
             {
-                DropTypeEachReward(reward_prefab, star_reward_data_list);
-            }
-            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
-            {
-                DropTypeWeightReward(reward_prefab, star_reward_data_list);
-            }
-            else
-            {
-                Debug.Assert(false);
+                DROP_TYPE drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
+                if (drop_type == DROP_TYPE.DROP_EACH)
+                {
+                    DropTypeEachReward(reward_prefab, star_reward_data_list);
+                }
+                else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+                {
+                    DropTypeWeightReward(reward_prefab, star_reward_data_list);
+                }
+                else
+                {
+                    Debug.Assert(false);
+                }
             }
         }
 
@@ -462,7 +485,7 @@ public class GameResultWinPopup : PopupBase
         var repeat_reward_data_list = m.Get_RewardSetDataList(stage.repeat_reward_group_id);
         if (repeat_reward_data_list.Count > 0)
         {
-            drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
+            DROP_TYPE drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
             if (drop_type == DROP_TYPE.DROP_EACH)
             {
                 DropTypeEachReward(reward_prefab, repeat_reward_data_list);
@@ -477,9 +500,18 @@ public class GameResultWinPopup : PopupBase
             }
         }
 
-
         //  버튼 컨테이너 들어오기
         Reward_Btn_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+
+        //  스테이지 클리어
+        var user_dungeon_data = (UserStoryStageData)Dungeon.GetUserDungeonData();
+        if (user_dungeon_data != null)
+        {
+            var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+            stage_mng.StoryStageWin(user_dungeon_data.Stage_ID);
+            stage_mng.SetStageStarPoint(user_dungeon_data.Stage_ID, star_point);
+        }
+        GameData.Instance.Save();
     }
     /// <summary>
     /// 각각의 아이템 드랍 확률에 따라 드랍한다.
@@ -497,7 +529,7 @@ public class GameResultWinPopup : PopupBase
             if (r < reward_data.drop_per)
             {
                 var obj = pool.GetGameObject(prefab, Reward_List_View.content);
-                var item = obj.GetComponent<RewardItemCard>();
+                var item = obj.GetComponent<BattleRewardItemCard>();
                 item.SetRewardSetData(reward_data);
                 Used_Reward_Item_List.Add(item);
 
@@ -526,7 +558,7 @@ public class GameResultWinPopup : PopupBase
             if (r < sum)
             {
                 var obj = pool.GetGameObject(prefab, Reward_List_View.content);
-                var item = obj.GetComponent<RewardItemCard>();
+                var item = obj.GetComponent<BattleRewardItemCard>();
                 item.SetRewardSetData(reward_data);
                 Used_Reward_Item_List.Add(item);
 

@@ -119,4 +119,19 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         return Stage;
     }
 
+    public override object GetUserDungeonData()
+    {
+        return User_Data;
+    }
+
+    public override int GetStarPoint()
+    {
+        return User_Data.GetStarPoint();
+    }
+
+    public override bool IsClearedDungeon()
+    {
+        return User_Data.IsStageCleared();
+    }
+
 }

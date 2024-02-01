@@ -79,7 +79,7 @@ public class UserMemorialData : UserDataBase
     {
         if (!IsUpdateData())
         {
-            return false;
+            return null;
         }
         var json = new LitJson.JsonData();
         json[NODE_MEMORIAL_ID] = Memorial_ID;

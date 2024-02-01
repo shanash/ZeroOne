@@ -7,7 +7,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Damage Text")]
     TMP_Text Damage_Text;
 
-    readonly float VELOCITY = 100f;
+    readonly float VELOCITY = 1.5f;
 
 
     public override void SetData(params object[] data)
@@ -73,13 +73,13 @@ public class Damage_Normal_Effect_Text : EffectBase
 
     private void Update()
     {
-        if (Is_Action)
+        if (Is_Action && !Is_Pause)
         {
             Delta += Time.deltaTime * Effect_Speed_Multiple;
 
-            var pos = this.transform.localPosition;
+            var pos = this.transform.position;
             pos.y += VELOCITY * Time.deltaTime;
-            this.transform.localPosition = pos;
+            this.transform.position = pos;
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

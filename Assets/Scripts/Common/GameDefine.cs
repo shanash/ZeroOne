@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 게임 타입 
+/// </summary>
 public enum GAME_TYPE
 {
     NONE = 0,
@@ -9,6 +13,13 @@ public enum GAME_TYPE
 
     STORY_MODE,                         //  스토리 모드
 }
+/// <summary>
+/// 전투 배속 타입 <b>(주석에서 사용할 태그 테스트)</b><br/>
+/// <b>Bold</b><br/>
+/// <i>Italic</i><br/>
+/// <u>Underline</u><br/>
+/// <br>Line Break</br><br/>
+/// </summary>
 public enum BATTLE_SPEED_TYPE
 {
     NORMAL_TYPE = 0,                //  x1

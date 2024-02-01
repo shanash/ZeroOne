@@ -627,41 +627,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa163268e120774a86f2d01de081743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &436959202
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 436959203}
-  m_Layer: 5
-  m_Name: Damage_Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &436959203
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436959202}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 626533048}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,7 +1209,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1209628013}
-  - {fileID: 436959203}
   - {fileID: 1085865612}
   - {fileID: 1335748826044780623}
   m_Father: {fileID: 0}
@@ -3419,7 +3383,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Battle_Mng: {fileID: 2014289893}
   HP_Bar_Container: {fileID: 1209628013}
-  Damage_Container: {fileID: 436959203}
   Box_Rect: {fileID: 1357468001}
   Timer_Box: {fileID: 7728376551319763133}
   Timer_Text: {fileID: 2360334068475230954}

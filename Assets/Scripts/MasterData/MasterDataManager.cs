@@ -38,6 +38,8 @@ public class MasterDataManager : BaseMasterDataManager
         return list.FindLast(x => x.accum_exp <= accum_exp);
     }
 
+    
+
     public Player_Level_Data Get_PlayerLevelData(int lv)
     {
         Check_Player_Level_Data();
@@ -141,10 +143,10 @@ public class MasterDataManager : BaseMasterDataManager
     }
 
 
-    public IReadOnlyList<Reward_Set_Data> Get_RewardSetDataList(int reward_id)
+    public IReadOnlyList<Reward_Set_Data> Get_RewardSetDataList(int reward_group_id)
     {
         Check_Reward_Set_Data();
-        return _Reward_Set_Data.Values.ToList().FindAll(x => x.reward_id == reward_id);
+        return _Reward_Set_Data.Values.ToList().FindAll(x => x.reward_group_id == reward_group_id);
     }
 
     public Charge_Value_Data Get_ChargeValueData(REWARD_TYPE rtype)
@@ -483,11 +485,23 @@ public class MasterDataManager : BaseMasterDataManager
     /// <returns></returns>
     public Stage_Data Get_StageData(int stage_id)
     {
-
         Check_Stage_Data();
 
         return _Stage_Data[stage_id];
     }
+
+    /// <summary>
+    /// 해당 스테이지를 기준으로 다음 스테이지를 찾아준다.
+    /// </summary>
+    /// <param name="stage_id"></param>
+    /// <returns></returns>
+    public Stage_Data Get_NextStageData(int stage_id)
+    {
+        Check_Stage_Data();
+        var stage_list = _Stage_Data.Values.OrderBy(x => x.stage_id).ToList();
+        return stage_list.Find(x => x.stage_id > stage_id);
+    }
+
     public void Get_StageDataList(int zone_id, ref List<Stage_Data> list)
     {
         Check_Stage_Data();

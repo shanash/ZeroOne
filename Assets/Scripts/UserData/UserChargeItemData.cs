@@ -127,7 +127,11 @@ public class UserChargeItemData : UserDataBase
         }
         return ERROR_CODE.FAILED;
     }
-
+    /// <summary>
+    /// 완전 풀 충전.<br/>
+    /// CHARGE_TYPE에 따라 추가 작업 필요. 지금은 기본 타입으로 풀 충전만 해줌
+    /// </summary>
+    /// <returns></returns>
     public ERROR_CODE FullChargeItem()
     {
         int cnt = GetCount();
@@ -209,6 +213,10 @@ public class UserChargeItemData : UserDataBase
 
         var now = DateTime.Now.ToLocalTime();
         ERROR_CODE result = CheckDateAndTimeChange();
+        if (result == ERROR_CODE.NOT_WORK)
+        {
+            return TimeSpan.Zero;
+        }
 
         TimeSpan cooltime = TimeSpan.FromSeconds(GetRepeatTime());
         TimeSpan subtract = now - Last_Used_Date;
@@ -289,9 +297,8 @@ public class UserChargeItemData : UserDataBase
                 Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
             }
             Is_Update_Data = true;
-            code = ERROR_CODE.SUCCESS;
         }
-
+        code = ERROR_CODE.SUCCESS;
         return code;
     }
     /// <summary>
@@ -314,6 +321,10 @@ public class UserChargeItemData : UserDataBase
 
     public override JsonData Serialized()
     {
+        if (!IsUpdateData())
+        {
+            return null;
+        }
         var json = new JsonData();
 
         json[NODE_CHARGE_ITEM_TYPE] = (int)Charge_Item_Type;

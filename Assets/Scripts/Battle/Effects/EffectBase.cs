@@ -19,6 +19,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     public bool Is_Action { get; protected set; } = false;
 
+    public bool Is_Pause { get; protected set; } = false;
+
     public bool Is_Loop { get; protected set; } = false;
 
     protected System.Action<EffectBase> Finish_Callback;
@@ -106,17 +108,6 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
     {
         if (obj != null)
         {
-            //var children = obj.GetComponentsInChildren<ParticleSystem>();
-            //if (children != null && children.Length > 0)
-            //{
-            //    int cnt = children.Length;
-            //    for (int i = 0; i < cnt; i++)
-            //    {
-            //        ParticleSystem child = children[i];
-            //        var main = child.main;
-            //        main.simulationSpeed = speed_multiple;
-            //    }
-            //}
             int cnt = All_Particle_List.Count;
             for (int i = 0; i < cnt; i++)
             {
@@ -173,6 +164,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
         Factory.UnusedEffectBase(this);
         Is_Action = false;
         Is_Loop = false;
+        Is_Pause = false;
     }
 
     public virtual void SetData(params object[] data) { }
@@ -180,7 +172,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     public virtual void OnPuase()
     {
-        Is_Action = false;
+        //Is_Action = false;
+        Is_Pause = true;
         if (Particle_Effect != null)
         {
             Particle_Effect.Pause(true);
@@ -189,10 +182,14 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     public virtual void OnResume()
     {
-        Is_Action = true;
+        //Is_Action = true;
+        Is_Pause = false;
         if (Particle_Effect != null)
         {
-            Particle_Effect.Play(true);
+            if (!Particle_Effect.isPlaying)
+            {
+                Particle_Effect.Play(true);
+            }
         }
         
     }
@@ -205,6 +202,7 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
     {
         Is_Action = false;
         Is_Loop = false;
+        Is_Pause = false;
         //  모든 파티클 컴포넌트를 리스트에 담아둔다
         if (Particle_Effect != null)
         {

@@ -18,8 +18,10 @@ public class SkillInfoTooltipPopup : PopupBase
 
         int skill_id = (int)data[0];
         Target_Position = (Vector2)data[1];
-
-        Skill_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillData(skill_id);
+        if (skill_id != 0)
+        {
+            Skill_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillData(skill_id);
+        }
 
         base.ShowPopup(data);
 

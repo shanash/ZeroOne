@@ -26,7 +26,7 @@ public class Player_Character_Love_Level_Data : System.IDisposable
 	double _need_exp;
 
 	///	<summary>
-	///	필요 경험치
+	///	호감도 랭크(인연 랭크)
 	///	</summary>
 	public LOVE_LEVEL_TYPE love_level_type => _love_level_type;
 	LOVE_LEVEL_TYPE _love_level_type;

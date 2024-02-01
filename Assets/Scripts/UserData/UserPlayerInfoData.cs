@@ -151,7 +151,7 @@ public class UserPlayerInfoData : UserDataBase
     {
         if (!IsUpdateData())
         {
-            return false;
+            return null;
         }
         var json = new LitJson.JsonData();
 

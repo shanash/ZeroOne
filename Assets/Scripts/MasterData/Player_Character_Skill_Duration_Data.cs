@@ -65,8 +65,8 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 	///	<summary>
 	///	절대값
 	///	</summary>
-	public int value => _value;
-	int _value;
+	public double value => _value;
+	double _value;
 
 	///	<summary>
 	///	배율
@@ -81,6 +81,24 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 	///	</summary>
 	public double rate => _rate;
 	double _rate;
+
+	///	<summary>
+	///	LvUp고정
+	///	</summary>
+	public double up_value => _up_value;
+	double _up_value;
+
+	///	<summary>
+	///	LvUp배율
+	///	</summary>
+	public double up_multiple => _up_multiple;
+	double _up_multiple;
+
+	///	<summary>
+	///	LvUp확률
+	///	</summary>
+	public double up_rate => _up_rate;
+	double _up_rate;
 
 	///	<summary>
 	///	이펙트 프리팹
@@ -112,6 +130,9 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 		_value = raw_data.value;
 		_multiple = raw_data.multiple;
 		_rate = raw_data.rate;
+		_up_value = raw_data.up_value;
+		_up_multiple = raw_data.up_multiple;
+		_up_rate = raw_data.up_rate;
 		_effect_path = raw_data.effect_path;
 		_is_overlapable = raw_data.is_overlapable;
 	}
@@ -166,6 +187,9 @@ public class Player_Character_Skill_Duration_Data : System.IDisposable
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();
 		sb.AppendFormat("[rate] = <color=yellow>{0}</color>", rate).AppendLine();
+		sb.AppendFormat("[up_value] = <color=yellow>{0}</color>", up_value).AppendLine();
+		sb.AppendFormat("[up_multiple] = <color=yellow>{0}</color>", up_multiple).AppendLine();
+		sb.AppendFormat("[up_rate] = <color=yellow>{0}</color>", up_rate).AppendLine();
 		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
 		sb.AppendFormat("[is_overlapable] = <color=yellow>{0}</color>", is_overlapable).AppendLine();
 		return sb.ToString();

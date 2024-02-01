@@ -36,6 +36,12 @@ public partial class BattleManager_V2 : MonoBehaviour
 
                     Dungeon_Data = new BattleDungeon_StoryStageData();
                     Dungeon_Data.SetDungeonID(stage_id);
+
+                    var user_dungeon_data = (UserStoryStageData)Dungeon_Data.GetUserDungeonData();
+                    if (user_dungeon_data != null)
+                    {
+                        user_dungeon_data.AddChallenageCount();
+                    }
                 }
                 break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
@@ -45,6 +51,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
                     Dungeon_Data = new BattleDungeon_SkillPreviewEditorData();
                     Dungeon_Data.SetDungeonID(stage_id);
+                    
                 }
                 break;
         }
@@ -72,9 +79,9 @@ public partial class BattleManager_V2 : MonoBehaviour
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Boss_Point");
 
         //  effect
-        list.Add("Assets/AssetResources/Prefabs/Effects/UI/Damage_Normal_Effect_Text");
-        list.Add("Assets/AssetResources/Prefabs/Effects/UI/Heal_Normal_Effect_Text");
-        list.Add("Assets/AssetResources/Prefabs/Effects/UI/Trans_Effect_Text");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
 
 

@@ -7,6 +7,9 @@ public class RewardCardBase : UIBase
     [SerializeField, Tooltip("Reward Item Icon")]
     protected Image Reward_Item_Icon;
 
+    [SerializeField, Tooltip("Reward Character Icon")]
+    protected Image Reward_Character_Icon;
+
     protected RewardDataBase Data;
     
     public void SetRewardSetData(Reward_Set_Data d)
@@ -26,7 +29,19 @@ public class RewardCardBase : UIBase
         {
             CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.GetRewardItemIconPath(), (spr) =>
             {
-                Reward_Item_Icon.sprite = spr;
+                if (Data.GetRewardType() == REWARD_TYPE.CHARACTER || Data.GetRewardType() == REWARD_TYPE.PIECE_CHARACTER)
+                {
+                    Reward_Item_Icon.gameObject.SetActive(false);
+                    Reward_Character_Icon.gameObject.SetActive(true);
+                    Reward_Character_Icon.sprite = spr;
+                }
+                else
+                {
+                    Reward_Item_Icon.gameObject.SetActive(true);
+                    Reward_Item_Icon.sprite = spr;
+                    Reward_Character_Icon.gameObject.SetActive(false);
+                }
+                
             });
         }
     }

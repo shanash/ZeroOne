@@ -18,6 +18,8 @@ public class SkillEffect_Duration_Simple : SkillEffectBase
 
     }
 
+
+
     public override void MoveTarget(Transform target, float duration)
     {
         base.MoveTarget(target, duration);

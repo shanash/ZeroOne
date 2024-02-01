@@ -13,9 +13,12 @@ public class Raw_Player_Character_Skill_Duration_Data : System.IDisposable
 	public double repeat_interval {get; set;}
 	public int[] finish_pc_onetime_ids {get; set;}
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
-	public int value {get; set;}
+	public double value {get; set;}
 	public double multiple {get; set;}
 	public double rate {get; set;}
+	public double up_value {get; set;}
+	public double up_multiple {get; set;}
+	public double up_rate {get; set;}
 	public string effect_path {get; set;}
 	public bool is_overlapable {get; set;}
 
@@ -28,7 +31,6 @@ public class Raw_Player_Character_Skill_Duration_Data : System.IDisposable
 		persistence_type = PERSISTENCE_TYPE.NONE;
 		count = 0;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
-		value = 0;
 		effect_path = string.Empty;
 		is_overlapable = false;
 	}

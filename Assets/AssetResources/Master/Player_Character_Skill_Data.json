@@ -551,7 +551,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100015
+      10050101
     ],
     "duration_effect_ids": [
       0
@@ -562,14 +562,71 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "shoot",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Parabola_Fireball"
+    "event_name": "hit"
   },
   {
     "pc_skill_id": 100502,
     "pc_skill_group_id": 100502,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      10050201
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "heal"
+  },
+  {
+    "pc_skill_id": 100503,
+    "pc_skill_group_id": 100503,
     "target_type": 1,
     "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      10050301
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit"
+  },
+  {
+    "pc_skill_id": 100504,
+    "pc_skill_group_id": 100504,
+    "target_type": 0,
+    "target_rule_type": 1,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,
@@ -584,7 +641,7 @@
       0
     ],
     "duration_effect_ids": [
-      500005
+      10050401
     ],
     "second_target_onetime_effect_ids": [
       0
@@ -592,37 +649,6 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "debuff",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
-  },
-  {
-    "pc_skill_id": 100503,
-    "pc_skill_group_id": 100503,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "target_range": 0.0,
-    "effect_count_type": 2,
-    "second_target_rule": 2,
-    "max_second_target_count": 0,
-    "second_target_range": 10.0,
-    "effect_weight": [
-      50,
-      50
-    ],
-    "onetime_effect_ids": [
-      100017
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "second_target_onetime_effect_ids": [
-      100018
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "shoot"
+    "event_name": "buff"
   }
 ]

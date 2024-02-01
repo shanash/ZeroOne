@@ -4,6 +4,7 @@
 [System.Serializable]
 public class Raw_Skill_Lang_Data : System.IDisposable
 {
+	public int index_id {get; set;}
 	public string string_id {get; set;}
 	public string kor {get; set;}
 	public string eng {get; set;}
@@ -13,6 +14,7 @@ public class Raw_Skill_Lang_Data : System.IDisposable
 
 	public Raw_Skill_Lang_Data()
 	{
+		index_id = 0;
 		string_id = string.Empty;
 		kor = string.Empty;
 		eng = string.Empty;

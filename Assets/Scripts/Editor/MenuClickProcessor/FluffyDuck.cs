@@ -135,7 +135,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         static void ConvertExcelToJson()
         {
             Excel2Json.Program.Main(
-                "-d", "Android/ExcelData_V2",
+                "-d", "Android/ExcelData",
                 "-o", "Assets/AssetResources/Master",
                 "-cs", "Assets/Scripts/MasterData");
 

@@ -11,7 +11,7 @@ public class SkillEffectCast : SkillEffectBase
 
     private void Update()
     {
-        if (Is_Action)
+        if (Is_Action && !Is_Pause)
         {
             if (CheckParticleComplete())
             {

@@ -51,6 +51,7 @@ public class UserChargeItemDataManager : ManagerBase
             item = new UserChargeItemData();
             item.SetRewardType(rtype);
             User_Charge_Item_Data_List.Add(item);
+            Is_Update_Data = true;
         }
         return item;
     }

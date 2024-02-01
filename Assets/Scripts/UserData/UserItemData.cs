@@ -92,7 +92,7 @@ public class UserItemData : UserDataBase
     {
         if (!IsUpdateData())
         {
-            return false;
+            return null;
         }
         var json = new JsonData();
 

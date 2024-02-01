@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
+
+/// <summary>
+/// 루시아
+/// </summary>
 public class Hero_100001 : HeroBase_V2
 {
 

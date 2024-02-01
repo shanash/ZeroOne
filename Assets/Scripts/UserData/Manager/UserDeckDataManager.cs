@@ -94,7 +94,7 @@ public class UserDeckDataManager : ManagerBase
         new_deck.SetSelect(false);
         new_deck.ChangeTeamName(string.Format("{0}팀", next_num));
         User_Deck_List.Add(new_deck);
-
+        Is_Update_Data = true;
         return new_deck;
     }
     /// <summary>

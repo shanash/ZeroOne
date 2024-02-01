@@ -7,6 +7,12 @@ using System.Net;
 namespace ProtocolShared.Proto.Base
 {
     [System.Serializable]
+    public class EmptyRequest
+    {
+    }
+
+
+    [System.Serializable]
     public class ResponseBase
     {
         public ResCode ResCode { get; set; } = ResCode.Failed;

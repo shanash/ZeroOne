@@ -406,7 +406,7 @@ public class UserHeroSkillData : UserDataBase
     {
         if (!IsUpdateData())
         {
-            return false;
+            return null;
         }
         var json = new JsonData();
         json[NODE_HERO_SKILL_GROUP_ID] = GetSkillGroupID();

@@ -39,8 +39,8 @@ public class Reward_Set_Data : System.IDisposable
 
 	///	<summary>
 	///	출현 타입
-	///	0: drop_per 칼럼을 해당 행의 보상 출현 성공률로 사용
-	///	1: drop_per 칼럼을 같은 reward_id 내에서 출현 비중으로 사용
+	///	1: drop_per 칼럼을 해당 행의 보상 출현 성공률로 사용
+	///	2: drop_per 칼럼을 같은 reward_id 내에서 출현 비중으로 사용
 	///	</summary>
 	public int drop_type => _drop_type;
 	int _drop_type;

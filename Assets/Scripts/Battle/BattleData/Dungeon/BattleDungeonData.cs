@@ -28,6 +28,12 @@ public class BattleDungeonData : BattleDataBase
     public virtual object GetDungeonData() { return null; }
 
     /// <summary>
+    /// 사용자 던전 데이터 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual object GetUserDungeonData() { return null; }
+
+    /// <summary>
     /// 웨이브 인덱스. 
     /// 라벨에 표시할땐 +1 해서 표시
     /// </summary>
@@ -169,4 +175,15 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual int GetDefaultClearReward() { return 0; }
+
+    /// <summary>
+    /// 완료된 던전인지 여부 반환(1회 이상 클리어한 던전인지)
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool IsClearedDungeon() { return false; }
+    /// <summary>
+    /// 별 포인트가 있는 던전에서, 획득한 별 포인트
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetStarPoint() {  return 0; }
 }

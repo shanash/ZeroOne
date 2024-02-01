@@ -163,7 +163,7 @@ public class UserStoryStageData : UserDataBase
     {
         if (!IsUpdateData())
         {
-            return false;
+            return null;
         }
         var json = new LitJson.JsonData();
 
