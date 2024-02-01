@@ -17,8 +17,13 @@ namespace FluffyDuck.Util
         {
             string key = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8);
             SetKey(key);
-            Set(val);
+            if (!val.Equals(default))
+            {
+                Set(val);
+            }
         }
+
+        public SecureVar(SecureVar<T> val) : this(val != null ? val.Get() : default) { }
 
         public void Set(T val)
         {
@@ -70,5 +75,4 @@ namespace FluffyDuck.Util
             return secureArray;
         }
     }
-
 }
