@@ -235,4 +235,9 @@ public class HeroInfoBoxEssence : MonoBehaviour
             popup.ShowPopup();
         });
     }
+
+    public void OnSelectedTab(Gpm.Ui.Tab tab)
+    {
+        Refresh();
+    }
 }

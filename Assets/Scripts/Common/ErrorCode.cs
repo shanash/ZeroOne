@@ -1,5 +1,6 @@
 public enum ERROR_CODE
 {
+    //TODO: RESULT_CODE가 더 낫지 않을까 합니다..
     SUCCESS = 100,
     LEVEL_UP_SUCCESS = 110,
 
@@ -25,6 +26,7 @@ public enum ERROR_CODE
     NOT_ENOUGH_ALCHEMIST_COUNT,
     NOT_ENOUGH_SLOT,
     NOT_ENOUGH_BINGO_POINT,
+    NOT_ENOUGH_ALL,
 
 
     NOT_WORK = 30001,
@@ -50,6 +52,4 @@ public enum ERROR_CODE
     NOT_EXIST_EMPTY_SLOT,                                                           //  빈 슬롯이 없음
     ALREADY_COMPLETE,
     NOT_CONNECT_NETWORK = 50001,
-
-
 }

@@ -52,7 +52,7 @@ public class HeroInfoUI : PopupBase
 
     List<UserHeroData> User_Hero_Datas;
     int Current_Hero_Data_Index;
-    BattleUnitData User_Hero_Battle_Data;
+    BattlePcData User_Hero_Battle_Data;
 
     protected override void Initialize()
     {
@@ -134,11 +134,6 @@ public class HeroInfoUI : PopupBase
         base.Spawned();
 
         Initialize();
-        InfoBox_Tab_Controller.SelectFirstTab();
-
-        // 레벨업 탭과 승급 탭은 일단 막아놓습니다.
-        InfoBox_Tab_Controller.GetTab(1).SetBlockTab(true);
-        InfoBox_Tab_Controller.GetTab(2).SetBlockTab(true);
     }
 
     public void OnClickProfileButton()

@@ -69,7 +69,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected virtual void CalcEvationPoint()
     {
-        Evasion = Unit_Data.GetEvationPoint();
+        Evasion = Unit_Data.GetEvasionPoint();
     }
     /// <summary>
     /// 명중률 계산

@@ -43,7 +43,6 @@ public class UserHeroDeckMountData : UserDataBase
         Player_Character_Num = player_character_num;
 
         InitMasterData();
-        Is_Update_Data = true;
         return this;
     }
 

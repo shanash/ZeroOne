@@ -122,7 +122,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
                 new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Unit_Data.GetMagicDefensePoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Unit_Data.GetApproachDistance().ToString("N0")),
                 new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Unit_Data.GetAttackRecovery().ToPercentage()),
-                new StatusItemData(ConstString.Hero.EVASION_POINT, Unit_Data.GetEvationPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.EVASION_POINT, Unit_Data.GetEvasionPoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.ACCURACY_POINT, Unit_Data.GetAccuracyPoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Unit_Data.GetAutoRecoveryLife().ToPercentage())
             };

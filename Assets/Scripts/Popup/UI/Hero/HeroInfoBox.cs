@@ -20,12 +20,15 @@ public class HeroInfoBox : MonoBehaviour
     [SerializeField, Tooltip("Hero Info Box LevelUp")]
     HeroInfoBoxLevelUp Hero_Info_Box_LevelUp;
 
+    [SerializeField, Tooltip("Hero Info Box LevelUp")]
+    HeroInfoBoxAdvance Hero_Info_Box_Advance;
+
     [SerializeField, Tooltip("Hero Essence Info")]
     HeroInfoBoxEssence Hero_Info_Box_Essence;
 
-    BattleUnitData User_Hero_Data;
+    BattlePcData User_Hero_Data;
 
-    public void SetHeroData(BattleUnitData data)
+    public void SetHeroData(BattlePcData data)
     {
         User_Hero_Data = data;
         FixedUpdatePopup();
@@ -41,6 +44,11 @@ public class HeroInfoBox : MonoBehaviour
             Tab_On_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
         }
 
+        Tab_Controller.SelectFirstTab();
+
+        // 레벨업 탭과 승급 탭은 일단 막아놓습니다.
+        Tab_Controller.GetTab(1).SetBlockTab(true);
+
         Refresh();
     }
 
@@ -48,6 +56,7 @@ public class HeroInfoBox : MonoBehaviour
     {
         Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
         Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_Advance.SetHeroData(User_Hero_Data);
         Hero_Info_Box_Essence.SetHeroData(User_Hero_Data);
     }
 

@@ -2,6 +2,8 @@
 
 public class BattleNpcData : BattleUnitData
 {
+    protected override int Level { get; set; }
+
     Npc_Data Data;
 
     Npc_Battle_Data Battle_Data;
@@ -104,7 +106,7 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
 
-    public override double GetEvationPoint()
+    public override double GetEvasionPoint()
     {
         if (Battle_Data != null)
         {

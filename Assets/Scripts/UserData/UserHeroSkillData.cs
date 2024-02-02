@@ -309,10 +309,11 @@ public class UserHeroSkillData : UserDataBase
             {
                 continue;
             }
-            //  스킬 강화 아이템이 아니면 스킵
+            //  리스트에 스킬 강화 아이템이 아닌 것이 들어있으면 실패
             if (!IsValidSkillExpItem(use_data.Item_Type))
             {
-                continue;
+                result.Code = ERROR_CODE.NOT_ENABLE_WORK;
+                return result;
             }
             var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
             if (item_data != null)

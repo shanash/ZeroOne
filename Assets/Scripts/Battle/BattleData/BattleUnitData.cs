@@ -1,7 +1,7 @@
 // TODO: 팩토리로 생성 가능할듯
 public abstract class BattleUnitData : BattleDataBase
 {
-    protected int Level;
+    protected abstract int Level { get; set; }
 
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
 
@@ -78,7 +78,7 @@ public abstract class BattleUnitData : BattleDataBase
             GetAttackDamagePoint(),
             GetAttackDefensePoint(),
             GetAutoRecoveryLife(),
-            GetEvationPoint(),
+            GetEvasionPoint(),
             GetAttackRecovery(),
             GetAccuracyPoint(),
             GetSumSkillsLevel());
@@ -120,7 +120,7 @@ public abstract class BattleUnitData : BattleDataBase
     /// 회피 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetEvationPoint();
+    public abstract double GetEvasionPoint();
     /// <summary>
     /// 웨이브 이동시 자동 체력 회복
     /// </summary>

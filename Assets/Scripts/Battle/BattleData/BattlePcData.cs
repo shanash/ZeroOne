@@ -1,11 +1,16 @@
 public class BattlePcData : BattleUnitData
 {
-    public Player_Character_Data Data { get; private set; }
-    public Player_Character_Battle_Data Battle_Data { get; private set; }
-
-    UserHeroData User_Data;
+    public UserHeroData User_Data { get; private set; } = null;
+    public Player_Character_Data Data { get { return User_Data.Hero_Data; } }
+    public Player_Character_Battle_Data Battle_Data { get { return User_Data.Battle_Data; } }
+    protected override int Level { get => User_Data.GetLevel(); set { } }
 
     public BattlePcData() : base(CHARACTER_TYPE.PC) { }
+
+    public BattlePcData(BattlePcData battle_pc_data) : base(battle_pc_data.Character_Type)
+    {
+        User_Data = new UserHeroData(battle_pc_data.User_Data);
+    }
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {
@@ -18,9 +23,6 @@ public class BattlePcData : BattleUnitData
 
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
 
-        Data = User_Data.Hero_Data;
-        Battle_Data = User_Data.Battle_Data;
-
         return this;
     }
 
@@ -32,6 +34,7 @@ public class BattlePcData : BattleUnitData
         }
         return 0;
     }
+
     public override int GetUnitNum()
     {
         if (User_Data != null)
@@ -43,21 +46,35 @@ public class BattlePcData : BattleUnitData
     {
         return Data;
     }
+
     public override object GetBattleData()
     {
         return Battle_Data;
     }
+
     public override void SetLevel(int lv)
     {
         
     }
+
     public override int GetLevel()
     {
-        return User_Data.GetLevel();
+        return Level;
     }
+
     public override int GetStarGrade()
     {
         return User_Data.GetStarGrade();
+    }
+
+    public ERROR_CODE AdvanceStarGrade()
+    {
+        return User_Data.AdvanceStarGrade();
+    }
+
+    public ERROR_CODE CheckAdvanceStarGrade()
+    {
+        return User_Data.CheckAdvanceStarGrade();
     }
 
     public override void SetStatDataID(int stat_id)
@@ -79,48 +96,62 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetAttackDamagePoint()
+    public override double GetAttackDamagePoint() => GetAttackDamagePoint(Battle_Data);
+    double GetAttackDamagePoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.attack;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.attack + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
 
-    public override double GetMagicDamagePoint()
+    public override double GetMagicDamagePoint() => GetMagicDamagePoint(Battle_Data);
+    double GetMagicDamagePoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            double att = Battle_Data.m_attack;
-            return att;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.m_attack + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
 
-    public override double GetAttackDefensePoint()
+    public override double GetAttackDefensePoint() => GetAttackDefensePoint(Battle_Data);
+    double GetAttackDefensePoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.defend;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.defend + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
 
-    public override double GetMagicDefensePoint()
+    public override double GetMagicDefensePoint() => GetMagicDefensePoint(Battle_Data);
+    double GetMagicDefensePoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.m_defend;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.m_defend + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
 
-    public override double GetLifePoint()
+    public override double GetLifePoint() => GetLifePoint(Battle_Data);
+    double GetLifePoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.hp;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.hp + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -134,18 +165,26 @@ public class BattlePcData : BattleUnitData
         return base.GetAttackRecovery();
     }
 
-    public override double GetAccuracyPoint()
+    public override double GetAccuracyPoint() => GetAccuracyPoint(Battle_Data);
+    double GetAccuracyPoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
-            return Battle_Data.accuracy;
+        if (battle_data != null)
+        {
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.accuracy + (GetLevel() - 1) * up_value;
+        }
         return 0;
     }
 
-    public override double GetEvationPoint()
+    public override double GetEvasionPoint() => GetEvasionPoint(Battle_Data);
+    double GetEvasionPoint(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.evasion;
+            //TODO: 더미값을 임시로 곱해놓습니다.
+            float up_value = 1f;
+            return battle_data.evasion + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -250,5 +289,4 @@ public class BattlePcData : BattleUnitData
     {
         return NPC_TYPE.NONE;
     }
-
 }
