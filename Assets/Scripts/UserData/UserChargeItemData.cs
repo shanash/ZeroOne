@@ -321,10 +321,10 @@ public class UserChargeItemData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new JsonData();
 
         json[NODE_CHARGE_ITEM_TYPE] = (int)Charge_Item_Type;

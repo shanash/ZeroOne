@@ -2,7 +2,6 @@ using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserHeroSkillData : UserDataBase
@@ -216,13 +215,13 @@ public class UserHeroSkillData : UserDataBase
         //  성공이 아니면 바로 반환
         if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
         {
-            result.Code = result_simulate.Code;
+            result.ResetAndResultCode(result_simulate.Code);
             return result;
         }
         //  증가된 경험치가 없거나, 필요 금화량이 0일경우 아무일도 하지 않도록(예외 상황임)
         if (result_simulate.Add_Exp == 0 || result_simulate.Need_Gold == 0)
         {
-            result.Code = ERROR_CODE.NOT_WORK;
+            result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
             return result;
         }
         
@@ -230,7 +229,7 @@ public class UserHeroSkillData : UserDataBase
         bool is_usable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
         if (!is_usable_gold)
         {
-            result.Code = ERROR_CODE.NOT_ENOUGH_GOLD;
+            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
             return result;
         }
         else
@@ -252,7 +251,7 @@ public class UserHeroSkillData : UserDataBase
         //  아이템이 충분하지 않음
         if (!is_usable_item)
         {
-            result.Code = ERROR_CODE.NOT_ENOUGH_ITEM;
+            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
             return result;
         }
         else
@@ -296,7 +295,7 @@ public class UserHeroSkillData : UserDataBase
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
         {
-            result.Code = ERROR_CODE.ALREADY_MAX_LEVEL;
+            result.ResetAndResultCode(ERROR_CODE.ALREADY_MAX_LEVEL);
             return result;
         }
 
@@ -305,6 +304,7 @@ public class UserHeroSkillData : UserDataBase
         for (int i = 0; i < cnt; i++)
         {
             var use_data = use_list[i];
+            //  0이하인 경우는 거의 없겠지만, 해킹에 의해 0이하인 경우 아이템의 수량이 증가하는 문제가 있을 수 있음.
             if (use_data.Use_Count <= 0)
             {
                 continue;
@@ -328,7 +328,7 @@ public class UserHeroSkillData : UserDataBase
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            result.Code = ERROR_CODE.FAILED;
+            result.ResetAndResultCode(ERROR_CODE.FAILED);
             return result;
         }
         //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다

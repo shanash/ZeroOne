@@ -1,6 +1,7 @@
 
 using FluffyDuck.Util;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class UserHeroData : UserDataBase
 {
@@ -201,10 +202,15 @@ public class UserHeroData : UserDataBase
 
     bool IsMaxLevel()
     {
-        var pinfo = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
-
-        return pinfo.GetLevel() <= GetLevel();
+        return GetMaxLevel() <= GetLevel();
     }
+
+    public int GetMaxLevel()
+    {
+        var pinfo = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+        return pinfo.GetLevel();
+    }
+
     /// <summary>
     /// 다음 레벨업에 필요한 경험치
     /// </summary>
@@ -250,6 +256,170 @@ public class UserHeroData : UserDataBase
         float lv_exp = (float)GetLevelExp();
         float need_exp = (float)GetNextExp();
         return lv_exp / need_exp;
+    }
+
+    public USE_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_EXP_ITEM_DATA> use_list)
+    {
+        var goods_mng = GameData.Instance.GetUserGoodsDataManager();
+        var item_mng = GameData.Instance.GetUserItemDataManager();
+        var m = MasterDataManager.Instance;
+        //  ID 높은 순으로(ID 높은것이 경험치 양이 많음)
+        use_list.Sort((a, b) => b.Item_ID.CompareTo(a.Item_ID));
+
+        //  result data 초기화
+        USE_EXP_ITEM_RESULT_DATA result = new USE_EXP_ITEM_RESULT_DATA();
+        result.Code = ERROR_CODE.FAILED;
+        result.Result_Lv = GetLevel();
+        result.Result_Accum_Exp = GetExp();
+        result.Add_Exp = 0;
+        result.Used_Gold = 0;
+        //  시뮬레이션 결과를 받아온다.
+        var result_simulate = GetCalcSimulateExp(use_list);
+        //  성공이 아니면 바로 반환
+        if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        {
+            result.ResetAndResultCode(result_simulate.Code);
+            return result;
+        }
+        //  증가된 경험치가 없거나, 필요 금화량이 0인 경우, 아무것도 하지 않도록(이런 경우는 있으면 안되는 상황)
+        if (result_simulate.Add_Exp <= 0 || result_simulate.Need_Gold <= 0)
+        {
+            result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
+            return result;
+        }
+
+        //  금화가 충분한지 체크
+        bool is_useable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
+        if (!is_useable_gold)
+        {
+            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
+            return result;
+        }
+        result.Used_Gold = result_simulate.Need_Gold;
+
+        //  아이템 체크
+        bool is_usable_item = true;
+        int cnt = use_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use = use_list[i];
+            if (!item_mng.IsUsableItemCount(use.Item_Type, use.Item_ID, use.Use_Count))
+            {
+                is_usable_item = false;
+                break;
+            }
+        }
+        //  아이템이 충분하지 않음.
+        if (!is_usable_item)
+        {
+            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
+            return result;
+        }
+        result.Add_Exp = result_simulate.Add_Exp;
+
+        //  재화 및 아이템 소모
+        goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, result.Used_Gold);
+        cnt = use_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use = use_list[i];
+            item_mng.UseItemCount(use.Item_Type, use.Item_ID, use.Use_Count);
+        }
+        //  경험치 증가 및 레벨업
+        result.Code = AddExp(result_simulate.Add_Exp);
+
+        return result;
+    }
+
+    /// <summary>
+    /// 캐릭터 경험치 증가 시뮬레이션<br/>
+    /// 지정 경험치 아이템 사용시 필요 금화와 레벨 상승 결과를 알려준다.<br/>
+    /// 최대 레벨을 초과할 경우, 초과 경험치 정보도 같이 알려준다.
+    /// </summary>
+    /// <param name="use_list"></param>
+    /// <returns></returns>
+    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
+    {
+        EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
+        //  가능한 결과 코드 : ALREADY_MAX_LEVEL, FAILED, SUCCESS, LEVEL_UP_SUCCESS, 
+        //  최초 초기화
+        result.Code = ERROR_CODE.FAILED;
+        result.Result_Lv = GetLevel();
+        result.Result_Accum_Exp = GetExp();
+
+        result.Need_Gold = 0;
+        result.Add_Exp = 0;
+        result.Over_Exp = 0;
+
+        //  이미 최대레벨일 경우 강화 불가
+        if (IsMaxLevel())
+        {
+            result.ResetAndResultCode(ERROR_CODE.ALREADY_MAX_LEVEL);
+            return result;
+        }
+
+        var m = MasterDataManager.Instance;
+        int cnt = use_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var use_data = use_list[i];
+            //  0이하인 경우는 거의 없겠지만, 해킹에 의해 0이하인 경우 아이템의 수량이 증가하는 문제가 있을 수 있음.
+            if (use_data.Use_Count <= 0)
+            {
+                continue;
+            }
+            //  캐릭터 경험치 아이템이 아니면 스킵 
+            if (!IsValidExpItem(use_data.Item_Type))
+            {
+                continue;
+            }
+
+            var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
+            if (item_data == null)
+            {
+                continue;
+            }
+            result.Add_Exp += item_data.int_var1 * use_data.Use_Count;
+            result.Need_Gold += item_data.int_var2 * use_data.Use_Count;
+        }
+
+        int max_level = GetMaxLevel();
+        result.Result_Accum_Exp += result.Add_Exp;
+        Player_Character_Level_Data next_lv_data = m.Get_PlayerCharacterLevelDataByAccumExp(result.Result_Accum_Exp);
+        //  레벨 데이터가 없으면 failed
+        if (next_lv_data == null)
+        {
+            result.ResetAndResultCode(ERROR_CODE.FAILED);
+            return result;
+        }
+        //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다.
+        if (max_level < next_lv_data.level)
+        {
+            next_lv_data = m.Get_PlayerCharacterLevelData(max_level);
+        }
+        //  레벨이 증가할 경우, 해당 레벨로 적용
+        if (result.Result_Lv < next_lv_data.level)
+        {
+            result.Result_Lv = next_lv_data.level;
+            result.Code = ERROR_CODE.LEVEL_UP_SUCCESS;
+        }
+        else
+        {
+            result.Code = ERROR_CODE.SUCCESS;
+        }
+
+        //  결과 레벨이 최대 레벨일 경우, 초과된 경험치 양을 알려준다.
+        if (max_level <= next_lv_data.level)
+        {
+            result.Over_Exp = result.Result_Accum_Exp - next_lv_data.accum_exp;
+        }
+
+        return result;
+    }
+
+    bool IsValidExpItem(ITEM_TYPE_V2 itype)
+    {
+        return itype == ITEM_TYPE_V2.EXP_POTION_C;
     }
 
     #endregion
@@ -476,9 +646,6 @@ public class UserHeroData : UserDataBase
 
 
 
-
-
-
     public POSITION_TYPE GetPositionType()
     {
         return Battle_Data.position_type;
@@ -496,10 +663,10 @@ public class UserHeroData : UserDataBase
     
     public override LitJson.JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new LitJson.JsonData();
 
         json[NODE_PLAYER_CHARACTER_ID] = GetPlayerCharacterID();

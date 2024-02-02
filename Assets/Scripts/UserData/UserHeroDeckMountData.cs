@@ -65,10 +65,10 @@ public class UserHeroDeckMountData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new JsonData();
         json[NODE_PLAYER_CHARACTER_ID] = Player_Character_ID;
         json[NODE_PLAYER_CHARACTER_NUM] = Player_Character_Num;

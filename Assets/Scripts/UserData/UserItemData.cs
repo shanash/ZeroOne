@@ -90,10 +90,10 @@ public class UserItemData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new JsonData();
 
         json[NODE_ITEM_TYPE] = (int)Item_Type;

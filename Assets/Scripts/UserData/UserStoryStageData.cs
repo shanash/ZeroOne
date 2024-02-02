@@ -161,10 +161,10 @@ public class UserStoryStageData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new LitJson.JsonData();
 
         json[NODE_STAGE_ID] = Stage_ID;

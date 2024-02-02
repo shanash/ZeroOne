@@ -2,6 +2,7 @@ using Cysharp.Text;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -1015,6 +1016,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
+        last_damage = Math.Truncate(last_damage);
         dmg.Damage = last_damage;
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에

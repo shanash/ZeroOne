@@ -124,6 +124,16 @@ public struct EXP_SIMULATE_RESULT_DATA
     public double Add_Exp;          //  경험치 아이템 사용시 증가되는 경험치
     public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
     public double Need_Gold;        //  겅혐치 아이템 사용시 필요 골드
+
+    public void ResetAndResultCode(ERROR_CODE code)
+    {
+        Code = code;
+        Result_Lv = 0;
+        Result_Accum_Exp = 0;
+        Add_Exp = 0;
+        Over_Exp = 0;
+        Need_Gold = 0;
+    }
 }
 /// <summary>
 /// 스킬/캐릭터 경험치 아이템 사용 후 경험치 상승 결과 데이터를 담는다.<br/>
@@ -139,5 +149,14 @@ public struct USE_EXP_ITEM_RESULT_DATA
 
     public double Add_Exp;              //  증가된 경험치
     public double Used_Gold;            //  소모된 골드
+
+    public void ResetAndResultCode(ERROR_CODE code)
+    {
+        Code = code;
+        Result_Lv = 0;
+        Result_Accum_Exp = 0;
+        Add_Exp = 0;
+        Used_Gold = 0;
+    }
 }
 #endregion

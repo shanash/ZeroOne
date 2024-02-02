@@ -142,10 +142,10 @@ public class UserGoodsData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
+        //if (!IsUpdateData())
+        //{
+        //    return null;
+        //}
         var json = new JsonData();
         json[NODE_GOODS_TYPE] = (int)Goods_Type;
         json[NODE_COUNT] = GetCount();

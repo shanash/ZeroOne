@@ -1,4 +1,5 @@
 using Cysharp.Text;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -19,12 +20,13 @@ public class Damage_Normal_Effect_Text : EffectBase
 
         BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)data[0];
 
-        //double dmg = Math.Truncate(send_data.Damage);
-        double dmg = send_data.Damage;
+        double dmg = Math.Truncate(send_data.Damage);
+        
 
         if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)
         {
-            Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
+            //Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
+            Damage_Text.text = ZString.Format("-{0}", dmg);
         }
         else
         {
@@ -37,12 +39,14 @@ public class Damage_Normal_Effect_Text : EffectBase
                 }
                 else
                 {
-                    Damage_Text.text = ZString.Format("<color=#{0}>-{1:0.##}</color>", txt_color, dmg);
+                    //Damage_Text.text = ZString.Format("<color=#{0}>-{1:0.##}</color>", txt_color, dmg);
+                    Damage_Text.text = ZString.Format("<color=#{0}>-{1}</color>", txt_color, dmg);
                 }
             }
             else
             {
-                Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
+                //Damage_Text.text = ZString.Format("-{0:0.##}", dmg);
+                Damage_Text.text = ZString.Format("-{0}", dmg);
             }
         }
     }
