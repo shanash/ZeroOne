@@ -12,6 +12,9 @@ namespace FluffyDuck.Util
         UPDATE_TOP_STATUS_BAR_DIA,
         UPDATE_TOP_STATUS_BAR_STAMINA,
         UPDATE_TOP_STATUS_BAR_SOURCE,
+
+
+        UPDATE_TOP_PLAYER_INFO = 201,
     }
 
     public class UpdateEventDispatcher : MonoSingleton<UpdateEventDispatcher>

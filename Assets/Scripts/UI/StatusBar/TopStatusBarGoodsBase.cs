@@ -43,6 +43,7 @@ public class TopStatusBarGoodsBase : MonoBehaviour, IPointerDownHandler, IPointe
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         ClickCallback();
     }
 
