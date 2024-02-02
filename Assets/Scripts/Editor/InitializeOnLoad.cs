@@ -13,7 +13,7 @@ namespace FluffyDuck.EditorUtil
     {
         const string SESSION_STATE_KEY = "InitializeOnLoad";
 
-        static AddressableAssetSettings Settings = AddressableAssetSettingsDefaultObject.Settings;
+        static AddressableAssetSettings Settings => AddressableAssetSettingsDefaultObject.Settings;
 
         static InitializeOnLoad()
         {
