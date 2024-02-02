@@ -23,8 +23,8 @@ public enum GAME_TYPE
 public enum BATTLE_SPEED_TYPE
 {
     NORMAL_TYPE = 0,                //  x1
-    FAST_SPEED_1_5,                 //  x1.5
-    FAST_SPEED_2,                   //  x2
+    FAST_SPEED_X2,                 //  x2
+    FAST_SPEED_X3,                   //  x3
 }
 public enum TEAM_POSITION_TYPE
 {
@@ -115,11 +115,14 @@ public class GameDefine : MonoBehaviour
     /// </summary>
     public static readonly int MAX_LOBBY_CHARACTER_COUNT = 10;
 
+    /// <summary>
+    /// 전투 배속 정보
+    /// </summary>
     public static readonly Dictionary<BATTLE_SPEED_TYPE, float> GAME_SPEEDS = new Dictionary<BATTLE_SPEED_TYPE, float>
     {
         { BATTLE_SPEED_TYPE.NORMAL_TYPE, 1f },
-        { BATTLE_SPEED_TYPE.FAST_SPEED_1_5, 1.5f },
-        { BATTLE_SPEED_TYPE.FAST_SPEED_2, 2f },
+        { BATTLE_SPEED_TYPE.FAST_SPEED_X2, 2f },
+        { BATTLE_SPEED_TYPE.FAST_SPEED_X3, 3f },
     };
 
 

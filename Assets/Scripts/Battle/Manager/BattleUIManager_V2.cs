@@ -74,13 +74,13 @@ public class BattleUIManager_V2 : MonoBehaviour
     {
         BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
         Fast_Speed.gameObject.SetActive(speed_type != BATTLE_SPEED_TYPE.NORMAL_TYPE);
-        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
-        {
-            Fast_Speed.text = "x1.5";
-        }
-        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X2)
         {
             Fast_Speed.text = "x2";
+        }
+        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X3)
+        {
+            Fast_Speed.text = "x3";
         }
     }
 
@@ -100,9 +100,8 @@ public class BattleUIManager_V2 : MonoBehaviour
         }
         var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
         var life = obj.GetComponent<LifeBarNode>();
-        //life.SetBarColor(ttype);
-        life.ShowLifeBar(5f);
         life.SetTargetTransform(t);
+        life.ShowLifeBar(5f);
 
         Used_Life_Bar_List.Add(life);
         return life;

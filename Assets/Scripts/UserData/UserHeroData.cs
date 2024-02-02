@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 
 public class UserHeroData : UserDataBase
 {
+
     /// <summary>
     /// 캐릭터 아이디
     /// </summary>

@@ -53,13 +53,13 @@ public partial class BattleManager_V2 : MonoBehaviour
 
         BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
         float speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
-        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_1_5)
+        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X2)
         {
-            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_1_5];
+            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X2];
         }
-        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_2)
+        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X3)
         {
-            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_2];
+            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X3];
         }
         SetBattleFastSpeed(speed);
     }

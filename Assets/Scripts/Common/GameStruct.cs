@@ -100,3 +100,44 @@ public struct Effect_Queue_Data
 
 }
 
+#region Exp Simulate Data
+/// <summary>
+/// 스킬/캐릭터 경험치 상승에 사용될 경험치 아이템의 사용 갯수 지정 데이터
+/// </summary>
+public struct USE_EXP_ITEM_DATA
+{
+    public ITEM_TYPE_V2 Item_Type;
+    public int Item_ID;
+    public int Use_Count;
+}
+
+/// <summary>
+/// 스킬/캐릭터 경험치 아이템 사용 후 시뮬레이션 결과 데이터
+/// </summary>
+public struct EXP_SIMULATE_RESULT_DATA
+{
+    public ERROR_CODE Code;         //  레벨업 가능/불가능
+    public int Result_Lv;           //  경험치 아이템 사용시 결과 레벨
+    public double Result_Accum_Exp;       //  경험치 아이템 사용시 결과 경험치
+
+
+    public double Add_Exp;          //  경험치 아이템 사용시 증가되는 경험치
+    public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
+    public double Need_Gold;        //  겅혐치 아이템 사용시 필요 골드
+}
+/// <summary>
+/// 스킬/캐릭터 경험치 아이템 사용 후 경험치 상승 결과 데이터를 담는다.<br/>
+/// 실제 소모된 경험치 아이템 정보만 반환.<br/>
+/// 필요한 아이템 보다 더 많은 아이템을 사용할 경우 해당 아이템은 사용되지 않도록 
+/// </summary>
+public struct USE_EXP_ITEM_RESULT_DATA
+{
+    public ERROR_CODE Code;
+
+    public int Result_Lv;               //  경험치 아이템 사용 후 결과 레벨
+    public double Result_Accum_Exp;     //  경험치 아이템 사용 후 최종 경험치(누적 경험치)
+
+    public double Add_Exp;              //  증가된 경험치
+    public double Used_Gold;            //  소모된 골드
+}
+#endregion

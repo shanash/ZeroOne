@@ -31,23 +31,6 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     Coroutine Show_Coroutine;
 
-    //public void SetBarColor(TEAM_TYPE ttype)
-    //{
-    //    if (ttype == TEAM_TYPE.LEFT)
-    //    {
-    //        Life_Bar.color = "00FF00".ToRGBFromHex();
-    //    }
-    //    else
-    //    {
-    //        Life_Bar.color = "FFAA00".ToRGBFromHex();
-    //    }
-
-    //    if (Show_Coroutine != null)
-    //    {
-    //        StopCoroutine(Show_Coroutine);
-    //    }
-    //    Show_Coroutine = StartCoroutine(StartShowLifeBar(5f));
-    //}
 
     public void ShowLifeBar(float duration)
     {

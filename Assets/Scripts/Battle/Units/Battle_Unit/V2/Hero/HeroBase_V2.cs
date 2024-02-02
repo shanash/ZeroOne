@@ -17,8 +17,6 @@ using UnityEngine.Rendering;
 /// 전투 캐릭의 기본이 되는 여러 가지 기능은 본 클래스에 담아둔다.<br/>
 /// </summary>
 [RequireComponent(typeof(SkeletonUtility))]
-[RequireComponent(typeof(CapsuleCollider))]
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(UnitRenderTexture))]
 [RequireComponent(typeof(RendererSortingZ))]
 [RequireComponent(typeof(SortingGroup))]

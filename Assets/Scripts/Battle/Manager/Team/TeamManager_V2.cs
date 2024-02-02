@@ -176,27 +176,29 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void LeftTeamPosition()
     {
-        float field_size = 16f;
+        float field_size = 13f;
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
-        front_pos_list.Add(new Vector3(0, 0, 2.5f));
-        front_pos_list.Add(new Vector3(0, 0, 5f));
-        front_pos_list.Add(new Vector3(0, 0, 7.5f));
-        front_pos_list.Add(new Vector3(0, 0, 10f));
+        front_pos_list.Add(new Vector3(0, 0, 1f));
+        front_pos_list.Add(new Vector3(0, 0, -1f));
+        front_pos_list.Add(new Vector3(0, 0, 2f));
+        front_pos_list.Add(new Vector3(0, 0, -2f));
 
         List<Vector3> middle_pos_list = new List<Vector3>();
         middle_pos_list.Add(new Vector3(-2.5f, 0, 0));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 2.5f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 5f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 7.5f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 10f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 1f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, -1f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 2f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, -2f));
 
         List<Vector3> back_pos_list = new List<Vector3>();
         back_pos_list.Add(new Vector3(-5, 0, 0));
-        back_pos_list.Add(new Vector3(-5, 0, 2.5f));
-        back_pos_list.Add(new Vector3(-5, 0, 5f));
-        back_pos_list.Add(new Vector3(-5, 0, 7.5f));
-        back_pos_list.Add(new Vector3(-5, 0, 10f));
+        back_pos_list.Add(new Vector3(-5, 0, 1f));
+        back_pos_list.Add(new Vector3(-5, 0, -1f));
+        back_pos_list.Add(new Vector3(-5, 0, 2f));
+        back_pos_list.Add(new Vector3(-5, 0, -2f));
+
+        int idx = 0;
        
         for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)
         {
@@ -222,12 +224,13 @@ public partial class TeamManager_V2 : IDisposable
             for (int i = 0; i < members.Count; i++)
             {
                 var mem = members[i];
-                if (i < pos_list.Count)
+                if (idx < pos_list.Count)
                 {
-                    Vector3 pos = pos_list[i];
+                    Vector3 pos = pos_list[idx];
                     pos.x -= field_size;
                     mem.SetTeamFieldPosition(pos);
                 }
+                idx++;
             }
         }
 
@@ -240,28 +243,29 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void RightTeamPosition()
     {
-        float field_size = 16f;
+        float field_size = 13f;
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
-        front_pos_list.Add(new Vector3(0, 0, 2.5f));
-        front_pos_list.Add(new Vector3(0, 0, 5f));
-        front_pos_list.Add(new Vector3(0, 0, 7.5f));
-        front_pos_list.Add(new Vector3(0, 0, 10f));
+        front_pos_list.Add(new Vector3(0, 0, 1f));
+        front_pos_list.Add(new Vector3(0, 0, -1f));
+        front_pos_list.Add(new Vector3(0, 0, 2f));
+        front_pos_list.Add(new Vector3(0, 0, -2f));
 
         List<Vector3> middle_pos_list = new List<Vector3>();
         middle_pos_list.Add(new Vector3(2.5f, 0, 0));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 2.5f));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 5f));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 7.5f));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 10f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 1f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, -1f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 2f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, -2f));
 
         List<Vector3> back_pos_list = new List<Vector3>();
         back_pos_list.Add(new Vector3(5, 0, 0));
-        back_pos_list.Add(new Vector3(5, 0, 2.5f));
-        back_pos_list.Add(new Vector3(5, 0, 5f));
-        back_pos_list.Add(new Vector3(5, 0, 7.5f));
-        back_pos_list.Add(new Vector3(5, 0, 10f));
+        back_pos_list.Add(new Vector3(5, 0, 1f));
+        back_pos_list.Add(new Vector3(5, 0, -1f));
+        back_pos_list.Add(new Vector3(5, 0, 2f));
+        back_pos_list.Add(new Vector3(5, 0, -2f));
 
+        int idx = 0;
         for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)
         {
             List<Vector3> pos_list = null;
@@ -286,12 +290,13 @@ public partial class TeamManager_V2 : IDisposable
             for (int i = 0; i < members.Count; i++)
             {
                 var mem = members[i];
-                if (i < pos_list.Count)
+                if (idx < pos_list.Count)
                 {
-                    Vector3 pos = pos_list[i];
+                    Vector3 pos = pos_list[idx];
                     pos.x += field_size;
                     mem.SetTeamFieldPosition(pos);
                 }
+                idx++;
             }
         }
 

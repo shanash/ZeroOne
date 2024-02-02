@@ -7,46 +7,6 @@ using UnityEngine;
 
 public class UserHeroSkillData : UserDataBase
 {
-    /// <summary>
-    /// 스킬 경험치 상승에 사용될 스킬 경험치 아이템의 사용 갯수 지정 데이터
-    /// </summary>
-    public struct USE_SKILL_EXP_ITEM_DATA
-    {
-        public ITEM_TYPE_V2 Item_Type;
-        public int Item_ID;
-        public int Use_Count;
-    }
-
-    /// <summary>
-    /// 스킬 경험치 아이템 사용 후 시뮬레이션 결과 데이터
-    /// </summary>
-    public struct SIMULATE_RESULT_DATA
-    {
-        public ERROR_CODE Code;         //  레벨업 가능/불가능
-        public int Result_Lv;           //  경험치 아이템 사용시 결과 레벨
-        public double Result_Accum_Exp;       //  경험치 아이템 사용시 결과 경험치
-
-
-        public double Add_Exp;          //  경험치 아이템 사용시 증가되는 경험치
-        public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
-        public double Need_Gold;        //  겅혐치 아이템 사용시 필요 골드
-    }
-    /// <summary>
-    /// 스킬 경험치 아이템 사용 후 경험치 상승 결과 데이터를 담는다.<br/>
-    /// 실제 소모된 경험치 아이템 정보만 반환.<br/>
-    /// 필요한 아이템 보다 더 많은 아이템을 사용할 경우 해당 아이템은 사용되지 않도록 
-    /// </summary>
-    public struct USE_SKILL_EXP_ITEM_RESULT_DATA
-    {
-        public ERROR_CODE Code;
-
-        public int Result_Lv;               //  경험치 아이템 사용 후 결과 레벨
-        public double Result_Accum_Exp;     //  경험치 아이템 사용 후 최종 경험치(누적 경험치)
-
-        public double Add_Exp;              //  증가된 경험치
-        public double Used_Gold;            //  소모된 골드
-    }
-
 
     SecureVar<int> Skill_Group_ID = null;
     SecureVar<int> Player_Character_ID = null;
@@ -235,7 +195,7 @@ public class UserHeroSkillData : UserDataBase
     /// 최적의 시뮬레이션은 적용 전에 별도의 로직을 거쳐 알아내야 함
     /// </summary>
     /// <param name="use_list"></param>
-    public USE_SKILL_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_SKILL_EXP_ITEM_DATA> use_list)
+    public USE_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_EXP_ITEM_DATA> use_list)
     {
         var goods_mng = GameData.Instance.GetUserGoodsDataManager();
         var item_mng = GameData.Instance.GetUserItemDataManager();
@@ -244,7 +204,7 @@ public class UserHeroSkillData : UserDataBase
         use_list.Sort((a, b) => b.Item_ID.CompareTo(a.Item_ID));
 
         //  result data 초기화
-        USE_SKILL_EXP_ITEM_RESULT_DATA result = new USE_SKILL_EXP_ITEM_RESULT_DATA();
+        USE_EXP_ITEM_RESULT_DATA result = new USE_EXP_ITEM_RESULT_DATA();
         result.Code = ERROR_CODE.FAILED;
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
@@ -321,9 +281,9 @@ public class UserHeroSkillData : UserDataBase
     /// </summary>
     /// <param name="use_list"></param>
     /// <returns></returns>
-    public SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_SKILL_EXP_ITEM_DATA> use_list)
+    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
     {
-        SIMULATE_RESULT_DATA result = new SIMULATE_RESULT_DATA();
+        EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
         //  가능한 결과 코드 : ALREADY_MAX_LEVEL, FAILED, SUCCESS, LEVEL_UP_SUCCESS, 
         //  최초 초기화
         result.Code = ERROR_CODE.FAILED;

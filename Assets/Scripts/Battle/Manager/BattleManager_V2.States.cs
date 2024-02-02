@@ -276,7 +276,7 @@ public partial class BattleManager_V2 : MonoBehaviour
             {
                 enemy_team.SpawnHeros();
             }
-
+            
             Fade_In_Out_Layer.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, () =>
             {
                 ChangeState(GAME_STATES.PLAYING);
