@@ -299,7 +299,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         double attk_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.ATK_DOWN);
         double attk_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.ATK_DOWN);
 
-        double pt = Attack + (attk_up_value - attk_down_value);
+        double pt = Physics_Attack + (attk_up_value - attk_down_value);
         if (attk_up_rate > 0 || attk_down_rate > 0)
         {
             pt += pt * (attk_up_rate - attk_down_rate);
@@ -319,7 +319,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         double def_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DEF_DOWN);
         double def_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.DEF_DOWN);
 
-        double pt = Defense + (def_up_value - def_down_value);
+        double pt = Physics_Defense + (def_up_value - def_down_value);
         if (def_up_rate > 0 || def_down_rate > 0)
         {
             pt += pt * (def_up_rate - def_down_rate);
@@ -334,7 +334,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double GetCriticalChancePoint()
     {
         //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Critical_Rate;
+        double pt = Physics_Critical_Rate;
         return pt;
     }
 
@@ -345,7 +345,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double GetCriticalPowerPoint()
     {
         //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Critical_Power;
+        double pt = Physics_Critical_Power;
 
         return pt;
     }

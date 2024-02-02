@@ -518,7 +518,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  공격력 오름 차순
-        temp_list.Sort((a, b) => a.Attack.CompareTo(b.Attack));
+        temp_list.Sort((a, b) => a.Physics_Attack.CompareTo(b.Physics_Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -531,7 +531,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  공격력 내림 차순
-        temp_list.Sort((a, b) => b.Attack.CompareTo(a.Attack));
+        temp_list.Sort((a, b) => b.Physics_Attack.CompareTo(a.Physics_Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -544,7 +544,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  방어력 오름 차순
-        temp_list.Sort((a, b) => a.Defense.CompareTo(b.Defense));
+        temp_list.Sort((a, b) => a.Physics_Defense.CompareTo(b.Physics_Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
 
     }
@@ -558,7 +558,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  방어력 내림 차순
-        temp_list.Sort((a, b) => b.Defense.CompareTo(a.Defense));
+        temp_list.Sort((a, b) => b.Physics_Defense.CompareTo(a.Physics_Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
 

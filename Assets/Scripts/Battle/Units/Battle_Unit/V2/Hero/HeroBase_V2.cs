@@ -59,20 +59,30 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     public double Max_Life { get; protected set; }
     /// <summary>
-    /// 추가 최대 체력. 스킬 및 장비 옵션 등으로 인하여 일시적으로 증가된 최대 체력 (사용 안할듯) 
+    /// 추가 최대 체력<br/>
+    /// 스킬 및 장비 옵션 등으로 인하여 일시적으로 증가된 최대 체력
     /// </summary>
     public double Added_Max_Life { get; protected set; }
     /// <summary>
     /// 물리 공격력. 
     /// </summary>
-    public double Attack { get; protected set; }
+    public double Physics_Attack { get; protected set; }
+    /// <summary>
+    /// 마법 공격력
+    /// </summary>
+    public double Magic_Attack { get; protected set; }
 
     /// <summary>
-    /// 방어력<br/>
+    /// 물리 방어력<br/>
     /// 방어율 = 1/(1+방어력/100)
     /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
-    public double Defense { get; protected set; }
+    public double Physics_Defense { get; protected set; }
+
+    /// <summary>
+    /// 마법 방어력<br/>
+    /// </summary>
+    public double Magic_Defense { get; protected set; } 
 
     /// <summary>
     /// 이동 속도
@@ -104,14 +114,29 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double Auto_Recovery_Life { get; protected set; }
 
     /// <summary>
-    /// 치명타 확률<br/>
+    /// 물리 치명타 확률<br/>
     /// 크리티컬 발생 확률 = 크리티컬 값 * 0.05 * 0.01 * 레벨 / 적 레벨
     /// </summary>
-    public double Critical_Rate { get; protected set; }
+    public double Physics_Critical_Rate { get; protected set; }
     /// <summary>
-    /// 치명타 파워 - 기본 공격력의 배수
+    /// 물리 치명타 파워 - 기본 공격력의 배수
     /// </summary>
-    public double Critical_Power { get; protected set; }
+    public double Physics_Critical_Power { get; protected set; }
+    /// <summary>
+    /// 마법 치명타 확률<br/>
+    /// </summary>
+    public double Magic_Critical_Rate { get; protected set; }
+    /// <summary>
+    /// 마법 치명타 파워
+    /// </summary>
+    public double Magic_Critical_Power { get; protected set; }
+
+    /// <summary>
+    /// 강인함 (상태이상 저항력)<br/>
+    /// 상태이상 확률 및 상태이상 지속 시간에 영향<br/>
+    /// 상태이상 확률 = 상태이상 확률 - (상태이상 확률 * 강인함 / 1000)
+    /// </summary>
+    public double Resist_Point { get; protected set; }
 
     /// <summary>
     /// 흡혈 
@@ -119,10 +144,20 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double Vampire_Point { get; protected set; }
 
     /// <summary>
+    /// 체력 회복량 증가(힐량 증가)
+    /// </summary>
+    public double Life_Recovery_Inc { get; protected set; }
+
+    /// <summary>
     /// 보유 에너지
     /// </summary>
     public int Energy_Value { get; protected set; }
 
+    /// <summary>
+    /// 무게<br/>
+    /// 넉백 및 풀링에서 변수로 사용
+    /// </summary>
+    public double Weight { get; protected set; }
 
     /// <summary>
     /// 리더/보스 여부
@@ -962,6 +997,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         double last_damage = data.Damage;
         var target = data.Targets[0];
         double vampire_hp = last_damage * Vampire_Point / (Vampire_Point + target.GetLevel() + 100);
+        vampire_hp = Math.Truncate(vampire_hp);
         if (vampire_hp > 0)
         {
             AddLifeRecovery(vampire_hp);
@@ -1073,7 +1109,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     public void WaveEndRecoveryLife()
     {
         double recovery_hp = Max_Life * Auto_Recovery_Life;
-        AddLifeRecovery(recovery_hp);
+        recovery_hp = Math.Truncate(recovery_hp);
+        if (recovery_hp > 0)
+        {
+            AddLifeRecovery(recovery_hp);
+        }
     }
 
 

@@ -33,28 +33,28 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected virtual void CalcAttackPoint()
     {
-        Attack = Unit_Data.GetAttackDamagePoint();
+        Physics_Attack = Unit_Data.GetAttackDamagePoint();
     }
     /// <summary>
     /// 방어력 계산. 패시브 방어력 등 계산
     /// </summary>
     protected virtual void CalcDefensePoint()
     {
-        Defense = Unit_Data.GetAttackDefensePoint();
+        Physics_Defense = Unit_Data.GetAttackDefensePoint();
     }
     /// <summary>
     /// 치명타 확률
     /// </summary>
     protected virtual void CalcCriticalChance()
     {
-        Critical_Rate = Unit_Data.GetCriticalChance();
+        Physics_Critical_Rate = Unit_Data.GetCriticalChance();
     }
     /// <summary>
     /// 치명타 데미지(파워)
     /// </summary>
     protected virtual void CalcCriticalPower()
     {
-        Critical_Power = Unit_Data.GetCriticalPower();
+        Physics_Critical_Power = Unit_Data.GetCriticalPower();
     }
 
     /// <summary>

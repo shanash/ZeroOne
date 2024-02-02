@@ -26,10 +26,10 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
                     send_data.Damage = Data.value;
                     break;
                 case STAT_MULTIPLE_TYPE.ATTACK:
-                    send_data.Damage = send_data.Caster.Attack * Data.multiple;
+                    send_data.Damage = send_data.Caster.Physics_Attack * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.DEFENSE:
-                    send_data.Damage = send_data.Caster.Defense * Data.multiple;
+                    send_data.Damage = send_data.Caster.Physics_Defense * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
                     send_data.Damage = send_data.Caster.Max_Life * Data.multiple;
