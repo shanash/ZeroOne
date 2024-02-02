@@ -308,30 +308,110 @@ public partial class TeamManager_V2
             case TARGET_RULE_TYPE.APPROACH:
                 FindTargetRuleApproach(self, approach_distance, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.HIGHEST_LIFE_VALUE:
-                FindTargetRuleHighestLifeValue(self, count, ref targets);
+
+            case TARGET_RULE_TYPE.HIGH_HP_VALUE:    //  완료
+                FindTargetRuleHighHPValue(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.HIGHEST_LIFE_RATE:
-                FindTargetRuleHighestLifeRate(self, count, ref targets);
+            case TARGET_RULE_TYPE.HIGH_HP_RATE:     //  완료
+                FindTargetRuleHighHPRate(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.LOWEST_LIFE_VALUE:
-                FindTargetRuleLowestLifeValue(self, count, ref targets);
+            case TARGET_RULE_TYPE.LOW_HP_VALUE:     //  완료
+                FindTargetRuleLowHPValue(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.LOWEST_LIFE_RATE:
-                FindTargetRuleLowestLifeRate(self, count, ref targets);
+            case TARGET_RULE_TYPE.LOW_HP_RATE:      //  완료
+                FindTargetRuleLowHPRate(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.LOWEST_ATTACK:
-                FindTargetRuleLowestAttack(self, count, ref targets);
+            case TARGET_RULE_TYPE.LOW_P_ATK:        //  완료
+                FindTargetRuleLowPhysicsAttack(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.LOWEST_DEFENSE:
-                FindTargetRuleLowestDefense(self, count, ref targets);
+            case TARGET_RULE_TYPE.HIGH_P_ATK:       //  완료
+                FindTargetRuleHighPhysicsAttack(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.HIGHEST_ATTACK:
-                FindTargetRuleHighestAttack(self, count, ref targets);
+            case TARGET_RULE_TYPE.LOW_M_ATK:        //  완료
+                FindTargetRuleLowMagicAttack(self, count, ref targets);
                 break;
-            case TARGET_RULE_TYPE.HIGHEST_DEFENSE:
-                FindTargetRuleHighestDefense(self, count, ref targets);
+            case TARGET_RULE_TYPE.HIGH_M_ATK:       //  완료
+                FindTargetRuleHighMagicAttack(self, count, ref targets);
                 break;
+            case TARGET_RULE_TYPE.LOW_PM_ATK:       //  완료
+                FindTargetRuleLowBothAttack(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_PM_ATK:      //  완료
+                FindTargetRuleHighBothAttack(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_P_DEF:        //  완료
+                FindTargetRuleLowPhysicsDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_P_DEF:       //  완료
+                FindTargetRuleHighPhysicsDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_M_DEF:        //  완료
+                FindTargetRuleLowMagicDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_M_DEF:       //  완료
+                FindTargetRuleHighMagicDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_PM_DEF:       //  완료
+                FindTargetRuleLowBothDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_PM_DEF:      //  완료
+                FindTargetRuleHighBothDefense(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_MAX_HP:       //  완료
+                FindTargetRuleLowMaxHP(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_MAX_HP:      //  완료
+                FindTargetRuleHighMaxHP(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_ACCURACY:     //  완료
+                FindTargetRuleLowAccuracy(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_ACCURACY:    //  완료
+                FindTargetRuleHighAccuracy(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_EVASION:      //  완료
+                FindTargetRuleLowEvation(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_EVASION:     //  완료
+                FindTargetRuleHighEvation(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_P_CRI_INC:    //  완료
+                FindTargetRuleLowPhysicsCriticalChance(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_P_CRI_INC:   //  완료
+                FindTargetRuleHighPhysicsCriticalChance(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_M_CRI_INC:    //  완료
+                FindTargetRuleLowMagicCriticalChance(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_M_CRI_INC:   //  완료
+                FindTargetRuleHighMagicCriticalChance(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_P_CRI_ADD:    //  완료
+                FindTargetRuleLowPhysicsCriticalPower(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_P_CRI_ADD:   //  완료
+                FindTargetRuleHighPhysicsCriticalPower(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_M_CRI_ADD:    //  완료
+                FindTargetRuleLowMagicCriticalPower(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_M_CRI_ADD:   //  완료
+                FindTargetRuleHighMagicCriticalPower(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_ATK_RECOVERY: //  완료
+                FindTargetRuleLowVampirePoint(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_ATK_RECOVERY:    //  완료
+                FindTargetRuleHighVampirePoint(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.LOW_RESIST:       //  완료
+                FindTargetRuleLowResistPoint(self, count, ref targets);
+                break;
+            case TARGET_RULE_TYPE.HIGH_RESIST:      //  완료
+                FindTargetRuleHighResistPoint(self, count, ref targets);
+                break;
+                
         }
     }
 
@@ -459,7 +539,7 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleHighestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleHighHPValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
         //  현재 체력 내림 차순
@@ -472,7 +552,7 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleHighestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleHighHPRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
         //  현재 체력 비율 내림 차순
@@ -485,7 +565,7 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleLowestLifeValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleLowHPValue(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
         //  현재 체력 오름 차순
@@ -499,7 +579,7 @@ public partial class TeamManager_V2
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleLowestLifeRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleLowHPRate(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
 
@@ -509,58 +589,402 @@ public partial class TeamManager_V2
     }
 
     /// <summary>
-    /// 공격력 수치가 가장 낮은 타겟 찾기
+    /// 물리 공격력 수치가 가장 낮은 타겟 찾기
     /// </summary>
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleLowestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleLowPhysicsAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  공격력 오름 차순
+        //  물리 공격력 오름 차순
         temp_list.Sort((a, b) => a.Physics_Attack.CompareTo(b.Physics_Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
-    /// 공격력 수치가 가장 높은 타겟 찾기
+    /// 물리 공격력 수치가 가장 높은 타겟 찾기
     /// </summary>
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleHighestAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleHighPhysicsAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  공격력 내림 차순
+        //  물리 공격력 내림 차순
         temp_list.Sort((a, b) => b.Physics_Attack.CompareTo(a.Physics_Attack));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
-    /// 방어력 수치가 가장 낮은 타겟 찾기
+    /// 마법 공격력 수치가 가장 낮은 타겟 찾기
     /// </summary>
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleLowestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleLowMagicAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  방어력 오름 차순
+        //  마법 공격력 오름 차순
+        temp_list.Sort((a, b) => a.Magic_Attack.CompareTo(b.Magic_Attack));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 공격력 수치가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighMagicAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 공격력 내림 차순
+        temp_list.Sort((a, b) => b.Magic_Attack.CompareTo(a.Magic_Attack));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 물리/마법 공격력 수치 중 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowBothAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리/마법 중 낮은 공격력 오름 차순
+        temp_list.Sort((a, b) => a.GetLowAttackPoint().CompareTo(b.GetLowAttackPoint()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+
+    }
+    /// <summary>
+    /// 물리/마법 공격력 수치 중 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighBothAttack(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리/마법 중 높은 공격력 내림 차순
+        temp_list.Sort((a, b) => b.GetHighAttackPoint().CompareTo(a.GetHighAttackPoint()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 물리 방어력 수치가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowPhysicsDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리 방어력 오름 차순
         temp_list.Sort((a, b) => a.Physics_Defense.CompareTo(b.Physics_Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
 
     }
     /// <summary>
-    /// 방어력 수치가 가장 높은 타겟 찾기
+    /// 물리 방어력 수치가 가장 높은 타겟 찾기
     /// </summary>
     /// <param name="self"></param>
     /// <param name="count"></param>
     /// <param name="targets"></param>
-    void FindTargetRuleHighestDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    void FindTargetRuleHighPhysicsDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
     {
         var temp_list = GetAliveMembers();
-        //  방어력 내림 차순
+        //  물리 방어력 내림 차순
         temp_list.Sort((a, b) => b.Physics_Defense.CompareTo(a.Physics_Defense));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
+    /// <summary>
+    /// 마법 방어력 수치가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowMagicDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 방어력 오름 차순
+        temp_list.Sort((a, b) => a.Magic_Defense.CompareTo(b.Magic_Defense));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 방어력 수치가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighMagicDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 방어력 내림 차순
+        temp_list.Sort((a, b) => b.Magic_Defense.CompareTo(a.Magic_Defense));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
+    /// <summary>
+    /// 물리/마법 방어력 수치 중 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowBothDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리/마법 방어력 수치 중 낮은 수치의 오름 차순
+        temp_list.Sort((a, b) => a.GetLowDefensePoint().CompareTo(b.GetLowDefensePoint()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 물리/마법 방어력 수치 중 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighBothDefense(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리/마법 방어력 수치 중 높은 수치의 내림 차순
+        temp_list.Sort((a, b) => b.GetLowDefensePoint().CompareTo(a.GetLowDefensePoint()));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 최대 체력이 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowMaxHP(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  최대 체력 오름 차순
+        temp_list.Sort((a, b) => a.Max_Life.CompareTo((b.Max_Life)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 최대 체력이 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighMaxHP(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  최대 체력 내림 차순
+        temp_list.Sort((a, b) => b.Max_Life.CompareTo(a.Max_Life));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+   
+    /// <summary>
+    /// 명중이 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowAccuracy(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  명중 오름 차순
+        temp_list.Sort((a, b) => a.Accuracy.CompareTo((b.Accuracy)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 명중이 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighAccuracy(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  명중 내림 차순
+        temp_list.Sort((a, b) => b.Accuracy.CompareTo(a.Accuracy));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 회피가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowEvation(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  회피 오름 차순
+        temp_list.Sort((a, b) => a.Evasion.CompareTo((b.Evasion)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 회피가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighEvation(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  회피 내림 차순
+        temp_list.Sort((a, b) => b.Evasion.CompareTo(a.Evasion));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 물리 치명타 확률 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowPhysicsCriticalChance(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리 치명타 확률 오름 차순
+        temp_list.Sort((a, b) => a.Physics_Critical_Rate.CompareTo((b.Physics_Critical_Rate)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 물리 치명타 확률 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighPhysicsCriticalChance(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리 치명타 확률 내림 차순
+        temp_list.Sort((a, b) => b.Physics_Critical_Rate.CompareTo(a.Physics_Critical_Rate));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 치명타 확률 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowMagicCriticalChance(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 치명타 확률 오름 차순
+        temp_list.Sort((a, b) => a.Magic_Critical_Rate.CompareTo((b.Magic_Critical_Rate)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 치명타 확률 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighMagicCriticalChance(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 치명타 확률 내림 차순
+        temp_list.Sort((a, b) => b.Magic_Critical_Rate.CompareTo(a.Magic_Critical_Rate));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 물리 치명타 파워 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowPhysicsCriticalPower(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리 치명타 추가 데미지 오름 차순
+        temp_list.Sort((a, b) => a.Physics_Critical_Power.CompareTo((b.Physics_Critical_Power)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 물리 치명타 파워 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighPhysicsCriticalPower(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  물리 치명타 추가 데미지 내림 차순
+        temp_list.Sort((a, b) => b.Physics_Critical_Power.CompareTo(a.Physics_Critical_Power));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 치명타 파워 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowMagicCriticalPower(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 치명타 추가 데미지 오름 차순
+        temp_list.Sort((a, b) => a.Magic_Critical_Power.CompareTo((b.Magic_Critical_Power)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 마법 치명타 파워 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighMagicCriticalPower(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  마법 치명타 추가 데미지 내림 차순
+        temp_list.Sort((a, b) => b.Magic_Critical_Power.CompareTo(a.Magic_Critical_Power));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 흡혈(타격 시 체력 회복량) 포인트가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowVampirePoint(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  흠혈 포인트 오름 차순
+        temp_list.Sort((a, b) => a.Vampire_Point.CompareTo((b.Vampire_Point)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 흡혈(타격 시 체력 회복량) 포인트가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighVampirePoint(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  흡혈 포인트 내림 차순
+        temp_list.Sort((a, b) => b.Vampire_Point.CompareTo(a.Vampire_Point));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 강인함(상태이상 확률 저항 및 상태이상 지속 시간 저항) 포인트가 가장 낮은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleLowResistPoint(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  강인함(상태 저항) 포인트 오름 차순
+        temp_list.Sort((a, b) => a.Resist_Point.CompareTo((b.Resist_Point)));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+    /// <summary>
+    /// 강인함(상태이상 확률 저항 및 상태이상 지속 시간 저항) 포인트가 가장 높은 타겟 찾기
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="count"></param>
+    /// <param name="targets"></param>
+    void FindTargetRuleHighResistPoint(HeroBase_V2 self, int count, ref List<HeroBase_V2> targets)
+    {
+        var temp_list = GetAliveMembers();
+        //  강인함(상태 저항) 포인트 내림 차순
+        temp_list.Sort((a, b) => b.Resist_Point.CompareTo(a.Resist_Point));
+        GetTargetsFromTempList(temp_list, count, ref targets);
+    }
+
 
     /// <summary>
     /// 가장 가까운 적 우선 선택(순번 컬럼 연동하여 순서대로) 후 일정 영역내의 뒤에있는 타겟의 추가 선택

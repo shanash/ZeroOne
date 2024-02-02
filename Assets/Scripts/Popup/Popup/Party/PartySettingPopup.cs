@@ -52,22 +52,21 @@ public class PartySettingPopup : PopupBase
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     int Dungeon_ID;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         if (data.Length != 2)
         {
-            HidePopup();
-            return;
+            return false;
         }
 
         Game_Type = (GAME_TYPE)data[0];
         Dungeon_ID = (int)data[1];
 
-        base.ShowPopup(data);
-
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         UpdateFilterType();
         InitPopupUI();
+
+        return true;
     }
 
     void InitPopupUI()

@@ -125,7 +125,7 @@ public enum TARGET_RULE_TYPE
 	HIGHEST_DEFENSE = 2004,
 	/// <summary>9999 가장 가까운 상대 타겟 선택(화면상에서 적에게 접근하기 위한 용도)</summary>
 	APPROACH = 9999,
-	/// <summary>1001 리더 선택</summary>
+	/// <summary>1001 리더 선택 (리더 없음)</summary>
 	LEADER_HIGH_PRIORITY = 1001,
 	/// <summary>2001 남은 체력이 가장 많은 타겟 선택</summary>
 	HIGHEST_LIFE_VALUE = 2001,
@@ -247,6 +247,92 @@ public enum TARGET_RULE_TYPE
 	GAIN_DEBUFF_DURATION_FATAL_WOUNDS = 6009,
 	/// <summary>6010 디버프 효과 중 명중률 감소 효과가 있는 타겟 선택</summary>
 	GAIN_DEBUFF_DURATION_ACCURACY_DEC = 6010,
+	/// <summary>10001 현재 체력이 가장 낮은 대상</summary>
+	LOW_HP_VALUE = 10001,
+	/// <summary>10002 현재 체력이 가장 높은 대상</summary>
+	HIGH_HP_VALUE = 10002,
+	/// <summary>10003 남은 체력 비율이 가장 높은 대상</summary>
+	HIGH_HP_RATE = 10003,
+	/// <summary>10004 남은 체력 비율이 가장 낮은 대상</summary>
+	LOW_HP_RATE = 10004,
+	/// <summary>10003 최대 체력이 가장 낮은 대상</summary>
+	LOW_MAX_HP = 10005,
+	/// <summary>10004 최대 체력이 가장 높은 대상</summary>
+	HIGH_MAX_HP = 10006,
+	/// <summary>10005 물리 공격력이 가장 낮은 대상</summary>
+	LOW_P_ATK = 10007,
+	/// <summary>10006 물리 공격력이 가장 높은 대상</summary>
+	HIGH_P_ATK = 10008,
+	/// <summary>10007 마법 공격력이 가장 낮은 대상</summary>
+	LOW_M_ATK = 10009,
+	/// <summary>10008 마법 공격력이 가장 높은 대상</summary>
+	HIGH_M_ATK = 10010,
+	/// <summary>10009 물리/ 마법 공격력이 가장 낮은 대상</summary>
+	LOW_PM_ATK = 10011,
+	/// <summary>10010 물리/ 마법 공격력이 가장 높은 대상</summary>
+	HIGH_PM_ATK = 10012,
+	/// <summary>10011 물리 방어력이 가장 낮은 대상</summary>
+	LOW_P_DEF = 10013,
+	/// <summary>10012 물리 방어력이 가장 높은 대상</summary>
+	HIGH_P_DEF = 10014,
+	/// <summary>10013 마법 방어력이 가장 낮은 대상</summary>
+	LOW_M_DEF = 10015,
+	/// <summary>10014 마법 방어력이 가장 높은 대상</summary>
+	HIGH_M_DEF = 10016,
+	/// <summary>10015 물리/ 마법 방어력이 가장 낮은 대상</summary>
+	LOW_PM_DEF = 10017,
+	/// <summary>10016 물리/ 마법 방어력이 가장 높은 대상</summary>
+	HIGH_PM_DEF = 10018,
+	/// <summary>10017 물리 크리티컬 확률이 가장 낮은 대상</summary>
+	LOW_P_CRI_INC = 10019,
+	/// <summary>10018 물리 크리티컬 확률이 가장 높은 대상</summary>
+	HIGH_P_CRI_INC = 10020,
+	/// <summary>10019 마법 크리티컬 확률이 가장 낮은 대상</summary>
+	LOW_M_CRI_INC = 10021,
+	/// <summary>10020 마법 크리티컬 확률이 가장 높은 대상</summary>
+	HIGH_M_CRI_INC = 10022,
+	/// <summary>10021 물리 크리티컬 추가 대미지가 가장 낮은 대상</summary>
+	LOW_P_CRI_ADD = 10023,
+	/// <summary>10022 물리 크리티컬 추가 대미지가 가장 높은 대상</summary>
+	HIGH_P_CRI_ADD = 10024,
+	/// <summary>10023 마법 크리티컬 추가 대미지가 가장 낮은 대상</summary>
+	LOW_M_CRI_ADD = 10025,
+	/// <summary>10024 마법 크리티컬 추가 대미지가 가장 높은 대상</summary>
+	HIGH_M_CRI_ADD = 10026,
+	/// <summary>10025 명중이 가장 낮은 대상</summary>
+	LOW_ACCURACY = 10027,
+	/// <summary>10026 명중이 가장 높은 대상</summary>
+	HIGH_ACCURACY = 10028,
+	/// <summary>10027 회피가 가장 낮은 대상</summary>
+	LOW_EVASION = 10029,
+	/// <summary>10028 회피가 가장 높은 대상</summary>
+	HIGH_EVASION = 10030,
+	/// <summary>10029 타격 시 회복량이 가장 낮은 대상</summary>
+	LOW_ATK_RECOVERY = 10031,
+	/// <summary>10030 타격 시 회복량이 가장 높은 대상</summary>
+	HIGH_ATK_RECOVERY = 10032,
+	/// <summary>10031 회복량이 가장 낮은 대상</summary>
+	LOW_HEAL = 10033,
+	/// <summary>10032 회복량이 가장 높은 대상</summary>
+	HIGH_HEAL = 10034,
+	/// <summary>10033 강인함이 가장 낮은 대상</summary>
+	LOW_RESIST = 10035,
+	/// <summary>10034 강인함이 가장 높은 대상</summary>
+	HIGH_RESIST = 10036,
+	/// <summary>20001 상태이상 중인 대상</summary>
+	CC_ALL_PROGRESS = 20001,
+	/// <summary>20002 기절 중인 대상</summary>
+	CC_STUN_PROGRESS = 20002,
+	/// <summary>20003 결박 중인 대상</summary>
+	CC_BIND_PROGRESS = 20003,
+	/// <summary>20004 침묵 중인 대상</summary>
+	CC_SILENCE_PROGRESS = 20004,
+	/// <summary>20005 빙결 중인 대상</summary>
+	CC_FREEZ_PROGRESS = 20005,
+	/// <summary>20101 버프 상태 중인 대상</summary>
+	BUFF_ALL_PROGRESS = 20101,
+	/// <summary>20201 디버프 상태 중인 대상</summary>
+	DEBUFF_ALL_PROGRESS = 20201,
 }
 
 ///	<summary>

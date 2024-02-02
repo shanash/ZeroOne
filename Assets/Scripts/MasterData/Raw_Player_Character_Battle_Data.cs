@@ -16,9 +16,15 @@ public class Raw_Player_Character_Battle_Data : System.IDisposable
 	public double m_attack {get; set;}
 	public double defend {get; set;}
 	public double m_defend {get; set;}
+	public double p_cri_Inc {get; set;}
+	public double m_cri_Inc {get; set;}
+	public double p_cri_add {get; set;}
+	public double m_cri_add {get; set;}
 	public double attack_recovery {get; set;}
 	public double evasion {get; set;}
 	public double accuracy {get; set;}
+	public double heal {get; set;}
+	public double resist  {get; set;}
 	public double auto_recovery {get; set;}
 	public double move_speed {get; set;}
 	public string attack_script {get; set;}

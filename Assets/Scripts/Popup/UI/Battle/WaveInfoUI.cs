@@ -12,18 +12,16 @@ public class WaveInfoUI : PopupBase
     float Delay_Time;
     bool Is_Action;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         if (data == null || data.Length < 2)
         {
-            HidePopup();
-            return;
+            return false;
         }
         Data = (Wave_Data)data[0];
         Delay_Time = (float)data[1];
-        base.ShowPopup(data);
 
-
+        return true;
     }
 
     protected override void ShowPopupAniEndCallback()

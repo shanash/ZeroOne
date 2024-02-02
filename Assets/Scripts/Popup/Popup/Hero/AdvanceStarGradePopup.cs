@@ -11,23 +11,16 @@ public class AdvanceStarGradePopup : PopupBase
 
     Action Confirm = null;
 
-    protected override void Initialize()
+    protected override bool Initialize(object[] data)
     {
-        base.Initialize();
-    }
-
-    public override void ShowPopup(params object[] data)
-    {
-        base.ShowPopup(data);
-
-        if (data.Length != 2 || data[0] is not Action || data[1] is not List<StatusItemData>)
+        if (data.Length != 2 || data[0] is not Action || data[1] is not UserHeroData)
         {
-            Debug.Assert(false, $"잘못된 ProfilePopup 팝업 호출!!");
-            HidePopup();
-            return;
+            return false;
         }
 
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()

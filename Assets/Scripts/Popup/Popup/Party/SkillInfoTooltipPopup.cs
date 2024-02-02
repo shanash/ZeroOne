@@ -8,12 +8,11 @@ public class SkillInfoTooltipPopup : PopupBase
 
     Player_Character_Skill_Data Skill_Data;
     Vector2 Target_Position = Vector2.zero;
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         if (data.Length != 2)
         {
-            HidePopup();
-            return;
+            return false;
         }
 
         int skill_id = (int)data[0];
@@ -23,9 +22,9 @@ public class SkillInfoTooltipPopup : PopupBase
             Skill_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillData(skill_id);
         }
 
-        base.ShowPopup(data);
-
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()

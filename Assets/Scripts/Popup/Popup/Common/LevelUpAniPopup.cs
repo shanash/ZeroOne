@@ -10,14 +10,13 @@ public class LevelUpAniPopup : PopupBase
 
     [SerializeField, Tooltip("Animator")]
     Animator Anim;
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         Anim_Event?.SetAnimationEventCallback(AnimationCompleteCallback);
-
-        base.ShowPopup(data);
         Anim.Play("LevelUpAni");
-    }
 
+        return true;
+    }
 
     void AnimationCompleteCallback(string key)
     {

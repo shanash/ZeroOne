@@ -182,29 +182,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         return null;
     }
 
-    //[Obsolete]
-    ///// <summary>
-    ///// 발사체 타입에 따른 타겟의 Transform 반환
-    ///// </summary>
-    ///// <param name="ptype"></param>
-    ///// <returns></returns>
-    //public Transform GetBodyPositionByProjectileType(PROJECTILE_TYPE ptype)
-    //{
-    //    switch (ptype)
-    //    {
-    //        case PROJECTILE_TYPE.THROW_FOOT:
-    //        case PROJECTILE_TYPE.INSTANT_TARGET_FOOT:
-    //            return GetBodyTypeTransform(SD_BODY_TYPE.FOOT);
-    //        case PROJECTILE_TYPE.THROW_BODY:
-    //        case PROJECTILE_TYPE.INSTANT_TARGET_BODY:
-    //            return GetBodyTypeTransform(SD_BODY_TYPE.BODY);
-    //        case PROJECTILE_TYPE.THROW_HEAD:
-    //        case PROJECTILE_TYPE.INSTANT_TARGET_HEAD:
-    //            return GetBodyTypeTransform(SD_BODY_TYPE.HEAD);
-    //    }
-    //    return null;
-    //}
-
+  
     /// <summary>
     /// 이펙트 발현 타겟 위치<br/>
     /// 투사체 : 이펙트의 도착 위치<br/>
@@ -363,6 +341,39 @@ public partial class HeroBase_V2 : UnitBase_V2
         double evation_rate = 1 / (1 + 100 / (Evasion - caster_accuracy));
 
         return evation_rate * 1000000;
+    }
+
+    /// <summary>
+    /// 물리/마법 공격력 중 낮은 포인트 반환
+    /// </summary>
+    /// <returns></returns>
+    public double GetLowAttackPoint()
+    {
+        return Physics_Attack < Magic_Attack ? Physics_Attack : Magic_Attack;
+    }
+    /// <summary>
+    /// 물리/마법 공격력 중 높은 포인트 반환
+    /// </summary>
+    /// <returns></returns>
+    public double GetHighAttackPoint()
+    {
+        return Physics_Attack > Magic_Attack ? Physics_Attack : Magic_Attack;
+    }
+    /// <summary>
+    /// 물리/마법 방어력 중 낮은 포인트 반환
+    /// </summary>
+    /// <returns></returns>
+    public double GetLowDefensePoint()
+    {
+        return Physics_Defense < Magic_Defense ? Physics_Defense : Magic_Defense;
+    }
+    /// <summary>
+    /// 물리/마법 방어력 중 높은 포인트 반환
+    /// </summary>
+    /// <returns></returns>
+    public double GetHighDefensePoint()
+    {
+        return Physics_Defense > Magic_Defense ? Physics_Defense : Magic_Defense;
     }
 
     /// <summary>

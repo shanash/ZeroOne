@@ -34,21 +34,20 @@ public class SelectStageUI : PopupBase
     int Zone_ID;
     Zone_Data Zone;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(params object[] data)
     {
         if (data.Length != 1)
         {
-            HidePopup();
-            return;
+            return false;
         }
 
         Zone_ID = (int)data[0];
         Zone = MasterDataManager.Instance.Get_ZoneData(Zone_ID);
 
-        base.ShowPopup(data);
-
         FixedUpdatePopup();
         UpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()

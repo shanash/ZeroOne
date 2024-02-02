@@ -28,12 +28,11 @@ public class PCDeckSettingUI : PopupBase
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     int Dungeon_ID;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(params object[] data)
     {
         if (data.Length != 2)
         {
-            HidePopup();
-            return;
+            return false;
         }
 
         Game_Type = (GAME_TYPE)data[0];
@@ -41,14 +40,13 @@ public class PCDeckSettingUI : PopupBase
 
         Deck_Mng.SetGameType(Game_Type);
 
-        base.ShowPopup(data);
-
         //  애니메이션을 사용하지 않을 경우 여기서 프리팹 체크
         if (!IsUseAnimation())
         {
             CheckPopupUsePrefabs();
         }
 
+        return true;
     }
 
     /// <summary>

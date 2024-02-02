@@ -11,24 +11,22 @@ public class NotiTimerPopup : PopupBase
 
     bool Show_Message;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        if (data.Length < 2)
+        if (data.Length != 2)
         {
-            Duration = 3f;
+            return false;
         }
-        else
-        {
-            Duration = (float)data[0];
-        }
+
         Show_Message = true;
+        Duration = (float)data[0];
         string msg = (string)data[1];
         Message_Text.text = msg;
 
         SetEnableEscKeyExit(false);
-        base.ShowPopup(data);
-    }
 
+        return true;
+    }
 
     protected override void OnUpdatePopup()
     {

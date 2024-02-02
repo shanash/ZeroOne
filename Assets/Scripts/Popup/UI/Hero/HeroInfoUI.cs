@@ -54,32 +54,26 @@ public class HeroInfoUI : PopupBase
     int Current_Hero_Data_Index;
     BattlePcData User_Hero_Battle_Data;
 
-    protected override void Initialize()
+    void Reset()
     {
-        base.Initialize();
-
         User_Hero_Datas = null;
         Current_Hero_Data_Index = -1;
-
         User_Hero_Battle_Data = null;
-        Hero_Info_Box.SetHeroData(null);
     }
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         if (data.Length != 2 || data[0] is not List<UserHeroData> || data[1] is not int)
         {
-            Debug.Assert(false, $"잘못된 HeroInfoUI 팝업 호출!!");
-            HidePopup();
-            return;
+            return false;
         }
 
         User_Hero_Datas = data[0] as List<UserHeroData>;
         Current_Hero_Data_Index = (int)data[1];
 
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()
@@ -133,7 +127,7 @@ public class HeroInfoUI : PopupBase
     {
         base.Spawned();
 
-        Initialize();
+        Reset();
     }
 
     public void OnClickProfileButton()
@@ -156,7 +150,6 @@ public class HeroInfoUI : PopupBase
 
     public void OnClickBack()
     {
-        Initialize();
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
     }

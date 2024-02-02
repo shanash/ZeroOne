@@ -35,11 +35,12 @@ public class GameResultLosePopup : PopupBase
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
 
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
         SetEnableEscKeyExit(false);
         InitAssets();
+
+        return true;
     }
 
     void InitAssets()

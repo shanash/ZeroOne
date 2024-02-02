@@ -24,12 +24,12 @@ public class FilterPopup : PopupBase
 
     CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()

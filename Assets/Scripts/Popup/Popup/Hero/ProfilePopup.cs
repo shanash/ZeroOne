@@ -41,26 +41,23 @@ public class ProfilePopup : PopupBase
 
     Player_Character_Data Data;
 
-    protected override void Initialize()
+    void Reset()
     {
-        base.Initialize();
         Data = null;
     }
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         if (data.Length != 1 || data[0] is not Player_Character_Data)
         {
-            Debug.Assert(false, $"잘못된 ProfilePopup 팝업 호출!!");
-            HidePopup();
-            return;
+            return false;
         }
 
         Data = data[0] as Player_Character_Data;
 
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()
@@ -98,5 +95,6 @@ public class ProfilePopup : PopupBase
         {
             Ease_Base.transform.localScale = new Vector2(0f, 0f);
         }
+        Reset();
     }
 }

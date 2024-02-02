@@ -21,7 +21,7 @@ namespace FluffyDuck.UI
         public System.Action<PopupBase, object> Action;
     }
 
-    public class PopupBase : MonoBehaviour, IPoolableComponent
+    public abstract class PopupBase : MonoBehaviour, IPoolableComponent
     {
         [SerializeField, Tooltip("팝업 박스. 해당 박스를 On/Off 하여 팝업을 보여주거나 감춘다.")]
         protected RectTransform Box_Rect = null;
@@ -56,10 +56,7 @@ namespace FluffyDuck.UI
 
         protected bool Is_Enable_Esc_Key_Exit;
 
-        protected virtual void Initialize()
-        {
-
-        }
+        protected virtual bool Initialize(object[] data) => true;
 
         public void SetEnableEscKeyExit(bool enable)
         {
@@ -106,9 +103,14 @@ namespace FluffyDuck.UI
         /// 팝업 등장
         /// </summary>
         /// <param name="data"></param>
-        public virtual void ShowPopup(params object[] data)
+        public void ShowPopup(params object[] data)
         {
-            Initialize();
+            if (!Initialize(data))
+            {
+                Debug.Assert(false, $"잘못된 {this.GetType().Name} 팝업 호출!!");
+                Hide();
+                return;
+            }
             Is_Enable_Key_Event = true;
             Box_Rect?.gameObject.SetActive(true);
             Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);

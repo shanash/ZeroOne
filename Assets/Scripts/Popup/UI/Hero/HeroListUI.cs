@@ -23,20 +23,19 @@ public class HeroListUI : PopupBase
     CHARACTER_SORT Filter_Type;
     bool Is_Ascended_Sort;
 
-    protected override void Initialize()
+    void Reset()
     {
-        base.Initialize();
         User_Hero_Datas = null;
         Filter_Type = CHARACTER_SORT.NAME;
         Is_Ascended_Sort = true;
     }
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()
@@ -136,7 +135,7 @@ public class HeroListUI : PopupBase
     public override void Spawned()
     {
         base.Spawned();
-        Initialize();
+        Reset();
     }
 
     /// <summary>

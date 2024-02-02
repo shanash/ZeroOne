@@ -4,11 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class BattlePausePopup : PopupBase
 {
-    public override void ShowPopup(params object[] data)
-    {
-        base.ShowPopup(data);
-    }
-
     /// <summary>
     /// 이어 하기
     /// </summary>

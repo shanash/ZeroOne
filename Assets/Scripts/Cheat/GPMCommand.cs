@@ -73,6 +73,7 @@ public class GPMCommand : MonoBehaviour
         string key = cheat_key.ToLower();
         Debug.Log($"{key}");
 
+        var gd = GameData.Instance;
         string[] keys = key.Split(" ");
         if (keys[0].Equals("gold"))
         {
@@ -81,7 +82,8 @@ public class GPMCommand : MonoBehaviour
                 double gold = 0;
                 if (double.TryParse(keys[1], out gold))
                 {
-                    GameData.Instance.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
+                    gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
+                    gd.Save();
                 }
             }
         }
@@ -92,7 +94,26 @@ public class GPMCommand : MonoBehaviour
                 double dia = 0;
                 if (double.TryParse(keys[1], out dia))
                 {
-                    GameData.Instance.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
+                    gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
+                    gd.Save();
+                }
+            }
+        }
+        else if (keys[0].Equals("cpiece"))
+        {
+            //  using => cpiece character_id count
+            if (keys.Length == 3)
+            {
+                int pc_id = 0;
+                double count = 0;
+                if (int.TryParse(keys[1], out pc_id) && double.TryParse(keys[2], out count))
+                {
+                    var pc_data = MasterDataManager.Instance.Get_PlayerCharacterData(pc_id);
+                    if (pc_data != null)
+                    {
+                        gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
+                        gd.Save();
+                    }
                 }
             }
         }

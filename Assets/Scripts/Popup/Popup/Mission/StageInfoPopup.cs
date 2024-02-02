@@ -51,20 +51,18 @@ public class StageInfoPopup : PopupBase
     bool Is_Animation_End;
     bool Is_Load_Complete;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         if (data.Length != 1)
         {
-            HidePopup();
-            return;
+            return false;
         }
 
         Stage = (Stage_Data)data[0];
-
         User_Data = GameData.Instance.GetUserStoryStageDataManager().FindUserStoryStageData(Stage.stage_id);
-
-        base.ShowPopup(data);
         InitAssets();
+
+        return true;
     }
 
     void InitAssets()

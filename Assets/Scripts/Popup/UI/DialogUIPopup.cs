@@ -8,9 +8,4 @@ public class DialogUIPopup : PopupBase
     TMP_Text Talker_Text;
     [SerializeField, Tooltip("Message")]
     TMP_Text Message_Text;
-
-    public override void ShowPopup(params object[] data)
-    {
-        base.ShowPopup(data);
-    }
 }

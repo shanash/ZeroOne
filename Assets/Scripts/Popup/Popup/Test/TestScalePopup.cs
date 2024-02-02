@@ -14,13 +14,13 @@ public class TestScalePopup : PopupBase
 
     string Prefab_Name = "Assets/AssetResources/Prefabs/Popup/Popup/TestListNode";
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         List<string> list = new List<string>();
         list.Add(Prefab_Name);
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(list, null);
+
+        return true;
     }
 
     protected override void ShowPopupAniEndCallback()

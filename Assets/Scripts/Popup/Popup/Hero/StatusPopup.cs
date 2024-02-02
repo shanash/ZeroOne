@@ -13,29 +13,26 @@ public class StatusPopup : PopupBase
     [SerializeField, Tooltip("Status List View")]
     InfiniteScroll Status_LIst_View;
 
-    List<StatusItemData> Datas;
+    List<StatusItemData> Datas = null;
 
-    protected override void Initialize()
+    void Reset()
     {
-        base.Initialize();
         Datas = null;
     }
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
-        base.ShowPopup(data);
-
         if (data.Length != 2 || data[0] is not string || data[1] is not List<StatusItemData>)
         {
-            Debug.Assert(false, $"잘못된 ProfilePopup 팝업 호출!!");
-            HidePopup();
-            return;
+            return false;
         }
 
         Title.text = data[0] as string;
         Datas = data[1] as List<StatusItemData>;
 
         FixedUpdatePopup();
+
+        return true;
     }
 
     protected override void FixedUpdatePopup()

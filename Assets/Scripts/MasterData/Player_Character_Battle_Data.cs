@@ -82,7 +82,31 @@ public class Player_Character_Battle_Data : System.IDisposable
 	double _m_defend;
 
 	///	<summary>
-	///	회복량
+	///	물리 크리티컬 확률
+	///	</summary>
+	public double p_cri_Inc => _p_cri_Inc;
+	double _p_cri_Inc;
+
+	///	<summary>
+	///	마법 크리티컬 확률
+	///	</summary>
+	public double m_cri_Inc => _m_cri_Inc;
+	double _m_cri_Inc;
+
+	///	<summary>
+	///	물리 크리티컬 추가 대미지
+	///	</summary>
+	public double p_cri_add => _p_cri_add;
+	double _p_cri_add;
+
+	///	<summary>
+	///	마법 크리티컬 추가 대미지
+	///	</summary>
+	public double m_cri_add => _m_cri_add;
+	double _m_cri_add;
+
+	///	<summary>
+	///	타격 시 회복량
 	///	</summary>
 	public double attack_recovery => _attack_recovery;
 	double _attack_recovery;
@@ -98,6 +122,18 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	</summary>
 	public double accuracy => _accuracy;
 	double _accuracy;
+
+	///	<summary>
+	///	힐량
+	///	</summary>
+	public double heal => _heal;
+	double _heal;
+
+	///	<summary>
+	///	강인함
+	///	</summary>
+	public double resist  => _resist ;
+	double _resist ;
 
 	///	<summary>
 	///	자동 회복
@@ -134,9 +170,15 @@ public class Player_Character_Battle_Data : System.IDisposable
 		_m_attack = raw_data.m_attack;
 		_defend = raw_data.defend;
 		_m_defend = raw_data.m_defend;
+		_p_cri_Inc = raw_data.p_cri_Inc;
+		_m_cri_Inc = raw_data.m_cri_Inc;
+		_p_cri_add = raw_data.p_cri_add;
+		_m_cri_add = raw_data.m_cri_add;
 		_attack_recovery = raw_data.attack_recovery;
 		_evasion = raw_data.evasion;
 		_accuracy = raw_data.accuracy;
+		_heal = raw_data.heal;
+		_resist  = raw_data.resist ;
 		_auto_recovery = raw_data.auto_recovery;
 		_move_speed = raw_data.move_speed;
 		_attack_script = raw_data.attack_script;
@@ -183,9 +225,15 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[m_attack] = <color=yellow>{0}</color>", m_attack).AppendLine();
 		sb.AppendFormat("[defend] = <color=yellow>{0}</color>", defend).AppendLine();
 		sb.AppendFormat("[m_defend] = <color=yellow>{0}</color>", m_defend).AppendLine();
+		sb.AppendFormat("[p_cri_Inc] = <color=yellow>{0}</color>", p_cri_Inc).AppendLine();
+		sb.AppendFormat("[m_cri_Inc] = <color=yellow>{0}</color>", m_cri_Inc).AppendLine();
+		sb.AppendFormat("[p_cri_add] = <color=yellow>{0}</color>", p_cri_add).AppendLine();
+		sb.AppendFormat("[m_cri_add] = <color=yellow>{0}</color>", m_cri_add).AppendLine();
 		sb.AppendFormat("[attack_recovery] = <color=yellow>{0}</color>", attack_recovery).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
+		sb.AppendFormat("[heal] = <color=yellow>{0}</color>", heal).AppendLine();
+		sb.AppendFormat("[resist ] = <color=yellow>{0}</color>", resist ).AppendLine();
 		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();

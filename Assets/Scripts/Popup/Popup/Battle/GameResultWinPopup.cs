@@ -108,19 +108,20 @@ public class GameResultWinPopup : PopupBase
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
 
-    public override void ShowPopup(params object[] data)
+    protected override bool Initialize(object[] data)
     {
         if (data.Length != 2)
         {
-            HidePopup();
-            return;
+            return false;
         }
+
         Battle_Mng = (BattleManager_V2)data[0];
         Dungeon = (BattleDungeonData)data[1];
 
-        base.ShowPopup(data);
         SetEnableEscKeyExit(false);
         InitAssets();
+
+        return true;
     }
 
     void InitAssets()
