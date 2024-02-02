@@ -49,20 +49,20 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         }
 
         [MenuItem("FluffyDuck/Skill/Preview _&9", false, 11)]
-        static void SkillPreviewOpen()
+        static void Skill_PreviewOpen()
         {
             SkillPreview.ShowWindow();
         }
 
         [MenuItem("FluffyDuck/Skill/Editor _&0", false, 12)]
-        static void SkillEditorOpen()
+        static void Skill_EditorOpen()
         {
             SkillEditor.ShowWindow();
         }
 
 
         [MenuItem("FluffyDuck/Move Scene/Title _&1", false, 31)]
-        static void TitleSceneOpen()
+        static void MoveScene_Title()
         {
             string go_scene = "title";
             string scene_name = EditorSceneManager.GetActiveScene().name;
@@ -74,7 +74,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         }
 
         [MenuItem("FluffyDuck/Move Scene/Lobby _&2", false, 32)]
-        static void LobbySceneOpen()
+        static void MoveScene_Lobby()
         {
             string go_scene = "home";
             string scene_name = EditorSceneManager.GetActiveScene().name;
@@ -85,7 +85,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
         [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
-        static void BattleSceneOpen()
+        static void MoveScene_Battle()
         {
             string go_scene = "battlev2";
             string scene_name = EditorSceneManager.GetActiveScene().name;
@@ -97,7 +97,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         }
 
         [MenuItem("FluffyDuck/Move Scene/Memorial _&4", false, 34)]
-        static void MemorialSceneOpen()
+        static void MoveScene_Memorial()
         {
             string go_scene = "memorial";
             string scene_name = EditorSceneManager.GetActiveScene().name;
@@ -108,14 +108,34 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
         }
 
-        [MenuItem("FluffyDuck/Clear Persistent Data _%#c", false, 50)]
-        static void ClearUserData()
+        [MenuItem("FluffyDuck/Persistent/Open Folder _%#o", false, 50)]
+        static void Persistent_OpenFolder()
         {
-            string persistent_folder_path = $"{UnityEngine.Application.persistentDataPath}";
+            string folder_path = $"{UnityEngine.Application.persistentDataPath}";
 
+            if (System.IO.Directory.Exists(folder_path))
+            {
+                if (System.Environment.OSVersion.Platform == System.PlatformID.Win32NT)
+                {
+                    Process.Start("explorer.exe", folder_path.Replace('/', '\\'));
+                }
+                else if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
+                {
+                    Process.Start("open", folder_path);
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Folder does not exist: " + folder_path);
+            }
+        }
+
+        [MenuItem("FluffyDuck/Persistent/Clear Data _%#d", false, 51)]
+        static void Persistent_ClearData()
+        {
             try
             {
-                string[] files = System.IO.Directory.GetFiles(persistent_folder_path);
+                string[] files = System.IO.Directory.GetFiles(UnityEngine.Application.persistentDataPath);
 
                 foreach (string file in files)
                 {
