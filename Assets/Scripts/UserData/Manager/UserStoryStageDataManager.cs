@@ -179,6 +179,16 @@ public class UserStoryStageDataManager : ManagerBase
         AddUserStoryStageData(next_stage.stage_id);
     }
 
+    /// <summary>
+    /// 오픈되어 있는 마지막 스테이지 정보 반환
+    /// </summary>
+    /// <returns></returns>
+    public UserStoryStageData GetLastOpenStage()
+    {
+        User_Story_Stage_Data.Sort((a, b) => a.Stage_ID.CompareTo(b.Stage_ID));
+        return User_Story_Stage_Data.Last();
+    }
+
 
     public override JsonData Serialized()
     {

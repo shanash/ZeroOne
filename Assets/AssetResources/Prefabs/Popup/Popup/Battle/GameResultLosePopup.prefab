@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 3604812788069948400}
   - component: {fileID: 8156509598315451906}
   m_Layer: 5
-  m_Name: PlayerLevel
+  m_Name: PlayerLevel_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -898,6 +898,13 @@ MonoBehaviour:
   Lose_Text_Ease: {fileID: 7968870918373092509}
   Player_Info_Ease_Alpha: {fileID: 4734814059178259333}
   Player_Info_Ease_Slide: {fileID: 7493126379242856972}
+  Player_Lv_Title: {fileID: 3604812788069948400}
+  Player_Lv: {fileID: 510161822233524194}
+  Player_Exp_Gauge: {fileID: 8353037511957334266}
+  Player_Exp_Title: {fileID: 894542806288993810}
+  Player_Exp: {fileID: 4550851100934156827}
+  Stage_Reward_Icon: {fileID: 7368727232068495677}
+  Stage_Reward_Gold_Count: {fileID: 8008668462059148192}
   Character_Info_Ease_Alpha: {fileID: 1740830489790580710}
   Character_Info_Ease_Slide: {fileID: 7139459726610837043}
   Character_Info_Container: {fileID: 1108806662135691369}
@@ -968,7 +975,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: eeda62f054ea88d49b144004131ad4bf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1350,7 +1357,7 @@ GameObject:
   - component: {fileID: 8008668462059148192}
   - component: {fileID: 6904918216279609300}
   m_Layer: 5
-  m_Name: RewardText
+  m_Name: Reward_Count
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1498,7 +1505,7 @@ GameObject:
   - component: {fileID: 4184271980979353869}
   - component: {fileID: 8353037511957334266}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: ExpGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1587,7 +1594,7 @@ GameObject:
   - component: {fileID: 6899522725374146341}
   - component: {fileID: 894542806288993810}
   m_Layer: 5
-  m_Name: EXP
+  m_Name: EXP_Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

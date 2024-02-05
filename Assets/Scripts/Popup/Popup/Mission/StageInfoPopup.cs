@@ -2,7 +2,6 @@ using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +38,11 @@ public class StageInfoPopup : PopupBase
 
     [SerializeField, Tooltip("Repeat Reward List View")]
     ScrollRect Repeat_Reward_List_View;
+
+    [SerializeField, Tooltip("Current Stamina")]
+    TMP_Text Current_Stamina;
+    [SerializeField, Tooltip("Used Stamina")]   //  2B8FFF
+    TMP_Text Used_Stamina;
 
 
     Stage_Data Stage;
@@ -204,6 +208,22 @@ public class StageInfoPopup : PopupBase
             Used_Reward_Item_List.Add(reward_item);
         }
 
+        //  stamina
+        int need_stamina = Stage.use_stamina;
+        var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+
+        Current_Stamina.text = stamina_item.GetCount().ToString("N0");
+
+        int used_stamina_count = stamina_item.GetCount() - need_stamina;
+
+        if (stamina_item.IsUsableChargeItemCount(need_stamina))
+        {
+            Used_Stamina.text = ZString.Format("<color=#2B8FFF>{0:N0}</color>", used_stamina_count);
+        }
+        else
+        {
+            Used_Stamina.text = ZString.Format("<color=#ff0000>{0:N0}</color>", used_stamina_count);
+        }
 
         if (User_Data != null)
         {
