@@ -307,10 +307,6 @@ public class StageInfoPopup : PopupBase
     {
         base.Spawned();
 
-        if (Ease_Base != null)
-        {
-            Ease_Base.transform.localScale = new Vector2(0f, 0f);
-        }
         Is_Animation_End = false;
         Is_Load_Complete = false;
     }
@@ -323,7 +319,5 @@ public class StageInfoPopup : PopupBase
 
         ClearNpcList();
         ClearRewardItemList();
-
-
     }
 }

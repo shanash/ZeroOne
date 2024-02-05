@@ -61,15 +61,4 @@ public class FilterPopup : PopupBase
         }
         HidePopup();
     }
-
-    public override void Spawned()
-    {
-        base.Spawned();
-
-        if (Ease_Base != null)
-        {
-            Ease_Base.transform.localScale = new Vector2(0f, 0f);
-        }
-
-    }
 }

@@ -254,6 +254,13 @@ namespace FluffyDuck.UI
             Is_Enable_Key_Event = true;
             Popup_Hide_End_Callback = null;
             Popup_Hide_Complete_Callback = null;
+
+            // 스케일은 등장시 최소에서 커지는 애니메이션이니
+            // 등장시 스케일을 0으로 잡아줍시다
+            if (Ease_Base != null && Ease_Base is UIEaseScale)
+            {
+                Ease_Base.transform.localScale = new Vector2(0f, 0f);
+            }
         }
 
         public virtual void Despawned()

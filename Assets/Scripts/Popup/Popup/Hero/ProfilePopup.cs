@@ -90,11 +90,6 @@ public class ProfilePopup : PopupBase
     public override void Spawned()
     {
         base.Spawned();
-
-        if (Ease_Base != null)
-        {
-            Ease_Base.transform.localScale = new Vector2(0f, 0f);
-        }
         Reset();
     }
 }

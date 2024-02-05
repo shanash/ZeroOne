@@ -282,11 +282,6 @@ public class PartySettingPopup : PopupBase
     public override void Spawned()
     {
         base.Spawned();
-
-        if (Ease_Base != null)
-        {
-            Ease_Base.transform.localScale = new Vector2(0f, 0f);
-        }
         Selected_Info_Box.ShowInfoBox(false);
     }
     public override void Despawned()
