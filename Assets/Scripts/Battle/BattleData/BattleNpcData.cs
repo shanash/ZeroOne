@@ -64,7 +64,7 @@ public class BattleNpcData : BattleUnitData
         Stat_Data = MasterDataManager.Instance.Get_NpcLevelStatData(stat_id);
     }
 
-
+    #region Stats
     public override float GetMoveSpeed()
     {
         if (Battle_Data != null)
@@ -73,7 +73,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetAttackDamagePoint()
+    public override double GetPhysicsAttackPoint()
     {
         if (Battle_Data != null)
         {
@@ -81,8 +81,12 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+    public override double GetMagicAttackPoint()
+    {
+        return 0;
+    }
 
-    public override double GetAttackDefensePoint()
+    public override double GetPhysicsDefensePoint()
     {
         if (Battle_Data != null)
         {
@@ -90,12 +94,22 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+    public override double GetMagicDefensePoint()
+    {
+        return 0;
+    }
+    
     public override double GetLifePoint()
     {
         if (Battle_Data != null)
         {
             return Battle_Data.hp;
         }
+        return 0;
+    }
+
+    public override double GetAttackRecovery()
+    {
         return 0;
     }
 
@@ -115,6 +129,38 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
 
+    public override double GetVampirePoint()
+    {
+        return 0;
+    }
+    public override double GetPhysicsCriticalChance()
+    {
+        return 0;
+    }
+    public override double GetPhysicsCriticalPower()
+    {
+        return 0;
+    }
+    public override double GetMagicCriticalChance()
+    {
+        return 0;
+    }
+    public override double GetMagicCriticalPower()
+    {
+        return 0;
+    }
+    public override double GetResistPoint()
+    {
+        return 0;
+    }
+    public override double GetLifeRecoveryInc()
+    {
+        return 0;
+    }
+    public override double GetWeight()
+    {
+        return 0;
+    }
 
     public override float GetApproachDistance()
     {
@@ -124,6 +170,8 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
+    #endregion
+
 
     public override int[] GetSkillPattern()
     {

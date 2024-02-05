@@ -12,14 +12,14 @@ public class Raw_Player_Character_Battle_Data : System.IDisposable
 	public int passive_skill_group_id {get; set;}
 	public int special_skill_group_id {get; set;}
 	public double hp {get; set;}
-	public double attack {get; set;}
+	public double p_attack {get; set;}
 	public double m_attack {get; set;}
-	public double defend {get; set;}
+	public double p_defend {get; set;}
 	public double m_defend {get; set;}
-	public double p_cri_Inc {get; set;}
-	public double m_cri_Inc {get; set;}
-	public double p_cri_add {get; set;}
-	public double m_cri_add {get; set;}
+	public double p_cri_rate {get; set;}
+	public double m_cri_rate {get; set;}
+	public double p_cri_power {get; set;}
+	public double m_cri_power {get; set;}
 	public double attack_recovery {get; set;}
 	public double evasion {get; set;}
 	public double accuracy {get; set;}

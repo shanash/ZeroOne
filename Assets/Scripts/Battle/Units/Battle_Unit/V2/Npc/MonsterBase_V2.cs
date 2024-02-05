@@ -45,11 +45,11 @@ public class MonsterBase_V2 : HeroBase_V2
 
     protected override void CalcAttackPoint()
     {
-        Physics_Attack = Unit_Data.GetAttackDamagePoint();
+        Physics_Attack = Unit_Data.GetPhysicsAttackPoint();
     }
     protected override void CalcDefensePoint()
     {
-        Physics_Defense = Unit_Data.GetAttackDefensePoint();
+        Physics_Defense = Unit_Data.GetPhysicsDefensePoint();
     }
     protected override void CalcMoveSpeed()
     {

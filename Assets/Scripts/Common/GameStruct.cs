@@ -4,17 +4,17 @@ using System.Collections.Generic;
 /// 본 파일은 게임내에 다양하게 사용되는 데이터 타입의 구조체 또는 클래스를 선언하기 위한 파일.
 public struct BATTLE_SEND_DATA
 {
-    public HeroBase_V2 Caster;
-    public List<HeroBase_V2> Targets;
-    public BattleSkillData Skill;
-    public BattleOnetimeSkillData Onetime;
-    public BattleDurationSkillData Duration;
-    public int Effect_Weight_Index;
+    public HeroBase_V2 Caster;                      //  시전자
+    public List<HeroBase_V2> Targets;               //  대상(타겟)
+    public BattleSkillData Skill;                   //  사용 스킬
+    public BattleOnetimeSkillData Onetime;          //  일회성 스킬
+    public BattleDurationSkillData Duration;        //  지속성 스킬
+    public int Effect_Weight_Index;                 //  스킬 효과 비중 인덱스
 
     public DURATION_EFFECT_TYPE Duration_Effect_Type;
 
     public double Damage;
-    public bool Is_Critical;
+    public bool Is_Critical;                        //  치명타 확률
 
 
     public void Reset()

@@ -1,4 +1,6 @@
 // TODO: 팩토리로 생성 가능할듯
+using DocumentFormat.OpenXml.Drawing.Charts;
+
 public abstract class BattleUnitData : BattleDataBase
 {
     protected abstract int Level { get; set; }
@@ -75,8 +77,8 @@ public abstract class BattleUnitData : BattleDataBase
     {
         return GameCalc.GetCombatPoint(
             GetLifePoint(),
-            GetAttackDamagePoint(),
-            GetAttackDefensePoint(),
+            GetPhysicsAttackPoint(),
+            GetPhysicsDefensePoint(),
             GetAutoRecoveryLife(),
             GetEvasionPoint(),
             GetAttackRecovery(),
@@ -85,18 +87,22 @@ public abstract class BattleUnitData : BattleDataBase
     }
 
     /// <summary>
-    /// 공격 포인트
+    /// 물리 공격 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetAttackDamagePoint();
+    public abstract double GetPhysicsAttackPoint();
 
-    public virtual double GetMagicDamagePoint() { return 0; }
+    /// <summary>
+    /// 마법 공격 포인트
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetMagicAttackPoint() { return 0; }
 
     /// <summary>
     /// 방어력 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetAttackDefensePoint();
+    public abstract double GetPhysicsDefensePoint();
     public virtual double GetMagicDefensePoint() {  return 0; }
 
     /// <summary>
@@ -127,17 +133,50 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual double GetAutoRecoveryLife() { return 0; }
     /// <summary>
-    /// 치명타 확률<br/>
+    /// 물리 치명타 확률<br/>
     /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
     /// </summary>
     /// <returns></returns>
-    public virtual double GetCriticalChance() {  return 0; }
+    public virtual double GetPhysicsCriticalChance() {  return 0; }
     /// <summary>
-    /// 치명타 데미지(파워)<br/>
-    /// 치명타 데미지 = 최종 데미지 * 2(or 크리티컬 데미지에 영향을 주는 스탯 값)
+    /// 물리 치명타 데미지(파워)<br/>
+    /// 치명타 데미지 = 최종 데미지 * 2(or 물리 크리티컬 데미지에 영향을 주는 스탯 값)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetCriticalPower() { return 0; }
+    public virtual double GetPhysicsCriticalPower() { return 0; }
+    /// <summary>
+    /// 마법 치명타 확률<br/>
+    /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetMagicCriticalChance() { return 0; }
+    /// <summary>
+    /// 마법 치명타 데미지(파워)<br/>
+    /// 치명타 데미지 = 최종 데미지 * 2(or 마법 크리티컬 데미지에 영향을 주는 스탯 값)
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetMagicCriticalPower() { return 0; }
+
+    /// <summary>
+    /// 강인함(상태이상 저항력)<br/>
+    /// 상태이상 확률 및 상태이상 지속 시간에 영향을 주는 스탯<br/>
+    /// 상태이상 확률 = 상태이상 확률 - (상태이상 확률 * 강인함 / 1000)
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetResistPoint() { return 0; }
+
+    /// <summary>
+    /// 체력 회복량 증가(힐량 증가)
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetLifeRecoveryInc() {  return 0; }
+
+    /// <summary>
+    /// 무게<br/>
+    /// 넉백 및 풀링의 변수로 사용
+    /// </summary>
+    /// <returns></returns>
+    public virtual double GetWeight() { return 0; }
 
     /// <summary>
     /// 이동 속도

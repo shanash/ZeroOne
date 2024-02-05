@@ -72,5 +72,6 @@ namespace ProtocolShared.Proto.Base
         NeedCreateUser = 10001, // 유저를 생성해야 함.
         DuplicationName = 10002, // 유저를 생성해야 함.
         NotFoundItem = 10003, // 아이템을 찾을수 없음.
+
     }
 }

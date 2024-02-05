@@ -42,6 +42,7 @@ public class UserHeroDataManager : ManagerBase
         }
 
         Save();
+        GameData.Instance.GetUserHeroSkillDataManager().Save();
     }
 
     public void GetUserHeroDataList(ref List<UserHeroData> list)
@@ -97,7 +98,19 @@ public class UserHeroDataManager : ManagerBase
 
             //  hero skill data init
             var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
-            skill_mng?.AddUserHeroSkillGroups(hero, hero.GetPlayerCharacterBattleData().skill_pattern);
+            if (skill_mng != null)
+            {
+                var battle_data = hero.GetPlayerCharacterBattleData();
+                int cnt = battle_data.skill_pattern.Length;
+                //  normal skill
+                for (int i = 0; i < cnt; i++)
+                {
+                    skill_mng.AddUserHeroSkillGroups(hero, battle_data.skill_pattern[i]);
+                }
+
+                //  special skill
+                skill_mng.AddUserHeroSkillGroups(hero, battle_data.special_skill_group_id);
+            }
         }
 
         return hero;

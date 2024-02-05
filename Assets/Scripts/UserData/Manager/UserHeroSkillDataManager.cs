@@ -30,29 +30,24 @@ public class UserHeroSkillDataManager : ManagerBase
         return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);   
     }
 
-    public void AddUserHeroSkillGroups(UserHeroData hero, int[] skill_pattern)
+    public void AddUserHeroSkillGroups(UserHeroData hero, int skill_group_id)
     {
         var m = MasterDataManager.Instance;
-        int cnt = skill_pattern.Length;
-        for (int i = 0; i < cnt; i++)
+        if (skill_group_id == 0)
         {
-            int skill_group_id = skill_pattern[i];
-            if (skill_group_id == 0)
-            {
-                continue;
-            }
-            var skill_data = m.Get_PlayerCharacterSkillGroupData(skill_group_id);
-            if (skill_data == null)
-            {
-                continue;
-            }
-            //  기본 공격은 스킬 강화 불가
-            if (skill_data.skill_type == SKILL_TYPE.NORMAL_ATTACK)
-            {
-                continue;
-            }
-            AddUserHeroSkillData(hero, skill_data.pc_skill_group_id);
+            return;
         }
+        var skill_data = m.Get_PlayerCharacterSkillGroupData(skill_group_id);
+        if (skill_data == null)
+        {
+            return;
+        }
+        //  기본 공격은 스킬 강화 불가
+        if (skill_data.skill_type == SKILL_TYPE.NORMAL_ATTACK)
+        {
+            return;
+        }
+        AddUserHeroSkillData(hero, skill_data.pc_skill_group_id);
     }
     
 

@@ -21,8 +21,6 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(UnitRenderTexture))]
 [RequireComponent(typeof(RendererSortingZ))]
 [RequireComponent(typeof(SortingGroup))]
-
-
 public partial class HeroBase_V2 : UnitBase_V2
 {
     [SerializeField, Tooltip("Skeleton")]

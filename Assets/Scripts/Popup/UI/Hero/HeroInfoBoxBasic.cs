@@ -65,8 +65,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
         }
 
         Combat_Number_Text.text = Unit_Data.GetCombatPoint().ToString("N0");
-        Attack_Number_Text.text = Unit_Data.GetAttackDamagePoint().ToString("N0");
-        Defense_Number_Text.text = Unit_Data.GetAttackDefensePoint().ToString("N0");
+        Attack_Number_Text.text = Unit_Data.GetPhysicsAttackPoint().ToString("N0");
+        Defense_Number_Text.text = Unit_Data.GetPhysicsDefensePoint().ToString("N0");
         Life_Number_Text.text = Unit_Data.GetLifePoint().ToString("N0");
 
         Skill_Mng = new BattleSkillManager();
@@ -116,9 +116,9 @@ public class HeroInfoBoxBasic : MonoBehaviour
             {
                 new StatusItemData(ConstString.Hero.COMBAT_POWER, Unit_Data.GetCombatPoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.LIFE_POINT, Unit_Data.GetLifePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Unit_Data.GetAttackDamagePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Unit_Data.GetMagicDamagePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Unit_Data.GetAttackDefensePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Unit_Data.GetPhysicsAttackPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Unit_Data.GetMagicAttackPoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Unit_Data.GetPhysicsDefensePoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Unit_Data.GetMagicDefensePoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Unit_Data.GetApproachDistance().ToString("N0")),
                 new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Unit_Data.GetAttackRecovery().ToPercentage()),

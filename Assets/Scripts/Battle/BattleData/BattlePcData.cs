@@ -1,3 +1,5 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
+
 public class BattlePcData : BattleUnitData
 {
     public UserHeroData User_Data { get; private set; } = null;
@@ -87,6 +89,7 @@ public class BattlePcData : BattleUnitData
         return User_Data;
     }
 
+    #region Stats
     public override float GetMoveSpeed()
     {
         if (Battle_Data != null)
@@ -96,20 +99,20 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetAttackDamagePoint() => GetAttackDamagePoint(Battle_Data);
-    double GetAttackDamagePoint(Player_Character_Battle_Data battle_data)
+    public override double GetPhysicsAttackPoint() => GetPhysicsAttackPoint(Battle_Data);
+    double GetPhysicsAttackPoint(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.attack + (GetLevel() - 1) * up_value;
+            return battle_data.p_attack + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
 
-    public override double GetMagicDamagePoint() => GetMagicDamagePoint(Battle_Data);
-    double GetMagicDamagePoint(Player_Character_Battle_Data battle_data)
+    public override double GetMagicAttackPoint() => GetMagicAttackPoint(Battle_Data);
+    double GetMagicAttackPoint(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
@@ -120,14 +123,14 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetAttackDefensePoint() => GetAttackDefensePoint(Battle_Data);
-    double GetAttackDefensePoint(Player_Character_Battle_Data battle_data)
+    public override double GetPhysicsDefensePoint() => GetPhysicsDefensePoint(Battle_Data);
+    double GetPhysicsDefensePoint(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.defend + (GetLevel() - 1) * up_value;
+            return battle_data.p_defend + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -206,16 +209,71 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetCriticalChance()
+    public override double GetPhysicsCriticalChance() => GetPhysicsCriticalChance(Battle_Data);
+    double GetPhysicsCriticalChance(Player_Character_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.p_cri_rate;
+        }
         return 0;
     }
 
-    public override double GetCriticalPower()
+    public override double GetPhysicsCriticalPower() => GetPhysicsCriticalPower(Battle_Data);
+    double GetPhysicsCriticalPower(Player_Character_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.p_cri_power;
+        }
         return 0;
     }
 
+    public override double GetMagicCriticalChance() => GetMagicCriticalChance(Battle_Data);
+    double GetMagicCriticalChance(Player_Character_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+        {
+            return battle_data.m_cri_rate;
+        }
+        return 0;
+    }
+
+    public override double GetMagicCriticalPower() => GetMagicCriticalPower(Battle_Data);
+    double GetMagicCriticalPower(Player_Character_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+        {
+            return battle_data.m_cri_power;
+        }
+        return 0;
+    }
+
+    public override double GetResistPoint() => GetResistPoint(Battle_Data);
+    double GetResistPoint(Player_Character_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+        {
+            return battle_data.resist;
+        }
+        return 0;
+    }
+
+    public override double GetLifeRecoveryInc() => GetLifeRecoveryInc(Battle_Data);
+    double GetLifeRecoveryInc(Player_Character_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+        {
+            return battle_data.heal;
+        }
+        return 0;
+    }
+
+    public override double GetWeight() => GetWeight(Battle_Data);
+    double GetWeight(Player_Character_Battle_Data battle_data)
+    {
+        return 0;
+    }
 
     public override float GetApproachDistance()
     {
@@ -225,6 +283,9 @@ public class BattlePcData : BattleUnitData
         }
         return 0;
     }
+    #endregion
+
+
 
     public override int[] GetSkillPattern()
     {

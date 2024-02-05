@@ -8,24 +8,42 @@ using System.Threading.Tasks;
 
 namespace ProtocolShared.Proto
 {
-    public class ItemData
+    public class CharacterInfo
     {
         public Guid Id { get; set; }
-        public int ItemId { get; set; }
-        public int Count { get; set; } = 0;
-    }
-    public class InventoryResponse
-    {
-        public List<ItemData> ItemList { get; set; }
+        public int CharacterId { get; set; }
+        public byte Level { get; set; } = 1;
+        public ushort Experience { get; set; } = 0;
+        // 성(별)
+        public byte Star { get; set; } = 1;
+        public ushort Piece { get; set; } = 0;
+        // 스킬
+        public byte UltimateSkillLevel { get; set; } = 1;
+        public uint UltimateSkillExp { get; set; } = 0;
+        public byte ActiveSkillLevel_1 { get; set; } = 1;
+        public uint ActiveSkillExp_1 { get; set; } = 0;
+        public byte ActiveSkillLevel_2 { get; set; } = 1;
+        public uint ActiveSkillExp_2 { get; set; } = 0;
+        public byte PassiveSkillLevel { get; set; } = 1;
+        public uint PassiveSkillExp { get; set; } = 0;
+        // 호감도
+        public byte LoveLevel { get; set; } = 1;
+        public uint LoveExp { get; set; } = 0;
+        // 장비 슬롯
+        public Guid ItemSlot_1 { get; set; }
+        public Guid ItemSlot_2 { get; set; }
+        public Guid ItemSlot_3 { get; set; }
+        public Guid ItemSlot_4 { get; set; }
+        public Guid ItemSlot_5 { get; set; }
+        public Guid ItemSlot_6 { get; set; }
+        // 액세서리 슬롯
+        public Guid AccSlot_1 { get; set; }
+        public Guid AccSlot_2 { get; set; }
+        public Guid AccSlot_3 { get; set; }
     }
 
-    public class CreateItemRequest
+    public class CharacterListResponse
     {
-        public int ItemId { get; set; }
+        public List<CharacterInfo> CharacterList { get; set; }
     }
-
-    public class CreateItemResponse
-    {
-        public ItemData Item { get; set; }
-    } 
 }
