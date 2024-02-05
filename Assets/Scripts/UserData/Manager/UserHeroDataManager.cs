@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class UserHeroDataManager : ManagerBase
 {
-
     List<UserHeroData> User_Hero_Data_List = new List<UserHeroData>();
 
     public UserHeroDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype)
@@ -65,6 +64,7 @@ public class UserHeroDataManager : ManagerBase
     {
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == h.Player_Character_ID && x.Player_Character_Num == h.Player_Character_Num); ;
     }
+
     /// <summary>
     /// 사용자 캐릭터 데이터 찾기(id/num 으로 찾기)
     /// </summary>
@@ -75,6 +75,7 @@ public class UserHeroDataManager : ManagerBase
     {
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
+
     /// <summary>
     /// 사용자 캐릭터 데이터 가져오기
     /// </summary>
@@ -171,7 +172,6 @@ public class UserHeroDataManager : ManagerBase
 
         return true;
     }
-
 
 
     //-------------------------------------------------------------------------

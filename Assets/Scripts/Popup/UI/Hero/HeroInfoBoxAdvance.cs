@@ -1,4 +1,6 @@
+using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -131,7 +133,28 @@ public class HeroInfoBoxAdvance : MonoBehaviour
     /// </summary>
     public void OnClickAdvanceBtn()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/AdvanceStarGradePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        {
+            popup.ShowPopup(Battle_PC_Data);
+            popup.AddClosedCallbackDelegate(OnConfirmAdvance);
+        });
+    }
 
+    public void OnConfirmAdvance(params object[] data)
+    {
+        if (ERROR_CODE.SUCCESS != Battle_PC_Data.AdvanceStarGrade())
+        {
+            Debug.Assert(false, "성급진화 실패???");
+            return;
+        }
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        {
+            popup.ShowPopup();
+        });
+
+        Refresh();
     }
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)

@@ -13,10 +13,7 @@ public class UserHeroData : UserDataBase
     /// 캐릭터 아이디
     /// </summary>
     SecureVar<int> Player_Character_ID = null;
-    /// <summary>
-    /// 캐릭터 고유 번호(서버측에서 발급)
-    /// </summary>
-    public int Player_Character_Num { get; protected set; } = 0;
+
     /// <summary>
     /// 레벨
     /// </summary>
@@ -40,16 +37,19 @@ public class UserHeroData : UserDataBase
     /// </summary>
     SecureVar<int> Star_Grade = null;
 
-    public int Lobby_Choice_Num { get; protected set; } = 0;
-
-    public bool Is_Choice_Lobby { get; protected set; } = false;
-
-    public Player_Character_Data Hero_Data { get; private set; } = null;
-    public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
-
     Player_Character_Level_Data Lv_Data = null;
     Player_Character_Love_Level_Data Love_Lv_Data = null;
     Star_Upgrade_Data Star_Data = null;
+
+    /// <summary>
+    /// 캐릭터 고유 번호(서버측에서 발급)
+    /// </summary>
+    public int Player_Character_Num { get; protected set; } = 0;
+    public Player_Character_Data Hero_Data { get; private set; } = null;
+    public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
+    public int Lobby_Choice_Num { get; protected set; } = 0;
+    public bool Is_Choice_Lobby { get; protected set; } = false;
+    public bool Is_Copy { get; private set; } = false;
 
     public UserHeroData(LitJson.JsonData json_data)
     {
@@ -72,6 +72,8 @@ public class UserHeroData : UserDataBase
         Lv_Data = data.Lv_Data;
         Love_Lv_Data = data.Love_Lv_Data;
         Star_Data = data.Star_Data;
+
+        Is_Copy = true;
     }
 
     public UserHeroData(int player_character_id, int player_character_num)
@@ -128,8 +130,6 @@ public class UserHeroData : UserDataBase
         }
         Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id, GetStarGrade());
         Star_Data = m.Get_StarUpgradeData(GetStarGrade());
-
-        Is_Update_Data = true;
     }
 
     public int GetPlayerCharacterID()
@@ -654,12 +654,30 @@ public class UserHeroData : UserDataBase
         }
 
         //  성급 진화
-        int next_star_grade = GetStarGrade() + 1;
-        SetStarGrade(next_star_grade);
+        SetNextStarGrade(false, data);
+
+        // 결과 저장
+        goods_mng.Save();
+        item_mng.Save();
+        GameData.Instance.GetUserHeroDataManager().Save();
 
         return ERROR_CODE.SUCCESS;
     }
 
+    /// <summary>
+    /// 성급 진화 전에도 진화에 관한 데이터가 필요하기 때문에
+    /// 확인을 위해서 public으로 메소드를 별도로 만듭니다.
+    /// 각종 스탯 비교를 위해서가 아니면 절대로 밖에서 호출하지 맙시다.
+    /// </summary>
+    public void SetNextStarGrade() => SetNextStarGrade(Is_Copy, ERROR_CODE.FAILED);
+    void SetNextStarGrade(bool is_copy, ERROR_CODE advance_result)
+    {
+        if (is_copy || advance_result == ERROR_CODE.SUCCESS)
+        {
+            int next_star_grade = GetStarGrade() + 1;
+            SetStarGrade(next_star_grade);
+        }
+    }
 
     /// <summary>
     /// 최대 성급인지 반환
@@ -670,6 +688,7 @@ public class UserHeroData : UserDataBase
         const int max_star_grade = 5;
         return GetStarGrade() >= max_star_grade;
     }
+
     /// <summary>
     /// 성급 진화에 필요한 캐릭터 조각
     /// </summary>
@@ -695,8 +714,6 @@ public class UserHeroData : UserDataBase
         return 0;
     }
     #endregion
-
-
 
 
     public POSITION_TYPE GetPositionType()

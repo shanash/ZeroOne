@@ -30,21 +30,17 @@ namespace FluffyDuck.UI
         protected POPUP_TYPE Popup_Type = POPUP_TYPE.NONE;
 
         [SerializeField, Tooltip("팝업 애니메이션 컴포넌트")]
-        protected UIEaseBase Ease_Base;
-
-
-        protected bool Is_Enable_Key_Event;
+        protected UIEaseBase Ease_Base = null;
 
         /// <summary>
         /// 닫기 종료 후 호출되는 함수 - 팝업 내에서 사용됨.
         /// </summary>
-        protected System.Action Popup_Hide_End_Callback;
-
+        protected System.Action Popup_Hide_End_Callback = null;
 
         /// <summary>
         /// 닫기 완료 후 호출되는 함수 - 팝업을 호출한 클래스에서 사용됨
         /// </summary>
-        protected System.Action Popup_Hide_Complete_Callback;
+        protected System.Action Popup_Hide_Complete_Callback = null;
 
         /// <summary>
         /// 닫기 완료 후 경우에 따라 필요한 데이터를 받아야 할 경우가 있음
@@ -52,11 +48,15 @@ namespace FluffyDuck.UI
         /// </summary>
         /// <param name="data"></param>
         public delegate void Popup_Closeed_Delegate(params object[] data);
-        protected Popup_Closeed_Delegate Closed_Delegate;
+        protected Popup_Closeed_Delegate Closed_Delegate = null;
 
-        protected bool Is_Enable_Esc_Key_Exit;
+        protected bool Is_Enable_Key_Event = false;
+        protected bool Is_Enable_Esc_Key_Exit = false;
 
-        protected virtual bool Initialize(object[] data) => true;
+        protected virtual bool Initialize(object[] data)
+        {
+            return true;
+        }
 
         public void SetEnableEscKeyExit(bool enable)
         {
@@ -88,15 +88,15 @@ namespace FluffyDuck.UI
 
         protected virtual void Hide()
         {
+            Closed_Delegate = null;
+
             Box_Rect?.gameObject.SetActive(false);
             PopupManager.Instance.RemovePopup(this);
             //  팝업 감추기 종료시 호출 - 팝업 내에서 사용
             Popup_Hide_End_Callback?.Invoke();
-            Popup_Hide_End_Callback = null;
 
             //  팝업 감추기 완료 시 호출 - 팝업을 호출한 클래스에
             Popup_Hide_Complete_Callback?.Invoke();
-            Popup_Hide_Complete_Callback = null;
         }
 
         /// <summary>
@@ -111,7 +111,6 @@ namespace FluffyDuck.UI
                 Hide();
                 return;
             }
-            Is_Enable_Key_Event = true;
             Box_Rect?.gameObject.SetActive(true);
             Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);
         }
@@ -161,9 +160,9 @@ namespace FluffyDuck.UI
             }
         }
 
-        public void SetClosedCallbackDelegate(Popup_Closeed_Delegate d)
+        public void AddClosedCallbackDelegate(Popup_Closeed_Delegate d)
         {
-            Closed_Delegate = d;
+            Closed_Delegate += d;
         }
         
         /// <summary>
@@ -250,12 +249,20 @@ namespace FluffyDuck.UI
 
         public virtual void Spawned()
         {
+            Closed_Delegate = null;
             Is_Enable_Esc_Key_Exit = true;
+            Is_Enable_Key_Event = true;
+            Popup_Hide_End_Callback = null;
+            Popup_Hide_Complete_Callback = null;
         }
-        
+
         public virtual void Despawned()
         {
-
+            Closed_Delegate = null;
+            Is_Enable_Key_Event = false;
+            Is_Enable_Esc_Key_Exit = false;
+            Popup_Hide_End_Callback = null;
+            Popup_Hide_Complete_Callback = null;
         }
 
         protected virtual void OnUpdatePopup() { }

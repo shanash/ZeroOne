@@ -1,4 +1,5 @@
 using FluffyDuck.UI;
+using Gpm.Ui;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -8,15 +9,20 @@ public class AdvanceStarGradePopup : PopupBase
 {
     [SerializeField, Tooltip("팝업창 제목")]
     TMP_Text Title = null;
+    [SerializeField, Tooltip("List View")]
+    InfiniteScroll Status_LIst_View;
 
-    Action Confirm = null;
+    BattlePcData Battle_Pc_Data = null;
+    BattlePcData After_Advance_Battle_Pc_Data = null;
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 2 || data[0] is not Action || data[1] is not UserHeroData)
+        if (data.Length != 1 || data[0] is not BattlePcData)
         {
             return false;
         }
+
+        Battle_Pc_Data = (BattlePcData)data[0];
 
         FixedUpdatePopup();
 
@@ -25,12 +31,31 @@ public class AdvanceStarGradePopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
+        After_Advance_Battle_Pc_Data = new BattlePcData(Battle_Pc_Data);
+        After_Advance_Battle_Pc_Data.User_Data.SetNextStarGrade();
+
+        Status_LIst_View.Clear();
+
+        List<StatusItemData> list = new List<StatusItemData>
+            {
+                new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, $"{Battle_Pc_Data.GetAttackDamagePoint():N0} -> {After_Advance_Battle_Pc_Data.GetAttackDamagePoint():N0}"),
+                new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, $"{Battle_Pc_Data.GetMagicDamagePoint():N0} -> {After_Advance_Battle_Pc_Data.GetMagicDamagePoint():N0}"),
+                new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, $"{Battle_Pc_Data.GetAttackDefensePoint():N0} -> {After_Advance_Battle_Pc_Data.GetAttackDefensePoint():N0}"),
+                new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, $"{Battle_Pc_Data.GetMagicDefensePoint():N0} -> {After_Advance_Battle_Pc_Data.GetMagicDefensePoint():N0}"),
+                new StatusItemData(ConstString.Hero.EVASION_POINT, $"{Battle_Pc_Data.GetEvasionPoint():N0} -> {After_Advance_Battle_Pc_Data.GetEvasionPoint():N0}"),
+                new StatusItemData(ConstString.Hero.ACCURACY_POINT, $"{Battle_Pc_Data.GetAccuracyPoint():N0} -> {After_Advance_Battle_Pc_Data.GetAccuracyPoint():N0}"),
+            };
+
+        foreach (var data in list)
+        {
+            Status_LIst_View.InsertData(data);
+        }
     }
 
     public void OnClickComfirm()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        Confirm?.Invoke();
+        Closed_Delegate?.Invoke();
         HidePopup();
     }
 
