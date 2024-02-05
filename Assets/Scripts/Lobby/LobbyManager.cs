@@ -32,6 +32,18 @@ public class LobbyManager : MonoBehaviour
 
         pd = Factory.Instantiate<Producer>(1010051, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
+
+
+        var board = BlackBoard.Instance;
+        int open_dungeon_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, 0);
+        if (open_dungeon_id > 0)
+        {
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+            {
+                popup.ShowPopup();
+            });
+
+        }
     }
 
     /// <summary>

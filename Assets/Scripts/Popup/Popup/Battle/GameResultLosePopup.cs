@@ -270,6 +270,11 @@ public class GameResultLosePopup : PopupBase
     public void OnClickHome()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        
+        var board = BlackBoard.Instance;
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
+
         SceneManager.LoadScene("home");
     }
 

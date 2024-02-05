@@ -177,6 +177,7 @@ public class UserStoryStageDataManager : ManagerBase
             return;
         }
         AddUserStoryStageData(next_stage.stage_id);
+        SetCurrentZoneID(next_stage.zone_id);
     }
 
     /// <summary>

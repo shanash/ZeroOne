@@ -179,12 +179,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         }
         Flush_Coroutine = null;
 
-
-        if (Show_Coroutine != null)
-        {
-            StopCoroutine(Show_Coroutine);
-        }
-        Show_Coroutine = null;
+        HideLifeBar();
     }
 
 

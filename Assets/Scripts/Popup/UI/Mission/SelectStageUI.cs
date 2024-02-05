@@ -1,5 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using Gpm.Ui;
 using System.Collections.Generic;
 using TMPro;
@@ -52,12 +53,30 @@ public class SelectStageUI : PopupBase
 
     protected override void FixedUpdatePopup()
     {
+        var m = MasterDataManager.Instance;
+
+        var board = BlackBoard.Instance;
+        int open_dungeon_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, 0);
+        if (open_dungeon_id > 0)
+        {
+            Stage_Data stage = m.Get_StageData(open_dungeon_id);
+            if (stage != null)
+            {
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+                {
+                    popup.ShowPopup(stage);
+                });
+            }
+
+            BlackBoard.Instance.RemoveBlackBoardData(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID);
+        }
+
         Stage_List_View.Clear();
 
         var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
         var last_stage = stage_mng.GetLastOpenStage();
 
-        var m = MasterDataManager.Instance;
+        
         List<Stage_Data> stage_list = new List<Stage_Data>();
 
         m.Get_StageDataList(Zone_ID, ref stage_list);

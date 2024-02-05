@@ -410,11 +410,29 @@ public class GameResultWinPopup : PopupBase
     public void OnClickGameRewardNext()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+
+        var board = BlackBoard.Instance;
+
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
+
+        var stage = (Stage_Data)Dungeon.GetDungeonData();
+        var next_stage = MasterDataManager.Instance.Get_NextStageData(stage.stage_id);
+        if (next_stage != null)
+        {
+            board.SetBlackBoard(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, next_stage.stage_id);
+        }
+        
         SceneManager.LoadScene("home");
     }
     public void OnClickGameRewardHome()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+       
+        var board = BlackBoard.Instance;
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
+        board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
+        
         SceneManager.LoadScene("home");
 
     }
