@@ -71,7 +71,7 @@ public class GPMCommand : MonoBehaviour
         }
 
         string key = cheat_key.ToLower();
-        Debug.Log($"{key}");
+        //Debug.Log($"{key}");
 
         var gd = GameData.Instance;
         string[] keys = key.Split(" ");
@@ -84,6 +84,7 @@ public class GPMCommand : MonoBehaviour
                 {
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
                     gd.Save();
+                    UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
                 }
             }
         }
@@ -96,6 +97,7 @@ public class GPMCommand : MonoBehaviour
                 {
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
                     gd.Save();
+                    UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
                 }
             }
         }
@@ -114,11 +116,15 @@ public class GPMCommand : MonoBehaviour
                         gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
                         gd.Save();
                     }
+                    else
+                    {
+                        Debug.Log("캐릭터를 찾을 수 없습니다.");
+                    }
                 }
             }
         }
 
-        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
+        
     }
 
 }
