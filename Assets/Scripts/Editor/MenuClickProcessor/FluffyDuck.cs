@@ -144,6 +144,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
                 }
 
                 UnityEngine.Debug.Log("All Persistent Datas have been deleted.");
+                EditorUtility.DisplayDialog("삭제 완료", "모든 Persistent 데이터가 삭제되었습니다", "확인");
             }
             catch (System.Exception ex)
             {
