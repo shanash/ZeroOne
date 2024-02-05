@@ -88,7 +88,16 @@ public class UserHeroDataManager : ManagerBase
             return null;
         }
         var hero = FindUserHeroData(hero_data_id, hero_data_num);
-        UnityEngine.Debug.Assert(hero != null, "사용자 캐릭터 데이터가 정상적으로 생성되지 않았습니다!! - UserHeroDataManager::GetUserHeroData()");
+        if (hero == null)
+        {
+            hero = new UserHeroData(hero_data_id, hero_data_num);
+            User_Hero_Data_List.Add(hero);
+            Is_Update_Data = true;
+
+            //  hero skill data init
+            var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
+            skill_mng?.AddUserHeroSkillGroups(hero, hero.GetPlayerCharacterBattleData().skill_pattern);
+        }
 
         return hero;
     }

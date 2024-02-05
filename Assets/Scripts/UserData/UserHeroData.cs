@@ -74,6 +74,11 @@ public class UserHeroData : UserDataBase
         Star_Data = data.Star_Data;
     }
 
+    public UserHeroData(int player_character_id, int player_character_num)
+    {
+        SetPlayerCharacterDataID(player_character_id, player_character_num);
+    }
+
     protected override void Reset()
     {
         InitSecureVars();
