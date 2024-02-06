@@ -25,6 +25,7 @@ public class Raw_Player_Character_Battle_Data : System.IDisposable
 	public double accuracy {get; set;}
 	public double heal {get; set;}
 	public double resist  {get; set;}
+	public double weight {get; set;}
 	public double auto_recovery {get; set;}
 	public double move_speed {get; set;}
 	public string attack_script {get; set;}

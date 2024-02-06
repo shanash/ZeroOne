@@ -136,6 +136,12 @@ public class Player_Character_Battle_Data : System.IDisposable
 	double _resist ;
 
 	///	<summary>
+	///	무게
+	///	</summary>
+	public double weight => _weight;
+	double _weight;
+
+	///	<summary>
 	///	자동 회복
 	///	</summary>
 	public double auto_recovery => _auto_recovery;
@@ -179,6 +185,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		_accuracy = raw_data.accuracy;
 		_heal = raw_data.heal;
 		_resist  = raw_data.resist ;
+		_weight = raw_data.weight;
 		_auto_recovery = raw_data.auto_recovery;
 		_move_speed = raw_data.move_speed;
 		_attack_script = raw_data.attack_script;
@@ -234,6 +241,7 @@ public class Player_Character_Battle_Data : System.IDisposable
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[heal] = <color=yellow>{0}</color>", heal).AppendLine();
 		sb.AppendFormat("[resist ] = <color=yellow>{0}</color>", resist ).AppendLine();
+		sb.AppendFormat("[weight] = <color=yellow>{0}</color>", weight).AppendLine();
 		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
 		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		sb.AppendFormat("[attack_script] = <color=yellow>{0}</color>", attack_script).AppendLine();

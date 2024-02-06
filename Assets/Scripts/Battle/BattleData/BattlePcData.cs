@@ -165,7 +165,7 @@ public class BattlePcData : BattleUnitData
         {
             return Battle_Data.attack_recovery;
         }
-        return base.GetAttackRecovery();
+        return 0;
     }
 
     public override double GetAccuracyPoint() => GetAccuracyPoint(Battle_Data);
@@ -272,6 +272,10 @@ public class BattlePcData : BattleUnitData
     public override double GetWeight() => GetWeight(Battle_Data);
     double GetWeight(Player_Character_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.weight;
+        }
         return 0;
     }
 

@@ -268,8 +268,6 @@ namespace FluffyDuck.UI
             Closed_Delegate = null;
             Is_Enable_Key_Event = false;
             Is_Enable_Esc_Key_Exit = false;
-            Popup_Hide_End_Callback = null;
-            Popup_Hide_Complete_Callback = null;
         }
 
         protected virtual void OnUpdatePopup() { }

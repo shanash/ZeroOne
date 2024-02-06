@@ -73,92 +73,155 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetPhysicsAttackPoint()
+    public override double GetPhysicsAttackPoint() => GetPhysicsAttackPoint(Battle_Data);
+    double GetPhysicsAttackPoint(Npc_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.attack;
+            return battle_data.p_attack;
         }
-        return 0;
-    }
-    public override double GetMagicAttackPoint()
-    {
         return 0;
     }
 
-    public override double GetPhysicsDefensePoint()
+    public override double GetMagicAttackPoint() => GetMagicAttackPoint(Battle_Data);
+    double GetMagicAttackPoint(Npc_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.defend;
+            return battle_data.m_attack;
         }
         return 0;
     }
-    public override double GetMagicDefensePoint()
+
+    public override double GetPhysicsDefensePoint() => GetPhysicsDefensePoint(Battle_Data);
+    double GetPhysicsDefensePoint(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.p_defend;
+        }
+        return 0;
+    }
+
+    public override double GetMagicDefensePoint() => GetMagicDefensePoint(Battle_Data);
+    double GetMagicDefensePoint(Npc_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+        {
+            return battle_data.m_defend;
+        }
         return 0;
     }
     
-    public override double GetLifePoint()
+    public override double GetLifePoint() => GetLifePoint(Battle_Data);
+    double GetLifePoint(Npc_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.hp;
+            return battle_data.hp;
         }
         return 0;
     }
 
-    public override double GetAttackRecovery()
+    public override double GetAttackRecovery() => GetAttackRecovery(Battle_Data);
+    double GetAttackRecovery(Npc_Battle_Data battle_data)
     {
-        return 0;
-    }
-
-    public override double GetAccuracyPoint()
-    {
-        if (Battle_Data != null)
-            return Battle_Data.accuracy;
-        return 0;
-    }
-
-    public override double GetEvasionPoint()
-    {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.evasion;
+            return battle_data.attack_recovery;
         }
         return 0;
     }
 
-    public override double GetVampirePoint()
+
+    public override double GetAccuracyPoint() => GetAccuracyPoint(Battle_Data);
+    double GetAccuracyPoint(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.accuracy;
+        }
         return 0;
     }
-    public override double GetPhysicsCriticalChance()
+
+    public override double GetEvasionPoint() => GetEvasionPoint(Battle_Data);
+    double GetEvasionPoint(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.evasion;
+        }
         return 0;
     }
-    public override double GetPhysicsCriticalPower()
+
+    public override double GetVampirePoint() => GetVampirePoint(Battle_Data);
+    double GetVampirePoint(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.attack_recovery;
+        }
         return 0;
     }
-    public override double GetMagicCriticalChance()
+    public override double GetPhysicsCriticalChance() => GetPhysicsCriticalChance(Battle_Data);
+    double GetPhysicsCriticalChance(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.p_cri_rate;
+        }
         return 0;
     }
-    public override double GetMagicCriticalPower()
+    public override double GetPhysicsCriticalPower() => GetPhysicsCriticalPower(Battle_Data);
+    double GetPhysicsCriticalPower(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.p_cri_power;
+        }
         return 0;
     }
-    public override double GetResistPoint()
+    public override double GetMagicCriticalChance() => GetMagicCriticalChance(Battle_Data);
+    double GetMagicCriticalChance(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.m_cri_rate;
+        }
         return 0;
     }
-    public override double GetLifeRecoveryInc()
+    public override double GetMagicCriticalPower() => GetMagicCriticalPower(Battle_Data);
+    double GetMagicCriticalPower(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.m_cri_power;
+        }
         return 0;
     }
-    public override double GetWeight()
+    public override double GetResistPoint() => GetResistPoint(Battle_Data);
+    double GetResistPoint(Npc_Battle_Data battle_data)
     {
+        if (battle_data != null)
+        {
+            return battle_data.resist;
+        }
+        return 0;
+    }
+    public override double GetLifeRecoveryInc() => GetLifeRecoveryInc(Battle_Data);
+    double GetLifeRecoveryInc(Npc_Battle_Data battle_data) 
+    { 
+        if (battle_data != null)
+        {
+            return battle_data.heal;
+        }
+        return 0; 
+    }
+    public override double GetWeight() => GetWeight(Battle_Data);
+    double GetWeight(Npc_Battle_Data battle_data)
+    {
+        if (battle_data != null)
+            return battle_data.weight;
         return 0;
     }
 

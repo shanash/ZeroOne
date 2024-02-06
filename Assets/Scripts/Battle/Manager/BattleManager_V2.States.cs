@@ -361,6 +361,9 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     public virtual void GameStateGameOverLoseBegin()
     {
+        var win_team = FindTeamManager(TEAM_TYPE.RIGHT);
+        win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
+
         Game_Over_Delta = 1f;
         UI_Mng.ShowBattleUI(false);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
