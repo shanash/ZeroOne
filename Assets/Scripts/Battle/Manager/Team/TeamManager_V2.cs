@@ -459,7 +459,11 @@ public partial class TeamManager_V2 : IDisposable
             member_list[i].RevertState();
         }
     }
-
+    /// <summary>
+    /// 살아있는 모든 유닛을 숨김 처리 (지정 타겟 제외)<br/>
+    /// 죽은 유닛은 어차피 사라질 것이기 때문에 제외
+    /// </summary>
+    /// <param name="targets"></param>
     public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets) 
     {
         var member_list = GetAliveMembers();
@@ -473,10 +477,15 @@ public partial class TeamManager_V2 : IDisposable
             }
         }
     }
-
+    /// <summary>
+    /// 모든 유닛을 보여줌.<br/>
+    /// 죽은 유닛도 보여줌. 궁극기로 인해 죽었을 수도 있기 때문에.<br/>
+    /// 죽은 이후의 처리는 상태가 변경되면 알아서 처리할 것임
+    /// </summary>
+    /// <param name="targets"></param>
     public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {
-        var member_list = GetAliveMembers();
+        var member_list = GetMembers();
         int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
@@ -487,7 +496,11 @@ public partial class TeamManager_V2 : IDisposable
             }
         }
     }
-
+    /// <summary>
+    /// 살아있는 모든 유닛을 궁극기 사용을 위해 멈춤<br/>
+    /// 궁극기 사용 유닛만 남김
+    /// </summary>
+    /// <param name="hero"></param>
     public void AllPauseTeamMembersWithoutHero(HeroBase_V2 hero)
     {
         var member_list = GetAliveMembers();
@@ -501,9 +514,15 @@ public partial class TeamManager_V2 : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// 궁극기를 얻어 맞고 죽을 수도 있으니, GetAliveMembers() 사용을 할 수 없음.<br/>
+    /// 현재 모든 멤버를 이전 상태로 돌려두고, 죽을 놈은 알아서 죽게 해야함
+    /// </summary>
+    /// <param name="hero"></param>
     public void AllResumeTeamMembersWithoutHero(HeroBase_V2 hero)
     {
-        var member_list = GetAliveMembers();
+        var member_list = GetMembers();
         int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {

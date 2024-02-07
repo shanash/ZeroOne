@@ -69,6 +69,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         return Skill_Mng;
     }
 
+
+
     /// <summary>
     /// 지정 유닛과 자신의 거리 반환
     /// </summary>
@@ -312,7 +314,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double GetCriticalChancePoint()
     {
         //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Physics_Critical_Rate;
+        double pt = Physics_Critical_Chance;
         return pt;
     }
 
@@ -323,7 +325,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public double GetCriticalPowerPoint()
     {
         //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Physics_Critical_Power;
+        double pt = Physics_Critical_Power_Add;
 
         return pt;
     }
@@ -429,6 +431,82 @@ public partial class HeroBase_V2 : UnitBase_V2
 
 
 
+    #region Get Stats
+
+    protected virtual double GetPhysicsAttackPoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetPhysicsAttackPoint() : 0;
+    }
+    protected virtual double GetMagicAttackPoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetMagicAttackPoint() : 0;
+    }
+
+    protected virtual double GetPhysicsDefensePoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetPhysicsDefensePoint() : 0;
+    }
+    protected virtual double GetMagicDefensePoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetMagicDefensePoint() : 0;
+    }
+
+    protected virtual double GetAccuracy()
+    {
+        return Unit_Data != null ? Unit_Data.GetAccuracyPoint() : 0;
+    }
+    protected virtual double GetEvasion()
+    {
+        return Unit_Data != null ? Unit_Data.GetEvasionPoint() : 0;
+    }
+
+    protected virtual double GetAutoRecoveryLife()
+    {
+        return Unit_Data != null ? Unit_Data.GetAutoRecoveryLife() : 0;
+    }
+
+    protected virtual double GetPhysicsCriticalChance()
+    {
+        return Unit_Data != null ? Unit_Data.GetPhysicsCriticalChance() : 0;
+    }
+    protected virtual double GetMagicCriticalChance()
+    {
+        return Unit_Data != null ? Unit_Data.GetMagicCriticalChance() : 0;
+    }
+    protected virtual double GetPhysicsCriticalPowerAdd()
+    {
+        return Unit_Data != null ? Unit_Data.GetPhysicsCriticalPowerAdd() : 0;
+    }
+    protected virtual double GetMagicCriticalPowerAdd()
+    {
+        return Unit_Data != null ? Unit_Data.GetMagicCriticalPowerAdd() : 0;
+    }
+
+    protected virtual double GetResistPoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetResistPoint() : 0;
+    }
+
+    protected virtual double GetVampirePoint()
+    {
+        return Unit_Data != null ? Unit_Data.GetVampirePoint() : 0;
+    }
+
+    protected virtual double GetLifeRecoveryInc()
+    {
+        return Unit_Data != null ? Unit_Data.GetLifeRecoveryInc() : 0;
+    }
+
+    protected virtual double GetWeight()
+    {
+        return Unit_Data != null ? Unit_Data.GetWeight() : 0;
+    }
+
+    protected virtual double GetMoveSpeed()
+    {
+        return Unit_Data != null ? Unit_Data.GetMoveSpeed() : 0;
+    }
+    #endregion
 
 
 }

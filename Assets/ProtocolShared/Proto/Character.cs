@@ -15,7 +15,7 @@ namespace ProtocolShared.Proto
         public byte Level { get; set; } = 1;
         public ushort Experience { get; set; } = 0;
         // 성(별)
-        public byte Star { get; set; } = 1;
+        public byte Rank { get; set; } = 1;
         public ushort Piece { get; set; } = 0;
         // 스킬
         public byte UltimateSkillLevel { get; set; } = 1;
@@ -30,12 +30,12 @@ namespace ProtocolShared.Proto
         public byte LoveLevel { get; set; } = 1;
         public uint LoveExp { get; set; } = 0;
         // 장비 슬롯
-        public Guid ItemSlot_1 { get; set; }
-        public Guid ItemSlot_2 { get; set; }
-        public Guid ItemSlot_3 { get; set; }
-        public Guid ItemSlot_4 { get; set; }
-        public Guid ItemSlot_5 { get; set; }
-        public Guid ItemSlot_6 { get; set; }
+        //public Guid ItemSlot_1 { get; set; }
+        //public Guid ItemSlot_2 { get; set; }
+        //public Guid ItemSlot_3 { get; set; }
+        //public Guid ItemSlot_4 { get; set; }
+        //public Guid ItemSlot_5 { get; set; }
+        //public Guid ItemSlot_6 { get; set; }
         // 액세서리 슬롯
         public Guid AccSlot_1 { get; set; }
         public Guid AccSlot_2 { get; set; }

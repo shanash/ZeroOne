@@ -23,19 +23,19 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
             switch (Data.multiple_type)
             {
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
-                    send_data.Damage = Data.value;
+                    send_data.Physics_Attack_Point = Data.value;
                     break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
-                    send_data.Damage = send_data.Caster.Physics_Attack * Data.multiple;
+                    send_data.Physics_Attack_Point = send_data.Caster.Physics_Attack * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    send_data.Damage = send_data.Caster.Physics_Defense * Data.multiple;
+                    send_data.Physics_Attack_Point = send_data.Caster.Physics_Defense * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    send_data.Damage = send_data.Caster.Max_Life * Data.multiple;
+                    send_data.Physics_Attack_Point = send_data.Caster.Max_Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:
-                    send_data.Damage = send_data.Caster.Life * Data.multiple;
+                    send_data.Physics_Attack_Point = send_data.Caster.Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);
@@ -58,10 +58,10 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
             }
 
             //  비중만큼의 데미지만 준다
-            double damage = send_data.Damage * (double)weight * 0.01;
+            double damage = send_data.Physics_Attack_Point * (double)weight * 0.01;
             if (damage < 1)
                 damage = 1;
-            send_data.Damage = Math.Truncate(damage);
+            send_data.Physics_Attack_Point = Math.Truncate(damage);
             t.AddDamage(send_data);
         }
 

@@ -113,7 +113,7 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
     
-    public override double GetLifePoint() => GetLifePoint(Battle_Data);
+    public override double GetMaxLifePoint() => GetLifePoint(Battle_Data);
     double GetLifePoint(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)
@@ -172,7 +172,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetPhysicsCriticalPower() => GetPhysicsCriticalPower(Battle_Data);
+    public override double GetPhysicsCriticalPowerAdd() => GetPhysicsCriticalPower(Battle_Data);
     double GetPhysicsCriticalPower(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)
@@ -190,7 +190,7 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-    public override double GetMagicCriticalPower() => GetMagicCriticalPower(Battle_Data);
+    public override double GetMagicCriticalPowerAdd() => GetMagicCriticalPower(Battle_Data);
     double GetMagicCriticalPower(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)

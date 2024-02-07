@@ -20,7 +20,7 @@ public class Damage_Normal_Effect_Text : EffectBase
 
         BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)data[0];
 
-        double dmg = Math.Truncate(send_data.Damage);
+        double dmg = Math.Truncate(send_data.Physics_Attack_Point);
         
 
         if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)

@@ -838,7 +838,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  물리 치명타 확률 오름 차순
-        temp_list.Sort((a, b) => a.Physics_Critical_Rate.CompareTo((b.Physics_Critical_Rate)));
+        temp_list.Sort((a, b) => a.Physics_Critical_Chance.CompareTo((b.Physics_Critical_Chance)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -851,7 +851,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  물리 치명타 확률 내림 차순
-        temp_list.Sort((a, b) => b.Physics_Critical_Rate.CompareTo(a.Physics_Critical_Rate));
+        temp_list.Sort((a, b) => b.Physics_Critical_Chance.CompareTo(a.Physics_Critical_Chance));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -864,7 +864,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  마법 치명타 확률 오름 차순
-        temp_list.Sort((a, b) => a.Magic_Critical_Rate.CompareTo((b.Magic_Critical_Rate)));
+        temp_list.Sort((a, b) => a.Magic_Critical_Chance.CompareTo((b.Magic_Critical_Chance)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -877,7 +877,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  마법 치명타 확률 내림 차순
-        temp_list.Sort((a, b) => b.Magic_Critical_Rate.CompareTo(a.Magic_Critical_Rate));
+        temp_list.Sort((a, b) => b.Magic_Critical_Chance.CompareTo(a.Magic_Critical_Chance));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -890,7 +890,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  물리 치명타 추가 데미지 오름 차순
-        temp_list.Sort((a, b) => a.Physics_Critical_Power.CompareTo((b.Physics_Critical_Power)));
+        temp_list.Sort((a, b) => a.Physics_Critical_Power_Add.CompareTo((b.Physics_Critical_Power_Add)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -903,7 +903,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  물리 치명타 추가 데미지 내림 차순
-        temp_list.Sort((a, b) => b.Physics_Critical_Power.CompareTo(a.Physics_Critical_Power));
+        temp_list.Sort((a, b) => b.Physics_Critical_Power_Add.CompareTo(a.Physics_Critical_Power_Add));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -916,7 +916,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  마법 치명타 추가 데미지 오름 차순
-        temp_list.Sort((a, b) => a.Magic_Critical_Power.CompareTo((b.Magic_Critical_Power)));
+        temp_list.Sort((a, b) => a.Magic_Critical_Power_Add.CompareTo((b.Magic_Critical_Power_Add)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -929,7 +929,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  마법 치명타 추가 데미지 내림 차순
-        temp_list.Sort((a, b) => b.Magic_Critical_Power.CompareTo(a.Magic_Critical_Power));
+        temp_list.Sort((a, b) => b.Magic_Critical_Power_Add.CompareTo(a.Magic_Critical_Power_Add));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>

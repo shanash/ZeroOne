@@ -73,6 +73,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
         list.Add("Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode");
         list.Add("Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode");
+        list.Add("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Death_Member_Flag_Node");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Start_Point");

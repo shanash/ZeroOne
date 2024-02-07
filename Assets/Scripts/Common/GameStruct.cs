@@ -13,8 +13,10 @@ public struct BATTLE_SEND_DATA
 
     public DURATION_EFFECT_TYPE Duration_Effect_Type;
 
-    public double Damage;
-    public bool Is_Critical;                        //  치명타 확률
+    public double Physics_Attack_Point;                   //  물리 공격력
+    public double Magic_Attack_Point;                     //  마법 공격력
+    public bool Is_Physics_Critical;                      //  물리 치명타 확률
+    public bool Is_Magic_Critical;                        //  마법 치명타 확률
 
 
     public void Reset()
@@ -23,8 +25,10 @@ public struct BATTLE_SEND_DATA
         Skill = null;
         Onetime = null;
         Duration = null;
-        Damage = 0;
-        Is_Critical = false;
+        Physics_Attack_Point = 0;
+        Magic_Attack_Point = 0;
+        Is_Physics_Critical = false;
+        Is_Magic_Critical = false;
         Effect_Weight_Index = 0;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
         ClearTargets();
@@ -60,7 +64,7 @@ public struct BATTLE_SEND_DATA
         result.Skill = Skill;
         result.Onetime = Onetime;
         result.Duration = Duration;
-        result.Damage = Damage;
+        result.Physics_Attack_Point = Physics_Attack_Point;
         result.Effect_Weight_Index = Effect_Weight_Index;
         result.Duration_Effect_Type = Duration_Effect_Type;
         if (result.Targets == null)

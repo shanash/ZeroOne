@@ -401,44 +401,44 @@ public enum STAT_MULTIPLE_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>100 공격력 기준 절대값 계산</summary>
+	/// <summary>100 공격력 절대값 계산</summary>
 	ATTACK_VALUE = 100,
-	/// <summary>101 공격력 기준 배율 계산</summary>
-	ATTACK_RATE = 101,
-	/// <summary>102 방어력 기준 절대값 계산</summary>
-	DEFENSE_VALUE = 102,
-	/// <summary>103 방어력 기준 배율 계산</summary>
-	DEFENSE_RATE = 103,
-	/// <summary>104 최대 체력 기준 절대값 계산</summary>
-	MAX_LIFE = 104,
-	/// <summary>105 최대 체력 기준 배율 계산</summary>
-	MAX_LIFE_RATE = 105,
-	/// <summary>106 현재 체력 기준 절대값 계산</summary>
-	LIFE = 106,
-	/// <summary>107 현재 체력 기준 배율 계산</summary>
-	LIFE_RATE = 107,
-	/// <summary>108 크리티컬 확률을 절대값 계산</summary>
-	CRITICAL_CHANCE = 108,
-	/// <summary>109 크리티컬 확률을 배율 계산</summary>
-	CRITICAL_CHANCE_RATE = 109,
-	/// <summary>110 크리티컬 파워 기준 절대값 계산</summary>
-	CRITICAL_POWER_ADD = 110,
-	/// <summary>111 크리티컬 파워 기준 배율 계산</summary>
-	CRITICAL_POWER_ADD_RATE = 111,
-	/// <summary>112 명중률 기준 절대값 계산</summary>
-	ACCURACY_VALUE = 112,
-	/// <summary>113 명중률 기준 배율 계산</summary>
-	ACCURACY_RATE = 113,
-	/// <summary>114 회피율 기준 절대값 계산</summary>
-	EVASION_VALUE = 114,
-	/// <summary>115 회피율 기준 배율 계산</summary>
-	EVASION_RATE = 115,
-	/// <summary>116 회복량 기준 절대값 계산</summary>
-	HEAL_VALUE = 116,
-	/// <summary>117 회복량 기준 배율 계산</summary>
-	HEAL_RATE = 117,
-	/// <summary>118 피해량 기준 배율 계산</summary>
-	DAMAGE = 118,
+	/// <summary>101 방어력 절대값 계산</summary>
+	DEFENSE_VALUE = 101,
+	/// <summary>102 최대 체력 절대 값</summary>
+	MAX_LIFE = 102,
+	/// <summary>103 현재 체력 절대 값</summary>
+	LIFE = 103,
+	/// <summary>104 크리티컬 확률 절대값</summary>
+	CRITICAL_CHANCE = 104,
+	/// <summary>105 크리티컬 파워 절대 값</summary>
+	CRITICAL_POWER_ADD = 105,
+	/// <summary>106 명중률 절대 값</summary>
+	ACCURACY_VALUE = 106,
+	/// <summary>107 회피율 절대 값</summary>
+	EVASION_VALUE = 107,
+	/// <summary>108 회복량 절대 값</summary>
+	HEAL_VALUE = 108,
+	/// <summary>201 공격력 배율 계산</summary>
+	ATTACK_RATE = 201,
+	/// <summary>202 방어력 배율 계산</summary>
+	DEFENSE_RATE = 202,
+	/// <summary>203 최대 체력 배율 값</summary>
+	MAX_LIFE_RATE = 203,
+	/// <summary>204 현재 체력 배율 계산</summary>
+	LIFE_RATE = 204,
+	/// <summary>205 크리티컬 확률 배율 계산</summary>
+	CRITICAL_CHANCE_RATE = 205,
+	/// <summary>206 크리티컬 파워 배율 계산</summary>
+	CRITICAL_POWER_ADD_RATE = 206,
+	/// <summary>207 명중률 배율 계산</summary>
+	ACCURACY_RATE = 207,
+	/// <summary>208 회피율 배율 계산</summary>
+	EVASION_RATE = 208,
+	/// <summary>209 회복량 배율 계산</summary>
+	HEAL_RATE = 209,
+	/// <summary>210 피해량 배율 계산</summary>
+	DAMAGE = 210,
 }
 
 ///	<summary>

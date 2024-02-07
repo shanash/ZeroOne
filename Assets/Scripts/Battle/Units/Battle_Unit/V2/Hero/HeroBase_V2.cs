@@ -45,7 +45,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     protected SkeletonUtility Utility;
 
-    protected bool Is_Reposition;
+    //protected bool Is_Reposition;
 
     /// <summary>
     /// 현재 체력
@@ -64,28 +64,28 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 물리 공격력. 
     /// </summary>
-    public double Physics_Attack { get; protected set; }
+    public double Physics_Attack => GetPhysicsAttackPoint();
     /// <summary>
     /// 마법 공격력
     /// </summary>
-    public double Magic_Attack { get; protected set; }
+    public double Magic_Attack => GetMagicAttackPoint();
 
     /// <summary>
     /// 물리 방어력<br/>
     /// 방어율 = 1/(1+방어력/100)
     /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
-    public double Physics_Defense { get; protected set; }
+    public double Physics_Defense => GetPhysicsDefensePoint();
 
     /// <summary>
     /// 마법 방어력<br/>
     /// </summary>
-    public double Magic_Defense { get; protected set; } 
+    public double Magic_Defense => GetMagicDefensePoint();
 
     /// <summary>
     /// 이동 속도
     /// </summary>
-    public double Move_Speed { get; protected set; }
+    public double Move_Speed => GetMoveSpeed();
 
     /// <summary>
     /// 물리 명중률<br/>
@@ -94,7 +94,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 명중 확률  = 1 - 회피 확률
     /// 명중 실패시 데미지 감소(빗나감 데미지)
     /// </summary>
-    public double Accuracy { get; protected set; }
+    public double Accuracy => GetAccuracy();
 
     /// <summary>
     /// 물리 회피율<br/>
@@ -102,49 +102,49 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 회피 레벨 테이블의 값을 참조한다.<br/>
     /// 회피 확률 = 1 / (1 + 100 / 회피값)
     /// </summary>
-    public double Evasion { get; protected set; }
+    public double Evasion => GetEvasion();
 
     /// <summary>
     /// 자동 회복<br/>
     /// 한 웨이브를 클리어 했을 때 회복되는 수치<br/>
     /// 자동 회복량 = 최대 체력 * 자동 회복 값(배율)
     /// </summary>
-    public double Auto_Recovery_Life { get; protected set; }
+    public double Auto_Recovery_Life => GetAutoRecoveryLife();
 
     /// <summary>
     /// 물리 치명타 확률<br/>
     /// 크리티컬 발생 확률 = 크리티컬 값 * 0.05 * 0.01 * 레벨 / 적 레벨
     /// </summary>
-    public double Physics_Critical_Rate { get; protected set; }
+    public double Physics_Critical_Chance => GetPhysicsCriticalChance();
     /// <summary>
-    /// 물리 치명타 파워 - 기본 공격력의 배수
+    /// 물리 치명타 파워 증가 - 기본 치명타 배수에 추가 데미지
     /// </summary>
-    public double Physics_Critical_Power { get; protected set; }
+    public double Physics_Critical_Power_Add => GetPhysicsCriticalPowerAdd();
     /// <summary>
     /// 마법 치명타 확률<br/>
     /// </summary>
-    public double Magic_Critical_Rate { get; protected set; }
+    public double Magic_Critical_Chance => GetMagicCriticalChance();
     /// <summary>
     /// 마법 치명타 파워
     /// </summary>
-    public double Magic_Critical_Power { get; protected set; }
+    public double Magic_Critical_Power_Add => GetMagicCriticalPowerAdd();
 
     /// <summary>
     /// 강인함 (상태이상 저항력)<br/>
     /// 상태이상 확률 및 상태이상 지속 시간에 영향<br/>
     /// 상태이상 확률 = 상태이상 확률 - (상태이상 확률 * 강인함 / 1000)
     /// </summary>
-    public double Resist_Point { get; protected set; }
+    public double Resist_Point => GetResistPoint();
 
     /// <summary>
     /// 흡혈 
     /// </summary>
-    public double Vampire_Point { get; protected set; }
+    public double Vampire_Point => GetVampirePoint();
 
     /// <summary>
     /// 체력 회복량 증가(힐량 증가)
     /// </summary>
-    public double Life_Recovery_Inc { get; protected set; }
+    public double Life_Recovery_Inc => GetLifeRecoveryInc();
 
     /// <summary>
     /// 보유 에너지
@@ -155,7 +155,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 무게<br/>
     /// 넉백 및 풀링에서 변수로 사용
     /// </summary>
-    public double Weight { get; protected set; }
+    public double Weight => GetWeight();
 
     /// <summary>
     /// 리더/보스 여부
@@ -174,7 +174,9 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 체력 게이지
     /// </summary>
-    protected LifeBarNode Life_Bar = null;
+    //protected LifeBarNode Life_Bar = null;
+
+    protected LifeBarNode_V2 Life_Bar_V2 = null;
 
 
     protected List<HeroBase_V2> Normal_Attack_Target = new List<HeroBase_V2>();
@@ -306,9 +308,14 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void AddLifeBar()
     {
-        if (Life_Bar == null)
+        //if (Life_Bar == null)
+        //{
+        //    Life_Bar = UI_Mng.AddLifeBarNode(Life_Bar_Pos, Team_Type);
+        //}
+        if (Life_Bar_V2 == null)
         {
-            Life_Bar = UI_Mng.AddLifeBarNode(Life_Bar_Pos, Team_Type);
+            var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2", GetHPPositionTransform());
+            Life_Bar_V2 = obj.GetComponent<LifeBarNode_V2>();
         }
     }
     /// <summary>
@@ -316,11 +323,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void RemoveLifeBar()
     {
-        if (Life_Bar != null)
+        //if (Life_Bar != null)
+        //{
+        //    UI_Mng.RemoveLifeBarNode(Life_Bar);
+        //}
+        //Life_Bar = null;
+        if (Life_Bar_V2 != null)
         {
-            UI_Mng.RemoveLifeBarNode(Life_Bar);
+            GameObjectPoolManager.Instance.UnusedGameObject(Life_Bar_V2.gameObject);
         }
-        Life_Bar = null;
+        Life_Bar_V2 = null;
     }
     /// <summary>
     /// 체력바 업데이트
@@ -328,7 +340,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void UpdateLifeBar()
     {
         float per = (float)(Life / Max_Life);
-        Life_Bar?.SetLifePercent(per);
+        Life_Bar_V2?.SetLifePercent(per);
         Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
 
@@ -510,7 +522,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         ShadowAlphaAnimation(alpha, duration);
         if (alpha == 0f)
         {
-            Life_Bar.HideLifeBar();
+            Life_Bar_V2.HideLifeBar();
         }
     }
     public void UnitRenderTextureEnable(bool enable)
@@ -709,7 +721,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Caster = this;
                 dmg.AddTarget(target);
                 dmg.Skill = skill;
-                dmg.Damage = GetAttackPoint();
+                dmg.Physics_Attack_Point = GetAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  onetime skill
@@ -803,7 +815,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Caster = this;
                 dmg.AddTargets(Normal_Attack_Target);
                 dmg.Skill = skill;
-                dmg.Damage = GetAttackPoint();
+                dmg.Physics_Attack_Point = GetAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
@@ -841,7 +853,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     dmg.Caster = this;
                     dmg.AddTarget(target);
                     dmg.Skill = skill;
-                    dmg.Damage = GetAttackPoint();
+                    dmg.Physics_Attack_Point = GetAttackPoint();
                     dmg.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
@@ -992,7 +1004,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         //  todo
-        double last_damage = data.Damage;
+        double last_damage = data.Physics_Attack_Point;
         var target = data.Targets[0];
         double vampire_hp = last_damage * Vampire_Point / (Vampire_Point + target.GetLevel() + 100);
         vampire_hp = Math.Truncate(vampire_hp);
@@ -1015,12 +1027,12 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        double last_damage = dmg.Damage;
+        double last_damage = dmg.Physics_Attack_Point;
 
         //  회피 여기서 계산할까? 회피하면 데미지가 줄어든다고 했는데, 그 로직은?
         if (IsEvation(dmg.Caster.Accuracy))
         {
-            last_damage = dmg.Damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
+            last_damage = dmg.Physics_Attack_Point * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
         }
 
 
@@ -1042,7 +1054,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         int r = UnityEngine.Random.Range(0, 100000);
         if (r < cri_chance)
         {
-            dmg.Is_Critical = true;
+            dmg.Is_Physics_Critical = true;
             last_damage *= GetCriticalPowerPoint();
         }
 
@@ -1051,7 +1063,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         last_damage = Math.Truncate(last_damage);
-        dmg.Damage = last_damage;
+        dmg.Physics_Attack_Point = last_damage;
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
@@ -1476,11 +1488,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x += move;
-        if (Is_Reposition)
-        {
-            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-            pos.z += zmove;
-        }
+        //if (Is_Reposition)
+        //{
+        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
+        //    pos.z += zmove;
+        //}
         this.transform.localPosition = pos;
     }
 
@@ -1500,11 +1512,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x -= move;
-        if (Is_Reposition)
-        {
-            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-            pos.z += zmove;
-        }
+        //if (Is_Reposition)
+        //{
+        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
+        //    pos.z += zmove;
+        //}
         this.transform.localPosition = pos;
     }
     /// <summary>
@@ -1515,11 +1527,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x += move;
-        if (Is_Reposition)
-        {
-            float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-            pos.z += zmove;
-        }
+        //if (Is_Reposition)
+        //{
+        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
+        //    pos.z += zmove;
+        //}
         this.transform.localPosition = pos;
     }
     /// <summary>
@@ -1576,45 +1588,45 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        UnitTriggerEnter(other);
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        UnitTriggerExit(other);
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    UnitTriggerEnter(other);
+    //}
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    UnitTriggerExit(other);
+    //}
 
-    protected virtual void UnitTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
-        {
-            var monster = other.gameObject.GetComponent<HeroBase_V2>();
-            if (monster != null)
-            {
-                if (monster.Deck_Order < Deck_Order)
-                {
-                    //  change reposition
-                    Is_Reposition = true;
-                }
-            }
-        }
-    }
-    protected virtual void UnitTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
-        {
-            var monster = other.gameObject.GetComponent<HeroBase_V2>();
-            if (monster != null)
-            {
-                if (monster.Deck_Order < Deck_Order)
-                {
-                    //  change reposition
-                    Is_Reposition = false;
-                }
-            }
-        }
-    }
+    //protected virtual void UnitTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
+    //    {
+    //        var monster = other.gameObject.GetComponent<HeroBase_V2>();
+    //        if (monster != null)
+    //        {
+    //            if (monster.Deck_Order < Deck_Order)
+    //            {
+    //                //  change reposition
+    //                Is_Reposition = true;
+    //            }
+    //        }
+    //    }
+    //}
+    //protected virtual void UnitTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
+    //    {
+    //        var monster = other.gameObject.GetComponent<HeroBase_V2>();
+    //        if (monster != null)
+    //        {
+    //            if (monster.Deck_Order < Deck_Order)
+    //            {
+    //                //  change reposition
+    //                Is_Reposition = false;
+    //            }
+    //        }
+    //    }
+    //}
 
 
     public override string ToString()

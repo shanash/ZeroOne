@@ -67,7 +67,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Combat_Number_Text.text = Unit_Data.GetCombatPoint().ToString("N0");
         Attack_Number_Text.text = Unit_Data.GetPhysicsAttackPoint().ToString("N0");
         Defense_Number_Text.text = Unit_Data.GetPhysicsDefensePoint().ToString("N0");
-        Life_Number_Text.text = Unit_Data.GetLifePoint().ToString("N0");
+        Life_Number_Text.text = Unit_Data.GetMaxLifePoint().ToString("N0");
 
         Skill_Mng = new BattleSkillManager();
         Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
@@ -115,7 +115,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
             List<StatusItemData> status_list = new List<StatusItemData>
             {
                 new StatusItemData(ConstString.Hero.COMBAT_POWER, Unit_Data.GetCombatPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.LIFE_POINT, Unit_Data.GetLifePoint().ToString("N0")),
+                new StatusItemData(ConstString.Hero.LIFE_POINT, Unit_Data.GetMaxLifePoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Unit_Data.GetPhysicsAttackPoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Unit_Data.GetMagicAttackPoint().ToString("N0")),
                 new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Unit_Data.GetPhysicsDefensePoint().ToString("N0")),

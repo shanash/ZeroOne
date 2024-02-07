@@ -855,7 +855,8 @@ GameObject:
   - component: {fileID: 2847624309827102327}
   - component: {fileID: 1694499669114936388}
   - component: {fileID: 2359919485472175477}
-  - component: {fileID: 8194202890446709907}
+  - component: {fileID: 1084803709375203753}
+  - component: {fileID: 8284905880996216846}
   m_Layer: 20
   m_Name: Container
   m_TagString: Untagged
@@ -872,7 +873,7 @@ RectTransform:
   m_GameObject: {fileID: 8066265953366639166}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2839228700754179510}
@@ -921,7 +922,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8194202890446709907
+--- !u!225 &1084803709375203753
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066265953366639166}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &8284905880996216846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -930,17 +943,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8066265953366639166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 963d15e4b35f7804b80683b7ecdfc746, type: 3}
+  m_Script: {fileID: 11500000, guid: 03b857b13d1ff2e40a6d7cf4459d9f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Ease_Data_List:
   - Move_Type: 1
-    Ease_Type: 27
-    Ease_Vector: {x: 1, y: 1}
-    Ease_Float: 0
+    Ease_Type: 21
+    Ease_Vector: {x: 0, y: 0}
+    Ease_Float: 1
     Ease_Duration: 0.3
   - Move_Type: 2
-    Ease_Type: 26
+    Ease_Type: 21
     Ease_Vector: {x: 0, y: 0}
     Ease_Float: 0
     Ease_Duration: 0.3
@@ -995,7 +1008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Box_Rect: {fileID: 7745641500622125356}
   Popup_Type: 2
-  Ease_Base: {fileID: 8194202890446709907}
+  Ease_Base: {fileID: 8284905880996216846}
 --- !u!1 &8825204263449583460
 GameObject:
   m_ObjectHideFlags: 0

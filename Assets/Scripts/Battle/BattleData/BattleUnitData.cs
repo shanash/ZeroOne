@@ -75,7 +75,7 @@ public abstract class BattleUnitData : BattleDataBase
     public virtual double GetCombatPoint()
     {
         return GameCalc.GetCombatPoint(
-            GetLifePoint(),
+            GetMaxLifePoint(),
             GetPhysicsAttackPoint(),
             GetPhysicsDefensePoint(),
             GetAutoRecoveryLife(),
@@ -108,7 +108,7 @@ public abstract class BattleUnitData : BattleDataBase
     /// 체력 포인트
     /// </summary>
     /// <returns></returns>
-    public abstract double GetLifePoint();
+    public abstract double GetMaxLifePoint();
 
     /// <summary>
     /// 흡혈량
@@ -142,7 +142,7 @@ public abstract class BattleUnitData : BattleDataBase
     /// 치명타 데미지 = 최종 데미지 * 2(or 물리 크리티컬 데미지에 영향을 주는 스탯 값)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetPhysicsCriticalPower() { return 0; }
+    public virtual double GetPhysicsCriticalPowerAdd() { return 0; }
     /// <summary>
     /// 마법 치명타 확률<br/>
     /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
@@ -154,7 +154,7 @@ public abstract class BattleUnitData : BattleDataBase
     /// 치명타 데미지 = 최종 데미지 * 2(or 마법 크리티컬 데미지에 영향을 주는 스탯 값)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMagicCriticalPower() { return 0; }
+    public virtual double GetMagicCriticalPowerAdd() { return 0; }
 
     /// <summary>
     /// 강인함(상태이상 저항력)<br/>

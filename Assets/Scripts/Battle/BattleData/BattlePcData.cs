@@ -145,8 +145,8 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetLifePoint() => GetLifePoint(Battle_Data);
-    double GetLifePoint(Player_Character_Battle_Data battle_data)
+    public override double GetMaxLifePoint() => GetMaxLifePoint(Battle_Data);
+    double GetMaxLifePoint(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
@@ -217,7 +217,7 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetPhysicsCriticalPower() => GetPhysicsCriticalPower(Battle_Data);
+    public override double GetPhysicsCriticalPowerAdd() => GetPhysicsCriticalPower(Battle_Data);
     double GetPhysicsCriticalPower(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
@@ -237,7 +237,7 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override double GetMagicCriticalPower() => GetMagicCriticalPower(Battle_Data);
+    public override double GetMagicCriticalPowerAdd() => GetMagicCriticalPower(Battle_Data);
     double GetMagicCriticalPower(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
