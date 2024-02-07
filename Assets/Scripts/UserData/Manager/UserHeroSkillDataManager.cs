@@ -25,9 +25,9 @@ public class UserHeroSkillDataManager : ManagerBase
         return User_Hero_Skill_Data_List.FindAll(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num);
     }
 
-    public UserHeroSkillData FindUserHeroSkillData(int player_character_num, int skill_group_id)
+    public UserHeroSkillData FindUserHeroSkillData(int player_character_id, int player_character_num, int skill_group_id)
     {
-        return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);
+        return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);
     }
 
     public void AddUserHeroSkillGroups(UserHeroData hero, int skill_group_id)
@@ -81,7 +81,7 @@ public class UserHeroSkillDataManager : ManagerBase
         // 스킬데이터를 찾습니다.
         if (user_hero != null)
         {
-            result = FindUserHeroSkillData(user_hero.Player_Character_Num, skill_group_id);
+            result = FindUserHeroSkillData(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num, skill_group_id);
         }
 
         // 못찾았으면 새로 만들어줍니다
@@ -148,7 +148,7 @@ public class UserHeroSkillDataManager : ManagerBase
                     int skill_grp_id = 0;
                     if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num) && int.TryParse(jdata[NODE_HERO_SKILL_GROUP_ID].ToString(), out skill_grp_id))
                     {
-                        UserHeroSkillData item = FindUserHeroSkillData(player_character_num, skill_grp_id);
+                        UserHeroSkillData item = FindUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
                         if (item != null)
                         {
                             item.Deserialized(jdata);
