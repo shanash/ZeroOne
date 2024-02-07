@@ -25,9 +25,9 @@ public class UserHeroSkillDataManager : ManagerBase
         return User_Hero_Skill_Data_List.FindAll(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num);
     }
 
-    public UserHeroSkillData FindUserHeroSkillData(int player_character_id, int player_character_num, int skill_group_id)
+    public UserHeroSkillData FindUserHeroSkillData(int skill_group_id)
     {
-        return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);   
+        return User_Hero_Skill_Data_List.Find(x => x.GetSkillGroupID() == skill_group_id);
     }
 
     public void AddUserHeroSkillGroups(UserHeroData hero, int skill_group_id)
@@ -49,32 +49,36 @@ public class UserHeroSkillDataManager : ManagerBase
         }
         AddUserHeroSkillData(hero, skill_data.pc_skill_group_id);
     }
-    
-
-    public UserHeroSkillData AddUserHeroSkillData(UserHeroData user_hero, int skill_group_id)
-    {
-        var skill = FindUserHeroSkillData(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num, skill_group_id);
-        if (skill == null)
-        {
-            skill = new UserHeroSkillData();
-            skill.SetSkillGroupID(user_hero, skill_group_id);
-            User_Hero_Skill_Data_List.Add(skill);
-            Is_Update_Data = true;
-        }
-
-        return skill;
-    }
 
     public UserHeroSkillData AddUserHeroSkillData(int player_character_id, int player_character_num, int skill_group_id)
     {
-        var skill = FindUserHeroSkillData(player_character_id, player_character_num, skill_group_id);
+        var user_hero = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(player_character_id, player_character_num);
+        if (user_hero != null)
+        {
+            return AddUserHeroSkillData(user_hero, skill_group_id);
+        }
+
+        return null;
+    }
+
+    public UserHeroSkillData AddUserHeroSkillData(UserHeroData user_hero, int skill_group_id)
+    {
+        var skill = FindUserHeroSkillData(skill_group_id);
+
         if (skill == null)
         {
             skill = new UserHeroSkillData();
-            skill.SetSkillGroupID(player_character_id, player_character_num, skill_group_id);
+            skill.SetSkillGroupID(skill_group_id);
             User_Hero_Skill_Data_List.Add(skill);
             Is_Update_Data = true;
         }
+
+        if (user_hero != null && skill.Hero_Data != user_hero)
+        {
+            skill.SetUserHero(user_hero);
+            Is_Update_Data = true;
+        }
+
         return skill;
     }
 
@@ -123,14 +127,14 @@ public class UserHeroSkillDataManager : ManagerBase
                     int skill_grp_id = 0;
                     if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num) && int.TryParse(jdata[NODE_HERO_SKILL_GROUP_ID].ToString(), out skill_grp_id))
                     {
-                        UserHeroSkillData item = FindUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
+                        UserHeroSkillData item = FindUserHeroSkillData(skill_grp_id);
                         if (item != null)
                         {
                             item.Deserialized(jdata);
                         }
                         else
                         {
-                            item = AddUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
+                            item = AddUserHeroSkillData(null, skill_grp_id);
                             item.Deserialized(jdata);
                         }
                     }

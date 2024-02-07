@@ -96,6 +96,7 @@ public class UserHeroDataManager : ManagerBase
             skill_mng.AddUserHeroSkillGroups(hero, battle_data.special_skill_group_id);
         }
     }
+
     /// <summary>
     /// 사용자 캐릭터 데이터 가져오기
     /// </summary>
@@ -113,7 +114,6 @@ public class UserHeroDataManager : ManagerBase
         }
         return hero;
     }
-
 
     public override LitJson.JsonData Serialized()
     {

@@ -13,9 +13,10 @@ public class UserHeroSkillData : UserDataBase
     SecureVar<int> Level = null;
     SecureVar<double> Exp = null;
 
-    UserHeroData Hero_Data;
     Player_Character_Skill_Group Data;
     Player_Character_Skill_Level_Data Level_Data;
+
+    public UserHeroData Hero_Data { get; private set; }
 
     public UserHeroSkillData() : base() { }
 
@@ -48,19 +49,16 @@ public class UserHeroSkillData : UserDataBase
         }
     }
 
-    public void SetSkillGroupID(int player_character_id, int player_character_num, int skill_grp_id)
+    public void SetSkillGroupID(int skill_grp_id)
     {
         Skill_Group_ID.Set(skill_grp_id);
-        Player_Character_ID.Set(player_character_id);
-        Player_Character_Num.Set(player_character_num);
         InitMasterData();
         Is_Update_Data = true;
     }
 
-    public void SetSkillGroupID(UserHeroData hero, int skill_grp_id)
+    public void SetUserHero(UserHeroData hero)
     {
         Hero_Data = hero;
-        Skill_Group_ID.Set(skill_grp_id);
         Player_Character_ID.Set(Hero_Data.GetPlayerCharacterID());
         Player_Character_Num.Set(Hero_Data.Player_Character_Num);
         InitMasterData();
@@ -69,12 +67,15 @@ public class UserHeroSkillData : UserDataBase
 
     protected override void InitMasterData()
     {
-        var m = MasterDataManager.Instance;
-        Data = m.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
-        Level_Data = m.Get_PlayerCharacterSkillLevelData(GetLevel());
+        if (GetSkillGroupID() != 0)
+        {
+            var m = MasterDataManager.Instance;
+            Data = m.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
+            Level_Data = m.Get_PlayerCharacterSkillLevelData(GetLevel());
+        }
 
         var mng = GameData.Instance.GetUserHeroDataManager();
-        if (mng != null)
+        if (mng != null && GetPlayerCharacterNum() != 0)
         {
             Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
         }
