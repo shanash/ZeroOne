@@ -38,7 +38,8 @@ public class UserHeroDataManager : ManagerBase
         for (int i = 0; i < cnt; i++)
         {
             var pdata = pc_data_list[i];
-            GetUserHeroData(pdata.player_character_id, hero_data_num++);
+            var hero = AddUserHeroData(pdata.player_character_id, hero_data_num++);
+            AddUserHeroSkillData(hero);
         }
 
         Save();
@@ -77,42 +78,39 @@ public class UserHeroDataManager : ManagerBase
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
 
+
+    void AddUserHeroSkillData(UserHeroData hero)
+    {
+        var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
+        if (skill_mng != null)
+        {
+            var battle_data = hero.GetPlayerCharacterBattleData();
+            int cnt = battle_data.skill_pattern.Length;
+            //  normal skill
+            for (int i = 0; i < cnt; i++)
+            {
+                skill_mng.AddUserHeroSkillGroups(hero, battle_data.skill_pattern[i]);
+            }
+
+            //  special skill
+            skill_mng.AddUserHeroSkillGroups(hero, battle_data.special_skill_group_id);
+        }
+    }
     /// <summary>
     /// 사용자 캐릭터 데이터 가져오기
     /// </summary>
     /// <param name="hero_data_id"></param>
     /// <param name="hero_data_num"></param>
     /// <returns></returns>
-    UserHeroData GetUserHeroData(int hero_data_id, int hero_data_num)
+    public UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
     {
-        if (hero_data_id == 0)
-        {
-            return null;
-        }
         var hero = FindUserHeroData(hero_data_id, hero_data_num);
         if (hero == null)
         {
             hero = new UserHeroData(hero_data_id, hero_data_num);
             User_Hero_Data_List.Add(hero);
             Is_Update_Data = true;
-
-            //  hero skill data init
-            var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
-            if (skill_mng != null)
-            {
-                var battle_data = hero.GetPlayerCharacterBattleData();
-                int cnt = battle_data.skill_pattern.Length;
-                //  normal skill
-                for (int i = 0; i < cnt; i++)
-                {
-                    skill_mng.AddUserHeroSkillGroups(hero, battle_data.skill_pattern[i]);
-                }
-
-                //  special skill
-                skill_mng.AddUserHeroSkillGroups(hero, battle_data.special_skill_group_id);
-            }
         }
-
         return hero;
     }
 
@@ -173,7 +171,9 @@ public class UserHeroDataManager : ManagerBase
                         }
                         else
                         {
-                            item = new UserHeroData(jdata);
+                            item = AddUserHeroData(player_character_id, player_character_num);
+                            item.Deserialized(jdata);
+                            AddUserHeroSkillData(item);
                             User_Hero_Data_List.Add(item);
                         }
                     }
