@@ -271,11 +271,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>    
     public double GetAttackPoint()
     {
-        double attk_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.ATK_UP);
-        double attk_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.ATK_UP);
+        double attk_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP);
+        double attk_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP);
 
-        double attk_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.ATK_DOWN);
-        double attk_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.ATK_DOWN);
+        double attk_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN);
+        double attk_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN);
 
         double pt = Physics_Attack + (attk_up_value - attk_down_value);
         if (attk_up_rate > 0 || attk_down_rate > 0)
@@ -291,11 +291,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     public double GetDefensePoint()
     {
-        double def_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DEF_UP);
-        double def_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.DEF_UP);
+        double def_up_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP);
+        double def_up_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP);
 
-        double def_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.DEF_DOWN);
-        double def_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.DEF_DOWN);
+        double def_down_rate = GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN);
+        double def_down_value = GetDurationSkillTypesValues(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN);
 
         double pt = Physics_Defense + (def_up_value - def_down_value);
         if (def_up_rate > 0 || def_down_rate > 0)

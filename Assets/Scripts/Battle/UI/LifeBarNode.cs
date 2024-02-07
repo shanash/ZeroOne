@@ -168,6 +168,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         {
             This_Rect = GetComponent<RectTransform>();
         }
+        HideLifeBar();
     }
 
     public void Despawned()

@@ -9,6 +9,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 	public int default_star {get; set;}
 	public ROLE_TYPE role_type {get; set;}
 	public TRIBE_TYPE tribe_type {get; set;}
+	public ATTRIBUTE_TYPE attribute_type {get; set;}
 	public int profile_age {get; set;}
 	public int[] profile_birthday {get; set;}
 	public int profile_high {get; set;}
@@ -29,6 +30,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 		default_star = 0;
 		role_type = ROLE_TYPE.NONE;
 		tribe_type = TRIBE_TYPE.NONE;
+		attribute_type = ATTRIBUTE_TYPE.NONE;
 		profile_age = 0;
 		profile_high = 0;
 		profile_habby = string.Empty;

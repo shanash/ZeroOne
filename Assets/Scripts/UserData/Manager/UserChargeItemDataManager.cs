@@ -75,10 +75,6 @@ public class UserChargeItemDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
         var json = new JsonData();
 
         var arr = new JsonData();

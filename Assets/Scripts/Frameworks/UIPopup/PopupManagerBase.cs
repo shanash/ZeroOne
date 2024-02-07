@@ -28,7 +28,7 @@ namespace FluffyDuck.UI
         /// Scene이 변할때마다 재생성됩니다
         /// </summary>
         protected override bool ResetInstanceOnChangeScene => true;
-        protected override bool Is_DontDestroyOnLoad => true;
+        protected override bool Is_DontDestroyOnLoad => false;
 
         protected override void Initialize()
         {

@@ -46,4 +46,24 @@ namespace ProtocolShared.Proto
     {
         public List<CharacterInfo> CharacterList { get; set; }
     }
+
+    public class DeckInfo
+    {
+        public uint No { get; set; }
+        public Guid Slot1 { get; set; }
+        public Guid? Slot2 { get; set; }
+        public Guid? Slot3 { get; set; }
+        public Guid? Slot4 { get; set; }
+        public Guid? Slot5 { get; set; }
+    }
+
+    public class DeckListResponse
+    {
+        public List<DeckInfo> DeckList { get; set; } = new List<DeckInfo>();
+    }
+
+    public class SetDeckRequest
+    {
+        public DeckInfo Deck { get; set; } 
+    }
 }

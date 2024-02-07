@@ -401,26 +401,44 @@ public enum STAT_MULTIPLE_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>100 공격력을 기준으로 절대값 계산을 하기 위한 수치</summary>
+	/// <summary>100 공격력 기준 절대값 계산</summary>
 	ATTACK_VALUE = 100,
-	/// <summary>101 공격력을 기준으로 배율 계산을 하기 위한 수치</summary>
-	ATTACK = 101,
-	/// <summary>200 방어력을 기준으로 계산을 하기 위한 수치</summary>
-	DEFENSE = 200,
-	/// <summary>300 최대 체력을 기준으로 계산을 하기 위한 수치</summary>
-	MAX_LIFE = 300,
-	/// <summary>400 현재 체력을 기준으로 계산을 하기 위한 수치</summary>
-	LIFE = 400,
-	/// <summary>500 크리티컬 확률을 기준으로 계산을 하기 위한 수치</summary>
-	CRITICAL_RATE = 500,
-	/// <summary>600 크리티컬 파워를 기준으로 계산을 하기 위한 수치</summary>
-	CRITICAL_POWER = 600,
-	/// <summary>700 명중률을 기준으로 계산을 하기 위한 수치</summary>
-	ACCURACY = 700,
-	/// <summary>800 회피율을 기준으로 계산을 하기 위한 수치</summary>
-	EVASION = 800,
-	/// <summary>900 피해량을 기준으로 계산을 하기 위한 수치</summary>
-	DAMAGE = 900,
+	/// <summary>101 공격력 기준 배율 계산</summary>
+	ATTACK_RATE = 101,
+	/// <summary>102 방어력 기준 절대값 계산</summary>
+	DEFENSE_VALUE = 102,
+	/// <summary>103 방어력 기준 배율 계산</summary>
+	DEFENSE_RATE = 103,
+	/// <summary>104 최대 체력 기준 절대값 계산</summary>
+	MAX_LIFE = 104,
+	/// <summary>105 최대 체력 기준 배율 계산</summary>
+	MAX_LIFE_RATE = 105,
+	/// <summary>106 현재 체력 기준 절대값 계산</summary>
+	LIFE = 106,
+	/// <summary>107 현재 체력 기준 배율 계산</summary>
+	LIFE_RATE = 107,
+	/// <summary>108 크리티컬 확률을 절대값 계산</summary>
+	CRITICAL_CHANCE = 108,
+	/// <summary>109 크리티컬 확률을 배율 계산</summary>
+	CRITICAL_CHANCE_RATE = 109,
+	/// <summary>110 크리티컬 파워 기준 절대값 계산</summary>
+	CRITICAL_POWER_ADD = 110,
+	/// <summary>111 크리티컬 파워 기준 배율 계산</summary>
+	CRITICAL_POWER_ADD_RATE = 111,
+	/// <summary>112 명중률 기준 절대값 계산</summary>
+	ACCURACY_VALUE = 112,
+	/// <summary>113 명중률 기준 배율 계산</summary>
+	ACCURACY_RATE = 113,
+	/// <summary>114 회피율 기준 절대값 계산</summary>
+	EVASION_VALUE = 114,
+	/// <summary>115 회피율 기준 배율 계산</summary>
+	EVASION_RATE = 115,
+	/// <summary>116 회복량 기준 절대값 계산</summary>
+	HEAL_VALUE = 116,
+	/// <summary>117 회복량 기준 배율 계산</summary>
+	HEAL_RATE = 117,
+	/// <summary>118 피해량 기준 배율 계산</summary>
+	DAMAGE = 118,
 }
 
 ///	<summary>
@@ -522,12 +540,14 @@ public enum ONETIME_EFFECT_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>1 데미지를 준다</summary>
-	DAMAGE = 1,
-	/// <summary>2 체력 회복</summary>
-	LIFE_RECOVERY = 2,
-	/// <summary>3 빈 이펙트(일회성 효과는 없음)</summary>
-	NONE_EFFECT = 3,
+	/// <summary>1 물리 대미지</summary>
+	PHYSICS_DAMAGE = 1,
+	/// <summary>2 마법 대미지</summary>
+	MAGIC_DAMAGE = 2,
+	/// <summary>3 체력 회복</summary>
+	LIFE_RECOVERY = 3,
+	/// <summary>4 빈 이펙트</summary>
+	NONE_EFFECT = 4,
 }
 
 ///	<summary>
@@ -549,16 +569,60 @@ public enum DURATION_EFFECT_TYPE
 	BIND = 104,
 	/// <summary>105 빙결</summary>
 	FREEZE = 105,
-	/// <summary>106 공격력 증가</summary>
-	ATK_UP = 106,
-	/// <summary>107 방어력 증가</summary>
-	DEF_UP = 107,
-	/// <summary>108 공격력 감소</summary>
-	ATK_DOWN = 108,
-	/// <summary>109 방어력 감소</summary>
-	DEF_DOWN = 109,
-	/// <summary>110 공격력 방어력 스탯 교환</summary>
-	EXCHANGE_ATK_DEF = 110,
+	/// <summary>106 물리 공격력 증가</summary>
+	PHYSICS_ATTACK_UP = 106,
+	/// <summary>107 마법 공격력 증가</summary>
+	MAGIC_ATTACK_UP = 107,
+	/// <summary>108 물리 방어력 증가</summary>
+	PHYSICS_DEFEND_UP = 108,
+	/// <summary>109 마법 방어력 증가</summary>
+	MAGIC_DEFEND_UP = 109,
+	/// <summary>110 마법 공격력 감소</summary>
+	PHYSICS_ATTACK_DOWN = 110,
+	/// <summary>111 마법 공격력 감소</summary>
+	MAGIC_ATTACK_DOWN = 111,
+	/// <summary>112 물리 방어력 감소</summary>
+	PHYSICS_DEFEND_DOWN = 112,
+	/// <summary>113 마법 방어력 감소</summary>
+	MAGIC_DEFEND_DOWN = 113,
+	/// <summary>114 물리 공격력 물리 방어력 스탯 교환</summary>
+	EXCHANGE_PHYSICS_ATTACK_DEFEND = 114,
+	/// <summary>115 마법 공격력 마법 방어력 스탯 교환</summary>
+	EXCHANGE_MAGIC_ATTACK_DEFEND = 115,
+	/// <summary>116 물리/마법 공격력 물리/ 마법 방어력 스탯 교환</summary>
+	EXCHANGE_ATTACK_DEFEND_ALL = 116,
+	/// <summary>117 물리 크리티컬 확률 증가</summary>
+	PHYSICS_CRITICAL_CHANCE_UP = 117,
+	/// <summary>118 마법 크리티컬 확률 증가</summary>
+	MAGIC_CRITICAL_CHANCE_UP = 118,
+	/// <summary>119 물리 크리티컬 추가 대미지 증가</summary>
+	PHYSICS_CRITICAL_POWER_ADD_UP = 119,
+	/// <summary>120 마법 크리티컬 추가 대미지 증가</summary>
+	MAGIC_CRITICAL_POWER_ADD_UP = 120,
+	/// <summary>121 타격 시 회복량 증가</summary>
+	ATTACK_LIFE_RECOVERY_UP = 121,
+	/// <summary>122 회피 증가</summary>
+	EVASION_UP = 122,
+	/// <summary>123 명중 증가</summary>
+	ACCURACY_UP = 123,
+	/// <summary>124 회복량 증가</summary>
+	HEAL_UP = 124,
+	/// <summary>125 물리 크리티컬 확률 감소</summary>
+	PHYSICS_CRITICAL_CHANCE_DOWN = 125,
+	/// <summary>126 마법 크리티컬 확률 감소</summary>
+	MAGIC_CRITICAL_CHANCE_DOWN = 126,
+	/// <summary>127 물리 크리티컬 추가 대미지 감소</summary>
+	PHYSICS_CRITICAL_POWER_ADD_DOWN = 127,
+	/// <summary>128 마법 크리티컬 추가 대미지 감소</summary>
+	MAGIC_CRITICAL_POWER_ADD_DOWN = 128,
+	/// <summary>129 타격 시 회복량 감소</summary>
+	ATTACK_LIFE_RECOVERY_DOWN = 129,
+	/// <summary>130 회피 감소</summary>
+	EVASION_DOWN = 130,
+	/// <summary>131 명중 감소</summary>
+	ACCURACY_DOWN = 131,
+	/// <summary>132 회복량 감소</summary>
+	HEAL_DOWN = 132,
 }
 
 ///	<summary>
@@ -878,6 +942,23 @@ public enum LOVE_LEVEL_TYPE
 	LIKE = 4,
 	/// <summary>5 사랑함</summary>
 	LOVE = 5,
+}
+
+///	<summary>
+///	공격 타입
+///	</summary>
+public enum ATTRIBUTE_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>전기</summary>
+	ELECTRICITY = 1,
+	/// <summary>베리타리움</summary>
+	VEGETARIUM = 2,
+	/// <summary>요력</summary>
+	VITALITY = 3,
+	/// <summary>마력</summary>
+	MAGIC = 4,
 }
 
 ///	<summary>

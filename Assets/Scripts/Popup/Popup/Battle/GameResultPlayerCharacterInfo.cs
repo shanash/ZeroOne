@@ -54,8 +54,6 @@ public class GameResultPlayerCharacterInfo : UIBase
     IEnumerator StartLevelUp(int char_exp)
     {
         int before_lv = User_Data.GetLevel();
-        //float before_xp_percent = User_Data.GetExpPercetage();
-        //double before_remain_need_xp = User_Data.GetRemainNextExp();
 
         var result_code = User_Data.AddExp(char_exp);
         if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))

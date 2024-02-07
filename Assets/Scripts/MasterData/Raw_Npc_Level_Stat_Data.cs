@@ -5,23 +5,29 @@
 public class Raw_Npc_Level_Stat_Data : System.IDisposable
 {
 	public int npc_level_stat_id {get; set;}
-	public NPC_TYPE npc_type {get; set;}
-	public TRIBE_TYPE tribe_type {get; set;}
-	public ROLE_TYPE role_type {get; set;}
-	public double attack_inc {get; set;}
-	public double defend_inc {get; set;}
-	public double hp_inc {get; set;}
-	public double evation_inc {get; set;}
-	public double accuracy_inc {get; set;}
+	public double life {get; set;}
+	public double physics_attack {get; set;}
+	public double magic_attack {get; set;}
+	public double physics_defend {get; set;}
+	public double magic_defend {get; set;}
+	public double physics_critical_chance {get; set;}
+	public double magic_critical_chance {get; set;}
+	public double physics_critical_power_add {get; set;}
+	public double magic_critical_power_add {get; set;}
+	public double attack_life_recovery {get; set;}
+	public double evation {get; set;}
+	public double accuracy {get; set;}
+	public double heal {get; set;}
+	public double resist  {get; set;}
+	public double weight {get; set;}
+	public double auto_recovery {get; set;}
+	public double move_speed {get; set;}
 
 	private bool disposed = false;
 
 	public Raw_Npc_Level_Stat_Data()
 	{
 		npc_level_stat_id = 0;
-		npc_type = NPC_TYPE.NONE;
-		tribe_type = TRIBE_TYPE.NONE;
-		role_type = ROLE_TYPE.NONE;
 	}
 
 	public void Dispose()

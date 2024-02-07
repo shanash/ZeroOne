@@ -114,11 +114,14 @@ public class GameResultLosePopup : PopupBase
     {
         //  일단 스테미너 사용 완료 하자. (패배시 스테미너 1 사용)
         int cost_stamina = 1;
-        var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+
+        var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
+        var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
         if (stamina_item != null)
         {
             stamina_item.UseChargeItem(cost_stamina);
         }
+        stamina_mng.Save();
 
         //  player info
         BeforePlayerInfo();

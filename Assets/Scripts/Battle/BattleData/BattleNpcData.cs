@@ -78,7 +78,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_attack;
+            return battle_data.physics_attack;
         }
         return 0;
     }
@@ -88,7 +88,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_attack;
+            return battle_data.magic_attack;
         }
         return 0;
     }
@@ -98,7 +98,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_defend;
+            return battle_data.physics_defend;
         }
         return 0;
     }
@@ -108,7 +108,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_defend;
+            return battle_data.magic_defend;
         }
         return 0;
     }
@@ -118,7 +118,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.hp;
+            return battle_data.life;
         }
         return 0;
     }
@@ -128,7 +128,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.attack_recovery;
+            return battle_data.attack_life_recovery;
         }
         return 0;
     }
@@ -159,7 +159,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.attack_recovery;
+            return battle_data.attack_life_recovery;
         }
         return 0;
     }
@@ -168,7 +168,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_cri_rate;
+            return battle_data.physics_critical_chance;
         }
         return 0;
     }
@@ -177,7 +177,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_cri_power;
+            return battle_data.physics_critical_power_add;
         }
         return 0;
     }
@@ -186,7 +186,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_cri_rate;
+            return battle_data.magic_critical_chance;
         }
         return 0;
     }
@@ -195,7 +195,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_cri_power;
+            return battle_data.magic_critical_power_add;
         }
         return 0;
     }

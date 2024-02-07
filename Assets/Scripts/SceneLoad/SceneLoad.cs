@@ -74,7 +74,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
         scene_list.Add("title");
         scene_list.Add("load");
         scene_list.Add("home");
-        scene_list.Add("battlev2");
+        scene_list.Add("battle");
         scene_list.Add("memorial");
 
         if (!scene_list.Contains(Start_Scene_Name))

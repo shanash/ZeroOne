@@ -28,10 +28,10 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.ATTACK:
+                case STAT_MULTIPLE_TYPE.ATTACK_RATE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.DEFENSE:
+                case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
                     Debug.Assert(false);
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
@@ -40,16 +40,16 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.LIFE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_RATE:
+                case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_POWER:
+                case STAT_MULTIPLE_TYPE.CRITICAL_POWER_ADD:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.ACCURACY:
+                case STAT_MULTIPLE_TYPE.ACCURACY_VALUE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.EVASION:
+                case STAT_MULTIPLE_TYPE.EVASION_VALUE:
                     Debug.Assert(false);
                     break;
                 case STAT_MULTIPLE_TYPE.DAMAGE:

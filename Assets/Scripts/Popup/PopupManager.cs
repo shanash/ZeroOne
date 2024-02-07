@@ -1,6 +1,7 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PopupManager : PopupManagerBase<PopupManager>
 {
@@ -34,7 +35,17 @@ public class PopupManager : PopupManagerBase<PopupManager>
 
     void InitContainer()
     {
-        var go = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Popup_Container", this.transform);
-        _Container = go.GetComponent<PopupContainer>();
+        string scene_name = SceneManager.GetActiveScene().name;
+        if (scene_name.Equals("battle"))
+        {
+            var go = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Battle_Popup_Container", this.transform);
+            _Container = go.GetComponent<PopupContainer>();
+            _Container.SetUICamera();
+        }
+        else
+        {
+            var go = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Popup_Container", this.transform);
+            _Container = go.GetComponent<PopupContainer>();
+        }
     }
 }

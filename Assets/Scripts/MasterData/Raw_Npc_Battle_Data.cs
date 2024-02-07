@@ -10,16 +10,16 @@ public class Raw_Npc_Battle_Data : System.IDisposable
 	public int[] skill_pattern {get; set;}
 	public int passive_skill_group_id {get; set;}
 	public int special_skill_group_id {get; set;}
-	public double hp {get; set;}
-	public double p_attack {get; set;}
-	public double m_attack {get; set;}
-	public double p_defend {get; set;}
-	public double m_defend {get; set;}
-	public double p_cri_rate {get; set;}
-	public double m_cri_rate {get; set;}
-	public double p_cri_power {get; set;}
-	public double m_cri_power {get; set;}
-	public double attack_recovery {get; set;}
+	public double life {get; set;}
+	public double physics_attack {get; set;}
+	public double magic_attack {get; set;}
+	public double physics_defend {get; set;}
+	public double magic_defend {get; set;}
+	public double physics_critical_chance {get; set;}
+	public double magic_critical_chance {get; set;}
+	public double physics_critical_power_add {get; set;}
+	public double magic_critical_power_add {get; set;}
+	public double attack_life_recovery {get; set;}
 	public double evasion {get; set;}
 	public double accuracy {get; set;}
 	public double heal {get; set;}

@@ -355,6 +355,40 @@
     "event_name": "shoot"
   },
   {
+    "pc_skill_id": 100204,
+    "pc_skill_group_id": 100204,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 7.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      15,
+      15,
+      15,
+      15,
+      15,
+      25
+    ],
+    "onetime_effect_ids": [
+      100009
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot"
+  },
+  {
     "pc_skill_id": 100301,
     "pc_skill_group_id": 100301,
     "target_type": 1,
@@ -446,6 +480,37 @@
     "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
+    "pc_skill_id": 1003034,
+    "pc_skill_group_id": 100304,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      50,
+      50
+    ],
+    "onetime_effect_ids": [
+      100011
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
+  },
+  {
     "pc_skill_id": 100401,
     "pc_skill_group_id": 100401,
     "target_type": 1,
@@ -479,7 +544,7 @@
     "pc_skill_id": 100402,
     "pc_skill_group_id": 100402,
     "target_type": 0,
-    "target_rule_type": 3002,
+    "target_rule_type": 1,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,
@@ -509,7 +574,7 @@
     "pc_skill_id": 100403,
     "pc_skill_group_id": 100403,
     "target_type": 1,
-    "target_rule_type": 6,
+    "target_rule_type": 1,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,

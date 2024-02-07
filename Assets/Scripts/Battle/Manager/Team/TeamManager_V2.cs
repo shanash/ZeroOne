@@ -327,6 +327,7 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void StoryModeMonsterTeamSpawn()
     {
+        ClearMembers();
         var pool = GameObjectPoolManager.Instance;
 
         var wdata = (Wave_Data)Dungeon.GetWaveData();
@@ -523,6 +524,17 @@ public partial class TeamManager_V2 : IDisposable
         GameObjectPoolManager.Instance.UnusedGameObject(hero.gameObject);
         Used_Members.Remove(hero);
         Alive_Member_Count = Used_Members.Count;
+    }
+
+    void ClearMembers()
+    {
+        var pool = GameObjectPoolManager.Instance;
+        int cnt = Used_Members.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            pool.UnusedGameObject(Used_Members[i].gameObject);
+        }
+        Used_Members.Clear();
     }
 
     public int GetTotalMemberCount()

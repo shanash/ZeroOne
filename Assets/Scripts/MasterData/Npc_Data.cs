@@ -32,6 +32,12 @@ public class Npc_Data : System.IDisposable
 	NPC_TYPE _npc_type;
 
 	///	<summary>
+	///	공격 속성
+	///	</summary>
+	public ATTRIBUTE_TYPE attribute_type => _attribute_type;
+	ATTRIBUTE_TYPE _attribute_type;
+
+	///	<summary>
 	///	전투 정보 인덱스
 	///	</summary>
 	public int npc_battle_id => _npc_battle_id;
@@ -57,6 +63,7 @@ public class Npc_Data : System.IDisposable
 		_name_kr = raw_data.name_kr;
 		_tribe_type = raw_data.tribe_type;
 		_npc_type = raw_data.npc_type;
+		_attribute_type = raw_data.attribute_type;
 		_npc_battle_id = raw_data.npc_battle_id;
 		_prefab_path = raw_data.prefab_path;
 		_icon_path = raw_data.icon_path;
@@ -85,6 +92,7 @@ public class Npc_Data : System.IDisposable
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
 		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();
+		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();

@@ -54,62 +54,62 @@ public class Player_Character_Battle_Data : System.IDisposable
 	///	<summary>
 	///	체력
 	///	</summary>
-	public double hp => _hp;
-	double _hp;
+	public double life => _life;
+	double _life;
 
 	///	<summary>
 	///	물리 공격력
 	///	</summary>
-	public double p_attack => _p_attack;
-	double _p_attack;
+	public double physics_attack => _physics_attack;
+	double _physics_attack;
 
 	///	<summary>
 	///	마법 공격력
 	///	</summary>
-	public double m_attack => _m_attack;
-	double _m_attack;
+	public double magic_attack => _magic_attack;
+	double _magic_attack;
 
 	///	<summary>
 	///	물리 방어력
 	///	</summary>
-	public double p_defend => _p_defend;
-	double _p_defend;
+	public double physics_defend => _physics_defend;
+	double _physics_defend;
 
 	///	<summary>
 	///	마법_방어력
 	///	</summary>
-	public double m_defend => _m_defend;
-	double _m_defend;
+	public double magic_defend => _magic_defend;
+	double _magic_defend;
 
 	///	<summary>
 	///	물리 크리티컬 확률
 	///	</summary>
-	public double p_cri_rate => _p_cri_rate;
-	double _p_cri_rate;
+	public double physics_critical_chance => _physics_critical_chance;
+	double _physics_critical_chance;
 
 	///	<summary>
 	///	마법 크리티컬 확률
 	///	</summary>
-	public double m_cri_rate => _m_cri_rate;
-	double _m_cri_rate;
+	public double magic_critical_chance => _magic_critical_chance;
+	double _magic_critical_chance;
 
 	///	<summary>
 	///	물리 크리티컬 추가 대미지
 	///	</summary>
-	public double p_cri_power => _p_cri_power;
-	double _p_cri_power;
+	public double physics_critical_power_add => _physics_critical_power_add;
+	double _physics_critical_power_add;
 
 	///	<summary>
 	///	마법 크리티컬 추가 대미지
 	///	</summary>
-	public double m_cri_power => _m_cri_power;
-	double _m_cri_power;
+	public double magic_critical_power_add => _magic_critical_power_add;
+	double _magic_critical_power_add;
 
 	///	<summary>
 	///	타격 시 회복량
 	///	</summary>
-	public double attack_recovery => _attack_recovery;
-	double _attack_recovery;
+	public double attack_life_recovery => _attack_life_recovery;
+	double _attack_life_recovery;
 
 	///	<summary>
 	///	회피
@@ -171,16 +171,16 @@ public class Player_Character_Battle_Data : System.IDisposable
 			_skill_pattern = raw_data.skill_pattern.ToArray();
 		_passive_skill_group_id = raw_data.passive_skill_group_id;
 		_special_skill_group_id = raw_data.special_skill_group_id;
-		_hp = raw_data.hp;
-		_p_attack = raw_data.p_attack;
-		_m_attack = raw_data.m_attack;
-		_p_defend = raw_data.p_defend;
-		_m_defend = raw_data.m_defend;
-		_p_cri_rate = raw_data.p_cri_rate;
-		_m_cri_rate = raw_data.m_cri_rate;
-		_p_cri_power = raw_data.p_cri_power;
-		_m_cri_power = raw_data.m_cri_power;
-		_attack_recovery = raw_data.attack_recovery;
+		_life = raw_data.life;
+		_physics_attack = raw_data.physics_attack;
+		_magic_attack = raw_data.magic_attack;
+		_physics_defend = raw_data.physics_defend;
+		_magic_defend = raw_data.magic_defend;
+		_physics_critical_chance = raw_data.physics_critical_chance;
+		_magic_critical_chance = raw_data.magic_critical_chance;
+		_physics_critical_power_add = raw_data.physics_critical_power_add;
+		_magic_critical_power_add = raw_data.magic_critical_power_add;
+		_attack_life_recovery = raw_data.attack_life_recovery;
 		_evasion = raw_data.evasion;
 		_accuracy = raw_data.accuracy;
 		_heal = raw_data.heal;
@@ -227,16 +227,16 @@ public class Player_Character_Battle_Data : System.IDisposable
 
 		sb.AppendFormat("[passive_skill_group_id] = <color=yellow>{0}</color>", passive_skill_group_id).AppendLine();
 		sb.AppendFormat("[special_skill_group_id] = <color=yellow>{0}</color>", special_skill_group_id).AppendLine();
-		sb.AppendFormat("[hp] = <color=yellow>{0}</color>", hp).AppendLine();
-		sb.AppendFormat("[p_attack] = <color=yellow>{0}</color>", p_attack).AppendLine();
-		sb.AppendFormat("[m_attack] = <color=yellow>{0}</color>", m_attack).AppendLine();
-		sb.AppendFormat("[p_defend] = <color=yellow>{0}</color>", p_defend).AppendLine();
-		sb.AppendFormat("[m_defend] = <color=yellow>{0}</color>", m_defend).AppendLine();
-		sb.AppendFormat("[p_cri_rate] = <color=yellow>{0}</color>", p_cri_rate).AppendLine();
-		sb.AppendFormat("[m_cri_rate] = <color=yellow>{0}</color>", m_cri_rate).AppendLine();
-		sb.AppendFormat("[p_cri_power] = <color=yellow>{0}</color>", p_cri_power).AppendLine();
-		sb.AppendFormat("[m_cri_power] = <color=yellow>{0}</color>", m_cri_power).AppendLine();
-		sb.AppendFormat("[attack_recovery] = <color=yellow>{0}</color>", attack_recovery).AppendLine();
+		sb.AppendFormat("[life] = <color=yellow>{0}</color>", life).AppendLine();
+		sb.AppendFormat("[physics_attack] = <color=yellow>{0}</color>", physics_attack).AppendLine();
+		sb.AppendFormat("[magic_attack] = <color=yellow>{0}</color>", magic_attack).AppendLine();
+		sb.AppendFormat("[physics_defend] = <color=yellow>{0}</color>", physics_defend).AppendLine();
+		sb.AppendFormat("[magic_defend] = <color=yellow>{0}</color>", magic_defend).AppendLine();
+		sb.AppendFormat("[physics_critical_chance] = <color=yellow>{0}</color>", physics_critical_chance).AppendLine();
+		sb.AppendFormat("[magic_critical_chance] = <color=yellow>{0}</color>", magic_critical_chance).AppendLine();
+		sb.AppendFormat("[physics_critical_power_add] = <color=yellow>{0}</color>", physics_critical_power_add).AppendLine();
+		sb.AppendFormat("[magic_critical_power_add] = <color=yellow>{0}</color>", magic_critical_power_add).AppendLine();
+		sb.AppendFormat("[attack_life_recovery] = <color=yellow>{0}</color>", attack_life_recovery).AppendLine();
 		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[heal] = <color=yellow>{0}</color>", heal).AppendLine();

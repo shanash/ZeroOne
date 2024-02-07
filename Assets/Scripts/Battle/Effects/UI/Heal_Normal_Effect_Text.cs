@@ -7,7 +7,7 @@ public class Heal_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Heal Text")]
     TMP_Text Heal_Text;
 
-    readonly float VELOCITY = 1.5f;
+    readonly float VELOCITY = 3.5f;
 
 
     public override void SetData(params object[] data)

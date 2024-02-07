@@ -228,7 +228,7 @@ public class PCDeckSettingUI : PopupBase
         }
         board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
 
-        SceneManager.LoadScene("battlev2");
+        SceneManager.LoadScene("battle");
     }
 
     public override void Despawned()

@@ -14,66 +14,129 @@ public class Npc_Level_Stat_Data : System.IDisposable
 	int _npc_level_stat_id;
 
 	///	<summary>
-	///	NPC Type
-	///	</summary>
-	public NPC_TYPE npc_type => _npc_type;
-	NPC_TYPE _npc_type;
-
-	///	<summary>
-	///	종족 타입
-	///	</summary>
-	public TRIBE_TYPE tribe_type => _tribe_type;
-	TRIBE_TYPE _tribe_type;
-
-	///	<summary>
-	///	롤 타입
-	///	</summary>
-	public ROLE_TYPE role_type => _role_type;
-	ROLE_TYPE _role_type;
-
-	///	<summary>
-	///	공격력 증가
-	///	</summary>
-	public double attack_inc => _attack_inc;
-	double _attack_inc;
-
-	///	<summary>
-	///	방어력 증가
-	///	</summary>
-	public double defend_inc => _defend_inc;
-	double _defend_inc;
-
-	///	<summary>
 	///	체력 증가
 	///	</summary>
-	public double hp_inc => _hp_inc;
-	double _hp_inc;
+	public double life => _life;
+	double _life;
+
+	///	<summary>
+	///	물리 공격력 증가
+	///	</summary>
+	public double physics_attack => _physics_attack;
+	double _physics_attack;
+
+	///	<summary>
+	///	마법 공격력 증가
+	///	</summary>
+	public double magic_attack => _magic_attack;
+	double _magic_attack;
+
+	///	<summary>
+	///	물리 방어력 증가
+	///	</summary>
+	public double physics_defend => _physics_defend;
+	double _physics_defend;
+
+	///	<summary>
+	///	마법 방어력 증가
+	///	</summary>
+	public double magic_defend => _magic_defend;
+	double _magic_defend;
+
+	///	<summary>
+	///	물리 크리티컬 확률
+	///	</summary>
+	public double physics_critical_chance => _physics_critical_chance;
+	double _physics_critical_chance;
+
+	///	<summary>
+	///	마법 크리티컬 확률
+	///	</summary>
+	public double magic_critical_chance => _magic_critical_chance;
+	double _magic_critical_chance;
+
+	///	<summary>
+	///	물리 크리티컬 추가 대미지
+	///	</summary>
+	public double physics_critical_power_add => _physics_critical_power_add;
+	double _physics_critical_power_add;
+
+	///	<summary>
+	///	마법 크리티컬 추가 대미지
+	///	</summary>
+	public double magic_critical_power_add => _magic_critical_power_add;
+	double _magic_critical_power_add;
+
+	///	<summary>
+	///	타격 시 회복량
+	///	</summary>
+	public double attack_life_recovery => _attack_life_recovery;
+	double _attack_life_recovery;
 
 	///	<summary>
 	///	회피 증가
 	///	</summary>
-	public double evation_inc => _evation_inc;
-	double _evation_inc;
+	public double evation => _evation;
+	double _evation;
 
 	///	<summary>
 	///	명중 증가
 	///	</summary>
-	public double accuracy_inc => _accuracy_inc;
-	double _accuracy_inc;
+	public double accuracy => _accuracy;
+	double _accuracy;
+
+	///	<summary>
+	///	힐량
+	///	</summary>
+	public double heal => _heal;
+	double _heal;
+
+	///	<summary>
+	///	강인함
+	///	</summary>
+	public double resist  => _resist ;
+	double _resist ;
+
+	///	<summary>
+	///	무게
+	///	</summary>
+	public double weight => _weight;
+	double _weight;
+
+	///	<summary>
+	///	자동 회복
+	///	</summary>
+	public double auto_recovery => _auto_recovery;
+	double _auto_recovery;
+
+	///	<summary>
+	///	전투 이동 속도
+	///	</summary>
+	public double move_speed => _move_speed;
+	double _move_speed;
 
 	private bool disposed = false;
 
 	public Npc_Level_Stat_Data(Raw_Npc_Level_Stat_Data raw_data)
 	{
 		_npc_level_stat_id = raw_data.npc_level_stat_id;
-		_npc_type = raw_data.npc_type;
-		_tribe_type = raw_data.tribe_type;
-		_role_type = raw_data.role_type;
-		_attack_inc = raw_data.attack_inc;
-		_defend_inc = raw_data.defend_inc;
-		_hp_inc = raw_data.hp_inc;
-		_evation_inc = raw_data.evation_inc;
-		_accuracy_inc = raw_data.accuracy_inc;
+		_life = raw_data.life;
+		_physics_attack = raw_data.physics_attack;
+		_magic_attack = raw_data.magic_attack;
+		_physics_defend = raw_data.physics_defend;
+		_magic_defend = raw_data.magic_defend;
+		_physics_critical_chance = raw_data.physics_critical_chance;
+		_magic_critical_chance = raw_data.magic_critical_chance;
+		_physics_critical_power_add = raw_data.physics_critical_power_add;
+		_magic_critical_power_add = raw_data.magic_critical_power_add;
+		_attack_life_recovery = raw_data.attack_life_recovery;
+		_evation = raw_data.evation;
+		_accuracy = raw_data.accuracy;
+		_heal = raw_data.heal;
+		_resist  = raw_data.resist ;
+		_weight = raw_data.weight;
+		_auto_recovery = raw_data.auto_recovery;
+		_move_speed = raw_data.move_speed;
 	}
 
 	public void Dispose()
@@ -96,14 +159,23 @@ public class Npc_Level_Stat_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[npc_level_stat_id] = <color=yellow>{0}</color>", npc_level_stat_id).AppendLine();
-		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();
-		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
-		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
-		sb.AppendFormat("[attack_inc] = <color=yellow>{0}</color>", attack_inc).AppendLine();
-		sb.AppendFormat("[defend_inc] = <color=yellow>{0}</color>", defend_inc).AppendLine();
-		sb.AppendFormat("[hp_inc] = <color=yellow>{0}</color>", hp_inc).AppendLine();
-		sb.AppendFormat("[evation_inc] = <color=yellow>{0}</color>", evation_inc).AppendLine();
-		sb.AppendFormat("[accuracy_inc] = <color=yellow>{0}</color>", accuracy_inc).AppendLine();
+		sb.AppendFormat("[life] = <color=yellow>{0}</color>", life).AppendLine();
+		sb.AppendFormat("[physics_attack] = <color=yellow>{0}</color>", physics_attack).AppendLine();
+		sb.AppendFormat("[magic_attack] = <color=yellow>{0}</color>", magic_attack).AppendLine();
+		sb.AppendFormat("[physics_defend] = <color=yellow>{0}</color>", physics_defend).AppendLine();
+		sb.AppendFormat("[magic_defend] = <color=yellow>{0}</color>", magic_defend).AppendLine();
+		sb.AppendFormat("[physics_critical_chance] = <color=yellow>{0}</color>", physics_critical_chance).AppendLine();
+		sb.AppendFormat("[magic_critical_chance] = <color=yellow>{0}</color>", magic_critical_chance).AppendLine();
+		sb.AppendFormat("[physics_critical_power_add] = <color=yellow>{0}</color>", physics_critical_power_add).AppendLine();
+		sb.AppendFormat("[magic_critical_power_add] = <color=yellow>{0}</color>", magic_critical_power_add).AppendLine();
+		sb.AppendFormat("[attack_life_recovery] = <color=yellow>{0}</color>", attack_life_recovery).AppendLine();
+		sb.AppendFormat("[evation] = <color=yellow>{0}</color>", evation).AppendLine();
+		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
+		sb.AppendFormat("[heal] = <color=yellow>{0}</color>", heal).AppendLine();
+		sb.AppendFormat("[resist ] = <color=yellow>{0}</color>", resist ).AppendLine();
+		sb.AppendFormat("[weight] = <color=yellow>{0}</color>", weight).AppendLine();
+		sb.AppendFormat("[auto_recovery] = <color=yellow>{0}</color>", auto_recovery).AppendLine();
+		sb.AppendFormat("[move_speed] = <color=yellow>{0}</color>", move_speed).AppendLine();
 		return sb.ToString();
 	}
 }

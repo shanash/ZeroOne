@@ -38,6 +38,12 @@ public class Player_Character_Data : System.IDisposable
 	TRIBE_TYPE _tribe_type;
 
 	///	<summary>
+	///	공격 속성
+	///	</summary>
+	public ATTRIBUTE_TYPE attribute_type => _attribute_type;
+	ATTRIBUTE_TYPE _attribute_type;
+
+	///	<summary>
 	///	프로필 정보_나이
 	///	</summary>
 	public int profile_age => _profile_age;
@@ -106,6 +112,7 @@ public class Player_Character_Data : System.IDisposable
 		_default_star = raw_data.default_star;
 		_role_type = raw_data.role_type;
 		_tribe_type = raw_data.tribe_type;
+		_attribute_type = raw_data.attribute_type;
 		_profile_age = raw_data.profile_age;
 		if(raw_data.profile_birthday != null)
 			_profile_birthday = raw_data.profile_birthday.ToArray();
@@ -144,6 +151,7 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[default_star] = <color=yellow>{0}</color>", default_star).AppendLine();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
+		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
 		sb.AppendFormat("[profile_age] = <color=yellow>{0}</color>", profile_age).AppendLine();
 		sb.AppendLine("[profile_birthday]");
 		if(profile_birthday != null)

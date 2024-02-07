@@ -14,6 +14,12 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 	int _pc_skill_onetime_id;
 
 	///	<summary>
+	///	속성
+	///	</summary>
+	public ATTRIBUTE_TYPE attribute_type => _attribute_type;
+	ATTRIBUTE_TYPE _attribute_type;
+
+	///	<summary>
 	///	일회성 효과 타입
 	///	</summary>
 	public ONETIME_EFFECT_TYPE onetime_effect_type => _onetime_effect_type;
@@ -60,6 +66,7 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 	public Player_Character_Skill_Onetime_Data(Raw_Player_Character_Skill_Onetime_Data raw_data)
 	{
 		_pc_skill_onetime_id = raw_data.pc_skill_onetime_id;
+		_attribute_type = raw_data.attribute_type;
 		_onetime_effect_type = raw_data.onetime_effect_type;
 		_multiple_type = raw_data.multiple_type;
 		_value = raw_data.value;
@@ -89,6 +96,7 @@ public class Player_Character_Skill_Onetime_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[pc_skill_onetime_id] = <color=yellow>{0}</color>", pc_skill_onetime_id).AppendLine();
+		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
 		sb.AppendFormat("[onetime_effect_type] = <color=yellow>{0}</color>", onetime_effect_type).AppendLine();
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();

@@ -62,7 +62,7 @@ public class BattleSkillDataFactory
             {
                 switch (pc_skill.onetime_effect_type)
                 {
-                    case ONETIME_EFFECT_TYPE.DAMAGE:
+                    case ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE:
                         return typeof(BattlePcOnetimeSkillData_Damage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattlePcOnetimeSkillData_LifeRecovery);
@@ -77,7 +77,7 @@ public class BattleSkillDataFactory
             {
                 switch (npc_skill.onetime_effect_type)
                 {
-                    case ONETIME_EFFECT_TYPE.DAMAGE:
+                    case ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE:
                         return typeof(BattleNpcOnetimeSkillData_Damage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattleNpcOnetimeSkillData_LifeRecovery);
@@ -121,13 +121,13 @@ public class BattleSkillDataFactory
                         return typeof(BattlePcDurationSkillData_Bind);
                     case DURATION_EFFECT_TYPE.FREEZE:
                         return typeof(BattlePcDurationSkillData_Freeze);
-                    case DURATION_EFFECT_TYPE.ATK_UP:
+                    case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP:
                         return typeof(BattlePcDurationSkillData_AttackUp);
-                    case DURATION_EFFECT_TYPE.DEF_UP:
+                    case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP:
                         return typeof(BattlePcDurationSkillData_DefenseUp);
-                    case DURATION_EFFECT_TYPE.ATK_DOWN:
+                    case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN:
                         return typeof(BattlePcDurationSkillData_AttackDown);
-                    case DURATION_EFFECT_TYPE.DEF_DOWN:
+                    case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN:
                         return typeof(BattlePcDurationSkillData_DefenseDown);
                     default:
                         Debug.Assert(false, "PC 버프 스킬데이터가 정상적이지 않습니다!!!");
@@ -150,13 +150,13 @@ public class BattleSkillDataFactory
                         return typeof(BattleNpcDurationSkillData_Bind);
                     case DURATION_EFFECT_TYPE.FREEZE:
                         return typeof(BattleNpcDurationSkillData_Freeze);
-                    case DURATION_EFFECT_TYPE.ATK_UP:
+                    case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP:
                         return typeof(BattleNpcDurationSkillData_AttackUp);
-                    case DURATION_EFFECT_TYPE.DEF_UP:
+                    case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP:
                         return typeof(BattleNpcDurationSkillData_DefenseUp);
-                    case DURATION_EFFECT_TYPE.ATK_DOWN:
+                    case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN:
                         return typeof(BattleNpcDurationSkillData_AttackDown);
-                    case DURATION_EFFECT_TYPE.DEF_DOWN:
+                    case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN:
                         return typeof(BattleNpcDurationSkillData_DefenseDown);
                     default:
                         Debug.Assert(false, "NPC 버프 스킬데이터가 정상적이지 않습니다!!!");

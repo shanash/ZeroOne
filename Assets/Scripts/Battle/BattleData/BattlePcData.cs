@@ -1,5 +1,3 @@
-using DocumentFormat.OpenXml.Drawing.Charts;
-
 public class BattlePcData : BattleUnitData
 {
     public UserHeroData User_Data { get; private set; } = null;
@@ -106,7 +104,7 @@ public class BattlePcData : BattleUnitData
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.p_attack + (GetLevel() - 1) * up_value;
+            return battle_data.physics_attack + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -118,7 +116,7 @@ public class BattlePcData : BattleUnitData
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.m_attack + (GetLevel() - 1) * up_value;
+            return battle_data.magic_attack + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -130,7 +128,7 @@ public class BattlePcData : BattleUnitData
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.p_defend + (GetLevel() - 1) * up_value;
+            return battle_data.physics_defend + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -142,7 +140,7 @@ public class BattlePcData : BattleUnitData
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.m_defend + (GetLevel() - 1) * up_value;
+            return battle_data.magic_defend + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -154,7 +152,7 @@ public class BattlePcData : BattleUnitData
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
             float up_value = 1f;
-            return battle_data.hp + (GetLevel() - 1) * up_value;
+            return battle_data.life + (GetLevel() - 1) * up_value;
         }
         return 0;
     }
@@ -163,7 +161,7 @@ public class BattlePcData : BattleUnitData
     {
         if (Battle_Data != null)
         {
-            return Battle_Data.attack_recovery;
+            return Battle_Data.attack_life_recovery;
         }
         return 0;
     }
@@ -204,7 +202,7 @@ public class BattlePcData : BattleUnitData
     {
         if (Battle_Data != null)
         {
-            return Battle_Data.attack_recovery;
+            return Battle_Data.attack_life_recovery;
         }
         return 0;
     }
@@ -214,7 +212,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_cri_rate;
+            return battle_data.physics_critical_chance;
         }
         return 0;
     }
@@ -224,7 +222,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.p_cri_power;
+            return battle_data.physics_critical_power_add;
         }
         return 0;
     }
@@ -234,7 +232,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_cri_rate;
+            return battle_data.magic_critical_chance;
         }
         return 0;
     }
@@ -244,7 +242,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.m_cri_power;
+            return battle_data.magic_critical_power_add;
         }
         return 0;
     }

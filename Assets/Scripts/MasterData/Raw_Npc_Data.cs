@@ -8,6 +8,7 @@ public class Raw_Npc_Data : System.IDisposable
 	public string name_kr {get; set;}
 	public TRIBE_TYPE tribe_type {get; set;}
 	public NPC_TYPE npc_type {get; set;}
+	public ATTRIBUTE_TYPE attribute_type {get; set;}
 	public int npc_battle_id {get; set;}
 	public string prefab_path {get; set;}
 	public string icon_path {get; set;}
@@ -20,6 +21,7 @@ public class Raw_Npc_Data : System.IDisposable
 		name_kr = string.Empty;
 		tribe_type = TRIBE_TYPE.NONE;
 		npc_type = NPC_TYPE.NONE;
+		attribute_type = ATTRIBUTE_TYPE.NONE;
 		npc_battle_id = 0;
 		prefab_path = string.Empty;
 		icon_path = string.Empty;

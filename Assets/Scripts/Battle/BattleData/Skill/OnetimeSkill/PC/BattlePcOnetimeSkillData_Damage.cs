@@ -25,10 +25,10 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
                     send_data.Damage = Data.value;
                     break;
-                case STAT_MULTIPLE_TYPE.ATTACK:
+                case STAT_MULTIPLE_TYPE.ATTACK_RATE:
                     send_data.Damage = send_data.Caster.Physics_Attack * Data.multiple;
                     break;
-                case STAT_MULTIPLE_TYPE.DEFENSE:
+                case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
                     send_data.Damage = send_data.Caster.Physics_Defense * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
@@ -37,16 +37,16 @@ public class BattlePcOnetimeSkillData_Damage : BattlePcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.LIFE:
                     send_data.Damage = send_data.Caster.Life * Data.multiple;
                     break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_RATE:
+                case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_POWER:
+                case STAT_MULTIPLE_TYPE.CRITICAL_POWER_ADD:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.ACCURACY:
+                case STAT_MULTIPLE_TYPE.ACCURACY_VALUE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.EVASION:
+                case STAT_MULTIPLE_TYPE.EVASION_VALUE:
                     Debug.Assert(false);
                     break;
                 case STAT_MULTIPLE_TYPE.DAMAGE:

@@ -51,13 +51,14 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override void UnitStateInit()
     {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
         ChangeState(UNIT_STATES.READY);
-
     }
 
     public override void UnitStateReadyBegin()
     {
         Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT);
+        
     }
     public override void UnitStateReady()
     {
@@ -179,6 +180,11 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateMove()
     {
+        if (!IsAlive())
+        {
+            ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
         if (Team_Type == TEAM_TYPE.LEFT)
         {
             MoveLeftTeam();

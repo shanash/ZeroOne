@@ -160,11 +160,13 @@ public class GameResultWinPopup : PopupBase
     {
         //  일단 스테미너 사용 완료 하자.
         int cost_stamina = Dungeon.GetPlayerExp();
-        var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+        var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
+        var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
         if (stamina_item != null)
         {
             stamina_item.UseChargeItem(cost_stamina);
         }
+        stamina_mng.Save();
 
         //  player info
         BeforePlayerInfo();
@@ -269,7 +271,8 @@ public class GameResultWinPopup : PopupBase
     /// </summary>
     void BeforePlayerInfo()
     {
-        var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+        var player_mng = GameData.Instance.GetUserGameInfoDataManager();
+        var player_data = player_mng.GetCurrentPlayerInfoData();
         int before_lv = player_data.GetLevel();
         float before_exp_per = player_data.GetExpPercentage();
 
@@ -280,9 +283,12 @@ public class GameResultWinPopup : PopupBase
         Player_Exp_Gauge.value = before_exp_per;
         Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
         Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
+        //player_mng.Save();
 
         //  금화 획득
-        GameData.Instance.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gain_default_gold);
+        var goods_mng = GameData.Instance.GetUserGoodsDataManager();
+        goods_mng.AddUserGoodsCount(GOODS_TYPE.GOLD, gain_default_gold);
+        goods_mng.Save();
     }
     /// <summary>
     /// 경험치 획득 후 플레이어 정보 업데이트
@@ -295,7 +301,8 @@ public class GameResultWinPopup : PopupBase
 
     IEnumerator StartAfterPlayerInfo()
     {
-        var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+        var player_mng = GameData.Instance.GetUserGameInfoDataManager();
+        var player_data = player_mng.GetCurrentPlayerInfoData();
         int before_lv = player_data.GetLevel();
         int gain_player_exp = Dungeon.GetPlayerExp();
         var result_code = player_data.AddExp(gain_player_exp);
@@ -303,6 +310,7 @@ public class GameResultWinPopup : PopupBase
         {
             yield break;
         }
+        player_mng.Save();
 
         int after_lv = player_data.GetLevel();
         int gauge_full_count = after_lv - before_lv;
@@ -352,8 +360,10 @@ public class GameResultWinPopup : PopupBase
             {
                 popup.ShowPopup();
             });
-            var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+            var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
+            var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
             stamina_item.FullChargeItem();
+            stamina_mng.Save();
         }
     }
 
@@ -376,6 +386,8 @@ public class GameResultWinPopup : PopupBase
         //  save data 필요
         Next_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         Next_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+
+        GameData.Instance.GetUserHeroDataManager().Save();
     }
     /// <summary>
     /// 별 도장 애니

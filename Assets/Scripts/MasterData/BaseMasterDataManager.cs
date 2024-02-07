@@ -314,6 +314,23 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<ROLE_TYPE, Role_Icon_Data>();
 	///	<summary>
+	///	 <b>key_1 ATTRIBUTE_TYPE : attribute_type </b><br/>
+	///	</summary>
+	protected Dictionary<ATTRIBUTE_TYPE, Attribute_Icon_Data> _Attribute_Icon_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<ATTRIBUTE_TYPE, Attribute_Icon_Data>();
+	///	<summary>
+	///	 <b>key_1 int : player_character_id </b><br/>
+	///	 <b>key_2 int : star_grade </b><br/>
+	///	</summary>
+	protected Dictionary<Tuple<int, int>, Player_Character_Level_Stat_Data> _Player_Character_Level_Stat_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<Tuple<int, int>, Player_Character_Level_Stat_Data>();
+	///	<summary>
 	///	 <b>key_1 int : reward_id </b><br/>
 	///	</summary>
 	protected Dictionary<int, Reward_Set_Data> _Reward_Set_Data
@@ -461,6 +478,8 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Battle_Data();
 		await LoadMaster_Position_Icon_Data();
 		await LoadMaster_Role_Icon_Data();
+		await LoadMaster_Attribute_Icon_Data();
+		await LoadMaster_Player_Character_Level_Stat_Data();
 		await LoadMaster_Reward_Set_Data();
 		await LoadMaster_World_Data();
 		await LoadMaster_Zone_Data();
@@ -1015,6 +1034,34 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async Task LoadMaster_Attribute_Icon_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Attribute_Icon_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Attribute_Icon_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Attribute_Icon_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Attribute_Icon_Data.Add(raw_data.attribute_type, new Attribute_Icon_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Player_Character_Level_Stat_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Character_Level_Stat_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Player_Character_Level_Stat_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Character_Level_Stat_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Character_Level_Stat_Data.Add(new Tuple<int, int>(raw_data.player_character_id, raw_data.star_grade), new Player_Character_Level_Stat_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_Reward_Set_Data()
 	{
 #if UNITY_5_3_OR_NEWER
@@ -1476,6 +1523,22 @@ public class BaseMasterDataManager
 		if(_Role_Icon_Data == null)
 		{
 			await LoadMaster_Role_Icon_Data();
+		}
+	}
+
+	protected async void Check_Attribute_Icon_Data()
+	{
+		if(_Attribute_Icon_Data == null)
+		{
+			await LoadMaster_Attribute_Icon_Data();
+		}
+	}
+
+	protected async void Check_Player_Character_Level_Stat_Data()
+	{
+		if(_Player_Character_Level_Stat_Data == null)
+		{
+			await LoadMaster_Player_Character_Level_Stat_Data();
 		}
 	}
 

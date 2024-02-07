@@ -1,6 +1,5 @@
 // TODO: 팩토리로 생성 가능할듯
-using DocumentFormat.OpenXml.Drawing.Charts;
-
+/**/
 public abstract class BattleUnitData : BattleDataBase
 {
     protected abstract int Level { get; set; }

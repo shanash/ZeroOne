@@ -17,10 +17,30 @@ public class PopupContainer : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("노티 팝업. 모달 위에서도 보일 수 있는 팝업. 가장 최상위. 현재 UI의 기믹에는 영향을 주지 않고, 화면 일부에서 단순 메세지를 보여주기 위한 용도.")]
     RectTransform _Noti_Container;
 
+    [SerializeField, Tooltip("UI용 Page Canvas")]
+    Canvas _Full_Page_Canvas;
+    [SerializeField, Tooltip("팝업용 Page Canvas")]
+    Canvas _Etc_Page_Canvas;
+    
+
     public RectTransform FullPage_Container => _FullPage_Container;
     public RectTransform Dialog_Container => _Dialog_Container;
     public RectTransform Modal_Container => _Modal_Container;
     public RectTransform Noti_Container => _Noti_Container;
+
+    public void SetUICamera()
+    {
+        var ui_cam_obj = GameObject.FindGameObjectWithTag("Battle_UI_Camera");
+        if (ui_cam_obj != null)
+        {
+            var ui_cam = ui_cam_obj.GetComponent<Camera>();
+            if (ui_cam != null)
+            {
+                _Full_Page_Canvas.worldCamera = ui_cam;
+                _Etc_Page_Canvas.worldCamera = ui_cam;
+            }
+        }
+    }
 
     public void Despawned()
     {

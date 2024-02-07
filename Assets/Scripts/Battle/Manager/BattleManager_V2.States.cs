@@ -42,6 +42,7 @@ public partial class BattleManager_V2 : MonoBehaviour
                     {
                         user_dungeon_data.AddChallenageCount();
                     }
+                    GameData.Instance.GetUserStoryStageDataManager().Save();
                 }
                 break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
