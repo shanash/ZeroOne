@@ -38,6 +38,9 @@ public class PopupContainer : MonoBehaviour, IPoolableComponent
             {
                 _Full_Page_Canvas.worldCamera = ui_cam;
                 _Etc_Page_Canvas.worldCamera = ui_cam;
+
+                _FullPage_Canvas.sortingLayerName = "Popup";
+                _Etc_Page_Canvas.sortingLayerName = "Popup";
             }
         }
     }

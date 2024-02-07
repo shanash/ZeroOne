@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using System;
 using UnityEngine;
 
@@ -35,10 +36,16 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
                     Debug.Assert(false);
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
+                    recovery_hp = Data.value;
+                    break;
+                case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
                     recovery_hp = t.Max_Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:
-                    Debug.Assert(false);
+                    recovery_hp = Data.value;
+                    break;
+                case STAT_MULTIPLE_TYPE.LIFE_RATE:
+                    recovery_hp = t.Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);
