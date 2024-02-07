@@ -10,6 +10,8 @@ public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Uti
 
     public virtual string GetEffectPrefab() { return null; }
 
+    public virtual ONETIME_EFFECT_TYPE GetOnetimeEffectType() { return ONETIME_EFFECT_TYPE.NONE; }
+
    
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {

@@ -30,7 +30,7 @@ public class BattleNpcOnetimeSkillData_LifeRecovery : BattleNpcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.MAX_LIFE:
+                case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
                     recovery_hp = t.Max_Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:

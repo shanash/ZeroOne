@@ -21,6 +21,10 @@ public class BattlePcOnetimeSkillData : BattleOnetimeSkillData
     {
         return Data;
     }
+    public override ONETIME_EFFECT_TYPE GetOnetimeEffectType()
+    {
+        return Data.onetime_effect_type;
+    }
     public override string GetEffectPrefab()
     {
         return Data.effect_path;

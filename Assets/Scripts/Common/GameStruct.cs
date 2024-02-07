@@ -1,4 +1,5 @@
 
+using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
 /// 본 파일은 게임내에 다양하게 사용되는 데이터 타입의 구조체 또는 클래스를 선언하기 위한 파일.
@@ -13,6 +14,7 @@ public struct BATTLE_SEND_DATA
 
     public DURATION_EFFECT_TYPE Duration_Effect_Type;
 
+    //public ONETIME_EFFECT_TYPE Onetime_Effect_Type;
     public double Physics_Attack_Point;                   //  물리 공격력
     public double Magic_Attack_Point;                     //  마법 공격력
     public bool Is_Physics_Critical;                      //  물리 치명타 확률
@@ -30,6 +32,7 @@ public struct BATTLE_SEND_DATA
         Is_Physics_Critical = false;
         Is_Magic_Critical = false;
         Effect_Weight_Index = 0;
+        //Onetime_Effect_Type = ONETIME_EFFECT_TYPE.NONE;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
         ClearTargets();
     }
