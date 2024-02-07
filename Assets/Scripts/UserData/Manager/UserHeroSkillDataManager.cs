@@ -25,9 +25,9 @@ public class UserHeroSkillDataManager : ManagerBase
         return User_Hero_Skill_Data_List.FindAll(x => x.GetPlayerCharacterID() == player_character_id && x.GetPlayerCharacterNum() == player_character_num);
     }
 
-    public UserHeroSkillData FindUserHeroSkillData(int skill_group_id)
+    public UserHeroSkillData FindUserHeroSkillData(int player_character_num, int skill_group_id)
     {
-        return User_Hero_Skill_Data_List.Find(x => x.GetSkillGroupID() == skill_group_id);
+        return User_Hero_Skill_Data_List.Find(x => x.GetPlayerCharacterNum() == player_character_num && x.GetSkillGroupID() == skill_group_id);
     }
 
     public void AddUserHeroSkillGroups(UserHeroData hero, int skill_group_id)
@@ -52,34 +52,55 @@ public class UserHeroSkillDataManager : ManagerBase
 
     public UserHeroSkillData AddUserHeroSkillData(int player_character_id, int player_character_num, int skill_group_id)
     {
-        var user_hero = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(player_character_id, player_character_num);
-        if (user_hero != null)
+        UserHeroSkillData result = null;
+        UserHeroData user_hero_data = null;
+
+        // 유저 캐릭터 데이터를 찾아서
+        var m = GameData.Instance.GetUserHeroDataManager();
+        if (m != null)
         {
-            return AddUserHeroSkillData(user_hero, skill_group_id);
+            user_hero_data = m.FindUserHeroData(player_character_id, player_character_num);
         }
 
-        return null;
+        // 넣어서 만들어줍니다
+        result = AddUserHeroSkillData(user_hero_data, skill_group_id);
+
+        // 유저 캐릭터 데이터를 찾지 못했으면 pid와 pnum만 세팅해줍니다
+        if (user_hero_data == null)
+        {
+            result.SetUserHeroNumOnly(player_character_id, player_character_num);
+        }
+
+        return result;
     }
 
     public UserHeroSkillData AddUserHeroSkillData(UserHeroData user_hero, int skill_group_id)
     {
-        var skill = FindUserHeroSkillData(skill_group_id);
+        UserHeroSkillData result = null;
 
-        if (skill == null)
+        // 스킬데이터를 찾습니다.
+        if (user_hero != null)
         {
-            skill = new UserHeroSkillData();
-            skill.SetSkillGroupID(skill_group_id);
-            User_Hero_Skill_Data_List.Add(skill);
+            result = FindUserHeroSkillData(user_hero.Player_Character_Num, skill_group_id);
+        }
+
+        // 못찾았으면 새로 만들어줍니다
+        if (result == null)
+        {
+            result = new UserHeroSkillData();
+            result.SetSkillGroupID(skill_group_id);
+            User_Hero_Skill_Data_List.Add(result);
             Is_Update_Data = true;
         }
 
-        if (user_hero != null && skill.Hero_Data != user_hero)
+        // 제공된 유저캐릭터가 기존값이랑 다르면 넣어줍니다
+        if (user_hero != null && result.Hero_Data != user_hero)
         {
-            skill.SetUserHero(user_hero);
+            result.SetUserHero(user_hero);
             Is_Update_Data = true;
         }
 
-        return skill;
+        return result;
     }
 
     public override JsonData Serialized()
@@ -127,14 +148,14 @@ public class UserHeroSkillDataManager : ManagerBase
                     int skill_grp_id = 0;
                     if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num) && int.TryParse(jdata[NODE_HERO_SKILL_GROUP_ID].ToString(), out skill_grp_id))
                     {
-                        UserHeroSkillData item = FindUserHeroSkillData(skill_grp_id);
+                        UserHeroSkillData item = FindUserHeroSkillData(player_character_num, skill_grp_id);
                         if (item != null)
                         {
                             item.Deserialized(jdata);
                         }
                         else
                         {
-                            item = AddUserHeroSkillData(null, skill_grp_id);
+                            item = AddUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
                             item.Deserialized(jdata);
                         }
                     }

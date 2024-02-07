@@ -59,10 +59,25 @@ public class UserHeroSkillData : UserDataBase
     public void SetUserHero(UserHeroData hero)
     {
         Hero_Data = hero;
-        Player_Character_ID.Set(Hero_Data.GetPlayerCharacterID());
-        Player_Character_Num.Set(Hero_Data.Player_Character_Num);
+        SetUserHeroNumOnly();
         InitMasterData();
         Is_Update_Data = true;
+    }
+
+    /// <summary>
+    /// 서버가 붙지 않은 상황에서 별도로 세팅해줄 필요가 있어서 보호수준을 공개로 합니다
+    /// </summary>
+    /// <param name="player_character_id">캐릭터 ID</param>
+    /// <param name="player_character_num">유저가 소유하고 있는 캐릭터 번호(인덱스)</param>
+    public void SetUserHeroNumOnly(int player_character_id = 0, int player_character_num = 0)
+    {
+        if (Hero_Data != null)
+        {
+            player_character_id = Hero_Data.GetPlayerCharacterID();
+            player_character_num = Hero_Data.Player_Character_Num;
+        }
+        Player_Character_ID.Set(player_character_id);
+        Player_Character_Num.Set(player_character_num);
     }
 
     protected override void InitMasterData()
@@ -75,7 +90,7 @@ public class UserHeroSkillData : UserDataBase
         }
 
         var mng = GameData.Instance.GetUserHeroDataManager();
-        if (mng != null && GetPlayerCharacterNum() != 0)
+        if (mng != null)
         {
             Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
         }
