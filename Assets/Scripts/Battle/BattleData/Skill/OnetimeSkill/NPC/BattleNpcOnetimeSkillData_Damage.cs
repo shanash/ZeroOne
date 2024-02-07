@@ -19,6 +19,8 @@ public class BattleNpcOnetimeSkillData_Damage : BattleNpcOnetimeSkillData
             var t = data.Targets[i];
             send_data.AddTarget(t);
 
+            //Data.attribute_type
+
             switch (Data.multiple_type)
             {
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값

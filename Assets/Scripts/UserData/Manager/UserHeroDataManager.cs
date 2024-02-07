@@ -174,7 +174,6 @@ public class UserHeroDataManager : ManagerBase
                             item = AddUserHeroData(player_character_id, player_character_num);
                             item.Deserialized(jdata);
                             AddUserHeroSkillData(item);
-                            User_Hero_Data_List.Add(item);
                         }
                     }
                 }

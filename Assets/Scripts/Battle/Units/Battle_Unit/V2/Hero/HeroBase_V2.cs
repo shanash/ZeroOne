@@ -308,13 +308,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void AddLifeBar()
     {
-        //if (Life_Bar == null)
-        //{
-        //    Life_Bar = UI_Mng.AddLifeBarNode(Life_Bar_Pos, Team_Type);
-        //}
         if (Life_Bar_V2 == null)
         {
             var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2", GetHPPositionTransform());
+            obj.transform.localPosition = Vector3.zero;
             Life_Bar_V2 = obj.GetComponent<LifeBarNode_V2>();
         }
     }
@@ -323,11 +320,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void RemoveLifeBar()
     {
-        //if (Life_Bar != null)
-        //{
-        //    UI_Mng.RemoveLifeBarNode(Life_Bar);
-        //}
-        //Life_Bar = null;
         if (Life_Bar_V2 != null)
         {
             GameObjectPoolManager.Instance.UnusedGameObject(Life_Bar_V2.gameObject);
