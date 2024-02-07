@@ -2,23 +2,30 @@ using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserHeroSkillData : UserDataBase
 {
-
     SecureVar<int> Skill_Group_ID = null;
     SecureVar<int> Player_Character_ID = null;
     SecureVar<int> Player_Character_Num = null;
     SecureVar<int> Level = null;
     SecureVar<double> Exp = null;
+    Player_Character_Skill_Level_Data Level_Data = null;
 
-    Player_Character_Skill_Group Data;
-    Player_Character_Skill_Level_Data Level_Data;
-
+    public Player_Character_Skill_Group Group_Data { get; private set; } = null;
     public UserHeroData Hero_Data { get; private set; }
 
-    public UserHeroSkillData() : base() { }
+    public UserHeroSkillData(UserHeroData hero, int skill_grp_id) : base()
+    {
+        InitSecureVars();
+        SetSkillGroupID(skill_grp_id);
+        if (hero != null)
+        {
+            SetUserHero(hero);
+        }
+    }
 
     protected override void Reset()
     {
@@ -85,13 +92,14 @@ public class UserHeroSkillData : UserDataBase
         if (GetSkillGroupID() != 0)
         {
             var m = MasterDataManager.Instance;
-            Data = m.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
-            Level_Data = m.Get_PlayerCharacterSkillLevelData(GetLevel());
+        Group_Data = m.Get_PlayerCharacterSkillGroupData(GetSkillGroupID());
+        Level_Data = m.Get_PlayerCharacterSkillLevelData(GetLevel());
         }
 
         var mng = GameData.Instance.GetUserHeroDataManager();
         if (mng != null)
         {
+            Debug.Log("Get Hero Data".WithColorTag(Color.white));
             Hero_Data = mng.FindUserHeroData(GetPlayerCharacterID(), GetPlayerCharacterNum());
         }
     }
@@ -137,6 +145,7 @@ public class UserHeroSkillData : UserDataBase
         }
         return Level_Data.need_exp;
     }
+
     /// <summary>
     /// 현재 레벨의 경험치
     /// </summary>
@@ -147,8 +156,10 @@ public class UserHeroSkillData : UserDataBase
         {
             Level_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(GetLevel());
         }
+
         return GetExp() - Level_Data.accum_exp;
     }
+
     /// <summary>
     /// 현재 레벨의 경험치 진행률 
     /// </summary>
@@ -179,8 +190,8 @@ public class UserHeroSkillData : UserDataBase
             exp += xp;
 
             //  level check
-            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelDataByAccumExp(exp);
-            if (lv_data != null)
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref exp, GetMaxLevel());
+            if (lv_data == null)
             {
                 return code;
             }
@@ -289,33 +300,22 @@ public class UserHeroSkillData : UserDataBase
 
         return result;
     }
-    /// <summary>
-    /// 경험치 증가 시뮬레이션.<br/>
-    /// 지정 경험치 아이템 사용시 필요 금화와 레벨 상승 결과를 알려준다.<br/>
-    /// 최대 레벨을 초과할 경우 초과 경험치 정보도 같이 알려준다.
-    /// </summary>
-    /// <param name="use_list"></param>
-    /// <returns></returns>
-    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
-    {
-        EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
-        //  가능한 결과 코드 : ALREADY_MAX_LEVEL, FAILED, SUCCESS, LEVEL_UP_SUCCESS, 
-        //  최초 초기화
-        result.Code = ERROR_CODE.FAILED;
-        result.Result_Lv = GetLevel();
-        result.Result_Accum_Exp = GetExp();
-        
-        result.Need_Gold = 0;
-        result.Add_Exp = 0;
-        result.Over_Exp = 0;
-        //  이미 최대레벨일 경우 강화 불가
-        if (IsMaxLevel())
-        {
-            result.ResetAndResultCode(ERROR_CODE.ALREADY_MAX_LEVEL);
-            return result;
-        }
 
+    /// <summary>
+    /// 경험치 아이템들의 상승 경험치, 필요골드의 총 합
+    /// </summary>
+    /// <param name="added_exp">상승 경험치</param>
+    /// <param name="need_gold">필요골드</param>
+    /// <param name="use_list">사용할 경험치 아이템</param>
+    /// <returns></returns>
+    public ERROR_CODE SumExpItemInfo(out double added_exp, out double need_gold, List<USE_EXP_ITEM_DATA> use_list)
+    {
         var m = MasterDataManager.Instance;
+
+        ERROR_CODE result = ERROR_CODE.SUCCESS;
+        added_exp = 0;
+        need_gold = 0;
+
         int cnt = use_list.Count;
         for (int i = 0; i < cnt; i++)
         {
@@ -328,49 +328,114 @@ public class UserHeroSkillData : UserDataBase
             //  리스트에 스킬 강화 아이템이 아닌 것이 들어있으면 실패
             if (!IsValidSkillExpItem(use_data.Item_Type))
             {
-                result.Code = ERROR_CODE.NOT_ENABLE_WORK;
-                return result;
+                Debug.Assert(false, "경험치 아이템이 아닙니다");
+                result = ERROR_CODE.NOT_ENABLE_WORK;
+                break;
             }
             var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
             if (item_data != null)
             {
-                result.Add_Exp += item_data.int_var1 * use_data.Use_Count;
-                result.Need_Gold += item_data.int_var2 * use_data.Use_Count;
+                added_exp += item_data.int_var1 * use_data.Use_Count;
+                need_gold += item_data.int_var2 * use_data.Use_Count;
             }
         }
 
-        int max_level = GetMaxLevel();
-        result.Result_Accum_Exp += result.Add_Exp;
-        Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByAccumExp(result.Result_Accum_Exp);
+        return result;
+    }
+
+    /// <summary>
+    /// 경험치 증가 시뮬레이션.<br/>
+    /// 지정 경험치 아이템 사용시 필요 금화와 레벨 상승 결과를 알려준다.<br/>
+    /// 최대 레벨을 초과할 경우 초과 경험치 정보도 같이 알려준다.
+    /// </summary>
+    /// <param name="use_list"></param>
+    /// <returns></returns>
+    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
+    {
+        ERROR_CODE code;
+
+        //  이미 최대레벨일 경우 강화 불가
+        if (IsMaxLevel())
+        {
+            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.ALREADY_MAX_LEVEL);
+        }
+
+        code = SumExpItemInfo(out double sum_items_exp, out double sum_items_need_gold, use_list);
+
+        if (ERROR_CODE.SUCCESS != code)
+        {
+            return new EXP_SIMULATE_RESULT_DATA(code);
+        }
+
+        var m = MasterDataManager.Instance;
+
+        double current_exp = GetExp();
+        double result_exp = current_exp + sum_items_exp;
+
+        Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref result_exp, GetMaxLevel());
+
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            result.ResetAndResultCode(ERROR_CODE.FAILED);
-            return result;
+            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.FAILED);
         }
-        //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다
-        if (max_level < next_lv_data.level)
-        {
-            next_lv_data = m.Get_PlayerCharacterSkillLevelData(max_level);
-        }
+
+        double add_exp = result_exp - current_exp;
 
         //  레벨이 증가할 경우 해당 레벨로 적용
-        if (result.Result_Lv < next_lv_data.level)
+        if (GetLevel() < next_lv_data.level)
         {
-            result.Result_Lv = next_lv_data.level;
-            result.Code = ERROR_CODE.LEVEL_UP_SUCCESS;
-        }
-        else
-        {
-            result.Code = ERROR_CODE.SUCCESS;
-        }
-        //  결과 레벨이 최대 레벨일 경우 초과된 경험치 양을 알려준다.
-        if (max_level <= next_lv_data.level)
-        {
-            result.Over_Exp = result.Result_Accum_Exp - next_lv_data.accum_exp;
+            code = ERROR_CODE.LEVEL_UP_SUCCESS;
         }
 
+        var result = new EXP_SIMULATE_RESULT_DATA()
+        {
+            Code = code,
+            Result_Lv = next_lv_data.level,
+            Result_Accum_Exp = result_exp,
+            Add_Exp = add_exp,
+            Over_Exp = result_exp - next_lv_data.accum_exp,
+            Need_Gold = sum_items_need_gold,
+        };
+
         return result;
+    }
+
+    /// <summary>
+    /// 시뮬레이션을 위해 복제한 데이터에 경험치 아이템만큼의 경험치를 부어서 경험치 업된 데이터를 가져옵니다
+    /// </summary>
+    /// <param name="use_list"></param>
+    /// <returns></returns>
+    public UserHeroSkillData GetAddedExpSkillGroup(double add_exp, out ERROR_CODE error_code)
+    {
+        var clone = (UserHeroSkillData)Clone();
+
+        //  이미 최대레벨일 경우 강화 불가
+        if (clone.IsMaxLevel())
+        {
+            error_code = ERROR_CODE.ALREADY_MAX_LEVEL;
+            return clone;
+        }
+
+        var m = MasterDataManager.Instance;
+
+        double current_exp = GetExp();
+        double result_exp = current_exp + add_exp;
+
+        Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref result_exp, GetMaxLevel());
+
+        //  레벨 데이터가 없으면 failed
+        if (next_lv_data == null)
+        {
+            error_code = ERROR_CODE.FAILED;
+            return null;
+        }
+        error_code = (GetLevel() < next_lv_data.level) ? ERROR_CODE.LEVEL_UP_SUCCESS : ERROR_CODE.SUCCESS;
+
+        add_exp = result_exp - current_exp;
+        clone.AddExp(add_exp);
+
+        return clone;
     }
 
     bool IsValidSkillExpItem(ITEM_TYPE_V2 itype)
@@ -378,6 +443,23 @@ public class UserHeroSkillData : UserDataBase
         return itype == ITEM_TYPE_V2.EXP_SKILL;
     }
 
+    public override object Clone()
+    {
+        UserHeroSkillData clone = (UserHeroSkillData)this.MemberwiseClone();
+        clone.Skill_Group_ID = new SecureVar<int>(Skill_Group_ID);
+        clone.Player_Character_ID = new SecureVar<int>(Player_Character_ID);
+        clone.Player_Character_Num = new SecureVar<int>(Player_Character_Num);
+        clone.Level = new SecureVar<int>(Level);
+        clone.Exp = new SecureVar<double>(Exp);
+
+        if (Hero_Data != null)
+        {
+            //TODO: 비어있네요?
+            clone.Hero_Data = (UserHeroData)Hero_Data.Clone();
+        }
+
+        return clone;
+    }
 
     public override JsonData Serialized()
     {
@@ -393,6 +475,7 @@ public class UserHeroSkillData : UserDataBase
         json[NODE_EXP] = GetExp();
         return json;
     }
+
     public override bool Deserialized(JsonData json)
     {
         if (json == null) return false;
@@ -423,6 +506,7 @@ public class UserHeroSkillData : UserDataBase
         InitMasterData();
         return true;
     }
+
 
     //-------------------------------------------------------------------------
     // Json Node Name

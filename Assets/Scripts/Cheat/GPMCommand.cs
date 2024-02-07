@@ -37,6 +37,7 @@ public class GPMCommand : MonoBehaviour
         player_info_mng.Save();
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_PLAYER_INFO);
+        Debug.Log("PlayerLevelUp");
     }
 
     /// <summary>
@@ -56,6 +57,7 @@ public class GPMCommand : MonoBehaviour
             hero.AddExp(need_exp);
         }
         hero_mng.Save();
+        Debug.Log("AllCharacterLevelUp");
     }
 
     /// <summary>
@@ -79,8 +81,7 @@ public class GPMCommand : MonoBehaviour
         {
             if (keys.Length > 1)
             {
-                double gold = 0;
-                if (double.TryParse(keys[1], out gold))
+                if (double.TryParse(keys[1], out double gold))
                 {
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
                     gd.Save();
@@ -92,8 +93,7 @@ public class GPMCommand : MonoBehaviour
         {
             if (keys.Length > 1)
             {
-                double dia = 0;
-                if (double.TryParse(keys[1], out dia))
+                if (double.TryParse(keys[1], out double dia))
                 {
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
                     gd.Save();
@@ -106,9 +106,7 @@ public class GPMCommand : MonoBehaviour
             //  using => cpiece character_id count
             if (keys.Length == 3)
             {
-                int pc_id = 0;
-                double count = 0;
-                if (int.TryParse(keys[1], out pc_id) && double.TryParse(keys[2], out count))
+                if (int.TryParse(keys[1], out int pc_id) && double.TryParse(keys[2], out double count))
                 {
                     var pc_data = MasterDataManager.Instance.Get_PlayerCharacterData(pc_id);
                     if (pc_data != null)
@@ -123,8 +121,19 @@ public class GPMCommand : MonoBehaviour
                 }
             }
         }
-
-        
+        else if (keys[0].Equals("item"))
+        {
+            //  using => item item_id count
+            if (keys.Length == 3)
+            {
+                if (int.TryParse(keys[1], out int item_id) && double.TryParse(keys[2], out double count))
+                {
+                    Item_Data data = MasterDataManager.Instance.Get_ItemData(item_id);
+                    var user_item = gd.GetUserItemDataManager().FindUserItem(data.item_type, item_id);
+                    user_item.AddItemCount(count);
+                    gd.Save();
+                }
+            }
+        }
     }
-
 }

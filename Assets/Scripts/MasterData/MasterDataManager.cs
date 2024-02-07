@@ -31,14 +31,26 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Player_Character_Skill_Level_Data();
         return _Player_Character_Skill_Level_Data[lv];
     }
-    public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelDataByAccumExp(double accum_exp)
+
+    /// <summary>
+    /// 최대레벨을 넘어가지 않는 스킬레벨데이터를 가져옵니다
+    /// </summary>
+    /// <param name="accum_exp">총 경험치</param>
+    /// <param name="max_level">최대레벨</param>
+    /// <returns></returns>
+    public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref double accum_exp, int max_level)
     {
+        double _accum_exp = accum_exp;
         Check_Player_Character_Skill_Level_Data();
         var list = _Player_Character_Skill_Level_Data.Values.OrderBy(x => x.level).ToList();
-        return list.FindLast(x => x.accum_exp <= accum_exp);
-    }
+        var item = list.FindLast(x => (x.accum_exp <= _accum_exp && x.level <= max_level));
+        if (item.level == max_level)
+        {
+            accum_exp = item.accum_exp;
+        }
 
-    
+        return item;
+    }
 
     public Player_Level_Data Get_PlayerLevelData(int lv)
     {

@@ -1,6 +1,5 @@
 using FluffyDuck.UI;
 using Gpm.Ui;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -31,11 +30,9 @@ public class AdvanceStarGradePopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        After_Advance_Battle_Pc_Data = new BattlePcData(Battle_Pc_Data);
-        After_Advance_Battle_Pc_Data.User_Data.SetNextStarGrade();
-
         Status_LIst_View.Clear();
 
+        After_Advance_Battle_Pc_Data = Battle_Pc_Data.GetNextStarGradeData();
         List<StatusItemData> list = new List<StatusItemData>
             {
                 new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, $"{Battle_Pc_Data.GetPhysicsAttackPoint():N0} -> {After_Advance_Battle_Pc_Data.GetPhysicsAttackPoint():N0}"),

@@ -1,7 +1,7 @@
 
 using System;
 
-public abstract class BattleDataBase : IDisposable
+public abstract class BattleDataBase : IDisposable, ICloneable
 {
     protected bool disposed = false;
 
@@ -31,4 +31,5 @@ public abstract class BattleDataBase : IDisposable
 
     protected virtual void Reset() { }
     protected virtual void Destroy() { }
+    public virtual object Clone() { return null; }
 }

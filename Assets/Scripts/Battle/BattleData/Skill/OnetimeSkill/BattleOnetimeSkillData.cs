@@ -2,7 +2,7 @@
 
 using System;
 
-public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Util.Factory.IProduct
+public class BattleOnetimeSkillData : BattleDataBase, FluffyDuck.Util.Factory.IProduct
 {
     public virtual void SetOnetimeSkillDataID(int skill_onetime_id) { }
 
@@ -15,10 +15,5 @@ public class BattleOnetimeSkillData : BattleDataBase, ICloneable, FluffyDuck.Uti
    
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {
-    }
-
-    public virtual object Clone()
-    {
-        return null;
     }
 }

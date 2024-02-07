@@ -8,7 +8,7 @@ public enum UNIT_SKILL_TYPE
     PC_SKILL,
     NPC_SKILL
 }
-public abstract class BattleSkillData : BattleDataBase, ICloneable
+public abstract class BattleSkillData : BattleDataBase
 {
     protected HeroBase_V2 Caster;
     protected List<HeroBase_V2> Targets = new List<HeroBase_V2>();
@@ -183,9 +183,4 @@ public abstract class BattleSkillData : BattleDataBase, ICloneable
     /// 스킬 사용 후 데이터 리셋
     /// </summary>
     public virtual void ResetSkill() { }
-
-    public virtual object Clone()
-    {
-        return null;
-    }
 }

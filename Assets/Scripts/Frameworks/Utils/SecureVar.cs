@@ -10,13 +10,12 @@ namespace FluffyDuck.Util
     public class SecureVar<T>
     {
         string encryptData = string.Empty;
-        T data;
         string encryptKey = string.Empty;
+        T data = default;
 
         public SecureVar(T val = default)
         {
-            string key = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8);
-            SetKey(key);
+            CreateKey();
             if (!val.Equals(default))
             {
                 Set(val);
@@ -55,12 +54,13 @@ namespace FluffyDuck.Util
             return (T)Convert.ChangeType(data, typeof(T));
         }
 
-
-        public void SetKey(string key)
+        public void CreateKey()
         {
+            string key = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8);
             encryptKey = key;
         }
-        public bool IsSetKey()
+
+        public bool IsExistKey()
         {
             return !string.IsNullOrEmpty(encryptKey);
         }

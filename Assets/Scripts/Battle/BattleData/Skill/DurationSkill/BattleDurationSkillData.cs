@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Util.Factory.IProduct
+public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.IProduct
 {
     /// <summary>
     /// 지속성 효과 1개와, 이펙트는 1:1로 매칭되어야만 한다.
@@ -179,8 +179,6 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
         return result;
     }
 
-
-
     public virtual bool CalcEtcPersistenceCount(PERSISTENCE_TYPE ptype)
     {
         PERSISTENCE_TYPE cur_type = GetPersistenceType();
@@ -195,16 +193,9 @@ public class BattleDurationSkillData : BattleDataBase, ICloneable, FluffyDuck.Ut
         return false;
     }
 
-    
-
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {
         Send_Data = data;
         Send_Data.Duration_Effect_Type = Send_Data.Duration.GetDurationEffectType();
-    }
-
-    public virtual object Clone()
-    {
-        return null;
     }
 }

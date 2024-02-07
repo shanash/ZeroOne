@@ -37,10 +37,9 @@ public class HeroInfoBoxBasic : MonoBehaviour
     [SerializeField, Tooltip("Skill Icons")]
     protected List<Image> Skill_Icons;
 
-    BattleUnitData Unit_Data;
-    BattleSkillManager Skill_Mng;
+    BattlePcData Unit_Data;
 
-    public void SetHeroData(BattleUnitData data)
+    public void SetHeroData(BattlePcData data)
     {
         Unit_Data = data;
 
@@ -69,28 +68,24 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Defense_Number_Text.text = Unit_Data.GetPhysicsDefensePoint().ToString("N0");
         Life_Number_Text.text = Unit_Data.GetMaxLifePoint().ToString("N0");
 
-        Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
+        var skill_group_list = GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num);
 
-        // TODO: 아이콘은 일단 제대로 값이 다 채워질때까지 표시하지 않습니다
-        /*
-        int i = 0;
-
-        for (SKILL_TYPE type = SKILL_TYPE.SKILL_01; type <= SKILL_TYPE.SPECIAL_SKILL; type++)
+        foreach (var icon in Skill_Icons)
         {
-            var skill_group = Skill_Mng.FindSkillType(type);
+            icon.sprite = null;
+        }
 
+        int i = 0;
+        foreach (var skill_group in skill_group_list)
+        {
             // 콜백 참조 때문에 별도로 변수를 선언해야 합니다
             int sprite_index = i;
-
-            CommonUtils.GetResourceFromAddressableAsset<Sprite>(skill_group.GetSkillIconPath(), (spr) =>
+            CommonUtils.GetResourceFromAddressableAsset<Sprite>(skill_group.Group_Data.icon, (spr) =>
             {
                 Skill_Icons[sprite_index].sprite = spr;
             });
             i++;
         }
-        */
     }
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)
@@ -101,9 +96,10 @@ public class HeroInfoBoxBasic : MonoBehaviour
     public void OnClickSkillButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/SkillLevelPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            //TODO:
+            popup.ShowPopup(GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num));
         });
     }
 

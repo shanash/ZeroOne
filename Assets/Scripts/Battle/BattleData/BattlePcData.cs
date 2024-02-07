@@ -1,16 +1,14 @@
 public class BattlePcData : BattleUnitData
 {
+    // TODO: 레벨업 더미값을 임시로 곱합니다. 레벨업 데이터 구현이 완료되면 나중에 지워줍시다
+    const float UP_VALUE = 1f;
+
     public UserHeroData User_Data { get; private set; } = null;
     public Player_Character_Data Data { get { return User_Data.Hero_Data; } }
     public Player_Character_Battle_Data Battle_Data { get { return User_Data.Battle_Data; } }
     protected override int Level { get => User_Data.GetLevel(); set { } }
 
     public BattlePcData() : base(CHARACTER_TYPE.PC) { }
-
-    public BattlePcData(BattlePcData battle_pc_data) : base(battle_pc_data.Character_Type)
-    {
-        User_Data = new UserHeroData(battle_pc_data.User_Data);
-    }
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {
@@ -171,9 +169,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.accuracy + (GetLevel() - 1) * up_value;
+            return battle_data.accuracy + (GetLevel() - 1) * UP_VALUE;
         }
         return 0;
     }
@@ -183,9 +179,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.evasion + (GetLevel() - 1) * up_value;
+            return battle_data.evasion + (GetLevel() - 1) * UP_VALUE;
         }
         return 0;
     }
@@ -351,5 +345,19 @@ public class BattlePcData : BattleUnitData
     public override NPC_TYPE GetNpctype()
     {
         return NPC_TYPE.NONE;
+    }
+
+    public BattlePcData GetNextStarGradeData()
+    {
+        var clone = (BattlePcData)this.Clone();
+        clone.User_Data.TryUpNextStarGrade();
+        return clone;
+    }
+
+    public override object Clone()
+    {
+        BattlePcData clone = (BattlePcData)this.MemberwiseClone();
+        clone.User_Data = (UserHeroData)User_Data.Clone();
+        return clone;
     }
 }

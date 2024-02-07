@@ -132,7 +132,7 @@ public struct EXP_SIMULATE_RESULT_DATA
     public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
     public double Need_Gold;        //  겅혐치 아이템 사용시 필요 골드
 
-    public void ResetAndResultCode(ERROR_CODE code)
+    public EXP_SIMULATE_RESULT_DATA(ERROR_CODE code = default)
     {
         Code = code;
         Result_Lv = 0;

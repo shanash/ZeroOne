@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
@@ -87,8 +88,7 @@ public class UserHeroSkillDataManager : ManagerBase
         // 못찾았으면 새로 만들어줍니다
         if (result == null)
         {
-            result = new UserHeroSkillData();
-            result.SetSkillGroupID(skill_group_id);
+            result = new UserHeroSkillData(null, skill_group_id);
             User_Hero_Skill_Data_List.Add(result);
             Is_Update_Data = true;
         }
@@ -143,21 +143,12 @@ public class UserHeroSkillDataManager : ManagerBase
                 for (int i = 0; i < cnt; i++)
                 {
                     var jdata = arr[i];
-                    int player_character_id = 0;
-                    int player_character_num = 0;
-                    int skill_grp_id = 0;
-                    if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out player_character_num) && int.TryParse(jdata[NODE_HERO_SKILL_GROUP_ID].ToString(), out skill_grp_id))
+                    if (int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out int player_character_id)
+                        && int.TryParse(jdata[NODE_PLAYER_CHARACTER_NUM].ToString(), out int player_character_num)
+                        && int.TryParse(jdata[NODE_HERO_SKILL_GROUP_ID].ToString(), out int skill_grp_id))
                     {
-                        UserHeroSkillData item = FindUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
-                        if (item != null)
-                        {
-                            item.Deserialized(jdata);
-                        }
-                        else
-                        {
-                            item = AddUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
-                            item.Deserialized(jdata);
-                        }
+                        UserHeroSkillData item = AddUserHeroSkillData(player_character_id, player_character_num, skill_grp_id);
+                        item.Deserialized(jdata);
                     }
                 }
             }

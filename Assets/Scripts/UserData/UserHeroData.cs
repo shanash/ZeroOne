@@ -49,31 +49,11 @@ public class UserHeroData : UserDataBase
     public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
     public int Lobby_Choice_Num { get; protected set; } = 0;
     public bool Is_Choice_Lobby { get; protected set; } = false;
-    public bool Is_Copy { get; private set; } = false;
+    public bool Is_Clone { get; private set; } = false;
 
     public UserHeroData(LitJson.JsonData json_data)
     {
         Deserialized(json_data);
-    }
-
-    public UserHeroData(UserHeroData data)
-    {
-        Player_Character_ID = new SecureVar<int>(data.Player_Character_ID);
-        Player_Character_Num = data.Player_Character_Num;
-        Level = new SecureVar<int>(data.Level);
-        Exp = new SecureVar<double>(data.Exp);
-        Love_Level = new SecureVar<int>(data.Love_Level);
-        Love_Exp = new SecureVar<double>(data.Love_Exp);
-        Star_Grade = new SecureVar<int>(data.Star_Grade);
-        Lobby_Choice_Num = data.Lobby_Choice_Num;
-        Is_Choice_Lobby = data.Is_Choice_Lobby;
-        Hero_Data = data.Hero_Data;
-        Battle_Data = data.Battle_Data;
-        Lv_Data = data.Lv_Data;
-        Love_Lv_Data = data.Love_Lv_Data;
-        Star_Data = data.Star_Data;
-
-        Is_Copy = true;
     }
 
     public UserHeroData(int player_character_id, int player_character_num)
@@ -381,8 +361,7 @@ public class UserHeroData : UserDataBase
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
         {
-            result.ResetAndResultCode(ERROR_CODE.ALREADY_MAX_LEVEL);
-            return result;
+            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.ALREADY_MAX_LEVEL);
         }
 
         var m = MasterDataManager.Instance;
@@ -416,8 +395,7 @@ public class UserHeroData : UserDataBase
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            result.ResetAndResultCode(ERROR_CODE.FAILED);
-            return result;
+            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.FAILED);
         }
         //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다.
         if (max_level < next_lv_data.level)
@@ -654,7 +632,7 @@ public class UserHeroData : UserDataBase
         }
 
         //  성급 진화
-        SetNextStarGrade(false, data);
+        SetNextStarGrade();
 
         // 결과 저장
         goods_mng.Save();
@@ -669,14 +647,21 @@ public class UserHeroData : UserDataBase
     /// 확인을 위해서 public으로 메소드를 별도로 만듭니다.
     /// 각종 스탯 비교를 위해서가 아니면 절대로 밖에서 호출하지 맙시다.
     /// </summary>
-    public void SetNextStarGrade() => SetNextStarGrade(Is_Copy, ERROR_CODE.FAILED);
-    void SetNextStarGrade(bool is_copy, ERROR_CODE advance_result)
+    public bool TryUpNextStarGrade()
     {
-        if (is_copy || advance_result == ERROR_CODE.SUCCESS)
+        if (!Is_Clone)
         {
-            int next_star_grade = GetStarGrade() + 1;
-            SetStarGrade(next_star_grade);
+            return false;
         }
+
+        SetNextStarGrade();
+        return true;
+    }
+
+    void SetNextStarGrade()
+    {
+        int next_star_grade = GetStarGrade() + 1;
+        SetStarGrade(next_star_grade);
     }
 
     /// <summary>
@@ -730,7 +715,21 @@ public class UserHeroData : UserDataBase
     {
         SetLobbyChoiceNumber(0);
     }
-    
+
+    public override object Clone()
+    {
+        UserHeroData clone = (UserHeroData)this.MemberwiseClone();
+        clone.Player_Character_ID = new SecureVar<int>(Player_Character_ID);
+        clone.Level = new SecureVar<int>(Level);
+        clone.Exp = new SecureVar<double>(Exp);
+        clone.Love_Level = new SecureVar<int>(Love_Level);
+        clone.Love_Exp = new SecureVar<double>(Love_Exp);
+        clone.Star_Grade = new SecureVar<int>(Star_Grade);
+        clone.Is_Clone = true;
+
+        return clone;
+    }
+
     public override LitJson.JsonData Serialized()
     {
         //if (!IsUpdateData())

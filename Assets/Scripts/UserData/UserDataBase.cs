@@ -8,7 +8,7 @@ public class UserDataBase : IDisposable, ICloneable
     /// 내부적으로 어떤 데이터가 갱신되었을 경우 사용.
     /// 어쩌면 실시간으로 갱신 정보를 서버와 통신할 수 있기 때문에 사용하지 않을 수도 있음.
     /// </summary>
-    protected bool Is_Update_Data;
+    protected bool Is_Update_Data = false;
 
     protected bool disposed = false;
 
@@ -82,6 +82,5 @@ public class UserDataBase : IDisposable, ICloneable
         return ret;
     }
 
-    //  데이터 복제
     public virtual object Clone() { return null; }
 }
