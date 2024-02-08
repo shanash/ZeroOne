@@ -40,7 +40,7 @@ namespace UI.SkillLevelPopup
             On_Changed_Use_Count = callback_changed_use_item;
             int index = Array.FindIndex(SPRITE_IDX_BY_ITEM_IDs, (item) => item == Data.Data.item_id);
             BackGround.sprite = BG_Sprites[index];
-            Update();
+            UpdateUI();
         }
 
         public void OnClickAdd()
@@ -60,14 +60,11 @@ namespace UI.SkillLevelPopup
             Use_Count = 0;
         }
 
-        void Update()
+        void UpdateUI()
         {
             Select.SetActive(Use_Count > 0);
-            Exist_Count_UI.text = "";//Exist_Count.ToString("N0");
-            if (Exist_Count != null)
-            {
-                Use_Count_UI.text = $"{Use_Count.ToString("N0")}/{Exist_Count.ToString("N0")}";
-            }
+            Exist_Count_UI.text = Exist_Count.ToString("N0");
+            Use_Count_UI.text = $"{Use_Count.ToString("N0")}/{Exist_Count.ToString("N0")}";
         }
 
         public bool SetUseCount(int count)
@@ -81,7 +78,7 @@ namespace UI.SkillLevelPopup
             {
                 Use_Count = count;
             }
-            Update();
+            UpdateUI();
 
             return true;
         }

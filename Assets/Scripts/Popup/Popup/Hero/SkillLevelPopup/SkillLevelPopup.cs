@@ -75,7 +75,6 @@ public class SkillLevelPopup : PopupBase
     ERROR_CODE UpdateUI(bool use_levelup_animation = false)
     {
         Skill_Name.text = Current_SkillGroup.Group_Data.name_kr;
-        UpdateExpItemButtons();
 
         return SetLevelupData(use_levelup_animation);
     }
@@ -117,8 +116,8 @@ public class SkillLevelPopup : PopupBase
             Exist_Exp_Items.Add(data);
         }
         Use_Exp_Items.Clear();
-        
-        UpdateUI();
+
+        UpdatePopup();
     }
 
     public override void UpdatePopup()
@@ -133,6 +132,7 @@ public class SkillLevelPopup : PopupBase
                 return;
             }
 
+            UpdateExpItemButtons();
             UpdateUI();
         }
     }
@@ -225,6 +225,7 @@ public class SkillLevelPopup : PopupBase
         }
         Use_Exp_Items.Clear();
 
+        UpdateExpItemButtons();
         UpdateUI();
     }
 
@@ -240,8 +241,10 @@ public class SkillLevelPopup : PopupBase
 
         GameData.Instance.GetUserHeroSkillDataManager().Save();
         GameData.Instance.GetUserGoodsDataManager().Save();
+        GameData.Instance.GetUserItemDataManager().Save();
 
         Use_Exp_Items.Clear();
+        UpdateExpItemButtons();
         UpdateUI(true);
 
         if (result.Code == ERROR_CODE.LEVEL_UP_SUCCESS)
