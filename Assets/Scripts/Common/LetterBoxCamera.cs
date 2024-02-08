@@ -9,6 +9,8 @@ public class LetterBoxCamera : MonoBehaviour
         NONE = 0,
         TOP,
         BOTTOM,
+        LEFT,
+        RIGHT,
     }
 
     Camera Letter_Box_Cam;
@@ -38,6 +40,7 @@ public class LetterBoxCamera : MonoBehaviour
         float new_height = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이 (실제 View Height)
 
         float hide_height = (1f - new_height) * 0.5f;
+        float hide_width = (1f - new_width) * 0.5f;
 
         if (box_type == LETTER_BOX_TYPE.TOP)
         {
@@ -46,6 +49,14 @@ public class LetterBoxCamera : MonoBehaviour
         else if (box_type == LETTER_BOX_TYPE.BOTTOM)
         {
             Letter_Box_Cam.rect = new Rect((1f - new_width) / 2f, 0f, new_width, hide_height);
+        }
+        else if (box_type == LETTER_BOX_TYPE.LEFT)
+        {
+            Letter_Box_Cam.rect = new Rect(0f, 0f, hide_width, 1f);
+        }
+        else if (box_type == LETTER_BOX_TYPE.RIGHT)
+        {
+            Letter_Box_Cam.rect = new Rect(1f - hide_width, 0f, hide_width, 1f);
         }
         else
         {

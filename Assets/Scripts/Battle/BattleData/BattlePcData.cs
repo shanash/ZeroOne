@@ -6,6 +6,9 @@ public class BattlePcData : BattleUnitData
     public UserHeroData User_Data { get; private set; } = null;
     public Player_Character_Data Data { get { return User_Data.Hero_Data; } }
     public Player_Character_Battle_Data Battle_Data { get { return User_Data.Battle_Data; } }
+
+    public Player_Character_Level_Stat_Data Stat_Data { get; protected set; }
+
     protected override int Level { get => User_Data.GetLevel(); set { } }
 
     public BattlePcData() : base(CHARACTER_TYPE.PC) { }

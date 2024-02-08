@@ -177,26 +177,27 @@ public partial class TeamManager_V2 : IDisposable
     void LeftTeamPosition()
     {
         float field_size = 13f;
+        //  front
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
-        front_pos_list.Add(new Vector3(0, 0, 1f));
-        front_pos_list.Add(new Vector3(0, 0, -1f));
-        front_pos_list.Add(new Vector3(0, 0, 2f));
         front_pos_list.Add(new Vector3(0, 0, -2f));
-
+        front_pos_list.Add(new Vector3(0, 0, 2f));
+        front_pos_list.Add(new Vector3(0, 0, -1f));
+        front_pos_list.Add(new Vector3(0, 0, 1f));
+        //  middle        
         List<Vector3> middle_pos_list = new List<Vector3>();
         middle_pos_list.Add(new Vector3(-2.5f, 0, 0));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 1f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, -1f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 2f));
         middle_pos_list.Add(new Vector3(-2.5f, 0, -2f));
-
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 2f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, -1f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 1f));
+        //  back
         List<Vector3> back_pos_list = new List<Vector3>();
         back_pos_list.Add(new Vector3(-5, 0, 0));
-        back_pos_list.Add(new Vector3(-5, 0, 1f));
-        back_pos_list.Add(new Vector3(-5, 0, -1f));
-        back_pos_list.Add(new Vector3(-5, 0, 2f));
         back_pos_list.Add(new Vector3(-5, 0, -2f));
+        back_pos_list.Add(new Vector3(-5, 0, 2f));
+        back_pos_list.Add(new Vector3(-5, 0, -1f));
+        back_pos_list.Add(new Vector3(-5, 0, 1f));
 
         int idx = 0;
        
@@ -244,26 +245,30 @@ public partial class TeamManager_V2 : IDisposable
     void RightTeamPosition()
     {
         float field_size = 13f;
+        //  front
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
-        front_pos_list.Add(new Vector3(0, 0, 1f));
-        front_pos_list.Add(new Vector3(0, 0, -1f));
-        front_pos_list.Add(new Vector3(0, 0, 2f));
         front_pos_list.Add(new Vector3(0, 0, -2f));
-
+        front_pos_list.Add(new Vector3(0, 0, 2f));
+        front_pos_list.Add(new Vector3(0, 0, -1f));
+        front_pos_list.Add(new Vector3(0, 0, 1f));
+        
+        //  middle
         List<Vector3> middle_pos_list = new List<Vector3>();
         middle_pos_list.Add(new Vector3(2.5f, 0, 0));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 1f));
-        middle_pos_list.Add(new Vector3(2.5f, 0, -1f));
-        middle_pos_list.Add(new Vector3(2.5f, 0, 2f));
         middle_pos_list.Add(new Vector3(2.5f, 0, -2f));
-
+        middle_pos_list.Add(new Vector3(2.5f, 0, 2f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, -1f));
+        middle_pos_list.Add(new Vector3(2.5f, 0, 1f));
+        
+        //  back
         List<Vector3> back_pos_list = new List<Vector3>();
         back_pos_list.Add(new Vector3(5, 0, 0));
-        back_pos_list.Add(new Vector3(5, 0, 1f));
-        back_pos_list.Add(new Vector3(5, 0, -1f));
-        back_pos_list.Add(new Vector3(5, 0, 2f));
         back_pos_list.Add(new Vector3(5, 0, -2f));
+        back_pos_list.Add(new Vector3(5, 0, 2f));
+        back_pos_list.Add(new Vector3(5, 0, -1f));
+        back_pos_list.Add(new Vector3(5, 0, 1f));
+        
 
         int idx = 0;
         for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)

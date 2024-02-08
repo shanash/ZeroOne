@@ -87,7 +87,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
         static void MoveScene_Battle()
         {
-            string go_scene = "battlev2";
+            string go_scene = "battle";
             string scene_name = EditorSceneManager.GetActiveScene().name;
             if (scene_name.Equals(go_scene))
             {

@@ -86,6 +86,8 @@ public class GPMCommand : MonoBehaviour
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
                     gd.Save();
                     UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
+
+                    CommonUtils.ShowToast($"골드 {gold} 획득 완료", TOAST_BOX_LENGTH.SHORT);
                 }
             }
         }
@@ -98,6 +100,8 @@ public class GPMCommand : MonoBehaviour
                     gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
                     gd.Save();
                     UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
+
+                    CommonUtils.ShowToast($"보석 {dia} 획득 완료", TOAST_BOX_LENGTH.SHORT);
                 }
             }
         }
@@ -113,10 +117,11 @@ public class GPMCommand : MonoBehaviour
                     {
                         gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
                         gd.Save();
+                        CommonUtils.ShowToast($"{pc_data.name_kr} 조각을 {count}개 획득 했습니다.", TOAST_BOX_LENGTH.SHORT);
                     }
                     else
                     {
-                        Debug.Log("캐릭터를 찾을 수 없습니다.\nUsage => [cpiece] [character_id] [count]");
+                        CommonUtils.ShowToast("캐릭터 조각을 찾을 수 없습니다.\nUsage => [cpiece] [character_id] [count]", TOAST_BOX_LENGTH.SHORT);
                     }
                 }
             }
@@ -133,6 +138,8 @@ public class GPMCommand : MonoBehaviour
                     {
                         gd.GetUserItemDataManager().AddUserItemCount(data.item_type, data.item_id, count);
                         gd.Save();
+
+                        CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(data.name_id)}를 {count}개 획득했습니다.", TOAST_BOX_LENGTH.SHORT);
                     }
                     else
                     {
