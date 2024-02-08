@@ -1,5 +1,4 @@
 
-using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
 /// 본 파일은 게임내에 다양하게 사용되는 데이터 타입의 구조체 또는 클래스를 선언하기 위한 파일.

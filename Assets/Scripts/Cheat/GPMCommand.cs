@@ -116,7 +116,7 @@ public class GPMCommand : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("캐릭터를 찾을 수 없습니다.");
+                        Debug.Log("캐릭터를 찾을 수 없습니다.\nUsage => [cpiece] [character_id] [count]");
                     }
                 }
             }
@@ -129,9 +129,16 @@ public class GPMCommand : MonoBehaviour
                 if (int.TryParse(keys[1], out int item_id) && double.TryParse(keys[2], out double count))
                 {
                     Item_Data data = MasterDataManager.Instance.Get_ItemData(item_id);
-                    var user_item = gd.GetUserItemDataManager().FindUserItem(data.item_type, item_id);
-                    user_item.AddItemCount(count);
-                    gd.Save();
+                    if (data != null)
+                    {
+                        gd.GetUserItemDataManager().AddUserItemCount(data.item_type, data.item_id, count);
+                        gd.Save();
+                    }
+                    else
+                    {
+                        CommonUtils.ShowToast("존재하지 않는 아이템 아이디 입니다.\nUsage => [item] [item_id] [count]", TOAST_BOX_LENGTH.SHORT);
+                    }
+                    
                 }
             }
         }
