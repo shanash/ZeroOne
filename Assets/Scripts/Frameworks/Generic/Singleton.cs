@@ -10,6 +10,7 @@ namespace FluffyDuck.Util
         protected static bool IsQuitting = false;
         static object Sync_Obj = new object();
 
+        public static T I => Instance;
         public static T Instance
         {
             get
