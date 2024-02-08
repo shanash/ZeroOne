@@ -514,12 +514,10 @@ public class MasterDataManager : BaseMasterDataManager
         return stage_list.Find(x => x.stage_id > stage_id);
     }
 
-    public void Get_StageDataList(int zone_id, ref List<Stage_Data> list)
+    public IReadOnlyList<Stage_Data> Get_StageDataListByZoneID(int zone_id)
     {
         Check_Stage_Data();
-        list.Clear();
-        list.AddRange(_Stage_Data.Values.ToList().FindAll(x => x.zone_id == zone_id));
-        list.Sort((a, b) => a.stage_ordering.CompareTo(b.stage_ordering));
+        return _Stage_Data.Values.ToList().FindAll(x => x.zone_id == zone_id);
     }
 
 

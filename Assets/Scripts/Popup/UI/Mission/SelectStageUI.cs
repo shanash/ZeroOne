@@ -3,6 +3,7 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Gpm.Ui;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -77,11 +78,9 @@ public class SelectStageUI : PopupBase
         var last_stage = stage_mng.GetLastOpenStage();
 
         
-        List<Stage_Data> stage_list = new List<Stage_Data>();
+        var stage_list = m.Get_StageDataListByZoneID(Zone_ID);
 
-        m.Get_StageDataList(Zone_ID, ref stage_list);
-
-        int last_index = stage_list.FindIndex(x => x.stage_id == last_stage.Stage_ID);
+        int last_index = stage_list.ToList().FindIndex(x => x.stage_id == last_stage.Stage_ID);
 
         int cnt = stage_list.Count;
         for (int i = 0; i < cnt; i++)
@@ -108,7 +107,12 @@ public class SelectStageUI : PopupBase
         Zone_Desc.text = Zone.zone_tooltip;
 
         //  Zone_Star_Proceed_Text
-        Zone_Star_Proceed_Text.text = ZString.Format("스테이지 진행도({0}/{1})", smng.GetGainStarPoints(Zone_ID), smng.GetTotalStarCount(Zone_ID));
+        int gain_star = smng.GetGainStarPoints(Zone_ID);
+        int total_star = smng.GetTotalStarCount(Zone_ID);
+        Zone_Star_Proceed_Text.text = ZString.Format("스테이지 진행도({0}/{1})", gain_star, total_star);
+
+        float per = (float)gain_star / (float)total_star;
+        Zone_Star_Gauge.value = Mathf.Clamp01(per);
     }
 
     public void OnClickZoneStarReward()

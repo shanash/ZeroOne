@@ -54,8 +54,10 @@ public class UserStoryStageDataManager : ManagerBase
         Current_Zone = first_zone;
         Current_Zone_ID = first_zone.zone_id;
 
-        List<Stage_Data> stage_list = new List<Stage_Data>();
-        m.Get_StageDataList(Current_Zone_ID, ref stage_list);
+        //List<Stage_Data> stage_list = new List<Stage_Data>();
+        //m.Get_StageDataList(Current_Zone_ID, ref stage_list);
+
+        var stage_list = m.Get_StageDataListByZoneID(Current_Zone_ID);
 
         if (stage_list.Count == 0)
             return;
@@ -84,8 +86,9 @@ public class UserStoryStageDataManager : ManagerBase
 
     public int GetTotalStarCount(int zone_id)
     {
-        var list = FindUserStoryStageDataList(zone_id);
-        return list.Count * 3;
+        var stage_list = MasterDataManager.Instance.Get_StageDataListByZoneID(zone_id);
+        int sum = stage_list.Count * 3;
+        return sum;
     }
 
     public int GetGainStarPoints(int zone_id)
