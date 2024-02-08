@@ -42,7 +42,7 @@ public class UIHeroBase : UnitBase_V2
                     break;
             }
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             PlayAnimationV2(ani_type);
         }

@@ -23,7 +23,7 @@ public class GestureManager : Singleton<GestureManager>
     Vector2 Last_TouchPosition = Vector2.zero;
 
     //bool Is_Nade_State = false;
-    ICollection<ICursorInteractable> Nade_Components = null;
+    //ICollection<ICursorInteractable> Nade_Components = null;
 
     public event Action<TOUCH_GESTURE_TYPE, ICursorInteractable, Vector2, int> OnGestureDetected;
 
@@ -34,7 +34,7 @@ public class GestureManager : Singleton<GestureManager>
     public event TapEventHandler OnTap;
     public event TapEventHandler OnDoubleTap;
     public event DragEventHandler OnDrag;
-    public event NadeEventHandler OnNade;
+    //public event NadeEventHandler OnNade;
 
     public bool Enable { get; set; } = true;
 

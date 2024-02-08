@@ -464,11 +464,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (state == UNIT_STATES.ATTACK_1)
         {
             var skill = GetSkillManager().GetCurrentSkillGroup();
-            if (Unit_Data.GetUnitID() == 100001)
-            {
-                bool a = false;
-            }
-
             if (animation_name.Equals(skill.GetSkillActionName()))
             {
                 var exec_list = skill.GetExecuableSkillDatas(evt_name);

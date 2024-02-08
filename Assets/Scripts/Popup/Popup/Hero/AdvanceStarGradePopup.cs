@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class AdvanceStarGradePopup : PopupBase
 {
-    [SerializeField, Tooltip("팝업창 제목")]
-    TMP_Text Title = null;
+    //[SerializeField, Tooltip("팝업창 제목")]
+    //TMP_Text Title = null;
     [SerializeField, Tooltip("List View")]
     InfiniteScroll Status_LIst_View;
 

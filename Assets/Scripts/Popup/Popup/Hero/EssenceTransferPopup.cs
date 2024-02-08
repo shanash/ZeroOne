@@ -13,9 +13,6 @@ public class EssenceTransferPopup : PopupBase
     GameObject ToVerticalButton = null;
 
     [SerializeField]
-    Canvas canvas = null;
-
-    [SerializeField]
     RawImage Chara_Image = null;
 
     RenderTexture Chara_Texture = null;

@@ -12,10 +12,6 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
     {
         var ec = GetEffectComponent();
         base.StartParticle(ec.Effect_Duration, loop);
-        if (Send_Data.Onetime.GetOnetimeEffectType() == ONETIME_EFFECT_TYPE.LIFE_RECOVERY)
-        {
-            bool a = false;
-        }
         Send_Data.Onetime?.ExecSkill(Send_Data);
     }
 

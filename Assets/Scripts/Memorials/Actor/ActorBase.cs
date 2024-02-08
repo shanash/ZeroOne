@@ -59,7 +59,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     TrackEntry Drag_Track_Entry;
 
-    float Nade_Point = 0;
+    //float Nade_Point = 0;
 
     float Origin_Mouth_Alpha = 0; // 원래 입 크기
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
@@ -102,8 +102,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             RemoveSkeletonEventListener();
         }
     }
-
-    float[] vertex_buffer = null;
 
     void Update()
     {
@@ -371,7 +369,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
-        Vector2 drag_dest;
+        //Vector2 drag_dest;
 
         switch (comp)
         {
@@ -574,7 +572,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected void AddGestureEventListener()
     {
-        GestureManager.Instance.OnNade += OnNade;
+        //GestureManager.Instance.OnNade += OnNade;
         GestureManager.Instance.OnTap += OnTap;
         GestureManager.Instance.OnDoubleTap += OnDoubleTap;
         GestureManager.Instance.OnDrag += OnDrag;
@@ -582,7 +580,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected void RemoveGestureEventListener()
     {
-        GestureManager.Instance.OnNade -= OnNade;
+        //GestureManager.Instance.OnNade -= OnNade;
         GestureManager.Instance.OnTap -= OnTap;
         GestureManager.Instance.OnDoubleTap -= OnDoubleTap;
         GestureManager.Instance.OnDrag -= OnDrag;
@@ -668,7 +666,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Drag_Track_Entry = null;
         Current_Chat_Motion_Id = -1;
         Current_Serifu_Index = -1;
-        Nade_Point = 0;
+        //Nade_Point = 0;
         Current_Mouth_Anim_Name = string.Empty;
         Dragged_Canvas_Position = Vector2.zero;
         Current_Face_Direction = Vector2.zero;
