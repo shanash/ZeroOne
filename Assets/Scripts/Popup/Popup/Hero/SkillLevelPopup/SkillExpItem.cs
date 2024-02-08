@@ -73,6 +73,7 @@ namespace UI.SkillLevelPopup
             {
                 return false;
             }
+
             var error_code = On_Changed_Use_Count?.Invoke(Data.Data.item_id, count);
             if (error_code == ERROR_CODE.SUCCESS || error_code == ERROR_CODE.LEVEL_UP_SUCCESS)
             {

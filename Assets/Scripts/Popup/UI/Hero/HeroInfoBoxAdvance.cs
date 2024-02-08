@@ -143,11 +143,20 @@ public class HeroInfoBoxAdvance : MonoBehaviour
 
     public void OnConfirmAdvance(params object[] data)
     {
-        if (ERROR_CODE.SUCCESS != Battle_PC_Data.AdvanceStarGrade())
+        Battle_PC_Data.AdvanceStarGrade(OnResponseAdvance);
+    }
+
+    void OnResponseAdvance(ERROR_CODE code)
+    {
+        if (ERROR_CODE.SUCCESS != code)
         {
             Debug.Assert(false, "성급진화 실패???");
             return;
         }
+
+        GameData.Instance.GetUserGoodsDataManager().Save();
+        GameData.Instance.GetUserItemDataManager().Save();
+        GameData.Instance.GetUserHeroDataManager().Save();
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {

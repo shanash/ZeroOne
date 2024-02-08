@@ -615,17 +615,14 @@ public class UserHeroData : UserDataBase
             return data;
         }
 
-        var goods_mng = GameData.Instance.GetUserGoodsDataManager();
-        var item_mng = GameData.Instance.GetUserItemDataManager();
-
         //  캐릭터 조각 소모
-        ERROR_CODE piece_use_result = item_mng.UseItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), GetNeedPiece());
+        ERROR_CODE piece_use_result = GameData.Instance.GetUserItemDataManager().UseItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), GetNeedPiece());
         if (piece_use_result != ERROR_CODE.SUCCESS)
         {
             return piece_use_result;
         }
         //  필요 골드 소모
-        ERROR_CODE gold_use_result = goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, GetNeedGold());
+        ERROR_CODE gold_use_result = GameData.Instance.GetUserGoodsDataManager().UseGoodsCount(GOODS_TYPE.GOLD, GetNeedGold());
         if (gold_use_result != ERROR_CODE.SUCCESS)
         {
             return gold_use_result;
@@ -633,11 +630,6 @@ public class UserHeroData : UserDataBase
 
         //  성급 진화
         SetNextStarGrade();
-
-        // 결과 저장
-        goods_mng.Save();
-        item_mng.Save();
-        GameData.Instance.GetUserHeroDataManager().Save();
 
         return ERROR_CODE.SUCCESS;
     }
@@ -647,15 +639,20 @@ public class UserHeroData : UserDataBase
     /// 확인을 위해서 public으로 메소드를 별도로 만듭니다.
     /// 각종 스탯 비교를 위해서가 아니면 절대로 밖에서 호출하지 맙시다.
     /// </summary>
-    public bool TryUpNextStarGrade()
+    public ERROR_CODE TryUpNextStarGrade()
     {
         if (!Is_Clone)
         {
-            return false;
+            return ERROR_CODE.NOT_ENABLE_WORK;
+        }
+
+        if (IsMaxStarGrade())
+        {
+            return ERROR_CODE.ALREADY_MAX_LEVEL;
         }
 
         SetNextStarGrade();
-        return true;
+        return ERROR_CODE.SUCCESS;
     }
 
     void SetNextStarGrade()

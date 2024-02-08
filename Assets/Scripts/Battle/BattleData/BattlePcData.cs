@@ -1,3 +1,6 @@
+using System;
+using System.Diagnostics;
+
 public class BattlePcData : BattleUnitData
 {
     // TODO: 레벨업 더미값을 임시로 곱합니다. 레벨업 데이터 구현이 완료되면 나중에 지워줍시다
@@ -68,9 +71,10 @@ public class BattlePcData : BattleUnitData
         return User_Data.GetStarGrade();
     }
 
-    public ERROR_CODE AdvanceStarGrade()
+    public void AdvanceStarGrade(Action<ERROR_CODE> callback)
     {
-        return User_Data.AdvanceStarGrade();
+        ERROR_CODE result = User_Data.AdvanceStarGrade();
+        callback(result);
     }
 
     public ERROR_CODE CheckAdvanceStarGrade()
@@ -353,7 +357,12 @@ public class BattlePcData : BattleUnitData
     public BattlePcData GetNextStarGradeData()
     {
         var clone = (BattlePcData)this.Clone();
-        clone.User_Data.TryUpNextStarGrade();
+        var result = clone.User_Data.TryUpNextStarGrade();
+        if (result != ERROR_CODE.SUCCESS)
+        {
+            Debug.Assert(false, $"성급 진화에 실패했습니다 : {result}");
+            return null;
+        }
         return clone;
     }
 

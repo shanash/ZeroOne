@@ -110,7 +110,7 @@ public struct Effect_Queue_Data
 /// <summary>
 /// 스킬/캐릭터 경험치 상승에 사용될 경험치 아이템의 사용 갯수 지정 데이터
 /// </summary>
-public struct USE_EXP_ITEM_DATA
+public record USE_EXP_ITEM_DATA
 {
     public ITEM_TYPE_V2 Item_Type;
     public int Item_ID;

@@ -35,8 +35,6 @@ public class UserItemData : UserDataBase
         InitMasterData();
     }
 
-    
-
     /// <summary>
     /// 각 아이템 데이터 반환
     /// </summary>
@@ -61,9 +59,9 @@ public class UserItemData : UserDataBase
         Is_Update_Data = true;
         return ERROR_CODE.SUCCESS;
     }
+
     public ERROR_CODE UseItemCount(double use_cnt)
     {
-
         if (!IsUsableItemCount(use_cnt))
         {
             return ERROR_CODE.NOT_ENOUGH_ITEM;
@@ -79,6 +77,7 @@ public class UserItemData : UserDataBase
 
         return ERROR_CODE.FAILED;
     }
+
     public bool IsUsableItemCount(double cnt)
     {
         if (cnt < 0)

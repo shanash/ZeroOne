@@ -64,32 +64,52 @@ public class SkillLevelPopup : PopupBase
         }
 
         Skill_Groups = data[0] as IReadOnlyList<UserHeroSkillData>;
-        Use_Exp_Items = new List<USE_EXP_ITEM_DATA>();
 
+        Use_Exp_Items = new List<USE_EXP_ITEM_DATA>();
         Exist_Exp_Items = new List<UserItem_NormalItemData>();
 
         FixedUpdatePopup();
         return true;
     }
 
+    protected override void OnUpdatePopup()
+    {
+        base.OnUpdatePopup();
+
+        if (Current_SkillGroups == null)
+        {
+            return;
+        }
+
+        UpdateExpItemButtons();
+        UpdateUI();
+    }
+
     ERROR_CODE UpdateUI(bool use_levelup_animation = false)
     {
         Skill_Name.text = Current_SkillGroup.Group_Data.name_kr;
 
-        return SetLevelupData(use_levelup_animation);
+        return UpdateLevelupInfoUI(use_levelup_animation);
     }
 
+    /// <summary>
+    /// 경험치 아이템 버튼 업데이트<br />
+    /// 경험치 아이템 버튼을 눌렀을때 업데이트 시켜주면 순환 호출을 하기 때문에<br />
+    /// UpdateUI에서는 별도로 분리
+    /// </summary>
     void UpdateExpItemButtons()
     {
         for (int i = 0; i < Exist_Exp_Items.Count; i++)
         {
+            if (!Use_Exp_Items.Exists(x => x.Item_ID == Exist_Exp_Items[i].Data.item_id))
+            {
+                Use_Exp_Items.Add(CreateExpItem(Exist_Exp_Items[i].Data.item_id, 0));
+            }
+
             Exp_Items[i].Initialize(Exist_Exp_Items[i], OnChangedUseItemCount);
             Exp_Items[i].gameObject.SetActive(Exist_Exp_Items[i].GetCount() > 0);
-            if (Use_Exp_Items.Exists(x => x.Item_ID == Exist_Exp_Items[i].Item_ID))
-            {
-                var item = Use_Exp_Items.Find(x => x.Item_ID == Exist_Exp_Items[i].Item_ID);
-                Exp_Items[i].SetUseCount(item.Use_Count);
-            }
+            var item = Use_Exp_Items.Find(x => x.Item_ID == Exist_Exp_Items[i].Item_ID);
+            Exp_Items[i].SetUseCount(item.Use_Count);
         }
     }
 
@@ -108,6 +128,8 @@ public class SkillLevelPopup : PopupBase
             Skill_Tab_Ui[i].Set(skill_group);
         }
 
+        After_SkillGroup = Current_SkillGroup;
+
         Exist_Exp_Items.Clear();
         // 유저가 소유하고 있는 경험치 아이템 가져오기
         for (int i = 0; i < 5; i++)
@@ -115,7 +137,6 @@ public class SkillLevelPopup : PopupBase
             var data = (UserItem_NormalItemData)GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_SKILL, max_exp_item_id - i);
             Exist_Exp_Items.Add(data);
         }
-        Use_Exp_Items.Clear();
 
         UpdatePopup();
     }
@@ -137,7 +158,12 @@ public class SkillLevelPopup : PopupBase
         }
     }
 
-    ERROR_CODE SetLevelupData(bool use_levelup_animation)
+    /// <summary>
+    /// 레벨업 관련 정보 세팅
+    /// </summary>
+    /// <param name="use_levelup_animation"></param>
+    /// <returns></returns>
+    ERROR_CODE UpdateLevelupInfoUI(bool use_levelup_animation)
     {
         ERROR_CODE result_code = ERROR_CODE.SUCCESS;
         After_SkillGroup = Current_SkillGroup;
@@ -146,15 +172,16 @@ public class SkillLevelPopup : PopupBase
         bool exist_enough_golds = true;
         double not_used_exp = 0;
 
-        if (Use_Exp_Items.Count > 0)
-        {
-            result_code = Current_SkillGroup.SumExpItemInfo(out double items_total_exp, out need_golds, Use_Exp_Items);
+        result_code = Current_SkillGroup.SumExpItemInfo(out double items_total_exp, out need_golds, Use_Exp_Items);
 
-            if (result_code != ERROR_CODE.SUCCESS)
-            {
-                Debug.Assert(false, $"잘못된 아이템 에러 : {result_code}");
-                return result_code;
-            }
+        if (result_code != ERROR_CODE.SUCCESS)
+        {
+            Debug.Assert(false, $"잘못된 아이템 에러 : {result_code}");
+            return result_code;
+        }
+
+        if (items_total_exp > 0)
+        {
 
             exist_enough_golds = GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, need_golds);
             After_SkillGroup = Current_SkillGroup.GetAddedExpSkillGroup(items_total_exp, out result_code);
@@ -167,50 +194,43 @@ public class SkillLevelPopup : PopupBase
 
             var add_exp = (After_SkillGroup.GetExp() - Current_SkillGroup.GetExp());
             not_used_exp = items_total_exp - add_exp;
-
-            Debug.Log($"not_used_exp : {not_used_exp}");
         }
 
-        // 
+        // 스킬정보 박스
         skillInfos[0].SetData(Current_SkillGroup);
         skillInfos[1].SetData(After_SkillGroup);
 
         // 경험치 텍스트 및 바
-        double cur_exp = After_SkillGroup.IsMaxLevel() ? not_used_exp : After_SkillGroup.GetLevelExp();
+        double cur_exp = After_SkillGroup.IsMaxLevel() ? not_used_exp : After_SkillGroup.GetLevelExp(); // 초과될때는 초과된만큼의 경험치를 표시
         double next_exp = After_SkillGroup.GetNextExp();
         string exp_text = $"{cur_exp}/{next_exp}";
-        exp_text = After_SkillGroup.IsMaxLevel() ? exp_text.WithColorTag(Color.red) : exp_text;
+        exp_text = After_SkillGroup.IsMaxLevel() ? exp_text.WithColorTag(Color.red) : exp_text; // 초과될때 빨간색
         Add_Exp_Text.text = exp_text;
 
         float exp_bar_val = After_SkillGroup.IsMaxLevel() ? (float)(not_used_exp / After_SkillGroup.GetNextExp()) : After_SkillGroup.GetExpPercentage();
         Add_Exp_Bar.value = exp_bar_val;
-
-        Add_Exp_Bar.image.color = After_SkillGroup.IsMaxLevel() ? Color.red : Color.white;
+        Add_Exp_Bar.image.color = After_SkillGroup.IsMaxLevel() ? Color.red : Color.white; // 초과될때 빨간색
 
         //골드 소모 텍스트
         string gold_string = ((int)need_golds).ToString("N0");
-        Need_Gold_Text.text = (exist_enough_golds) ? gold_string : gold_string.WithColorTag(Color.red);
+        Need_Gold_Text.text = (exist_enough_golds) ? gold_string : gold_string.WithColorTag(Color.red); // 돈이 부족할때는 빨간색
 
         // 버튼 활성/비활성화
         AutoSelect_Button.enabled = !Current_SkillGroup.IsMaxLevel();
-        Up_Button.enabled = !Current_SkillGroup.IsMaxLevel() && exist_enough_golds;
+        Up_Button.enabled = !Current_SkillGroup.IsMaxLevel() && items_total_exp > 0 && exist_enough_golds; // !최대레벨 && 사용하려는 경험치가 있어야 && 소모하기에 충분한 돈
 
         return result_code;
     }
 
     public ERROR_CODE OnChangedUseItemCount(int item_id, int count)
     {
-        if (Use_Exp_Items.Exists(x => x.Item_ID == item_id && x.Use_Count < count)
-            && After_SkillGroup.IsMaxLevel())
+        if (After_SkillGroup.IsMaxLevel())
         {
             return ERROR_CODE.ALREADY_MAX_LEVEL;
         }
 
-        Use_Exp_Items.RemoveAll(x => x.Item_ID == item_id);
-        if (count > 0)
-        {
-            Use_Exp_Items.Add(CreateExpItem(item_id, count));
-        }
+        var item = Use_Exp_Items.Find(x => x.Item_ID == item_id);
+        item.Use_Count = count;
 
         return UpdateUI();
     }
@@ -231,8 +251,11 @@ public class SkillLevelPopup : PopupBase
 
     public void OnClickLevelup()
     {
-        var result = Current_SkillGroup.AddExpUseItem(Use_Exp_Items);
+        Current_SkillGroup.AddExpUseItem(OnResponseLevelup, Use_Exp_Items);
+    }
 
+    void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
+    {
         if (result.Code != ERROR_CODE.SUCCESS && result.Code != ERROR_CODE.LEVEL_UP_SUCCESS)
         {
             Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
