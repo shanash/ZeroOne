@@ -252,6 +252,7 @@ public class SkillLevelPopup : PopupBase
     public void OnClickLevelup()
     {
         Current_SkillGroup.AddExpUseItem(OnResponseLevelup, Use_Exp_Items);
+
     }
 
     void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
