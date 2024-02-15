@@ -279,15 +279,12 @@ public class UserStoryStageDataManager : ManagerBase
                     if (int.TryParse(jdata[NODE_STAGE_ID].ToString(), out stage_id))
                     {
                         UserStoryStageData item = FindUserStoryStageData(stage_id);
-                        if (item != null)
-                        {
-                            item.Deserialized(jdata);
-                        }
-                        else
+                        
+                        if (item == null)
                         {
                             item = AddUserStoryStageData(stage_id);
-                            item?.Deserialized(jdata);
                         }
+                        item?.Deserialized(jdata);
                     }
                 }
             }

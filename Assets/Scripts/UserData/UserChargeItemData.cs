@@ -112,7 +112,7 @@ public class UserChargeItemData : UserDataBase
 
         if (use_cnt > 0)
         {
-            CheckDateAndTimeChange();
+            CheckDateAndTimeCharge();
             int item_cnt = GetCount();
             item_cnt -= use_cnt;
             Count.Set(item_cnt);
@@ -167,7 +167,7 @@ public class UserChargeItemData : UserDataBase
 
     
 
-    public override ERROR_CODE CheckDateAndTimeChange()
+    public override ERROR_CODE CheckDateAndTimeCharge()
     {
         ERROR_CODE code = ERROR_CODE.NOT_WORK;
 
@@ -212,7 +212,7 @@ public class UserChargeItemData : UserDataBase
         }
 
         var now = DateTime.Now.ToLocalTime();
-        ERROR_CODE result = CheckDateAndTimeChange();
+        ERROR_CODE result = CheckDateAndTimeCharge();
         if (result == ERROR_CODE.NOT_WORK)
         {
             return TimeSpan.Zero;
@@ -356,7 +356,7 @@ public class UserChargeItemData : UserDataBase
         }
 
         InitMasterData();
-        CheckDateAndTimeChange();
+        CheckDateAndTimeCharge();
         return true;
     }
 

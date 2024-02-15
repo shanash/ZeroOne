@@ -45,7 +45,7 @@ public class UserDataBase : IDisposable, ICloneable
     public virtual void InitUpdateData() { Is_Update_Data = false; }
     public void SetUpdateData(bool is_update) { Is_Update_Data = is_update; }
 
-    public virtual ERROR_CODE CheckDateAndTimeChange() { return ERROR_CODE.NOT_WORK; }
+    public virtual ERROR_CODE CheckDateAndTimeCharge() { return ERROR_CODE.NOT_WORK; }
 
     public virtual LitJson.JsonData Serialized() { return null; }
     public virtual bool Deserialized(LitJson.JsonData json) { return false; }

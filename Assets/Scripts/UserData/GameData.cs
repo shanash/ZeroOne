@@ -105,6 +105,15 @@ public class GameData : Singleton<GameData>
             }
             User_Data_Manager_List.Add(mng);
         }
+        //  boss stage data
+        {
+            var mng = new UserBossDungeonDataManager(USER_DATA_MANAGER_TYPE.USER_BOSS_DUNGEON_DATA_MANAGER);
+            if (!mng.Load())
+            {
+                mng.InitDataManager();
+            }
+            User_Data_Manager_List.Add(mng);
+        }
     }
 
     T FindUserDataManager<T>(USER_DATA_MANAGER_TYPE utype) where T : ManagerBase
@@ -148,6 +157,10 @@ public class GameData : Singleton<GameData>
     public UserHeroSkillDataManager GetUserHeroSkillDataManager()
     {
         return FindUserDataManager<UserHeroSkillDataManager>(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
+    }
+    public UserBossDungeonDataManager GetUserBossDungeonDataManager()
+    {
+        return FindUserDataManager<UserBossDungeonDataManager>(USER_DATA_MANAGER_TYPE.USER_BOSS_DUNGEON_DATA_MANAGER);
     }
 
 

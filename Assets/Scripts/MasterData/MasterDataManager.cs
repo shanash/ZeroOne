@@ -578,7 +578,9 @@ public class MasterDataManager : BaseMasterDataManager
     public IReadOnlyList<Boss_Data> Get_BossDataList()
     {
         Check_Boss_Data();
-        return _Boss_Data.Values.ToList();
+        var list = _Boss_Data.Values.ToList();
+        list.Sort((a, b) => a.boss_id.CompareTo(b.boss_id));
+        return list;
     }
 
     public Boss_Data Get_BossData(int boss_id)
@@ -598,6 +600,15 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Boss_Stage_Data();
         return _Boss_Stage_Data[boss_stage_id];
     }
+
+    public Boss_Stage_Data Get_NextBossStageData(int boss_stage_id)
+    {
+        Check_Boss_Data();
+        var stage = Get_BossStageData(boss_stage_id);
+        var stage_list = Get_BossStageDataListByBossStageGroupID(stage.boss_stage_group_id).ToList();
+        return stage_list.Find(x => x.boss_stage_id > boss_stage_id);
+    }
+
     public IReadOnlyList<Boss_Stage_Data> Get_BossStageDataListByBossStageGroupID(int boss_stage_group_id)
     {
         Check_Boss_Stage_Data();
