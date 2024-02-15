@@ -39,7 +39,10 @@ namespace UI.SkillLevelPopup
             Data = data;
             On_Changed_Use_Count = callback_changed_use_item;
             int index = Array.FindIndex(SPRITE_IDX_BY_ITEM_IDs, (item) => item == Data.Data.item_id);
-            BackGround.sprite = BG_Sprites[index];
+            if (index != -1)
+            {
+                BackGround.sprite = BG_Sprites[index];
+            }
             UpdateUI();
         }
 

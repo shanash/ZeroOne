@@ -45,9 +45,8 @@ public class SkillLevelPopup : PopupBase
 
     IReadOnlyList<UserHeroSkillData> Skill_Groups = null;
 
-    List<UserItem_NormalItemData> Exist_Exp_Items = null;
-
     List<USE_EXP_ITEM_DATA> Use_Exp_Items = null;
+    List<UserItem_NormalItemData> Exist_Exp_Items = null;
 
     int Selected_Index = -1;
 
@@ -99,8 +98,14 @@ public class SkillLevelPopup : PopupBase
     /// </summary>
     void UpdateExpItemButtons()
     {
-        for (int i = 0; i < Exist_Exp_Items.Count; i++)
+        for (int i = 0; i < Exp_Items.Length; i++)
         {
+            if (Exist_Exp_Items.Count <= i)
+            {
+                Exp_Items[i].gameObject.SetActive(false);
+                continue;
+            }
+
             if (!Use_Exp_Items.Exists(x => x.Item_ID == Exist_Exp_Items[i].Data.item_id))
             {
                 Use_Exp_Items.Add(CreateExpItem(Exist_Exp_Items[i].Data.item_id, 0));
@@ -135,7 +140,10 @@ public class SkillLevelPopup : PopupBase
         for (int i = 0; i < 5; i++)
         {
             var data = (UserItem_NormalItemData)GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_SKILL, max_exp_item_id - i);
-            Exist_Exp_Items.Add(data);
+            if (data != null)
+            {
+                Exist_Exp_Items.Add(data);
+            }
         }
 
         UpdatePopup();

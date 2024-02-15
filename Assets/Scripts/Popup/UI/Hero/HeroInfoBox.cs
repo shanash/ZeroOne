@@ -51,9 +51,6 @@ public class HeroInfoBox : MonoBehaviour
 
         Tab_Controller.SelectFirstTab();
 
-        // 레벨업 탭과 승급 탭은 일단 막아놓습니다.
-        Tab_Controller.GetTab(1).SetBlockTab(true);
-
         Refresh();
     }
 
@@ -61,7 +58,7 @@ public class HeroInfoBox : MonoBehaviour
     {
         //Hero_Info_Box_Basic.Refresh();
         //Hero_Info_Box_LevelUp.Refresh();
-        Hero_Info_Box_Advance.Refresh();
+        //Hero_Info_Box_Advance.Refresh();
         //Hero_Info_Box_Essence.Refresh();
     }
 

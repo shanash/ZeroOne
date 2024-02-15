@@ -265,7 +265,7 @@ public class UserHeroData : UserDataBase
         return lv_exp / need_exp;
     }
 
-    public USE_EXP_ITEM_RESULT_DATA AddExpUseItem(List<USE_EXP_ITEM_DATA> use_list)
+    public void AddExpUseItem(System.Action<USE_EXP_ITEM_RESULT_DATA> callback, List<USE_EXP_ITEM_DATA> use_list)
     {
         var goods_mng = GameData.Instance.GetUserGoodsDataManager();
         var item_mng = GameData.Instance.GetUserItemDataManager();
@@ -282,60 +282,64 @@ public class UserHeroData : UserDataBase
         result.Used_Gold = 0;
         //  시뮬레이션 결과를 받아온다.
         var result_simulate = GetCalcSimulateExp(use_list);
-        //  성공이 아니면 바로 반환
-        if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
-        {
-            result.ResetAndResultCode(result_simulate.Code);
-            return result;
-        }
-        //  증가된 경험치가 없거나, 필요 금화량이 0인 경우, 아무것도 하지 않도록(이런 경우는 있으면 안되는 상황)
-        if (result_simulate.Add_Exp <= 0 || result_simulate.Need_Gold <= 0)
-        {
-            result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
-            return result;
-        }
 
-        //  금화가 충분한지 체크
-        bool is_useable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
-        if (!is_useable_gold)
+        do
         {
-            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
-            return result;
-        }
-        result.Used_Gold = result_simulate.Need_Gold;
-
-        //  아이템 체크
-        bool is_usable_item = true;
-        int cnt = use_list.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var use = use_list[i];
-            if (!item_mng.IsUsableItemCount(use.Item_Type, use.Item_ID, use.Use_Count))
+            //  성공이 아니면 바로 반환
+            if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
             {
-                is_usable_item = false;
+                result.ResetAndResultCode(result_simulate.Code);
                 break;
             }
-        }
-        //  아이템이 충분하지 않음.
-        if (!is_usable_item)
-        {
-            result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
-            return result;
-        }
-        result.Add_Exp = result_simulate.Add_Exp;
+            //  증가된 경험치가 없거나, 필요 금화량이 0인 경우, 아무것도 하지 않도록(이런 경우는 있으면 안되는 상황)
+            if (result_simulate.Add_Exp <= 0 || result_simulate.Need_Gold <= 0)
+            {
+                result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
+                break;
+            }
 
-        //  재화 및 아이템 소모
-        goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, result.Used_Gold);
-        cnt = use_list.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var use = use_list[i];
-            item_mng.UseItemCount(use.Item_Type, use.Item_ID, use.Use_Count);
-        }
-        //  경험치 증가 및 레벨업
-        result.Code = AddExp(result_simulate.Add_Exp);
+            //  금화가 충분한지 체크
+            bool is_useable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
+            if (!is_useable_gold)
+            {
+                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
+                break;
+            }
+            result.Used_Gold = result_simulate.Need_Gold;
 
-        return result;
+            //  아이템 체크
+            bool is_usable_item = true;
+            int cnt = use_list.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                var use = use_list[i];
+                if (!item_mng.IsUsableItemCount(use.Item_Type, use.Item_ID, use.Use_Count))
+                {
+                    is_usable_item = false;
+                    break;
+                }
+            }
+            //  아이템이 충분하지 않음.
+            if (!is_usable_item)
+            {
+                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
+                break;
+            }
+            result.Add_Exp = result_simulate.Add_Exp;
+
+            //  재화 및 아이템 소모
+            goods_mng.UseGoodsCount(GOODS_TYPE.GOLD, result.Used_Gold);
+            cnt = use_list.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                var use = use_list[i];
+                item_mng.UseItemCount(use.Item_Type, use.Item_ID, use.Use_Count);
+            }
+            //  경험치 증가 및 레벨업
+            result.Code = AddExp(result_simulate.Add_Exp);
+        } while (false);
+
+        callback(result);
     }
 
     /// <summary>
