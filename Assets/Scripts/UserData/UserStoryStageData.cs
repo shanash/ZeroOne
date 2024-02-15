@@ -1,7 +1,7 @@
 
 using FluffyDuck.Util;
 using LitJson;
-
+/**/
 public class UserStoryStageData : UserDataBase
 {
     public int Stage_ID { get; protected set; } = 0;
@@ -12,6 +12,7 @@ public class UserStoryStageData : UserDataBase
 
 
     Stage_Data Data;
+    World_Data World;
     Zone_Data Zone;
 
     public UserStoryStageData() : base() { }
@@ -49,7 +50,8 @@ public class UserStoryStageData : UserDataBase
     {
         var m = MasterDataManager.Instance;
         Data = m.Get_StageData(Stage_ID);
-        Zone = m.Get_ZoneData(Data.zone_id);
+        Zone = m.Get_ZoneDataByStageGroupID(Data.stage_group_id);
+        World = m.Get_WorldDataByZoneGroupID(Zone.zone_group_id);
     }
 
     public void AddChallenageCount()
@@ -96,20 +98,16 @@ public class UserStoryStageData : UserDataBase
         return GetWinCount() > 0;
     }
 
-    public int GetWorldID()
+    
+    public int GetStageGroupID()
     {
-        if (Zone != null)
+        //if (Zone != null)
+        //{
+        //    return Zone.stage_group_id;
+        //}
+        if (Data != null)
         {
-            return Zone.in_world_id;
-        }
-        return 0;
-    }
-
-    public int GetZoneID()
-    {
-        if (Zone != null)
-        {
-            return Zone.zone_id;
+            return Data.stage_group_id;
         }
         return 0;
     }
@@ -157,6 +155,11 @@ public class UserStoryStageData : UserDataBase
     public Zone_Data GetZoneData()
     {
         return Zone;
+    }
+
+    public World_Data GetWorldData()
+    {
+        return World;
     }
 
     public override JsonData Serialized()

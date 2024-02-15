@@ -14,10 +14,16 @@ public class Stage_Data : System.IDisposable
 	int _stage_id;
 
 	///	<summary>
-	///	지역 id
+	///	스테이지 그룹 ID
 	///	</summary>
-	public int zone_id => _zone_id;
-	int _zone_id;
+	public int stage_group_id => _stage_group_id;
+	int _stage_group_id;
+
+	///	<summary>
+	///	웨이브 그룹 ID
+	///	</summary>
+	public int wave_group_id => _wave_group_id;
+	int _wave_group_id;
 
 	///	<summary>
 	///	스테이지 넘버링
@@ -78,7 +84,8 @@ public class Stage_Data : System.IDisposable
 	public Stage_Data(Raw_Stage_Data raw_data)
 	{
 		_stage_id = raw_data.stage_id;
-		_zone_id = raw_data.zone_id;
+		_stage_group_id = raw_data.stage_group_id;
+		_wave_group_id = raw_data.wave_group_id;
 		_stage_ordering = raw_data.stage_ordering;
 		_stage_name = raw_data.stage_name;
 		_use_stamina = raw_data.use_stamina;
@@ -110,7 +117,8 @@ public class Stage_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[stage_id] = <color=yellow>{0}</color>", stage_id).AppendLine();
-		sb.AppendFormat("[zone_id] = <color=yellow>{0}</color>", zone_id).AppendLine();
+		sb.AppendFormat("[stage_group_id] = <color=yellow>{0}</color>", stage_group_id).AppendLine();
+		sb.AppendFormat("[wave_group_id] = <color=yellow>{0}</color>", wave_group_id).AppendLine();
 		sb.AppendFormat("[stage_ordering] = <color=yellow>{0}</color>", stage_ordering).AppendLine();
 		sb.AppendFormat("[stage_name] = <color=yellow>{0}</color>", stage_name).AppendLine();
 		sb.AppendFormat("[use_stamina] = <color=yellow>{0}</color>", use_stamina).AppendLine();

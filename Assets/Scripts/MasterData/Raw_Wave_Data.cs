@@ -5,7 +5,7 @@
 public class Raw_Wave_Data : System.IDisposable
 {
 	public int wave_id {get; set;}
-	public int stage_id {get; set;}
+	public int wave_group_id {get; set;}
 	public int wave_sequence {get; set;}
 	public int enemy_appearance_count {get; set;}
 	public int[] enemy_appearance_info {get; set;}
@@ -18,7 +18,7 @@ public class Raw_Wave_Data : System.IDisposable
 	public Raw_Wave_Data()
 	{
 		wave_id = 0;
-		stage_id = 0;
+		wave_group_id = 0;
 		wave_sequence = 0;
 		enemy_appearance_count = 0;
 		wave_time = 0;

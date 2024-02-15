@@ -33,10 +33,10 @@ public class StageListCellNode : InfiniteScrollItem
         var data = (StageListData)sdata;
 
         //  stage number
-        Stage_Number.text = ZString.Format("{0}-{1}", data.Zone.zone_ordering, data.Data.stage_ordering);
+        Stage_Number.text = ZString.Format("{0}-{1}", data.Zone.zone_ordering, data.Stage.stage_ordering);
 
         //  stage name
-        Stage_Name.text = data.Data.stage_name;
+        Stage_Name.text = data.Stage.stage_name;
 
         //  star point
         if (data.IsExistUserData())
@@ -85,7 +85,7 @@ public class StageListCellNode : InfiniteScrollItem
         {
             var data = (StageListData)this.scrollData;
 
-            popup.ShowPopup(data.Data);
+            popup.ShowPopup(data.World, data.Zone, data.Stage);
         });
     }
 

@@ -117,7 +117,7 @@ public class GPMCommand : MonoBehaviour
                     {
                         gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
                         gd.Save();
-                        CommonUtils.ShowToast($"{pc_data.name_kr} 조각을 {count}개 획득 했습니다.", TOAST_BOX_LENGTH.SHORT);
+                        CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(pc_data.name_id)} 조각을 {count}개 획득 했습니다.", TOAST_BOX_LENGTH.SHORT);
                     }
                     else
                     {

@@ -61,7 +61,10 @@ public class BattleNpcData : BattleUnitData
         }
         return 0;
     }
-
+    public override ATTRIBUTE_TYPE GetAttributeType()
+    {
+        return Data.attribute_type;
+    }
     public override void SetLevel(int lv)
     {
         Level = lv;

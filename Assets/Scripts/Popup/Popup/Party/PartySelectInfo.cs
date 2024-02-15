@@ -63,7 +63,7 @@ public class PartySelectInfo : MonoBehaviour
         Level_Text.text = ZString.Format("LV.{0}", User_Data.GetLevel());
 
         //  name
-        Name_Text.text = User_Data.GetPlayerCharacterData().name_kr;
+        Name_Text.text = GameDefine.GetLocalizeString(User_Data.GetPlayerCharacterData().name_id);
 
         //  position
         var pos_data = m.Get_PositionIconData(User_Data.GetPositionType());

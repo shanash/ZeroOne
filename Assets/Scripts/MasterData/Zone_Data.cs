@@ -20,10 +20,16 @@ public class Zone_Data : System.IDisposable
 	string _zone_name;
 
 	///	<summary>
-	///	속한 월드
+	///	존 그룹 ID
 	///	</summary>
-	public int in_world_id => _in_world_id;
-	int _in_world_id;
+	public int zone_group_id => _zone_group_id;
+	int _zone_group_id;
+
+	///	<summary>
+	///	스테이지 그룹 ID
+	///	</summary>
+	public int stage_group_id => _stage_group_id;
+	int _stage_group_id;
 
 	///	<summary>
 	///	오더링
@@ -61,7 +67,8 @@ public class Zone_Data : System.IDisposable
 	{
 		_zone_id = raw_data.zone_id;
 		_zone_name = raw_data.zone_name;
-		_in_world_id = raw_data.in_world_id;
+		_zone_group_id = raw_data.zone_group_id;
+		_stage_group_id = raw_data.stage_group_id;
 		_zone_ordering = raw_data.zone_ordering;
 		_zone_difficulty = raw_data.zone_difficulty;
 		_zone_img_path = raw_data.zone_img_path;
@@ -90,7 +97,8 @@ public class Zone_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[zone_id] = <color=yellow>{0}</color>", zone_id).AppendLine();
 		sb.AppendFormat("[zone_name] = <color=yellow>{0}</color>", zone_name).AppendLine();
-		sb.AppendFormat("[in_world_id] = <color=yellow>{0}</color>", in_world_id).AppendLine();
+		sb.AppendFormat("[zone_group_id] = <color=yellow>{0}</color>", zone_group_id).AppendLine();
+		sb.AppendFormat("[stage_group_id] = <color=yellow>{0}</color>", stage_group_id).AppendLine();
 		sb.AppendFormat("[zone_ordering] = <color=yellow>{0}</color>", zone_ordering).AppendLine();
 		sb.AppendFormat("[zone_difficulty] = <color=yellow>{0}</color>", zone_difficulty).AppendLine();
 		sb.AppendFormat("[zone_img_path] = <color=yellow>{0}</color>", zone_img_path).AppendLine();

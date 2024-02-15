@@ -5,7 +5,8 @@
 public class Raw_Stage_Data : System.IDisposable
 {
 	public int stage_id {get; set;}
-	public int zone_id {get; set;}
+	public int stage_group_id {get; set;}
+	public int wave_group_id {get; set;}
 	public int stage_ordering {get; set;}
 	public string stage_name {get; set;}
 	public int use_stamina {get; set;}
@@ -21,7 +22,8 @@ public class Raw_Stage_Data : System.IDisposable
 	public Raw_Stage_Data()
 	{
 		stage_id = 0;
-		zone_id = 0;
+		stage_group_id = 0;
+		wave_group_id = 0;
 		stage_ordering = 0;
 		stage_name = string.Empty;
 		use_stamina = 0;

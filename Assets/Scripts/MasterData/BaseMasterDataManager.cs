@@ -15,6 +15,39 @@ public class BaseMasterDataManager
 {
 
 	///	<summary>
+	///	 <b>key_1 ATTRIBUTE_TYPE : attacker_attribute_type </b><br/>
+	///	</summary>
+	protected Dictionary<ATTRIBUTE_TYPE, Attribute_Superiority_Data> _Attribute_Superiority_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<ATTRIBUTE_TYPE, Attribute_Superiority_Data>();
+	///	<summary>
+	///	 <b>key_1 ATTRIBUTE_TYPE : attribute_type </b><br/>
+	///	 <b>key_2 int : same_attribute_count </b><br/>
+	///	</summary>
+	protected Dictionary<Tuple<ATTRIBUTE_TYPE, int>, Attribute_Synergy_Data> _Attribute_Synergy_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<Tuple<ATTRIBUTE_TYPE, int>, Attribute_Synergy_Data>();
+	///	<summary>
+	///	 <b>key_1 int : boss_id </b><br/>
+	///	</summary>
+	protected Dictionary<int, Boss_Data> _Boss_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<int, Boss_Data>();
+	///	<summary>
+	///	 <b>key_1 int : boss_stage_id </b><br/>
+	///	</summary>
+	protected Dictionary<int, Boss_Stage_Data> _Boss_Stage_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<int, Boss_Stage_Data>();
+	///	<summary>
 	///	 <b>key_1 REWARD_TYPE : reward_type </b><br/>
 	///	</summary>
 	protected Dictionary<REWARD_TYPE, Charge_Value_Data> _Charge_Value_Data
@@ -441,6 +474,10 @@ public class BaseMasterDataManager
 
 	private async void InitLoadMasterData()
 	{
+		await LoadMaster_Attribute_Superiority_Data();
+		await LoadMaster_Attribute_Synergy_Data();
+		await LoadMaster_Boss_Data();
+		await LoadMaster_Boss_Stage_Data();
 		await LoadMaster_Charge_Value_Data();
 		await LoadMaster_Editor_Stage_Data();
 		await LoadMaster_Editor_Wave_Data();
@@ -516,6 +553,62 @@ public class BaseMasterDataManager
 
 
 #endif
+	protected async Task LoadMaster_Attribute_Superiority_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Attribute_Superiority_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Attribute_Superiority_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Attribute_Superiority_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Attribute_Superiority_Data.Add(raw_data.attacker_attribute_type, new Attribute_Superiority_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Attribute_Synergy_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Attribute_Synergy_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Attribute_Synergy_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Attribute_Synergy_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Attribute_Synergy_Data.Add(new Tuple<ATTRIBUTE_TYPE, int>(raw_data.attribute_type, raw_data.same_attribute_count), new Attribute_Synergy_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Boss_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Boss_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Boss_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Boss_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Boss_Data.Add(raw_data.boss_id, new Boss_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Boss_Stage_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Boss_Stage_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Boss_Stage_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Boss_Stage_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Boss_Stage_Data.Add(raw_data.boss_stage_id, new Boss_Stage_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_Charge_Value_Data()
 	{
 #if UNITY_5_3_OR_NEWER
@@ -1227,6 +1320,38 @@ public class BaseMasterDataManager
 		foreach (var raw_data in raw_data_list)
 		{
 			_Story_Lang_Data.Add(raw_data.string_id, new Story_Lang_Data(raw_data));
+		}
+	}
+
+	protected async void Check_Attribute_Superiority_Data()
+	{
+		if(_Attribute_Superiority_Data == null)
+		{
+			await LoadMaster_Attribute_Superiority_Data();
+		}
+	}
+
+	protected async void Check_Attribute_Synergy_Data()
+	{
+		if(_Attribute_Synergy_Data == null)
+		{
+			await LoadMaster_Attribute_Synergy_Data();
+		}
+	}
+
+	protected async void Check_Boss_Data()
+	{
+		if(_Boss_Data == null)
+		{
+			await LoadMaster_Boss_Data();
+		}
+	}
+
+	protected async void Check_Boss_Stage_Data()
+	{
+		if(_Boss_Stage_Data == null)
+		{
+			await LoadMaster_Boss_Stage_Data();
 		}
 	}
 

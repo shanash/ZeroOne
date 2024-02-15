@@ -19,6 +19,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     public override void StartParticle(float duration, bool loop = false)
     {
         base.StartParticle(duration, loop);
+        Writer.SetTypewriterSpeed(Effect_Speed_Multiple);
         Writer.ShowText(Show_Text);
     }
 

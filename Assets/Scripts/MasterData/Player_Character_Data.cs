@@ -1,4 +1,4 @@
-﻿#if UNITY_5_3_OR_NEWER
+#if UNITY_5_3_OR_NEWER
 using FluffyDuck.Util;
 #endif
 using System.Linq;
@@ -12,6 +12,12 @@ public class Player_Character_Data : System.IDisposable
 	///	</summary>
 	public int player_character_id => _player_character_id;
 	int _player_character_id;
+
+	///	<summary>
+	///	캐릭터 명칭
+	///	</summary>
+	public string name_id => _name_id;
+	string _name_id;
 
 	///	<summary>
 	///	캐릭터 명칭
@@ -32,7 +38,7 @@ public class Player_Character_Data : System.IDisposable
 	ROLE_TYPE _role_type;
 
 	///	<summary>
-	///	캐릭터가 속한 종족
+	///	종족
 	///	</summary>
 	public TRIBE_TYPE tribe_type => _tribe_type;
 	TRIBE_TYPE _tribe_type;
@@ -86,6 +92,18 @@ public class Player_Character_Data : System.IDisposable
 	string _sd_prefab_path;
 
 	///	<summary>
+	///	로비 스탠딩
+	///	</summary>
+	public int lobby_basic_id => _lobby_basic_id;
+	int _lobby_basic_id;
+
+	///	<summary>
+	///	로비 서약 스탠딩
+	///	</summary>
+	public int lobby_merry_id => _lobby_merry_id;
+	int _lobby_merry_id;
+
+	///	<summary>
 	///	캐릭터 아이콘
 	///	</summary>
 	public string icon_path => _icon_path;
@@ -108,6 +126,7 @@ public class Player_Character_Data : System.IDisposable
 	public Player_Character_Data(Raw_Player_Character_Data raw_data)
 	{
 		_player_character_id = raw_data.player_character_id;
+		_name_id = raw_data.name_id;
 		_name_kr = raw_data.name_kr;
 		_default_star = raw_data.default_star;
 		_role_type = raw_data.role_type;
@@ -121,6 +140,8 @@ public class Player_Character_Data : System.IDisposable
 		_battle_info_id = raw_data.battle_info_id;
 		_prefab_path = raw_data.prefab_path;
 		_sd_prefab_path = raw_data.sd_prefab_path;
+		_lobby_basic_id = raw_data.lobby_basic_id;
+		_lobby_merry_id = raw_data.lobby_merry_id;
 		_icon_path = raw_data.icon_path;
 		_Illustration_path = raw_data.Illustration_path;
 		_script = raw_data.script;
@@ -147,6 +168,7 @@ public class Player_Character_Data : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
+		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[default_star] = <color=yellow>{0}</color>", default_star).AppendLine();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
@@ -168,6 +190,8 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[battle_info_id] = <color=yellow>{0}</color>", battle_info_id).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[sd_prefab_path] = <color=yellow>{0}</color>", sd_prefab_path).AppendLine();
+		sb.AppendFormat("[lobby_basic_id] = <color=yellow>{0}</color>", lobby_basic_id).AppendLine();
+		sb.AppendFormat("[lobby_merry_id] = <color=yellow>{0}</color>", lobby_merry_id).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();

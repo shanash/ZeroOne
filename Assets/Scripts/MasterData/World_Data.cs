@@ -19,12 +19,19 @@ public class World_Data : System.IDisposable
 	public string world_name => _world_name;
 	string _world_name;
 
+	///	<summary>
+	///	존 그룹ID
+	///	</summary>
+	public int zone_group_id => _zone_group_id;
+	int _zone_group_id;
+
 	private bool disposed = false;
 
 	public World_Data(Raw_World_Data raw_data)
 	{
 		_world_id = raw_data.world_id;
 		_world_name = raw_data.world_name;
+		_zone_group_id = raw_data.zone_group_id;
 	}
 
 	public void Dispose()
@@ -48,6 +55,7 @@ public class World_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[world_id] = <color=yellow>{0}</color>", world_id).AppendLine();
 		sb.AppendFormat("[world_name] = <color=yellow>{0}</color>", world_name).AppendLine();
+		sb.AppendFormat("[zone_group_id] = <color=yellow>{0}</color>", zone_group_id).AppendLine();
 		return sb.ToString();
 	}
 }

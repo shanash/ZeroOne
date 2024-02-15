@@ -1062,6 +1062,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
+        //  속성 계산
+        double attribute_dmg_inc = GetSuperiorityAttributeDamageInc(dmg.Caster.GetAttributeType());
+        if (attribute_dmg_inc > 0)
+        {
+            last_damage += last_damage * attribute_dmg_inc;
+        }
+
         //  소수점 이하 버리기
         last_damage = Math.Truncate(last_damage);
         if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
@@ -1072,6 +1079,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             dmg.Magic_Attack_Point = last_damage;
         }
+
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
@@ -1122,6 +1130,26 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
 
     /// <summary>
+    /// 속성 체크.<br/>
+    /// 공격자가 피격자보다 우세한 속성일 경우, 최종 데미지 추가 비율 반환
+    /// </summary>
+    /// <param name="caster_atype"></param>
+    /// <returns></returns>
+    double GetSuperiorityAttributeDamageInc(ATTRIBUTE_TYPE caster_atype)
+    {
+        double inc_pt = 0;
+        var superiority = MasterDataManager.Instance.Get_AttributeSuperiorityData(caster_atype);
+        if (superiority != null)
+        {
+            if (superiority.defender_attribute_type == GetAttributeType())
+            {
+                inc_pt = superiority.final_damage_per;
+            }
+        }
+        return inc_pt;
+    }
+
+    /// <summary>
     /// 웨이브 종료시 체력 회복
     /// </summary>
     public void WaveEndRecoveryLife()
@@ -1144,7 +1172,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             d.effect_path = path;
             d.Target_Position = target;
             d.Data = data;
-            d.Duration = duration;
+            d.Duration = duration + (Battle_Speed_Multiple * 1f);
             Effect_Queue_Data_List.Add(d);
         }
     }
@@ -1165,7 +1193,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     SpawnQueueEffect(edata);
 
-                    Effect_Queue_Interval = 0.1f;
+                    Effect_Queue_Interval = 0.15f;
                 }
 
             }

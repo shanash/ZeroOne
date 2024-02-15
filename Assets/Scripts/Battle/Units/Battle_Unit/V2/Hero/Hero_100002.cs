@@ -92,6 +92,13 @@ public class Hero_100002 : HeroBase_V2
                     }
                 }
             }
+            else if (track is ShakeCameraTrack)
+            {
+                if (track.name.Equals("ShakeCameraTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, virtual_cam);
+                }
+            }
         }
 
         StartPlayableDirector();

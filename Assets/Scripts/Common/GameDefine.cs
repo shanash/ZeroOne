@@ -12,6 +12,7 @@ public enum GAME_TYPE
     EDITOR_SKILL_EDIT_MODE,             //  에디터에서 스킬 에디트 모드(아직 미개발)
 
     STORY_MODE,                         //  스토리 모드
+    BOSS_DUNGEON_MODE,                  //  보스 던전 모드
 }
 /// <summary>
 /// 전투 배속 타입 <b>(주석에서 사용할 태그 테스트)</b><br/>

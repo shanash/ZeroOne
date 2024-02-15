@@ -36,15 +36,20 @@ public class SelectStageUI : PopupBase
     int Zone_ID;
     Zone_Data Zone;
 
+    int World_ID;
+    World_Data World;
+
     protected override bool Initialize(params object[] data)
     {
-        if (data.Length != 1)
+        if (data.Length != 2)
         {
             return false;
         }
-
-        Zone_ID = (int)data[0];
-        Zone = MasterDataManager.Instance.Get_ZoneData(Zone_ID);
+        World_ID = (int)data[0];
+        Zone_ID = (int)data[1];
+        var m = MasterDataManager.Instance;
+        World = m.Get_WorldData(World_ID);
+        Zone = m.Get_ZoneData(Zone_ID);
 
         FixedUpdatePopup();
         UpdatePopup();
@@ -65,7 +70,7 @@ public class SelectStageUI : PopupBase
             {
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
                 {
-                    popup.ShowPopup(stage);
+                    popup.ShowPopup(World, Zone, stage);
                 });
             }
 
@@ -78,7 +83,7 @@ public class SelectStageUI : PopupBase
         var last_stage = stage_mng.GetLastOpenStage();
 
         
-        var stage_list = m.Get_StageDataListByZoneID(Zone_ID);
+        var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
 
         int last_index = stage_list.ToList().FindIndex(x => x.stage_id == last_stage.Stage_ID);
 
@@ -87,7 +92,7 @@ public class SelectStageUI : PopupBase
         {
             var stage = stage_list[i];
             var new_stage = new StageListData();
-            new_stage.SetStageID(stage.stage_id);
+            new_stage.SetStageID(World.world_id, Zone.zone_id, stage.stage_id);
             Stage_List_View.InsertData(new_stage);
         }
 
@@ -107,8 +112,9 @@ public class SelectStageUI : PopupBase
         Zone_Desc.text = Zone.zone_tooltip;
 
         //  Zone_Star_Proceed_Text
-        int gain_star = smng.GetGainStarPoints(Zone_ID);
-        int total_star = smng.GetTotalStarCount(Zone_ID);
+        
+        int gain_star = smng.GetGainStarPoints(Zone.stage_group_id);
+        int total_star = smng.GetTotalStarCount(Zone.stage_group_id);
         Zone_Star_Proceed_Text.text = ZString.Format("스테이지 진행도({0}/{1})", gain_star, total_star);
 
         float per = (float)gain_star / (float)total_star;

@@ -20,7 +20,7 @@ public class MissionGateUI : PopupBase
             {
                 var mng = GameData.Instance.GetUserStoryStageDataManager();
 
-                popup.ShowPopup(mng.GetCurrentZoneID());
+                popup.ShowPopup(mng.GetCurrentWorldID(), mng.GetCurrentZoneID());
             });
         }
     }
@@ -33,7 +33,7 @@ public class MissionGateUI : PopupBase
         {
             var mng = GameData.Instance.GetUserStoryStageDataManager();
 
-            popup.ShowPopup(mng.GetCurrentZoneID());
+            popup.ShowPopup(mng.GetCurrentWorldID(), mng.GetCurrentZoneID());
         });
     }
 

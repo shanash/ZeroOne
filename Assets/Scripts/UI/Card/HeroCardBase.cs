@@ -82,7 +82,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         // role type
         SetRoleType(data.GetPlayerCharacterData().role_type);
         // 
-        SetName(data.GetPlayerCharacterData().name_kr);
+        SetName(GameDefine.GetLocalizeString(data.GetPlayerCharacterData().name_id));
 
         SetFilter(data, filter_type);
 
@@ -163,7 +163,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
                 filter_text = new string('★', data.GetStarGrade());
                 break;
             case CHARACTER_SORT.NAME:
-                Filter_Text.text = Data.name_kr;
+                Filter_Text.text = GameDefine.GetLocalizeString(Data.name_id);
                 break;
             default:
                 Filter_Text.text = "미구현";

@@ -1,13 +1,20 @@
 // TODO: 팩토리로 생성 가능할듯
 /**/
+using System.Collections.Generic;
+
 public abstract class BattleUnitData : BattleDataBase
 {
     protected HeroBase_V2 Hero;
-     public BattleSkillManager Skill_Mng { get; protected set; }
+    public BattleSkillManager Skill_Mng { get; protected set; }
 
     protected abstract int Level { get; set; }
 
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
+
+    /// <summary>
+    /// 팀 속성 시너지 데이터
+    /// </summary>
+    protected List<Attribute_Synergy_Data> Team_Synergy_Data_List = new List<Attribute_Synergy_Data>();
 
     //protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
@@ -39,7 +46,43 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual int GetUnitNum() { return 0; }
 
-    
+    /// <summary>
+    /// 팀 속성 시너지 추가<br/>
+    /// 아군만 시너지 효과를 얻을 수 있다.
+    /// </summary>
+    /// <param name="synergy_list"></param>
+    public void AddTeamAttributeSynergy(List<Attribute_Synergy_Data> synergy_list)
+    {
+        int cnt = synergy_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var s = synergy_list[i];
+            if (!Team_Synergy_Data_List.Contains(s))
+            {
+                Team_Synergy_Data_List.Add(s);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 팀 속성 시너지 포인트 반환
+    /// </summary>
+    /// <param name="mtype"></param>
+    /// <returns></returns>
+    public double GetTeamAttributeAddPoint(STAT_MULTIPLE_TYPE mtype)
+    {
+        double point = 0;
+        int cnt = Team_Synergy_Data_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var s = Team_Synergy_Data_List[i];
+            if (s.multiple_type == mtype)
+            {
+                point += s.add_damage_per;
+            }
+        }
+        return point;
+    }
 
     /// <summary>
     /// 유닛의 레벨 설정
@@ -82,7 +125,11 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual object GetUserUnitData() {  return null; }
 
-    
+    /// <summary>
+    /// 유닛의 속성 타입 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual ATTRIBUTE_TYPE GetAttributeType() {  return ATTRIBUTE_TYPE.NONE; }
 
     /// <summary>
     /// 전투력 포인트

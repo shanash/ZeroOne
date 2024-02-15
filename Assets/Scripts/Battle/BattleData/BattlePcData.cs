@@ -75,7 +75,10 @@ public class BattlePcData : BattleUnitData
     {
         return Battle_Data;
     }
-
+    public override ATTRIBUTE_TYPE GetAttributeType()
+    {
+        return Data.attribute_type;
+    }
     public override void SetLevel(int lv)
     {
         //  nothing
@@ -127,7 +130,22 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_attack + (GetLevel() - 1) * Stat_Data.physics_attack;
+            double point = battle_data.physics_attack + (GetLevel() - 1) * Stat_Data.physics_attack;
+            //  team synergy
+            double team_synergy_inc = GetTeamAttributeAddPoint(STAT_MULTIPLE_TYPE.ATTACK_RATE);
+            if (team_synergy_inc > 0)
+            {
+                point += point * team_synergy_inc;
+            }
+            //  지속성 효과 (공격력 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -137,8 +155,22 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            return battle_data.magic_attack + (GetLevel() - 1) * Stat_Data.magic_attack;
+            double point = battle_data.magic_attack + (GetLevel() - 1) * Stat_Data.magic_attack;
+            //  team synergy
+            double team_synergy_inc = GetTeamAttributeAddPoint(STAT_MULTIPLE_TYPE.ATTACK_RATE);
+            if (team_synergy_inc > 0)
+            {
+                point += point * team_synergy_inc;
+            }
+            //  지속성 효과 (공격력 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_ATTACK_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_ATTACK_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -148,8 +180,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            return battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
+            double point = battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
+            //  지속성 효과 (물리 방어력 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -159,8 +198,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            return battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
+            double point = battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
+            //  지속성 효과 (마법 방어력 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_DEFEND_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_DEFEND_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -170,8 +216,8 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            return battle_data.life + (GetLevel() - 1) * Stat_Data.life;
+            double point = battle_data.life + (GetLevel() - 1) * Stat_Data.life;
+            return point;
         }
         return 0;
     }
@@ -181,7 +227,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.attack_life_recovery * (GetLevel() - 1) * Stat_Data.attack_life_recovery;
+            double point = battle_data.attack_life_recovery * (GetLevel() - 1) * Stat_Data.attack_life_recovery;
+            //  지속성 효과 (공격후 흡혈 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -191,7 +245,16 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.accuracy + (GetLevel() - 1) * Stat_Data.accuracy;
+            double point = battle_data.accuracy + (GetLevel() - 1) * Stat_Data.accuracy;
+            //  지속성 효과 (명중 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -201,7 +264,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.evasion + (GetLevel() - 1) * Stat_Data.evasion;
+            double point = battle_data.evasion + (GetLevel() - 1) * Stat_Data.evasion;
+            //  지속성 효과 (회피 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.EVASION_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.EVASION_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -210,7 +281,8 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.auto_recovery + (GetLevel() - 1) * Stat_Data.auto_recovery;
+            double point = battle_data.auto_recovery + (GetLevel() - 1) * Stat_Data.auto_recovery;
+            return point;
         }
         return 0;
     }
@@ -221,7 +293,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_chance + (GetLevel() - 1) * Stat_Data.physics_critical_chance;
+            double point = battle_data.physics_critical_chance + (GetLevel() - 1) * Stat_Data.physics_critical_chance;
+            //  지속성 효과 (물리 치명타 확률 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -231,7 +311,15 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_power_add + (GetLevel() - 1) * Stat_Data.physics_critical_power_add;
+            double point = battle_data.physics_critical_power_add + (GetLevel() - 1) * Stat_Data.physics_critical_power_add;
+            //  지속성 효과 (물리 치명타 데미지 추가 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+            return point;
         }
         return 0;
     }
@@ -241,7 +329,16 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_chance + (GetLevel() - 1) * Stat_Data.magic_critical_chance;
+            double point = battle_data.magic_critical_chance + (GetLevel() - 1) * Stat_Data.magic_critical_chance;
+            //  지속성 효과 (마법 치명타 확률 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -251,7 +348,16 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_power_add + (GetLevel() - 1) * Stat_Data.magic_critical_power_add;
+            double point = battle_data.magic_critical_power_add + (GetLevel() - 1) * Stat_Data.magic_critical_power_add;
+            //  지속성 효과 (마법 치명타 확률 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -261,7 +367,9 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.resist + (GetLevel() - 1) * Stat_Data.resist;
+            double point = battle_data.resist + (GetLevel() - 1) * Stat_Data.resist;
+            //  지속성 효과에 강인함 증가/감소 효과가 없음 [todo] 
+            return point;
         }
         return 0;
     }
@@ -271,7 +379,16 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.heal + (GetLevel() - 1) * Stat_Data.heal;
+            double point = battle_data.heal + (GetLevel() - 1) * Stat_Data.heal;
+            //  지속성 효과 (힐량 증가/감소)
+            double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.HEAL_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.HEAL_DOWN);
+            if (dur_inc - dur_dec != 0)
+            {
+                point += point * (dur_inc - dur_dec);
+            }
+
+            return point;
         }
         return 0;
     }
@@ -281,7 +398,8 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.weight + (GetLevel() - 1) * Stat_Data.weight;
+            double point = battle_data.weight + (GetLevel() - 1) * Stat_Data.weight;
+            return point;
         }
         return 0;
     }
@@ -346,7 +464,7 @@ public class BattlePcData : BattleUnitData
     public override string GetUnitName()
     {
         if (Data != null)
-            return Data.name_kr;
+            return GameDefine.GetLocalizeString(Data.name_id);
         return null;
     }
     public override TRIBE_TYPE GetTribeType()

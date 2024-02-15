@@ -44,7 +44,8 @@ public class StageInfoPopup : PopupBase
     [SerializeField, Tooltip("Used Stamina")]   //  2B8FFF
     TMP_Text Used_Stamina;
 
-
+    World_Data World;
+    Zone_Data Zone;
     Stage_Data Stage;
     UserStoryStageData User_Data;
 
@@ -57,12 +58,13 @@ public class StageInfoPopup : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 1)
+        if (data.Length != 3)
         {
             return false;
         }
-
-        Stage = (Stage_Data)data[0];
+        World = (World_Data)data[0];
+        Zone = (Zone_Data)data[1];
+        Stage = (Stage_Data)data[2];
         User_Data = GameData.Instance.GetUserStoryStageDataManager().FindUserStoryStageData(Stage.stage_id);
         InitAssets();
 
@@ -113,17 +115,18 @@ public class StageInfoPopup : PopupBase
     {
         var m = MasterDataManager.Instance;
         var pool = GameObjectPoolManager.Instance;
-        var zone = m.Get_ZoneData(Stage.zone_id);
+        //var zone = m.Get_ZoneData(Stage.zone_id);
 
-        Stage_Number.text = ZString.Format("{0}-{1}", zone.zone_ordering, Stage.stage_ordering);
+        Stage_Number.text = ZString.Format("{0}-{1}", Zone.zone_ordering, Stage.stage_ordering);
 
         Stage_Name.text = Stage.stage_name;
 
         int cnt = 0;
         //  npc list
         string npc_prefab = "Assets/AssetResources/Prefabs/UI/Card/NpcCard";
-        List<Wave_Data> wave_data_list = new List<Wave_Data>();
-        m.Get_WaveDataList(Stage.stage_id, ref wave_data_list);
+        //List<Wave_Data> wave_data_list = new List<Wave_Data>();
+        //m.Get_WaveDataList(Stage.wave_group_id, ref wave_data_list);
+        var wave_data_list = m.Get_WaveDataList(Stage.wave_group_id);
 
         List<BattleNpcData> npc_data_list = new List<BattleNpcData>();
 

@@ -97,7 +97,7 @@ public class HeroInfoUI : PopupBase
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
 
         Level_Text.text = $"LV. {User_Hero_Battle_Data.GetLevel()}";
-        Name_Text.text = Hero_Base_Data.name_kr;
+        Name_Text.text = GameDefine.GetLocalizeString(Hero_Base_Data.name_id);
 
         int star_grade = Unit_Data.GetStarGrade();
         for (int i = 0; i < Star_Images.Count; ++i)

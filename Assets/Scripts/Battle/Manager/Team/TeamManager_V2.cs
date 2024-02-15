@@ -132,6 +132,7 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     protected void MyTeamSpawn()
     {
+        var m = MasterDataManager.Instance;
         var pool = GameObjectPoolManager.Instance;
         var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(Game_Type);
         var hero_list = deck.GetDeckHeroes();
@@ -140,6 +141,29 @@ public partial class TeamManager_V2 : IDisposable
         Total_Member_Count = cnt;
         Alive_Member_Count = cnt;
 
+        //  팀 속성 시너지 효과
+        List<Attribute_Synergy_Data> team_synergy = new List<Attribute_Synergy_Data>();
+        //  속성별로 보유하고 있는 속성의 합을 찾아준다.
+        foreach (ATTRIBUTE_TYPE attr in Enum.GetValues(typeof(ATTRIBUTE_TYPE)))
+        {
+            if (attr == ATTRIBUTE_TYPE.NONE)
+            {
+                continue;
+            }
+            //  같은 속성을 가진 캐릭터 리스트 반환
+            var same_attr_list = hero_list.FindAll(x => x.GetUserHeroData().Hero_Data.attribute_type == attr);
+            //  같은 속성을 가진 캐릭터가 2개 이상일 경우, 시너지 효과 있음
+            if (same_attr_list.Count > 1)
+            {
+                var synergy = m.Get_AttributeSynergyData(attr, same_attr_list.Count);
+                if (synergy != null)
+                {
+                    //  시너지 등록
+                    team_synergy.Add(synergy);
+                }
+            }
+        }
+
         for (int i = 0; i < cnt; i++)
         {
             UserHeroDeckMountData user_deck_hero = hero_list[i];
@@ -147,7 +171,7 @@ public partial class TeamManager_V2 : IDisposable
 
             var unit_data = new BattlePcData();
             unit_data.SetUnitID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
-            //unit_data.SetLevel(user_data.GetLevel());
+            unit_data.AddTeamAttributeSynergy(team_synergy);
 
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();

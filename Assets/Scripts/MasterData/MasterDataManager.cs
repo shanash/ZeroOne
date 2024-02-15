@@ -444,7 +444,7 @@ public class MasterDataManager : BaseMasterDataManager
 
     #endregion
 
-    #region Stage
+    #region Story Dungeon
 
     /// <summary>
     /// 에디터에서 사용할 스테이지 데이터 가져오기
@@ -470,13 +470,16 @@ public class MasterDataManager : BaseMasterDataManager
         Check_World_Data();
         return _World_Data[world_id];
     }
+    public World_Data Get_WorldDataByZoneGroupID(int zone_group_id)
+    {
+        Check_Wave_Data();
+        return _World_Data.Values.ToList().Find(x => x.zone_group_id == zone_group_id);
+    }
 
-    public void Get_WorldDataList(ref List<World_Data> list)
+    public IReadOnlyList<World_Data> Get_WorldDataList()
     {
         Check_World_Data();
-        list.Clear();
-        list.AddRange(_World_Data.Values.ToList());
-        list.Sort((a, b) => a.world_id.CompareTo(b.world_id));
+        return _World_Data.Values.ToList();
     }
 
     public Zone_Data Get_ZoneData(int zone_id)
@@ -485,12 +488,18 @@ public class MasterDataManager : BaseMasterDataManager
         return _Zone_Data[zone_id];
     }
 
-    public void Get_ZoneDataList(int world_id, STAGE_DIFFICULTY_TYPE diff_type, ref List<Zone_Data> list)
+    public Zone_Data Get_ZoneDataByStageGroupID(int stage_group_id)
     {
         Check_Zone_Data();
-        list.Clear();
-        list.AddRange(_Zone_Data.Values.ToList().FindAll(x => x.in_world_id == world_id && x.zone_difficulty == diff_type));
+        return _Zone_Data.Values.ToList().Find(x => x.stage_group_id == stage_group_id);
+    }
+
+    public IReadOnlyList<Zone_Data> Get_ZoneDataList(int zone_group_id, STAGE_DIFFICULTY_TYPE diff_type)
+    {
+        Check_Zone_Data();
+        var list = _Zone_Data.Values.ToList().FindAll(x => x.zone_group_id == zone_group_id);
         list.Sort((a, b) => a.zone_ordering.CompareTo(b.zone_ordering));
+        return list;
     }
 
     /// <summary>
@@ -517,39 +526,86 @@ public class MasterDataManager : BaseMasterDataManager
         return stage_list.Find(x => x.stage_id > stage_id);
     }
 
-    public IReadOnlyList<Stage_Data> Get_StageDataListByZoneID(int zone_id)
+    public IReadOnlyList<Stage_Data> Get_StageDataListByStageGroupID(int stage_group_id)
     {
         Check_Stage_Data();
-        return _Stage_Data.Values.ToList().FindAll(x => x.zone_id == zone_id);
+        return _Stage_Data.Values.ToList().FindAll(x => x.stage_group_id == stage_group_id);
     }
 
 
     /// <summary>
     /// 모든 스테이지 정보 가져오기
-    /// 차후 지역별 스테이지 정보를 가져오는 방식이 될 수도 있다.
     /// </summary>
-    /// <param name="list"></param>
-    public void Get_StageDataList(ref List<Stage_Data> list)
+    /// <returns></returns>
+    public IReadOnlyList<Stage_Data> Get_StageDataList()
     {
         Check_Stage_Data();
-
-        list.Clear();
-        list.AddRange(_Stage_Data.Values.ToList());
+        return _Stage_Data.Values.ToList();
     }
+
     /// <summary>
     /// 각 스테이지별로 지정된 웨이브의 그룹id로 해당 웨이브 데이터 리스트를 찾아 반환
     /// </summary>
-    /// <param name="stage_id"></param>
+    /// <param name="wave_group_id"></param>
     /// <param name="list"></param>
-    public void Get_WaveDataList(int stage_id, ref List<Wave_Data> list)
+    public void Get_WaveDataList(int wave_group_id, ref List<Wave_Data> list)
     {
 
         Check_Wave_Data();
         list.Clear();
-        list.AddRange(_Wave_Data.Values.ToList().FindAll(x => x.stage_id == stage_id));
+        list.AddRange(_Wave_Data.Values.ToList().FindAll(x => x.wave_group_id == wave_group_id));
         //  wave_sequence 오름 차순 정렬
         list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
     }
+
+    /// <summary>
+    /// 각 스테이지별 지정된 웨이브 그룹ID로 해당 웨이브 데이터 리스트 찾아 반환
+    /// </summary>
+    /// <param name="wave_group_id"></param>
+    /// <returns></returns>
+    public IReadOnlyList<Wave_Data> Get_WaveDataList(int wave_group_id)
+    {
+        Check_Wave_Data();
+        var list = _Wave_Data.Values.ToList().FindAll(x => x.wave_group_id == wave_group_id);
+        //  wave_sequence 오름 차순 정렬
+        list.Sort((a, b) => a.wave_sequence.CompareTo(b.wave_sequence));
+        return list;
+    }
+
+    #endregion
+
+    #region Boss Dungeon
+    public IReadOnlyList<Boss_Data> Get_BossDataList()
+    {
+        Check_Boss_Data();
+        return _Boss_Data.Values.ToList();
+    }
+
+    public Boss_Data Get_BossData(int boss_id)
+    {
+        Check_Boss_Data();
+        return _Boss_Data[boss_id];
+    }
+
+    public Boss_Data Get_BossDataByBossStageGroupID(int boss_stage_group_id)
+    {
+        Check_Boss_Data();
+        return _Boss_Data.Values.ToList().Find(x => x.boss_stage_group_id == boss_stage_group_id);
+    }
+
+    public Boss_Stage_Data Get_BossStageData(int boss_stage_id)
+    {
+        Check_Boss_Stage_Data();
+        return _Boss_Stage_Data[boss_stage_id];
+    }
+    public IReadOnlyList<Boss_Stage_Data> Get_BossStageDataListByBossStageGroupID(int boss_stage_group_id)
+    {
+        Check_Boss_Stage_Data();
+        var list = _Boss_Stage_Data.Values.ToList().FindAll(x => x.boss_stage_group_id == boss_stage_group_id);
+        list.Sort((a, b) => a.stage_ordering.CompareTo(b.stage_ordering));
+        return list;
+    }
+
     #endregion
 
     #region Memorial
@@ -715,6 +771,42 @@ public class MasterDataManager : BaseMasterDataManager
         }
 
         return list;
+    }
+    #endregion
+
+
+    #region Attribute
+    /// <summary>
+    /// 속성 아이콘 정보 
+    /// </summary>
+    /// <param name="atype"></param>
+    /// <returns></returns>
+    public Attribute_Icon_Data Get_AttributeIconData(ATTRIBUTE_TYPE atype)
+    {
+        Check_Attribute_Icon_Data();
+        return _Attribute_Icon_Data[atype];
+    }
+    /// <summary>
+    /// 속성의 상성 정보
+    /// </summary>
+    /// <param name="atype"></param>
+    /// <returns></returns>
+    public Attribute_Superiority_Data Get_AttributeSuperiorityData(ATTRIBUTE_TYPE atype)
+    {
+        Check_Attribute_Superiority_Data();
+        return _Attribute_Superiority_Data[atype];
+    }
+
+    /// <summary>
+    /// 속성의 팀 시너지
+    /// </summary>
+    /// <param name="atype"></param>
+    /// <param name="same_count"></param>
+    /// <returns></returns>
+    public Attribute_Synergy_Data Get_AttributeSynergyData(ATTRIBUTE_TYPE atype, int same_count)
+    {
+        Check_Attribute_Synergy_Data();
+        return _Attribute_Synergy_Data[new Tuple<ATTRIBUTE_TYPE, int>(atype, same_count)];
     }
     #endregion
 

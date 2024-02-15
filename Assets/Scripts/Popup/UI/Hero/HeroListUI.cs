@@ -63,8 +63,8 @@ public class HeroListUI : PopupBase
                 {
                     return
                     Is_Ascended_Sort ?
-                    a.GetPlayerCharacterData().name_kr.CompareTo(b.GetPlayerCharacterData().name_kr) :
-                    b.GetPlayerCharacterData().name_kr.CompareTo(a.GetPlayerCharacterData().name_kr);
+                    GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id)) :
+                    GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id));
                 });
                 break;
             case CHARACTER_SORT.LEVEL_CHARACTER:

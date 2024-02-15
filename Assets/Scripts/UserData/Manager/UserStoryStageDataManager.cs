@@ -4,9 +4,11 @@ using System.Linq;
 
 public class UserStoryStageDataManager : ManagerBase
 {
+    int Current_World_ID;
     int Current_Zone_ID;
 
     List<UserStoryStageData> User_Story_Stage_Data = new List<UserStoryStageData>();
+    World_Data Current_World;
     Zone_Data Current_Zone;
 
     public UserStoryStageDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype)
@@ -27,6 +29,10 @@ public class UserStoryStageDataManager : ManagerBase
     {
         var m = MasterDataManager.Instance;
 
+        if (Current_World_ID != 0)
+        {
+            SetCurrentWorldID(Current_World_ID);
+        }
         if (Current_Zone_ID != 0)
         {
             SetCurrentZoneID(Current_Zone_ID);
@@ -38,26 +44,23 @@ public class UserStoryStageDataManager : ManagerBase
         }
 
         //  first stage init
-
-        List<World_Data> world_list = new List<World_Data>();
-        m.Get_WorldDataList(ref world_list);
+        var world_list = m.Get_WorldDataList();
         if (world_list.Count == 0)
             return;
-        var first_world = world_list[0];
-        List<Zone_Data> zone_list = new List<Zone_Data>();
-        m.Get_ZoneDataList(first_world.world_id, STAGE_DIFFICULTY_TYPE.NORMAL, ref zone_list);
+        Current_World = world_list[0];
+        Current_World_ID = Current_World.world_id;
+
+        var zone_list = m.Get_ZoneDataList(Current_World.zone_group_id, STAGE_DIFFICULTY_TYPE.NORMAL);
+        
         if (zone_list.Count == 0)
         {
             return;
         }
         var first_zone = zone_list[0];
         Current_Zone = first_zone;
-        Current_Zone_ID = first_zone.zone_id;
+        Current_Zone_ID = Current_Zone.zone_id;
 
-        //List<Stage_Data> stage_list = new List<Stage_Data>();
-        //m.Get_StageDataList(Current_Zone_ID, ref stage_list);
-
-        var stage_list = m.Get_StageDataListByZoneID(Current_Zone_ID);
+        var stage_list = m.Get_StageDataListByStageGroupID(Current_Zone.stage_group_id);
 
         if (stage_list.Count == 0)
             return;
@@ -75,6 +78,13 @@ public class UserStoryStageDataManager : ManagerBase
         Is_Update_Data = true;
     }
 
+    public void SetCurrentWorldID(int world_id)
+    {
+        Current_World_ID = world_id;
+        Current_World = MasterDataManager.Instance.Get_WorldData(Current_World_ID);
+        Is_Update_Data = true;
+    }
+
     public STAGE_DIFFICULTY_TYPE GetCurrentStageDifficultyType()
     {
         if (Current_Zone != null)
@@ -84,16 +94,16 @@ public class UserStoryStageDataManager : ManagerBase
         return STAGE_DIFFICULTY_TYPE.NONE;
     }
 
-    public int GetTotalStarCount(int zone_id)
+    public int GetTotalStarCount(int stage_group_id)
     {
-        var stage_list = MasterDataManager.Instance.Get_StageDataListByZoneID(zone_id);
+        var stage_list = MasterDataManager.Instance.Get_StageDataListByStageGroupID(stage_group_id);
         int sum = stage_list.Count * 3;
         return sum;
     }
 
-    public int GetGainStarPoints(int zone_id)
+    public int GetGainStarPoints(int stage_group_id)
     {
-        var list = FindUserStoryStageDataList(zone_id);
+        var list = FindUserStoryStageDataList(stage_group_id);
         int sum = User_Story_Stage_Data.Sum(x => x.GetStarPoint());
         return sum;
     }
@@ -104,14 +114,23 @@ public class UserStoryStageDataManager : ManagerBase
         return Current_Zone_ID;
     }
 
+    public int GetCurrentWorldID()
+    {
+        return Current_World_ID;
+    }
+
     public Zone_Data GetCurrentZoneData()
     {
         return Current_Zone;
     }
-
-    public List<UserStoryStageData> FindUserStoryStageDataList(int zone_id)
+    public World_Data GetCurrentWorldData()
     {
-        return User_Story_Stage_Data.FindAll(x => x.GetZoneID() == zone_id);
+        return Current_World;
+    }
+
+    public List<UserStoryStageData> FindUserStoryStageDataList(int stage_group_id)
+    {
+        return User_Story_Stage_Data.FindAll(x => x.GetStageGroupID() == stage_group_id);
     }
 
     public UserStoryStageData FindUserStoryStageData(int stage_id)
@@ -180,7 +199,10 @@ public class UserStoryStageDataManager : ManagerBase
             return;
         }
         AddUserStoryStageData(next_stage.stage_id);
-        SetCurrentZoneID(next_stage.zone_id);
+        var zone = m.Get_ZoneDataByStageGroupID(next_stage.stage_group_id);
+        SetCurrentZoneID(zone.zone_id);
+        var world = m.Get_WorldDataByZoneGroupID(zone.zone_group_id);
+        SetCurrentWorldID(world.world_id);
     }
 
     /// <summary>
@@ -197,7 +219,7 @@ public class UserStoryStageDataManager : ManagerBase
     public override JsonData Serialized()
     {
         var json = new LitJson.JsonData();
-
+        json[NODE_CURRENT_WORLD_ID] = Current_World_ID;
         json[NODE_CURRENT_ZONE_ID] = Current_Zone_ID;
 
         var arr = new JsonData();
@@ -231,7 +253,11 @@ public class UserStoryStageDataManager : ManagerBase
         {
             return false;
         }
-
+        if (json.ContainsKey(NODE_CURRENT_WORLD_ID))
+        {
+            int world_id = ParseInt(json, NODE_CURRENT_WORLD_ID);
+            SetCurrentWorldID(world_id);
+        }
         if (json.ContainsKey(NODE_CURRENT_ZONE_ID))
         {
             int zone_id = ParseInt(json, NODE_CURRENT_ZONE_ID);
@@ -275,6 +301,7 @@ public class UserStoryStageDataManager : ManagerBase
     //-------------------------------------------------------------------------
     // Json Node Name
     //-------------------------------------------------------------------------
+    protected const string NODE_CURRENT_WORLD_ID = "wid";
     protected const string NODE_CURRENT_ZONE_ID = "zid";
     protected const string NODE_STAGE_DATA_LIST = "slist";
 

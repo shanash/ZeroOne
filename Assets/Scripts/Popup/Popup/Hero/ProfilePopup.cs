@@ -73,7 +73,7 @@ public class ProfilePopup : PopupBase
         });
         
 
-        Name.text = Data.name_kr;
+        Name.text = GameDefine.GetLocalizeString(Data.name_id);
         Age.text = ConstString.Hero.FormatHeroAge(Data.profile_age);
         Birthday.text = ConstString.Hero.FormatHeroBirthday(Data.profile_birthday);
         Height.text = ConstString.Hero.FormatHeroHeight(Data.profile_high);

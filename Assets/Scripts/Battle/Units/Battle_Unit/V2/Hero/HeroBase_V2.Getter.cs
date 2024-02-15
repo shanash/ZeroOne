@@ -125,6 +125,15 @@ public partial class HeroBase_V2 : UnitBase_V2
         //return sum;
         return GetSkillManager().GetDurationValuesByDurEffectType(dtype);
     }
+
+    /// <summary>
+    /// 캐릭터 속성
+    /// </summary>
+    /// <returns></returns>
+    public ATTRIBUTE_TYPE GetAttributeType()
+    {
+        return Unit_Data.GetAttributeType();
+    }
     
     /// <summary>
     /// 도착 pos type에 따른 좌표 정보 반환
