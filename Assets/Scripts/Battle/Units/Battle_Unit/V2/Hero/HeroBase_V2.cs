@@ -45,8 +45,6 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     protected SkeletonUtility Utility;
 
-    //protected bool Is_Reposition;
-
     /// <summary>
     /// 현재 체력
     /// </summary>
@@ -139,7 +137,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 흡혈 
     /// </summary>
-    public double Vampire_Point => GetVampirePoint();
+    public double Attack_Life_Recovery => GetAttackLifeRecovery();
 
     /// <summary>
     /// 체력 회복량 증가(힐량 증가)
@@ -174,8 +172,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 체력 게이지
     /// </summary>
-    //protected LifeBarNode Life_Bar = null;
-
     protected LifeBarNode_V2 Life_Bar_V2 = null;
 
 
@@ -186,20 +182,15 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected BattleUnitData Unit_Data;
 
-    /// <summary>
-    /// 스킬 매니져
-    /// </summary>
-    protected BattleSkillManager Skill_Mng;
-
-    protected object Duration_Lock = new object();
-    /// <summary>
-    /// 지속성 효과 데이터를 관리
-    /// </summary>
-    protected List<BattleDurationSkillData> Used_Battle_Duration_Data_List = new List<BattleDurationSkillData>();
-    /// <summary>
-    /// 삭제 예약을 위한 지속성 데이터 리스트
-    /// </summary>
-    protected List<BattleDurationSkillData> Remove_Reserved_Duration_Data_List = new List<BattleDurationSkillData>();
+    //protected object Duration_Lock = new object();
+    ///// <summary>
+    ///// 지속성 효과 데이터를 관리
+    ///// </summary>
+    //protected List<BattleDurationSkillData> Used_Battle_Duration_Data_List = new List<BattleDurationSkillData>();
+    ///// <summary>
+    ///// 삭제 예약을 위한 지속성 데이터 리스트
+    ///// </summary>
+    //protected List<BattleDurationSkillData> Remove_Reserved_Duration_Data_List = new List<BattleDurationSkillData>();
 
     public int Deck_Order { get; protected set; }
 
@@ -233,9 +224,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     public virtual void SetBattleUnitData(BattleUnitData unit_dt)
     {
         Unit_Data = unit_dt;
-        Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-        Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
+        Unit_Data.SetHeroBase(this);
+        //Skill_Mng = new BattleSkillManager();
+        //Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
+        //Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
 
     }
 
@@ -253,6 +245,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public void SetBattleSpeed(float speed)
     {
         Battle_Speed_Multiple = speed;
+        //Unit_Data.SetBattleSpeed(speed);
         var tracks = FindAllTrakcs();
         if (tracks != null && tracks.Length > 0)
         {
@@ -928,16 +921,17 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void ClearDurationSkillDataList()
     {
-        lock (Duration_Lock)
-        {
-            int cnt = Used_Battle_Duration_Data_List.Count;
-            for (int i = 0; i < cnt; i++)
-            {
-                var duration = Used_Battle_Duration_Data_List[i];
-                duration.Dispose();
-            }
-            Used_Battle_Duration_Data_List.Clear();
-        }
+        //lock (Duration_Lock)
+        //{
+        //    int cnt = Used_Battle_Duration_Data_List.Count;
+        //    for (int i = 0; i < cnt; i++)
+        //    {
+        //        var duration = Used_Battle_Duration_Data_List[i];
+        //        duration.Dispose();
+        //    }
+        //    Used_Battle_Duration_Data_List.Clear();
+        //}
+        GetSkillManager().ClearDurationSkillDataList();
 
     }
 
@@ -997,7 +991,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  todo
         double last_damage = data.Physics_Attack_Point;
         var target = data.Targets[0];
-        double vampire_hp = last_damage * Vampire_Point / (Vampire_Point + target.GetLevel() + 100);
+        double vampire_hp = last_damage * Attack_Life_Recovery / (Attack_Life_Recovery + target.GetLevel() + 100);
         vampire_hp = Math.Truncate(vampire_hp);
         if (vampire_hp > 0)
         {
@@ -1018,12 +1012,19 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
-        double last_damage = dmg.Physics_Attack_Point;
+        ONETIME_EFFECT_TYPE etype = dmg.Onetime.GetOnetimeEffectType();
 
-        //  회피 여기서 계산할까? 회피하면 데미지가 줄어든다고 했는데, 그 로직은?
+        //  물리 마법 결정 데미지
+        double damage = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? dmg.Magic_Attack_Point : dmg.Physics_Attack_Point;
+
+        double last_damage = damage;
+
+        //  회피 여기서 계산할까? 회피하면 미스 판정.(데미지 0)
         if (IsEvation(dmg.Caster.Accuracy))
         {
-            last_damage = dmg.Physics_Attack_Point * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
+            //last_damage = damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
+            //  miss 소환 필요
+            return;
         }
 
 
@@ -1038,23 +1039,39 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         //  방어율 = 상수 + 방어력 / 100
         //  최종 데미지 계산 (최종 데미지 = 적 데미지 * 방어율)
-        last_damage = GetCalcDamage(last_damage);
+        last_damage = GetCalcDamage(last_damage, etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE);
 
         //  치명타 확률
-        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel());
+        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel(), etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE);
         int r = UnityEngine.Random.Range(0, 100000);
         if (r < cri_chance)
         {
-            dmg.Is_Physics_Critical = true;
-            last_damage *= GetCriticalPowerPoint();
+            if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
+            {
+                dmg.Is_Physics_Critical = true;
+                last_damage *= 1.5 * Physics_Critical_Power_Add;
+            }
+            else
+            {
+                dmg.Is_Magic_Critical = true;
+                last_damage *= 1.5 * Magic_Critical_Power_Add;
+            }
         }
 
         if (last_damage <= 0)
         {
             return;
         }
+        //  소수점 이하 버리기
         last_damage = Math.Truncate(last_damage);
-        dmg.Physics_Attack_Point = last_damage;
+        if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
+        {
+            dmg.Physics_Attack_Point = last_damage;
+        }
+        else
+        {
+            dmg.Magic_Attack_Point = last_damage;
+        }
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
@@ -1068,13 +1085,13 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (Life <= 0)
         {
             Life = 0;
-            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect", Life_Bar_Pos, dmg, 1f);
+            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
             UpdateLifeBar();
             ChangeState(UNIT_STATES.DEATH);
             return;
         }
 
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect", Life_Bar_Pos, dmg, 1f);
+        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
         UpdateLifeBar();
 
         Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
@@ -1119,7 +1136,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
 
 
-    protected void AddSpawnEffectText(string path, Transform target, object data, float duration)
+    public void AddSpawnEffectText(string path, Transform target, object data, float duration)
     {
         lock (Effect_Queue_Lock)
         {
@@ -1182,65 +1199,69 @@ public partial class HeroBase_V2 : UnitBase_V2
             duration_skill = null;
             return;
         }
+        GetSkillManager().AddDurationSkillEffect(duration_skill);
 
-        var caster = duration_skill.GetBattleSendData().Caster;
-
-        int rate = UnityEngine.Random.Range(0, 10000);
-        if (rate < duration_skill.GetRate())
-        {
-            lock (Duration_Lock)
-            {
-                var d_type = duration_skill.GetDurationEffectType();
-                if (duration_skill.IsOverlapable())
-                {
-                    Used_Battle_Duration_Data_List.Add(duration_skill);
+        //int rate = UnityEngine.Random.Range(0, 10000);
+        //if (rate < duration_skill.GetRate())
+        //{
+        //    lock (Duration_Lock)
+        //    {
+        //        var d_type = duration_skill.GetDurationEffectType();
+        //        if (duration_skill.IsOverlapable())
+        //        {
+        //            Used_Battle_Duration_Data_List.Add(duration_skill);
                     
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
-                }
-                else
-                {
-                    //  같은 스킬 효과가 있을 경우 교체(나중에 로직에 따라 변경하자)
-                    var found = Used_Battle_Duration_Data_List.Find(x => x.GetDurationEffectType() == duration_skill.GetDurationEffectType());
-                    if (found != null)
-                    {
-                        Used_Battle_Duration_Data_List.Remove(found);
-                        found.Dispose();
-                        found = null;
-                    }
+        //            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+        //        }
+        //        else
+        //        {
+        //            //  같은 스킬 효과가 있을 경우 교체(나중에 로직에 따라 변경하자)
+        //            var found = Used_Battle_Duration_Data_List.Find(x => x.GetDurationEffectType() == duration_skill.GetDurationEffectType());
+        //            if (found != null)
+        //            {
+        //                Used_Battle_Duration_Data_List.Remove(found);
+        //                found.Dispose();
+        //                found = null;
+        //            }
 
-                    if (d_type == DURATION_EFFECT_TYPE.FREEZE)
-                    {
-                        ChangeState(UNIT_STATES.FREEZE);
-                    }
-                    else if (d_type == DURATION_EFFECT_TYPE.STUN)
-                    {
-                        ChangeState(UNIT_STATES.STUN);
-                    }
-                    else if (d_type == DURATION_EFFECT_TYPE.BIND)
-                    {
-                        ChangeState(UNIT_STATES.BIND);
-                    }
+        //            if (d_type == DURATION_EFFECT_TYPE.FREEZE)
+        //            {
+        //                ChangeState(UNIT_STATES.FREEZE);
+        //            }
+        //            else if (d_type == DURATION_EFFECT_TYPE.STUN)
+        //            {
+        //                ChangeState(UNIT_STATES.STUN);
+        //            }
+        //            else if (d_type == DURATION_EFFECT_TYPE.BIND)
+        //            {
+        //                ChangeState(UNIT_STATES.BIND);
+        //            }
 
-                    Used_Battle_Duration_Data_List.Add(duration_skill);
+        //            Used_Battle_Duration_Data_List.Add(duration_skill);
                     
-                    AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+        //            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
 
-                }
-                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-            }
+        //        }
+        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
+        //    }
 
-        }
-        else
-        {
-            duration_skill.Dispose();
-            duration_skill = null;
-        }
+        //}
+        //else
+        //{
+        //    duration_skill.Dispose();
+        //    duration_skill = null;
+        //}
+    }
+
+    public void SendSlotEvent(SKILL_SLOT_EVENT_TYPE etype)
+    {
+        Slot_Events?.Invoke(etype);
     }
 
     /// <summary>
     /// 지속성 효과에서 발생하는 일회성 효과 이펙트 구현
     /// </summary>
-    void SpawnOnetimeEffectFromDurationSkill(BattleOnetimeSkillData onetime, BATTLE_SEND_DATA send_data)
+    public void SpawnOnetimeEffectFromDurationSkill(BattleOnetimeSkillData onetime, BATTLE_SEND_DATA send_data)
     {
         var factory = Battle_Mng.GetEffectFactory();
 
@@ -1271,148 +1292,150 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void CalcDurationSkillTime()
     {
-        lock (Duration_Lock)
-        {
-            if (Used_Battle_Duration_Data_List.Count == 0)
-            {
-                return;
-            }
+        float dt = Time.deltaTime * Battle_Speed_Multiple;
+        GetSkillManager().CalcDurationSkillTime(dt);
+        //lock (Duration_Lock)
+        //{
+        //    if (Used_Battle_Duration_Data_List.Count == 0)
+        //    {
+        //        return;
+        //    }
 
-            //  상태변경용 내부 함수
-            System.Action<UNIT_STATES, DURATION_EFFECT_TYPE> trans_change_state = (state, dtype) =>
-            {
-                if (dtype == DURATION_EFFECT_TYPE.FREEZE)
-                {
-                    if (state == UNIT_STATES.FREEZE)
-                    {
-                        ChangeState(UNIT_STATES.ATTACK_READY_1);
-                    }
-                }
-                else if (dtype == DURATION_EFFECT_TYPE.STUN)
-                {
-                    if (state == UNIT_STATES.STUN)
-                    {
-                        ChangeState(UNIT_STATES.ATTACK_READY_1);
-                    }
-                }
-                else if (dtype == DURATION_EFFECT_TYPE.BIND)
-                {
-                    if (state == UNIT_STATES.BIND)
-                    {
-                        ChangeState(UNIT_STATES.ATTACK_READY_1);
-                    }
-                }
-            };
+        //    //  상태변경용 내부 함수
+        //    System.Action<UNIT_STATES, DURATION_EFFECT_TYPE> trans_change_state = (state, dtype) =>
+        //    {
+        //        if (dtype == DURATION_EFFECT_TYPE.FREEZE)
+        //        {
+        //            if (state == UNIT_STATES.FREEZE)
+        //            {
+        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
+        //            }
+        //        }
+        //        else if (dtype == DURATION_EFFECT_TYPE.STUN)
+        //        {
+        //            if (state == UNIT_STATES.STUN)
+        //            {
+        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
+        //            }
+        //        }
+        //        else if (dtype == DURATION_EFFECT_TYPE.BIND)
+        //        {
+        //            if (state == UNIT_STATES.BIND)
+        //            {
+        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
+        //            }
+        //        }
+        //    };
 
-            var state = GetCurrentState();
-            float dt = Time.deltaTime * Battle_Speed_Multiple;
-            Remove_Reserved_Duration_Data_List.Clear();
-            for (int i = 0; i < Used_Battle_Duration_Data_List.Count; i++)
-            {
-                BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
-                DURATION_CALC_RESULT_TYPE result = duration.CalcDuration_V2(dt);
-                if (result != DURATION_CALC_RESULT_TYPE.NONE)
-                {
-                    var d_type = duration.GetDurationEffectType();
-                    switch (result)
-                    {
-                        case DURATION_CALC_RESULT_TYPE.REPEAT_INTERVAL:
-                            {
-                                //  반복 효과 적용
-                                if (duration.IsUseRepeatInterval())
-                                {
-                                    var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
-                                    int repeat_onetime_cnt = repeat_onetime_list.Count;
-                                    for (int o = 0; o < repeat_onetime_cnt; o++)
-                                    {
-                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-                                        //  todo execSkill
-                                        BattleOnetimeSkillData onetime = repeat_onetime_list[o];
-                                        send_data.Onetime = onetime;
-                                        //  일회성 효과 이펙트 
-                                        SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-                                    }
-                                }
+        //    var state = GetCurrentState();
+        //    float dt = Time.deltaTime * Battle_Speed_Multiple;
+        //    Remove_Reserved_Duration_Data_List.Clear();
+        //    for (int i = 0; i < Used_Battle_Duration_Data_List.Count; i++)
+        //    {
+        //        BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
+        //        DURATION_CALC_RESULT_TYPE result = duration.CalcDuration_V2(dt);
+        //        if (result != DURATION_CALC_RESULT_TYPE.NONE)
+        //        {
+        //            var d_type = duration.GetDurationEffectType();
+        //            switch (result)
+        //            {
+        //                case DURATION_CALC_RESULT_TYPE.REPEAT_INTERVAL:
+        //                    {
+        //                        //  반복 효과 적용
+        //                        if (duration.IsUseRepeatInterval())
+        //                        {
+        //                            var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
+        //                            int repeat_onetime_cnt = repeat_onetime_list.Count;
+        //                            for (int o = 0; o < repeat_onetime_cnt; o++)
+        //                            {
+        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+        //                                //  todo execSkill
+        //                                BattleOnetimeSkillData onetime = repeat_onetime_list[o];
+        //                                send_data.Onetime = onetime;
+        //                                //  일회성 효과 이펙트 
+        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
+        //                            }
+        //                        }
 
-                            }
-                            break;
-                        case DURATION_CALC_RESULT_TYPE.FINISH:
-                            {
-                                //  종료 효과 적용 체크
-                                if (duration.IsUseFinishEffect())
-                                {
-                                    var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
-                                    int finish_onetime_cnt = finish_onetime_list.Count;
-                                    for (int f = 0; f < finish_onetime_cnt; f++)
-                                    {
-                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-                                        BattleOnetimeSkillData onetime = finish_onetime_list[f];
-                                        send_data.Onetime = onetime;
-                                        //  일회성 효과 이펙트
-                                        SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-                                    }
-                                }
-                                Remove_Reserved_Duration_Data_List.Add(duration);
-                                //  상태변경
-                                trans_change_state(state, d_type);
+        //                    }
+        //                    break;
+        //                case DURATION_CALC_RESULT_TYPE.FINISH:
+        //                    {
+        //                        //  종료 효과 적용 체크
+        //                        if (duration.IsUseFinishEffect())
+        //                        {
+        //                            var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
+        //                            int finish_onetime_cnt = finish_onetime_list.Count;
+        //                            for (int f = 0; f < finish_onetime_cnt; f++)
+        //                            {
+        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+        //                                BattleOnetimeSkillData onetime = finish_onetime_list[f];
+        //                                send_data.Onetime = onetime;
+        //                                //  일회성 효과 이펙트
+        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
+        //                            }
+        //                        }
+        //                        Remove_Reserved_Duration_Data_List.Add(duration);
+        //                        //  상태변경
+        //                        trans_change_state(state, d_type);
 
 
-                            }
-                            break;
-                        case DURATION_CALC_RESULT_TYPE.REPEAT_AND_FINISH:
-                            {
-                                //  반복 효과 적용
-                                if (duration.IsUseRepeatInterval())
-                                {
-                                    var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
-                                    int repeat_onetime_cnt = repeat_onetime_list.Count;
-                                    for (int o = 0; o < repeat_onetime_cnt; o++)
-                                    {
-                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-                                        //  todo execSkill
-                                        BattleOnetimeSkillData onetime = repeat_onetime_list[o];
-                                        send_data.Onetime = onetime;
-                                        //  일회성 효과 이펙트 
-                                        SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-                                    }
-                                }
-                                //  종료 효과 적용
-                                if (duration.IsUseFinishEffect())
-                                {
-                                    var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
-                                    int finish_onetime_cnt = finish_onetime_list.Count;
-                                    for (int f = 0; f < finish_onetime_cnt; f++)
-                                    {
-                                        BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-                                        BattleOnetimeSkillData onetime = finish_onetime_list[f];
-                                        send_data.Onetime = onetime;
-                                        //  일회성 효과 이펙트
-                                        SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-                                    }
-                                }
-                                Remove_Reserved_Duration_Data_List.Add(duration);
-                                //  상태변경
-                                trans_change_state(state, d_type);
-                            }
-                            break;
-                    }
-                }
-            }
-            //  종료된 스킬 제거
-            if (Remove_Reserved_Duration_Data_List.Count > 0)
-            {
-                int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
-                for (int i = 0; i < reserved_cnt; i++)
-                {
-                    BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
-                    Used_Battle_Duration_Data_List.Remove(duration);
-                    duration.Dispose();
-                    duration = null;
-                }
+        //                    }
+        //                    break;
+        //                case DURATION_CALC_RESULT_TYPE.REPEAT_AND_FINISH:
+        //                    {
+        //                        //  반복 효과 적용
+        //                        if (duration.IsUseRepeatInterval())
+        //                        {
+        //                            var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
+        //                            int repeat_onetime_cnt = repeat_onetime_list.Count;
+        //                            for (int o = 0; o < repeat_onetime_cnt; o++)
+        //                            {
+        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+        //                                //  todo execSkill
+        //                                BattleOnetimeSkillData onetime = repeat_onetime_list[o];
+        //                                send_data.Onetime = onetime;
+        //                                //  일회성 효과 이펙트 
+        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
+        //                            }
+        //                        }
+        //                        //  종료 효과 적용
+        //                        if (duration.IsUseFinishEffect())
+        //                        {
+        //                            var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
+        //                            int finish_onetime_cnt = finish_onetime_list.Count;
+        //                            for (int f = 0; f < finish_onetime_cnt; f++)
+        //                            {
+        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
+        //                                BattleOnetimeSkillData onetime = finish_onetime_list[f];
+        //                                send_data.Onetime = onetime;
+        //                                //  일회성 효과 이펙트
+        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
+        //                            }
+        //                        }
+        //                        Remove_Reserved_Duration_Data_List.Add(duration);
+        //                        //  상태변경
+        //                        trans_change_state(state, d_type);
+        //                    }
+        //                    break;
+        //            }
+        //        }
+        //    }
+        //    //  종료된 스킬 제거
+        //    if (Remove_Reserved_Duration_Data_List.Count > 0)
+        //    {
+        //        int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
+        //        for (int i = 0; i < reserved_cnt; i++)
+        //        {
+        //            BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
+        //            Used_Battle_Duration_Data_List.Remove(duration);
+        //            duration.Dispose();
+        //            duration = null;
+        //        }
 
-                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-            }
-        }
+        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
+        //    }
+        //}
     }
 
 
@@ -1425,42 +1448,43 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="ptype"></param>
     protected void CalcDurationCountUse(PERSISTENCE_TYPE ptype)
     {
-        if (ptype == PERSISTENCE_TYPE.TIME)
-        {
-            return;
-        }
+        GetSkillManager().CalcDurationCountUse(ptype);
+        //if (ptype == PERSISTENCE_TYPE.TIME)
+        //{
+        //    return;
+        //}
 
-        lock (Duration_Lock)
-        {
-            int cnt = Used_Battle_Duration_Data_List.Count;
-            if (cnt == 0)
-            {
-                return;
-            }
-            Remove_Reserved_Duration_Data_List.Clear();
-            for (int i = 0; i < cnt; i++)
-            {
-                BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
-                if (duration.CalcEtcPersistenceCount(ptype))
-                {
-                    //  지속 횟수 종료
-                    Remove_Reserved_Duration_Data_List.Add(duration);
-                }
-            }
-            //  종료된 지속성 효과 제거
-            if (Remove_Reserved_Duration_Data_List.Count > 0)
-            {
-                int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
-                for (int i = 0; i < reserved_cnt; i++)
-                {
-                    BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
-                    Used_Battle_Duration_Data_List.Remove(duration);
-                    duration.Dispose();
-                    duration = null;
-                }
-                Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-            }
-        }
+        //lock (Duration_Lock)
+        //{
+        //    int cnt = Used_Battle_Duration_Data_List.Count;
+        //    if (cnt == 0)
+        //    {
+        //        return;
+        //    }
+        //    Remove_Reserved_Duration_Data_List.Clear();
+        //    for (int i = 0; i < cnt; i++)
+        //    {
+        //        BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
+        //        if (duration.CalcEtcPersistenceCount(ptype))
+        //        {
+        //            //  지속 횟수 종료
+        //            Remove_Reserved_Duration_Data_List.Add(duration);
+        //        }
+        //    }
+        //    //  종료된 지속성 효과 제거
+        //    if (Remove_Reserved_Duration_Data_List.Count > 0)
+        //    {
+        //        int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
+        //        for (int i = 0; i < reserved_cnt; i++)
+        //        {
+        //            BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
+        //            Used_Battle_Duration_Data_List.Remove(duration);
+        //            duration.Dispose();
+        //            duration = null;
+        //        }
+        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
+        //    }
+        //}
 
     }
     /// <summary>
@@ -1572,7 +1596,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         Skeleton.AnimationState.ClearTracks();
         if (state == UNIT_STATES.ATTACK_READY_1 || state == UNIT_STATES.ATTACK_1 || state == UNIT_STATES.ATTACK_END)
         {
-            Skill_Mng.SetNextSkillPattern();
+            GetSkillManager().SetNextSkillPattern();
         }
         
         ChangeState(UNIT_STATES.SKILL_READY_1);

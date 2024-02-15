@@ -147,7 +147,7 @@ public partial class TeamManager_V2 : IDisposable
 
             var unit_data = new BattlePcData();
             unit_data.SetUnitID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
-            unit_data.SetLevel(user_data.GetLevel());
+            //unit_data.SetLevel(user_data.GetLevel());
 
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();

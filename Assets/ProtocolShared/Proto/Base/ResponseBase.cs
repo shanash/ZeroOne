@@ -11,7 +11,6 @@ namespace ProtocolShared.Proto.Base
     {
     }
 
-
     [System.Serializable]
     public class ResponseBase
     {

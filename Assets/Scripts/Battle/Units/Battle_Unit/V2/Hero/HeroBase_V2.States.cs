@@ -67,7 +67,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateIdle()
     {
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateStunBegin()
@@ -82,7 +82,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateSleepBegin()
@@ -97,7 +97,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateFreezeBegin()
@@ -117,7 +117,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateFreezeExit()
@@ -144,7 +144,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  attack check
 
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateAttack01()
@@ -155,7 +155,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
     public override void UnitStateMoveInBegin()
     {
@@ -194,7 +194,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             MoveRightTeam();
         }
         CalcDurationSkillTime();
-        Skill_Mng.CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateWaveRunBegin()
@@ -219,7 +219,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         float dt = Time.deltaTime * Battle_Speed_Multiple;
-        bool is_delay_finish = Skill_Mng.CalcSkillUseDelay(dt);
+        bool is_delay_finish = GetSkillManager().CalcSkillUseDelay(dt);
         if (is_delay_finish)
         {
             FindApproachTargets();
@@ -230,12 +230,12 @@ public partial class HeroBase_V2 : UnitBase_V2
             }
             ChangeState(UNIT_STATES.ATTACK_1);
         }
-        Skill_Mng.CalcSpecialSkillCooltime(dt);
+        GetSkillManager().CalcSpecialSkillCooltime(dt);
     }
 
     public override void UnitStateAttack01Begin()
     {
-        string skill_action_name = Skill_Mng.GetCurrentSkillGroup().GetSkillActionName();
+        string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillActionName();
         var name_list = skill_action_name.Split('_');
         int track = 0;
         if (name_list.Length > 0)

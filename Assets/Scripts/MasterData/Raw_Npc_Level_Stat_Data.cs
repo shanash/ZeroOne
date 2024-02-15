@@ -15,7 +15,7 @@ public class Raw_Npc_Level_Stat_Data : System.IDisposable
 	public double physics_critical_power_add {get; set;}
 	public double magic_critical_power_add {get; set;}
 	public double attack_life_recovery {get; set;}
-	public double evation {get; set;}
+	public double evasion {get; set;}
 	public double accuracy {get; set;}
 	public double heal {get; set;}
 	public double resist  {get; set;}

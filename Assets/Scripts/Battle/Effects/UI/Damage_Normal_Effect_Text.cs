@@ -1,4 +1,5 @@
 using Cysharp.Text;
+using Febucci.UI;
 using System;
 using TMPro;
 using UnityEngine;
@@ -8,8 +9,18 @@ public class Damage_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Damage Text")]
     TMP_Text Damage_Text;
 
-    readonly float VELOCITY = 3.5f;
+    [SerializeField, Tooltip("Typewriter")]
+    TypewriterByCharacter Writer;
 
+    readonly float VELOCITY = 1.5f;
+
+    string Show_Text = string.Empty;
+
+    public override void StartParticle(float duration, bool loop = false)
+    {
+        base.StartParticle(duration, loop);
+        Writer.ShowText(Show_Text);
+    }
 
     public override void SetData(params object[] data)
     {
@@ -20,32 +31,42 @@ public class Damage_Normal_Effect_Text : EffectBase
 
         BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)data[0];
 
-        double dmg = Math.Truncate(send_data.Physics_Attack_Point);
-        
+        ONETIME_EFFECT_TYPE etype = send_data.Onetime.GetOnetimeEffectType();
 
-        if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)
+        double dmg = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? Math.Truncate(send_data.Magic_Attack_Point) : Math.Truncate(send_data.Physics_Attack_Point);
+
+        string dmg_str = dmg.ToString();
+        int cnt = dmg_str.Length;
+        var sb = ZString.CreateStringBuilder();
+        for (int i = 0; i < cnt; i++)
         {
-            Damage_Text.text = ZString.Format("{0}", dmg);
+            sb.AppendFormat("<sprite={0}>", dmg_str[i]);
         }
-        else
-        {
-            string txt_color = GetDurationEffectColorText(send_data.Duration_Effect_Type);
-            if (!string.IsNullOrEmpty(txt_color))
-            {
-                if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.DAMAGE_REDUCE)
-                {
-                    Damage_Text.text = ZString.Format("<color=#{0}><size=30>피해감소</size></color>\n{1}", txt_color, dmg);
-                }
-                else
-                {
-                    Damage_Text.text = ZString.Format("<color=#{0}>{1}</color>", txt_color, dmg);
-                }
-            }
-            else
-            {
-                Damage_Text.text = ZString.Format("{0}", dmg);
-            }
-        }
+        Show_Text = sb.ToString();
+
+        //if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)
+        //{
+        //    Damage_Text.text = ZString.Format("{0}", dmg);
+        //}
+        //else
+        //{
+        //    string txt_color = GetDurationEffectColorText(send_data.Duration_Effect_Type);
+        //    if (!string.IsNullOrEmpty(txt_color))
+        //    {
+        //        if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.DAMAGE_REDUCE)
+        //        {
+        //            Damage_Text.text = ZString.Format("<color=#{0}><size=30>피해감소</size></color>\n{1}", txt_color, dmg);
+        //        }
+        //        else
+        //        {
+        //            Damage_Text.text = ZString.Format("<color=#{0}>{1}</color>", txt_color, dmg);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Damage_Text.text = ZString.Format("{0}", dmg);
+        //    }
+        //}
     }
 
     string GetDurationEffectColorText(DURATION_EFFECT_TYPE dtype)
@@ -97,6 +118,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     public override void Despawned()
     {
         Damage_Text.text = "";
+        Show_Text = string.Empty;
     }
 
 

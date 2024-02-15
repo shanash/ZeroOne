@@ -2,9 +2,14 @@
 /**/
 public abstract class BattleUnitData : BattleDataBase
 {
+    protected HeroBase_V2 Hero;
+     public BattleSkillManager Skill_Mng { get; protected set; }
+
     protected abstract int Level { get; set; }
 
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
+
+    //protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
     protected BattleUnitData(CHARACTER_TYPE ctype) : base()
     {
@@ -12,6 +17,15 @@ public abstract class BattleUnitData : BattleDataBase
     }
 
     public abstract BattleUnitData SetUnitID(params int[] unit_ids);
+
+    public void SetHeroBase(HeroBase_V2 h)
+    {
+        Hero = h;
+        if (Skill_Mng != null)
+        {
+            Skill_Mng.SetHeroBase(h);
+        }
+    }
 
     /// <summary>
     /// 유닛 ID
@@ -24,6 +38,8 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual int GetUnitNum() { return 0; }
+
+    
 
     /// <summary>
     /// 유닛의 레벨 설정
@@ -80,7 +96,7 @@ public abstract class BattleUnitData : BattleDataBase
             GetPhysicsDefensePoint(),
             GetAutoRecoveryLife(),
             GetEvasionPoint(),
-            GetAttackRecovery(),
+            GetAttackLifeRecovery(),
             GetAccuracyPoint(),
             GetSumSkillsLevel());
     }
@@ -95,26 +111,31 @@ public abstract class BattleUnitData : BattleDataBase
     /// 마법 공격 포인트
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMagicAttackPoint() { return 0; }
+    public abstract double GetMagicAttackPoint();
 
     /// <summary>
-    /// 방어력 포인트
+    /// 물리 방어력 포인트
     /// </summary>
     /// <returns></returns>
     public abstract double GetPhysicsDefensePoint();
-    public virtual double GetMagicDefensePoint() {  return 0; }
+    /// <summary>
+    /// 마법 방어력 포인트
+    /// </summary>
+    /// <returns></returns>
+    public abstract double GetMagicDefensePoint();
 
     /// <summary>
-    /// 체력 포인트
+    /// 최대 체력 포인트
     /// </summary>
     /// <returns></returns>
     public abstract double GetMaxLifePoint();
 
     /// <summary>
-    /// 흡혈량
+    /// 흡혈량<br/>
+    /// 회복량 = 내가 준 최종 데미지(적에게 최종적으로 가해진 데미지) * HP 흡수 포인트 / (HP 흡수 포인트 + 상대 레벨 + 100)<br/>
     /// </summary>
     /// <returns></returns>
-    public virtual double GetAttackRecovery() { return 0; }
+    public abstract double GetAttackLifeRecovery();
 
     /// <summary>
     /// 명중 포인트
@@ -136,25 +157,25 @@ public abstract class BattleUnitData : BattleDataBase
     /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
     /// </summary>
     /// <returns></returns>
-    public virtual double GetPhysicsCriticalChance() {  return 0; }
+    public abstract double GetPhysicsCriticalChance();
     /// <summary>
     /// 물리 치명타 데미지(파워)<br/>
     /// 치명타 데미지 = 최종 데미지 * 2(or 물리 크리티컬 데미지에 영향을 주는 스탯 값)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetPhysicsCriticalPowerAdd() { return 0; }
+    public abstract double GetPhysicsCriticalPowerAdd();
     /// <summary>
     /// 마법 치명타 확률<br/>
     /// 치명타 확률 = 치명타 확률 값 * 0.05 * 0.01 * 캐스터 레벨 / 적 레벨
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMagicCriticalChance() { return 0; }
+    public abstract double GetMagicCriticalChance();
     /// <summary>
     /// 마법 치명타 데미지(파워)<br/>
     /// 치명타 데미지 = 최종 데미지 * 2(or 마법 크리티컬 데미지에 영향을 주는 스탯 값)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMagicCriticalPowerAdd() { return 0; }
+    public abstract double GetMagicCriticalPowerAdd();
 
     /// <summary>
     /// 강인함(상태이상 저항력)<br/>
@@ -162,33 +183,26 @@ public abstract class BattleUnitData : BattleDataBase
     /// 상태이상 확률 = 상태이상 확률 - (상태이상 확률 * 강인함 / 1000)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetResistPoint() { return 0; }
+    public abstract double GetResistPoint();
 
     /// <summary>
     /// 체력 회복량 증가(힐량 증가)
     /// </summary>
     /// <returns></returns>
-    public virtual double GetLifeRecoveryInc() {  return 0; }
+    public abstract double GetLifeRecoveryInc();
 
     /// <summary>
     /// 무게<br/>
     /// 넉백 및 풀링의 변수로 사용
     /// </summary>
     /// <returns></returns>
-    public virtual double GetWeight() { return 0; }
+    public abstract double GetWeight();
 
     /// <summary>
     /// 이동 속도
     /// </summary>
     /// <returns></returns>
     public abstract float GetMoveSpeed();
-    /// <summary>
-    /// HP 흡수 포인트<br/>
-    /// 회복량 = 내가 준 최종 데미지(적에게 최종적으로 가해진 데미지) * HP 흡수 포인트 / (HP 흡수 포인트 + 상대 레벨 + 100)<br/>
-    /// 무조건 회복이지?
-    /// </summary>
-    /// <returns></returns>
-    public virtual double GetVampirePoint() {  return 0; }
 
     /// <summary>
     /// 접근 거리
@@ -243,4 +257,26 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual NPC_TYPE GetNpctype() { return NPC_TYPE.NONE; }
+
+    /// <summary>
+    /// 전투 캐릭 반환
+    /// </summary>
+    /// <returns></returns>
+    public HeroBase_V2 GetHeroBase() { return Hero; }
+
+    //public void SetBattleSpeed(float speed) 
+    //{
+    //    Battle_Speed_Multiple = speed;
+    //    if (Skill_Mng != null)
+    //    {
+    //        Skill_Mng.SetBattleSpeed(speed);
+    //    }
+    //}
+
+    protected override void Destroy()
+    {
+        Hero = null;
+        Skill_Mng?.Dispose();
+        Skill_Mng = null;
+    }
 }

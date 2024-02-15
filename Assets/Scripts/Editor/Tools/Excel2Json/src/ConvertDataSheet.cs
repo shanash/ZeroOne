@@ -319,11 +319,15 @@ namespace Excel2Json
         {
             var cellValue = GetValue<string>(cell);
             cellValue = Regex.Replace(cellValue, @"[\[\]]", "");
-            var elements = cellValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] elements = cellValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             JArray array = new JArray();
 
-            foreach (var element in elements)
+            foreach (string element in elements)
             {
+                if (string.IsNullOrEmpty(element))
+                {
+                    continue;
+                }
                 switch (info.type.Replace("*", "").ToLower())
                 {
                     case "int[]":

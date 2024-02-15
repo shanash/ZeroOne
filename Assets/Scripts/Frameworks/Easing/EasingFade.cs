@@ -176,6 +176,8 @@ namespace FluffyDuck.Util
             RevertState();
         }
 
+        public virtual void ResetEasing() { }
+
         public void Spawned()
         {
             Easing_End_Callback = null;

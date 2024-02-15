@@ -49,11 +49,6 @@ namespace Excel2Json
                                 continue;
                             }
 
-                            if (ws.Name.Equals("reward_set"))
-                            {
-                                bool a = false;
-                            }
-
                             // ENUM 시트와 데이터 시트로 구분 필요
                             if (ws.Name.Contains("@"))
                             {

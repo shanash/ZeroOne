@@ -76,8 +76,8 @@ public class Npc_Level_Stat_Data : System.IDisposable
 	///	<summary>
 	///	회피 증가
 	///	</summary>
-	public double evation => _evation;
-	double _evation;
+	public double evasion => _evasion;
+	double _evasion;
 
 	///	<summary>
 	///	명중 증가
@@ -130,7 +130,7 @@ public class Npc_Level_Stat_Data : System.IDisposable
 		_physics_critical_power_add = raw_data.physics_critical_power_add;
 		_magic_critical_power_add = raw_data.magic_critical_power_add;
 		_attack_life_recovery = raw_data.attack_life_recovery;
-		_evation = raw_data.evation;
+		_evasion = raw_data.evasion;
 		_accuracy = raw_data.accuracy;
 		_heal = raw_data.heal;
 		_resist  = raw_data.resist ;
@@ -169,7 +169,7 @@ public class Npc_Level_Stat_Data : System.IDisposable
 		sb.AppendFormat("[physics_critical_power_add] = <color=yellow>{0}</color>", physics_critical_power_add).AppendLine();
 		sb.AppendFormat("[magic_critical_power_add] = <color=yellow>{0}</color>", magic_critical_power_add).AppendLine();
 		sb.AppendFormat("[attack_life_recovery] = <color=yellow>{0}</color>", attack_life_recovery).AppendLine();
-		sb.AppendFormat("[evation] = <color=yellow>{0}</color>", evation).AppendLine();
+		sb.AppendFormat("[evasion] = <color=yellow>{0}</color>", evasion).AppendLine();
 		sb.AppendFormat("[accuracy] = <color=yellow>{0}</color>", accuracy).AppendLine();
 		sb.AppendFormat("[heal] = <color=yellow>{0}</color>", heal).AppendLine();
 		sb.AppendFormat("[resist ] = <color=yellow>{0}</color>", resist ).AppendLine();

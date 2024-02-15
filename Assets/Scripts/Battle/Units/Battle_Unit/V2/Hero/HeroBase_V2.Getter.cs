@@ -66,7 +66,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     public BattleSkillManager GetSkillManager()
     {
-        return Skill_Mng;
+        return Unit_Data.Skill_Mng;
     }
 
 
@@ -92,17 +92,18 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected double GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE dtype)
     {
-        double sum = 0;
-        int cnt = Used_Battle_Duration_Data_List.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var dur = Used_Battle_Duration_Data_List[i];
-            if (dur.GetDurationEffectType() == dtype)
-            {
-                sum += dur.GetMultipleTypeByMultiples();
-            }
-        }
-        return sum;
+        //double sum = 0;
+        //int cnt = Used_Battle_Duration_Data_List.Count;
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    var dur = Used_Battle_Duration_Data_List[i];
+        //    if (dur.GetDurationEffectType() == dtype)
+        //    {
+        //        sum += dur.GetMultipleByMultipleType();
+        //    }
+        //}
+        //return sum;
+        return GetSkillManager().GetDurationMultiplesByDurEffectType(dtype);
     }
     /// <summary>
     /// 지속성 스킬 중 지정 타입의 스탯 타입 값 반환(절대 값)
@@ -111,17 +112,18 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected double GetDurationSkillTypesValues(DURATION_EFFECT_TYPE dtype)
     {
-        double sum = 0;
-        int cnt = Used_Battle_Duration_Data_List.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var dur = Used_Battle_Duration_Data_List[i];
-            if (dur.GetDurationEffectType() == dtype)
-            {
-                sum += dur.GetMultipleTypeByValues();
-            }
-        }
-        return sum;
+        //double sum = 0;
+        //int cnt = Used_Battle_Duration_Data_List.Count;
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    var dur = Used_Battle_Duration_Data_List[i];
+        //    if (dur.GetDurationEffectType() == dtype)
+        //    {
+        //        sum += dur.GetValuesByMultipleType();
+        //    }
+        //}
+        //return sum;
+        return GetSkillManager().GetDurationValuesByDurEffectType(dtype);
     }
     
     /// <summary>
@@ -243,26 +245,39 @@ public partial class HeroBase_V2 : UnitBase_V2
 
 
     /// <summary>
-    /// 방어율<br/>
-    /// 방어율 = 1 / (1 + 방어력 / 100)<br/>
-    /// 최종 데미지 = 적 데미지 * 방어율
+    /// 물리 방어율<br/>
+    /// 물리 방어율 = 1 / (1 + 물리 방어력 / 100)<br/>
+    /// 최종 데미지 = 적 데미지 * 물리 방어율
     /// </summary>
     /// <returns></returns>
-    protected double GetDefenseRate()
+    protected double GetPhysicsDefenseRate()
     {
         double def_pt = GetDefensePoint();
         double defense_rate = 1 / (1 + (def_pt / 100));
         return defense_rate;
     }
     /// <summary>
+    /// 마법 방어율<br/>
+    /// 마법 방어율 = 1 / (1 + 마법 방어력 / 100)<br/>
+    /// 최종 데미지 = 적 데미지 * 마법 방어율
+    /// </summary>
+    /// <returns></returns>
+    protected double GetMagicDefenseRate()
+    {
+        double def_pt = GetMagicDefenseRate();
+        double defense_rate = 1 / (1 + def_pt / 100);
+        return defense_rate;
+    }
+
+    /// <summary>
     /// 최종 데미지<br/>
     /// 최종 데미지 = 적 데미지 * 방어율
     /// </summary>
     /// <param name="damage"></param>
     /// <returns></returns>
-    protected double GetCalcDamage(double damage)
+    protected double GetCalcDamage(double damage, bool is_physics)
     {
-        double defense_rate = GetDefenseRate();
+        double defense_rate = is_physics ? GetPhysicsDefenseRate() : GetMagicDefenseRate();
         double last_damage = damage * defense_rate;
         return last_damage;
     }
@@ -304,29 +319,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             pt += pt * (def_up_rate - def_down_rate);
         }
-        return pt;
-    }
-
-    /// <summary>
-    /// 실시간 버프 등이 적용된 크리티컬 찬스 포인트
-    /// </summary>
-    /// <returns></returns>
-    public double GetCriticalChancePoint()
-    {
-        //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Physics_Critical_Chance;
-        return pt;
-    }
-
-    /// <summary>
-    /// 실시간 버프 등이 적용된 크리티컬 파워
-    /// </summary>
-    /// <returns></returns>
-    public double GetCriticalPowerPoint()
-    {
-        //  버프/디버프 관련 데이터를 가져와서 적용할 필요가 있음. [todo]
-        double pt = Physics_Critical_Power_Add;
-
         return pt;
     }
 
@@ -421,11 +413,21 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     /// <param name="caster_lv">공격자의 레벨</param>
     /// <param name="target_lv">피격자의 레벨</param>
+    /// <param name="is_physics">물리 공격 여부</param>
     /// <returns>백만분율로 변환</returns>
-    protected double GetCriticalChanceRate(int caster_lv, int target_lv)
+    protected double GetCriticalChanceRate(int caster_lv, int target_lv, bool is_physics)
     {
+        double chance = 0;
 
-        double chance = (GetCriticalChancePoint() * 0.05 * ((double)caster_lv / (double)target_lv) * 0.01) * 1000000;
+        if (is_physics)
+        {
+            chance = (Physics_Critical_Chance * 0.05 * ((double)caster_lv / (double)target_lv) * 0.01) * 1000000;
+        }
+        else
+        {
+            chance = (Magic_Critical_Chance * 0.05 * ((double)caster_lv / (double)target_lv) * 0.01) * 1000000;
+        }
+
         return chance;
     }
 
@@ -487,9 +489,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         return Unit_Data != null ? Unit_Data.GetResistPoint() : 0;
     }
 
-    protected virtual double GetVampirePoint()
+    protected virtual double GetAttackLifeRecovery()
     {
-        return Unit_Data != null ? Unit_Data.GetVampirePoint() : 0;
+        return Unit_Data != null ? Unit_Data.GetAttackLifeRecovery() : 0;
     }
 
     protected virtual double GetLifeRecoveryInc()

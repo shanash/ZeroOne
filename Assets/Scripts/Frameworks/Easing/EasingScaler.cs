@@ -3,35 +3,34 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// ´Ü¼øÇÑ À¯ÇüÀÇ ½ºÄÉÀÏ¸µ À¯Æ¿
-/// ScaleUpÀº +Vector2, ScaleDown Àº -Vector2¸¦ »ç¿ëÇÑ´Ù.
-/// ½ºÄÉÀÏÀÇ º¯°æÀº ÇöÀçÀÇ OriginLocalScaleÀ» ±âÁØÀ¸·Î º¯°æµÈ °ª ¸¸Å­ +- µÈ´Ù.
-/// Vector2.one¿¡¼­ ScaleUp Vector2.oneÀ» Àû¿ëÇÒ °æ¿ì °á°ú´Â Vector2(2, 2)·Î µÈ´Ù.
-/// Vector2.one¿¡¼­ ScaleDown -Vector2.oneÀ» Àû¿ëÇÒ °æ¿ì °á°ú´Â Vector2.zero·Î µÈ´Ù.
+/// ë‹¨ìˆœí•œ ìœ í˜•ì˜ ìŠ¤ì¼€ì¼ë§ ìœ í‹¸
+/// ScaleUpì€ +Vector2, ScaleDown ì€ -Vector2ë¥¼ ì‚¬ìš©í•œë‹¤.
+/// ìŠ¤ì¼€ì¼ì˜ ë³€ê²½ì€ í˜„ì¬ì˜ OriginLocalScaleì„ ê¸°ì¤€ìœ¼ë¡œ ë³€ê²½ëœ ê°’ ë§Œí¼ +- ëœë‹¤.
+/// Vector2.oneì—ì„œ ScaleUp Vector2.oneì„ ì ìš©í•  ê²½ìš° ê²°ê³¼ëŠ” Vector2(2, 2)ë¡œ ëœë‹¤.
+/// Vector2.oneì—ì„œ ScaleDown -Vector2.oneì„ ì ìš©í•  ê²½ìš° ê²°ê³¼ëŠ” Vector2.zeroë¡œ ëœë‹¤.
 /// </summary>
 public class EasingScaler : EasingFade
 {
-    Vector3 OriginLocalScale = Vector3.one;
+    Vector3 Start_Scale = Vector3.one;
 
-    Vector2 ScaleData = Vector2.zero;
+    Vector3 Target_Scale = Vector2.zero;
 
-    private void Awake()
+    Vector3 Diff_Scale = Vector2.zero;
+
+    public void SetStartScale(Vector3 start_scale)
     {
-        SaveOriginScale();
-    }
-    void SaveOriginScale()
-    {
-        OriginLocalScale = transform.localScale;
+        Start_Scale = start_scale;
+        this.transform.localScale = Start_Scale;
     }
 
     /// <summary>
-    /// EasingÀ» ÀÌ¿ëÇÏ¿© ½ºÄÉÀÏ¸µ º¯°æ
+    /// Easingì„ ì´ìš©í•˜ì—¬ ìŠ¤ì¼€ì¼ë§ ë³€ê²½
     /// </summary>
-    /// <param name="data">º¯°æÇÒ ½ºÄÉÀÏ¸µ Vector2. ÇöÀçÀÇ ½ºÄÉÀÏÀ» ±âÁØÀ¸·Î ¾ó¸¶³ª º¯°æÇÒÁö Á¤ÇÑ´Ù. (-)ÀÏ °æ¿ì ½ºÄÉÀÏ DownÀÌ µÈ´Ù.</param>
+    /// <param name="data">ë³€ê²½í•  ìŠ¤ì¼€ì¼ë§ Vector2. í˜„ì¬ì˜ ìŠ¤ì¼€ì¼ì„ ê¸°ì¤€ìœ¼ë¡œ ì–¼ë§ˆë‚˜ ë³€ê²½í• ì§€ ì •í•œë‹¤. (-)ì¼ ê²½ìš° ìŠ¤ì¼€ì¼ Downì´ ëœë‹¤.</param>
     public override void StartEasing(object data, Action cb = null)
     {
-        ScaleData = (Vector2)(data);
-        SaveOriginScale();
+        Target_Scale = (Vector3)(data);
+        Diff_Scale = Target_Scale - Start_Scale;
         base.StartEasing(data, cb);
     }
 
@@ -47,12 +46,18 @@ public class EasingScaler : EasingFade
     private void UpdateScaler(EasingFunction.Function func, float weight)
     {
         float ev = func(0.0f, 1.0f, weight);
-        Vector2 easingDelta = ScaleData * ev;
-        transform.localScale = OriginLocalScale + new Vector3(easingDelta.x, easingDelta.y, 0f);
+        Vector3 easingDelta = Diff_Scale * ev;
+        //transform.localScale = Start_Scale + new Vector3(easingDelta.x, easingDelta.y, 0f);
+        transform.localScale = Start_Scale + easingDelta;
     }
 
     protected override void UpdatePostDelayEnd()
     {
-        transform.localScale = OriginLocalScale + (Vector3)ScaleData;
+        transform.localScale = Target_Scale;
+    }
+
+    public override void ResetEasing()
+    {
+        transform.localScale = Vector3.one;
     }
 }

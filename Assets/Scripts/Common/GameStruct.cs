@@ -54,6 +54,15 @@ public struct BATTLE_SEND_DATA
         Targets?.AddRange(targets);
     }
 
+    public HeroBase_V2 GetFirstTarget()
+    {
+        if (Targets.Count > 0)
+        {
+            return Targets[0];
+        }
+        return null;
+    }
+
     public void ClearTargets()
     {
         Targets?.Clear();

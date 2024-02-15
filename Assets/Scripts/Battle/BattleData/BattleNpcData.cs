@@ -24,8 +24,23 @@ public class BattleNpcData : BattleUnitData
         Data = m.Get_NpcData(npc_id);
 
         Battle_Data = m.Get_NpcBattleData(Data.npc_battle_id);
+        CreateSkillManager();
 
         return this;
+    }
+
+    void CreateSkillManager()
+    {
+        if (Skill_Mng == null)
+        {
+            Skill_Mng = new BattleSkillManager();
+            Skill_Mng.SetNpcSkillGroups(GetSkillPattern());
+            Skill_Mng.SetNpcSpecialSkillGroup(GetSpecialSkillID());
+            if (Hero != null)
+            {
+                Skill_Mng.SetHeroBase(Hero);
+            }
+        }
     }
 
     public override object GetUnitData()
@@ -78,7 +93,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_attack;
+            return battle_data.physics_attack + (GetLevel() - 1) * Stat_Data.physics_attack;
         }
         return 0;
     }
@@ -88,7 +103,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_attack;
+            return battle_data.magic_attack + (GetLevel() - 1) * Stat_Data.magic_attack;
         }
         return 0;
     }
@@ -98,7 +113,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_defend;
+            return battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
         }
         return 0;
     }
@@ -108,7 +123,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_defend;
+            return battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
         }
         return 0;
     }
@@ -118,17 +133,17 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.life;
+            return battle_data.life + (GetLevel() - 1) * Stat_Data.life;
         }
         return 0;
     }
 
-    public override double GetAttackRecovery() => GetAttackRecovery(Battle_Data);
-    double GetAttackRecovery(Npc_Battle_Data battle_data)
+    public override double GetAttackLifeRecovery() => GetAttackLifeRecovery(Battle_Data);
+    double GetAttackLifeRecovery(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
-            return battle_data.attack_life_recovery;
+            return battle_data.attack_life_recovery + (GetLevel() - 1) * Stat_Data.attack_life_recovery;
         }
         return 0;
     }
@@ -139,7 +154,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.accuracy;
+            return battle_data.accuracy + (GetLevel() - 1) * Stat_Data.accuracy;
         }
         return 0;
     }
@@ -149,26 +164,17 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.evasion;
+            return battle_data.evasion + (GetLevel() - 1) * Stat_Data.evasion;
         }
         return 0;
     }
 
-    public override double GetVampirePoint() => GetVampirePoint(Battle_Data);
-    double GetVampirePoint(Npc_Battle_Data battle_data)
-    {
-        if (battle_data != null)
-        {
-            return battle_data.attack_life_recovery;
-        }
-        return 0;
-    }
     public override double GetPhysicsCriticalChance() => GetPhysicsCriticalChance(Battle_Data);
     double GetPhysicsCriticalChance(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_chance;
+            return battle_data.physics_critical_chance + (GetLevel() - 1) * Stat_Data.physics_critical_chance;
         }
         return 0;
     }
@@ -177,7 +183,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_power_add;
+            return battle_data.physics_critical_power_add + (GetLevel() - 1) * Stat_Data.physics_critical_power_add;
         }
         return 0;
     }
@@ -186,7 +192,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_chance;
+            return battle_data.magic_critical_chance + (GetLevel() - 1) * Stat_Data.magic_critical_chance;
         }
         return 0;
     }
@@ -195,7 +201,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_power_add;
+            return battle_data.magic_critical_power_add + (GetLevel() - 1) * Stat_Data.magic_critical_power_add;
         }
         return 0;
     }
@@ -204,7 +210,7 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.resist;
+            return battle_data.resist + (GetLevel() - 1) * Stat_Data.resist;
         }
         return 0;
     }
@@ -213,7 +219,7 @@ public class BattleNpcData : BattleUnitData
     { 
         if (battle_data != null)
         {
-            return battle_data.heal;
+            return battle_data.heal + (GetLevel() - 1) * Stat_Data.heal;
         }
         return 0; 
     }
@@ -221,7 +227,7 @@ public class BattleNpcData : BattleUnitData
     double GetWeight(Npc_Battle_Data battle_data)
     {
         if (battle_data != null)
-            return battle_data.weight;
+            return battle_data.weight + (GetLevel() - 1) * Stat_Data.weight;
         return 0;
     }
 

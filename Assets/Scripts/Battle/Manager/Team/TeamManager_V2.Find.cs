@@ -942,7 +942,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  흠혈 포인트 오름 차순
-        temp_list.Sort((a, b) => a.Vampire_Point.CompareTo((b.Vampire_Point)));
+        temp_list.Sort((a, b) => a.Attack_Life_Recovery.CompareTo((b.Attack_Life_Recovery)));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>
@@ -955,7 +955,7 @@ public partial class TeamManager_V2
     {
         var temp_list = GetAliveMembers();
         //  흡혈 포인트 내림 차순
-        temp_list.Sort((a, b) => b.Vampire_Point.CompareTo(a.Vampire_Point));
+        temp_list.Sort((a, b) => b.Attack_Life_Recovery.CompareTo(a.Attack_Life_Recovery));
         GetTargetsFromTempList(temp_list, count, ref targets);
     }
     /// <summary>

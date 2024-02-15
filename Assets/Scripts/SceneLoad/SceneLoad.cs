@@ -88,6 +88,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
             {
                 BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
             }
+            
         }
 #endif
 

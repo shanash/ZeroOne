@@ -91,12 +91,12 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
     /// 스탯 타입의 배율 값
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMultipleTypeByMultiples() { return 0; }
+    public virtual double GetMultipleByMultipleType() { return 0; }
     /// <summary>
     /// 스탯 타입의 절대 값
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMultipleTypeByValues() { return 0; }
+    public virtual double GetValuesByMultipleType() { return 0; }
 
 
     /// <summary>

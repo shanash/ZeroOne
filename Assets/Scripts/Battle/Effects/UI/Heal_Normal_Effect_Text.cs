@@ -1,4 +1,6 @@
 using Cysharp.Text;
+using Febucci.UI;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,17 +9,33 @@ public class Heal_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Heal Text")]
     TMP_Text Heal_Text;
 
-    readonly float VELOCITY = 3.5f;
+    [SerializeField, Tooltip("Typewriter")]
+    TypewriterByCharacter Writer;
 
+    readonly float VELOCITY = 1.5f;
 
+    string Show_Text = string.Empty;
+    public override void StartParticle(float duration, bool loop = false)
+    {
+        base.StartParticle(duration, loop);
+        Writer.ShowText(Show_Text);
+    }
     public override void SetData(params object[] data)
     {
         if (data.Length != 1)
         {
             return;
         }
-        double recovery_hp = (double)data[0];
-        Heal_Text.text = ZString.Format("{0}", recovery_hp);
+        double recovery_hp = Math.Truncate((double)data[0]);
+        string hp_str = recovery_hp.ToString();
+        var sb = ZString.CreateStringBuilder();
+        int cnt = hp_str.Length;
+        for (int i = 0; i < cnt; i++)
+        {
+            sb.AppendFormat("<sprite={0}>", hp_str[i]);
+        }
+        Show_Text = sb.ToString();
+        //Heal_Text.text = ZString.Format("{0}", recovery_hp);
     }
 
     private void Update()

@@ -11,7 +11,7 @@ namespace ProtocolShared.Proto
 
     public class LoginResponse
     {
-        public string userId { get; set; } = string.Empty;
+        public string playerId { get; set; } = string.Empty;
         public string accessToken { get; set; } = string.Empty;
         public string refreshToken { get; set; } = string.Empty;
     }

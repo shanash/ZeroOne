@@ -3,9 +3,6 @@ using System.Diagnostics;
 
 public class BattlePcData : BattleUnitData
 {
-    // TODO: 레벨업 더미값을 임시로 곱합니다. 레벨업 데이터 구현이 완료되면 나중에 지워줍시다
-    const float UP_VALUE = 1f;
-
     public UserHeroData User_Data { get; private set; } = null;
     public Player_Character_Data Data { get { return User_Data.Hero_Data; } }
     public Player_Character_Battle_Data Battle_Data { get { return User_Data.Battle_Data; } }
@@ -26,8 +23,31 @@ public class BattlePcData : BattleUnitData
         int pc_num = unit_ids[1];
 
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
-
+        CheckStatData();
+        CreateSkillManager();
         return this;
+    }
+
+    void CreateSkillManager()
+    {
+        if (Skill_Mng == null)
+        {
+            Skill_Mng = new BattleSkillManager();
+            Skill_Mng.SetPlayerCharacterSkillGroups(GetSkillPattern());
+            Skill_Mng.SetPlayerCharacterSpecialSkillGroup(GetSpecialSkillID());
+            if (Hero != null)
+            {
+                Skill_Mng.SetHeroBase(Hero);
+            }
+        }
+    }
+
+    void CheckStatData()
+    {
+        if (Stat_Data == null)
+        {
+            Stat_Data = MasterDataManager.Instance.Get_PlayerCharacterLevelStatData(User_Data.GetPlayerCharacterID(), User_Data.GetStarGrade());
+        }
     }
 
     public override int GetUnitID()
@@ -58,7 +78,7 @@ public class BattlePcData : BattleUnitData
 
     public override void SetLevel(int lv)
     {
-        
+        //  nothing
     }
 
     public override int GetLevel()
@@ -107,9 +127,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.physics_attack + (GetLevel() - 1) * up_value;
+            return battle_data.physics_attack + (GetLevel() - 1) * Stat_Data.physics_attack;
         }
         return 0;
     }
@@ -120,8 +138,7 @@ public class BattlePcData : BattleUnitData
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.magic_attack + (GetLevel() - 1) * up_value;
+            return battle_data.magic_attack + (GetLevel() - 1) * Stat_Data.magic_attack;
         }
         return 0;
     }
@@ -132,8 +149,7 @@ public class BattlePcData : BattleUnitData
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.physics_defend + (GetLevel() - 1) * up_value;
+            return battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
         }
         return 0;
     }
@@ -144,8 +160,7 @@ public class BattlePcData : BattleUnitData
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.magic_defend + (GetLevel() - 1) * up_value;
+            return battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
         }
         return 0;
     }
@@ -156,17 +171,17 @@ public class BattlePcData : BattleUnitData
         if (battle_data != null)
         {
             //TODO: 더미값을 임시로 곱해놓습니다.
-            float up_value = 1f;
-            return battle_data.life + (GetLevel() - 1) * up_value;
+            return battle_data.life + (GetLevel() - 1) * Stat_Data.life;
         }
         return 0;
     }
 
-    public override double GetAttackRecovery()
+    public override double GetAttackLifeRecovery() => GetAttackLifeRecovery(Battle_Data);
+    double GetAttackLifeRecovery(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.attack_life_recovery;
+            return battle_data.attack_life_recovery * (GetLevel() - 1) * Stat_Data.attack_life_recovery;
         }
         return 0;
     }
@@ -176,7 +191,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.accuracy + (GetLevel() - 1) * UP_VALUE;
+            return battle_data.accuracy + (GetLevel() - 1) * Stat_Data.accuracy;
         }
         return 0;
     }
@@ -186,34 +201,27 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.evasion + (GetLevel() - 1) * UP_VALUE;
+            return battle_data.evasion + (GetLevel() - 1) * Stat_Data.evasion;
         }
         return 0;
     }
-    public override double GetAutoRecoveryLife()
+    public override double GetAutoRecoveryLife() => GetAutoRecoveryLife(Battle_Data);
+    double GetAutoRecoveryLife(Player_Character_Battle_Data battle_data)
     {
-        if (Battle_Data != null)
+        if (battle_data != null)
         {
-            return Battle_Data.auto_recovery;
+            return battle_data.auto_recovery + (GetLevel() - 1) * Stat_Data.auto_recovery;
         }
         return 0;
     }
 
-    public override double GetVampirePoint()
-    {
-        if (Battle_Data != null)
-        {
-            return Battle_Data.attack_life_recovery;
-        }
-        return 0;
-    }
 
     public override double GetPhysicsCriticalChance() => GetPhysicsCriticalChance(Battle_Data);
     double GetPhysicsCriticalChance(Player_Character_Battle_Data battle_data)
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_chance;
+            return battle_data.physics_critical_chance + (GetLevel() - 1) * Stat_Data.physics_critical_chance;
         }
         return 0;
     }
@@ -223,7 +231,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_critical_power_add;
+            return battle_data.physics_critical_power_add + (GetLevel() - 1) * Stat_Data.physics_critical_power_add;
         }
         return 0;
     }
@@ -233,7 +241,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_chance;
+            return battle_data.magic_critical_chance + (GetLevel() - 1) * Stat_Data.magic_critical_chance;
         }
         return 0;
     }
@@ -243,7 +251,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_critical_power_add;
+            return battle_data.magic_critical_power_add + (GetLevel() - 1) * Stat_Data.magic_critical_power_add;
         }
         return 0;
     }
@@ -253,7 +261,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.resist;
+            return battle_data.resist + (GetLevel() - 1) * Stat_Data.resist;
         }
         return 0;
     }
@@ -263,7 +271,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.heal;
+            return battle_data.heal + (GetLevel() - 1) * Stat_Data.heal;
         }
         return 0;
     }
@@ -273,7 +281,7 @@ public class BattlePcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.weight;
+            return battle_data.weight + (GetLevel() - 1) * Stat_Data.weight;
         }
         return 0;
     }

@@ -6,9 +6,10 @@ public class MonsterBase_V2 : HeroBase_V2
     {
         
         Unit_Data = unit_dt;
-
-        Skill_Mng = new BattleSkillManager();
-        Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
+        Unit_Data.SetHeroBase(this);
+        
+        //Skill_Mng = new BattleSkillManager();
+        //Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
 
     }
 

@@ -101,11 +101,11 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
     {
         return Data.is_overlapable;
     }
-    public override double GetMultipleTypeByMultiples()
+    public override double GetMultipleByMultipleType()
     {
         return Data.multiple;
     }
-    public override double GetMultipleTypeByValues()
+    public override double GetValuesByMultipleType()
     {
         return Data.value;
     }

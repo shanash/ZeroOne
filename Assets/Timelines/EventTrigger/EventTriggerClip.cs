@@ -12,7 +12,7 @@ public class EventTriggerClip : PlayableAsset, ITimelineClipAsset
 
     [Space()]
     [Header("Event Trigger ID")]
-    [SerializeField, Tooltip("Trigger ID")]
+    [SerializeField, Tooltip("Trigger ID(이벤트 아이디)")]
     string Trigger_ID;
 
     [Space()]

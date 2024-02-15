@@ -68,7 +68,7 @@ public class NetworkManager : Singleton<NetworkManager>
             new DevLoginRequest { macAddress = mac_address },
             (ResponseData<LoginResponse> res) =>
             {
-                User_Id = res.Data.userId;
+                User_Id = res.Data.playerId;
                 Access_Token = res.Data.accessToken;
                 Refresh_Token = res.Data.refreshToken;
                 Client.SetTokenInfo($"{Base_Uri}account/login/refreshtoken", res.Data.accessToken, res.Data.refreshToken);

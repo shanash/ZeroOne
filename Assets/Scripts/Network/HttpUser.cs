@@ -12,13 +12,13 @@ public class HttpUser : Singleton<HttpUser>
 
     }
 
-    public void RequestGetUserInfo(Action<ResponseData<UserInfoResponse>> callback)
+    public void RequestGetUserInfo(Action<ResponseData<PlayerInfoResponse>> callback)
     {
-        NetworkManager.Instance.SendRequest<EmptyRequest, UserInfoResponse>(HttpMethod.GET, "game/user", null, (ResponseData<UserInfoResponse> res) => { callback(res); });
+        NetworkManager.Instance.SendRequest<EmptyRequest, PlayerInfoResponse>(HttpMethod.GET, "game/user", null, (ResponseData<PlayerInfoResponse> res) => { callback(res); });
     }
 
-    public void RequestCreateUser(CreateUserRequest request, Action<ResponseData<UserInfoResponse>> callback)
+    public void RequestCreateUser(CreatePlayerRequest request, Action<ResponseData<PlayerInfoResponse>> callback)
     {
-        NetworkManager.Instance.SendRequest<CreateUserRequest, UserInfoResponse>(HttpMethod.POST, "game/user", request, (ResponseData<UserInfoResponse> res) => { callback(res); });
+        NetworkManager.Instance.SendRequest<CreatePlayerRequest, PlayerInfoResponse>(HttpMethod.POST, "game/user", request, (ResponseData<PlayerInfoResponse> res) => { callback(res); });
     }
 }

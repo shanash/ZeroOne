@@ -69,7 +69,7 @@ namespace ProtocolShared.Proto.Base
         HTTPVersionNotSupported = 505, // 클라이언트가 요청에 사용한 HTTP 버전을 서버가 지원하지 않는다.
         InsufficientStorage = 507, // (WebDAV) 서버에 저장 공간 부족으로 처리에 실패하였다.
 
-        NeedCreateUser = 10001, // 유저를 생성해야 함.
+        NeedCreatePlayer = 10001, // 유저를 생성해야 함.
         DuplicationName = 10002, // 유저를 생성해야 함.
         NotFoundItem = 10003, // 아이템을 찾을수 없음.
 

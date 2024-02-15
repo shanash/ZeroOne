@@ -203,17 +203,7 @@ public class MasterDataManager : BaseMasterDataManager
         list.Clear();
         list.AddRange(_Player_Character_Data.Values.ToList());
     }
-    ///// <summary>
-    ///// 플레이어 캐릭터의 전투 정보
-    ///// </summary>
-    ///// <param name="battle_info_id"></param>
-    ///// <returns></returns>
-    //public Player_Character_Battle_Data Get_PlayerCharacterBattleData(int battle_info_id)
-    //{
-    //    Check_Player_Character_Battle_Data();
-    //    return _Player_Character_Battle_Data.Find(x => x.battle_info_id == battle_info_id);
-    //}
-
+    
     /// <summary>
     /// 플레이어 캐릭터 전투 정보
     /// </summary>
@@ -224,6 +214,19 @@ public class MasterDataManager : BaseMasterDataManager
     {
         Check_Player_Character_Battle_Data();
         return _Player_Character_Battle_Data.Values.ToList().Find(x => x.battle_info_id == battle_info_id && x.star_grade == star_grade);
+    }
+
+    /// <summary>
+    /// 플레이어 캐릭터 레벨당 스탯 정보<br/>
+    /// 각 스탯을 (레벨 - 1)을 곱해서 기본 스탯에 추가한다.
+    /// </summary>
+    /// <param name="player_character_id"></param>
+    /// <param name="star_grade"></param>
+    /// <returns></returns>
+    public Player_Character_Level_Stat_Data Get_PlayerCharacterLevelStatData(int player_character_id, int star_grade)
+    {
+        Check_Player_Character_Level_Stat_Data();
+        return _Player_Character_Level_Stat_Data.Values.ToList().Find(x => x.player_character_id == player_character_id && x.star_grade == star_grade);
     }
 
     /// <summary>

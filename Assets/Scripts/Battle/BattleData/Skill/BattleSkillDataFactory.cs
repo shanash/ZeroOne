@@ -63,7 +63,9 @@ public class BattleSkillDataFactory
                 switch (pc_skill.onetime_effect_type)
                 {
                     case ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE:
-                        return typeof(BattlePcOnetimeSkillData_Damage);
+                        return typeof(BattlePcOnetimeSkillData_PhysicsDamage);
+                    case ONETIME_EFFECT_TYPE.MAGIC_DAMAGE:
+                        return typeof(BattlePcOnetimeSkillData_MagicDamage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattlePcOnetimeSkillData_LifeRecovery);
                     case ONETIME_EFFECT_TYPE.NONE_EFFECT:
@@ -78,7 +80,9 @@ public class BattleSkillDataFactory
                 switch (npc_skill.onetime_effect_type)
                 {
                     case ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE:
-                        return typeof(BattleNpcOnetimeSkillData_Damage);
+                        return typeof(BattleNpcOnetimeSkillData_PhysicsDamage);
+                    case ONETIME_EFFECT_TYPE.MAGIC_DAMAGE:
+                        return typeof(BattleNpcOnetimeSkillData_MagicDamage);
                     case ONETIME_EFFECT_TYPE.LIFE_RECOVERY:
                         return typeof(BattleNpcOnetimeSkillData_LifeRecovery);
                     case ONETIME_EFFECT_TYPE.NONE_EFFECT:

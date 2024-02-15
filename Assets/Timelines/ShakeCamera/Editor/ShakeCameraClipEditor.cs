@@ -50,8 +50,8 @@ public class ShakeCameraClipEditor : Editor
         // serializedObject에 있는 실제 값을 가져옵니다.
         serializedObject.Update();
 
-        EditorGUILayout.Slider(_Magnitude, 1, 100);
-        EditorGUILayout.Slider(_Roughness, 1, 100);
+        EditorGUILayout.Slider(_Magnitude, 0, 100);
+        EditorGUILayout.Slider(_Roughness, 0, 100);
 
         int patternIndex = GetPatternIndex(_Vertical.boolValue, _Horizontal.boolValue);
         patternIndex = EditorGUILayout.Popup(new GUIContent("Pattern", "흔들리는 방향"), patternIndex, s_ShakePattern);
