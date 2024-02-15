@@ -31,6 +31,11 @@ public class HeroInfoBox : MonoBehaviour
     public void SetHeroData(BattlePcData data)
     {
         User_Hero_Data = data;
+        Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_Advance.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_Essence.SetHeroData(User_Hero_Data);
+
         FixedUpdatePopup();
     }
 
@@ -54,10 +59,10 @@ public class HeroInfoBox : MonoBehaviour
 
     public void Refresh()
     {
-        Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
-        Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
-        Hero_Info_Box_Advance.SetHeroData(User_Hero_Data);
-        Hero_Info_Box_Essence.SetHeroData(User_Hero_Data);
+        //Hero_Info_Box_Basic.Refresh();
+        //Hero_Info_Box_LevelUp.Refresh();
+        Hero_Info_Box_Advance.Refresh();
+        //Hero_Info_Box_Essence.Refresh();
     }
 
     public void OnBlocked(Gpm.Ui.Tab tab)

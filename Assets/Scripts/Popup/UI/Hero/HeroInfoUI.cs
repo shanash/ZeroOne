@@ -63,17 +63,30 @@ public class HeroInfoUI : PopupBase
 
     protected override bool Initialize(object[] data)
     {
+        Reset();
+
         if (data.Length != 2 || data[0] is not List<UserHeroData> || data[1] is not int)
         {
             return false;
         }
 
         User_Hero_Datas = data[0] as List<UserHeroData>;
-        Current_Hero_Data_Index = (int)data[1];
-
+        SetUserHero((int)data[1]);
         FixedUpdatePopup();
 
         return true;
+    }
+
+    void SetUserHero(int hero_data_index)
+    {
+        Current_Hero_Data_Index = hero_data_index;
+
+        var user_hero_data = User_Hero_Datas[Current_Hero_Data_Index];
+
+        User_Hero_Battle_Data = new BattlePcData();
+        User_Hero_Battle_Data.SetUnitID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+
+        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
     }
 
     protected override void FixedUpdatePopup()
@@ -86,12 +99,6 @@ public class HeroInfoUI : PopupBase
     public override void UpdatePopup()
     {
         base.UpdatePopup();
-        var user_hero_data = User_Hero_Datas[Current_Hero_Data_Index];
-
-        User_Hero_Battle_Data = new BattlePcData();
-        User_Hero_Battle_Data.SetUnitID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
-
-        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
 
         var Hero_Base_Data = (Player_Character_Data)User_Hero_Battle_Data.GetUnitData();
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
@@ -123,13 +130,6 @@ public class HeroInfoUI : PopupBase
         Hero_Info_Box.Refresh();
     }
 
-    public override void Spawned()
-    {
-        base.Spawned();
-
-        Reset();
-    }
-
     public void OnClickProfileButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -156,22 +156,25 @@ public class HeroInfoUI : PopupBase
 
     public void OnClickLeft()
     {
-        Current_Hero_Data_Index--;
-        if (Current_Hero_Data_Index < 0)
+        int index = Current_Hero_Data_Index - 1;
+        if (index < 0)
         {
-            Current_Hero_Data_Index = User_Hero_Datas.Count -1;
+            index = User_Hero_Datas.Count -1;
         }
 
+        SetUserHero(index);
         UpdatePopup();
     }
 
     public void OnClickRight()
     {
-        Current_Hero_Data_Index++;
-        if (Current_Hero_Data_Index == User_Hero_Datas.Count)
+        int index = Current_Hero_Data_Index + 1;
+        if (index == User_Hero_Datas.Count)
         {
-            Current_Hero_Data_Index = 0;
+            index = 0;
         }
+
+        SetUserHero(index);
         UpdatePopup();
     }
 }
