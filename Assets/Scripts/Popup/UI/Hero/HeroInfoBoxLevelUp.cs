@@ -56,8 +56,6 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             var data = (UserItem_NormalItemData)GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_POTION_C, MAX_EXP_ITEM_ID - i);
             if (data != null)
             {
-                Debug.Log($"data.Item_ID : {data.Item_ID}");
-                
                 Exist_Exp_Items.Add(data);
             }
         }
