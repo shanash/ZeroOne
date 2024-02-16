@@ -85,6 +85,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
 
         Exp_Bar.value = Unit_Data.User_Data.GetExpPercetage();
     }
+
     /// <summary>
     /// 경험치 아이템 버튼 업데이트<br />
     /// 경험치 아이템 버튼을 눌렀을때 업데이트 시켜주면 순환 호출을 하기 때문에<br />
@@ -131,7 +132,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             return;
         }
 
-        GameData.Instance.GetUserHeroSkillDataManager().Save();
+        GameData.Instance.GetUserHeroDataManager().Save();
         GameData.Instance.GetUserGoodsDataManager().Save();
         GameData.Instance.GetUserItemDataManager().Save();
 
