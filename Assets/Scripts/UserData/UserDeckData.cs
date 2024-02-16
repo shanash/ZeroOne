@@ -1,6 +1,7 @@
 
 
 using LitJson;
+using System;
 using System.Collections.Generic;
 
 public class UserDeckData : UserDataBase
@@ -14,6 +15,8 @@ public class UserDeckData : UserDataBase
     public string Team_Name { get; protected set; } = string.Empty;
 
     List<UserHeroDeckMountData> Deck_Heroes = new List<UserHeroDeckMountData>();
+
+    List<Attribute_Synergy_Data> Team_Synergy_Data_List = new List<Attribute_Synergy_Data>();
 
     public UserDeckData() : base() { }
 
@@ -111,6 +114,7 @@ public class UserDeckData : UserDataBase
         }
 
         new_hero.SetLeader(is_leader);
+        CalcTeamSynergy();
 
         return ERROR_CODE.SUCCESS;
     }
@@ -137,7 +141,7 @@ public class UserDeckData : UserDataBase
             {
                 Deck_Heroes[0].SetLeader(true);
             }
-
+            CalcTeamSynergy();
             Is_Update_Data = true;
         }
     }
@@ -152,7 +156,6 @@ public class UserDeckData : UserDataBase
         var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.GetPlayerCharacterID() && x.Player_Character_Num == hero.Player_Character_Num);
         if (found != null)
         {
-
             Deck_Heroes.Remove(found);
             if (found.Is_Leader)
             {
@@ -161,6 +164,7 @@ public class UserDeckData : UserDataBase
                     Deck_Heroes[0].SetLeader(true);
                 }
             }
+            CalcTeamSynergy();
             Is_Update_Data = true;
         }
     }
@@ -226,6 +230,39 @@ public class UserDeckData : UserDataBase
             Is_Update_Data = true;
         }
         Is_Selected = select;
+    }
+
+    public List<Attribute_Synergy_Data> GetTeamSynergyList()
+    {
+        return Team_Synergy_Data_List;
+    }
+
+    /// <summary>
+    /// 덱에 캐릭터 추가/삭제시마다 팀 시너지 업데이트
+    /// </summary>
+    void CalcTeamSynergy()
+    {
+        var m = MasterDataManager.Instance;
+        Team_Synergy_Data_List.Clear();
+        foreach (ATTRIBUTE_TYPE attr in Enum.GetValues(typeof(ATTRIBUTE_TYPE)))
+        {
+            if (attr == ATTRIBUTE_TYPE.NONE)
+            {
+                continue;
+            }
+            //  같은 속성을 가진 캐릭터 리스트 반환
+            var same_attr_list = Deck_Heroes.FindAll(x => x.GetUserHeroData().GetAttributeType() == attr);
+            //  같은 속성을 가진 캐릭터가 2개 이상일 경우, 시너지 효과 있음
+            if (same_attr_list.Count > 1)
+            {
+                var synergy = m.Get_AttributeSynergyData(attr, same_attr_list.Count);
+                if (synergy != null)
+                {
+                    //  시너지 등록
+                    Team_Synergy_Data_List.Add(synergy);
+                }
+            }
+        }
     }
 
     public override JsonData Serialized()
@@ -319,6 +356,7 @@ public class UserDeckData : UserDataBase
         }
 
         InitUpdateData();
+        CalcTeamSynergy();
 
         return true;
     }

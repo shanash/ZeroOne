@@ -50,6 +50,7 @@ public class UserBossDungeonDataManager : ManagerBase
                 }
             }
         }
+        Save();
     }
 
     /// <summary>
@@ -148,12 +149,16 @@ public class UserBossDungeonDataManager : ManagerBase
     }
 
     /// <summary>
-    /// 보스 던전 오픈 여부 
+    /// 보스 던전 오픈 여부 <br/>
+    /// 각 보스별 오픈 조건이 다른데, 각각의 오픈 조건이 완료되었는지 체크한 후<br/>
+    /// 조건이 충족되었을 경우에 오픈 반환<br/>
+    /// 지금은 조건이 없기 때문에 M2까지는 강제 오픈. M2 이후 수정 필요
     /// </summary>
     /// <param name="boss_id"></param>
     /// <returns></returns>
     public bool IsEnableOpenBossDungeon(int boss_id)
     {
+        var boss = MasterDataManager.Instance.Get_BossData(boss_id);
         return true;
     }
 

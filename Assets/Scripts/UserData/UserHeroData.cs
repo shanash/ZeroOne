@@ -566,7 +566,14 @@ public class UserHeroData : UserDataBase
         Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id, grade);
         Star_Data = m.Get_StarUpgradeData(grade);
     }
-
+    public ATTRIBUTE_TYPE GetAttributeType()
+    {
+        if (Hero_Data != null)
+        {
+            return Hero_Data.attribute_type;
+        }
+        return ATTRIBUTE_TYPE.NONE;
+    }
     /// <summary>
     /// 성급 진화 시뮬레이션.
     /// 필요 캐릭터 조각과 필요 골드를 알려준다.
