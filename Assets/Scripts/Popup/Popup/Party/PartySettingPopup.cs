@@ -271,7 +271,7 @@ public class PartySettingPopup : PopupBase
             board.SetBlackBoard(BLACK_BOARD_KEY.DUNGEON_ID, Dungeon_ID);
             board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
 
-            SceneManager.LoadScene("battle");
+            SCManager.I.ChangeScene(SceneName.battle);
         }
     }
 

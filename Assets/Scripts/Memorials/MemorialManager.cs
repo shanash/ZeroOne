@@ -45,6 +45,6 @@ public class MemorialManager : MonoBehaviour
 
     public void OnClickBack()
     {
-        SceneManager.LoadScene("home");
+        SCManager.Instance.ChangeScene(SceneName.home);
     }
 }

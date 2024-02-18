@@ -10,6 +10,8 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
     MEMORIAL_TYPE Type = MEMORIAL_TYPE.NONE;
 
+    public bool Is_Init => (Stage != null && Actor != null);
+
     Producer() { }
 
     bool Initialize(int memorial_id, MEMORIAL_TYPE type, Transform parent)

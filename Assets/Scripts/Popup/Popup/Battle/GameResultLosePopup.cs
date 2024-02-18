@@ -278,7 +278,7 @@ public class GameResultLosePopup : PopupBase
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
 
-        SceneManager.LoadScene("home");
+        SCManager.I.ChangeScene(SceneName.home);
     }
 
     public override void Despawned()

@@ -434,8 +434,8 @@ public class GameResultWinPopup : PopupBase
         {
             board.SetBlackBoard(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, next_stage.stage_id);
         }
-        
-        SceneManager.LoadScene("home");
+
+        SCManager.I.ChangeScene(SceneName.home);
     }
     public void OnClickGameRewardHome()
     {
@@ -444,9 +444,8 @@ public class GameResultWinPopup : PopupBase
         var board = BlackBoard.Instance;
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
-        
-        SceneManager.LoadScene("home");
 
+        SCManager.I.ChangeScene(SceneName.home);
     }
     /// <summary>
     /// 결과 정보를 숨기고 보상 컨테이너를 보여주기 위해 요청

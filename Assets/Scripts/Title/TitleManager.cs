@@ -1,8 +1,6 @@
 using FluffyDuck.Util;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TitleManager : MonoBehaviour
+public class TitleManager : SceneControllerBase
 {
     bool Is_Enable_Touch;
 
@@ -11,20 +9,21 @@ public class TitleManager : MonoBehaviour
         Is_Enable_Touch = true;
     }
 
-    public void OnClickTouchEvent()
+    public override void OnClick(UIButtonBase button)
     {
         if (Is_Enable_Touch)
         {
-            SceneManager.LoadScene(GameDefine.SCENE_LOAD);
-        }
+            //base.OnClick(button_name);
 
-    }
-    public void OnClickTitleMenu()
-    {
-        if (Is_Enable_Touch)
-        {
-            CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
+            switch (button.name)
+            {
+                case "Background_Touch_Btn":
+                    SCManager.Instance.ChangeScene(SceneName.load);
+                    break;
+                case "MenuBtn":
+                    CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
+                    break;
+            }
         }
     }
-
 }

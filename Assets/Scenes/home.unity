@@ -522,8 +522,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickCharacterList
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 49705310}
   - component: {fileID: 49705309}
   m_Layer: 5
-  m_Name: MemorialBtn
+  m_Name: UIShowBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,8 +622,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickUIShow
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -780,8 +780,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickShop
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1606,8 +1606,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickDeck
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2525,7 +2525,7 @@ GameObject:
   - component: {fileID: 441222513}
   - component: {fileID: 441222514}
   m_Layer: 5
-  m_Name: RoomBtn
+  m_Name: HouseBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2640,8 +2640,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickHouse
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2943,8 +2943,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickQuest
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4438,7 +4438,7 @@ GameObject:
   - component: {fileID: 811458986}
   - component: {fileID: 811458988}
   m_Layer: 5
-  m_Name: RightArrowBtn
+  m_Name: RightMemorialBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4510,7 +4510,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 811458984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 46430f7c7320cf041ba01055126bd78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -4542,13 +4542,15 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 811458986}
-  m_OnClick:
+  Scale_Rect: {fileID: 0}
+  Press_Scale: {x: 0, y: 0}
+  OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnclickRightMemorial
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5536,8 +5538,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickSearch
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6186,7 +6188,7 @@ GameObject:
   - component: {fileID: 1479429058}
   - component: {fileID: 1479429060}
   m_Layer: 5
-  m_Name: LeftArrowBtn
+  m_Name: LeftMemorialBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6258,7 +6260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1479429056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 46430f7c7320cf041ba01055126bd78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -6268,7 +6270,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -6290,13 +6292,15 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1479429058}
-  m_OnClick:
+  Scale_Rect: {fileID: 0}
+  Press_Scale: {x: 0, y: 0}
+  OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickLeftMemorial
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8375,8 +8379,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickChangeCharacter
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8622,8 +8626,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickPlay
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8762,7 +8766,7 @@ GameObject:
   - component: {fileID: 2130796009}
   - component: {fileID: 2130796010}
   m_Layer: 5
-  m_Name: MemorialBtn
+  m_Name: UIHideBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8857,8 +8861,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129971342}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: OnClickUIHide
-        m_Mode: 1
+        m_MethodName: OnClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
