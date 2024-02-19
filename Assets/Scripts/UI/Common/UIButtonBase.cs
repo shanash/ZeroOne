@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -6,13 +7,13 @@ using UnityEngine.UI;
 public class UIButtonBase : Selectable, IPointerClickHandler
 {
     [SerializeField, Tooltip("Scaling RectTransform")]
-    protected RectTransform Scale_Rect;
+    protected RectTransform Scale_Rect = null;
 
     [SerializeField, Tooltip("Press Scale")]
-    protected Vector2 Press_Scale;
+    protected Vector2 Press_Scale = default;
 
     [SerializeField, Tooltip("OnClick")]
-    protected UnityEvent OnClick = new UnityEvent();
+    protected UIButtonEvent OnClick = new UIButtonEvent();
 
 
     public void OnPointerClick(PointerEventData eventData)
@@ -21,7 +22,7 @@ public class UIButtonBase : Selectable, IPointerClickHandler
         {
             return;
         }
-        OnClick?.Invoke();
+        OnClick?.Invoke(this);
     }
 
     public override void OnPointerDown(PointerEventData eventData)
@@ -55,5 +56,6 @@ public class UIButtonBase : Selectable, IPointerClickHandler
         OnClick.RemoveAllListeners();
     }
 
-
+    [Serializable]
+    public class UIButtonEvent : UnityEvent<UIButtonBase> { }
 }

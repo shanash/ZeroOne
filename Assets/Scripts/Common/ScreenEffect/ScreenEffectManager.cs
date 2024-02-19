@@ -2,6 +2,7 @@ using UnityEngine;
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 public enum ScreenEffect
 {
@@ -24,7 +25,7 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
     Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> Sequence_Actions;
     bool DoingSequenceActions;
 
-    protected override bool ResetInstanceOnChangeScene => true;
+    protected override bool ResetInstanceOnChangeScene => false;
     protected override bool Is_DontDestroyOnLoad => true;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -44,6 +45,12 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
     {
         AddSequenceAction(effect, cb, duration, pre_delay, post_delay, ease);
         StartSequenceActions();
+    }
+
+    public async UniTask StartActionAsync(ScreenEffect effect, Action cb = null, float duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
+    {
+        AddSequenceAction(effect, cb, duration, pre_delay, post_delay, ease);
+        await StartSequenceActionsAsync();
     }
 
     public void AddSequenceAction(ScreenEffect effect, Action cb = null, float duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
@@ -77,6 +84,16 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
         StartSequenceRemainActions(Sequence_Actions);
     }
 
+    public async UniTask StartSequenceActionsAsync()
+    {
+        if (DoingSequenceActions)
+        {
+            return;
+        }
+        DoingSequenceActions = true;
+        await StartSequenceActionsAsync(Sequence_Actions);
+    }
+
     /// <summary>
     /// 재귀호출시켜서 큐에 남아있는 액션이 없을때까지 Ease액션을 실행시킨다
     /// </summary>
@@ -96,6 +113,31 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
         {
             DoingSequenceActions = false;
         }
+    }
+
+    /// <summary>
+    /// 재귀호출시켜서 큐에 남아있는 액션이 없을때까지 Ease액션을 실행시킨다
+    /// </summary>
+    /// <param name="actions"></param>
+    async UniTask StartSequenceActionsAsync(Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> actions)
+    {
+        (InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease) action = default;
+
+        bool is_continued = false;
+
+        while (actions.TryDequeue(out action))
+        {
+            StartInnerAction(action.action_type, action.param, () => {
+                action.cb?.Invoke();
+                is_continued = true;
+            }, action.duration, action.pre_delay, action.post_delay, action.ease);
+
+            await UniTask.WaitUntil(() => is_continued);
+
+            is_continued = false;
+        }
+
+        DoingSequenceActions = false;
     }
 
     /// <summary>

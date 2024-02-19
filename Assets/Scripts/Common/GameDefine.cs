@@ -94,10 +94,6 @@ public class GameDefine : MonoBehaviour
 {
     public static readonly bool USE_DEBUG_MODE = true;
 
-    public static readonly string SCENE_TITLE = "title";
-    public static readonly string SCENE_LOAD = "load";
-    public static readonly string SCENE_HOME = "home";
-
     /// <summary>
     /// 년월일시 포멧
     /// </summary>

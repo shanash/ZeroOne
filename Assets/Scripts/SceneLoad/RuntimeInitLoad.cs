@@ -7,8 +7,7 @@ public static class RuntimeInitLoad
     static void BeforeSetup()
     {
         SceneLoad.Start_Scene_Name = SceneManager.GetActiveScene().name;
-        SceneManager.LoadSceneAsync(GameDefine.SCENE_TITLE);
-
+        SceneManager.LoadSceneAsync(SceneName.title.ToString());
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

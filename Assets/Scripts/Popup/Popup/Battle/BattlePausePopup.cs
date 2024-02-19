@@ -25,6 +25,6 @@ public class BattlePausePopup : PopupBase
     /// </summary>
     public void OnClickExit()
     {
-        SceneManager.LoadScene("home");
+        SCManager.Instance.ChangeScene(SceneName.home);
     }
 }

@@ -2,9 +2,8 @@ using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyDuck.UI;
-using static ConstString;
 
-public partial class BattleManager_V2 : MonoBehaviour
+public partial class BattleManager_V2 : SceneControllerBase
 {
     [SerializeField, Tooltip("UI Manager")]
     protected BattleUIManager_V2 UI_Mng;

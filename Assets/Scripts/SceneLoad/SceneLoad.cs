@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Addressable 예시를 위해 만든 에셋 다운로드 스크립트
 /// </summary>
-public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
+public class SceneLoad : SceneControllerBase
 {
     AddressableContentDownloader _Downloader = new AddressableContentDownloader();
 
@@ -18,8 +18,6 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
     TMP_Text _UI_Text = null;
     [SerializeField]
     Slider _UI_Progress = null;
-
-    protected override bool _Is_DontDestroyOnLoad { get { return false; } }
 
     public static string Start_Scene_Name;
 
@@ -92,19 +90,7 @@ public class SceneLoad : MonoBehaviourSingleton<SceneLoad>
         }
 #endif
 
-        var op = SceneManager.LoadSceneAsync(first_scene, LoadSceneMode.Single);
-        op.allowSceneActivation = false;
-        float timer = 0.0f;
-        while (!op.isDone)
-        {
-            await Task.Yield();
-            timer += Time.deltaTime;
-            if (op.progress >= 0.9f)
-            {
-                op.allowSceneActivation = true;
-                break;
-            }
-        }
+        SCManager.Instance.ChangeScene(SceneName.home);
     }
 }
 

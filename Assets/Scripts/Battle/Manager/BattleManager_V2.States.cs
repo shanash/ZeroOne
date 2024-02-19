@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public partial class BattleManager_V2 : MonoBehaviour
+public partial class BattleManager_V2 : SceneControllerBase
 {
     protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 

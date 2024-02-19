@@ -1,10 +1,11 @@
+using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class LobbyManager : MonoBehaviour
+public class LobbyManager : SceneControllerBase
 {
     [SerializeField, Tooltip("Lobby Anim")]
     Animator Lobby_Anim;
@@ -15,9 +16,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField, Tooltip("Fade in Box")]
     RectTransform Fade_In_Box;
 
-    Producer pd;
+    Producer pd = null;
 
-    private void Start()
+    protected override void Initialize()
     {
         var audio = AudioManager.Instance;
 
@@ -27,12 +28,18 @@ public class LobbyManager : MonoBehaviour
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
         var pmng = PopupManager.Instance;
-        pmng.SetRootOnEnter(LobbyRootOnEnter);
-        pmng.SetRootOnExit(LobbyRootOnExit);
+        pmng.SetRootOnEnter(() => pd.Resume());
+        pmng.SetRootOnExit(() => pd.Pause());
 
         pd = Factory.Instantiate<Producer>(1010051, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
 
+        _ = InitializeAsync();
+    }
+
+    async UniTask InitializeAsync()
+    {
+        await UniTask.WaitUntil(() => pd.Is_Init);
 
         var board = BlackBoard.Instance;
         int open_dungeon_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, 0);
@@ -42,125 +49,68 @@ public class LobbyManager : MonoBehaviour
             {
                 popup.ShowPopup();
             });
+        }
 
+        SCManager.Instance.SetCurrent(this);
+    }
+
+    public override void OnClick(UIButtonBase button)
+    {
+        base.OnClick(button);
+
+        switch (button.name)
+        {
+            case "ChageCharacterBtn":
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+                {
+                    popup.ShowPopup();
+                });
+                break;
+            case "CharacterBtn":
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                {
+                    popup.ShowPopup();
+                });
+                break;
+            case "LeftMemorialBtn":
+                CommonUtils.ShowToast("Left 메모리얼", TOAST_BOX_LENGTH.SHORT);
+                break;
+            case "RightMemorialBtn":
+                CommonUtils.ShowToast("Right 메모리얼", TOAST_BOX_LENGTH.SHORT);
+                break;
+            case "PlayBtn":
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                {
+                    popup.ShowPopup();
+                });
+                break;
+            case "UIHideBtn":
+                Lobby_Anim.SetTrigger("fadeout");
+                break;
+            case "UIShowBtn":
+                Lobby_Anim.SetTrigger("fadein");
+                break;
+            case "PartyBtn":
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+                {
+                    popup.ShowPopup(GAME_TYPE.NONE, 0);
+                });
+                break;
+            case "HouseBtn":
+            case "MissionBtn":
+            case "ShopBtn":
+            case "SearchBtn":
+                ShowNotYetNoti();
+                break;
         }
     }
 
-    /// <summary>
-    /// 로비 화면위의 모든 팝업이 사라졌을때 호출되는 함수
-    /// </summary>
-    void LobbyRootOnEnter()
+    void ShowNotYetNoti()
     {
-        Debug.Log("LobbyRootOnEnter");
-        pd.Resume();
-    }
-
-    /// <summary>
-    /// 로비 화면을 가리는 팝업이 생성되었을때 호출되는 함수
-    /// </summary>
-    void LobbyRootOnExit()
-    {
-        Debug.Log("LobbyRootOnExit");
-        pd.Pause();
-    }
-
-    public void OnClickChangeCharacter()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-        {
-            popup.ShowPopup();
-        });
-    }
-
-    public void OnClickUIHide()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
-        Lobby_Anim.SetTrigger("fadeout");
-    }
-
-    public void OnClickUIShow()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
-        Lobby_Anim.SetTrigger("fadein");
-    }
-
-    public void OnClickCharacterList()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
-        {
-            popup.ShowPopup();
-        });
-    }
-
-    public void OnClickDeck()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/PartySettingPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-        {
-            popup.ShowPopup(GAME_TYPE.NONE, 0);
-        });
-
-    }
-
-    public void OnClickHouse()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
         });
-    }
-
-    public void OnClickSearch()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
-        {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
-        });
-    }
-    public void OnClickShop()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
-        {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
-        });
-    }
-
-    public void OnClickQuest()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
-        {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
-        });
-    }
-
-    public void OnClickPlay()
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
-        {
-            popup.ShowPopup();
-        });
-    }
-
-    public void OnClickLeftMemorial()
-    {
-        CommonUtils.ShowToast("Left 메모리얼", TOAST_BOX_LENGTH.SHORT);
-    }
-
-    public void OnclickRightMemorial()
-    {
-        CommonUtils.ShowToast("Right 메모리얼", TOAST_BOX_LENGTH.SHORT);
     }
 
     #region UI Animation Events
