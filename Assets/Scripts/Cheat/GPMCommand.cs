@@ -1,5 +1,6 @@
 using FluffyDuck.Util;
 using Gpm.LogViewer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -147,6 +148,49 @@ public class GPMCommand : MonoBehaviour
                     }
                     
                 }
+            }
+        }
+        else if (keys[0].Equals("hero"))
+        {
+            //  using => hero hero_id
+            string show_msg = string.Empty;
+            bool notice_format = true;
+            do
+            {
+                if (keys.Length != 2)
+                {
+                    show_msg += "입력값이 형식에 맞지 않습니다.\n";
+                    break;
+                }
+
+                if (!int.TryParse(keys[1], out int hero_id))
+                {
+                    show_msg += "입력한 캐릭터 ID가 숫자가 아닙니다.\n";
+                    break;
+                }
+
+                try
+                {
+                    var hero_mng = GameData.I.GetUserHeroDataManager();
+                    var hero = hero_mng.AddUserHeroData(hero_id);
+                    hero_mng.AddUserHeroSkillData(hero);
+
+                    hero_mng.Save();
+                    GameData.I.GetUserHeroSkillDataManager().Save();
+                }
+                catch (Exception ex)
+                {
+                    show_msg += $"다음 예외사항이 발생했습니다. {ex.ToString()}";
+                    notice_format = false;
+                    break;
+                }
+
+            } while (false);
+
+            if (!show_msg.Equals(string.Empty))
+            {
+                show_msg += notice_format ? "Usage => [hero] [hero_id]" : "";
+                CommonUtils.ShowToast(show_msg, TOAST_BOX_LENGTH.SHORT);
             }
         }
     }

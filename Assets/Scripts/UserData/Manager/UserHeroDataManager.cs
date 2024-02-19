@@ -32,12 +32,11 @@ public class UserHeroDataManager : ManagerBase
     {
         var m = MasterDataManager.Instance;
         var pc_data_list = m.Get_PlayerCharacterDataListByFirstOpen();
-        int hero_data_num = 1;
         int cnt = pc_data_list.Count;
         for (int i = 0; i < cnt; i++)
         {
             var pdata = pc_data_list[i];
-            var hero = AddUserHeroData(pdata.player_character_id, hero_data_num++);
+            var hero = AddUserHeroData(pdata.player_character_id);
             AddUserHeroSkillData(hero);
         }
 
@@ -77,8 +76,12 @@ public class UserHeroDataManager : ManagerBase
         return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id && x.Player_Character_Num == hero_data_num);
     }
 
+    public UserHeroData FindUserHeroData(int hero_data_id)
+    {
+        return User_Hero_Data_List.Find(x => x.GetPlayerCharacterID() == hero_data_id);
+    }
 
-    void AddUserHeroSkillData(UserHeroData hero)
+    public void AddUserHeroSkillData(UserHeroData hero)
     {
         var skill_mng = GameData.Instance.GetUserHeroSkillDataManager();
         if (skill_mng != null)
@@ -97,17 +100,17 @@ public class UserHeroDataManager : ManagerBase
     }
 
     /// <summary>
-    /// 사용자 캐릭터 데이터 가져오기
+    /// 사용자 캐릭터 데이터 추가하기
     /// </summary>
     /// <param name="hero_data_id"></param>
     /// <param name="hero_data_num"></param>
     /// <returns></returns>
-    public UserHeroData AddUserHeroData(int hero_data_id, int hero_data_num)
+    public UserHeroData AddUserHeroData(int hero_data_id)
     {
-        var hero = FindUserHeroData(hero_data_id, hero_data_num);
+        var hero = FindUserHeroData(hero_data_id);
         if (hero == null)
         {
-            hero = new UserHeroData(hero_data_id, hero_data_num);
+            hero = new UserHeroData(hero_data_id, User_Hero_Data_List.Count + 1);
             User_Hero_Data_List.Add(hero);
             Is_Update_Data = true;
         }
@@ -170,7 +173,7 @@ public class UserHeroDataManager : ManagerBase
                         }
                         else
                         {
-                            item = AddUserHeroData(player_character_id, player_character_num);
+                            item = AddUserHeroData(player_character_id);
                             item.Deserialized(jdata);
                             AddUserHeroSkillData(item);
                         }
