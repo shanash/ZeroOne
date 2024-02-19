@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZeroOne.Input;
 
 public class Background : MonoBehaviour, ICursorInteractable, FluffyDuck.Util.MonoFactory.IProduct
 {

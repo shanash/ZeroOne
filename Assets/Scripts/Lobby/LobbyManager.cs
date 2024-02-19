@@ -3,6 +3,7 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
+using ZeroOne.Input;
 
 
 public class LobbyManager : SceneControllerBase

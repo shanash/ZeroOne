@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ZeroOne.Input;
 
 public class TouchCanvas : MonoBehaviour
 {

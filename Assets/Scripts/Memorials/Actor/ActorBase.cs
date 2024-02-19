@@ -1,12 +1,10 @@
-using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
 using UnityEngine;
+using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
 {

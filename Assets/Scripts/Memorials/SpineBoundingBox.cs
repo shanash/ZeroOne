@@ -3,6 +3,7 @@ using Spine;
 using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
+using ZeroOne.Input;
 
 public enum TOUCH_BODY_DIRECTION
 {
