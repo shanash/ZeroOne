@@ -27,7 +27,6 @@ namespace FluffyDuck.UI
             base.StartMove(mtype, cb);
         }
 
-
         protected override void UpdateEase(EasingFunction.Function func, float weight)
         {
             float ev = func(0.0f, 1.0f, weight);

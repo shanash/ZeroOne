@@ -50,6 +50,32 @@ public class EffectFactory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 모든 이펙트 삭제<br/>
+    /// 지속성 효과 이펙트는 삭제하지 않는다.
+    /// </summary>
+    public void ClearAllEffects()
+    {
+        List<EffectBase> remove_effects = new List<EffectBase>();
+        int cnt = Used_Effect_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var effect = Used_Effect_List[i];
+            if (effect is SkillEffect_Duration_Base)
+            {
+                continue;
+            }
+            remove_effects.Add(effect);
+        }
+
+        for (int i = 0; i < remove_effects.Count; i++)
+        {
+            UnusedEffectBase(remove_effects[i]);
+        }
+
+    }
+
+
     public Transform GetLeftCenter() { return Left_Center; }
     public Transform GetRightCenter() { return Right_Center; }
 

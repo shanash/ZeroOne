@@ -198,6 +198,17 @@ public class UserDeckData : UserDataBase
         return Deck_Heroes.Exists(x => x.Is_Leader);
     }
 
+    /// <summary>
+    /// 팀 시너지 체크.<br/>
+    /// 해당 속성의 시너지가 활성화 되어 있는지 체크
+    /// </summary>
+    /// <param name="atype"></param>
+    /// <returns></returns>
+    public bool IsExistTeamSynergyAttribute(ATTRIBUTE_TYPE atype)
+    {
+        return Team_Synergy_Data_List.Exists(x => x.attribute_type == atype);
+    }
+
     public List<UserHeroDeckMountData> GetDeckHeroes()
     {
         //  사거리에 따라 정렬(사거리가 가까운 영웅부터)

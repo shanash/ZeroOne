@@ -16,8 +16,8 @@ public class Attribute_Icon_Data : System.IDisposable
 	///	<summary>
 	///	이름
 	///	</summary>
-	public string name_kr => _name_kr;
-	string _name_kr;
+	public string name_id => _name_id;
+	string _name_id;
 
 	///	<summary>
 	///	아이콘
@@ -30,7 +30,7 @@ public class Attribute_Icon_Data : System.IDisposable
 	public Attribute_Icon_Data(Raw_Attribute_Icon_Data raw_data)
 	{
 		_attribute_type = raw_data.attribute_type;
-		_name_kr = raw_data.name_kr;
+		_name_id = raw_data.name_id;
 		_icon = raw_data.icon;
 	}
 
@@ -54,7 +54,7 @@ public class Attribute_Icon_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
-		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
+		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		return sb.ToString();
 	}

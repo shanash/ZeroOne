@@ -27,6 +27,12 @@ public class Attribute_Synergy_Data : System.IDisposable
 	STAT_MULTIPLE_TYPE _multiple_type;
 
 	///	<summary>
+	///	시너지 효과 설명
+	///	</summary>
+	public string attribute_info => _attribute_info;
+	string _attribute_info;
+
+	///	<summary>
 	///	시너지 추가 가중 비율
 	///	</summary>
 	public double add_damage_per => _add_damage_per;
@@ -39,6 +45,7 @@ public class Attribute_Synergy_Data : System.IDisposable
 		_attribute_type = raw_data.attribute_type;
 		_same_attribute_count = raw_data.same_attribute_count;
 		_multiple_type = raw_data.multiple_type;
+		_attribute_info = raw_data.attribute_info;
 		_add_damage_per = raw_data.add_damage_per;
 	}
 
@@ -64,6 +71,7 @@ public class Attribute_Synergy_Data : System.IDisposable
 		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
 		sb.AppendFormat("[same_attribute_count] = <color=yellow>{0}</color>", same_attribute_count).AppendLine();
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
+		sb.AppendFormat("[attribute_info] = <color=yellow>{0}</color>", attribute_info).AppendLine();
 		sb.AppendFormat("[add_damage_per] = <color=yellow>{0}</color>", add_damage_per).AppendLine();
 		return sb.ToString();
 	}

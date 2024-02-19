@@ -12,7 +12,7 @@ public class Heal_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Typewriter")]
     TypewriterByCharacter Writer;
 
-    readonly float VELOCITY = 1.5f;
+    readonly float VELOCITY = 2f;
 
     string Show_Text = string.Empty;
     public override void StartParticle(float duration, bool loop = false)

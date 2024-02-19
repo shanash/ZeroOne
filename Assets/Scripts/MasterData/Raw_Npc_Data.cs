@@ -12,6 +12,7 @@ public class Raw_Npc_Data : System.IDisposable
 	public int npc_battle_id {get; set;}
 	public string prefab_path {get; set;}
 	public string icon_path {get; set;}
+	public double scale {get; set;}
 
 	private bool disposed = false;
 

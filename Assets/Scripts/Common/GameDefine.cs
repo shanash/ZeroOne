@@ -8,11 +8,14 @@ using UnityEngine;
 public enum GAME_TYPE
 {
     NONE = 0,
-    EDITOR_SKILL_PREVIEW_MODE,          //  에디터에서 스킬 프리뷰 모드
-    EDITOR_SKILL_EDIT_MODE,             //  에디터에서 스킬 에디트 모드(아직 미개발)
 
     STORY_MODE,                         //  스토리 모드
     BOSS_DUNGEON_MODE,                  //  보스 던전 모드
+
+    //  editor mode
+    EDITOR_SKILL_PREVIEW_MODE = 101,          //  에디터에서 스킬 프리뷰 모드
+    EDITOR_SKILL_EDIT_MODE = 102,             //  에디터에서 스킬 에디트 모드(아직 미개발)
+
 }
 /// <summary>
 /// 전투 배속 타입 <b>(주석에서 사용할 태그 테스트)</b><br/>
@@ -254,6 +257,7 @@ public class GameDefine : MonoBehaviour
         }
         else
         {
+            find_string = str_id;
             Debug.Assert(false);
         }
 

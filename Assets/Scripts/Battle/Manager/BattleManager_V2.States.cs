@@ -126,6 +126,8 @@ public partial class BattleManager_V2 : MonoBehaviour
         FSM.AddTransition(new GameStateReadyV2());
         FSM.AddTransition(new GameStateWaveInfoV2());
         FSM.AddTransition(new GameStateSpawnV2());
+        FSM.AddTransition(new GameStateMoveInV2());
+        FSM.AddTransition(new GameStatePlayReadyV2());
         FSM.AddTransition(new GameStatePlayingV2());
         FSM.AddTransition(new GameStateNextWaveV2());
         FSM.AddTransition(new GameStateWaveRunV2());
@@ -220,6 +222,49 @@ public partial class BattleManager_V2 : MonoBehaviour
     public virtual void GameStateWaveInfo() { }
     public virtual void GameStateWaveInfoExit() { }
 
+    public virtual void GameStateMoveInBegin() 
+    {
+        TeamMembersChangeState(UNIT_STATES.MOVE_IN);
+    }
+    public virtual void GameStateMoveIn() 
+    {
+        bool is_all_idle = true;
+        for (int i = 0; i < Used_Team_List.Count; i++)
+        {
+            if (!Used_Team_List[i].IsAllMembersState(UNIT_STATES.IDLE))
+            {
+                is_all_idle = false;
+                break;
+            }
+        }
+
+        if (is_all_idle)
+        {
+            ChangeState(GAME_STATES.PLAY_READY);
+        }
+    }
+    public virtual void GameStateMoveInExit() { }
+
+    float Play_Ready_Delta = 0;
+    public virtual void GameStatePlayReadyBegin() 
+    {
+        if (IsPrevPause())
+        {
+            return;
+        }
+        Play_Ready_Delta = 0.3f;
+    }
+    public virtual void GameStatePlayReady() 
+    {
+        Play_Ready_Delta-= Time.deltaTime;
+        if (Play_Ready_Delta < 0f)
+        {
+            ChangeState(GAME_STATES.PLAYING);
+        }
+    }
+    public virtual void GameStatePlayReadyExit() { }
+
+
 
     public virtual void GameStatePlayingBegin()
     {
@@ -229,7 +274,7 @@ public partial class BattleManager_V2 : MonoBehaviour
         }
 
         UI_Mng.UpdateWaveCount();
-        TeamMembersChangeState(UNIT_STATES.MOVE_IN);
+        TeamMembersChangeState(UNIT_STATES.ATTACK_READY_1);
     }
     public virtual void GameStatePlaying()
     {
@@ -265,12 +310,16 @@ public partial class BattleManager_V2 : MonoBehaviour
         {
             return;
         }
+        //  지속성 효과를 제외한 다른 모든 이펙트들을 제거해야 하는데...
+        GetEffectFactory().ClearAllEffects();
+
+
         if (Dungeon_Data.NextWave())
         {
             var my_team = FindTeamManager(TEAM_TYPE.LEFT);
             if (my_team != null)
             {
-                my_team.ChangeStateTeamMembers(UNIT_STATES.IDLE);
+                my_team.ChangeStateTeamMembers(UNIT_STATES.SPAWN);
                 my_team.LeftTeamResetPosition();
             }
 
@@ -282,7 +331,7 @@ public partial class BattleManager_V2 : MonoBehaviour
             
             Fade_In_Out_Layer.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, () =>
             {
-                ChangeState(GAME_STATES.PLAYING);
+                ChangeState(GAME_STATES.MOVE_IN);
             });
         }
         else

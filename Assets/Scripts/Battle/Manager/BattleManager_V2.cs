@@ -129,7 +129,7 @@ public partial class BattleManager_V2 : MonoBehaviour
 
     protected void WaveInfoCloseCallback()
     {
-        ChangeState(GAME_STATES.PLAYING);
+        ChangeState(GAME_STATES.MOVE_IN);
     }
 
     private void OnDestroy()

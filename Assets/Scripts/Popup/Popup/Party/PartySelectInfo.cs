@@ -30,7 +30,12 @@ public class PartySelectInfo : MonoBehaviour
     [SerializeField, Tooltip("Role Name")]
     TMP_Text Role_Name;
 
+    [SerializeField, Tooltip("Attribute Icon")]
+    Image Attribute_Icon;
+
     //  todo [skill list]
+    [SerializeField, Tooltip("Skill List")]
+    List<PartySelectSkillNode> Skill_List;
 
     UserHeroData User_Data;
 
@@ -38,6 +43,13 @@ public class PartySelectInfo : MonoBehaviour
     {
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
         UpdateSelectInfo();
+
+        int cnt = Skill_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var skill_slot = Skill_List[i];
+            skill_slot.SetPlayerCharacterID(pc_id, pc_num);
+        }
     }
 
     void UpdateSelectInfo()
@@ -88,6 +100,13 @@ public class PartySelectInfo : MonoBehaviour
             Role_Icon.sprite = spr;
         });
         Role_Name.text = role_data.name_kr;
+
+        //  attribute icon
+        var attr_data = m.Get_AttributeIconData(User_Data.GetAttributeType());
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(attr_data.icon, (spr) =>
+        {
+            Attribute_Icon.sprite = spr;
+        });
     }
     void UpdateEmptyInfo()
     {

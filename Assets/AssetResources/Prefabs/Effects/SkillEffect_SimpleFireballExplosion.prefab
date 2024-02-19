@@ -44156,7 +44156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6501935335356116510}
@@ -48977,7 +48977,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 2866140621573161625}
-  Skel_Effect: {fileID: 0}
 --- !u!114 &-877709004412769913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49015,6 +49014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e030fa471709dd4fb5a29ce6fb67200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Is_Show_All_Properties: 0
   Effect_Type: 3
   Effect_Duration: 1
   Is_Loop: 0
@@ -49022,13 +49022,15 @@ MonoBehaviour:
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
   Curve: {fileID: 0}
+  Start_Curve_Dist: 0
+  End_Curve_Dist: 0
   Parabola: {fileID: 0}
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
-  Following_Target: {fileID: 0}
 --- !u!1 &7231498398912393159
 GameObject:
   m_ObjectHideFlags: 0

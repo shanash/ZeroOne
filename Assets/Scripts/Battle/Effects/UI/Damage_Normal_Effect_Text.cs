@@ -12,7 +12,7 @@ public class Damage_Normal_Effect_Text : EffectBase
     [SerializeField, Tooltip("Typewriter")]
     TypewriterByCharacter Writer;
 
-    readonly float VELOCITY = 1.5f;
+    readonly float VELOCITY = 2f;
 
     string Show_Text = string.Empty;
 
@@ -35,7 +35,10 @@ public class Damage_Normal_Effect_Text : EffectBase
         ONETIME_EFFECT_TYPE etype = send_data.Onetime.GetOnetimeEffectType();
 
         double dmg = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? Math.Truncate(send_data.Magic_Attack_Point) : Math.Truncate(send_data.Physics_Attack_Point);
-
+        if (dmg <= 0)
+        {
+            bool a = false;
+        }
         string dmg_str = dmg.ToString();
         int cnt = dmg_str.Length;
         var sb = ZString.CreateStringBuilder();

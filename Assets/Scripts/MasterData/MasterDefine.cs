@@ -956,9 +956,9 @@ public enum ATTRIBUTE_TYPE
 	/// <summary>베리타리움</summary>
 	VEGETARIUM = 2,
 	/// <summary>요력</summary>
-	VITALITY = 3,
+	CHARM = 3,
 	/// <summary>마력</summary>
-	MAGIC = 4,
+	MANA = 4,
 }
 
 ///	<summary>

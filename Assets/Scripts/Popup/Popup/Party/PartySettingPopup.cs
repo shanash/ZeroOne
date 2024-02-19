@@ -34,6 +34,14 @@ public class PartySettingPopup : PopupBase
     InfiniteScroll Character_LIst_View;
 
     [Header("Bottom")]
+
+    [SerializeField, Tooltip("Synergy Show Btn")]
+    RectTransform Synergy_Show_Btn;
+
+    [SerializeField, Tooltip("Synergy Icons")]
+    List<Image> Synergy_Icon_List;
+
+
     [SerializeField, Tooltip("Auto Party Btn")]
     UIButtonBase Auto_Party_Btn;
 
@@ -62,6 +70,7 @@ public class PartySettingPopup : PopupBase
         Game_Type = (GAME_TYPE)data[0];
         Dungeon_ID = (int)data[1];
 
+        Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         UpdateFilterType();
         InitPopupUI();
@@ -120,7 +129,7 @@ public class PartySettingPopup : PopupBase
 
             var new_data = new PartyCharacterListData();
             new_data.Click_Hero_Callback = SelectCharacterCallback;
-            new_data.SetGameType(Game_Type);
+            new_data.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
 
             if (start + column_count < hero_count)
             {
@@ -165,7 +174,7 @@ public class PartySettingPopup : PopupBase
         }
 
         var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var user_deck = user_deck_mng.FindSelectedDeck(Game_Type);
+        var user_deck = user_deck_mng.FindSelectedDeck(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         var user_hero_data = hero.GetUserHeroData();
 
         //  선택 캐릭터 정보
@@ -207,7 +216,7 @@ public class PartySettingPopup : PopupBase
             return;
         }
         var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var user_deck = user_deck_mng.FindSelectedDeck(Game_Type);
+        var user_deck = user_deck_mng.FindSelectedDeck(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         user_deck.RemoveHero(slot.GetUserHeroDeckMountData());
 
         Party_Mng.UpdateUserPartySettings();
@@ -241,6 +250,29 @@ public class PartySettingPopup : PopupBase
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
     }
+
+    public void OnClickTeamSynergy()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+
+        var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
+        var user_deck = user_deck_mng.FindSelectedDeck(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
+        if (user_deck != null)
+        {
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/TeamSynergyEffectTooltipPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            {
+                popup.ShowPopup(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type, user_deck.Deck_Number, (Vector2)Synergy_Show_Btn.position);
+            });
+        }
+    }
+    public void OnClickTeamSynergyHelp()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/AttributePowerCompatibilityPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        {
+            popup.ShowPopup();
+        });
+    }
     public void OnClickAutoParty()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -256,7 +288,7 @@ public class PartySettingPopup : PopupBase
         else
         {
             var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-            var user_deck = user_deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+            var user_deck = user_deck_mng.FindSelectedDeck(Game_Type);
             //  덱에 영웅들이 세팅되어 있는지 여부 체크
             if (!user_deck.IsExistHeroInDeck())
             {

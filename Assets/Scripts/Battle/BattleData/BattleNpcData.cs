@@ -47,6 +47,10 @@ public class BattleNpcData : BattleUnitData
     {
         return Data;
     }
+    public override float GetUnitScale()
+    {
+        return (float)Data.scale;
+    }
 
     public override object GetBattleData()
     {

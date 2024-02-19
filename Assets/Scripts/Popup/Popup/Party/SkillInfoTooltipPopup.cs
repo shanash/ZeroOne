@@ -29,8 +29,13 @@ public class SkillInfoTooltipPopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        //Vector2 size = Container.rect.size;
-        //bool a = false;
-        Container.transform.position = Target_Position;
+        float rect_half_width = Container.rect.width * 0.5f;
+        var pos = Target_Position;
+        if (pos.x - rect_half_width < 0f)
+        {
+            pos.x += (rect_half_width - pos.x) + 20f;
+            //pos.x = rect_half_width + 20f;
+        }
+        Container.transform.position = pos;
     }
 }

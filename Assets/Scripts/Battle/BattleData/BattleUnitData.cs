@@ -311,6 +311,13 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public HeroBase_V2 GetHeroBase() { return Hero; }
 
+    /// <summary>
+    /// 유닛 스케일.<br/>
+    /// 유닛 스케일에 맞춰서, 이펙트의 스케일도 조절해야 함
+    /// </summary>
+    /// <returns></returns>
+    public virtual float GetUnitScale() { return 0.35f; }
+
     //public void SetBattleSpeed(float speed) 
     //{
     //    Battle_Speed_Multiple = speed;

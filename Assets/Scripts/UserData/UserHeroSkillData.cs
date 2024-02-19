@@ -116,6 +116,8 @@ public class UserHeroSkillData : UserDataBase
     public int GetLevel() { return Level.Get(); }
     public double GetExp() { return Exp.Get(); }
 
+    public Player_Character_Skill_Group GetSkillGroupData() { return Group_Data; }
+
     /// <summary>
     /// 스킬의 최대 레벨은 영웅의 현재 레벨
     /// </summary>

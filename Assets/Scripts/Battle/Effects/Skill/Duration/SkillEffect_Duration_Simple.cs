@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SkillEffect_Duration_Simple : SkillEffectBase
+public class SkillEffect_Duration_Simple : SkillEffect_Duration_Base
 {
 
     public override void StartParticle(Transform target, float duration, bool loop = false)

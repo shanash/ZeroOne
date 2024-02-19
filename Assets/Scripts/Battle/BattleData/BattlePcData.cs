@@ -71,6 +71,11 @@ public class BattlePcData : BattleUnitData
         return Data;
     }
 
+    public override float GetUnitScale()
+    {
+        return (float)Data.scale;
+    }
+
     public override object GetBattleData()
     {
         return Battle_Data;

@@ -9,9 +9,7 @@ public enum UNIT_STATES
 
     MOVE,                   //  전투 중 적에게 접근하는 상태
 
-
     IDLE,                   //  idle
-    TURN_ON,                //  사용 안함 (V2 기본 작업 완료 후 삭제 예정)
 
     PLAYING,
 

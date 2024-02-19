@@ -50,7 +50,9 @@ public class UserDeckDataManager : ManagerBase
         var deck = User_Deck_List.Find(x => x.Game_Type == game_type && x.Is_Selected);
         if (deck == null)
         {
-            deck = User_Deck_List[0];
+            //deck = User_Deck_List[0];
+            //deck.SetSelect(true);
+            deck = AddDeck(game_type);
             deck.SetSelect(true);
         }
         return deck;

@@ -1,4 +1,6 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,6 +25,10 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
 
     Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
 
+
+    UserHeroData User_Data;
+    UserHeroSkillData Skill_Data;
+
     private void Start()
     {
         switch (Skill_Type)
@@ -41,7 +47,44 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
 
     public void SetPlayerCharacterID(int pc_id, int pc_num)
     {
+        var gd = GameData.Instance;
+        User_Data = gd.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
 
+        var skill_list = User_Data.GetPlayerCharacterBattleData().skill_pattern;
+        int skill_group_id = 0;
+        if (Skill_Type == SKILL_TYPE.SKILL_01)
+        {
+            skill_group_id = skill_list[1];
+        }
+        else if (Skill_Type == SKILL_TYPE.SKILL_02)
+        {
+            skill_group_id = skill_list[2];
+        }
+        else if (Skill_Type == SKILL_TYPE.SPECIAL_SKILL)
+        {
+            skill_group_id = User_Data.GetPlayerCharacterBattleData().special_skill_group_id;
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
+
+        if (skill_group_id != 0)
+        {
+            Skill_Data = gd.GetUserHeroSkillDataManager().FindUserHeroSkillData(pc_id, pc_num, skill_group_id);
+            UpdateSkillCard();
+        }
+    }
+
+    void UpdateSkillCard()
+    {
+        //  icon
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Skill_Data.GetSkillGroupData().icon, (spr) =>
+        {
+            Skill_Icon.sprite = spr;
+        });
+        //  level
+        Skill_Level.text = ZString.Format("Lv.{0}", Skill_Data.GetLevel());
     }
 
 

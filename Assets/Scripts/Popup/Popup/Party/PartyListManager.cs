@@ -28,11 +28,11 @@ public class PartyListManager : MonoBehaviour
             var slot = Party_Slots[i];
             if (i < hero_list.Count)
             {
-                slot.SetUserHeroDeckMountData(hero_list[i]);
+                slot.SetUserHeroDeckMountData(hero_list[i], Game_Type);
             }
             else
             {
-                slot.SetUserHeroDeckMountData(null);
+                slot.SetUserHeroDeckMountData(null, Game_Type);
             }
         }
     }

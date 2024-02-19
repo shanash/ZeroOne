@@ -5,7 +5,7 @@
 public class Raw_Attribute_Icon_Data : System.IDisposable
 {
 	public ATTRIBUTE_TYPE attribute_type {get; set;}
-	public string name_kr {get; set;}
+	public string name_id {get; set;}
 	public string icon {get; set;}
 
 	private bool disposed = false;
@@ -13,7 +13,7 @@ public class Raw_Attribute_Icon_Data : System.IDisposable
 	public Raw_Attribute_Icon_Data()
 	{
 		attribute_type = ATTRIBUTE_TYPE.NONE;
-		name_kr = string.Empty;
+		name_id = string.Empty;
 		icon = string.Empty;
 	}
 

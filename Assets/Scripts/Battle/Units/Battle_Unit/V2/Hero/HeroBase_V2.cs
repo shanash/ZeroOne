@@ -705,7 +705,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Caster = this;
                 dmg.AddTarget(target);
                 dmg.Skill = skill;
-                dmg.Physics_Attack_Point = GetAttackPoint();
+                dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  onetime skill
@@ -799,7 +799,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Caster = this;
                 dmg.AddTargets(Normal_Attack_Target);
                 dmg.Skill = skill;
-                dmg.Physics_Attack_Point = GetAttackPoint();
+                dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
@@ -837,7 +837,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     dmg.Caster = this;
                     dmg.AddTarget(target);
                     dmg.Skill = skill;
-                    dmg.Physics_Attack_Point = GetAttackPoint();
+                    dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
                     dmg.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
@@ -1071,6 +1071,10 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         //  소수점 이하 버리기
         last_damage = Math.Truncate(last_damage);
+        if (last_damage <= 0)
+        {
+            return;
+        }
         if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
         {
             dmg.Physics_Attack_Point = last_damage;
@@ -1172,7 +1176,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             d.effect_path = path;
             d.Target_Position = target;
             d.Data = data;
-            d.Duration = duration + (Battle_Speed_Multiple * 1f);
+            d.Duration = duration + ((Battle_Speed_Multiple - 1) * 1f);
             Effect_Queue_Data_List.Add(d);
         }
     }
@@ -1477,43 +1481,45 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void CalcDurationCountUse(PERSISTENCE_TYPE ptype)
     {
         GetSkillManager().CalcDurationCountUse(ptype);
-        //if (ptype == PERSISTENCE_TYPE.TIME)
-        //{
-        //    return;
-        //}
+    }
 
-        //lock (Duration_Lock)
-        //{
-        //    int cnt = Used_Battle_Duration_Data_List.Count;
-        //    if (cnt == 0)
-        //    {
-        //        return;
-        //    }
-        //    Remove_Reserved_Duration_Data_List.Clear();
-        //    for (int i = 0; i < cnt; i++)
-        //    {
-        //        BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
-        //        if (duration.CalcEtcPersistenceCount(ptype))
-        //        {
-        //            //  지속 횟수 종료
-        //            Remove_Reserved_Duration_Data_List.Add(duration);
-        //        }
-        //    }
-        //    //  종료된 지속성 효과 제거
-        //    if (Remove_Reserved_Duration_Data_List.Count > 0)
-        //    {
-        //        int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
-        //        for (int i = 0; i < reserved_cnt; i++)
-        //        {
-        //            BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
-        //            Used_Battle_Duration_Data_List.Remove(duration);
-        //            duration.Dispose();
-        //            duration = null;
-        //        }
-        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-        //    }
-        //}
-
+    /// <summary>
+    /// 최초 필드 등장시 Left Team 이동<br/>
+    /// Center Point를 기준으로 각자의 사거리까지 도착하면 Idle 상태로 변경
+    /// </summary>
+    protected void MoveInLeftTeam()
+    {
+        var target = Battle_Mng.GetBattleField().GetCenterPoint();
+        float approach_dist = GetApproachDistance();
+        float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
+        if (dist <= approach_dist)
+        {
+            ChangeState(UNIT_STATES.IDLE);
+            return;
+        }
+        float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
+        var pos = this.transform.position;
+        pos.x += move;
+        this.transform.position = pos;
+    }
+    /// <summary>
+    /// NPC 최초 필드 등장시 Right Team 이동<br/>
+    /// Center Point를 기준으로 각자의 사거리까지 도착하면 Idle 상태로 변경
+    /// </summary>
+    protected void MoveInRightTeam()
+    {
+        var target = Battle_Mng.GetBattleField().GetCenterPoint();
+        float approach_dist = GetApproachDistance();
+        float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
+        if (dist <= approach_dist)
+        {
+            ChangeState(UNIT_STATES.IDLE);
+            return;
+        }
+        float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
+        var pos = this.transform.position;
+        pos.x -= move;
+        this.transform.position = pos;
     }
     /// <summary>
     /// Left Team 이동<br/>
@@ -1529,14 +1535,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
 
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-        var pos = this.transform.localPosition;
+        var pos = this.transform.position;
         pos.x += move;
-        //if (Is_Reposition)
-        //{
-        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-        //    pos.z += zmove;
-        //}
-        this.transform.localPosition = pos;
+        this.transform.position = pos;
     }
 
     /// <summary>
@@ -1553,14 +1554,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
 
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-        var pos = this.transform.localPosition;
+        var pos = this.transform.position;
         pos.x -= move;
-        //if (Is_Reposition)
-        //{
-        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-        //    pos.z += zmove;
-        //}
-        this.transform.localPosition = pos;
+        this.transform.position = pos;
     }
     /// <summary>
     /// Left Team 화면 전환때까지 반대쪽으로 달리기(웨이브 이동)
@@ -1631,55 +1627,16 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    UnitTriggerEnter(other);
-    //}
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    UnitTriggerExit(other);
-    //}
-
-    //protected virtual void UnitTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
-    //    {
-    //        var monster = other.gameObject.GetComponent<HeroBase_V2>();
-    //        if (monster != null)
-    //        {
-    //            if (monster.Deck_Order < Deck_Order)
-    //            {
-    //                //  change reposition
-    //                Is_Reposition = true;
-    //            }
-    //        }
-    //    }
-    //}
-    //protected virtual void UnitTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag(GameDefine.TAG_HERO))
-    //    {
-    //        var monster = other.gameObject.GetComponent<HeroBase_V2>();
-    //        if (monster != null)
-    //        {
-    //            if (monster.Deck_Order < Deck_Order)
-    //            {
-    //                //  change reposition
-    //                Is_Reposition = false;
-    //            }
-    //        }
-    //    }
-    //}
-
 
     public override string ToString()
     {
         var state = GetCurrentState();
         var sb = ZString.CreateStringBuilder();
         sb.AppendLine($"{nameof(Team_Type)} : <color=#ffffff>[{Team_Type}]</color>");
+        sb.AppendLine($"{nameof(state)} => {state}");
         sb.AppendLine($"{nameof(Life)} => {Life}");
         sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
-        sb.AppendLine($"{nameof(state)} => {state}");
+        
 
         return sb.ToString();
     }

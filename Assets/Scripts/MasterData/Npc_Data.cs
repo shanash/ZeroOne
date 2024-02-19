@@ -55,6 +55,12 @@ public class Npc_Data : System.IDisposable
 	public string icon_path => _icon_path;
 	string _icon_path;
 
+	///	<summary>
+	///	크기
+	///	</summary>
+	public double scale => _scale;
+	double _scale;
+
 	private bool disposed = false;
 
 	public Npc_Data(Raw_Npc_Data raw_data)
@@ -67,6 +73,7 @@ public class Npc_Data : System.IDisposable
 		_npc_battle_id = raw_data.npc_battle_id;
 		_prefab_path = raw_data.prefab_path;
 		_icon_path = raw_data.icon_path;
+		_scale = raw_data.scale;
 	}
 
 	public void Dispose()
@@ -96,6 +103,7 @@ public class Npc_Data : System.IDisposable
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
+		sb.AppendFormat("[scale] = <color=yellow>{0}</color>", scale).AppendLine();
 		return sb.ToString();
 	}
 }

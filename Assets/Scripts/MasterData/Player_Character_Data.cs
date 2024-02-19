@@ -1,4 +1,4 @@
-#if UNITY_5_3_OR_NEWER
+﻿#if UNITY_5_3_OR_NEWER
 using FluffyDuck.Util;
 #endif
 using System.Linq;
@@ -18,12 +18,6 @@ public class Player_Character_Data : System.IDisposable
 	///	</summary>
 	public string name_id => _name_id;
 	string _name_id;
-
-	///	<summary>
-	///	캐릭터 명칭
-	///	</summary>
-	public string name_kr => _name_kr;
-	string _name_kr;
 
 	///	<summary>
 	///	태생 성급
@@ -121,13 +115,18 @@ public class Player_Character_Data : System.IDisposable
 	public string script => _script;
 	string _script;
 
+	///	<summary>
+	///	크기
+	///	</summary>
+	public double scale => _scale;
+	double _scale;
+
 	private bool disposed = false;
 
 	public Player_Character_Data(Raw_Player_Character_Data raw_data)
 	{
 		_player_character_id = raw_data.player_character_id;
 		_name_id = raw_data.name_id;
-		_name_kr = raw_data.name_kr;
 		_default_star = raw_data.default_star;
 		_role_type = raw_data.role_type;
 		_tribe_type = raw_data.tribe_type;
@@ -145,6 +144,7 @@ public class Player_Character_Data : System.IDisposable
 		_icon_path = raw_data.icon_path;
 		_Illustration_path = raw_data.Illustration_path;
 		_script = raw_data.script;
+		_scale = raw_data.scale;
 	}
 
 	public void Dispose()
@@ -169,7 +169,6 @@ public class Player_Character_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
-		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[default_star] = <color=yellow>{0}</color>", default_star).AppendLine();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
@@ -195,6 +194,7 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();
+		sb.AppendFormat("[scale] = <color=yellow>{0}</color>", scale).AppendLine();
 		return sb.ToString();
 	}
 }

@@ -573,7 +573,17 @@ public partial class TeamManager_V2 : IDisposable
     public bool IsAllMembersState(UNIT_STATES trans)
     {
         var member_list = GetAliveMembers();
-        return !member_list.Exists(x => x.GetCurrentState() != trans);
+        bool is_all_same = true;
+        int cnt = member_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            if (member_list[i].GetCurrentState() != trans)
+            {
+                is_all_same = false;
+                break;
+            }
+        }
+        return is_all_same;
     }
 
     public void GetHeroPrefabsPath(ref List<string> list)

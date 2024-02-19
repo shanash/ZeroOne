@@ -18,6 +18,10 @@ public class BattleField : MonoBehaviour
     Transform Near_Obj_Container;
 
 
+    [SerializeField, Tooltip("Center Point")]
+    Transform Center_Point;
+
+
     public Transform GetFarBGContainer() { return Far_BG_Container; }
     public Transform GetUnitContainer() { return Unit_Container; }
     public EffectFactory GetEffectFactory() { return Effect_Container; }
@@ -25,6 +29,8 @@ public class BattleField : MonoBehaviour
 
     public Transform GetGroundBGContainer() { return Ground_BG_Container; }
     public SpriteRenderer GetUnitBackFaceBG() { return Back_Fade_BG; }
+
+    public Transform GetCenterPoint() { return Center_Point; }
 
 
 

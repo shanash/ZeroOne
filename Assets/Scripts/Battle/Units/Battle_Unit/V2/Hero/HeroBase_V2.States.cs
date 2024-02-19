@@ -64,10 +64,15 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         ChangeState(UNIT_STATES.SPAWN);
     }
+
+    public override void UnitStateIdleBegin()
+    {
+        PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
+    }
     public override void UnitStateIdle()
     {
-        CalcDurationSkillTime();
-        GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
+        //CalcDurationSkillTime();
+        //GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
 
     public override void UnitStateStunBegin()
@@ -166,11 +171,13 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         if (Team_Type == TEAM_TYPE.LEFT)
         {
-            MoveLeftTeam();
+            //MoveLeftTeam();
+            MoveInLeftTeam();
         }
         else
         {
-            MoveRightTeam();
+            //MoveRightTeam();
+            MoveInRightTeam();
         }
     }
 
