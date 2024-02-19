@@ -61,11 +61,11 @@ public class Hero_100001 : HeroBase_V2
                 else if (track.name.Equals("ActiveGroupCameraAnimationTrack"))
                 {
                     active_group_cam.Follow = active_group.transform;
-                    int t_cnt = Normal_Attack_Target.Count;
+                    int t_cnt = Attack_Targets.Count;
                     float weight = 1f / t_cnt;
                     for (int i = 0; i < t_cnt; i++)
                     {
-                        active_group.AddMember(Normal_Attack_Target[i].transform, weight, 2);
+                        active_group.AddMember(Attack_Targets[i].transform, weight, 2);
                     }
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, active_group_cam.GetComponent<Animator>());
                 }
@@ -121,10 +121,10 @@ public class Hero_100001 : HeroBase_V2
         var active_target_group = virtual_mng.GetActiveTargetGroup();
         if (active_target_group != null)
         {
-            int cnt = Normal_Attack_Target.Count;
+            int cnt = Attack_Targets.Count;
             for (int i = 0; i < cnt; i++)
             {
-                active_target_group.RemoveMember(Normal_Attack_Target[i].transform);
+                active_target_group.RemoveMember(Attack_Targets[i].transform);
             }
         }
     }

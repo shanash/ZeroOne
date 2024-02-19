@@ -230,7 +230,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (is_delay_finish)
         {
             FindApproachTargets();
-            if (Normal_Attack_Target.Count == 0)
+            if (Approach_Targets.Count == 0)
             {
                 ChangeState(UNIT_STATES.MOVE);
                 return;

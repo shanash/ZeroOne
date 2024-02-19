@@ -137,6 +137,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         FSM.AddTransition(new GameStateEndV2());
 
         FSM.Lazy_Init_Setting(this, UI_Mng, GAME_STATES.INIT);
+
+        SCManager.Instance.SetCurrent(this);
     }
     public void ChangeState(GAME_STATES trans)
     {

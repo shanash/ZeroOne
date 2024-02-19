@@ -174,8 +174,14 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected LifeBarNode_V2 Life_Bar_V2 = null;
 
-
-    protected List<HeroBase_V2> Normal_Attack_Target = new List<HeroBase_V2>();
+    /// <summary>
+    /// 공격용 타겟 리스트
+    /// </summary>
+    protected List<HeroBase_V2> Attack_Targets = new List<HeroBase_V2>();
+    /// <summary>
+    /// 접근용 타겟 리스트
+    /// </summary>
+    protected List<HeroBase_V2> Approach_Targets = new List<HeroBase_V2>();
 
     /// <summary>
     /// 영웅 데이터
@@ -405,7 +411,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 GetSkillManager().SetNextSkillPattern();
                 FindApproachTargets();
-                if (Normal_Attack_Target.Count == 0)
+                if (Approach_Targets.Count == 0)
                 {
                     ChangeState(UNIT_STATES.MOVE);
                 }
@@ -425,7 +431,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                 List<HeroBase_V2> targets = new List<HeroBase_V2>();
                 targets.Add(this);
-                targets.AddRange(Normal_Attack_Target);
+                targets.AddRange(Attack_Targets);
                 Battle_Mng.ShowAllUnitWithoutTargets(targets);
 
                 UnsetPlayableDirector();
@@ -613,7 +619,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected virtual void FindApproachTargets()
     {
         float distance = GetApproachDistance();
-        Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Approach_Targets);
     }
     /// <summary>
     /// 각 스킬에 지정되어 있는 타겟 찾기
@@ -621,7 +627,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="skill"></param>
     protected virtual void FindTargets(BattleSkillData skill)
     {
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Normal_Attack_Target);
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Attack_Targets);
     }
 
 
@@ -691,7 +697,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         var factory = Battle_Mng.GetEffectFactory();
         FindTargets(skill);
-        int target_cnt = Normal_Attack_Target.Count;
+        int target_cnt = Attack_Targets.Count;
         int effect_weight_index = skill.GetEffectWeightIndex();
 
         string skill_trigger_effect_prefab = skill.GetTriggerEffectPrefabPath();
@@ -700,7 +706,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
             for (int i = 0; i < target_cnt; i++)
             {
-                var target = Normal_Attack_Target[i];
+                var target = Attack_Targets[i];
                 BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
                 dmg.Caster = this;
                 dmg.AddTarget(target);
@@ -797,7 +803,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
                 dmg.Caster = this;
-                dmg.AddTargets(Normal_Attack_Target);
+                dmg.AddTargets(Attack_Targets);
                 dmg.Skill = skill;
                 dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
@@ -831,7 +837,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 for (int i = 0; i < target_cnt; i++)
                 {
-                    var target = Normal_Attack_Target[i];
+                    var target = Attack_Targets[i];
 
                     BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
                     dmg.Caster = this;
@@ -1326,151 +1332,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         float dt = Time.deltaTime * Battle_Speed_Multiple;
         GetSkillManager().CalcDurationSkillTime(dt);
-        //lock (Duration_Lock)
-        //{
-        //    if (Used_Battle_Duration_Data_List.Count == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    //  상태변경용 내부 함수
-        //    System.Action<UNIT_STATES, DURATION_EFFECT_TYPE> trans_change_state = (state, dtype) =>
-        //    {
-        //        if (dtype == DURATION_EFFECT_TYPE.FREEZE)
-        //        {
-        //            if (state == UNIT_STATES.FREEZE)
-        //            {
-        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
-        //            }
-        //        }
-        //        else if (dtype == DURATION_EFFECT_TYPE.STUN)
-        //        {
-        //            if (state == UNIT_STATES.STUN)
-        //            {
-        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
-        //            }
-        //        }
-        //        else if (dtype == DURATION_EFFECT_TYPE.BIND)
-        //        {
-        //            if (state == UNIT_STATES.BIND)
-        //            {
-        //                ChangeState(UNIT_STATES.ATTACK_READY_1);
-        //            }
-        //        }
-        //    };
-
-        //    var state = GetCurrentState();
-        //    float dt = Time.deltaTime * Battle_Speed_Multiple;
-        //    Remove_Reserved_Duration_Data_List.Clear();
-        //    for (int i = 0; i < Used_Battle_Duration_Data_List.Count; i++)
-        //    {
-        //        BattleDurationSkillData duration = Used_Battle_Duration_Data_List[i];
-        //        DURATION_CALC_RESULT_TYPE result = duration.CalcDuration_V2(dt);
-        //        if (result != DURATION_CALC_RESULT_TYPE.NONE)
-        //        {
-        //            var d_type = duration.GetDurationEffectType();
-        //            switch (result)
-        //            {
-        //                case DURATION_CALC_RESULT_TYPE.REPEAT_INTERVAL:
-        //                    {
-        //                        //  반복 효과 적용
-        //                        if (duration.IsUseRepeatInterval())
-        //                        {
-        //                            var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
-        //                            int repeat_onetime_cnt = repeat_onetime_list.Count;
-        //                            for (int o = 0; o < repeat_onetime_cnt; o++)
-        //                            {
-        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-        //                                //  todo execSkill
-        //                                BattleOnetimeSkillData onetime = repeat_onetime_list[o];
-        //                                send_data.Onetime = onetime;
-        //                                //  일회성 효과 이펙트 
-        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-        //                            }
-        //                        }
-
-        //                    }
-        //                    break;
-        //                case DURATION_CALC_RESULT_TYPE.FINISH:
-        //                    {
-        //                        //  종료 효과 적용 체크
-        //                        if (duration.IsUseFinishEffect())
-        //                        {
-        //                            var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
-        //                            int finish_onetime_cnt = finish_onetime_list.Count;
-        //                            for (int f = 0; f < finish_onetime_cnt; f++)
-        //                            {
-        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-        //                                BattleOnetimeSkillData onetime = finish_onetime_list[f];
-        //                                send_data.Onetime = onetime;
-        //                                //  일회성 효과 이펙트
-        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-        //                            }
-        //                        }
-        //                        Remove_Reserved_Duration_Data_List.Add(duration);
-        //                        //  상태변경
-        //                        trans_change_state(state, d_type);
-
-
-        //                    }
-        //                    break;
-        //                case DURATION_CALC_RESULT_TYPE.REPEAT_AND_FINISH:
-        //                    {
-        //                        //  반복 효과 적용
-        //                        if (duration.IsUseRepeatInterval())
-        //                        {
-        //                            var repeat_onetime_list = duration.GetRepeatOnetimeSkillDataList();
-        //                            int repeat_onetime_cnt = repeat_onetime_list.Count;
-        //                            for (int o = 0; o < repeat_onetime_cnt; o++)
-        //                            {
-        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-        //                                //  todo execSkill
-        //                                BattleOnetimeSkillData onetime = repeat_onetime_list[o];
-        //                                send_data.Onetime = onetime;
-        //                                //  일회성 효과 이펙트 
-        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-        //                            }
-        //                        }
-        //                        //  종료 효과 적용
-        //                        if (duration.IsUseFinishEffect())
-        //                        {
-        //                            var finish_onetime_list = duration.GetFinishOnetimeSkillDataList();
-        //                            int finish_onetime_cnt = finish_onetime_list.Count;
-        //                            for (int f = 0; f < finish_onetime_cnt; f++)
-        //                            {
-        //                                BATTLE_SEND_DATA send_data = duration.GetBattleSendData().Clone();
-        //                                BattleOnetimeSkillData onetime = finish_onetime_list[f];
-        //                                send_data.Onetime = onetime;
-        //                                //  일회성 효과 이펙트
-        //                                SpawnOnetimeEffectFromDurationSkill(onetime, send_data);
-        //                            }
-        //                        }
-        //                        Remove_Reserved_Duration_Data_List.Add(duration);
-        //                        //  상태변경
-        //                        trans_change_state(state, d_type);
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    //  종료된 스킬 제거
-        //    if (Remove_Reserved_Duration_Data_List.Count > 0)
-        //    {
-        //        int reserved_cnt = Remove_Reserved_Duration_Data_List.Count;
-        //        for (int i = 0; i < reserved_cnt; i++)
-        //        {
-        //            BattleDurationSkillData duration = Remove_Reserved_Duration_Data_List[i];
-        //            Used_Battle_Duration_Data_List.Remove(duration);
-        //            duration.Dispose();
-        //            duration = null;
-        //        }
-
-        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-        //    }
-        //}
     }
-
-
 
     /// <summary>
     /// 지속성 효과의 지속성 방식 타입 갱신<br/>
@@ -1489,10 +1351,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveInLeftTeam()
     {
-        var target = Battle_Mng.GetBattleField().GetCenterPoint();
-        float approach_dist = GetApproachDistance();
-        float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
-        if (dist <= approach_dist)
+        FindApproachTargets();
+        //var target = Battle_Mng.GetBattleField().GetCenterPoint();
+        //float approach_dist = GetApproachDistance();
+        //float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
+        //if (dist <= approach_dist)
+        //{
+        //    ChangeState(UNIT_STATES.IDLE);
+        //    return;
+        //}
+        if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.IDLE);
             return;
@@ -1508,10 +1376,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void MoveInRightTeam()
     {
-        var target = Battle_Mng.GetBattleField().GetCenterPoint();
-        float approach_dist = GetApproachDistance();
-        float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
-        if (dist <= approach_dist)
+        FindApproachTargets();
+        //var target = Battle_Mng.GetBattleField().GetCenterPoint();
+        //float approach_dist = GetApproachDistance();
+        //float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
+        //if (dist <= approach_dist)
+        //{
+        //    ChangeState(UNIT_STATES.IDLE);
+        //    return;
+        //}
+        if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.IDLE);
             return;
@@ -1528,7 +1402,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void MoveLeftTeam()
     {
         FindApproachTargets();
-        if (Normal_Attack_Target.Count > 0)
+        if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);
             return;
@@ -1547,7 +1421,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void MoveRightTeam()
     {
         FindApproachTargets();
-        if (Normal_Attack_Target.Count > 0)
+        if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.ATTACK_READY_1);
             return;
@@ -1614,7 +1488,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
         List<HeroBase_V2> targets = new List<HeroBase_V2>();
         targets.Add(this);
-        targets.AddRange(Normal_Attack_Target);
+        targets.AddRange(Attack_Targets);
         Battle_Mng.HideAllUnitWithoutTargets(targets);
 
         Skeleton.AnimationState.ClearTracks();
