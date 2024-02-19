@@ -515,6 +515,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             return null;
         }
+        
 
         return item;
 
@@ -591,6 +592,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             Debug.Assert(false, $"프리팹 {this.GetType()} 컴포넌트의 인스펙터에 SkeletonAnimation이 없습니다");
             return false;
         }
+
+        float[] vertex = null;
+
+        this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
+        Debug.Log($"{x} : {y} : {width} : {height}");
+
+        var myRender = this.GetComponent<MeshRenderer>();
+        var boundSize = myRender.bounds.size;
+        var mainTexSize = new Vector2(myRender.sharedMaterial.mainTexture.width, myRender.sharedMaterial.mainTexture.height);
+
+        Debug.Log($"{boundSize} : {mainTexSize}");
+
+
 
         InitField();
 
@@ -673,6 +687,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     bool GetSkeletonComponents()
     {
+        //TODO: 나중에 살릴 것
+        /*
         try
         {
             Face = FindBone(FACE_BONE_NAME);
@@ -684,8 +700,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             Debug.LogException(e);
         }
-
-        return Face != null && Balloon != null;
+        */
+        //return Face != null && Balloon != null;
+        return true;
     }
 
     /// <summary>

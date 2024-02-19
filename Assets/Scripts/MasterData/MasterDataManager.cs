@@ -25,7 +25,6 @@ public class MasterDataManager : BaseMasterDataManager
     public bool IsLoaded { get { return is_init_load; } }
 
     #region Level
-
     public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelData(int lv)
     {
         Check_Player_Character_Skill_Level_Data();
@@ -57,6 +56,7 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Player_Level_Data();
         return _Player_Level_Data[lv];
     }
+
     public Player_Level_Data Get_PlayerLevelDataByAccumExp(double accum_exp)
     {
         Check_Player_Level_Data();
@@ -89,13 +89,13 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Player_Character_Love_Level_Data();
         return _Player_Character_Love_Level_Data[lv];
     }
+
     public Player_Character_Love_Level_Data Get_PlayerCharacterLoveLevelDataByAccumExp(double accum_exp)
     {
         Check_Player_Character_Love_Level_Data();
         var list = _Player_Character_Love_Level_Data.Values.OrderBy(x => x.level).ToList();
         return list.FindLast(x => x.accum_exp <= accum_exp);
     }
-
     #endregion
 
     #region New Item Data
@@ -718,6 +718,11 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region L2D Character
+    public List<L2d_Char_Skin_Data> Get_L2dDataList()
+    {
+        return _L2d_Char_Skin_Data.Values.ToList();
+    }
+
     public L2d_Char_Skin_Data Get_L2DCharSkinData(int char_skin_id)
     {
         return _L2d_Char_Skin_Data[char_skin_id];

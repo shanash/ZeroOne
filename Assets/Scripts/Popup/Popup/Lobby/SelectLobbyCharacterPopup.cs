@@ -82,6 +82,7 @@ public class SelectLobbyCharacterPopup : PopupBase
         var choice_list = memorial_mng.GetUserMemorialDataListbyTempChoice();
         Select_Count.text = ZString.Format("선택 중   <color=#67afff>{0} / {1}</color>", choice_list.Count, GameDefine.MAX_LOBBY_CHARACTER_COUNT);
     }
+
     /// <summary>
     /// 메모리얼 캐릭터 선택시 콜백
     /// </summary>
@@ -109,6 +110,7 @@ public class SelectLobbyCharacterPopup : PopupBase
         }
 
     }
+
     /// <summary>
     /// 로비 메모리얼 순서 롤백(취소)
     /// </summary>
@@ -117,6 +119,7 @@ public class SelectLobbyCharacterPopup : PopupBase
         var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
         memorial_mng.RollbackLobbyChoiceOrder();
     }
+
     /// <summary>
     /// 로비 메모리얼 순서 확정
     /// </summary>
@@ -125,7 +128,6 @@ public class SelectLobbyCharacterPopup : PopupBase
         var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
         memorial_mng.ConfirmLobbyChoiceOrder();
     }
-
 
     /// <summary>
     /// 취소 버튼 이벤트

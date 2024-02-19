@@ -32,7 +32,7 @@ public class LobbyManager : SceneControllerBase
         pmng.SetRootOnEnter(() => pd.Resume());
         pmng.SetRootOnExit(() => pd.Pause());
 
-        pd = Factory.Instantiate<Producer>(1010051, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+        pd = Factory.Instantiate<Producer>(1010101, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
 
         _ = InitializeAsync();

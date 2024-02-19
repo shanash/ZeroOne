@@ -85,8 +85,6 @@ public class GameData : Singleton<GameData>
             User_Data_Manager_List.Add(mng);
         }
 
-        
-
         //  memorial data
         {
             var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
@@ -96,6 +94,17 @@ public class GameData : Singleton<GameData>
             }
             User_Data_Manager_List.Add(mng);
         }
+
+        //  memorial data
+        {
+            var mng = new UserL2dDataManager(USER_DATA_MANAGER_TYPE.USER_L2D_DATA_MANAGER);
+            if (!mng.Load())
+            {
+                mng.InitDataManager();
+            }
+            User_Data_Manager_List.Add(mng);
+        }
+
         //  story stage data
         {
             var mng = new UserStoryStageDataManager(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
@@ -138,18 +147,27 @@ public class GameData : Singleton<GameData>
     {
         return FindUserDataManager<UserMemorialDataManager>(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
     }
+
+    public UserL2dDataManager GetUserL2DDataManager()
+    {
+        return FindUserDataManager<UserL2dDataManager>(USER_DATA_MANAGER_TYPE.USER_L2D_DATA_MANAGER);
+    }
+
     public UserStoryStageDataManager GetUserStoryStageDataManager()
     {
         return FindUserDataManager<UserStoryStageDataManager>(USER_DATA_MANAGER_TYPE.USER_STORY_STAGE_DATA_MANAGER);
     }
+
     public UserGoodsDataManager GetUserGoodsDataManager()
     {
         return FindUserDataManager<UserGoodsDataManager>(USER_DATA_MANAGER_TYPE.USER_GOODS_DATA_MANAGER);
     }
+
     public UserItemDataManager GetUserItemDataManager()
     {
         return FindUserDataManager<UserItemDataManager>(USER_DATA_MANAGER_TYPE.USER_ITEM_DATA_MANAGER);
     }
+
     public UserChargeItemDataManager GetUserChargeItemDataManager()
     {
         return FindUserDataManager<UserChargeItemDataManager>(USER_DATA_MANAGER_TYPE.USER_CHARGE_ITEM_DATA_MANAGER);
@@ -158,11 +176,11 @@ public class GameData : Singleton<GameData>
     {
         return FindUserDataManager<UserHeroSkillDataManager>(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
     }
+
     public UserBossDungeonDataManager GetUserBossDungeonDataManager()
     {
         return FindUserDataManager<UserBossDungeonDataManager>(USER_DATA_MANAGER_TYPE.USER_BOSS_DUNGEON_DATA_MANAGER);
     }
-
 
     public void Save()
     {

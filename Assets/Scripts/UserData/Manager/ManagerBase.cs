@@ -12,6 +12,7 @@ public enum USER_DATA_MANAGER_TYPE
     USER_HERO_DATA_MANAGER,                 //  사용자 획득 영웅 데이터
     USER_DECK_DATA_MANAGER,                 //  사용자 영웅의 덱 세팅 데이터(각 게임 타입 및 덱의 최대 개수만큼 보유)
     USER_MEMORIAL_DATA_MANAGER,
+    USER_L2D_DATA_MANAGER,
 
     USER_STORY_STAGE_DATA_MANAGER,          //  기본 스토리 스테이지 데이터 매니져
     USER_BOSS_DUNGEON_DATA_MANAGER,         //  보스 던전 스테이지 데이터 매니져
@@ -68,10 +69,10 @@ public class ManagerBase : IDisposable
     protected virtual void Destroy() { }
 
     public virtual bool IsUpdateData() { return Is_Update_Data; }
+
     public virtual void InitUpdateData() { Is_Update_Data = false; }
 
     public virtual void SetUpdateData(bool is_update) { Is_Update_Data = is_update; }
-
 
     public virtual void InitDataManager() { }
 
@@ -136,6 +137,7 @@ public class ManagerBase : IDisposable
         }
         return ret;
     }
+    
     protected double ParseDouble(LitJson.JsonData json, string key)
     {
         double ret = 0;
@@ -145,10 +147,12 @@ public class ManagerBase : IDisposable
         }
         return ret;
     }
+
     public string ParseString(LitJson.JsonData json, string key)
     {
         return json[key].ToString();
     }
+
     public bool ParseBool(LitJson.JsonData json, string key)
     {
         bool ret = false;
@@ -159,7 +163,4 @@ public class ManagerBase : IDisposable
         return ret;
     }
     #endregion
-
-
-
 }

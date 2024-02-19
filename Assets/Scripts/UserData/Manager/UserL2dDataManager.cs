@@ -1,27 +1,26 @@
 using LitJson;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
-public class UserMemorialDataManager : ManagerBase
+public class UserL2dDataManager : ManagerBase
 {
-    List<UserMemorialData> User_Memorial_Data_List = new List<UserMemorialData>();
+    List<UserL2dData> User_L2d_Data_List = new List<UserL2dData>();
 
-    public UserMemorialDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype) { }
+    public UserL2dDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype) { }
 
     protected override void Destroy()
     {
-        int cnt = User_Memorial_Data_List.Count;
+        int cnt = User_L2d_Data_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            User_Memorial_Data_List[i].Dispose();
+            User_L2d_Data_List[i].Dispose();
         }
-        User_Memorial_Data_List.Clear();
+        User_L2d_Data_List.Clear();
     }
 
     public override void InitDataManager()
     {
-        if (User_Memorial_Data_List.Count > 0)
+        if (User_L2d_Data_List.Count > 0)
         {
             return;
         }
@@ -31,30 +30,30 @@ public class UserMemorialDataManager : ManagerBase
     void DummyDataSetting()
     {
         var m = MasterDataManager.Instance;
-        List<Me_Resource_Data> list = new List<Me_Resource_Data>();
-        m.Get_MemorialResourceDataList(ref list);
+        List<L2d_Char_Skin_Data> list = m.Get_L2dDataList();
 
         for (int i = 0; i < list.Count; i++)
         {
             var mdata = list[i];
-            AddUserMemorialData(mdata.memorial_id, mdata.player_character_id);
+            AddUserL2dData(mdata.l2d_id);
         }
 
         Save();
     }
 
-    public void GetUserMemorialDataList(ref List<UserMemorialData> list)
+    public void GetUserL2dDataList(ref List<UserL2dData> list)
     {
         list.Clear();
-        list.AddRange(User_Memorial_Data_List);
+        list.AddRange(User_L2d_Data_List);
     }
+
     /// <summary>
     /// 선택 확정되어 있는 메모리얼 리스트 반환
     /// </summary>
     /// <returns></returns>
-    public List<UserMemorialData> GetUserMemorialDataListByChoice()
+    public List<UserL2dData> GetUserL2dDataListByChoice()
     {
-        var list = User_Memorial_Data_List.FindAll(x => x.Is_Choice_Lobby);
+        var list = User_L2d_Data_List.FindAll(x => x.Is_Choice_Lobby);
         list.Sort((a, b) => a.Lobby_Choice_Number.CompareTo(b.Lobby_Choice_Number));
         return list;
     }
@@ -63,44 +62,38 @@ public class UserMemorialDataManager : ManagerBase
     /// 임시 선택된 메모리얼 리스트 반환
     /// </summary>
     /// <returns></returns>
-    public List<UserMemorialData> GetUserMemorialDataListbyTempChoice()
+    public List<UserL2dData> GetUserL2dDataListbyTempChoice()
     {
-        var list = User_Memorial_Data_List.FindAll(x => x.Is_Temp_Choice);
+        var list = User_L2d_Data_List.FindAll(x => x.Is_Temp_Choice);
         list.Sort((a, b) => a.Temp_Lobby_Choice_Number.CompareTo(b.Temp_Lobby_Choice_Number));
         return list;
     }
 
-
-    public List<UserMemorialData> FindMemorialDataListByPlayerID(int player_character_id)
+    public UserL2dData FindUserL2dData(int memorial_id)
     {
-        return User_Memorial_Data_List.FindAll(x => x.Player_Character_ID == player_character_id);
+        return User_L2d_Data_List.Find(x => x.Skin_Id == memorial_id);
     }
 
-    public UserMemorialData FindUserMemorialData(int memorial_id, int player_character_id)
+    UserL2dData AddUserL2dData(int l2d_id)
     {
-        return User_Memorial_Data_List.Find(x => x.Memorial_ID == memorial_id && x.Player_Character_ID == player_character_id);
-    }
-
-    UserMemorialData AddUserMemorialData(int memorial_id, int player_character_id)
-    {
-        if (memorial_id == 0 || player_character_id == 0)
+        if (l2d_id == 0)
         {
             return null;
         }
-        var memorial = FindUserMemorialData(memorial_id, player_character_id);
+        var memorial = FindUserL2dData(l2d_id);
         if (memorial == null)
         {
-            memorial = new UserMemorialData();
-            memorial.SetMemorialDataID(memorial_id, player_character_id);
-            User_Memorial_Data_List.Add(memorial);
+            memorial = new UserL2dData();
+            memorial.SetMemorialDataID(l2d_id);
+            User_L2d_Data_List.Add(memorial);
             Is_Update_Data = true;
         }
         return memorial;
     }
 
-    public ERROR_CODE SelectTempMemorialOrder(int memorial_id, int player_character_id)
+    public ERROR_CODE SelectTempL2dOrder(int memorial_id)
     {
-        var found = FindUserMemorialData(memorial_id, player_character_id);
+        var found = FindUserL2dData(memorial_id);
         if (found != null)
         {
             //  이미 선택된 상태라면, 해제해준다.
@@ -110,7 +103,7 @@ public class UserMemorialDataManager : ManagerBase
                 found.ResetTempLobbyChoice();
 
                 //  순서를 다시 지정해준다.
-                var choice_list = GetUserMemorialDataListbyTempChoice();
+                var choice_list = GetUserL2dDataListbyTempChoice();
                 int number = 1;
                 for (int i = 0; i < choice_list.Count; i++)
                 {
@@ -121,7 +114,7 @@ public class UserMemorialDataManager : ManagerBase
             }
             else
             {
-                var choice_list = GetUserMemorialDataListbyTempChoice();
+                var choice_list = GetUserL2dDataListbyTempChoice();
                 if (choice_list.Count == 0)
                 {
                     found.SetTempLobbyChoiceNumber(1);
@@ -153,10 +146,10 @@ public class UserMemorialDataManager : ManagerBase
     /// </summary>
     public void ReadyTempLobbyChoiceNumber()
     {
-        int cnt = User_Memorial_Data_List.Count;
+        int cnt = User_L2d_Data_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var item = User_Memorial_Data_List[i];
+            var item = User_L2d_Data_List[i];
             item.SetTempLobbyChoiceNumber(item.Lobby_Choice_Number);
         }
     }
@@ -166,7 +159,7 @@ public class UserMemorialDataManager : ManagerBase
     /// </summary>
     public void RollbackLobbyChoiceOrder()
     {
-        User_Memorial_Data_List.ForEach(x => x.ResetTempLobbyChoice());
+        User_L2d_Data_List.ForEach(x => x.ResetTempLobbyChoice());
     }
 
     /// <summary>
@@ -174,10 +167,10 @@ public class UserMemorialDataManager : ManagerBase
     /// </summary>
     public void ConfirmLobbyChoiceOrder()
     {
-        int cnt = User_Memorial_Data_List.Count;
+        int cnt = User_L2d_Data_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var item = User_Memorial_Data_List[i];
+            var item = User_L2d_Data_List[i];
             item.SetLobbyChoiceNumber(item.Temp_Lobby_Choice_Number);
             item.ResetTempLobbyChoice();
         }
@@ -190,10 +183,10 @@ public class UserMemorialDataManager : ManagerBase
         var json = new JsonData();
 
         var arr = new JsonData();
-        int cnt = User_Memorial_Data_List.Count;
+        int cnt = User_L2d_Data_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var item = User_Memorial_Data_List[i];
+            var item = User_L2d_Data_List[i];
             var jdata = item.Serialized();
             if (jdata == null)
             {
@@ -228,17 +221,16 @@ public class UserMemorialDataManager : ManagerBase
                     var jdata = arr[i];
 
                     int memorial_id = 0;
-                    int player_character_id = 0;
-                    if (int.TryParse(jdata[NODE_MEMORIAL_ID].ToString(), out memorial_id) && int.TryParse(jdata[NODE_PLAYER_CHARACTER_ID].ToString(), out player_character_id))
+                    if (int.TryParse(jdata[NODE_MEMORIAL_ID].ToString(), out memorial_id))
                     {
-                        UserMemorialData item = FindUserMemorialData(memorial_id, player_character_id);
+                        UserL2dData item = FindUserL2dData(memorial_id);
                         if (item != null)
                         {
                             item.Deserialized(jdata);
                         }
                         else
                         {
-                            item = AddUserMemorialData(memorial_id, player_character_id);
+                            item = AddUserL2dData(memorial_id);
                             item?.Deserialized(jdata);
                         }
                     }
@@ -255,6 +247,4 @@ public class UserMemorialDataManager : ManagerBase
     //-------------------------------------------------------------------------
     protected const string NODE_MEMORIAL_DATA_LIST = "mlist";
     protected const string NODE_MEMORIAL_ID = "mid";
-    protected const string NODE_PLAYER_CHARACTER_ID = "pid";
-
 }
