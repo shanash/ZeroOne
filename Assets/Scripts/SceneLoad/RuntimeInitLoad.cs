@@ -12,7 +12,6 @@ public static class RuntimeInitLoad
         List<string> scenes_in_build_names = new List<string>(numScenes);
         for (int i = 0; i < numScenes; ++i)
         {
-            Debug.Log($"SceneManager.GetSceneByBuildIndex(i).name : {SceneManager.GetSceneByBuildIndex(i).path}");
             scenes_in_build_names.Add(SceneManager.GetSceneByBuildIndex(i).name);
         }
 

@@ -14,13 +14,14 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	int _interaction_group_id;
 
 	///	<summary>
+	///	<b>key_2</b><br/>
 	///	근원전달 판별
 	///	</summary>
 	public bool check_using_essense => _check_using_essense;
 	bool _check_using_essense;
 
 	///	<summary>
-	///	<b>key_2</b><br/>
+	///	<b>key_3</b><br/>
 	///	터치 부위 타입
 	///	</summary>
 	public TOUCH_BODY_TYPE touch_type_01 => _touch_type_01;

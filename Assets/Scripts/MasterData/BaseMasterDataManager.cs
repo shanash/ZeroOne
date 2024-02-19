@@ -146,13 +146,14 @@ public class BaseMasterDataManager
 	} = new Dictionary<int, L2d_Skin_Ani_State_Data>();
 	///	<summary>
 	///	 <b>key_1 int : interaction_group_id </b><br/>
-	///	 <b>key_2 TOUCH_BODY_TYPE : touch_type_01 </b><br/>
+	///	 <b>key_2 bool : check_using_essense </b><br/>
+	///	 <b>key_3 TOUCH_BODY_TYPE : touch_type_01 </b><br/>
 	///	</summary>
-	protected Dictionary<Tuple<int, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
+	protected Dictionary<Tuple<int, bool, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data> _L2d_Interaction_Base_Data
 	{
 		get;
 		private set;
-	} = new Dictionary<Tuple<int, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data>();
+	} = new Dictionary<Tuple<int, bool, TOUCH_BODY_TYPE>, L2d_Interaction_Base_Data>();
 	///	<summary>
 	///	 <b>key_1 int : level </b><br/>
 	///	</summary>
@@ -805,7 +806,7 @@ public class BaseMasterDataManager
 		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_L2d_Interaction_Base_Data>>(json);
 		foreach (var raw_data in raw_data_list)
 		{
-			_L2d_Interaction_Base_Data.Add(new Tuple<int, TOUCH_BODY_TYPE>(raw_data.interaction_group_id, raw_data.touch_type_01), new L2d_Interaction_Base_Data(raw_data));
+			_L2d_Interaction_Base_Data.Add(new Tuple<int, bool, TOUCH_BODY_TYPE>(raw_data.interaction_group_id, raw_data.check_using_essense, raw_data.touch_type_01), new L2d_Interaction_Base_Data(raw_data));
 		}
 	}
 
