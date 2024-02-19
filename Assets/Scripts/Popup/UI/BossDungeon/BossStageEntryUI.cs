@@ -1,4 +1,5 @@
 using FluffyDuck.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,6 +25,6 @@ public class BossStageEntryUI : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        
+
     }
 }

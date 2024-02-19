@@ -9,7 +9,7 @@ public class Raw_Schedule_Data : System.IDisposable
 	public string date_end {get; set;}
 	public string time_open {get; set;}
 	public string time_close {get; set;}
-	public int day_of_week {get; set;}
+	public int[] day_of_weeks {get; set;}
 
 	private bool disposed = false;
 
@@ -20,7 +20,6 @@ public class Raw_Schedule_Data : System.IDisposable
 		date_end = string.Empty;
 		time_open = string.Empty;
 		time_close = string.Empty;
-		day_of_week = 0;
 	}
 
 	public void Dispose()

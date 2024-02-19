@@ -174,8 +174,9 @@ public class UserBossDungeonDataManager : ManagerBase
         {
             return ERROR_CODE.FAILED;
         }
+        //  입장 횟수 차감
         int cnt = GetCount();
-        cnt += 1;
+        cnt -= 1;
         Count.Set(cnt);
 
         var now = DateTime.Now.ToLocalTime();
@@ -327,36 +328,77 @@ public class UserBossDungeonDataManager : ManagerBase
 
     public override ERROR_CODE CheckDateAndTimeCharge()
     {
-        //int cnt = User_Boss_Dungeon_Data_List.Count;
-        //ERROR_CODE result = ERROR_CODE.NOT_WORK;
-        //for (int i = 0; i < cnt; i++)
-        //{
-        //    ERROR_CODE code = User_Boss_Dungeon_Data_List[i].CheckDateAndTimeCharge();
-        //    if (code != ERROR_CODE.NOT_WORK)
-        //    {
-        //        result = code;
-        //    }
-        //}
-        //return result;
-        
         ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        //  던전이 오픈 기간이 아니면 아무것도 안함
         if (!IsDungeonOpenTime())
         {
             return ERROR_CODE.NOT_WORK;
         }
+
         var now = DateTime.Now.ToLocalTime();
         var last_dt = GetLastUseDateTime();
         if (last_dt != DateTime.MinValue && last_dt.Date < now.Date)
         {
+            var open_time = TimeSpan.Parse(Schedule.time_open);
+            //  마지막 접속 시간을 기준으로 익일 새벽 시간을 찾는다.
+            var refresh_dt = last_dt.Date.Add(open_time);
+            if (refresh_dt <= last_dt)
+            {
+                refresh_dt = refresh_dt.AddDays(1);
+            }
 
+            //  현재 접속 시간과 갱신 시간을 체크해서, 현재 시간이 갱신시간을 넘었을 경우 갱신 해줌.
+            if (now >= refresh_dt)
+            {
+                //  갱신일이 아니라면, 갱신하지 않음.
+                if (!IsExistDayOfWeeks((int)refresh_dt.DayOfWeek))
+                {
+                    return code;
+                }
+                for (int i = 0; i < User_Boss_Dungeon_Data_List.Count; i++)
+                {
+                    User_Boss_Dungeon_Data_List[i].ResetDailyData();
+                }
+                Count.Set(GetMaxEntranceCount());
+                Last_Used_Dt = string.Empty;
+                Last_Used_Datetime = DateTime.MinValue;
+                Is_Update_Data = true;
+                code = ERROR_CODE.SUCCESS;
+            }
         }
 
         return code;
     }
 
+    /// <summary>
+    /// 해당 요일이 갱신 지정일로 정해져 있는지 여부 반환
+    /// </summary>
+    /// <param name="day_of_week"></param>
+    /// <returns></returns>
+    bool IsExistDayOfWeeks(int day_of_week)
+    {
+        bool is_exist = false;
+        for (int i = 0; i < Schedule.day_of_weeks.Length; i++)
+        {
+            if (Schedule.day_of_weeks[i] == day_of_week)
+            {
+                is_exist = true;
+                break;
+            }
+        }
+        return is_exist;
+    }
+
     public override JsonData Serialized()
     {
         var json = new JsonData();
+
+
+        json[NODE_ENTRANCE_COUNT] = GetCount();
+        if (!string.IsNullOrEmpty(Last_Used_Dt))
+        {
+            json[NODE_LAST_USED_DT] = Last_Used_Dt;
+        }
 
         var arr = new JsonData();
         int cnt = User_Boss_Dungeon_Data_List.Count;
@@ -389,6 +431,15 @@ public class UserBossDungeonDataManager : ManagerBase
         }
         InitDungeonData();
 
+        if (json.ContainsKey(NODE_ENTRANCE_COUNT))
+        {
+            Count.Set(ParseInt(json, NODE_ENTRANCE_COUNT));
+        }
+        if (json.ContainsKey(NODE_LAST_USED_DT))
+        {
+            Last_Used_Dt = ParseString(json, NODE_LAST_USED_DT);
+        }
+
         if (json.ContainsKey(NODE_DUNGEON_DATA_LIST))
         {
             var arr = json[NODE_DUNGEON_DATA_LIST];
@@ -414,12 +465,15 @@ public class UserBossDungeonDataManager : ManagerBase
         }
 
         InitUpdateData();
+        CheckDateAndTimeCharge();
         return true;
     }
 
     //-------------------------------------------------------------------------
     // Json Node Name
     //-------------------------------------------------------------------------
+    protected const string NODE_ENTRANCE_COUNT = "cnt";
+    protected const string NODE_LAST_USED_DT = "lastdt";
     protected const string NODE_DUNGEON_DATA_LIST = "dlist";
 
     protected const string NODE_BOSS_DUNGEON_ID = "bdid";

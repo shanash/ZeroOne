@@ -11,8 +11,6 @@ public class UserBossDungeonData : UserDataBase
     SecureVar<int> Daily_Win_Count = null;
     SecureVar<int> Star_Point = null;
 
-    string Last_Win_Dt = string.Empty;
-
     Boss_Data Boss;
     Boss_Stage_Data Stage;
 
@@ -22,7 +20,6 @@ public class UserBossDungeonData : UserDataBase
     {
         InitSecureVars();
         Boss_Dungeon_ID = 0;
-        Last_Win_Dt = string.Empty;
     }
     protected override void InitSecureVars()
     {
@@ -91,19 +88,9 @@ public class UserBossDungeonData : UserDataBase
         cnt += 1;
         Daily_Win_Count.Set(cnt);
 
-        var now = DateTime.Now.ToLocalTime();
-        Last_Win_Dt = now.ToString(GameDefine.DATE_TIME_FORMAT);
         Is_Update_Data = true;
     }
     
-    public DateTime GetLastWinDatetime()
-    {
-        if (!string.IsNullOrEmpty(Last_Win_Dt))
-        {
-            return DateTime.Parse(Last_Win_Dt);
-        }
-        return DateTime.MinValue;
-    }
 
     /// <summary>
     /// 보스 스테이지 그룹 ID
@@ -127,23 +114,6 @@ public class UserBossDungeonData : UserDataBase
         return GetStarPoint() >= 3;
     }
 
-    public override ERROR_CODE CheckDateAndTimeCharge()
-    {
-        ERROR_CODE code = ERROR_CODE.NOT_WORK;
-        var now = DateTime.Now.ToLocalTime();
-        var last_dt = GetLastWinDatetime();
-        if (last_dt != DateTime.MinValue && last_dt.Date < now.Date)
-        {
-            Daily_Challenge_Count.Set(0);
-            Daily_Win_Count.Set(0);
-            Last_Win_Dt = string.Empty;
-
-            Is_Update_Data = true;
-            code = ERROR_CODE.SUCCESS;
-        }
-
-        return code;
-    }
     /// <summary>
     /// 일일 횟수 관련 데이터 초기화
     /// </summary>
@@ -162,10 +132,6 @@ public class UserBossDungeonData : UserDataBase
         json[NODE_DAILY_CHALLENGE_COUNT] = GetDailyChallengeCount();
         json[NODE_DAILY_WIN_COUNT] = GetDailyWinCount();
         json[NODE_STAR_POINT] = GetStarPoint();
-        if (!string.IsNullOrEmpty(Last_Win_Dt))
-        {
-            json[NODE_LAST_WIN_DT] = Last_Win_Dt;
-        }
 
         return json;
     }
@@ -193,13 +159,9 @@ public class UserBossDungeonData : UserDataBase
         {
             Star_Point.Set(ParseInt(json, NODE_STAR_POINT));
         }
-        if (json.ContainsKey(NODE_LAST_WIN_DT))
-        {
-            Last_Win_Dt = ParseString(json, NODE_LAST_WIN_DT);
-        }
 
         InitMasterData();
-        CheckDateAndTimeCharge();
+        
         return true;
     }
     //-------------------------------------------------------------------------
@@ -209,7 +171,6 @@ public class UserBossDungeonData : UserDataBase
     protected const string NODE_DAILY_CHALLENGE_COUNT = "ccnt";
     protected const string NODE_DAILY_WIN_COUNT = "wcnt";
     protected const string NODE_STAR_POINT = "star";
-    protected const string NODE_LAST_WIN_DT = "windt";
 
 
 }
