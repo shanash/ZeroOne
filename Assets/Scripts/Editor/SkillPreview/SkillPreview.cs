@@ -232,8 +232,7 @@ public class SkillPreview : EditorWindow
         //  영웅 데이터가 없을 경우 마스터에서 데이터를 가져와서 추가한다
         if (Hero_Unit_Data_List.Count == 0)
         {
-            List<Player_Character_Data> pc_list = new List<Player_Character_Data>();
-            MasterDataManager.Instance.Get_PlayerCharacterDataList(ref pc_list);
+            var pc_list = MasterDataManager.Instance.Get_PlayerCharacterDataList();
             int pc_cnt = pc_list.Count;
             for (int i = 0; i < pc_cnt; i++)
             {

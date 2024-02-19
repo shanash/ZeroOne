@@ -43,10 +43,11 @@ public class Charge_Value_Data : System.IDisposable
 	int _repeat_time;
 
 	///	<summary>
-	///	데이터 사용 여부
+	///	스케쥴 ID
+	///	값이 0인 경우, repeat_time을 사용해서 일정 주기마다 회복
 	///	</summary>
-	public bool Use_Charge_Data => _Use_Charge_Data;
-	bool _Use_Charge_Data;
+	public int schedule_id => _schedule_id;
+	int _schedule_id;
 
 	private bool disposed = false;
 
@@ -57,7 +58,7 @@ public class Charge_Value_Data : System.IDisposable
 		_charge_count = raw_data.charge_count;
 		_repeat_type = raw_data.repeat_type;
 		_repeat_time = raw_data.repeat_time;
-		_Use_Charge_Data = raw_data.Use_Charge_Data;
+		_schedule_id = raw_data.schedule_id;
 	}
 
 	public void Dispose()
@@ -84,7 +85,7 @@ public class Charge_Value_Data : System.IDisposable
 		sb.AppendFormat("[charge_count] = <color=yellow>{0}</color>", charge_count).AppendLine();
 		sb.AppendFormat("[repeat_type] = <color=yellow>{0}</color>", repeat_type).AppendLine();
 		sb.AppendFormat("[repeat_time] = <color=yellow>{0}</color>", repeat_time).AppendLine();
-		sb.AppendFormat("[Use_Charge_Data] = <color=yellow>{0}</color>", Use_Charge_Data).AppendLine();
+		sb.AppendFormat("[schedule_id] = <color=yellow>{0}</color>", schedule_id).AppendLine();
 		return sb.ToString();
 	}
 }

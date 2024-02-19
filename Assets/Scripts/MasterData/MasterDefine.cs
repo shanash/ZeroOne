@@ -626,6 +626,23 @@ public enum DURATION_EFFECT_TYPE
 }
 
 ///	<summary>
+///	게임 타입(던전 타입)
+///	</summary>
+public enum GAME_TYPE
+{
+	/// <summary>NONE</summary>
+	NONE = 0,
+	/// <summary>1 스토리 모드</summary>
+	STORY_MODE = 1,
+	/// <summary>2 보스 던전 모드</summary>
+	BOSS_DUNGEON_MODE = 2,
+	/// <summary>1001 에디터에서 스킬 미리보기 모드(에디터에서만 사용)</summary>
+	EDITOR_SKILL_PREVIEW_MODE = 1001,
+	/// <summary>1002 에디터에서 스킬 편집 모드(에디터에서만 사용)</summary>
+	EDITOR_SKILL_EDIT_MODE = 1002,
+}
+
+///	<summary>
 ///	지속성 방식 타입
 ///	</summary>
 public enum PERSISTENCE_TYPE
@@ -892,8 +909,8 @@ public enum REWARD_TYPE
 	FAVORITE_ITEM = 104,
 	/// <summary>105 스테이지 스킵 티켓</summary>
 	STAGE_SKIP = 105,
-	/// <summary>106 던전 입장 티켓</summary>
-	TICKET_DUNGEON = 106,
+	/// <summary>106 보스전 입장 횟수</summary>
+	BOSS_DUNGEON_TICKET = 106,
 	/// <summary>107 정련석(장비 성장)</summary>
 	EQ_GROWUP = 107,
 	/// <summary>109 보상 선택 티켓(1개를 선택 획득)</summary>

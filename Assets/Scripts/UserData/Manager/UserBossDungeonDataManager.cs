@@ -1,5 +1,6 @@
 using FluffyDuck.Util;
 using LitJson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,38 @@ using UnityEngine;
 
 public class UserBossDungeonDataManager : ManagerBase
 {
+    /// <summary>
+    /// 기간 충전 횟수(정해진 스케쥴에 따라 충전되는 횟수)<br/>
+    /// Count는 입장 가능 총 횟수임. 스케쥴에 따라 충전되면 Count = Max_Count로 초기화 되어야 함
+    /// </summary>
+    SecureVar<int> Count = null;
+    /// <summary>
+    /// 마지막 입장 시점.(이 시점을 기준으로 충전)<br/>
+    /// 사용하지 않았을 경우, 재 충전시 Datetime.Mindate로 설정함
+    /// </summary>
+    string Last_Used_Dt = string.Empty;
+
+    DateTime Last_Used_Datetime;
+
     List<UserBossDungeonData> User_Boss_Dungeon_Data_List = new List<UserBossDungeonData>();
 
+    Dungeon_Data Dungeon;
+    Schedule_Data Schedule;
+    Max_Bound_Info_Data Max_Bound_Data;
+
+    
+
     public UserBossDungeonDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype) { }
+
+    protected override void Reset()
+    {
+        if (Count == null)
+        {
+            Count = new SecureVar<int>();
+        }
+        Last_Used_Dt = string.Empty;
+        Last_Used_Datetime = DateTime.MinValue;
+    }
 
     protected override void Destroy()
     {
@@ -28,7 +58,14 @@ public class UserBossDungeonDataManager : ManagerBase
     public override void InitDataManager()
     {
         var m = MasterDataManager.Instance;
-        var boss_list = m.Get_BossDataList();
+        if (!InitDungeonData())
+        {
+            return;
+        }
+
+
+        //  보스 던전은 보스 데이터를 조회한다.
+        var boss_list = m.Get_BossDataList(Dungeon.dungeon_group_id);
         if (boss_list.Count == 0)
         {
             return;
@@ -51,6 +88,24 @@ public class UserBossDungeonDataManager : ManagerBase
             }
         }
         Save();
+    }
+
+    bool InitDungeonData()
+    {
+        var m = MasterDataManager.Instance;
+
+        Dungeon = m.Get_DungeonData(GAME_TYPE.BOSS_DUNGEON_MODE);
+        if (Dungeon == null)
+        {
+            return false;
+        }
+        Schedule = m.Get_ScheduleData(Dungeon.schedule_id);
+        if (Schedule == null)
+        {
+            return false;
+        }
+        Max_Bound_Data = m.Get_MaxBoundInfoData(REWARD_TYPE.BOSS_DUNGEON_TICKET);
+        return true;
     }
 
     /// <summary>
@@ -115,10 +170,38 @@ public class UserBossDungeonDataManager : ManagerBase
         {
             return ERROR_CODE.FAILED;
         }
+        if (!IsEnableEntranceBossDungeon())
+        {
+            return ERROR_CODE.FAILED;
+        }
+        int cnt = GetCount();
+        cnt += 1;
+        Count.Set(cnt);
+
+        var now = DateTime.Now.ToLocalTime();
+        Last_Used_Datetime = now;
+        Last_Used_Dt = Last_Used_Datetime.ToString(GameDefine.DATE_TIME_FORMAT);
+        Is_Update_Data = true;
 
         stage.AddWinCount();
         OpenNextBossStage(boss_stage_id);
         return ERROR_CODE.SUCCESS;
+    }
+    /// <summary>
+    /// 마지막 사용 시간 가져오기
+    /// </summary>
+    /// <returns></returns>
+    public DateTime GetLastUseDateTime()
+    {
+        if (!string.IsNullOrEmpty(Last_Used_Dt))
+        {
+            if (Last_Used_Datetime == DateTime.MinValue)
+            {
+                Last_Used_Datetime = DateTime.Parse(Last_Used_Dt);
+            }
+            return Last_Used_Datetime;
+        }
+        return DateTime.MinValue;
     }
 
     /// <summary>
@@ -143,23 +226,9 @@ public class UserBossDungeonDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_stage_id"></param>
     /// <returns></returns>
-    public bool IsEnableBossDungeonEntrance(int boss_stage_id)
+    public bool IsEnableBossStageEntrance(int boss_stage_id)
     {
         return User_Boss_Dungeon_Data_List.Exists(x => x.Boss_Dungeon_ID == boss_stage_id);
-    }
-
-    /// <summary>
-    /// 보스 던전 오픈 여부 <br/>
-    /// 각 보스별 오픈 조건이 다른데, 각각의 오픈 조건이 완료되었는지 체크한 후<br/>
-    /// 조건이 충족되었을 경우에 오픈 반환<br/>
-    /// 지금은 조건이 없기 때문에 M2까지는 강제 오픈. M2 이후 수정 필요
-    /// </summary>
-    /// <param name="boss_id"></param>
-    /// <returns></returns>
-    public bool IsEnableOpenBossDungeon(int boss_id)
-    {
-        var boss = MasterDataManager.Instance.Get_BossData(boss_id);
-        return true;
     }
 
     /// <summary>
@@ -178,41 +247,111 @@ public class UserBossDungeonDataManager : ManagerBase
         }
         return null;
     }
+    public int GetCount()
+    {
+        return Count.Get();
+    }
+    public int GetMaxEntranceCount()
+    {
+        if (Max_Bound_Data != null)
+        {
+            return (int)Max_Bound_Data.base_max;
+        }
+        return 3;
+    }
 
     /// <summary>
-    /// 해당 보스 던전에 진입 가능한지 여부 체크<br/>
-    /// 각 보스당 1일 입장 제한 횟수가 지정되어 있음<br/>
-    /// 입장 제한 횟수는 각 던전에서 개별로 카운팅 되는 것이 아닌<br/>
-    /// 보스별로 입장 제한 횟수가 결정되기 때문에<br/>
-    /// 각 보스의 던전 총합으로 체크 가능
+    /// 보스 던전 컨텐츠가 오픈되었는지 여부 반환<br/>
+    /// 시간 오픈 체크<br/>
+    /// 던전 클리어 오픈 체크
     /// </summary>
-    /// <param name="boss_id"></param>
     /// <returns></returns>
-    public bool IsEnableEntranceBossDungeon(int boss_id)
+    public bool IsBossDungeonOpen()
     {
-        var boss = MasterDataManager.Instance.Get_BossData(boss_id);
-        if (boss != null)
+        if (!IsDungeonOpenTime())
         {
-            var find_all = FindUserBossDungeonDataList(boss.boss_stage_group_id);
-            int sum = find_all.Sum(x => x.GetDailyWinCount());
-            return sum < boss.enter_limit_count;
+            return false;
         }
+        //  던전 클리어 오픈 체크
+        if (Dungeon.open_game_type == GAME_TYPE.STORY_MODE)
+        {
+            var story_mng = GameData.Instance.GetUserStoryStageDataManager();
+            var stage = story_mng.FindUserStoryStageData(Dungeon.open_dungeon_id);
+            if (stage != null)
+            {
+                return stage.IsStageCleared();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         return false;
     }
+    /// <summary>
+    /// 던전 컨텐츠의 스케쥴 오픈 여부 확인
+    /// </summary>
+    /// <returns></returns>
+    bool IsDungeonOpenTime()
+    {
+        bool is_open = true;
+        if (Schedule == null)
+        {
+            return false;
+        }
+        var begin_dt = DateTime.Parse(Schedule.date_start);
+        var end_dt = DateTime.Parse(Schedule.date_end);
+        var now = DateTime.Now.ToLocalTime();
+        if (begin_dt > now || now > end_dt)
+        {
+            is_open = false;
+        }
+
+        return is_open;
+    }
+
+
+    /// <summary>
+    /// 보스 던전에 진입 가능한지 여부 체크(입장권이 남아 있는지 여부)<br/>
+    /// 보스 던전에 총 1일 입장 제한 횟수가 있음<br/>
+    /// 각 보스당 1일 입장 제한 횟수가 지정되는 것이 아님<br/>
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEnableEntranceBossDungeon()
+    {
+        return GetCount() > 0;
+    }
+
+
 
     public override ERROR_CODE CheckDateAndTimeCharge()
     {
-        int cnt = User_Boss_Dungeon_Data_List.Count;
-        ERROR_CODE result = ERROR_CODE.NOT_WORK;
-        for (int i = 0; i < cnt; i++)
+        //int cnt = User_Boss_Dungeon_Data_List.Count;
+        //ERROR_CODE result = ERROR_CODE.NOT_WORK;
+        //for (int i = 0; i < cnt; i++)
+        //{
+        //    ERROR_CODE code = User_Boss_Dungeon_Data_List[i].CheckDateAndTimeCharge();
+        //    if (code != ERROR_CODE.NOT_WORK)
+        //    {
+        //        result = code;
+        //    }
+        //}
+        //return result;
+        
+        ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        if (!IsDungeonOpenTime())
         {
-            ERROR_CODE code = User_Boss_Dungeon_Data_List[i].CheckDateAndTimeCharge();
-            if (code != ERROR_CODE.NOT_WORK)
-            {
-                result = code;
-            }
+            return ERROR_CODE.NOT_WORK;
         }
-        return result;
+        var now = DateTime.Now.ToLocalTime();
+        var last_dt = GetLastUseDateTime();
+        if (last_dt != DateTime.MinValue && last_dt.Date < now.Date)
+        {
+
+        }
+
+        return code;
     }
 
     public override JsonData Serialized()
@@ -248,6 +387,7 @@ public class UserBossDungeonDataManager : ManagerBase
         {
             return false;
         }
+        InitDungeonData();
 
         if (json.ContainsKey(NODE_DUNGEON_DATA_LIST))
         {

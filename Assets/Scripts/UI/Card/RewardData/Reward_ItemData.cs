@@ -56,7 +56,7 @@ public class Reward_ItemData : RewardDataBase
                 Data = new ItemData_ItemData_V2();
                 Data.SetItem(ITEM_TYPE_V2.STAGE_SKIP, Reward.var1);
                 break;
-            case REWARD_TYPE.TICKET_DUNGEON:
+            case REWARD_TYPE.BOSS_DUNGEON_TICKET:
                 Data = new ItemData_ItemData_V2();
                 Data.SetItem(ITEM_TYPE_V2.TICKET_DUNGEON, Reward.var1);
                 break;

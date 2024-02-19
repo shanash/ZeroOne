@@ -14,6 +14,12 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	int _interaction_group_id;
 
 	///	<summary>
+	///	근원전달 판별
+	///	</summary>
+	public bool check_using_essense => _check_using_essense;
+	bool _check_using_essense;
+
+	///	<summary>
 	///	<b>key_2</b><br/>
 	///	터치 부위 타입
 	///	</summary>
@@ -49,6 +55,7 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	public L2d_Interaction_Base_Data(Raw_L2d_Interaction_Base_Data raw_data)
 	{
 		_interaction_group_id = raw_data.interaction_group_id;
+		_check_using_essense = raw_data.check_using_essense;
 		_touch_type_01 = raw_data.touch_type_01;
 		_gescure_type_01 = raw_data.gescure_type_01;
 		_reaction_ani_id = raw_data.reaction_ani_id;
@@ -76,6 +83,7 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[interaction_group_id] = <color=yellow>{0}</color>", interaction_group_id).AppendLine();
+		sb.AppendFormat("[check_using_essense] = <color=yellow>{0}</color>", check_using_essense).AppendLine();
 		sb.AppendFormat("[touch_type_01] = <color=yellow>{0}</color>", touch_type_01).AppendLine();
 		sb.AppendFormat("[gescure_type_01] = <color=yellow>{0}</color>", gescure_type_01).AppendLine();
 		sb.AppendFormat("[reaction_ani_id] = <color=yellow>{0}</color>", reaction_ani_id).AppendLine();

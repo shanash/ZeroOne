@@ -121,6 +121,12 @@ public class Player_Character_Data : System.IDisposable
 	public double scale => _scale;
 	double _scale;
 
+	///	<summary>
+	///	초기 오픈 캐릭터
+	///	</summary>
+	public bool first_open_check => _first_open_check;
+	bool _first_open_check;
+
 	private bool disposed = false;
 
 	public Player_Character_Data(Raw_Player_Character_Data raw_data)
@@ -145,6 +151,7 @@ public class Player_Character_Data : System.IDisposable
 		_Illustration_path = raw_data.Illustration_path;
 		_script = raw_data.script;
 		_scale = raw_data.scale;
+		_first_open_check = raw_data.first_open_check;
 	}
 
 	public void Dispose()
@@ -195,6 +202,7 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();
 		sb.AppendFormat("[scale] = <color=yellow>{0}</color>", scale).AppendLine();
+		sb.AppendFormat("[first_open_check] = <color=yellow>{0}</color>", first_open_check).AppendLine();
 		return sb.ToString();
 	}
 }

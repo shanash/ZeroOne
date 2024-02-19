@@ -144,6 +144,14 @@ public class UserBossDungeonData : UserDataBase
 
         return code;
     }
+    /// <summary>
+    /// 일일 횟수 관련 데이터 초기화
+    /// </summary>
+    public void ResetDailyData()
+    {
+        Daily_Challenge_Count.Set(0);
+        Daily_Win_Count.Set(0);
+    }
 
 
     public override JsonData Serialized()

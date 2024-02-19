@@ -14,6 +14,12 @@ public class Boss_Data : System.IDisposable
 	int _boss_id;
 
 	///	<summary>
+	///	보스 그룹 ID
+	///	</summary>
+	public int boss_group_id => _boss_group_id;
+	int _boss_group_id;
+
+	///	<summary>
 	///	보스 명
 	///	</summary>
 	public string boss_name => _boss_name;
@@ -37,22 +43,16 @@ public class Boss_Data : System.IDisposable
 	public string boss_skill_info => _boss_skill_info;
 	string _boss_skill_info;
 
-	///	<summary>
-	///	입장 제한 횟수
-	///	</summary>
-	public int enter_limit_count => _enter_limit_count;
-	int _enter_limit_count;
-
 	private bool disposed = false;
 
 	public Boss_Data(Raw_Boss_Data raw_data)
 	{
 		_boss_id = raw_data.boss_id;
+		_boss_group_id = raw_data.boss_group_id;
 		_boss_name = raw_data.boss_name;
 		_boss_stage_group_id = raw_data.boss_stage_group_id;
 		_boss_story_info = raw_data.boss_story_info;
 		_boss_skill_info = raw_data.boss_skill_info;
-		_enter_limit_count = raw_data.enter_limit_count;
 	}
 
 	public void Dispose()
@@ -75,11 +75,11 @@ public class Boss_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[boss_id] = <color=yellow>{0}</color>", boss_id).AppendLine();
+		sb.AppendFormat("[boss_group_id] = <color=yellow>{0}</color>", boss_group_id).AppendLine();
 		sb.AppendFormat("[boss_name] = <color=yellow>{0}</color>", boss_name).AppendLine();
 		sb.AppendFormat("[boss_stage_group_id] = <color=yellow>{0}</color>", boss_stage_group_id).AppendLine();
 		sb.AppendFormat("[boss_story_info] = <color=yellow>{0}</color>", boss_story_info).AppendLine();
 		sb.AppendFormat("[boss_skill_info] = <color=yellow>{0}</color>", boss_skill_info).AppendLine();
-		sb.AppendFormat("[enter_limit_count] = <color=yellow>{0}</color>", enter_limit_count).AppendLine();
 		return sb.ToString();
 	}
 }

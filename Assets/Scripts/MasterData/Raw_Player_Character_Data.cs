@@ -23,6 +23,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 	public string Illustration_path {get; set;}
 	public string script {get; set;}
 	public double scale {get; set;}
+	public bool first_open_check {get; set;}
 
 	private bool disposed = false;
 
@@ -45,6 +46,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 		icon_path = string.Empty;
 		Illustration_path = string.Empty;
 		script = string.Empty;
+		first_open_check = false;
 	}
 
 	public void Dispose()

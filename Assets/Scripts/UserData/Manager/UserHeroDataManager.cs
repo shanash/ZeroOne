@@ -31,8 +31,7 @@ public class UserHeroDataManager : ManagerBase
     void DummyDataSettting()
     {
         var m = MasterDataManager.Instance;
-        List<Player_Character_Data> pc_data_list = new List<Player_Character_Data>();
-        m.Get_PlayerCharacterDataList(ref pc_data_list);
+        var pc_data_list = m.Get_PlayerCharacterDataListByFirstOpen();
         int hero_data_num = 1;
         int cnt = pc_data_list.Count;
         for (int i = 0; i < cnt; i++)

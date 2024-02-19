@@ -96,7 +96,7 @@ public class RewardCardBase : UIBase
             case REWARD_TYPE.STAGE_SKIP:
                 reward = new Reward_ItemData();
                 break;
-            case REWARD_TYPE.TICKET_DUNGEON:
+            case REWARD_TYPE.BOSS_DUNGEON_TICKET:
                 reward = new Reward_ItemData();
                 break;
             case REWARD_TYPE.EQ_GROWUP:

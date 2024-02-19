@@ -56,6 +56,14 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<REWARD_TYPE, Charge_Value_Data>();
 	///	<summary>
+	///	 <b>key_1 int : dungeon_id </b><br/>
+	///	</summary>
+	protected Dictionary<int, Dungeon_Data> _Dungeon_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<int, Dungeon_Data>();
+	///	<summary>
 	///	 <b>key_1 int : stage_id </b><br/>
 	///	</summary>
 	protected Dictionary<int, Editor_Stage_Data> _Editor_Stage_Data
@@ -372,6 +380,14 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<int, Reward_Set_Data>();
 	///	<summary>
+	///	 <b>key_1 int : schedule_id </b><br/>
+	///	</summary>
+	protected Dictionary<int, Schedule_Data> _Schedule_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<int, Schedule_Data>();
+	///	<summary>
 	///	 <b>key_1 int : world_id </b><br/>
 	///	</summary>
 	protected Dictionary<int, World_Data> _World_Data
@@ -479,6 +495,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Boss_Data();
 		await LoadMaster_Boss_Stage_Data();
 		await LoadMaster_Charge_Value_Data();
+		await LoadMaster_Dungeon_Data();
 		await LoadMaster_Editor_Stage_Data();
 		await LoadMaster_Editor_Wave_Data();
 		await LoadMaster_Essence_Status_Data();
@@ -518,6 +535,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Attribute_Icon_Data();
 		await LoadMaster_Player_Character_Level_Stat_Data();
 		await LoadMaster_Reward_Set_Data();
+		await LoadMaster_Schedule_Data();
 		await LoadMaster_World_Data();
 		await LoadMaster_Zone_Data();
 		await LoadMaster_Stage_Data();
@@ -620,6 +638,20 @@ public class BaseMasterDataManager
 		foreach (var raw_data in raw_data_list)
 		{
 			_Charge_Value_Data.Add(raw_data.reward_type, new Charge_Value_Data(raw_data));
+		}
+	}
+
+	protected async Task LoadMaster_Dungeon_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Dungeon_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Dungeon_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Dungeon_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Dungeon_Data.Add(raw_data.dungeon_id, new Dungeon_Data(raw_data));
 		}
 	}
 
@@ -1169,6 +1201,20 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async Task LoadMaster_Schedule_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Schedule_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Schedule_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Schedule_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Schedule_Data.Add(raw_data.schedule_id, new Schedule_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_World_Data()
 	{
 #if UNITY_5_3_OR_NEWER
@@ -1360,6 +1406,14 @@ public class BaseMasterDataManager
 		if(_Charge_Value_Data == null)
 		{
 			await LoadMaster_Charge_Value_Data();
+		}
+	}
+
+	protected async void Check_Dungeon_Data()
+	{
+		if(_Dungeon_Data == null)
+		{
+			await LoadMaster_Dungeon_Data();
 		}
 	}
 
@@ -1672,6 +1726,14 @@ public class BaseMasterDataManager
 		if(_Reward_Set_Data == null)
 		{
 			await LoadMaster_Reward_Set_Data();
+		}
+	}
+
+	protected async void Check_Schedule_Data()
+	{
+		if(_Schedule_Data == null)
+		{
+			await LoadMaster_Schedule_Data();
 		}
 	}
 

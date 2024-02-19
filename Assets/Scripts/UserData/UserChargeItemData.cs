@@ -24,6 +24,7 @@ public class UserChargeItemData : UserDataBase
 
     protected Charge_Value_Data Data;
     protected Max_Bound_Info_Data Max_Bound_Data;
+    protected Schedule_Data Schedule;
 
     public UserChargeItemData() : base() { }
 
@@ -55,7 +56,10 @@ public class UserChargeItemData : UserDataBase
         var m = MasterDataManager.Instance;
         Data = m.Get_ChargeValueData(Charge_Item_Type);
         Max_Bound_Data = m.Get_MaxBoundInfoData(Charge_Item_Type);
-
+        if (Data.schedule_id != 0)
+        {
+            Schedule = m.Get_ScheduleData(Data.schedule_id);
+        }
         if (string.IsNullOrEmpty(Last_Used_Dt))
         {
             Count.Set((int)Max_Bound_Data.base_max);
@@ -304,7 +308,15 @@ public class UserChargeItemData : UserDataBase
     /// <summary>
     /// 반복 주기 체크(n일)
     /// </summary>
-    ERROR_CODE CheckDays() { return ERROR_CODE.NOT_WORK; }
+    ERROR_CODE CheckDays() 
+    { 
+        if (Schedule == null)
+        {
+            return ERROR_CODE.NOT_WORK;
+        }
+
+        return ERROR_CODE.NOT_WORK; 
+    }
     /// <summary>
     /// 반복 주기 체크(n주간)
     /// </summary>

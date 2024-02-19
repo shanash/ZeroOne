@@ -1352,14 +1352,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void MoveInLeftTeam()
     {
         FindApproachTargets();
-        //var target = Battle_Mng.GetBattleField().GetCenterPoint();
-        //float approach_dist = GetApproachDistance();
-        //float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
-        //if (dist <= approach_dist)
-        //{
-        //    ChangeState(UNIT_STATES.IDLE);
-        //    return;
-        //}
         if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.IDLE);
@@ -1377,14 +1369,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected void MoveInRightTeam()
     {
         FindApproachTargets();
-        //var target = Battle_Mng.GetBattleField().GetCenterPoint();
-        //float approach_dist = GetApproachDistance();
-        //float dist = MathF.Abs(target.transform.position.x - this.transform.position.x);
-        //if (dist <= approach_dist)
-        //{
-        //    ChangeState(UNIT_STATES.IDLE);
-        //    return;
-        //}
         if (Approach_Targets.Count > 0)
         {
             ChangeState(UNIT_STATES.IDLE);

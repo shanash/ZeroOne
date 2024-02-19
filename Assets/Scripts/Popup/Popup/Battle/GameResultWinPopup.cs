@@ -663,7 +663,7 @@ public class GameResultWinPopup : PopupBase
             case REWARD_TYPE.STAGE_SKIP:
                 Debug.Assert(false);
                 break;
-            case REWARD_TYPE.TICKET_DUNGEON:
+            case REWARD_TYPE.BOSS_DUNGEON_TICKET:
                 Debug.Assert(false);
                 break;
             case REWARD_TYPE.EQ_GROWUP:

@@ -2,21 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/// <summary>
-/// 게임 타입 
-/// </summary>
-public enum GAME_TYPE
-{
-    NONE = 0,
+///// <summary>
+///// 게임 타입 
+///// </summary>
+//public enum GAME_TYPE
+//{
+//    NONE = 0,
 
-    STORY_MODE,                         //  스토리 모드
-    BOSS_DUNGEON_MODE,                  //  보스 던전 모드
+//    STORY_MODE,                         //  스토리 모드
+//    BOSS_DUNGEON_MODE,                  //  보스 던전 모드
 
-    //  editor mode
-    EDITOR_SKILL_PREVIEW_MODE = 101,          //  에디터에서 스킬 프리뷰 모드
-    EDITOR_SKILL_EDIT_MODE = 102,             //  에디터에서 스킬 에디트 모드(아직 미개발)
+//    //  editor mode
+//    EDITOR_SKILL_PREVIEW_MODE = 101,          //  에디터에서 스킬 프리뷰 모드
+//    EDITOR_SKILL_EDIT_MODE = 102,             //  에디터에서 스킬 에디트 모드(아직 미개발)
 
-}
+//}
 /// <summary>
 /// 전투 배속 타입 <b>(주석에서 사용할 태그 테스트)</b><br/>
 /// <b>Bold</b><br/>

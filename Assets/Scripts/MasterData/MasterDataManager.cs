@@ -169,7 +169,7 @@ public class MasterDataManager : BaseMasterDataManager
     public IReadOnlyList<Charge_Value_Data> Get_ChargeValueDataList()
     {
         Check_Charge_Value_Data();
-        return _Charge_Value_Data.Values.ToList().FindAll(x => x.Use_Charge_Data);
+        return _Charge_Value_Data.Values.ToList();
     }
 
     public Max_Bound_Info_Data Get_MaxBoundInfoData(REWARD_TYPE rtype)
@@ -192,16 +192,22 @@ public class MasterDataManager : BaseMasterDataManager
         return _Player_Character_Data[player_character_id];
     }
 
-    /// <summary>
-    /// 플레이어 캐릭터 모두 가져오기
-    /// </summary>
-    /// <param name="list"></param>
-    public void Get_PlayerCharacterDataList(ref List<Player_Character_Data> list)
+    public IReadOnlyList<Player_Character_Data> Get_PlayerCharacterDataList()
     {
         Check_Player_Character_Data();
+        return _Player_Character_Data.Values.ToList();
+    }
 
-        list.Clear();
-        list.AddRange(_Player_Character_Data.Values.ToList());
+    /// <summary>
+    /// 최초 지급 캐릭터 반환
+    /// </summary>
+    /// <returns></returns>
+    public IReadOnlyList<Player_Character_Data> Get_PlayerCharacterDataListByFirstOpen()
+    {
+        Check_Player_Character_Data();
+        var list = _Player_Character_Data.Values.ToList().FindAll(x => x.first_open_check);
+        list.Sort((a, b) => a.player_character_id.CompareTo(b.player_character_id));
+        return list;
     }
     
     /// <summary>
@@ -574,11 +580,49 @@ public class MasterDataManager : BaseMasterDataManager
 
     #endregion
 
+    #region Dungeon
+    public Dungeon_Data Get_DungeonData(GAME_TYPE gtype)
+    {
+        Check_Dungeon_Data();
+        var dungeon_list = _Dungeon_Data.Values.ToList().FindAll(x => x.game_type == gtype);
+        var now = DateTime.Now.ToLocalTime();
+        Dungeon_Data dungeon = null;
+        for (int i = 0; i < dungeon_list.Count; i++)
+        {
+            var d = dungeon_list[i];
+            if (d.schedule_id == 0)
+            {
+                continue;
+            }
+            var schedule = Get_ScheduleData(d.schedule_id);
+            if (schedule != null)
+            {
+                var begin_dt = DateTime.Parse(schedule.date_start);
+                var end_dt = DateTime.Parse(schedule.date_end);
+                if (begin_dt <= now && now <= end_dt)
+                {
+                    dungeon = d;
+                    break;
+                }
+            }
+        }
+        return dungeon;
+    }
+    #endregion
+
+    #region Etc
+    public Schedule_Data Get_ScheduleData(int schedule_id)
+    {
+        Check_Schedule_Data();
+        return _Schedule_Data[schedule_id];
+    }
+    #endregion
+
     #region Boss Dungeon
-    public IReadOnlyList<Boss_Data> Get_BossDataList()
+    public IReadOnlyList<Boss_Data> Get_BossDataList(int boss_group_id)
     {
         Check_Boss_Data();
-        var list = _Boss_Data.Values.ToList();
+        var list = _Boss_Data.Values.ToList().FindAll(x => x.boss_group_id == boss_group_id);
         list.Sort((a, b) => a.boss_id.CompareTo(b.boss_id));
         return list;
     }
