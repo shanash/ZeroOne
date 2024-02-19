@@ -11,7 +11,8 @@ public enum SceneName
     load,
     home,
     battle,
-    memorial,
+    skill_editor,
+    skill_preview,
 }
 
 public class SCManager : Singleton<SCManager>
@@ -22,6 +23,7 @@ public class SCManager : Singleton<SCManager>
     #endregion
 
     public SceneControllerBase Current_Controller { get; private set; }
+    public SceneName Default_Scene { get; set; } = SceneName.home;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void CallInstance()
@@ -44,10 +46,25 @@ public class SCManager : Singleton<SCManager>
         Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
     }
 
-    public void ChangeScene(SceneName scene_name/*, string detailPage = ""*/)
+    public void ChangeScene(SceneName scene_name = SceneName.None/*, string detailPage = ""*/)
     {
         if (Is_Changing)
             return;
+
+        if (scene_name == SceneName.None)
+        {
+            scene_name = Default_Scene;
+
+            // TODO: 이 세팅을 여기에 둬야 할까요?.....
+            if (Default_Scene.Equals(SceneName.skill_preview))
+            {
+                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
+            }
+            else if (Default_Scene.Equals(SceneName.skill_editor))
+            {
+                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
+            }
+        }
 
         if (scene_name.ToString().Equals(Current_SceneName))
             return;
@@ -62,7 +79,7 @@ public class SCManager : Singleton<SCManager>
 
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
 
-        await LoadSceneAsync(sceneName.ToString());
+        await LoadSceneImmidiatlyAsync(sceneName.ToString());
 
         await Resources.UnloadUnusedAssets();
         System.GC.Collect();
@@ -75,7 +92,7 @@ public class SCManager : Singleton<SCManager>
         Is_Changing = false;
     }
 
-    async UniTask LoadSceneAsync(string sceneName)
+    public async UniTask LoadSceneImmidiatlyAsync(string sceneName)
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;

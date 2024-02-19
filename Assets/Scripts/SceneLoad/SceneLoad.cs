@@ -66,31 +66,8 @@ public class SceneLoad : SceneControllerBase
         {
             await Task.Yield();
         }
-        string first_scene = "home";
-#if UNITY_EDITOR
-        List<string> scene_list = new List<string>();
-        scene_list.Add("title");
-        scene_list.Add("load");
-        scene_list.Add("home");
-        scene_list.Add("battle");
-        scene_list.Add("memorial");
 
-        if (!scene_list.Contains(Start_Scene_Name))
-        {
-            first_scene = Start_Scene_Name;
-            if (first_scene.Equals("skill_preview"))
-            {
-                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
-            }
-            else if (first_scene.Equals("skill_editor"))
-            {
-                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
-            }
-            
-        }
-#endif
-
-        SCManager.Instance.ChangeScene(SceneName.home);
+        SCManager.Instance.ChangeScene();
     }
 }
 
