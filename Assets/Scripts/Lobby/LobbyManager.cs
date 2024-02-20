@@ -37,7 +37,22 @@ public class LobbyManager : SceneControllerBase
         pmng.SetRootOnEnter(() => pd.Resume());
         pmng.SetRootOnExit(() => pd.Pause());
 
-        pd = Factory.Instantiate<Producer>(1010101, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+        var list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+
+
+        if (list.Count == 0)
+        {
+            string msg = "정상적으로 데이터가 설정되지 않았습니다.\nPersistent 데이터를 지워주세요";
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+            {
+                popup.ShowPopup(3f, msg);
+            });
+
+            SCManager.Instance.SetCurrent(this);
+            return;
+        }
+
+        pd = Factory.Instantiate<Producer>(list[0].Skin_Id, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
 
         InitCameraForL2dChar(Memorial_Camera);

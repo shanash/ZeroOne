@@ -35,7 +35,13 @@ public class UserL2dDataManager : ManagerBase
 
         foreach (int id in l2d_lobby_id_list)
         {
-            AddUserL2dData(id);
+            var data = AddUserL2dData(id);
+
+            // TODO:최초 더미 설정 : 에일린, 변경가능성이 언제든 있으니 확인
+            if (id.Equals(1010601))
+            {
+                data.SetLobbyChoiceNumber(1);
+            }
         }
 
         Save();
