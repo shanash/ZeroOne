@@ -30,13 +30,17 @@ public class UserL2dDataManager : ManagerBase
     void DummyDataSetting()
     {
         var m = MasterDataManager.Instance;
-        List<L2d_Char_Skin_Data> list = m.Get_L2dDataList();
+        var user_hero_list = GameData.I.GetUserHeroDataManager().GetUserHeroDataList();
+        var l2d_id_list = m.Get_PlayerCharacterDataList().Select(x => x.lobby_basic_id).ToList();
 
+        var l2d_lobby_data_list = l2d_id_list.Select(x => m.Get_L2DCharSkinData(x)).ToList();
+        /*
         for (int i = 0; i < list.Count; i++)
         {
             var mdata = list[i];
             AddUserL2dData(mdata.l2d_id);
         }
+        */
 
         Save();
     }
