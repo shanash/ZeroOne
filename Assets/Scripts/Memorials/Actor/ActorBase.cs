@@ -1,4 +1,5 @@
 using Cinemachine;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Spine;
 using Spine.Unity;
 using System;
@@ -611,8 +612,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return false;
         }
 
-        var brain = CinemachineCore.Instance.GetActiveBrain(0);
-        var Vcam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
+        var goCM = GameObject.Find("VirtualCineManager");
+        var goMemCamera = goCM.transform.Find("MemorialCamera");
+        var Vcam = goMemCamera.GetComponent<CinemachineVirtualCamera>();
 
         float scale = this.transform.lossyScale.y;
         float[] vertex = null;
