@@ -644,6 +644,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         return null;
     }
 
+    public float GetUnitScale()
+    {
+        return Unit_Data.GetUnitScale();
+    }
+
     protected virtual void SpawnSkillCastEffect(BattleSkillGroup skill_grp)
     {
         string[] effect_paths = skill_grp.GetSkillCastEffectPath();
@@ -661,7 +666,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 continue;
             }
-            var eff = (SkillEffectBase)factory.CreateEffect(e_path);
+            var eff = (SkillEffectBase)factory.CreateEffect(e_path, GetUnitScale());
             var ec = eff.GetEffectComponent();
             if (ec != null)
             {
@@ -712,6 +717,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.AddTarget(target);
                 dmg.Skill = skill;
                 dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
+                dmg.Magic_Attack_Point = GetMagicAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  onetime skill
@@ -727,7 +733,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     }
                     dmg.Onetime = onetime;
 
-                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
+                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path, GetUnitScale());
                     effect.SetBattleSendData(dmg);
 
                     var ec = effect.GetEffectComponent();
@@ -772,7 +778,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                     }
                     dmg.Duration = duration;
 
-                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
+                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path, target.GetUnitScale());
                     effect.SetBattleSendData(dmg);
 
                     var ec = effect.GetEffectComponent();
@@ -806,10 +812,11 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.AddTargets(Attack_Targets);
                 dmg.Skill = skill;
                 dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
+                dmg.Magic_Attack_Point = GetMagicAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
                 //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab);
+                var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
                 trigger_effect.SetBattleSendData(dmg);
 
                 var ec = trigger_effect.GetEffectComponent();
@@ -844,10 +851,11 @@ public partial class HeroBase_V2 : UnitBase_V2
                     dmg.AddTarget(target);
                     dmg.Skill = skill;
                     dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
+                    dmg.Magic_Attack_Point = GetMagicAttackPoint();
                     dmg.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab);
+                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
                     trigger_effect.SetBattleSendData(dmg);
 
                     var ec = trigger_effect.GetEffectComponent();
@@ -1313,7 +1321,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             send_data.Onetime = onetime;
 
-            var effect = (SkillEffectBase)factory.CreateEffect(effect_path);
+            var effect = (SkillEffectBase)factory.CreateEffect(effect_path, send_data.Caster.GetUnitScale());
             effect.SetBattleSendData(send_data);
 
             var ec = effect.GetEffectComponent();

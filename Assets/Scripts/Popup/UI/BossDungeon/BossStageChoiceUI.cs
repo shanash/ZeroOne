@@ -72,6 +72,7 @@ public class BossStageChoiceUI : PopupBase
         if (load_cnt >= total_cnt)
         {
             FixedUpdatePopup();
+            UpdatePopup();
         }
     }
 
@@ -96,9 +97,13 @@ public class BossStageChoiceUI : PopupBase
             var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageListNode", Stage_List_View.content);
             var node = obj.GetComponent<BossStageListNode>();
             node.SetBossStageData(stage);
+            node.SetSkipRefreshCallback(UpdatePopup());
             Used_Boss_Stage_List_Nodes.Add(node);
         }
+    }
 
+    public override void UpdatePopup()
+    {
         //  일일 입장 제한
         var boss_mng = GameData.Instance.GetUserBossStageDataManager();
         int entrance_cnt = boss_mng.GetEntranceCount();

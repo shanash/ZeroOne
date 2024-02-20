@@ -64,6 +64,17 @@ public class UserBossStageData : UserDataBase
         return Star_Point.Get();
     }
 
+    /// <summary>
+    /// 일일 승리 횟수는 매일 초기화 되기 때문에<br/>
+    /// 최초 승리시 최소 별 1개 이상이므로.<br/>
+    /// 별 갯수로 스테이지 클리어 여부 판단
+    /// </summary>
+    /// <returns></returns>
+    public bool IsStageCleared()
+    {
+        return GetStarPoint() > 0;
+    }
+
     public void SetStarPoint(int pt)
     {
         int star_point = GetStarPoint();

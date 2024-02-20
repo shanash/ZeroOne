@@ -45,6 +45,22 @@ public partial class BattleManager_V2 : SceneControllerBase
                     GameData.Instance.GetUserStoryStageDataManager().Save();
                 }
                 break;
+            case GAME_TYPE.BOSS_DUNGEON_MODE:
+                {
+                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.DUNGEON_ID, 100101);
+                    board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);     //  스테이지 id를 받은 후 해당 데이터를 삭제
+
+                    Dungeon_Data = new BattleDungeon_BossStageData();
+                    Dungeon_Data.SetDungeonID(stage_id);
+
+                    var user_dungeon_data = (UserBossStageData)Dungeon_Data.GetUserDungeonData();
+                    if (user_dungeon_data != null)
+                    {
+                        user_dungeon_data.AddDailyChallengeCount();
+                    }
+                    GameData.Instance.GetUserBossStageDataManager().Save();
+                }
+                break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
                 {
                     int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.EDITOR_STAGE_ID, 100001);
@@ -52,7 +68,6 @@ public partial class BattleManager_V2 : SceneControllerBase
 
                     Dungeon_Data = new BattleDungeon_SkillPreviewEditorData();
                     Dungeon_Data.SetDungeonID(stage_id);
-                    
                 }
                 break;
         }

@@ -317,7 +317,11 @@ public partial class TeamManager_V2 : IDisposable
         switch (Game_Type)
         {
             case GAME_TYPE.STORY_MODE:
-                StoryModeMonsterTeamSpawn();
+                DungeonMonsterTeamSpawn();
+                break;
+            case GAME_TYPE.BOSS_DUNGEON_MODE:
+                //BossStageModeMonsterTeamSpawn();
+                DungeonMonsterTeamSpawn();
                 break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
                 Editor_MonsterTeamSpawn();
@@ -325,12 +329,10 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-
-
     /// <summary>
     /// 스토리 모드 몬스터 스폰
     /// </summary>
-    void StoryModeMonsterTeamSpawn()
+    void DungeonMonsterTeamSpawn()
     {
         ClearMembers();
         var pool = GameObjectPoolManager.Instance;
@@ -362,6 +364,7 @@ public partial class TeamManager_V2 : IDisposable
             }
 
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
+            obj.transform.localScale = new Vector2(npc.GetUnitScale(), npc.GetUnitScale());
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 
@@ -596,7 +599,10 @@ public partial class TeamManager_V2 : IDisposable
             case GAME_TYPE.EDITOR_SKILL_EDIT_MODE:
                 break;
             case GAME_TYPE.STORY_MODE:
-                GetStoryModeHeroPrefabs(Game_Type, ref list);
+                GetPlayerCharacterDeckPrefabs(Game_Type, ref list);
+                break;
+            case GAME_TYPE.BOSS_DUNGEON_MODE:
+                GetPlayerCharacterDeckPrefabs(Game_Type, ref list);
                 break;
             default:
                 Debug.Assert(false);
@@ -609,7 +615,7 @@ public partial class TeamManager_V2 : IDisposable
     /// 스토리 모드의 플레이어 캐릭터 프리팹 반환
     /// </summary>
     /// <param name="list"></param>
-    protected void GetStoryModeHeroPrefabs(GAME_TYPE gtype, ref List<string> list)
+    protected void GetPlayerCharacterDeckPrefabs(GAME_TYPE gtype, ref List<string> list)
     {
         var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(gtype);
         var deck_heroes = deck.GetDeckHeroes();

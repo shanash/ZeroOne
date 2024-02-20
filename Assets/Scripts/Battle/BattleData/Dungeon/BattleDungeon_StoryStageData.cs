@@ -52,8 +52,6 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     public override void GetMonsterPrefabsPath(ref List<string> list)
     {
         var m = MasterDataManager.Instance;
-
-
         int wave_cnt = Wave_Datas.Count;
         //  웨이브별 npc 프리팹
         for (int w = 0; w < wave_cnt; w++)

@@ -16,20 +16,22 @@ public class EffectFactory : MonoBehaviour
 
     float Effect_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
-    public EffectBase CreateEffect(string path)
+    public EffectBase CreateEffect(string path, float scale = 1f)
     {
-        return CreateEffect(path, this.transform);
+        return CreateEffect(path, this.transform, scale);
     }
 
-    public EffectBase CreateEffect(string path, Transform parent)
+    public EffectBase CreateEffect(string path, Transform parent, float scale = 1f)
     {
         EffectBase effect = null;
 
         var pool = GameObjectPoolManager.Instance;
         var obj = pool.GetGameObject(path, parent);
+        obj.transform.localScale = new Vector3(scale, scale, scale);
         effect = obj.GetComponent<EffectBase>();
         effect.SetEffectFactory(this);
         effect.SetEffectSpeedMultiple(Effect_Speed_Multiple);
+
         Used_Effect_List.Add(effect);
         return effect;
     }

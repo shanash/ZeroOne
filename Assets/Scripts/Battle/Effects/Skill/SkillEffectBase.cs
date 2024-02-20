@@ -85,7 +85,7 @@ public class SkillEffectBase : EffectBase
                 }
                 sdata.Onetime = onetime;
 
-                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, sdata.Caster.GetUnitScale());
                 effect.SetBattleSendData(sdata);
 
                 var ec = GetEffectComponent();
@@ -121,7 +121,7 @@ public class SkillEffectBase : EffectBase
                     continue;
                 }
 
-                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, target.GetUnitScale());
                 effect.SetBattleSendData(sdata);
 
                 var ec = GetEffectComponent();
@@ -200,7 +200,7 @@ public class SkillEffectBase : EffectBase
                 }
                 Send_Data.Onetime = onetime;
 
-                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, Send_Data.Caster.GetUnitScale());
                 effect.SetBattleSendData(Send_Data);
 
                 var ec = effect.GetEffectComponent();
@@ -236,7 +236,7 @@ public class SkillEffectBase : EffectBase
                 }
                 Send_Data.Duration = duration;
 
-                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path);
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, target.GetUnitScale());
                 effect.SetBattleSendData(Send_Data);
 
                 var ec = effect.GetEffectComponent();

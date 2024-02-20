@@ -318,15 +318,6 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual float GetUnitScale() { return 0.35f; }
 
-    //public void SetBattleSpeed(float speed) 
-    //{
-    //    Battle_Speed_Multiple = speed;
-    //    if (Skill_Mng != null)
-    //    {
-    //        Skill_Mng.SetBattleSpeed(speed);
-    //    }
-    //}
-
     protected override void Destroy()
     {
         Hero = null;

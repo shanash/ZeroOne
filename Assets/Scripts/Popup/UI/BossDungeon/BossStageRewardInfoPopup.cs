@@ -64,14 +64,15 @@ public class BossStageRewardInfoPopup : PopupBase
         //  stage name
         Boss_Stage_Name.text = GameDefine.GetLocalizeString(Stage.stage_name);
 
-        //  Limit Time
+        //  제한 시간 - Stage를 구성하는 wave 제한 시간의 합산
         var wave_list = m.Get_WaveDataList(Stage.wave_group_id);
-        if (wave_list.Count > 0)
+        int sum_limit_time = 0;
+        for (int i = 0; i < wave_list.Count; i++)
         {
-            var first_wave = wave_list[0];
-            var time = TimeSpan.FromSeconds(first_wave.wave_time);
-            Limit_Time.text = ZString.Format("제한시간 {0:D2}:{1:D2}", time.Minutes, time.Seconds);
+            sum_limit_time += wave_list[i].wave_time;
         }
+        var time = TimeSpan.FromSeconds(sum_limit_time);
+        Limit_Time.text = ZString.Format("제한시간 {0:D2}:{1:D2}", time.Minutes, time.Seconds);
 
         //  리워드
         string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/RewardItemCard";
@@ -110,6 +111,7 @@ public class BossStageRewardInfoPopup : PopupBase
             Used_Reward_Item_Card_List.Add(item);
         }
     }
+
 
     void ClearRewardItemListNode()
     {

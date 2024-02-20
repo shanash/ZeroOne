@@ -163,6 +163,27 @@ public class UserBossStageDataManager : ManagerBase
             stage.SetStarPoint(star_pt);
         }
     }
+
+    /// <summary>
+    /// 보스 던전 스킵 요청
+    /// </summary>
+    /// <param name="boss_stage_id"></param>
+    /// <returns></returns>
+    public ERROR_CODE SkipBossStage(int boss_stage_id)
+    {
+        //  입장 횟수 부족
+        if (!IsEnableEntranceBossDungeon())
+        {
+            return ERROR_CODE.NOT_ENOUGH_ITEM;
+        }
+        var dungeon = FindUserBossDungeonData(boss_stage_id);
+        if (dungeon != null)
+        {
+            dungeon.AddDailyChallengeCount();
+            return BossStageWin(boss_stage_id);
+        }
+        return ERROR_CODE.FAILED;
+    }
     /// <summary>
     /// 보스 던전 승리
     /// </summary>
