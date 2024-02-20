@@ -24,6 +24,11 @@ public class LobbyManager : SceneControllerBase
 
     Producer pd = null;
 
+    List<UserL2dData> L2d_List = null;
+    int Current_L2d_Index = -1;
+
+    UserL2dData Current_L2d_Data => L2d_List[Current_L2d_Index];
+
     protected override void Initialize()
     {
         var audio = AudioManager.Instance;
@@ -37,10 +42,9 @@ public class LobbyManager : SceneControllerBase
         pmng.SetRootOnEnter(() => pd.Resume());
         pmng.SetRootOnExit(() => pd.Pause());
 
-        var list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+        L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
 
-
-        if (list.Count == 0)
+        if (L2d_List.Count == 0)
         {
             string msg = "정상적으로 데이터가 설정되지 않았습니다.\nPersistent 데이터를 지워주세요";
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
@@ -52,10 +56,9 @@ public class LobbyManager : SceneControllerBase
             return;
         }
 
-        pd = Factory.Instantiate<Producer>(list[0].Skin_Id, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
         GestureManager.Instance.Enable = false;
-
         InitCameraForL2dChar(Memorial_Camera);
+        SetLobbyChar(L2d_List);
 
         _ = InitializeAsync();
     }
@@ -89,6 +92,21 @@ public class LobbyManager : SceneControllerBase
         camera.m_Lens.FieldOfView = fov;
     }
 
+    public void OnConfirmPopup(params object[] data)
+    {
+        Debug.Assert(data.Length > 0, "확인 데이터가 없습니다.");
+
+        var popup_name = (string)data[0];
+        switch(popup_name)
+        {
+            case "SelectLobbyCharacterPopup":
+                var l2d_list =  (List<UserL2dData>)data[1];
+                SetLobbyChar(l2d_list);
+
+                break;
+        }
+    }
+
     public override void OnClick(UIButtonBase button)
     {
         base.OnClick(button);
@@ -99,6 +117,7 @@ public class LobbyManager : SceneControllerBase
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
                 {
                     popup.ShowPopup();
+                    popup.AddClosedCallbackDelegate(OnConfirmPopup);
                 });
                 break;
             case "CharacterBtn":
@@ -108,10 +127,20 @@ public class LobbyManager : SceneControllerBase
                 });
                 break;
             case "LeftMemorialBtn":
-                CommonUtils.ShowToast("Left 메모리얼", TOAST_BOX_LENGTH.SHORT);
+                Current_L2d_Index--;
+                if (Current_L2d_Index < 0)
+                {
+                    Current_L2d_Index = L2d_List.Count - 1;
+                }
+                UpdateLobbyChar();
                 break;
             case "RightMemorialBtn":
-                CommonUtils.ShowToast("Right 메모리얼", TOAST_BOX_LENGTH.SHORT);
+                Current_L2d_Index++;
+                if (Current_L2d_Index >= L2d_List.Count)
+                {
+                    Current_L2d_Index = 0;
+                }
+                UpdateLobbyChar();
                 break;
             case "PlayBtn":
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
@@ -219,6 +248,23 @@ public class LobbyManager : SceneControllerBase
         // 상단 면의 평면 방정식 계산
         Plane topPlane = new Plane(Vector3.Normalize(topDirection), cameraPosition);
         return topPlane;
+    }
+
+    void SetLobbyChar(List<UserL2dData> l2d_list)
+    {
+        L2d_List = l2d_list;
+        Current_L2d_Index = 0;
+        UpdateLobbyChar();
+    }
+
+    void UpdateLobbyChar()
+    {
+        if (pd != null)
+        {
+            pd.Release();
+            pd = null;
+        }
+        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
     }
 
     #region UI Animation Events

@@ -152,10 +152,12 @@ public class SelectLobbyCharacterPopup : PopupBase
     /// </summary>
     void ConfirmChoiceData()
     {
-        var selected_list = Character_List.FindAll(x => x.Is_Choice_Lobby).ToList();
+        var selected_list = Character_List.FindAll(x => x.Is_Choice_Lobby).OrderBy(x => x.Lobby_Choice_Number).ToList();
 
         GameData.I.GetUserL2DDataManager().SetLobbyChoiceOrder(selected_list);
         GameData.I.GetUserL2DDataManager().Save();
+
+        Closed_Delegate?.Invoke("SelectLobbyCharacterPopup", selected_list);
     }
 
     /// <summary>
@@ -174,7 +176,8 @@ public class SelectLobbyCharacterPopup : PopupBase
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         //  confirm todo
-        HidePopup(ConfirmChoiceData);
+        ConfirmChoiceData();
+        HidePopup();
     }
 
     public void OnClickToggleCheck()
