@@ -1,3 +1,4 @@
+using Cinemachine;
 using Spine;
 using Spine.Unity;
 using System;
@@ -8,6 +9,10 @@ using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
 {
+    // 보정 X, Y값
+    const float ADDED_POS_X = -2.2f;
+    const float ADDED_POS_Y = -1.3f;
+
     protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
     protected const int MOUTH_TRACK = 17;
@@ -585,6 +590,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         GestureManager.Instance.OnDrag -= OnDrag;
     }
 
+    float CalculateTop(Vector3 cam_pos, float fov, Vector3 target)
+    {
+        var distanceToTarget = Vector3.Distance(cam_pos, target);
+
+        // 수직 FOV의 절반을 라디안으로 변환
+        float verticalFOVInRadians = fov * Mathf.Deg2Rad;
+        // 카메라로부터 대상까지의 거리를 이용하여 시야 상단의 높이 계산
+        float topHeightAtDistance = distanceToTarget * Mathf.Tan(verticalFOVInRadians / 2);
+
+        // 카메라의 현재 y 위치에 계산된 높이를 추가하여 상단의 y값 계산
+        return cam_pos.y + topHeightAtDistance;
+    }
+
     bool Initialize(Producer pd, L2d_Char_Skin_Data skin_data, LOVE_LEVEL_TYPE love_level)
     {
         if (Skeleton == null)
@@ -593,18 +611,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return false;
         }
 
+        var brain = CinemachineCore.Instance.GetActiveBrain(0);
+        var Vcam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
+
+        float scale = this.transform.lossyScale.y;
         float[] vertex = null;
-
         this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
-        Debug.Log($"{x} : {y} : {width} : {height}");
-
-        var myRender = this.GetComponent<MeshRenderer>();
-        var boundSize = myRender.bounds.size;
-        var mainTexSize = new Vector2(myRender.sharedMaterial.mainTexture.width, myRender.sharedMaterial.mainTexture.height);
-
-        Debug.Log($"{boundSize} : {mainTexSize}");
-
-
+        this.transform.position = new Vector3(ADDED_POS_X, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
 
         InitField();
 

@@ -105,6 +105,8 @@ public class GameDefine : MonoBehaviour
 
     public static readonly int SCREEN_BASE_WIDTH = 1440;
     public static readonly int SCREEN_BASE_HEIGHT = 1080;
+    public static readonly int SCREEN_UI_BASE_WIDTH = 1920;
+    public static readonly int SCREEN_UI_BASE_HEIGHT = 1080;
     public static readonly Vector2 SCREEN_BASE_SIZE = new Vector2(SCREEN_BASE_WIDTH, SCREEN_BASE_HEIGHT);
 
     public static readonly string TAG_HERO = "Hero";
