@@ -108,6 +108,11 @@ public class UserBossDungeonDataManager : ManagerBase
         return true;
     }
 
+    public Dungeon_Data GetDungeonData()
+    {
+        return Dungeon;
+    }
+
     /// <summary>
     /// 사용자 보스 던전 데이터 찾기
     /// </summary>
@@ -176,7 +181,7 @@ public class UserBossDungeonDataManager : ManagerBase
         }
         //  입장 횟수 차감
         int cnt = GetCount();
-        cnt -= 1;
+        cnt += 1;
         Count.Set(cnt);
 
         var now = DateTime.Now.ToLocalTime();
@@ -248,10 +253,18 @@ public class UserBossDungeonDataManager : ManagerBase
         }
         return null;
     }
+
+
     public int GetCount()
     {
         return Count.Get();
     }
+
+    public int GetEntranceCount()
+    {
+        return GetMaxEntranceCount() - GetCount();
+    }
+
     public int GetMaxEntranceCount()
     {
         if (Max_Bound_Data != null)
@@ -259,6 +272,15 @@ public class UserBossDungeonDataManager : ManagerBase
             return (int)Max_Bound_Data.base_max;
         }
         return 3;
+    }
+
+    /// <summary>
+    /// 컨텐츠 오픈에 필요한 스테이지 클리어 ID
+    /// </summary>
+    /// <returns></returns>
+    public int GetNeedClearDungeonStageID()
+    {
+        return Dungeon.open_dungeon_id;
     }
 
     /// <summary>
@@ -321,9 +343,8 @@ public class UserBossDungeonDataManager : ManagerBase
     /// <returns></returns>
     public bool IsEnableEntranceBossDungeon()
     {
-        return GetCount() > 0;
+        return GetEntranceCount() > 0;
     }
-
 
 
     public override ERROR_CODE CheckDateAndTimeCharge()
@@ -359,7 +380,7 @@ public class UserBossDungeonDataManager : ManagerBase
                 {
                     User_Boss_Dungeon_Data_List[i].ResetDailyData();
                 }
-                Count.Set(GetMaxEntranceCount());
+                Count.Set(0);
                 Last_Used_Dt = string.Empty;
                 Last_Used_Datetime = DateTime.MinValue;
                 Is_Update_Data = true;

@@ -1,8 +1,16 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
+using UnityEngine;
 
 public class MissionGateUI : PopupBase
 {
+    [SerializeField, Tooltip("Boss Dungeon Btn")]
+    UIButtonBase Boss_Dungeon_Btn;
+    [SerializeField, Tooltip("Boss Dungeon Lock")]
+    RectTransform Boss_Dungeon_Lock;
+    
 
     protected override bool Initialize(object[] data)
     {
@@ -12,6 +20,8 @@ public class MissionGateUI : PopupBase
 
     protected override void FixedUpdatePopup()
     {
+        var gd = GameData.Instance;
+
         var board = BlackBoard.Instance;
         int open_dungeon_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, 0);
         if (open_dungeon_id > 0)
@@ -23,6 +33,10 @@ public class MissionGateUI : PopupBase
                 popup.ShowPopup(mng.GetCurrentWorldID(), mng.GetCurrentZoneID());
             });
         }
+
+        //  boss dungeon check
+        var boss_mng = gd.GetUserBossDungeonDataManager();
+        Boss_Dungeon_Lock.gameObject.SetActive(!boss_mng.IsBossDungeonOpen());
     }
 
 
@@ -72,9 +86,21 @@ public class MissionGateUI : PopupBase
     public void OnClickBossBattle()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+        var boss_mng = GameData.Instance.GetUserBossDungeonDataManager();
+        if (!boss_mng.IsBossDungeonOpen())
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+            {
+                var stage = MasterDataManager.Instance.Get_StageData(boss_mng.GetNeedClearDungeonStageID());
+                string msg = ZString.Format("{0}를 클리어 해야 합니다.", stage.stage_name);
+                popup.ShowPopup(3f, msg);
+            });
+            return;
+        }
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageEntryUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+        {
+            popup.ShowPopup();
         });
     }
 }
