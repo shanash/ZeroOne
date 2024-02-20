@@ -1,4 +1,5 @@
 using LitJson;
+using System.Diagnostics;
 
 public class UserL2dData : UserDataBase
 {
@@ -8,15 +9,8 @@ public class UserL2dData : UserDataBase
 
     public bool Is_Choice_Lobby { get; protected set; } = false;
 
-    /// <summary>
-    /// 임시 지정번호
-    /// </summary>
-    public int Temp_Lobby_Choice_Number { get; protected set; } = 0;
+    public int Player_Character_ID { get; protected set; } = 0;
 
-    /// <summary>
-    /// 임시 선택
-    /// </summary>
-    public bool Is_Temp_Choice { get; protected set; } = false;
 
     L2d_Char_Skin_Data Data;
 
@@ -27,13 +21,12 @@ public class UserL2dData : UserDataBase
         Skin_Id = 0;
         Lobby_Choice_Number = 0;
         Is_Choice_Lobby = false;
-        Temp_Lobby_Choice_Number = 0;
-        Is_Temp_Choice = false;
     }
 
-    public void SetL2dDataID(int memorial_id)
+    public void SetL2dDataID(int memorial_id, int hero_id)
     {
         Skin_Id = memorial_id;
+        Player_Character_ID = hero_id;
         InitMasterData();
     }
 
@@ -48,17 +41,6 @@ public class UserL2dData : UserDataBase
         return Data;
     }
 
-    public void SetTempLobbyChoiceNumber(int num)
-    {
-        Temp_Lobby_Choice_Number = num;
-        Is_Temp_Choice = Temp_Lobby_Choice_Number > 0;
-    }
-
-    public void ResetTempLobbyChoice()
-    {
-        SetTempLobbyChoiceNumber(0);
-    }
-
     public void SetLobbyChoiceNumber(int num)
     {
         Lobby_Choice_Number = num;
@@ -68,6 +50,14 @@ public class UserL2dData : UserDataBase
     public void ReleaseLobbyChoice()
     {
         SetLobbyChoiceNumber(0);
+    }
+
+    public override object Clone()
+    {
+        UserL2dData clone = (UserL2dData)this.MemberwiseClone();
+        clone.Data = this.Data;
+
+        return clone;
     }
 
     public override JsonData Serialized()

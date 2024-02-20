@@ -1,5 +1,6 @@
 using LitJson;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 public class UserL2dDataManager : ManagerBase
@@ -31,14 +32,15 @@ public class UserL2dDataManager : ManagerBase
     {
         var m = MasterDataManager.Instance;
         var user_hero_list = GameData.I.GetUserHeroDataManager().GetUserHeroDataList();
-        var l2d_lobby_id_list = user_hero_list.Select(x => m.Get_PlayerCharacterData(x.GetPlayerCharacterID()).lobby_basic_id).ToList();
 
-        foreach (int id in l2d_lobby_id_list)
+        foreach (var user_hero_data in user_hero_list)
         {
-            var data = AddUserL2dData(id);
+            int hero_id = user_hero_data.GetPlayerCharacterID();
+            int l2d_id = m.Get_PlayerCharacterData(user_hero_data.GetPlayerCharacterID()).lobby_basic_id;
+            var data = AddUserL2dData(l2d_id, hero_id);
 
             // TODO:최초 더미 설정 : 에일린, 변경가능성이 언제든 있으니 확인
-            if (id.Equals(1010601))
+            if (l2d_id.Equals(1010601))
             {
                 data.SetLobbyChoiceNumber(1);
             }
@@ -53,6 +55,22 @@ public class UserL2dDataManager : ManagerBase
         list.AddRange(User_L2d_Data_List);
     }
 
+    public List<UserL2dData> GetUserL2dDataList()
+    {
+        return User_L2d_Data_List.ToList();
+    }
+
+    public List<UserL2dData> GetCloneUserL2dDataList()
+    {
+        var list = new List<UserL2dData>();
+        foreach (var data in  User_L2d_Data_List)
+        {
+            list.Add((UserL2dData)data.Clone());
+        }
+
+        return list;
+    }
+
     /// <summary>
     /// 선택 확정되어 있는 메모리얼 리스트 반환
     /// </summary>
@@ -64,6 +82,22 @@ public class UserL2dDataManager : ManagerBase
         return list;
     }
 
+    public void SetLobbyChoiceOrder(List<UserL2dData> list)
+    {
+        int lobby_choice_num;
+        foreach (var l2d_data in User_L2d_Data_List)
+        {
+            lobby_choice_num = 0;
+            var input_data = list.Find(x => x.Skin_Id == l2d_data.Skin_Id);
+            if (input_data != null)
+            {
+                lobby_choice_num = input_data.Lobby_Choice_Number;
+            }
+            l2d_data.SetLobbyChoiceNumber(lobby_choice_num);
+        }
+    }
+
+    /*
     /// <summary>
     /// 임시 선택된 메모리얼 리스트 반환
     /// </summary>
@@ -74,29 +108,46 @@ public class UserL2dDataManager : ManagerBase
         list.Sort((a, b) => a.Temp_Lobby_Choice_Number.CompareTo(b.Temp_Lobby_Choice_Number));
         return list;
     }
+    */
 
     public UserL2dData FindUserL2dData(int memorial_id)
     {
         return User_L2d_Data_List.Find(x => x.Skin_Id == memorial_id);
     }
 
-    UserL2dData AddUserL2dData(int l2d_id)
+    UserL2dData AddUserL2dData(int l2d_id, int hero_id = 0)
     {
         if (l2d_id == 0)
         {
             return null;
         }
+
+        if (hero_id == 0)
+        {
+            var user_hero_list = GameData.I.GetUserHeroDataManager().GetUserHeroDataList();
+            foreach(var data in user_hero_list)
+            {
+                var hero_data = MasterDataManager.Instance.Get_PlayerCharacterData(data.GetPlayerCharacterID());
+                if (hero_data.lobby_basic_id.Equals(l2d_id))
+                {
+                    hero_id = hero_data.player_character_id;
+                }
+            }
+
+            Debug.Assert(hero_id != 0, $"입력한 L2d의 캐릭터id를 찾을 수 없습니다 : {l2d_id}");
+        }
+
         var l2d_data = FindUserL2dData(l2d_id);
         if (l2d_data == null)
         {
             l2d_data = new UserL2dData();
-            l2d_data.SetL2dDataID(l2d_id);
+            l2d_data.SetL2dDataID(l2d_id, hero_id);
             User_L2d_Data_List.Add(l2d_data);
             Is_Update_Data = true;
         }
         return l2d_data;
     }
-
+    /*
     public ERROR_CODE SelectTempL2dOrder(int memorial_id)
     {
         var found = FindUserL2dData(memorial_id);
@@ -146,7 +197,9 @@ public class UserL2dDataManager : ManagerBase
         }
         return ERROR_CODE.FAILED;
     }
+    */
 
+    /*
     /// <summary>
     /// 팝업 진입시 Temp Number에 Choice Number 값을 임시로 세팅해준다.
     /// </summary>
@@ -159,7 +212,9 @@ public class UserL2dDataManager : ManagerBase
             item.SetTempLobbyChoiceNumber(item.Lobby_Choice_Number);
         }
     }
+    */
 
+    /*
     /// <summary>
     /// 임시로 저장된 로비 순서 되돌림
     /// </summary>
@@ -167,7 +222,9 @@ public class UserL2dDataManager : ManagerBase
     {
         User_L2d_Data_List.ForEach(x => x.ResetTempLobbyChoice());
     }
+    */
 
+    /*
     /// <summary>
     /// 임시로 저장된 로비 순서 적용하기
     /// </summary>
@@ -183,6 +240,7 @@ public class UserL2dDataManager : ManagerBase
 
         Save();
     }
+    */
 
     public override JsonData Serialized()
     {

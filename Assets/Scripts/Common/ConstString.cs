@@ -67,5 +67,7 @@ public static class ConstString
     public static class Message
     {
         public const string NOT_YET = "준비중 입니다.";
+        public const string MAX = "최대치입니다";
+        public const string MIN = "최소치입니다";
     }
 }

@@ -1,6 +1,7 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using Gpm.Ui;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -21,6 +22,8 @@ public class SelectLobbyCharacterPopup : PopupBase
     [SerializeField, Tooltip("Character List View")]
     InfiniteScroll Character_List_View;
 
+    List<UserL2dData>  Character_List;
+    int Current_Choice_Count = 0;
 
     protected override void ShowPopupAniEndCallback()
     {
@@ -39,21 +42,17 @@ public class SelectLobbyCharacterPopup : PopupBase
         Character_List_View.Clear();
 
         const int column_count = 5;
-        var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
-        List<UserMemorialData> memorial_list = new List<UserMemorialData>();
 
-        //  메모리얼 리스트에 임시 순서를 지정해준다.
-        memorial_mng.ReadyTempLobbyChoiceNumber();
-        //  메모리얼 리스트 가져오기
-        memorial_mng.GetUserMemorialDataList(ref memorial_list);
+        var l2d_mng = GameData.I.GetUserL2DDataManager();
+        Character_List = l2d_mng.GetCloneUserL2dDataList();
 
         //  선택된 순서에 따라 우선 보여준다.
-        memorial_list = memorial_list.OrderBy(x => x.Memorial_ID).OrderBy(x => x.Temp_Lobby_Choice_Number).OrderByDescending(x => x.Is_Temp_Choice).ToList();
+        // Character_List = Character_List.OrderBy(x => x.Skin_Id).OrderBy(x => x.Lobby_Choice_Number).OrderByDescending(x => x.Is_Choice_Lobby).ToList();
 
         //  리스트 호출을 위한 데이터 분배
         int start = 0;
-        int row = memorial_list.Count / column_count;
-        if (memorial_list.Count % column_count > 0)
+        int row = Character_List.Count / column_count;
+        if (Character_List.Count % column_count > 0)
         {
             row += 1;
         }
@@ -62,40 +61,70 @@ public class SelectLobbyCharacterPopup : PopupBase
             start = r * column_count;
 
             var new_data = new LobbyCharacterListData();
-            new_data.Click_Memorial_Callback = SelectCharacterCallback;
-            if (start + column_count < memorial_list.Count)
+            new_data.Click_Char_Callback = SelectCharacterCallback;
+            if (start + column_count < Character_List.Count)
             {
-                new_data.SetUserMemorialDataList(memorial_list.GetRange(start, column_count));
+                new_data.SetUserL2dDataList(Character_List.GetRange(start, column_count));
             }
             else
             {
-                new_data.SetUserMemorialDataList(memorial_list.GetRange(start, memorial_list.Count - start));
+                new_data.SetUserL2dDataList(Character_List.GetRange(start, Character_List.Count - start));
             }
             Character_List_View.InsertData(new_data);
         }
-
     }
 
     public override void UpdatePopup()
     {
-        var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
-        var choice_list = memorial_mng.GetUserMemorialDataListbyTempChoice();
-        Select_Count.text = ZString.Format("선택 중   <color=#67afff>{0} / {1}</color>", choice_list.Count, GameDefine.MAX_LOBBY_CHARACTER_COUNT);
+        Current_Choice_Count = Character_List.OrderByDescending(x => x.Lobby_Choice_Number).Select(x => x.Lobby_Choice_Number).ToList()[0];
+        Select_Count.text = ZString.Format("선택 중   <color=#67afff>{0} / {1}</color>", Current_Choice_Count, GameDefine.MAX_LOBBY_CHARACTER_COUNT);
     }
 
     /// <summary>
     /// 메모리얼 캐릭터 선택시 콜백
     /// </summary>
     /// <param name="ud"></param>
-    void SelectCharacterCallback(UserMemorialData ud)
+    void SelectCharacterCallback(UserL2dData ud)
     {
-        var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
-        var result_code = memorial_mng.SelectTempMemorialOrder(ud.Memorial_ID, ud.Player_Character_ID);
-        if (result_code == ERROR_CODE.SUCCESS)
+        if (ud.Is_Choice_Lobby)
         {
-            Character_List_View.UpdateAllData();
-            UpdatePopup();
+            if (Current_Choice_Count == GameDefine.MIN_LOBBY_CHARACTER_COUNT)
+            {
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+                {
+                    popup.ShowPopup(3f, ConstString.Message.MIN);
+                });
+                return;
+            }
+
+
+            int canceled_lobby_num = ud.Lobby_Choice_Number;
+            ud.ReleaseLobbyChoice();
+
+            foreach (var data in Character_List)
+            {
+                if (data.Lobby_Choice_Number > canceled_lobby_num)
+                {
+                    data.SetLobbyChoiceNumber(data.Lobby_Choice_Number - 1);
+                }
+            }
         }
+        else
+        {
+            if (Current_Choice_Count == GameDefine.MAX_LOBBY_CHARACTER_COUNT)
+            {
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+                {
+                    popup.ShowPopup(3f, ConstString.Message.MAX);
+                });
+                return;
+            }
+
+            ud.SetLobbyChoiceNumber(Current_Choice_Count + 1);
+        }
+
+        Character_List_View.UpdateAllData();
+        UpdatePopup();
     }
 
     public override void HidePopup(System.Action cb = null)
@@ -116,8 +145,6 @@ public class SelectLobbyCharacterPopup : PopupBase
     /// </summary>
     void RollbackChoiceData()
     {
-        var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
-        memorial_mng.RollbackLobbyChoiceOrder();
     }
 
     /// <summary>
@@ -125,8 +152,10 @@ public class SelectLobbyCharacterPopup : PopupBase
     /// </summary>
     void ConfirmChoiceData()
     {
-        var memorial_mng = GameData.Instance.GetUserMemorialDataManager();
-        memorial_mng.ConfirmLobbyChoiceOrder();
+        var selected_list = Character_List.FindAll(x => x.Is_Choice_Lobby).ToList();
+
+        GameData.I.GetUserL2DDataManager().SetLobbyChoiceOrder(selected_list);
+        GameData.I.GetUserL2DDataManager().Save();
     }
 
     /// <summary>

@@ -3,21 +3,22 @@ using System.Collections.Generic;
 
 public class LobbyCharacterListData : InfiniteScrollData
 {
-    List<UserMemorialData> Memorial_List = new List<UserMemorialData>();
+    List<UserL2dData> L2d_List = new List<UserL2dData>();
 
-    public System.Action<UserMemorialData> Click_Memorial_Callback;
+    public System.Action<UserL2dData> Click_Char_Callback;
 
-    public void SetUserMemorialDataList(List<UserMemorialData> list)
+    public void SetUserL2dDataList(List<UserL2dData> list)
     {
-        Memorial_List.Clear();
+        L2d_List.Clear();
         if (list != null)
         {
-            Memorial_List.AddRange(list);
+            L2d_List.AddRange(list);
         }
     }
-    public List<UserMemorialData> GetUserMemorialDataList()
+
+    public List<UserL2dData> GetUserL2dDataList()
     {
-        return Memorial_List;
+        return L2d_List;
     }
 
 }

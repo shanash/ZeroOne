@@ -70,6 +70,17 @@ public class UserMemorialDataManager : ManagerBase
         return list;
     }
 
+    /// <summary>
+    /// 임시 선택된 메모리얼 리스트 반환
+    /// </summary>
+    /// <returns></returns>
+    public List<UserMemorialData> GetUserMemorialDataListbyTempChoice(List<UserMemorialData> list)
+    {
+        var result = list.FindAll(x => x.Is_Temp_Choice);
+        result.Sort((a, b) => a.Temp_Lobby_Choice_Number.CompareTo(b.Temp_Lobby_Choice_Number));
+        return result;
+    }
+
 
     public List<UserMemorialData> FindMemorialDataListByPlayerID(int player_character_id)
     {

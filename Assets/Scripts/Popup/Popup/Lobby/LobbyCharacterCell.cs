@@ -14,19 +14,19 @@ public class LobbyCharacterCell : InfiniteScrollItem
 
         var data = (LobbyCharacterListData)scrollData;
 
-        var memorial_list = data.GetUserMemorialDataList();
+        var memorial_list = data.GetUserL2dDataList();
         int cnt = Cell_Items.Count;
         for (int i = 0; i < cnt; i++)
         {
             var slot = Cell_Items[i];
-            slot.SetClickMemorialCallback(data.Click_Memorial_Callback);
+            slot.SetClickMemorialCallback(data.Click_Char_Callback);
             if (i < memorial_list.Count)
             {
-                slot.SetUserMemorialData(memorial_list[i]);
+                slot.SetUserL2dData(memorial_list[i]);
             }
             else
             {
-                slot.SetUserMemorialData(null);
+                slot.SetUserL2dData(null);
             }
         }
     }
