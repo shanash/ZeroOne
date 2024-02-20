@@ -100,6 +100,8 @@ public class GameResultWinPopup : PopupBase
     [SerializeField, Tooltip("Reward Btn Container Ease Slide")]
     UIEaseSlide Reward_Btn_Container_Ease_Slide;
 
+    [SerializeField, Tooltip("Next Stage Btn")]
+    UIButtonBase Next_Stage_Btn;
 
     List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
 
@@ -160,13 +162,16 @@ public class GameResultWinPopup : PopupBase
     {
         //  일단 스테미너 사용 완료 하자.
         int cost_stamina = Dungeon.GetPlayerExp();
-        var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
-        var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
-        if (stamina_item != null)
+        if (cost_stamina > 0)
         {
-            stamina_item.UseChargeItem(cost_stamina);
+            var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
+            var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
+            if (stamina_item != null)
+            {
+                stamina_item.UseChargeItem(cost_stamina);
+            }
+            stamina_mng.Save();
         }
-        stamina_mng.Save();
 
         //  player info
         BeforePlayerInfo();
@@ -178,6 +183,9 @@ public class GameResultWinPopup : PopupBase
         Backlight_Ease.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         //  승리 텍스트 등장
         WinText_Ease.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, WinTextEaseComplete);
+
+        //  next stage btn
+        Next_Stage_Btn.gameObject.SetActive(Dungeon.Game_Type == GAME_TYPE.STORY_MODE);
     }
 
     /// <summary>
@@ -283,7 +291,6 @@ public class GameResultWinPopup : PopupBase
         Player_Exp_Gauge.value = before_exp_per;
         Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
         Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
-        //player_mng.Save();
 
         //  금화 획득
         var goods_mng = GameData.Instance.GetUserGoodsDataManager();
@@ -475,23 +482,28 @@ public class GameResultWinPopup : PopupBase
         //  first reward list (첫번째 보상인지 여부 체크 필요)
         if (!Dungeon.IsClearedDungeon())
         {
-            var f_reward_data_list = m.Get_RewardSetDataList(stage.first_reward_group_id);
-            if (f_reward_data_list.Count > 0)
+            int first_reward_group_id = Dungeon.GetFirstRewardGroupID();
+            if (first_reward_group_id != 0)
             {
-                DROP_TYPE drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
-                if (drop_type == DROP_TYPE.DROP_EACH)
+                var f_reward_data_list = m.Get_RewardSetDataList(first_reward_group_id);
+                if (f_reward_data_list.Count > 0)
                 {
-                    DropTypeEachReward(reward_prefab, f_reward_data_list);
-                }
-                else if (drop_type == DROP_TYPE.DROP_WEIGHT)
-                {
-                    DropTypeWeightReward(reward_prefab, f_reward_data_list);
-                }
-                else
-                {
-                    Debug.Assert(false);
+                    DROP_TYPE drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
+                    if (drop_type == DROP_TYPE.DROP_EACH)
+                    {
+                        DropTypeEachReward(reward_prefab, f_reward_data_list);
+                    }
+                    else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+                    {
+                        DropTypeWeightReward(reward_prefab, f_reward_data_list);
+                    }
+                    else
+                    {
+                        Debug.Assert(false);
+                    }
                 }
             }
+            
         }
 
         //  star reward list - (이미 별 보상을 받았는지 체크 필요)
@@ -499,17 +511,45 @@ public class GameResultWinPopup : PopupBase
         //  아직 별보상을 받지 않은 상태라면..(별 3개 보상만 있음)
         if (Dungeon.GetStarPoint() < 3 && star_point == 3)
         {
-            var star_reward_data_list = m.Get_RewardSetDataList(stage.star_reward_group_id);
-            if (star_reward_data_list.Count > 0)
+            int star_reward_group_id = Dungeon.GetStarPointRewardGroupID();
+            if (star_reward_group_id != 0)
             {
-                DROP_TYPE drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
+                var star_reward_data_list = m.Get_RewardSetDataList(star_reward_group_id);
+                if (star_reward_data_list.Count > 0)
+                {
+                    DROP_TYPE drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
+                    if (drop_type == DROP_TYPE.DROP_EACH)
+                    {
+                        DropTypeEachReward(reward_prefab, star_reward_data_list);
+                    }
+                    else if (drop_type == DROP_TYPE.DROP_WEIGHT)
+                    {
+                        DropTypeWeightReward(reward_prefab, star_reward_data_list);
+                    }
+                    else
+                    {
+                        Debug.Assert(false);
+                    }
+                }
+            }
+            
+        }
+
+        //  repeat reward list
+        int repeat_reward_group_id = Dungeon.GetRepeatRewardGroupID();
+        if (repeat_reward_group_id != 0)
+        {
+            var repeat_reward_data_list = m.Get_RewardSetDataList(repeat_reward_group_id);
+            if (repeat_reward_data_list.Count > 0)
+            {
+                DROP_TYPE drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
                 if (drop_type == DROP_TYPE.DROP_EACH)
                 {
-                    DropTypeEachReward(reward_prefab, star_reward_data_list);
+                    DropTypeEachReward(reward_prefab, repeat_reward_data_list);
                 }
                 else if (drop_type == DROP_TYPE.DROP_WEIGHT)
                 {
-                    DropTypeWeightReward(reward_prefab, star_reward_data_list);
+                    DropTypeWeightReward(reward_prefab, repeat_reward_data_list);
                 }
                 else
                 {
@@ -517,37 +557,37 @@ public class GameResultWinPopup : PopupBase
                 }
             }
         }
-
-        //  repeat reward list
-        var repeat_reward_data_list = m.Get_RewardSetDataList(stage.repeat_reward_group_id);
-        if (repeat_reward_data_list.Count > 0)
-        {
-            DROP_TYPE drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
-            if (drop_type == DROP_TYPE.DROP_EACH)
-            {
-                DropTypeEachReward(reward_prefab, repeat_reward_data_list);
-            }
-            else if (drop_type == DROP_TYPE.DROP_WEIGHT)
-            {
-                DropTypeWeightReward(reward_prefab, repeat_reward_data_list);
-            }
-            else
-            {
-                Debug.Assert(false);
-            }
-        }
+        
 
         //  버튼 컨테이너 들어오기
         Reward_Btn_Container_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
 
         //  스테이지 클리어
-        var user_dungeon_data = (UserStoryStageData)Dungeon.GetUserDungeonData();
-        if (user_dungeon_data != null)
+        if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
-            var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
-            stage_mng.StoryStageWin(user_dungeon_data.Stage_ID);
-            stage_mng.SetStageStarPoint(user_dungeon_data.Stage_ID, star_point);
+            var user_dungeon_data = (UserStoryStageData)Dungeon.GetUserDungeonData();
+            if (user_dungeon_data != null)
+            {
+                var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+                stage_mng.StoryStageWin(user_dungeon_data.Stage_ID);
+                stage_mng.SetStageStarPoint(user_dungeon_data.Stage_ID, star_point);
+            }
         }
+        else if (Dungeon.Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
+        {
+            var user_dungeon_data = (UserBossStageData)Dungeon.GetUserDungeonData();
+            if (user_dungeon_data != null)
+            {
+                var boss_mng = GameData.Instance.GetUserBossStageDataManager();
+                boss_mng.BossStageWin(user_dungeon_data.Boss_Dungeon_ID);
+                boss_mng.SetStarPoint(user_dungeon_data.Boss_Dungeon_ID, star_point);
+            }
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
+        
         GameData.Instance.Save();
     }
     /// <summary>

@@ -113,15 +113,18 @@ public class GameResultLosePopup : PopupBase
     protected override void FixedUpdatePopup()
     {
         //  일단 스테미너 사용 완료 하자. (패배시 스테미너 1 사용)
-        int cost_stamina = 1;
-
-        var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
-        var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
-        if (stamina_item != null)
+        if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
-            stamina_item.UseChargeItem(cost_stamina);
+            int cost_stamina = 1;
+
+            var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
+            var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
+            if (stamina_item != null)
+            {
+                stamina_item.UseChargeItem(cost_stamina);
+            }
+            stamina_mng.Save();
         }
-        stamina_mng.Save();
 
         //  player info
         BeforePlayerInfo();
@@ -143,7 +146,15 @@ public class GameResultLosePopup : PopupBase
 
         Player_Lv.text = before_lv.ToString();
         Player_Exp_Gauge.value = before_exp_per;
-        Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
+        if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
+        {
+            Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
+        }
+        else
+        {
+            Player_Exp.text = string.Empty;
+        }
+        
         Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
     }
 
@@ -159,11 +170,16 @@ public class GameResultLosePopup : PopupBase
     {
         var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
         int before_lv = player_data.GetLevel();
-        int gain_player_exp = 1;    //  패배시 플레이어 경험치 1(스테미너 1 사용)
-        var result_code = player_data.AddExp(gain_player_exp);
-        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        int gain_player_exp = 0;    //  패배시 플레이어 경험치 1(스테미너 1 사용)
+        ERROR_CODE result_code = ERROR_CODE.NOT_WORK;
+        if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
-            yield break;
+            gain_player_exp = 1;
+            result_code = player_data.AddExp(gain_player_exp);
+            if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+            {
+                yield break;
+            }
         }
 
         int after_lv = player_data.GetLevel();
@@ -212,10 +228,20 @@ public class GameResultLosePopup : PopupBase
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
+                popup.SetHideCompleteCallback(() =>
+                {
+                    Home_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+                    Home_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+                });
                 popup.ShowPopup();
             });
             var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
             stamina_item.FullChargeItem();
+        }
+        else
+        {
+            Home_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+            Home_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
         }
     }
 
@@ -266,8 +292,8 @@ public class GameResultLosePopup : PopupBase
     void PlayerInfoEaseComplete()
     {
         AfterPlayerInfo();
-        Home_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
-        Home_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        //Home_Btn_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
+        //Home_Btn_Ease_Slide.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
 
     public void OnClickHome()

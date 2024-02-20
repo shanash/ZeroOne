@@ -186,4 +186,20 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual int GetStarPoint() {  return 0; }
+
+    /// <summary>
+    /// 초회 보상 그룹 ID 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetFirstRewardGroupID() { return 0; }
+    /// <summary>
+    /// 반복 보상 그룹 ID 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetRepeatRewardGroupID() { return 0; }
+    /// <summary>
+    /// 별 보상 그룹 ID 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetStarPointRewardGroupID() { return 0; }    
 }

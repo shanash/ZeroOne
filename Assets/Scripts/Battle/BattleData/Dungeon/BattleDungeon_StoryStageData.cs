@@ -132,4 +132,17 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         return User_Data.IsStageCleared();
     }
 
+    public override int GetFirstRewardGroupID()
+    {
+        return Stage.first_reward_group_id;
+    }
+    public override int GetRepeatRewardGroupID()
+    {
+        return Stage.repeat_reward_group_id;
+    }
+    public override int GetStarPointRewardGroupID()
+    {
+        return Stage.star_reward_group_id;
+    }
+
 }

@@ -117,4 +117,13 @@ public class BattleDungeon_BossStageData : BattleDungeonData
     {
         return User_Data.IsStageCleared();
     }
+
+    public override int GetFirstRewardGroupID()
+    {
+        return Stage.first_reward_group_id;
+    }
+    public override int GetRepeatRewardGroupID()
+    {
+        return Stage.repeat_reward_group_id;
+    }
 }
