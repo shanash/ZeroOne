@@ -175,13 +175,42 @@
   },
   {
     "pc_skill_id": 100103,
+    "pc_skill_group_id": 100102,
+    "target_type": 1,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500002
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot"
+  },
+  {
+    "pc_skill_id": 100104,
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,
-    "effect_count_type": 1,
+    "effect_count_type": 2,
     "second_target_rule": 0,
     "max_second_target_count": 0,
     "second_target_range": 0.0,
@@ -203,7 +232,7 @@
     "event_name": "effect"
   },
   {
-    "pc_skill_id": 100104,
+    "pc_skill_id": 100105,
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -211,22 +240,51 @@
     "target_count": 1,
     "target_range": 0.0,
     "effect_count_type": 2,
-    "second_target_rule": 1,
+    "second_target_rule": 0,
     "max_second_target_count": 0,
-    "second_target_range": 3.0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500005
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "effect"
+  },
+  {
+    "pc_skill_id": 100106,
+    "pc_skill_group_id": 100103,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
     "effect_weight": [
       33,
       33,
       34
     ],
     "onetime_effect_ids": [
-      10010302
+      10010201
     ],
     "duration_effect_ids": [
       0
     ],
     "second_target_onetime_effect_ids": [
-      10010303
+      0
     ],
     "second_target_duration_effect_ids": [
       0
@@ -234,7 +292,7 @@
     "event_name": "shoot"
   },
   {
-    "pc_skill_id": 100105,
+    "pc_skill_id": 100107,
     "pc_skill_group_id": 100104,
     "target_type": 1,
     "target_rule_type": 2,
@@ -250,6 +308,67 @@
     ],
     "onetime_effect_ids": [
       10010401
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit"
+  },
+  {
+    "pc_skill_id": 100108,
+    "pc_skill_group_id": 100104,
+    "target_type": 1,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      500005
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "debuff"
+  },
+  {
+    "pc_skill_id": 100109,
+    "pc_skill_group_id": 100104,
+    "target_type": 1,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      25,
+      25,
+      25,
+      25
+    ],
+    "onetime_effect_ids": [
+      10010402
     ],
     "duration_effect_ids": [
       0

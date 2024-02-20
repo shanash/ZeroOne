@@ -116,7 +116,7 @@ public class GameData : Singleton<GameData>
         }
         //  boss stage data
         {
-            var mng = new UserBossDungeonDataManager(USER_DATA_MANAGER_TYPE.USER_BOSS_DUNGEON_DATA_MANAGER);
+            var mng = new UserBossStageDataManager(USER_DATA_MANAGER_TYPE.USER_BOSS_STAGE_DATA_MANAGER);
             if (!mng.Load())
             {
                 mng.InitDataManager();
@@ -177,9 +177,9 @@ public class GameData : Singleton<GameData>
         return FindUserDataManager<UserHeroSkillDataManager>(USER_DATA_MANAGER_TYPE.USER_HERO_SKILL_DATA_MANAGER);
     }
 
-    public UserBossDungeonDataManager GetUserBossDungeonDataManager()
+    public UserBossStageDataManager GetUserBossStageDataManager()
     {
-        return FindUserDataManager<UserBossDungeonDataManager>(USER_DATA_MANAGER_TYPE.USER_BOSS_DUNGEON_DATA_MANAGER);
+        return FindUserDataManager<UserBossStageDataManager>(USER_DATA_MANAGER_TYPE.USER_BOSS_STAGE_DATA_MANAGER);
     }
 
     public void Save()

@@ -15,7 +15,7 @@ public enum USER_DATA_MANAGER_TYPE
     USER_L2D_DATA_MANAGER,
 
     USER_STORY_STAGE_DATA_MANAGER,          //  기본 스토리 스테이지 데이터 매니져
-    USER_BOSS_DUNGEON_DATA_MANAGER,         //  보스 던전 스테이지 데이터 매니져
+    USER_BOSS_STAGE_DATA_MANAGER,         //  보스 던전 스테이지 데이터 매니져
 
     USER_GOODS_DATA_MANAGER,
     USER_ITEM_DATA_MANAGER,

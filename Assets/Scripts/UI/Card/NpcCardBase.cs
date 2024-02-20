@@ -24,7 +24,7 @@ public class NpcCardBase : UIBase
     public void SetNpcID(int npc_id)
     {
         Data = MasterDataManager.Instance.Get_NpcData(npc_id);
-
+        UpdateNpcIcon();
     }
     public void SetBoss(bool boss)
     {

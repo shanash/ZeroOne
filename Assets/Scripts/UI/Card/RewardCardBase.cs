@@ -10,6 +10,9 @@ public class RewardCardBase : UIBase
     [SerializeField, Tooltip("Reward Character Icon")]
     protected Image Reward_Character_Icon;
 
+    [SerializeField, Tooltip("Piece Icon")]
+    protected Image Piece_Icon;
+
     protected RewardDataBase Data;
     
     public void SetRewardSetData(Reward_Set_Data d)
@@ -43,6 +46,8 @@ public class RewardCardBase : UIBase
                 }
                 
             });
+
+            Piece_Icon.gameObject.SetActive(Data.GetRewardType() == REWARD_TYPE.PIECE_CHARACTER || Data.GetRewardType() == REWARD_TYPE.PIECE_EQUIPMENT || Data.GetRewardType() == REWARD_TYPE.PIECE_ITEM);
         }
     }
 

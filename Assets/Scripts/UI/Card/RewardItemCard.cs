@@ -15,6 +15,11 @@ public class RewardItemCard : RewardCardBase
         Recv_Complete.gameObject.SetActive(complete);
     }
 
+    public void SetScale(Vector2 scale)
+    {
+        this.transform.localScale = scale;
+    }
+
 
     public override void Spawned()
     {

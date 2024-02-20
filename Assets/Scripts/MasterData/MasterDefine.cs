@@ -577,7 +577,7 @@ public enum DURATION_EFFECT_TYPE
 	PHYSICS_DEFEND_UP = 108,
 	/// <summary>109 마법 방어력 증가</summary>
 	MAGIC_DEFEND_UP = 109,
-	/// <summary>110 마법 공격력 감소</summary>
+	/// <summary>110 물리 공격력 감소</summary>
 	PHYSICS_ATTACK_DOWN = 110,
 	/// <summary>111 마법 공격력 감소</summary>
 	MAGIC_ATTACK_DOWN = 111,

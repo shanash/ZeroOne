@@ -3,7 +3,7 @@ using FluffyDuck.Util;
 using LitJson;
 using System;
 
-public class UserBossDungeonData : UserDataBase
+public class UserBossStageData : UserDataBase
 {
     public int Boss_Dungeon_ID { get; protected set; } = 0;
 
@@ -14,7 +14,7 @@ public class UserBossDungeonData : UserDataBase
     Boss_Data Boss;
     Boss_Stage_Data Stage;
 
-    public UserBossDungeonData() : base() { }
+    public UserBossStageData() : base() { }
 
     protected override void Reset()
     {

@@ -35,7 +35,7 @@ public class MissionGateUI : PopupBase
         }
 
         //  boss dungeon check
-        var boss_mng = gd.GetUserBossDungeonDataManager();
+        var boss_mng = gd.GetUserBossStageDataManager();
         Boss_Dungeon_Lock.gameObject.SetActive(!boss_mng.IsBossDungeonOpen());
     }
 
@@ -86,7 +86,7 @@ public class MissionGateUI : PopupBase
     public void OnClickBossBattle()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        var boss_mng = GameData.Instance.GetUserBossDungeonDataManager();
+        var boss_mng = GameData.Instance.GetUserBossStageDataManager();
         if (!boss_mng.IsBossDungeonOpen())
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>

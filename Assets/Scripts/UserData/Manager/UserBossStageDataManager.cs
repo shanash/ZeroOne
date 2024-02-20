@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UserBossDungeonDataManager : ManagerBase
+public class UserBossStageDataManager : ManagerBase
 {
     /// <summary>
     /// 기간 충전 횟수(정해진 스케쥴에 따라 충전되는 횟수)<br/>
@@ -21,7 +21,7 @@ public class UserBossDungeonDataManager : ManagerBase
 
     DateTime Last_Used_Datetime;
 
-    List<UserBossDungeonData> User_Boss_Dungeon_Data_List = new List<UserBossDungeonData>();
+    List<UserBossStageData> User_Boss_Dungeon_Data_List = new List<UserBossStageData>();
 
     Dungeon_Data Dungeon;
     Schedule_Data Schedule;
@@ -29,7 +29,7 @@ public class UserBossDungeonDataManager : ManagerBase
 
     
 
-    public UserBossDungeonDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype) { }
+    public UserBossStageDataManager(USER_DATA_MANAGER_TYPE utype) : base(utype) { }
 
     protected override void Reset()
     {
@@ -118,7 +118,7 @@ public class UserBossDungeonDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_dungeon_id"></param>
     /// <returns></returns>
-    public UserBossDungeonData FindUserBossDungeonData(int boss_dungeon_id)
+    public UserBossStageData FindUserBossDungeonData(int boss_dungeon_id)
     {
         return User_Boss_Dungeon_Data_List.Find(x => x.Boss_Dungeon_ID == boss_dungeon_id);
     }
@@ -128,7 +128,7 @@ public class UserBossDungeonDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_stage_group_id"></param>
     /// <returns></returns>
-    public List<UserBossDungeonData> FindUserBossDungeonDataList(int boss_stage_group_id)
+    public List<UserBossStageData> FindUserBossDungeonDataList(int boss_stage_group_id)
     {
         return User_Boss_Dungeon_Data_List.FindAll(x => x.GetBossStageGroupID() == boss_stage_group_id);
     }
@@ -138,7 +138,7 @@ public class UserBossDungeonDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_dungeon_id"></param>
     /// <returns></returns>
-    UserBossDungeonData AddUserBossDungeonData(int boss_dungeon_id)
+    UserBossStageData AddUserBossDungeonData(int boss_dungeon_id)
     {
         if (boss_dungeon_id == 0)
         {
@@ -147,7 +147,7 @@ public class UserBossDungeonDataManager : ManagerBase
         var stage = FindUserBossDungeonData(boss_dungeon_id);
         if (stage == null)
         {
-            stage = new UserBossDungeonData();
+            stage = new UserBossStageData();
             stage.SetBossDungeonID(boss_dungeon_id);
             User_Boss_Dungeon_Data_List.Add(stage);
             Is_Update_Data = true;
@@ -242,7 +242,7 @@ public class UserBossDungeonDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_id"></param>
     /// <returns></returns>
-    public UserBossDungeonData GetLastOpenDungeon(int boss_id)
+    public UserBossStageData GetLastOpenDungeon(int boss_id)
     {
         var boss = MasterDataManager.Instance.Get_BossData(boss_id);
         var find_all = FindUserBossDungeonDataList(boss.boss_stage_group_id);
@@ -312,6 +312,42 @@ public class UserBossDungeonDataManager : ManagerBase
 
         return false;
     }
+
+    /// <summary>
+    /// 보스 던전은 이미 오픈된 상태<br/>
+    /// 보스 리스트 중에서 해당 보스가 오픈되었는지 여부 판단
+    /// </summary>
+    /// <param name="boss_id"></param>
+    /// <returns></returns>
+    public bool IsBossOpen(int boss_id)
+    {
+        if (!IsBossDungeonOpen())
+        {
+            return false;
+        }
+
+        //  던전 오픈 조건 체크
+        var boss = MasterDataManager.Instance.Get_BossData(boss_id);
+        if (boss != null)
+        {
+            if (boss.open_game_type == GAME_TYPE.STORY_MODE)
+            {
+                var story_mng = GameData.Instance.GetUserStoryStageDataManager();
+                var stage = story_mng.FindUserStoryStageData(boss.open_dungeon_id);
+                if (stage != null)
+                {
+                    return stage.IsStageCleared();
+                }
+                else 
+                {
+                    return false; 
+                }
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// 던전 컨텐츠의 스케쥴 오픈 여부 확인
     /// </summary>
@@ -474,7 +510,7 @@ public class UserBossDungeonDataManager : ManagerBase
                     int boss_dungeon_id = 0;
                     if (int.TryParse(jdata[NODE_BOSS_DUNGEON_ID].ToString(), out boss_dungeon_id))
                     {
-                        UserBossDungeonData item = FindUserBossDungeonData(boss_dungeon_id);
+                        UserBossStageData item = FindUserBossDungeonData(boss_dungeon_id);
                         if (item == null)
                         {
                             item = AddUserBossDungeonData(boss_dungeon_id);

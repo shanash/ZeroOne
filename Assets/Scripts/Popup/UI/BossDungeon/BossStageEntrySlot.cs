@@ -22,18 +22,18 @@ public class BossStageEntrySlot : UIBase
     RectTransform Lock_Cover;
 
     Boss_Data Boss;
-    UserBossDungeonData User_Data;
+    UserBossStageDataManager Boss_Mng;
 
     public void SetBossDataID(int boss_id)
     {
         Boss = MasterDataManager.Instance.Get_BossData(boss_id);
-        User_Data = GameData.Instance.GetUserBossDungeonDataManager().FindUserBossDungeonData(boss_id);
+        Boss_Mng = GameData.Instance.GetUserBossStageDataManager();
         UpdateBossSlot();
     }
 
     void UpdateBossSlot()
     {
-        if (User_Data == null)
+        if (!Boss_Mng.IsBossOpen(Boss.boss_id))
         {
             Lock_Cover.gameObject.SetActive(true);
             return;
@@ -47,13 +47,13 @@ public class BossStageEntrySlot : UIBase
     public void OnClickChoiceBoss()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        if (User_Data == null)
+        if (!Boss_Mng.IsBossOpen(Boss.boss_id))
         {
             return;
         }
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageChoiceUI", FluffyDuck.UI.POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
-            popup.ShowPopup();
+            popup.ShowPopup(Boss);
         });
     }
 

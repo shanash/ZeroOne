@@ -20,6 +20,7 @@ public class BossStageEntryUI : PopupBase
 
     List<BossStageEntrySlot> Used_Boss_Slot_List = new List<BossStageEntrySlot>();
 
+
     protected override bool Initialize(object[] data)
     {
         InitAssets();
@@ -30,7 +31,22 @@ public class BossStageEntryUI : PopupBase
     void InitAssets()
     {
         List<string> asset_list = new List<string>();
-        asset_list.Add("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageEntrySlot");
+
+        //  boss slot prefab
+        var m = MasterDataManager.Instance;
+        var boss_mng = GameData.Instance.GetUserBossStageDataManager();
+
+        //  보스 리스트
+        var dungeon = boss_mng.GetDungeonData();
+        var boss_list = m.Get_BossDataList(dungeon.dungeon_group_id);
+        for (int i = 0; i < boss_list.Count; i++)
+        {
+            var boss = boss_list[i];
+            if (!asset_list.Contains(boss.prefab_path))
+            {
+                asset_list.Add(boss.prefab_path);
+            }
+        }
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -47,7 +63,7 @@ public class BossStageEntryUI : PopupBase
         ClearBossSlots();
 
         var m = MasterDataManager.Instance;
-        var boss_mng = GameData.Instance.GetUserBossDungeonDataManager();
+        var boss_mng = GameData.Instance.GetUserBossStageDataManager();
 
         //  보스 리스트
         var dungeon = boss_mng.GetDungeonData();
@@ -56,7 +72,7 @@ public class BossStageEntryUI : PopupBase
         for (int i = 0; i < boss_list.Count; i++)
         {
             var boss = boss_list[i];
-            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageEntrySlot", Boss_List_View.content);
+            var obj = pool.GetGameObject(boss.prefab_path, Boss_List_View.content);
             var slot = obj.GetComponent<BossStageEntrySlot>();
             slot.SetBossDataID(boss.boss_id);
             Used_Boss_Slot_List.Add(slot);
