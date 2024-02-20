@@ -31,16 +31,12 @@ public class UserL2dDataManager : ManagerBase
     {
         var m = MasterDataManager.Instance;
         var user_hero_list = GameData.I.GetUserHeroDataManager().GetUserHeroDataList();
-        var l2d_id_list = m.Get_PlayerCharacterDataList().Select(x => x.lobby_basic_id).ToList();
+        var l2d_lobby_id_list = user_hero_list.Select(x => m.Get_PlayerCharacterData(x.GetPlayerCharacterID()).lobby_basic_id).ToList();
 
-        var l2d_lobby_data_list = l2d_id_list.Select(x => m.Get_L2DCharSkinData(x)).ToList();
-        /*
-        for (int i = 0; i < list.Count; i++)
+        foreach (int id in l2d_lobby_id_list)
         {
-            var mdata = list[i];
-            AddUserL2dData(mdata.l2d_id);
+            AddUserL2dData(id);
         }
-        */
 
         Save();
     }
@@ -84,15 +80,15 @@ public class UserL2dDataManager : ManagerBase
         {
             return null;
         }
-        var memorial = FindUserL2dData(l2d_id);
-        if (memorial == null)
+        var l2d_data = FindUserL2dData(l2d_id);
+        if (l2d_data == null)
         {
-            memorial = new UserL2dData();
-            memorial.SetMemorialDataID(l2d_id);
-            User_L2d_Data_List.Add(memorial);
+            l2d_data = new UserL2dData();
+            l2d_data.SetL2dDataID(l2d_id);
+            User_L2d_Data_List.Add(l2d_data);
             Is_Update_Data = true;
         }
-        return memorial;
+        return l2d_data;
     }
 
     public ERROR_CODE SelectTempL2dOrder(int memorial_id)

@@ -31,7 +31,7 @@ public class UserL2dData : UserDataBase
         Is_Temp_Choice = false;
     }
 
-    public void SetMemorialDataID(int memorial_id)
+    public void SetL2dDataID(int memorial_id)
     {
         Skin_Id = memorial_id;
         InitMasterData();
