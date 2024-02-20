@@ -13,6 +13,7 @@ public class MasterDataManager : BaseMasterDataManager
             if (__instance == null)
             {
                 __instance = new MasterDataManager();
+                __instance.OnInitialize();
             }
             return __instance;
         }
@@ -22,6 +23,10 @@ public class MasterDataManager : BaseMasterDataManager
     {
     }
 
+    protected void OnInitialize()
+    {
+        InitLoadCustomData();
+    }
     public bool IsLoaded { get { return is_init_load; } }
 
     #region Level
@@ -901,5 +906,39 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Story_Lang_Data();
         return _Story_Lang_Data[str_id];
     }
+    #endregion
+
+    #region Custom Table
+    public void InitLoadCustomData()
+    {
+        Load_RewardGroupList();
+    }
+    protected Dictionary<int, List<Reward_Set_Data>> _Reward_Group_List_Data
+    {
+        get;
+        private set;
+    } = new Dictionary<int, List<Reward_Set_Data>>();
+    public void Load_RewardGroupList()
+    {
+        foreach (var data in _Reward_Set_Data)
+        {
+            List<Reward_Set_Data> list = _Reward_Group_List_Data[data.Value.reward_group_id];
+            if(list != null)
+            {
+                list.Add(data.Value);
+            }
+            else 
+            {  
+                list = new List<Reward_Set_Data>();
+                list.Add(data.Value);
+                _Reward_Group_List_Data.Add(data.Value.reward_group_id, list);
+            }
+        }
+    }
+    public IReadOnlyList<Reward_Set_Data> Get_RewardGroupList(int reward_group_id)
+    {
+        return _Reward_Group_List_Data[reward_group_id];
+    }
+
     #endregion
 }
