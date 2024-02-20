@@ -428,11 +428,18 @@ public class GameResultWinPopup : PopupBase
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
 
-        var stage = (Stage_Data)Dungeon.GetDungeonData();
-        var next_stage = MasterDataManager.Instance.Get_NextStageData(stage.stage_id);
-        if (next_stage != null)
+        if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
-            board.SetBlackBoard(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, next_stage.stage_id);
+            var stage = (Stage_Data)Dungeon.GetDungeonData();
+            var next_stage = MasterDataManager.Instance.Get_NextStageData(stage.stage_id);
+            if (next_stage != null)
+            {
+                board.SetBlackBoard(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, next_stage.stage_id);
+            }
+        }
+        else if (Dungeon.Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
+        {
+            //  보스 던전은 다음 버튼이 필요한가?
         }
 
         SCManager.I.ChangeScene(SceneName.home);

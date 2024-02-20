@@ -85,7 +85,7 @@ public class GameResultLosePopup : PopupBase
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup");
 
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+        var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
         var hero_list = deck.GetDeckHeroes();
 
         for (int i = 0; i < hero_list.Count; i++)
@@ -227,7 +227,7 @@ public class GameResultLosePopup : PopupBase
     {
         var pool = GameObjectPoolManager.Instance;
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
-        var deck = deck_mng.FindSelectedDeck(GAME_TYPE.STORY_MODE);
+        var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
         var hero_list = deck.GetDeckHeroes();
         int cnt = hero_list.Count;
         for (int i = 0; i < cnt; i++)
