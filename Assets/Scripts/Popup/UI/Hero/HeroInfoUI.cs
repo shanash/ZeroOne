@@ -73,7 +73,8 @@ public class HeroInfoUI : PopupBase
         over_cam.targetTexture = Chara_Texture;
 
         //TODO: 일단 임시로 카메라로 위치를 세팅
-        over_cam.transform.localPosition = new Vector3(-2, 0, 0);
+        over_cam.transform.localPosition = new Vector3(2, 0, 0);
+        Hero_Stand.enabled = true;
         Hero_Stand.texture = Chara_Texture;
     }
 
