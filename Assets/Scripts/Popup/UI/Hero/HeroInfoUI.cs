@@ -1,4 +1,5 @@
 using FluffyDuck.UI;
+using FluffyDuck.Util;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class HeroInfoUI : PopupBase
 {
     [SerializeField]
     TMP_Text Title;
+
+    [SerializeField]
+    RawImage Hero_Stand;
 
     [SerializeField, Tooltip("InfoBox Tap Controller")]
     Gpm.Ui.TabController InfoBox_Tab_Controller;
@@ -54,11 +58,23 @@ public class HeroInfoUI : PopupBase
     int Current_Hero_Data_Index;
     BattlePcData User_Hero_Battle_Data;
 
+    RenderTexture Chara_Texture = null;
+    Producer pd = null;
+
     void Reset()
     {
         User_Hero_Datas = null;
         Current_Hero_Data_Index = -1;
         User_Hero_Battle_Data = null;
+
+        Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, (int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), 16);
+        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
+        over_cam.fieldOfView = Camera.main.fieldOfView;
+        over_cam.targetTexture = Chara_Texture;
+
+        //TODO: 일단 임시로 카메라로 위치를 세팅
+        over_cam.transform.localPosition = new Vector3(-2, 0, 0);
+        Hero_Stand.texture = Chara_Texture;
     }
 
     protected override bool Initialize(object[] data)
@@ -85,6 +101,14 @@ public class HeroInfoUI : PopupBase
 
         User_Hero_Battle_Data = new BattlePcData();
         User_Hero_Battle_Data.SetUnitID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+
+        if (pd != null)
+        {
+            pd.Release();
+            pd = null;
+        }
+
+        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, MEMORIAL_TYPE.MEMORIAL);
 
         Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
     }
