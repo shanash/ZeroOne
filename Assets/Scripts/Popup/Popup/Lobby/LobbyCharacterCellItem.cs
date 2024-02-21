@@ -9,6 +9,8 @@ public class LobbyCharacterCellItem : MonoBehaviour
 
     [SerializeField, Tooltip("Character Cell Base")]
     CharacterCellBase Character_Base;
+    [SerializeField, Tooltip("Hero Name")]
+    TMP_Text Hero_Name;
 
     [SerializeField, Tooltip("Memorial Info Box")]
     RectTransform Memorial_Info_Box;
@@ -48,6 +50,9 @@ public class LobbyCharacterCellItem : MonoBehaviour
         }
         //  character base
         Character_Base.SetPlayerCharacterID(User_Data.Player_Character_ID);
+        
+        var data = MasterDataManager.Instance.Get_PlayerCharacterData(User_Data.Player_Character_ID);
+        Hero_Name.text = GameDefine.GetLocalizeString(data.name_id);
 
         //  select frame
         Memorial_Select_Frame.gameObject.SetActive(User_Data.Is_Choice_Lobby);
