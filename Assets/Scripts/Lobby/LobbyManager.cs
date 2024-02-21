@@ -257,14 +257,15 @@ public class LobbyManager : SceneControllerBase
         UpdateLobbyChar();
     }
 
-    void UpdateLobbyChar()
+    async UniTask UpdateLobbyChar()
     {
-        if (pd != null)
-        {
-            pd.Release();
-            pd = null;
-        }
+        var before_pd = pd;
         pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, MEMORIAL_TYPE.MAIN_LOBBY, Memorial_Parent);
+
+        await UniTask.WaitUntil(() => pd.Is_Init);
+
+        before_pd.Release();
+        before_pd = null;
     }
 
     #region UI Animation Events
