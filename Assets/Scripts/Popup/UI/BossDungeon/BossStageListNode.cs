@@ -119,10 +119,10 @@ public class BossStageListNode : UIBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
         var boss_mng = GameData.Instance.GetUserBossStageDataManager();
-        ERROR_CODE result = boss_mng.SkipBossStage(Stage.boss_stage_id);
-        if (result != ERROR_CODE.SUCCESS)
+        RESPONSE_TYPE result = boss_mng.SkipBossStage(Stage.boss_stage_id);
+        if (result != RESPONSE_TYPE.SUCCESS)
         {
-            if (result == ERROR_CODE.NOT_ENOUGH_ITEM)
+            if (result == RESPONSE_TYPE.NOT_ENOUGH_ITEM)
             {
                 CommonUtils.ShowToast("입장 횟수를 모두 소진하였습니다.", TOAST_BOX_LENGTH.SHORT);
             }

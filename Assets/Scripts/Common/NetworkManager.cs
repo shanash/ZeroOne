@@ -62,19 +62,19 @@ public class NetworkManager : Singleton<NetworkManager>
             throw new Exception("원인 불명의 이유로 맥 어드레스를 정상적으로 가져올 수 없습니다");
         }
 
-        SendRequest(
-            HttpMethod.POST,
-            "account/login/dev",
-            new DevLoginRequest { macAddress = mac_address },
-            (ResponseData<LoginResponse> res) =>
-            {
-                User_Id = res.Data.playerId;
-                Access_Token = res.Data.accessToken;
-                Refresh_Token = res.Data.refreshToken;
-                Client.SetTokenInfo($"{Base_Uri}account/login/refreshtoken", res.Data.accessToken, res.Data.refreshToken);
+        //SendRequest(
+        //    HttpMethod.POST,
+        //    "account/login/dev",
+        //    new DevLoginRequest { macAddress = mac_address },
+        //    (ResponseData<LoginResponse> res) =>
+        //    {
+        //        User_Id = res.Data.playerId;
+        //        Access_Token = res.Data.accessToken;
+        //        Refresh_Token = res.Data.refreshToken;
+        //        Client.SetTokenInfo($"{Base_Uri}account/login/refreshtoken", res.Data.accessToken, res.Data.refreshToken);
 
-                callback(res);
-            });
+        //        callback(res);
+        //    });
     }
 
     /// <summary>
@@ -121,8 +121,8 @@ public class NetworkManager : Singleton<NetworkManager>
                     $"{Base_Uri}{((Method_Path[0].Equals('/')) ? Method_Path[1..] : Method_Path)}",
                     request, Method);
 
-                if (response.ResCode != ResCode.Successed
-                    && ((int)response.ResCode < 200 || (int)response.ResCode >= 300))
+                if (response.ResType != RESPONSE_TYPE.SUCCESS
+                    && ((int)response.ResType < 200 || (int)response.ResType >= 300))
                 {
                     MainThreadDispatcher.Instance.AddAction(() => callback?.Invoke(response));
                     while (!retry)

@@ -313,7 +313,7 @@ public class GameResultWinPopup : PopupBase
         int before_lv = player_data.GetLevel();
         int gain_player_exp = Dungeon.GetPlayerExp();
         var result_code = player_data.AddExp(gain_player_exp);
-        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        if (!(result_code == RESPONSE_TYPE.SUCCESS || result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
         {
             yield break;
         }
@@ -361,7 +361,7 @@ public class GameResultWinPopup : PopupBase
             }
         }
 
-        if (result_code == ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
@@ -657,7 +657,7 @@ public class GameResultWinPopup : PopupBase
         var item_mng = gd.GetUserItemDataManager();     //  각종 아이템 및 조각 아이템
         var goods_mng = gd.GetUserGoodsDataManager();   //  재화
         int item_count = 0;
-
+        var m = MasterDataManager.Instance;
         switch (reward.reward_type)
         {
             case REWARD_TYPE.GOLD:
@@ -692,37 +692,7 @@ public class GameResultWinPopup : PopupBase
             case REWARD_TYPE.GET_ESSENCE:
                 Debug.Assert(false);
                 break;
-            case REWARD_TYPE.EXP_POTION_P:
-                item_count = reward.var2;
-                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_POTION_P, reward.var1, reward.var2);
-                break;
-            case REWARD_TYPE.EXP_POTION_C:
-                item_count = reward.var2;
-                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_POTION_C, reward.var1, reward.var2);
-                break;
-            case REWARD_TYPE.STA_POTION:
-                item_count = reward.var2;
-                item_mng.AddUserItemCount(ITEM_TYPE_V2.STA_POTION, reward.var1, reward.var2);
-                break;
-            case REWARD_TYPE.FAVORITE_ITEM:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.STAGE_SKIP:
-                Debug.Assert(false);
-                break;
             case REWARD_TYPE.BOSS_DUNGEON_TICKET:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.EQ_GROWUP:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_SELECT:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_RANDOM:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_ALL:
                 Debug.Assert(false);
                 break;
             case REWARD_TYPE.PIECE_EQUIPMENT:
@@ -737,9 +707,15 @@ public class GameResultWinPopup : PopupBase
                 item_count = reward.var2;
                 item_mng.AddUserItemCount(ITEM_TYPE_V2.PIECE_ITEM, reward.var1, reward.var2);
                 break;
-            case REWARD_TYPE.EXP_SKILL:
-                item_count = reward.var2;
-                item_mng.AddUserItemCount(ITEM_TYPE_V2.EXP_SKILL, reward.var1, reward.var2);
+            case REWARD_TYPE.ITEM:
+                {
+                    var item_data = m.Get_ItemData(reward.var1);
+                    if (item_data != null)
+                    {
+                        item_count = reward.var2;
+                        item_mng.AddUserItemCount(item_data.item_type, item_data.item_id, item_count);
+                    }
+                }
                 break;
             default:
                 Debug.Assert(false);

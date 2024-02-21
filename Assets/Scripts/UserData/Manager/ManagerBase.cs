@@ -87,9 +87,9 @@ public class ManagerBase : IDisposable
     public virtual LitJson.JsonData Serialized() { return null; }
     public virtual bool Deserialized(LitJson.JsonData json) { return false; }
 
-    public virtual ERROR_CODE CheckDateAndTimeCharge()
+    public virtual RESPONSE_TYPE CheckDateAndTimeCharge()
     {
-        return ERROR_CODE.NOT_WORK;
+        return RESPONSE_TYPE.NOT_WORK;
     }
 
     public virtual void Save()

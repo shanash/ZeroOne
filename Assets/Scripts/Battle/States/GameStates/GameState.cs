@@ -10,6 +10,7 @@ public enum GAME_STATES
     MOVE_IN,            //  필드에 등장(자리를 모두 잡을때 까지 대기)
     PLAY_READY,         //  필드 입장 후 잠깐 자리잡을 동안 대기(0.3초)
     PLAYING,            //  전투 
+    ULTIMATE_SKILL,     //  궁극기 시전중
     NEXT_WAVE,          //  다음 스테이지
     WAVE_RUN,
 

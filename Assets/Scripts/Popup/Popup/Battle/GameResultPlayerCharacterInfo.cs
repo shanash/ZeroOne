@@ -56,7 +56,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         int before_lv = User_Data.GetLevel();
 
         var result_code = User_Data.AddExp(char_exp);
-        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        if (!(result_code == RESPONSE_TYPE.SUCCESS || result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
         {
             yield break;
         }
@@ -114,7 +114,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         int before_love_lv = User_Data.GetLoveLevel();
 
         var result_code = User_Data.AddLoveExp(destiny_exp);
-        if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+        if (!(result_code == RESPONSE_TYPE.SUCCESS || result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
         {
             yield break;
         }

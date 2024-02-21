@@ -109,7 +109,7 @@ public class UserMemorialDataManager : ManagerBase
         return memorial;
     }
 
-    public ERROR_CODE SelectTempMemorialOrder(int memorial_id, int player_character_id)
+    public RESPONSE_TYPE SelectTempMemorialOrder(int memorial_id, int player_character_id)
     {
         var found = FindUserMemorialData(memorial_id, player_character_id);
         if (found != null)
@@ -128,7 +128,7 @@ public class UserMemorialDataManager : ManagerBase
                     var item = choice_list[i];
                     item.SetTempLobbyChoiceNumber(number++);
                 }
-                return ERROR_CODE.SUCCESS;
+                return RESPONSE_TYPE.SUCCESS;
             }
             else
             {
@@ -136,7 +136,7 @@ public class UserMemorialDataManager : ManagerBase
                 if (choice_list.Count == 0)
                 {
                     found.SetTempLobbyChoiceNumber(1);
-                    return ERROR_CODE.SUCCESS;
+                    return RESPONSE_TYPE.SUCCESS;
                 }
                 else
                 {
@@ -146,17 +146,17 @@ public class UserMemorialDataManager : ManagerBase
                         //  기존에 등록된 번호 중 최대 번호를 찾아, 다음 번호를 찾아준다.
                         int next_number = choice_list.Max(x => x.Temp_Lobby_Choice_Number) + 1;
                         found.SetTempLobbyChoiceNumber(next_number);
-                        return ERROR_CODE.SUCCESS;
+                        return RESPONSE_TYPE.SUCCESS;
                     }
                     else
                     {
-                        return ERROR_CODE.NOT_WORK;
+                        return RESPONSE_TYPE.NOT_WORK;
                     }
                 }
 
             }
         }
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
 
     /// <summary>

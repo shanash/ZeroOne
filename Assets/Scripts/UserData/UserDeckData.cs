@@ -84,11 +84,11 @@ public class UserDeckData : UserDataBase
     /// </summary>
     /// <param name="new_hero"></param>
     /// <returns></returns>
-    public ERROR_CODE AddSlotHero(UserHeroDeckMountData new_hero)
+    public RESPONSE_TYPE AddSlotHero(UserHeroDeckMountData new_hero)
     {
         if (!IsExistEmptySlot())
         {
-            return ERROR_CODE.NOT_EXIST_EMPTY_SLOT;
+            return RESPONSE_TYPE.NOT_EXIST_EMPTY_SLOT;
         }
         //  현재 리더가 없으면 신규 착용되는 영웅을 리더로 설정한다.
         bool is_leader = false;
@@ -116,10 +116,10 @@ public class UserDeckData : UserDataBase
         new_hero.SetLeader(is_leader);
         CalcTeamSynergy();
 
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
-    public ERROR_CODE AddSlotHero(int player_character_id, int player_character_num)
+    public RESPONSE_TYPE AddSlotHero(int player_character_id, int player_character_num)
     {
         var mount_hero = new UserHeroDeckMountData();
         mount_hero.SetUserHeroData(player_character_id, player_character_num);
@@ -355,7 +355,7 @@ public class UserDeckData : UserDataBase
                         else
                         {
                             var code = AddSlotHero(player_character_id, player_character_num);
-                            if (code == ERROR_CODE.SUCCESS)
+                            if (code == RESPONSE_TYPE.SUCCESS)
                             {
                                 item = FindUserHeroDeckMountData(player_character_id, player_character_num);
                                 item?.Deserialized(jdata);

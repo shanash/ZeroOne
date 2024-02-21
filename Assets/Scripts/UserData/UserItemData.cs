@@ -46,9 +46,9 @@ public class UserItemData : UserDataBase
         return Count.Get();
     }
 
-    public ERROR_CODE AddItemCount(double add_cnt)
+    public RESPONSE_TYPE AddItemCount(double add_cnt)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
         if (add_cnt < 0)
         {
             return code;
@@ -57,14 +57,14 @@ public class UserItemData : UserDataBase
         cnt += add_cnt;
         Count.Set(cnt);
         Is_Update_Data = true;
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
-    public ERROR_CODE UseItemCount(double use_cnt)
+    public RESPONSE_TYPE UseItemCount(double use_cnt)
     {
         if (!IsUsableItemCount(use_cnt))
         {
-            return ERROR_CODE.NOT_ENOUGH_ITEM;
+            return RESPONSE_TYPE.NOT_ENOUGH_ITEM;
         }
         if (use_cnt >= 0)
         {
@@ -72,10 +72,10 @@ public class UserItemData : UserDataBase
             cnt -= use_cnt;
             Count.Set(cnt);
             Is_Update_Data = true;
-            return ERROR_CODE.SUCCESS;
+            return RESPONSE_TYPE.SUCCESS;
         }
 
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
 
     public bool IsUsableItemCount(double cnt)

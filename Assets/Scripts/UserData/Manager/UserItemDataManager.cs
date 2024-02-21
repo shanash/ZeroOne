@@ -109,7 +109,7 @@ public class UserItemDataManager : ManagerBase
     /// <param name="item_id"></param>
     /// <param name="add_cnt"></param>
     /// <returns></returns>
-    public ERROR_CODE AddUserItemCount(ITEM_TYPE_V2 itype, int item_id, double add_cnt)
+    public RESPONSE_TYPE AddUserItemCount(ITEM_TYPE_V2 itype, int item_id, double add_cnt)
     {
         var item = FindUserItem(itype, item_id);
         if (item == null)
@@ -125,7 +125,7 @@ public class UserItemDataManager : ManagerBase
     /// <param name="item_id"></param>
     /// <param name="use_cnt"></param>
     /// <returns></returns>
-    public ERROR_CODE UseItemCount(ITEM_TYPE_V2 itype, int item_id, double use_cnt)
+    public RESPONSE_TYPE UseItemCount(ITEM_TYPE_V2 itype, int item_id, double use_cnt)
     {
         var item = FindUserItem(itype, item_id);
         if (item == null)

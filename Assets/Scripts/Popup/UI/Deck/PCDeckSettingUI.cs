@@ -177,10 +177,10 @@ public class PCDeckSettingUI : PopupBase
         }
         else // 처음 선택되는 영웅이라면 덱에 빈 슬롯이 있는지 찾아보고, 빈 슬롯이 있으면 추가
         {
-            ERROR_CODE code = user_deck.AddSlotHero(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
-            if (code != ERROR_CODE.SUCCESS)
+            RESPONSE_TYPE code = user_deck.AddSlotHero(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+            if (code != RESPONSE_TYPE.SUCCESS)
             {
-                if (code == ERROR_CODE.NOT_EXIST_EMPTY_SLOT)
+                if (code == RESPONSE_TYPE.NOT_EXIST_EMPTY_SLOT)
                 {
                     Debug.Log("슬롯에 빈 자리가 없습니다.");
                 }

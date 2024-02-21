@@ -169,12 +169,12 @@ public class UserBossStageDataManager : ManagerBase
     /// </summary>
     /// <param name="boss_stage_id"></param>
     /// <returns></returns>
-    public ERROR_CODE SkipBossStage(int boss_stage_id)
+    public RESPONSE_TYPE SkipBossStage(int boss_stage_id)
     {
         //  입장 횟수 부족
         if (!IsEnableEntranceBossDungeon())
         {
-            return ERROR_CODE.NOT_ENOUGH_ITEM;
+            return RESPONSE_TYPE.NOT_ENOUGH_ITEM;
         }
         var dungeon = FindUserBossDungeonData(boss_stage_id);
         if (dungeon != null)
@@ -182,23 +182,23 @@ public class UserBossStageDataManager : ManagerBase
             dungeon.AddDailyChallengeCount();
             return BossStageWin(boss_stage_id);
         }
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
     /// <summary>
     /// 보스 던전 승리
     /// </summary>
     /// <param name="boss_stage_id"></param>
     /// <returns></returns>
-    public ERROR_CODE BossStageWin(int boss_stage_id)
+    public RESPONSE_TYPE BossStageWin(int boss_stage_id)
     {
         var stage = FindUserBossDungeonData(boss_stage_id);
         if (stage == null)
         {
-            return ERROR_CODE.FAILED;
+            return RESPONSE_TYPE.FAILED;
         }
         if (!IsEnableEntranceBossDungeon())
         {
-            return ERROR_CODE.FAILED;
+            return RESPONSE_TYPE.FAILED;
         }
         //  입장 횟수 차감
         int cnt = GetCount();
@@ -212,7 +212,7 @@ public class UserBossStageDataManager : ManagerBase
 
         stage.AddWinCount();
         OpenNextBossStage(boss_stage_id);
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
     /// <summary>
     /// 마지막 사용 시간 가져오기
@@ -404,13 +404,13 @@ public class UserBossStageDataManager : ManagerBase
     }
 
 
-    public override ERROR_CODE CheckDateAndTimeCharge()
+    public override RESPONSE_TYPE CheckDateAndTimeCharge()
     {
-        ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        RESPONSE_TYPE code = RESPONSE_TYPE.NOT_WORK;
         //  던전이 오픈 기간이 아니면 아무것도 안함
         if (!IsDungeonOpenTime())
         {
-            return ERROR_CODE.NOT_WORK;
+            return RESPONSE_TYPE.NOT_WORK;
         }
 
         var now = DateTime.Now.ToLocalTime();
@@ -441,7 +441,7 @@ public class UserBossStageDataManager : ManagerBase
                 Last_Used_Dt = string.Empty;
                 Last_Used_Datetime = DateTime.MinValue;
                 Is_Update_Data = true;
-                code = ERROR_CODE.SUCCESS;
+                code = RESPONSE_TYPE.SUCCESS;
             }
         }
 

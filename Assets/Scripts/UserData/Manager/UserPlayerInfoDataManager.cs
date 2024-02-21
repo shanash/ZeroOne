@@ -51,14 +51,14 @@ public class UserPlayerInfoDataManager : ManagerBase
     /// </summary>
     /// <param name="xp"></param>
     /// <returns></returns>
-    public ERROR_CODE AddPlayerExp(double xp)
+    public RESPONSE_TYPE AddPlayerExp(double xp)
     {
         var info = GetCurrentPlayerInfoData();
         if (info != null)
         {
             return info.AddExp(xp);
         }
-        return ERROR_CODE.NOT_WORK;
+        return RESPONSE_TYPE.NOT_WORK;
     }
 
 

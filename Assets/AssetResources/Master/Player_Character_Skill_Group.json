@@ -246,5 +246,57 @@
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Claire_Ultimate_Cast"
     ]
+  },
+  {
+    "pc_skill_group_id": 100601,
+    "name_kr": "skill 15",
+    "skill_use_delay": 2.0,
+    "skill_type": 1,
+    "script": "근거리 전방 1명 공격(1히트)",
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_common",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Attack_01_Cast"
+    ]
+  },
+  {
+    "pc_skill_group_id": 100602,
+    "name_kr": "attack 01",
+    "skill_use_delay": 2.0,
+    "skill_type": 2,
+    "script": "자신에게 체력 회복",
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_skill_01",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Skill1_01_Cast"
+    ]
+  },
+  {
+    "pc_skill_group_id": 100603,
+    "name_kr": "attack 02",
+    "skill_use_delay": 2.5,
+    "skill_type": 3,
+    "script": "근거리 전방 1명 공격(1히트)",
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_skill_02",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Skill1_02_Cast"
+    ]
+  },
+  {
+    "pc_skill_group_id": 100604,
+    "name_kr": "클레어 궁극기",
+    "skill_use_delay": 17.0,
+    "skill_type": 4,
+    "script": "자기 자신에게 방어력 증가",
+    "target_skill_id": 100504,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_ultimate",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Claire_Ultimate_Cast"
+    ]
   }
 ]

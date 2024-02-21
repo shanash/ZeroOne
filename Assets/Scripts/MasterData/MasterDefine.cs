@@ -899,34 +899,16 @@ public enum REWARD_TYPE
 	SEND_ESSENCE = 9,
 	/// <summary>10 근원 받을 수 있는 횟수(캐릭터 공용 설정)</summary>
 	GET_ESSENCE = 10,
-	/// <summary>101 플레이어 경험치 물약</summary>
-	EXP_POTION_P = 101,
-	/// <summary>102 캐릭터 경험치 물약</summary>
-	EXP_POTION_C = 102,
-	/// <summary>103 스테미나 회복 물약</summary>
-	STA_POTION = 103,
-	/// <summary>104 호감도 아이템</summary>
-	FAVORITE_ITEM = 104,
-	/// <summary>105 스테이지 스킵 티켓</summary>
-	STAGE_SKIP = 105,
 	/// <summary>106 보스전 입장 횟수</summary>
 	BOSS_DUNGEON_TICKET = 106,
-	/// <summary>107 정련석(장비 성장)</summary>
-	EQ_GROWUP = 107,
-	/// <summary>109 보상 선택 티켓(1개를 선택 획득)</summary>
-	TICKET_REWARD_SELECT = 108,
-	/// <summary>100 보상 랜덤 티켓(1개를 확률 획득)</summary>
-	TICKET_REWARD_RANDOM = 109,
-	/// <summary>110 보상 패키지 티켓(모든 보상 획득)</summary>
-	TICKET_REWARD_ALL = 110,
 	/// <summary>111 장비 조각</summary>
 	PIECE_EQUIPMENT = 111,
 	/// <summary>112 캐릭터 조각</summary>
 	PIECE_CHARACTER = 112,
 	/// <summary>113 아이템 조각</summary>
 	PIECE_ITEM = 113,
-	/// <summary>114 스킬 경험치 아이템</summary>
-	EXP_SKILL = 114,
+	/// <summary>1000 아이템</summary>
+	ITEM = 1000,
 }
 
 ///	<summary>
@@ -976,6 +958,188 @@ public enum ATTRIBUTE_TYPE
 	CHARM = 3,
 	/// <summary>마력</summary>
 	MANA = 4,
+}
+
+///	<summary>
+///	결과 반환 타입(서버, 클라이언트 공통 사용)
+///	</summary>
+public enum RESPONSE_TYPE
+{
+	FAILED = 0,
+	SUCCESS = 1,
+	/// <summary>예외 사항 발생</summary>
+	EXCEPTION = 2,
+	EMPTY_BODY = 3,
+	NULL_RESPONSE = 4,
+	JSON_PARSE_FAILED = 5,
+	DUPLICATION_REQUEST = 6,
+	EXPIRED_ACCESS_TOKEN = 7,
+	EXPIRE_REFRESH_TOKEN = 8,
+	EXCEEDED_RETRY_COUNT = 9,
+	VALIDATE_FAILED_ACCESS_TOKEN = 10,
+	VALIDATE_FAILED_REFRESH_TOKEN = 11,
+	/// <summary>성공</summary>
+	OK = 200,
+	/// <summary>생성됨</summary>
+	CREATED = 201,
+	/// <summary>허용됨 (요청은 접수하였지만, 처리가 완료되지 않았다.)</summary>
+	ACCEPTED = 202,
+	/// <summary>신뢰 할 수 없는 정보</summary>
+	NON_AUTHORITATIVE_INFORMATION = 203,
+	/// <summary>처리는 성공하였지만 클라이언트에게 돌려줄 컨텐츠가 없다</summary>
+	NO_CONTENT = 204,
+	/// <summary>콘텐츠 재설정</summary>
+	RESET_CONTENT = 205,
+	/// <summary>콘텐츠의 일부만을 보낸다</summary>
+	PARTIAL_CONTENT = 206,
+	/// <summary>처리 결과의 스테이터스가 여러 개다.</summary>
+	MULTI_STATUS = 207,
+	/// <summary>선택 항목이 여러 개 있다</summary>
+	MULTIPLE_CHOICES = 300,
+	/// <summary>지정한 리소스가 새로운 URI로 이동하였다.</summary>
+	MOVED_PERMANENTRLY = 301,
+	/// <summary>요청한 리소스를 다른 URI에서 찾았다</summary>
+	FOUND = 302,
+	/// <summary>다른 위치로 요청 하라</summary>
+	SEE_OTHER = 303,
+	/// <summary>마지막 요청 이후 요청한 페이지는 수정되지 않았다</summary>
+	NOT_MODIFIED = 304,
+	/// <summary>지정한 리소스에 엑세스 하려면 프록시를 통해야 한다</summary>
+	USE_PROXY = 305,
+	/// <summary>임시로 리다이렉션 요청이 필요하다</summary>
+	TEMPORARY_REDIRECT = 306,
+	/// <summary>요청의 구문이 잘못되었다</summary>
+	BAD_REQUEST = 400,
+	/// <summary>지정한 리소스에 대한 액세스 권한이 없다</summary>
+	UNAUTHORIZED = 401,
+	/// <summary>지정한 리소스를 액세스 하기 위해서는 결제가 필요하다</summary>
+	PAYMENT_REQUIRED = 402,
+	/// <summary>지정한 리소스에 대한 액세스가 금지되었다</summary>
+	FORBIDDEN = 403,
+	/// <summary>지정한 리소스를 찾을 수 없다</summary>
+	NOT_FOUND = 404,
+	/// <summary>요청한 URI가 지정한 메소드를 지원하지 않는다</summary>
+	METHOD_NOT_ALLOWED = 405,
+	/// <summary>클라이언트가 Accept-* 헤더에 지정한 항목에 관해 처리할 수 없다</summary>
+	NOT_ACCEPTABLE = 406,
+	/// <summary>클라이언트는 프록시 서버에 인증이 필요하다</summary>
+	PROXY_AUTHENTICATION_REQUIRED = 407,
+	/// <summary>요청을 기다리다 서버에서 타임아웃 하였다</summary>
+	REQUEST_TIMEOUT = 408,
+	/// <summary>서버가 요청을 수행하는 중에 충돌이 발생하였다</summary>
+	CONFLICT = 409,
+	/// <summary>지정한 리소스가 이전에는 존재하였지만, 현재는 존재하지 않는다</summary>
+	GONE = 410,
+	/// <summary>요청 헤더에 Content-Length를 지정해야 한다</summary>
+	LENGTH_REQUIRED = 411,
+	/// <summary>If-Match와 같은 조건부 요청에서 지정한 사전 조건이 서버와 맞지 않는다</summary>
+	PRECONDITION_FAILED = 412,
+	/// <summary>요청 메시지가 너무 크다</summary>
+	REQUEST_ENTITY_TOO_LARGE = 413,
+	/// <summary>요청 uri가 너무 길다</summary>
+	REQUEST_URL_TO_LARGE = 414,
+	/// <summary>클라이언트가 지정한 미디어 타입을 서버가 지원하지 않는다</summary>
+	UNSUPPORTED_MEDIA_TYPE = 415,
+	/// <summary>클라이언트가 지정한 리소스의 범위가 서버의 리소스 사이즈와 맞지 않는다</summary>
+	RANGE_NOT_SATISFIABLE = 416,
+	/// <summary>클라이언트가 지정한 expect 헤더를 서버가 이해할 수 없다</summary>
+	EXPECTATION_FAILED = 417,
+	/// <summary>(WebDAV) 클라이언트가 송신한  XML이 구문은 맞지만, 의미상 오류가 있다</summary>
+	UNPROCESSABLE_ENTITY = 418,
+	/// <summary>(WebDAV) 지정한 리소스는 잠겨 있다</summary>
+	LOCKED = 419,
+	/// <summary>(WebDAV) 다른 작업의 실패로 인해 본 요청도 실패하였다.</summary>
+	FAILED_DEPENDENCY = 420,
+	/// <summary>클라이언트의 프로토콜의 업그레이드가 필요하다.</summary>
+	UPGRADED_REQUIRED = 421,
+	/// <summary>If-Match와 같은 사전조건을 지정하는 헤더가 필요하다.</summary>
+	PRECONDITION_REQUIRED = 422,
+	/// <summary>클라이언트가 주어진 시간 동안 너무 많은 요청을 보냈다.</summary>
+	TO_MANY_REQUESTS = 423,
+	/// <summary>헤더의 길이가 너무 크다.</summary>
+	REQUEST_HEADER_FIELDS_TOO_LARGE = 424,
+	/// <summary>(NGINX) 응답을 보내지 않고 연결을 종료하였다.</summary>
+	CONNECTION_CLOSED_WITHOUT_RESPONSE = 425,
+	/// <summary>법적으로 문제가 있는 리소스를 요청하였다.</summary>
+	UNAVAILABLE_FOR_LEGAL_REASONS = 426,
+	/// <summary>서버에 에러가 발생하였다.</summary>
+	INTERNAL_SERVER_ERROR = 500,
+	/// <summary>요청한 URI의 메소드에 대해 서버가 구현하고 있지 않다.</summary>
+	NOT_IMPLEMENTED = 501,
+	/// <summary>게이트웨이 또는 프록시 역할을 하는 서버가 그 뒷단의 서버로부터 잘못된 응답을 받았다.</summary>
+	BAD_GATEWAY = 502,
+	/// <summary>현재 서버에서 서비스를 제공할 수 없다.</summary>
+	SERVICE_UNAVAILABLE = 503,
+	/// <summary>게이트웨이 또는 프록시 역할을 하는 서버가 그 뒷단의 서버로부터 응답을 기다리다 타임아웃이 발생하였다.</summary>
+	GATEWAY_TIMEOUT = 504,
+	/// <summary>클라이언트가 요청에 사용한 HTTP 버전을 서버가 지원하지 않는다.</summary>
+	HTTP_VERSION_NOT_SUPPORTED = 505,
+	/// <summary>(WebDAV) 서버에 저장 공간 부족으로 처리에 실패하였다.</summary>
+	INSUFFICIENT_STORAGE = 506,
+	/// <summary>레벨업 성공(클라 전용)</summary>
+	LEVEL_UP_SUCCESS = 1000,
+	/// <summary>아무 효과 없음(클라 전용)</summary>
+	NOT_EFFECT_SUCCESS = 1001,
+	/// <summary>모든 스테이지 클리어</summary>
+	ALL_CLEAR_STAGE = 1002,
+	/// <summary>아이템 부족</summary>
+	NOT_ENOUGH_ITEM = 2001,
+	/// <summary>골드 부족</summary>
+	NOT_ENOUGH_GOLD = 2002,
+	/// <summary>다이아 부족(유료 재화)</summary>
+	NOT_ENOUGH_DIA = 2003,
+	/// <summary>장비 부족</summary>
+	NOT_ENOUGH_EQUIPMENT = 2004,
+	/// <summary>슬롯 부족</summary>
+	NOT_ENOUGH_SLOT = 2005,
+	/// <summary>뭐든 부족</summary>
+	NOT_ENOUGH_ALL = 2006,
+	/// <summary>아무것도 하지 않음</summary>
+	NOT_WORK = 3001,
+	/// <summary>아이템의 최대치를 초과할 수 없음</summary>
+	OVER_MAX_ITEM_BOUND = 4001,
+	/// <summary>아직 열린 컨텐츠가 아님</summary>
+	NOT_OPEN_CONTENT = 4002,
+	/// <summary>조건이 충족되지 않음</summary>
+	NOT_CONDITION_MET = 4003,
+	/// <summary>아직 준비되지 않음</summary>
+	NOT_READY = 4004,
+	/// <summary>이미 최대 레벨임</summary>
+	ALREADY_MAX_LEVEL = 4005,
+	/// <summary>닉네임 중복</summary>
+	DUPLICATE_NICKNAME = 4006,
+	/// <summary>서버 점검중</summary>
+	SERVER_MAINTERNANCE = 4007,
+	/// <summary>차단당한 디바이스</summary>
+	BLOCK_DEVICE = 4008,
+	/// <summary>탈퇴 진행중</summary>
+	USER_WITHDRAW_ING = 4009,
+	/// <summary>강제 업데이트 필요</summary>
+	NEED_FORCE_UPDATE = 4010,
+	/// <summary>토큰 리프레쉬 필요</summary>
+	NEED_REFRESH_TOKEN = 4011,
+	/// <summary>이미 받은 보상</summary>
+	ALREADY_RECV_REWARD = 4012,
+	/// <summary>이미 장착함</summary>
+	ALREADY_EQUIPED = 4013,
+	/// <summary>시간이 남아 있음</summary>
+	REMAIN_TIME = 4014,
+	/// <summary>허용 시간이 아님</summary>
+	INVALID_DATETIME = 4015,
+	/// <summary>작업 불가</summary>
+	NOT_ENABLE_WORK = 4016,
+	/// <summary>빈 슬롯이 없음</summary>
+	NOT_EXIST_EMPTY_SLOT = 4017,
+	/// <summary>이미 완료 함</summary>
+	ALREADY_COMPLETE = 4018,
+	/// <summary>네트워크에 연결되어 있지 않음</summary>
+	NOT_CONNECT_NETWORK = 5001,
+	/// <summary>유저를 생성해야 함</summary>
+	NEED_CREATE_PLAYER = 10001,
+	/// <summary>유저 네임 중복</summary>
+	DUPLICATION_NAME = 10002,
+	/// <summary>아이템을 찾을 수 없음</summary>
+	NOT_FOUND_ITEM = 10003,
 }
 
 ///	<summary>

@@ -26,7 +26,7 @@ namespace UI.SkillLevelPopup
 
         UserItem_NormalItemData Data = null;
 
-        public delegate ERROR_CODE OnChangedUseCount(int item_id, int count);
+        public delegate RESPONSE_TYPE OnChangedUseCount(int item_id, int count);
         OnChangedUseCount On_Changed_Use_Count = null;
 
         int Use_Count { get; set; } = 0;
@@ -78,7 +78,7 @@ namespace UI.SkillLevelPopup
             }
 
             var error_code = On_Changed_Use_Count?.Invoke(Data.Data.item_id, count);
-            if (error_code == ERROR_CODE.SUCCESS || error_code == ERROR_CODE.LEVEL_UP_SUCCESS)
+            if (error_code == RESPONSE_TYPE.SUCCESS || error_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
             {
                 Use_Count = count;
             }

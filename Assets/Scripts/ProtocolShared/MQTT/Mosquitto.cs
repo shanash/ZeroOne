@@ -18,7 +18,8 @@ namespace ProtocolShared.MQTT
         MqttClientOptions? _options = null;
         bool isDisconnect = false;
         Func<string, string, Task>? _onMessage = null;
-        public Mosquitto(){
+        public Mosquitto()
+        {
             _mqttClient = _mqttFactory.CreateMqttClient();
         }
 
@@ -33,7 +34,7 @@ namespace ProtocolShared.MQTT
 
             _mqttClient.ApplicationMessageReceivedAsync += OnMessage;
 
-            if(onConnected == null)
+            if (onConnected == null)
             {
                 _mqttClient.ConnectedAsync += OnConnected;
             }
@@ -53,9 +54,9 @@ namespace ProtocolShared.MQTT
 
             MqttClientConnectResult result = await _mqttClient.ConnectAsync(_options);
 
-            if(result.ResultCode != MqttClientConnectResultCode.Success)
+            if (result.ResultCode != MqttClientConnectResultCode.Success)
             {
-                return false; 
+                return false;
             }
 
             return true;
@@ -75,14 +76,14 @@ namespace ProtocolShared.MQTT
 
         private async Task OnDisconnected(MqttClientDisconnectedEventArgs arg)
         {
-            if(isDisconnect == false)
+            if (isDisconnect == false)
             {
                 // 연결이 끊기면 재접속 한다.
                 MqttClientConnectResult result = await _mqttClient.ConnectAsync(_options);
 
                 if (result.ResultCode != MqttClientConnectResultCode.Success)
                 {
-                    
+
                 }
             }
         }
@@ -91,7 +92,7 @@ namespace ProtocolShared.MQTT
         {
             var payloadSegment = arg.ApplicationMessage.PayloadSegment;
 
-            if(payloadSegment.Array != null)
+            if (payloadSegment.Array != null)
             {
                 byte[] payload = new byte[payloadSegment.Count];
                 Array.Copy(payloadSegment.Array, payloadSegment.Offset, payload, 0, payloadSegment.Count);

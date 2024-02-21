@@ -2,6 +2,7 @@ using FluffyDuck.Util;
 using System.Collections.Generic;
 using UnityEngine;
 using FluffyDuck.UI;
+using System.Collections;
 
 public partial class BattleManager_V2 : SceneControllerBase
 {
@@ -148,6 +149,42 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         return Used_Team_List.Find(x => x.Team_Type == team_type);
     }
+
+    public void StartUltimateSkill()
+    {
+        ChangeState(GAME_STATES.ULTIMATE_SKILL);
+    }
+    public void FinishUltimateSkill(HeroBase_V2 caster)
+    {
+        var all_death_team = Used_Team_List.Find(x => !x.IsAliveMembers());
+        if (all_death_team != null)
+        {
+            //  wait and playing
+            StartCoroutine(DelayChangeStatePlaying(1f, caster));
+        }
+        else
+        {
+            caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
+            AllResumeUnitWithoutHero(caster);
+            GetEffectFactory().OnResumeAndShow();
+            ChangeState(GAME_STATES.PLAYING);
+        }
+    }
+
+    IEnumerator DelayChangeStatePlaying(float delay, HeroBase_V2 caster)
+    {
+        yield return new WaitForSeconds(delay);
+        caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
+        AllResumeUnitWithoutHero(caster);
+        GetEffectFactory().OnResumeAndShow();
+        ChangeState(GAME_STATES.PLAYING);
+
+    }
+
+    //void DelayChangeStatePlaying()
+    //{
+    //    ChangeState(GAME_STATES.PLAYING);
+    //}
 
     public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {

@@ -171,12 +171,12 @@ public class GameResultLosePopup : PopupBase
         var player_data = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
         int before_lv = player_data.GetLevel();
         int gain_player_exp = 0;    //  패배시 플레이어 경험치 1(스테미너 1 사용)
-        ERROR_CODE result_code = ERROR_CODE.NOT_WORK;
+        RESPONSE_TYPE result_code = RESPONSE_TYPE.NOT_WORK;
         if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
             gain_player_exp = 1;
             result_code = player_data.AddExp(gain_player_exp);
-            if (!(result_code == ERROR_CODE.SUCCESS || result_code == ERROR_CODE.LEVEL_UP_SUCCESS))
+            if (!(result_code == RESPONSE_TYPE.SUCCESS || result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
             {
                 yield break;
             }
@@ -224,7 +224,7 @@ public class GameResultLosePopup : PopupBase
             }
         }
 
-        if (result_code == ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result_code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {

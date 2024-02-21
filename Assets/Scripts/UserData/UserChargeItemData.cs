@@ -87,9 +87,9 @@ public class UserChargeItemData : UserDataBase
         return GetCount() >= GetMaxBound();
     }
 
-    public ERROR_CODE AddChargeItem(int cnt)
+    public RESPONSE_TYPE AddChargeItem(int cnt)
     {
-        ERROR_CODE code = ERROR_CODE.SUCCESS;
+        RESPONSE_TYPE code = RESPONSE_TYPE.SUCCESS;
         if (cnt > 0)
         {
             int item_count = GetCount();
@@ -107,11 +107,11 @@ public class UserChargeItemData : UserDataBase
         return code;
     }
 
-    public ERROR_CODE UseChargeItem(int use_cnt)
+    public RESPONSE_TYPE UseChargeItem(int use_cnt)
     {
         if (!IsUsableChargeItemCount(use_cnt))
         {
-            return ERROR_CODE.NOT_ENOUGH_ITEM;
+            return RESPONSE_TYPE.NOT_ENOUGH_ITEM;
         }
 
         if (use_cnt > 0)
@@ -127,21 +127,21 @@ public class UserChargeItemData : UserDataBase
                 Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
             }
             Is_Update_Data = true;
-            return ERROR_CODE.SUCCESS;
+            return RESPONSE_TYPE.SUCCESS;
         }
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
     /// <summary>
     /// 완전 풀 충전.<br/>
     /// CHARGE_TYPE에 따라 추가 작업 필요. 지금은 기본 타입으로 풀 충전만 해줌
     /// </summary>
     /// <returns></returns>
-    public ERROR_CODE FullChargeItem()
+    public RESPONSE_TYPE FullChargeItem()
     {
         int cnt = GetCount();
         if (cnt > GetMaxBound())
         {
-            return ERROR_CODE.NOT_WORK;
+            return RESPONSE_TYPE.NOT_WORK;
         }
 
         cnt = GetMaxBound();
@@ -152,7 +152,7 @@ public class UserChargeItemData : UserDataBase
 
         Is_Update_Data = true;
 
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
     public bool IsUsableChargeItemCount(int use_cnt)
@@ -171,9 +171,9 @@ public class UserChargeItemData : UserDataBase
 
     
 
-    public override ERROR_CODE CheckDateAndTimeCharge()
+    public override RESPONSE_TYPE CheckDateAndTimeCharge()
     {
-        ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        RESPONSE_TYPE code = RESPONSE_TYPE.NOT_WORK;
 
         if (Data.repeat_type == REPEAT_TYPE.REPEAT_MIN)
         {
@@ -216,8 +216,8 @@ public class UserChargeItemData : UserDataBase
         }
 
         var now = DateTime.Now.ToLocalTime();
-        ERROR_CODE result = CheckDateAndTimeCharge();
-        if (result == ERROR_CODE.NOT_WORK)
+        RESPONSE_TYPE result = CheckDateAndTimeCharge();
+        if (result == RESPONSE_TYPE.NOT_WORK)
         {
             return TimeSpan.Zero;
         }
@@ -261,9 +261,9 @@ public class UserChargeItemData : UserDataBase
     /// <summary>
     /// 반복 주기 체크(n분)
     /// </summary>
-    ERROR_CODE CheckMinutes()
+    RESPONSE_TYPE CheckMinutes()
     {
-        ERROR_CODE code = ERROR_CODE.NOT_WORK;
+        RESPONSE_TYPE code = RESPONSE_TYPE.NOT_WORK;
         int repeat_time = GetRepeatTime();
         int now_count = GetCount();
         if (GetMaxBound() != 0 && now_count > GetMaxBound())
@@ -278,7 +278,7 @@ public class UserChargeItemData : UserDataBase
             Last_Used_Date = now;
             Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
             Is_Update_Data = true;
-            return ERROR_CODE.SUCCESS;
+            return RESPONSE_TYPE.SUCCESS;
         }
 
         var total_time = now - last;
@@ -302,33 +302,33 @@ public class UserChargeItemData : UserDataBase
             }
             Is_Update_Data = true;
         }
-        code = ERROR_CODE.SUCCESS;
+        code = RESPONSE_TYPE.SUCCESS;
         return code;
     }
     /// <summary>
     /// 반복 주기 체크(n일)
     /// </summary>
-    ERROR_CODE CheckDays() 
+    RESPONSE_TYPE CheckDays() 
     { 
         if (Schedule == null)
         {
-            return ERROR_CODE.NOT_WORK;
+            return RESPONSE_TYPE.NOT_WORK;
         }
 
-        return ERROR_CODE.NOT_WORK; 
+        return RESPONSE_TYPE.NOT_WORK; 
     }
     /// <summary>
     /// 반복 주기 체크(n주간)
     /// </summary>
-    ERROR_CODE CheckWeeks() { return ERROR_CODE.NOT_WORK; }
+    RESPONSE_TYPE CheckWeeks() { return RESPONSE_TYPE.NOT_WORK; }
     /// <summary>
     /// 반복 주기 체크(n개월)
     /// </summary>
-    ERROR_CODE CheckMonths() { return ERROR_CODE.NOT_WORK; }
+    RESPONSE_TYPE CheckMonths() { return RESPONSE_TYPE.NOT_WORK; }
     /// <summary>
     /// 반복 주기 체크(n년)
     /// </summary>
-    ERROR_CODE CheckYears() { return ERROR_CODE.NOT_WORK; }
+    RESPONSE_TYPE CheckYears() { return RESPONSE_TYPE.NOT_WORK; }
 
 
     public override JsonData Serialized()

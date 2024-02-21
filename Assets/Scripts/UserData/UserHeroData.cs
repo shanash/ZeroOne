@@ -168,9 +168,9 @@ public class UserHeroData : UserDataBase
     /// </summary>
     /// <param name="xp"></param>
     /// <returns></returns>
-    public ERROR_CODE AddExp(double xp)
+    public RESPONSE_TYPE AddExp(double xp)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
 
         if (xp < 0)
         {
@@ -189,19 +189,19 @@ public class UserHeroData : UserDataBase
             }
             if (GetLevel() < lv_data.level)
             {
-                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
                 SetLevel(lv_data.level);
             }
             else
             {
-                code = ERROR_CODE.SUCCESS;
+                code = RESPONSE_TYPE.SUCCESS;
             }
             Exp.Set(_exp);
             Is_Update_Data = true;
         }
         else
         {
-            code = ERROR_CODE.ALREADY_MAX_LEVEL;
+            code = RESPONSE_TYPE.ALREADY_MAX_LEVEL;
         }
 
         return code;
@@ -275,7 +275,7 @@ public class UserHeroData : UserDataBase
 
         //  result data 초기화
         USE_EXP_ITEM_RESULT_DATA result = new USE_EXP_ITEM_RESULT_DATA();
-        result.Code = ERROR_CODE.FAILED;
+        result.Code = RESPONSE_TYPE.FAILED;
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
         result.Add_Exp = 0;
@@ -286,7 +286,7 @@ public class UserHeroData : UserDataBase
         do
         {
             //  성공이 아니면 바로 반환
-            if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
+            if (!(result_simulate.Code == RESPONSE_TYPE.SUCCESS || result_simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
             {
                 result.ResetAndResultCode(result_simulate.Code);
                 break;
@@ -294,7 +294,7 @@ public class UserHeroData : UserDataBase
             //  증가된 경험치가 없거나, 필요 금화량이 0인 경우, 아무것도 하지 않도록(이런 경우는 있으면 안되는 상황)
             if (result_simulate.Add_Exp <= 0 || result_simulate.Need_Gold <= 0)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_WORK);
                 break;
             }
 
@@ -302,7 +302,7 @@ public class UserHeroData : UserDataBase
             bool is_useable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
             if (!is_useable_gold)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_ENOUGH_GOLD);
                 break;
             }
             result.Used_Gold = result_simulate.Need_Gold;
@@ -322,7 +322,7 @@ public class UserHeroData : UserDataBase
             //  아이템이 충분하지 않음.
             if (!is_usable_item)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_ENOUGH_ITEM);
                 break;
             }
             result.Add_Exp = result_simulate.Add_Exp;
@@ -354,7 +354,7 @@ public class UserHeroData : UserDataBase
         EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
         //  가능한 결과 코드 : ALREADY_MAX_LEVEL, FAILED, SUCCESS, LEVEL_UP_SUCCESS, 
         //  최초 초기화
-        result.Code = ERROR_CODE.FAILED;
+        result.Code = RESPONSE_TYPE.FAILED;
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
 
@@ -365,7 +365,7 @@ public class UserHeroData : UserDataBase
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
         {
-            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.ALREADY_MAX_LEVEL);
+            return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.ALREADY_MAX_LEVEL);
         }
 
         var m = MasterDataManager.Instance;
@@ -399,7 +399,7 @@ public class UserHeroData : UserDataBase
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.FAILED);
+            return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.FAILED);
         }
         //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다.
         if (max_level < next_lv_data.level)
@@ -410,11 +410,11 @@ public class UserHeroData : UserDataBase
         if (result.Result_Lv < next_lv_data.level)
         {
             result.Result_Lv = next_lv_data.level;
-            result.Code = ERROR_CODE.LEVEL_UP_SUCCESS;
+            result.Code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
         }
         else
         {
-            result.Code = ERROR_CODE.SUCCESS;
+            result.Code = RESPONSE_TYPE.SUCCESS;
         }
 
         //  결과 레벨이 최대 레벨일 경우, 초과된 경험치 양을 알려준다.
@@ -464,9 +464,9 @@ public class UserHeroData : UserDataBase
     /// </summary>
     /// <param name="xp"></param>
     /// <returns></returns>
-    public ERROR_CODE AddLoveExp(double xp)
+    public RESPONSE_TYPE AddLoveExp(double xp)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
 
         if (xp < 0)
         {
@@ -485,12 +485,12 @@ public class UserHeroData : UserDataBase
             }
             if (GetLoveLevel() < lv_data.level)
             {
-                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
                 SetLoveLevel(lv_data.level);
             }
             else
             {
-                code = ERROR_CODE.SUCCESS;
+                code = RESPONSE_TYPE.SUCCESS;
             }
 
             Love_Exp.Set(_exp);
@@ -498,7 +498,7 @@ public class UserHeroData : UserDataBase
         }
         else
         {
-            code = ERROR_CODE.ALREADY_MAX_LEVEL;
+            code = RESPONSE_TYPE.ALREADY_MAX_LEVEL;
         }
 
         return code;
@@ -579,14 +579,14 @@ public class UserHeroData : UserDataBase
     /// 필요 캐릭터 조각과 필요 골드를 알려준다.
     /// </summary>
     /// <returns></returns>
-    public ERROR_CODE CheckAdvanceStarGrade()
+    public RESPONSE_TYPE CheckAdvanceStarGrade()
     {
-        ERROR_CODE result = ERROR_CODE.SUCCESS;
+        RESPONSE_TYPE result = RESPONSE_TYPE.SUCCESS;
 
         //  이미 최대 성급 레벨입니다.
         if (IsMaxStarGrade())
         {
-            result = ERROR_CODE.ALREADY_MAX_LEVEL;
+            result = RESPONSE_TYPE.ALREADY_MAX_LEVEL;
             return result;
         }
 
@@ -600,14 +600,14 @@ public class UserHeroData : UserDataBase
         if (need_piece == 0 || !item_mng.IsUsableItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), need_piece))
         {
             //  캐릭터 조각이 부족합니다.
-            result = ERROR_CODE.NOT_ENOUGH_ITEM;
+            result = RESPONSE_TYPE.NOT_ENOUGH_ITEM;
         }
 
         //  필요 골드 체크
         if (need_gold == 0 || !goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, need_gold))
         {
             //  골드가 부족합니다.
-            result = (result != ERROR_CODE.NOT_ENOUGH_ITEM) ? ERROR_CODE.NOT_ENOUGH_GOLD : ERROR_CODE.NOT_ENOUGH_ALL;
+            result = (result != RESPONSE_TYPE.NOT_ENOUGH_ITEM) ? RESPONSE_TYPE.NOT_ENOUGH_GOLD : RESPONSE_TYPE.NOT_ENOUGH_ALL;
         }
 
         return result;
@@ -617,24 +617,24 @@ public class UserHeroData : UserDataBase
     /// 성급 진화 요청
     /// </summary>
     /// <returns></returns>
-    public ERROR_CODE AdvanceStarGrade()
+    public RESPONSE_TYPE AdvanceStarGrade()
     {
         var data = CheckAdvanceStarGrade();
 
-        if (data != ERROR_CODE.SUCCESS)
+        if (data != RESPONSE_TYPE.SUCCESS)
         {
             return data;
         }
 
         //  캐릭터 조각 소모
-        ERROR_CODE piece_use_result = GameData.Instance.GetUserItemDataManager().UseItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), GetNeedPiece());
-        if (piece_use_result != ERROR_CODE.SUCCESS)
+        RESPONSE_TYPE piece_use_result = GameData.Instance.GetUserItemDataManager().UseItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, GetPlayerCharacterID(), GetNeedPiece());
+        if (piece_use_result != RESPONSE_TYPE.SUCCESS)
         {
             return piece_use_result;
         }
         //  필요 골드 소모
-        ERROR_CODE gold_use_result = GameData.Instance.GetUserGoodsDataManager().UseGoodsCount(GOODS_TYPE.GOLD, GetNeedGold());
-        if (gold_use_result != ERROR_CODE.SUCCESS)
+        RESPONSE_TYPE gold_use_result = GameData.Instance.GetUserGoodsDataManager().UseGoodsCount(GOODS_TYPE.GOLD, GetNeedGold());
+        if (gold_use_result != RESPONSE_TYPE.SUCCESS)
         {
             return gold_use_result;
         }
@@ -642,7 +642,7 @@ public class UserHeroData : UserDataBase
         //  성급 진화
         SetNextStarGrade();
 
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
     /// <summary>
@@ -650,20 +650,20 @@ public class UserHeroData : UserDataBase
     /// 확인을 위해서 public으로 메소드를 별도로 만듭니다.
     /// 각종 스탯 비교를 위해서가 아니면 절대로 밖에서 호출하지 맙시다.
     /// </summary>
-    public ERROR_CODE TryUpNextStarGrade()
+    public RESPONSE_TYPE TryUpNextStarGrade()
     {
         if (!Is_Clone)
         {
-            return ERROR_CODE.NOT_ENABLE_WORK;
+            return RESPONSE_TYPE.NOT_ENABLE_WORK;
         }
 
         if (IsMaxStarGrade())
         {
-            return ERROR_CODE.ALREADY_MAX_LEVEL;
+            return RESPONSE_TYPE.ALREADY_MAX_LEVEL;
         }
 
         SetNextStarGrade();
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
     void SetNextStarGrade()

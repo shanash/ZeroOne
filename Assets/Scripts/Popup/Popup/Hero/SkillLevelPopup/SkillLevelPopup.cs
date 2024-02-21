@@ -84,7 +84,7 @@ public class SkillLevelPopup : PopupBase
         UpdateUI();
     }
 
-    ERROR_CODE UpdateUI(bool use_levelup_animation = false)
+    RESPONSE_TYPE UpdateUI(bool use_levelup_animation = false)
     {
         Skill_Name.text = Current_SkillGroup.Group_Data.name_kr;
 
@@ -171,9 +171,9 @@ public class SkillLevelPopup : PopupBase
     /// </summary>
     /// <param name="use_levelup_animation"></param>
     /// <returns></returns>
-    ERROR_CODE UpdateLevelupInfoUI(bool use_levelup_animation)
+    RESPONSE_TYPE UpdateLevelupInfoUI(bool use_levelup_animation)
     {
-        ERROR_CODE result_code = ERROR_CODE.SUCCESS;
+        RESPONSE_TYPE result_code = RESPONSE_TYPE.SUCCESS;
         After_SkillGroup = Current_SkillGroup;
 
         double need_golds = 0;
@@ -182,7 +182,7 @@ public class SkillLevelPopup : PopupBase
 
         result_code = Current_SkillGroup.SumExpItemInfo(out double items_total_exp, out need_golds, Use_Exp_Items);
 
-        if (result_code != ERROR_CODE.SUCCESS)
+        if (result_code != RESPONSE_TYPE.SUCCESS)
         {
             Debug.Assert(false, $"잘못된 아이템 에러 : {result_code}");
             return result_code;
@@ -230,11 +230,11 @@ public class SkillLevelPopup : PopupBase
         return result_code;
     }
 
-    public ERROR_CODE OnChangedUseItemCount(int item_id, int count)
+    public RESPONSE_TYPE OnChangedUseItemCount(int item_id, int count)
     {
         if (After_SkillGroup.IsMaxLevel())
         {
-            return ERROR_CODE.ALREADY_MAX_LEVEL;
+            return RESPONSE_TYPE.ALREADY_MAX_LEVEL;
         }
 
         var item = Use_Exp_Items.Find(x => x.Item_ID == item_id);
@@ -264,7 +264,7 @@ public class SkillLevelPopup : PopupBase
 
     void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
     {
-        if (result.Code != ERROR_CODE.SUCCESS && result.Code != ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
             return;
@@ -278,7 +278,7 @@ public class SkillLevelPopup : PopupBase
         UpdateExpItemButtons();
         UpdateUI(true);
 
-        if (result.Code == ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
@@ -311,8 +311,8 @@ public class SkillLevelPopup : PopupBase
 
                 if (exist_enough_golds)
                 {
-                    var after_data = Current_SkillGroup.GetAddedExpSkillGroup(_total_exp, out ERROR_CODE result_code);
-                    if (result_code != ERROR_CODE.SUCCESS && result_code != ERROR_CODE.LEVEL_UP_SUCCESS)
+                    var after_data = Current_SkillGroup.GetAddedExpSkillGroup(_total_exp, out RESPONSE_TYPE result_code);
+                    if (result_code != RESPONSE_TYPE.SUCCESS && result_code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
                     {
                         Debug.Assert(false, $"오류!! : {result_code}");
 

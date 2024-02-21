@@ -7,26 +7,33 @@ using System.Threading.Tasks;
 
 namespace ProtocolShared.Proto
 {
+
+    public class RewardResult
+    {
+
+    }
     public class GameStartRequest
     {
         [Required]
-        public ushort stage { get; set; }
+        public ushort stageId { get; set; }
+        // 스킵도 고려할것
+        [Required]
+        public Guid charSlot_1 { get; set; }
+        public Guid charSlot_2 { get; set; }
+        public Guid charSlot_3 { get; set; }
+        public Guid charSlot_4 { get; set; }
+        public Guid charSlot_5 { get; set; }
     }
 
     public class GameStartResponse
     {
-        public ushort useActionPoint { get; set; }
+        public short remainActionPoint { get; set; }
     }
-
 
     public class GameEndRequest
     {
         [Required]
-        public bool isSuccess { get; set; }
-        [Required]
-        public ushort kill { get; set; }
-        [Required] 
-        public ushort death { get; set; }
+        public bool isWin { get; set; }
     }
 
     public class GameEndResponse

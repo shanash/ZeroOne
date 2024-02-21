@@ -176,9 +176,9 @@ public class UserHeroSkillData : UserDataBase
     /// </summary>
     /// <param name="xp"></param>
     /// <returns></returns>
-    ERROR_CODE AddExp(double xp)
+    RESPONSE_TYPE AddExp(double xp)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
         if (xp < 0)
         {
             return code;
@@ -197,19 +197,19 @@ public class UserHeroSkillData : UserDataBase
             }
             if (GetLevel() < lv_data.level)
             {
-                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
                 SetLevel(lv_data.level);
             }
             else
             {
-                code = ERROR_CODE.SUCCESS;
+                code = RESPONSE_TYPE.SUCCESS;
             }
             Exp.Set(exp);
             Is_Update_Data = true;
         }
         else
         {
-            code = ERROR_CODE.ALREADY_COMPLETE;
+            code = RESPONSE_TYPE.ALREADY_COMPLETE;
         }
 
         return code;
@@ -231,7 +231,7 @@ public class UserHeroSkillData : UserDataBase
 
         //  result data 초기화
         USE_EXP_ITEM_RESULT_DATA result = new USE_EXP_ITEM_RESULT_DATA();
-        result.Code = ERROR_CODE.FAILED;
+        result.Code = RESPONSE_TYPE.FAILED;
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
         result.Add_Exp = 0;
@@ -242,7 +242,7 @@ public class UserHeroSkillData : UserDataBase
             //  시뮬레이션 결과를 받아온다.
             var result_simulate = GetCalcSimulateExp(use_list);
             //  성공이 아니면 바로 반환
-            if (!(result_simulate.Code == ERROR_CODE.SUCCESS || result_simulate.Code == ERROR_CODE.LEVEL_UP_SUCCESS))
+            if (!(result_simulate.Code == RESPONSE_TYPE.SUCCESS || result_simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS))
             {
                 result.ResetAndResultCode(result_simulate.Code);
                 break;
@@ -250,7 +250,7 @@ public class UserHeroSkillData : UserDataBase
             //  증가된 경험치가 없거나, 필요 금화량이 0일경우 아무일도 하지 않도록(예외 상황임)
             if (result_simulate.Add_Exp == 0 || result_simulate.Need_Gold == 0)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_WORK);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_WORK);
                 break;
             }
 
@@ -258,7 +258,7 @@ public class UserHeroSkillData : UserDataBase
             bool is_usable_gold = goods_mng.IsUsableGoodsCount(GOODS_TYPE.GOLD, result_simulate.Need_Gold);
             if (!is_usable_gold)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_GOLD);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_ENOUGH_GOLD);
                 break;
             }
             else
@@ -280,7 +280,7 @@ public class UserHeroSkillData : UserDataBase
             //  아이템이 충분하지 않음
             if (!is_usable_item)
             {
-                result.ResetAndResultCode(ERROR_CODE.NOT_ENOUGH_ITEM);
+                result.ResetAndResultCode(RESPONSE_TYPE.NOT_ENOUGH_ITEM);
                 break;
             }
             else
@@ -311,11 +311,11 @@ public class UserHeroSkillData : UserDataBase
     /// <param name="need_gold">필요골드</param>
     /// <param name="use_list">사용할 경험치 아이템</param>
     /// <returns></returns>
-    public ERROR_CODE SumExpItemInfo(out double added_exp, out double need_gold, List<USE_EXP_ITEM_DATA> use_list)
+    public RESPONSE_TYPE SumExpItemInfo(out double added_exp, out double need_gold, List<USE_EXP_ITEM_DATA> use_list)
     {
         var m = MasterDataManager.Instance;
 
-        ERROR_CODE result = ERROR_CODE.SUCCESS;
+        RESPONSE_TYPE result = RESPONSE_TYPE.SUCCESS;
         added_exp = 0;
         need_gold = 0;
 
@@ -332,7 +332,7 @@ public class UserHeroSkillData : UserDataBase
             if (!IsValidSkillExpItem(use_data.Item_Type))
             {
                 Debug.Assert(false, "경험치 아이템이 아닙니다");
-                result = ERROR_CODE.NOT_ENABLE_WORK;
+                result = RESPONSE_TYPE.NOT_ENABLE_WORK;
                 break;
             }
             var item_data = m.Get_ItemData(use_data.Item_Type, use_data.Item_ID);
@@ -355,17 +355,17 @@ public class UserHeroSkillData : UserDataBase
     /// <returns></returns>
     public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
     {
-        ERROR_CODE code;
+        RESPONSE_TYPE code;
 
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
         {
-            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.ALREADY_MAX_LEVEL);
+            return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.ALREADY_MAX_LEVEL);
         }
 
         code = SumExpItemInfo(out double sum_items_exp, out double sum_items_need_gold, use_list);
 
-        if (ERROR_CODE.SUCCESS != code)
+        if (RESPONSE_TYPE.SUCCESS != code)
         {
             return new EXP_SIMULATE_RESULT_DATA(code);
         }
@@ -380,7 +380,7 @@ public class UserHeroSkillData : UserDataBase
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            return new EXP_SIMULATE_RESULT_DATA(ERROR_CODE.FAILED);
+            return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.FAILED);
         }
 
         double add_exp = result_exp - current_exp;
@@ -388,7 +388,7 @@ public class UserHeroSkillData : UserDataBase
         //  레벨이 증가할 경우 해당 레벨로 적용
         if (GetLevel() < next_lv_data.level)
         {
-            code = ERROR_CODE.LEVEL_UP_SUCCESS;
+            code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
         }
 
         var result = new EXP_SIMULATE_RESULT_DATA()
@@ -409,14 +409,14 @@ public class UserHeroSkillData : UserDataBase
     /// </summary>
     /// <param name="use_list"></param>
     /// <returns></returns>
-    public UserHeroSkillData GetAddedExpSkillGroup(double add_exp, out ERROR_CODE error_code)
+    public UserHeroSkillData GetAddedExpSkillGroup(double add_exp, out RESPONSE_TYPE error_code)
     {
         var clone = (UserHeroSkillData)Clone();
 
         //  이미 최대레벨일 경우 강화 불가
         if (clone.IsMaxLevel())
         {
-            error_code = ERROR_CODE.ALREADY_MAX_LEVEL;
+            error_code = RESPONSE_TYPE.ALREADY_MAX_LEVEL;
             return clone;
         }
 
@@ -430,10 +430,10 @@ public class UserHeroSkillData : UserDataBase
         //  레벨 데이터가 없으면 failed
         if (next_lv_data == null)
         {
-            error_code = ERROR_CODE.FAILED;
+            error_code = RESPONSE_TYPE.FAILED;
             return null;
         }
-        error_code = (GetLevel() < next_lv_data.level) ? ERROR_CODE.LEVEL_UP_SUCCESS : ERROR_CODE.SUCCESS;
+        error_code = (GetLevel() < next_lv_data.level) ? RESPONSE_TYPE.LEVEL_UP_SUCCESS : RESPONSE_TYPE.SUCCESS;
 
         add_exp = result_exp - current_exp;
         clone.AddExp(add_exp);

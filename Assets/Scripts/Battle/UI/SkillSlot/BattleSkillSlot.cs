@@ -235,7 +235,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         {
             Hero.Slot_Events -= SkillSlotEventCallback;
         }
-        Hero = null;
     }
 
     public override void Spawned()

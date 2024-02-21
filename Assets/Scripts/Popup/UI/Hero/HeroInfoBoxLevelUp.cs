@@ -124,7 +124,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
 
     void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
     {
-        if (result.Code != ERROR_CODE.SUCCESS && result.Code != ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
             return;
@@ -138,7 +138,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         UpdateExpItemButtons();
         UpdateUI();
 
-        if (result.Code == ERROR_CODE.LEVEL_UP_SUCCESS)
+        if (result.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
@@ -147,17 +147,17 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         }
     }
 
-    public ERROR_CODE OnChangedUseItemCount(int item_id, int count)
+    public RESPONSE_TYPE OnChangedUseItemCount(int item_id, int count)
     {
         if (Unit_Data.User_Data.GetMaxLevel() == Unit_Data.User_Data.GetLevel())
         {
-            return ERROR_CODE.ALREADY_MAX_LEVEL;
+            return RESPONSE_TYPE.ALREADY_MAX_LEVEL;
         }
 
         var item = Use_Exp_Items.Find(x => x.Item_ID == item_id);
         item.Use_Count = count;
 
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
     USE_EXP_ITEM_DATA CreateExpItem(int item_id, int count)

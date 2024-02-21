@@ -99,13 +99,13 @@ public class BattlePcData : BattleUnitData
         return User_Data.GetStarGrade();
     }
 
-    public void AdvanceStarGrade(Action<ERROR_CODE> callback)
+    public void AdvanceStarGrade(Action<RESPONSE_TYPE> callback)
     {
-        ERROR_CODE result = User_Data.AdvanceStarGrade();
+        RESPONSE_TYPE result = User_Data.AdvanceStarGrade();
         callback(result);
     }
 
-    public ERROR_CODE CheckAdvanceStarGrade()
+    public RESPONSE_TYPE CheckAdvanceStarGrade()
     {
         return User_Data.CheckAdvanceStarGrade();
     }
@@ -489,7 +489,7 @@ public class BattlePcData : BattleUnitData
     {
         var clone = (BattlePcData)this.Clone();
         var result = clone.User_Data.TryUpNextStarGrade();
-        if (result != ERROR_CODE.SUCCESS)
+        if (result != RESPONSE_TYPE.SUCCESS)
         {
             Debug.Assert(false, $"성급 진화에 실패했습니다 : {result}");
             return null;

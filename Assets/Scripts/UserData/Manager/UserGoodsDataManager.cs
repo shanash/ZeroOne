@@ -90,7 +90,7 @@ public class UserGoodsDataManager : ManagerBase
         return goods;
     }
 
-    public ERROR_CODE AddUserGoodsCount(GOODS_TYPE gtype, double cnt)
+    public RESPONSE_TYPE AddUserGoodsCount(GOODS_TYPE gtype, double cnt)
     {
         UserGoodsData goods = FindUserGoods(gtype);
         if (goods == null)
@@ -101,11 +101,11 @@ public class UserGoodsDataManager : ManagerBase
         return goods.AddGoodsCount(cnt);
     }
 
-    public ERROR_CODE UseGoodsCount(GOODS_TYPE gtype, double cnt)
+    public RESPONSE_TYPE UseGoodsCount(GOODS_TYPE gtype, double cnt)
     {
         if (cnt < 0)
         {
-            return ERROR_CODE.FAILED;
+            return RESPONSE_TYPE.FAILED;
         }
 
         var goods = FindUserGoods(gtype);
@@ -113,7 +113,7 @@ public class UserGoodsDataManager : ManagerBase
         {
             return goods.UseGoods(cnt);
         }
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
 
     public override JsonData Serialized()

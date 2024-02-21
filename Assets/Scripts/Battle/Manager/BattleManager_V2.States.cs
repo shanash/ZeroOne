@@ -144,6 +144,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         FSM.AddTransition(new GameStateMoveInV2());
         FSM.AddTransition(new GameStatePlayReadyV2());
         FSM.AddTransition(new GameStatePlayingV2());
+        FSM.AddTransition(new GameStateUltimateSkillV2());
         FSM.AddTransition(new GameStateNextWaveV2());
         FSM.AddTransition(new GameStateWaveRunV2());
         FSM.AddTransition(new GameStatePauseV2());
@@ -279,8 +280,21 @@ public partial class BattleManager_V2 : SceneControllerBase
             ChangeState(GAME_STATES.PLAYING);
         }
     }
-    public virtual void GameStatePlayReadyExit() { }
+    public virtual void GameStatePlayReadyExit() 
+    {
+        TeamMembersChangeState(UNIT_STATES.ATTACK_READY_1);
+    }
 
+
+    public virtual void GameStateUltimateSkillBegin() 
+    {
+        UI_Mng.ShowBattleUI(false);
+    }
+    public virtual void GameStateUltimateSkill() { }
+    public virtual void GameStateUltimateSkillExit() 
+    {
+        UI_Mng.ShowBattleUI(true);
+    }
 
 
     public virtual void GameStatePlayingBegin()
@@ -291,7 +305,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
 
         UI_Mng.UpdateWaveCount();
-        TeamMembersChangeState(UNIT_STATES.ATTACK_READY_1);
+        //TeamMembersChangeState(UNIT_STATES.ATTACK_READY_1);
     }
     public virtual void GameStatePlaying()
     {

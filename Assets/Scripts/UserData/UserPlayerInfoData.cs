@@ -66,9 +66,9 @@ public class UserPlayerInfoData : UserDataBase
         Is_Update_Data = true;
     }
 
-    public ERROR_CODE AddExp(double xp)
+    public RESPONSE_TYPE AddExp(double xp)
     {
-        ERROR_CODE code = ERROR_CODE.FAILED;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
         if (xp < 0)
         {
             return code;
@@ -88,19 +88,19 @@ public class UserPlayerInfoData : UserDataBase
             }
             if (GetLevel() < lv_data.level)
             {
-                code = ERROR_CODE.LEVEL_UP_SUCCESS;
+                code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
                 SetLevel(lv_data.level);
             }
             else
             {
-                code = ERROR_CODE.SUCCESS;
+                code = RESPONSE_TYPE.SUCCESS;
             }
             Exp.Set(_exp);
             Is_Update_Data = true;
         }
         else
         {
-            code = ERROR_CODE.NOT_WORK;
+            code = RESPONSE_TYPE.NOT_WORK;
         }
 
         return code;

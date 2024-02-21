@@ -8,6 +8,7 @@ public class Reward_ItemData : RewardDataBase
 
     protected override void InitData()
     {
+        var m = MasterDataManager.Instance;
         switch (Reward.reward_type)
         {
             case REWARD_TYPE.STAMINA:
@@ -36,42 +37,9 @@ public class Reward_ItemData : RewardDataBase
             case REWARD_TYPE.GET_ESSENCE:
                 Debug.Assert(false);
                 break;
-            case REWARD_TYPE.EXP_POTION_P:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.EXP_POTION_P, Reward.var1);
-                break;
-            case REWARD_TYPE.EXP_POTION_C:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.EXP_POTION_C, Reward.var1);
-                break;
-            case REWARD_TYPE.STA_POTION:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.STA_POTION, Reward.var1);
-                break;
-            case REWARD_TYPE.FAVORITE_ITEM:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.FAVORITE_ITEM, Reward.var1);
-                break;
-            case REWARD_TYPE.STAGE_SKIP:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.STAGE_SKIP, Reward.var1);
-                break;
             case REWARD_TYPE.BOSS_DUNGEON_TICKET:
                 Data = new ItemData_ItemData_V2();
                 Data.SetItem(ITEM_TYPE_V2.TICKET_DUNGEON, Reward.var1);
-                break;
-            case REWARD_TYPE.EQ_GROWUP:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.EQ_GROWUP, Reward.var1);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_SELECT:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_RANDOM:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_ALL:
-                Debug.Assert(false);
                 break;
             case REWARD_TYPE.PIECE_EQUIPMENT:
                 Data = new ItemData_EquipmentData_V2();
@@ -81,9 +49,15 @@ public class Reward_ItemData : RewardDataBase
                 Data = new ItemData_CharacterData_V2();
                 Data.SetItem(ITEM_TYPE_V2.PIECE_CHARACTER, Reward.var1);
                 break;
-            case REWARD_TYPE.EXP_SKILL:
-                Data = new ItemData_ItemData_V2();
-                Data.SetItem(ITEM_TYPE_V2.EXP_SKILL, Reward.var1);
+            case REWARD_TYPE.ITEM:
+                {
+                    var item_data = m.Get_ItemData(Reward.var1);
+                    if (item_data != null)
+                    {
+                        Data = new ItemData_ItemData_V2();
+                        Data.SetItem(item_data.item_type, item_data.item_id);
+                    }
+                }
                 break;
             default:
                 Debug.Assert(false);

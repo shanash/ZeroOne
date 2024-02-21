@@ -170,18 +170,18 @@ public class UserStoryStageDataManager : ManagerBase
     /// 마지막 스테이지인 경우(다음 스테이지가 없을 경우) 게임데이터 로딩(초기화)시 마지막 스테이지 체크 후 다음 스테이지 오픈 여부 판단 필요<br/>
     /// </summary>
     /// <param name="stage_id"></param>
-    public ERROR_CODE StoryStageWin(int stage_id)
+    public RESPONSE_TYPE StoryStageWin(int stage_id)
     {
         var stage = FindUserStoryStageData(stage_id);
         if (stage == null)
         {
-            return ERROR_CODE.FAILED;
+            return RESPONSE_TYPE.FAILED;
         }
         stage.AddWinCount();
 
         OpenNextStage(stage_id);
 
-        return ERROR_CODE.SUCCESS;
+        return RESPONSE_TYPE.SUCCESS;
     }
 
 

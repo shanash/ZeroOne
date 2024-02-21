@@ -426,8 +426,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
-                Battle_Mng.AllResumeUnitWithoutHero(this);
-                Battle_Mng.GetEffectFactory().OnResumeAndShow();
+                //Battle_Mng.AllResumeUnitWithoutHero(this);
+                //Battle_Mng.GetEffectFactory().OnResumeAndShow();
 
                 List<HeroBase_V2> targets = new List<HeroBase_V2>();
                 targets.Add(this);
@@ -440,7 +440,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                 {
                     skill.ResetSkill();
                 }
-                ChangeState(UNIT_STATES.ATTACK_READY_1);
+                //ChangeState(UNIT_STATES.ATTACK_READY_1);
+                Battle_Mng.FinishUltimateSkill(this);
             }
         }
     }
@@ -1488,9 +1489,9 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             GetSkillManager().SetNextSkillPattern();
         }
-        
-        ChangeState(UNIT_STATES.SKILL_READY_1);
 
+        Battle_Mng.StartUltimateSkill();
+        ChangeState(UNIT_STATES.SKILL_READY_1);
     }
 
 

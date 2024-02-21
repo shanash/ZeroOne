@@ -87,16 +87,16 @@ public class UserGoodsData : UserDataBase
     /// <param name="cnt"></param>
     /// <param name="over_apply">max bound를 무시하고 추가 가능한 경우 추가</param>
     /// <returns></returns>
-    public ERROR_CODE AddGoodsCount(double cnt, bool over_apply = true)
+    public RESPONSE_TYPE AddGoodsCount(double cnt, bool over_apply = true)
     {
-        ERROR_CODE code = ERROR_CODE.SUCCESS;
+        RESPONSE_TYPE code = RESPONSE_TYPE.SUCCESS;
         if (cnt >= 0)
         {
             if (!over_apply)
             {
                 if (!IsEnableAddGoodsCount(cnt))
                 {
-                    return ERROR_CODE.OVER_MAX_ITEM_BOUND;
+                    return RESPONSE_TYPE.OVER_MAX_ITEM_BOUND;
                 }
             }
 
@@ -122,11 +122,11 @@ public class UserGoodsData : UserDataBase
         return code;
     }
 
-    public ERROR_CODE UseGoods(double cnt)
+    public RESPONSE_TYPE UseGoods(double cnt)
     {
         if (!IsUsableGoodsCount(cnt))
         {
-            return ERROR_CODE.NOT_ENOUGH_ITEM;
+            return RESPONSE_TYPE.NOT_ENOUGH_ITEM;
         }
         if (cnt > 0)
         {
@@ -134,10 +134,10 @@ public class UserGoodsData : UserDataBase
             g_count -= cnt;
             Count.Set(g_count);
             Is_Update_Data = true;
-            return ERROR_CODE.SUCCESS;
+            return RESPONSE_TYPE.SUCCESS;
         }
 
-        return ERROR_CODE.FAILED;
+        return RESPONSE_TYPE.FAILED;
     }
 
     public override JsonData Serialized()

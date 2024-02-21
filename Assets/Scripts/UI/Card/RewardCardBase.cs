@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using Irony.Parsing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -86,35 +87,8 @@ public class RewardCardBase : UIBase
             case REWARD_TYPE.GET_ESSENCE:
                 Debug.Assert(false);
                 break;
-            case REWARD_TYPE.EXP_POTION_P:
-                reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.EXP_POTION_C:
-                reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.STA_POTION:
-                reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.FAVORITE_ITEM:
-                reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.STAGE_SKIP:
-                reward = new Reward_ItemData();
-                break;
             case REWARD_TYPE.BOSS_DUNGEON_TICKET:
                 reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.EQ_GROWUP:
-                reward = new Reward_ItemData();
-                break;
-            case REWARD_TYPE.TICKET_REWARD_SELECT:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_RANDOM:
-                Debug.Assert(false);
-                break;
-            case REWARD_TYPE.TICKET_REWARD_ALL:
-                Debug.Assert(false);
                 break;
             case REWARD_TYPE.PIECE_EQUIPMENT:
                 reward = new Reward_ItemData();
@@ -122,8 +96,15 @@ public class RewardCardBase : UIBase
             case REWARD_TYPE.PIECE_CHARACTER:
                 reward = new Reward_ItemData();
                 break;
-            case REWARD_TYPE.EXP_SKILL:
-                reward = new Reward_ItemData();
+            case REWARD_TYPE.ITEM:
+                {
+                    var item_data = MasterDataManager.Instance.Get_ItemData(data.var1);
+                    if (item_data != null)
+                    {
+                        reward = new Reward_ItemData();
+                    }
+                }
+
                 break;
             default:
                 Debug.Assert(false);

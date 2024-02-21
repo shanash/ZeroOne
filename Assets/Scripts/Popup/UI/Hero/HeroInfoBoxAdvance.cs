@@ -74,8 +74,8 @@ public class HeroInfoBoxAdvance : MonoBehaviour
 
         var error_code = Battle_PC_Data.CheckAdvanceStarGrade();
 
-        bool is_success = error_code == ERROR_CODE.SUCCESS;
-        bool is_already_max_level = error_code == ERROR_CODE.ALREADY_MAX_LEVEL;
+        bool is_success = error_code == RESPONSE_TYPE.SUCCESS;
+        bool is_already_max_level = error_code == RESPONSE_TYPE.ALREADY_MAX_LEVEL;
 
         Advance_Button.image.sprite = is_success ? Enable_Button_Spr : Disable_Button_Spr;
         Advance_Button.enabled = is_success;
@@ -92,21 +92,21 @@ public class HeroInfoBoxAdvance : MonoBehaviour
         string cur_piece_count = piece_data.GetCount().ToString();
         string need_piece_count = Battle_PC_Data.User_Data.GetNeedPiece().ToString();
 
-        if (error_code != ERROR_CODE.SUCCESS)
+        if (error_code != RESPONSE_TYPE.SUCCESS)
         {
             switch(error_code)
             {
-                case ERROR_CODE.NOT_ENOUGH_GOLD:
+                case RESPONSE_TYPE.NOT_ENOUGH_GOLD:
                     gold_color_code = "#ff0000";
                     break;
-                case ERROR_CODE.NOT_ENOUGH_ITEM:
+                case RESPONSE_TYPE.NOT_ENOUGH_ITEM:
                     piece_color_code = "#ff0000";
                     break;
-                case ERROR_CODE.NOT_ENOUGH_ALL:
+                case RESPONSE_TYPE.NOT_ENOUGH_ALL:
                     gold_color_code = "#ff0000";
                     piece_color_code = "#ff0000";
                     break;
-                case ERROR_CODE.ALREADY_MAX_LEVEL:
+                case RESPONSE_TYPE.ALREADY_MAX_LEVEL:
                     piece_color_code = "#BFC9D1";
                     cur_piece_count = "0";
                     next_grade = cur_grade;
@@ -146,9 +146,9 @@ public class HeroInfoBoxAdvance : MonoBehaviour
         Battle_PC_Data.AdvanceStarGrade(OnResponseAdvance);
     }
 
-    void OnResponseAdvance(ERROR_CODE code)
+    void OnResponseAdvance(RESPONSE_TYPE code)
     {
-        if (ERROR_CODE.SUCCESS != code)
+        if (RESPONSE_TYPE.SUCCESS != code)
         {
             Debug.Assert(false, "성급진화 실패???");
             return;

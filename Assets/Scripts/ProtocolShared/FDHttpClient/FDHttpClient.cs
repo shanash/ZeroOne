@@ -3,12 +3,11 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using ProtocolShared.Proto.Base;
 using System.Net.Http;
+using ProtocolShared.Proto.Base;
 using ProtocolShared.Proto;
 
 #nullable disable
-
 
 namespace ProtocolShared.FDHttpClient
 {
@@ -105,25 +104,25 @@ namespace ProtocolShared.FDHttpClient
 
                     if (response == null)
                     {
-                        return new ResponseData<T> { ResCode = ResCode.NullResponse };
+                        return new ResponseData<T> { ResType = RESPONSE_TYPE.NULL_RESPONSE };
                     }
 
                     if (response.IsSuccessStatusCode == false)
                     {
-                        return new ResponseData<T> { ResCode = (ResCode)response.StatusCode };
+                        return new ResponseData<T> { ResType = (RESPONSE_TYPE)response.StatusCode };
                     }
 
                     byte[] results = await response.Content.ReadAsByteArrayAsync();
                     var bodyString = Encoding.UTF8.GetString(results);
 
-                    ResponseData<T> bodyObj = JsonConvert.DeserializeObject<ResponseData<T>>(bodyString) ?? new ResponseData<T> { ResCode = ResCode.EmptyBody };
+                    ResponseData<T> bodyObj = JsonConvert.DeserializeObject<ResponseData<T>>(bodyString) ?? new ResponseData<T> { ResType = RESPONSE_TYPE.EMPTY_BODY };
 
                     if (bodyObj == null)
                     {
-                        return new ResponseData<T> { ResCode = ResCode.JsonParseFailed };
+                        return new ResponseData<T> { ResType = RESPONSE_TYPE.JSON_PARSE_FAILED };
                     }
 
-                    if(bodyObj.ResCode == ResCode.DuplicationRequest)
+                    if (bodyObj.ResType == RESPONSE_TYPE.DUPLICATION_REQUEST)
                     {
                         // 중복 요청으로 인한 1초 대기 후 재요청
                         ++tryCount;
@@ -131,14 +130,14 @@ namespace ProtocolShared.FDHttpClient
                         continue;
                     }
 
-                    if(bodyObj.ResCode == ResCode.ExpiredAccessToken)
+                    if (bodyObj.ResType == RESPONSE_TYPE.EXPIRED_ACCESS_TOKEN)
                     {
                         // accessToken 이 만료되어 refreshToken 으로 갱신 요청
-                        ResponseData<RefreshTokenResponse> tokenRes = await HttpRequest<RefreshTokenResponse, RefreshTokenRequest>(_refrashUrl, new RefreshTokenRequest { refreshToken = _refrashToken }, HttpMethod.POST);
+                        ResponseData<RefreshTokenResponse> tokenRes = await HttpRequest<RefreshTokenResponse, RefreshTokenRequest>(_refrashUrl, new RefreshTokenRequest { RefreshToken = _refrashToken }, HttpMethod.POST);
 
-                        if(tokenRes.ResCode == ResCode.Successed)
+                        if (tokenRes.ResType == RESPONSE_TYPE.SUCCESS)
                         {
-                            _accessToken = tokenRes.Data.accessToken;
+                            _accessToken = tokenRes.Data.AccessToken;
                             ++tryCount;
                             // 갱신 성공하면 이전 요청 다시 요청
                             continue;
@@ -146,17 +145,17 @@ namespace ProtocolShared.FDHttpClient
                         else
                         {
                             // 실패하면 에러 코드 리턴 (다시 로그인 해야 됨)
-                            return new ResponseData<T> { ResCode = tokenRes.ResCode };
+                            return new ResponseData<T> { ResType = tokenRes.ResType };
                         }
                     }
 
                     return bodyObj;
                 }
-                return new ResponseData<T> { ResCode = ResCode.ExceededRetryCount };
+                return new ResponseData<T> { ResType = RESPONSE_TYPE.EXCEEDED_RETRY_COUNT };
             }
             catch (Exception)
             {
-                return new ResponseData<T> { ResCode = ResCode.Exception };
+                return new ResponseData<T> { ResType = RESPONSE_TYPE.EXCEPTION };
             }
         }
     }
