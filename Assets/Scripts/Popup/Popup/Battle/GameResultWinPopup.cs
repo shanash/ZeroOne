@@ -488,7 +488,7 @@ public class GameResultWinPopup : PopupBase
                 var f_reward_data_list = m.Get_RewardSetDataList(first_reward_group_id);
                 if (f_reward_data_list.Count > 0)
                 {
-                    DROP_TYPE drop_type = (DROP_TYPE)f_reward_data_list[0].drop_type;
+                    DROP_TYPE drop_type = f_reward_data_list[0].drop_type;
                     if (drop_type == DROP_TYPE.DROP_EACH)
                     {
                         DropTypeEachReward(reward_prefab, f_reward_data_list);
@@ -517,7 +517,7 @@ public class GameResultWinPopup : PopupBase
                 var star_reward_data_list = m.Get_RewardSetDataList(star_reward_group_id);
                 if (star_reward_data_list.Count > 0)
                 {
-                    DROP_TYPE drop_type = (DROP_TYPE)star_reward_data_list[0].drop_type;
+                    DROP_TYPE drop_type = star_reward_data_list[0].drop_type;
                     if (drop_type == DROP_TYPE.DROP_EACH)
                     {
                         DropTypeEachReward(reward_prefab, star_reward_data_list);
@@ -542,7 +542,7 @@ public class GameResultWinPopup : PopupBase
             var repeat_reward_data_list = m.Get_RewardSetDataList(repeat_reward_group_id);
             if (repeat_reward_data_list.Count > 0)
             {
-                DROP_TYPE drop_type = (DROP_TYPE)repeat_reward_data_list[0].drop_type;
+                DROP_TYPE drop_type = repeat_reward_data_list[0].drop_type;
                 if (drop_type == DROP_TYPE.DROP_EACH)
                 {
                     DropTypeEachReward(reward_prefab, repeat_reward_data_list);

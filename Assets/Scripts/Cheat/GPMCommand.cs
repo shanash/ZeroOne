@@ -152,7 +152,7 @@ public class GPMCommand : MonoBehaviour
         }
         else if (keys[0].Equals("hero"))
         {
-            //  using => hero hero_id
+            //  using => hero character_id
             string show_msg = string.Empty;
             bool notice_format = true;
             do
@@ -189,7 +189,7 @@ public class GPMCommand : MonoBehaviour
 
             if (!show_msg.Equals(string.Empty))
             {
-                show_msg += notice_format ? "Usage => [hero] [hero_id]" : "";
+                show_msg += notice_format ? "Usage => [hero] [character_id]" : "";
                 CommonUtils.ShowToast(show_msg, TOAST_BOX_LENGTH.SHORT);
             }
         }

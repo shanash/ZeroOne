@@ -8,8 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
-
-
+using UnityEngine.Timeline;
 
 /// <summary>
 /// 플레이어 유닛/NPC 유닛 등 전투에서 사용하는 플레이어의 베이스가 되는 클래스<br/>
@@ -297,9 +296,111 @@ public partial class HeroBase_V2 : UnitBase_V2
         SpawnSkillCastEffect(skill);
     }
 
-    protected virtual void SetPlayableDirector() { }
+    protected virtual void SetPlayableDirector()
+    {
+        if (Ultimate_Skill_Playable_Director == null)
+        {
+            return;
+        }
 
-    protected virtual void UnsetPlayableDirector() { }
+        var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
+        var virtual_cam = Battle_Mng.GetVirtualCineManager();
+        var brain_cam = virtual_cam.GetBrainCam();
+        var stage_cam = virtual_cam.GetStageCamera();
+
+        var character_cam = virtual_cam.GetCharacterCamera();
+        var free_cam = virtual_cam.GetFreeCamera();
+        var land_cam = virtual_cam.GetLandscapeCamera();
+
+        var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
+        var tracks = ta.GetOutputTracks();
+
+        foreach (var track in tracks)
+        {
+            if (track is AnimationTrack)
+            {
+                if (track.name.Equals("imation_TrackAnimation_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, unit_back_bg.GetComponent<Animator>());
+                }
+                else if (track.name.Equals("CharacterCameraAnimationTrack"))
+                {
+                    character_cam.Follow = this.transform;
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, character_cam.GetComponent<Animator>());
+                }
+                else if (track.name.Equals("LandscapeCameraAnimationTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, land_cam.GetComponent<Animator>());
+                }
+            }
+            else if (track is CinemachineTrack)
+            {
+                if (track.name.Equals("Cinemachine_Track"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, brain_cam);
+                    var clips = track.GetClips();
+                    foreach (var clip in clips)
+                    {
+                        CinemachineShot shot = clip.asset as CinemachineShot;
+                        if (shot != null)
+                        {
+                            if (shot.DisplayName.Equals("CharacterCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, character_cam);
+                            }
+                            else if (shot.DisplayName.Equals("FreeCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, free_cam);
+                            }
+                            else if (shot.DisplayName.Equals("StageCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, stage_cam);
+                            }
+                            else if (shot.DisplayName.Equals("LandscapeCamera"))
+                            {
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, land_cam);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (track is ShakeCameraTrack)
+            {
+                if (track.name.Equals("ShakeCameraTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, virtual_cam);
+                }
+            }
+        }
+    }
+
+    protected virtual void UnsetPlayableDirector()
+    {
+        var virtual_mng = Battle_Mng.GetVirtualCineManager();
+
+        var character_cam = virtual_mng.GetCharacterCamera();
+        if (character_cam != null)
+        {
+            character_cam.Follow = null;
+        }
+
+        var active_group_cam = virtual_mng.GetActiveTargetGroupCamera();
+        if (active_group_cam != null)
+        {
+            active_group_cam.Follow = null;
+        }
+
+
+        var active_target_group = virtual_mng.GetActiveTargetGroup();
+        if (active_target_group != null)
+        {
+            int cnt = Attack_Targets.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                active_target_group.RemoveMember(Attack_Targets[i].transform);
+            }
+        }
+    }
 
 
     /// <summary>

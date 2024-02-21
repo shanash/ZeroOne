@@ -9,7 +9,7 @@ public class Raw_Reward_Set_Data : System.IDisposable
 	public REWARD_TYPE reward_type {get; set;}
 	public int var1 {get; set;}
 	public int var2 {get; set;}
-	public int drop_type {get; set;}
+	public DROP_TYPE drop_type {get; set;}
 	public int drop_per {get; set;}
 	public bool is_use {get; set;}
 	public int sort_order {get; set;}
@@ -23,7 +23,7 @@ public class Raw_Reward_Set_Data : System.IDisposable
 		reward_type = REWARD_TYPE.NONE;
 		var1 = 0;
 		var2 = 0;
-		drop_type = 0;
+		drop_type = DROP_TYPE.NONE;
 		drop_per = 0;
 		is_use = false;
 		sort_order = 0;

@@ -21,6 +21,14 @@ public class Skill_Lang_Data : System.IDisposable
 
 	///	<summary>
 	///	한국어
+	///	스킬 스트링 규약
+	///	{0}: onetime시트의 multiple_type을 참조하여 해당 파라메터에 *multiple + value 를 적용
+	///	{1}: duriation시트의 multiple 값을 백분률(*100)화 하여 출력
+	///	{2}: duriation시트의 rate 값을 백분률(*100)화 하여 출력
+	///	{3}: duriation시트의 time 값을 출력
+	///	{4}: duriation시트의 count 값을 출력
+	///	{5}: duriation시트의 multiple_type을 참조하여 해당 파라메터에 *multiple + value 를 적용
+	///	{6}: duriation시트의 multiple 값을 백분률(*100)화 하여 출력
 	///	</summary>
 	public string kor => _kor;
 	string _kor;

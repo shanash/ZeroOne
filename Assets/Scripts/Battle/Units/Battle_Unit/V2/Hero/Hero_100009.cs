@@ -1,14 +1,10 @@
-using UnityEngine;
-using UnityEngine.Playables;
 using UnityEngine.Timeline;
-
-
+using UnityEngine;
 /// <summary>
-/// 루시아
+/// 엘리자베스
 /// </summary>
-public class Hero_100001 : HeroBase_V2
+public class Hero_100009 : HeroBase_V2
 {
-
 
     #region States
 
@@ -20,7 +16,6 @@ public class Hero_100001 : HeroBase_V2
     {
         ChangeState(UNIT_STATES.SKILL_1);
     }
-
 
     #endregion
 
@@ -72,6 +67,11 @@ public class Hero_100001 : HeroBase_V2
         }
     }
     #endregion
-    
+
+
+
+
+
+
 
 }
