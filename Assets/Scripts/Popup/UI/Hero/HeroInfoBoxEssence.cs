@@ -86,12 +86,6 @@ public class HeroInfoBoxEssence : MonoBehaviour
     TMP_Text Transfer_Resources_Value;
 
     /// <summary>
-    /// 근원 전달 버튼
-    /// </summary>
-    [SerializeField]
-    UIButtonBase TransferEssence_Button;
-
-    /// <summary>
     /// "근원 전달"
     /// </summary>
     [SerializeField]
@@ -104,11 +98,10 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     List<RelationshipToggleItemData> Toggle_Datas;
     int Selected_Relationship_Index = 0;
-    BattlePcData Unit_Data = null;
 
-    public void SetHeroData(BattlePcData data)
+    public void SetHeroData(BattleUnitData _/*data*/)
     {
-        Unit_Data = data;
+        //Unit_Data = data;
         FixedUpdatePopup();
     }
 
@@ -121,7 +114,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         FoundSpot_Skip_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_SKIP;
         TransferEssence_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER;
 
-        //int percent = PERCENT;
+        int percent = PERCENT;
 
         TransferReaction_Buttons_View.Clear();
 
@@ -205,7 +198,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
             FoundSpot_Value[i].SetActive(found_spot_number > i);
         }
 
-        Transfer_Resources_Value.text = $"{DATE_COUNT - Unit_Data.User_Data.Essence_Sended_Count_Of_Date}/{DATE_COUNT}";
+        Transfer_Resources_Value.text = $"{DATE_COUNT}/{DATE_COUNT}";
     }
 
     public void OnClickBuffDetailButton()
