@@ -49,6 +49,8 @@ public class HeroInfoBox : MonoBehaviour
             Tab_On_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
         }
 
+        // 근원전달은 에일린만 활성화
+        Tab_Controller.GetTab(3).SetBlockTab(User_Hero_Data.Data.player_character_id != 100006);
         Tab_Controller.SelectFirstTab();
 
         Refresh();
