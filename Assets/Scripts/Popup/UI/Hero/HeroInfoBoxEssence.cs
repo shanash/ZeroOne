@@ -68,10 +68,10 @@ public class HeroInfoBoxEssence : MonoBehaviour
     TMP_Text FoundSpot_Subject;
 
     /// <summary>
-    /// 발견한 스팟 갯수 이미지 오브젝트
+    /// 발견한 스팟 갯수 이미지 오브젝트 베이스(Initiate해서 사용)
     /// </summary>
     [SerializeField]
-    GameObject[] FoundSpot_Value;
+    GameObject FoundSpot_Base_Object;
 
     /// <summary>
     /// "스킵하기"
@@ -86,18 +86,29 @@ public class HeroInfoBoxEssence : MonoBehaviour
     TMP_Text Transfer_Resources_Value;
 
     /// <summary>
+    /// 근원 전달 버튼
+    /// </summary>
+    [SerializeField]
+    UIButtonBase TransferEssence_Button;
+
+    /// <summary>
     /// "근원 전달"
     /// </summary>
     [SerializeField]
     TMP_Text TransferEssence_Button_Value;
 
+    /// <summary>
+    /// 발견한 스팟 갯수 이미지 오브젝트
+    /// </summary>
+    List<GameObject> FoundSpot_Value;
 
     List<RelationshipToggleItemData> Toggle_Datas;
     int Selected_Relationship_Index = 0;
+    BattlePcData Unit_Data = null;
 
-    public void SetHeroData(BattleUnitData _/*data*/)
+    public void SetHeroData(BattlePcData data)
     {
-        //Unit_Data = data;
+        Unit_Data = data;
         FixedUpdatePopup();
     }
 
@@ -110,7 +121,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         FoundSpot_Skip_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_SKIP;
         TransferEssence_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER;
 
-        int percent = PERCENT;
+        //int percent = PERCENT;
 
         TransferReaction_Buttons_View.Clear();
 
@@ -125,7 +136,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
                 (i * 20 <= percent),
                 OnToggleChangedRelationship);
             */
-            //TODO: 0번째 1번째만 활성화 시켜줍니다
+            //TODO: M2를 위해서 하드코딩으로 0번째 1번째만 활성화 시켜줍니다
             var toggle_data = new RelationshipToggleItemData(i,
                 ConstString.Hero.LOVE_LEVEL[i],
                 TransferReaction_ToggleGroup,
@@ -133,6 +144,28 @@ public class HeroInfoBoxEssence : MonoBehaviour
                 OnToggleChangedRelationship);
             Toggle_Datas.Add(toggle_data);
             TransferReaction_Buttons_View.InsertData(toggle_data);
+        }
+
+        // 스팟 UI 삭제 및 생성
+        // TODO: 일단 4개 고정으로 생성해놓지만 나~중에 플렉서블하게 하려면 Enum touch_body_type의 갯수를 가져오던
+        // 아무튼 어디서든 몇개의 스팟인지 가져올 수 있게 하는 부분이 필요
+        if (FoundSpot_Value != null)
+        {
+            foreach (var obj in FoundSpot_Value)
+            {
+                Destroy(obj);
+            }
+            FoundSpot_Value.Clear();
+        }
+        else
+        {
+            FoundSpot_Value = new List<GameObject>();
+        }
+
+        for (int i = 0; i < 4; i++ )
+        {
+            var obj = Instantiate(FoundSpot_Base_Object, FoundSpot_Base_Object.transform.parent);
+            FoundSpot_Value.Add(obj);
         }
 
         Refresh();
@@ -167,12 +200,12 @@ public class HeroInfoBoxEssence : MonoBehaviour
         
         AddedCombatPower_Value.text = ConstString.FormatPlus(combat);
 
-        for (int i = 0; i < FoundSpot_Value.Length; i++)
+        for (int i = 0; i < FoundSpot_Value.Count; i++)
         {
             FoundSpot_Value[i].SetActive(found_spot_number > i);
         }
 
-        Transfer_Resources_Value.text = $"{DATE_COUNT}/{DATE_COUNT}";
+        Transfer_Resources_Value.text = $"{DATE_COUNT - Unit_Data.User_Data.Essence_Sended_Count_Of_Date}/{DATE_COUNT}";
     }
 
     public void OnClickBuffDetailButton()

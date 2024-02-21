@@ -49,6 +49,7 @@ public class UserHeroData : UserDataBase
     public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
     public int Lobby_Choice_Num { get; protected set; } = 0;
     public bool Is_Choice_Lobby { get; protected set; } = false;
+    public int Essence_Sended_Count_Of_Date { get; protected set; } = 0;
     public bool Is_Clone { get; private set; } = false;
 
     public UserHeroData(LitJson.JsonData json_data)
@@ -67,6 +68,7 @@ public class UserHeroData : UserDataBase
         Player_Character_Num = 0;
         Lobby_Choice_Num = 0;
         Is_Choice_Lobby = false;
+        Essence_Sended_Count_Of_Date = 0;
     }
 
     protected override void InitSecureVars()
@@ -755,6 +757,7 @@ public class UserHeroData : UserDataBase
         json[NODE_STAR_GRADE] = GetStarGrade();
         json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
+        json[NODE_ESSENCE_SENDED_COUNT_OF_DATE] = Essence_Sended_Count_Of_Date;
 
         return json;
     }
@@ -805,6 +808,10 @@ public class UserHeroData : UserDataBase
             {
                 Is_Choice_Lobby = ParseBool(json, NODE_IS_CHOICE);
             }
+            if (json.ContainsKey(NODE_ESSENCE_SENDED_COUNT_OF_DATE))
+            {
+                Essence_Sended_Count_Of_Date = ParseInt(json, NODE_ESSENCE_SENDED_COUNT_OF_DATE);
+            }
         }
 
         InitMasterData();
@@ -824,4 +831,5 @@ public class UserHeroData : UserDataBase
     protected const string NODE_STAR_GRADE = "star";
     protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
     protected const string NODE_IS_CHOICE = "choice";
+    protected const string NODE_ESSENCE_SENDED_COUNT_OF_DATE = "escod";
 }
