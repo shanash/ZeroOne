@@ -50,7 +50,7 @@ public class BattleSkillManager : BattleDataBase
     /// 플레이어 캐릭터의 스킬 패턴에 따른 스킬 그룹 추가
     /// </summary>
     /// <param name="skill_patterns"></param>
-    public void SetPlayerCharacterSkillGroups(int[] skill_patterns)
+    public void SetPlayerCharacterSkillGroups(UserHeroData hero, int[] skill_patterns)
     {
         int len = skill_patterns.Length;
         for (int i = 0; i < len; i++)
@@ -58,22 +58,23 @@ public class BattleSkillManager : BattleDataBase
             int skill_group_id = skill_patterns[i];
             if (skill_group_id == 0)
                 continue;
-            AddPlayerCharacterBattleSkillGroup(skill_group_id, i);
+            AddPlayerCharacterBattleSkillGroup(hero.GetPlayerCharacterID(), hero.Player_Character_Num, skill_group_id, i);
         }
     }
 
-    public void SetPlayerCharacterSpecialSkillGroup(int special_skill_id)
+    public void SetPlayerCharacterSpecialSkillGroup(UserHeroData hero, int special_skill_id)
     {
         if (special_skill_id == 0)
         {
             return;
         }
-        AddPlayerCharacterBattleSkillGroup(special_skill_id, 10);
+        AddPlayerCharacterBattleSkillGroup(hero.GetPlayerCharacterID(), hero.Player_Character_Num, special_skill_id, 10);
     }
 
-    void AddPlayerCharacterBattleSkillGroup(int skill_group_id, int order)
+    void AddPlayerCharacterBattleSkillGroup(int pc_id, int pc_num, int skill_group_id, int order)
     {
-        var grp = new BattlePcSkillGroup();
+        var user_skill = GameData.Instance.GetUserHeroSkillDataManager().FindUserHeroSkillData(pc_id, pc_num, skill_group_id);
+        var grp = new BattlePcSkillGroup(user_skill);
         grp.SetSkillOrder(order);
         grp.SetSkillGroupID(skill_group_id);
         _Skill_Groups.Add(grp);
@@ -489,6 +490,16 @@ public class BattleSkillManager : BattleDataBase
                 sum += dur.GetValuesByMultipleType();
             }
         }
+        return sum;
+    }
+
+    /// <summary>
+    /// 보유중인 스킬 레벨의 총 합
+    /// </summary>
+    /// <returns></returns>
+    public int GetSkillLevelSum()
+    {
+        int sum = Skill_Groups.Sum(x => x.GetSkillLevel());
         return sum;
     }
 

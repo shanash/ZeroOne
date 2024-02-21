@@ -3,8 +3,12 @@ using System.Collections.Generic;
 public class BattlePcSkillGroup : BattleSkillGroup
 {
     protected Player_Character_Skill_Group Skill_Group;
+    protected UserHeroSkillData User_Data;
 
-    public BattlePcSkillGroup() : base(UNIT_SKILL_TYPE.PC_SKILL) { }
+    public BattlePcSkillGroup(UserHeroSkillData skill) : base(UNIT_SKILL_TYPE.PC_SKILL) 
+    {
+        User_Data = skill;
+    }
 
     public override void SetSkillGroupID(int skill_group_id)
     {
@@ -77,6 +81,15 @@ public class BattlePcSkillGroup : BattleSkillGroup
     protected override int GetSpecialSkillTargetSkillID()
     {
         return Skill_Group.target_skill_id;
+    }
+
+    public override int GetSkillLevel()
+    {
+        if (Skill_Group.skill_type != SKILL_TYPE.NORMAL_ATTACK)
+        {
+            return User_Data.GetLevel();
+        }
+        return 0;
     }
 
 }

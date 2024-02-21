@@ -33,8 +33,8 @@ public class BattlePcData : BattleUnitData
         if (Skill_Mng == null)
         {
             Skill_Mng = new BattleSkillManager();
-            Skill_Mng.SetPlayerCharacterSkillGroups(GetSkillPattern());
-            Skill_Mng.SetPlayerCharacterSpecialSkillGroup(GetSpecialSkillID());
+            Skill_Mng.SetPlayerCharacterSkillGroups(User_Data, GetSkillPattern());
+            Skill_Mng.SetPlayerCharacterSpecialSkillGroup(User_Data, GetSpecialSkillID());
             if (Hero != null)
             {
                 Skill_Mng.SetHeroBase(Hero);
@@ -408,6 +408,8 @@ public class BattlePcData : BattleUnitData
         }
         return 0;
     }
+
+    public override int GetSumSkillsLevel() => Skill_Mng.GetSkillLevelSum();
 
     public override float GetApproachDistance()
     {
