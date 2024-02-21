@@ -13,7 +13,7 @@ public static class ConstString
         public static readonly string[] TRIBES = { "NONE", "인간", "엘프", "수인", "안드로이드", "악마", "천사" };
         public static readonly string[] ROLE = { "NONE", "탱커", "딜러", "서포터", "힐러" };
         public static readonly string[] SORT_FILLTER = { "이름", "레벨", "성급", "인연 레벨", "스킬 레벨", "궁극 스킬 레벨", "공격력", "방어력", "사정거리", "호감도" };
-        public static readonly string[] LOVE_LEVEL = { "LOVE_LV1", "LOVE_LV2", "LOVE_LV3", "LOVE_LV4", "LOVE_LV5" };
+        public static readonly string[] LOVE_LEVEL = { "어색함", "친근함", "절친함", "좋아함", "사랑함" };
 
         public const string COMBAT_POWER = "전투력";
         public const string LIFE_POINT = "체력";

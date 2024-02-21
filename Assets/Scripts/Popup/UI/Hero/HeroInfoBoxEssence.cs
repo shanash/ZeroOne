@@ -93,7 +93,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
 
     List<RelationshipToggleItemData> Toggle_Datas;
-    //BattleUnitData Unit_Data;
+    int Selected_Relationship_Index = 0;
 
     public void SetHeroData(BattleUnitData _/*data*/)
     {
@@ -116,12 +116,20 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
         Toggle_Datas = new List<RelationshipToggleItemData>();
 
-        for (int i = 0; i < ConstString.Hero.LOVE_LEVEL.Length; i++)
+        for (int i = 0; i < (int)LOVE_LEVEL_TYPE.LOVE; i++)
         {
+            /*
             var toggle_data = new RelationshipToggleItemData(i,
                 ConstString.Hero.LOVE_LEVEL[i],
                 TransferReaction_ToggleGroup,
                 (i * 20 <= percent),
+                OnToggleChangedRelationship);
+            */
+            //TODO: 0번째 1번째만 활성화 시켜줍니다
+            var toggle_data = new RelationshipToggleItemData(i,
+                ConstString.Hero.LOVE_LEVEL[i],
+                TransferReaction_ToggleGroup,
+                i <= 1,
                 OnToggleChangedRelationship);
             Toggle_Datas.Add(toggle_data);
             TransferReaction_Buttons_View.InsertData(toggle_data);
@@ -206,10 +214,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
         TransferReaction_Buttons_View.UpdateAllData();
 
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
-        {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
-        });
+        Selected_Relationship_Index = index;
     }
 
     public void OnClickSpotInfoSkipButton()
