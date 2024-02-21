@@ -126,7 +126,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
     {
         if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
-            Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
+            //Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
             return;
         }
 
