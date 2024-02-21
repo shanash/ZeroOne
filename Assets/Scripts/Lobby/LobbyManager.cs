@@ -264,8 +264,10 @@ public class LobbyManager : SceneControllerBase
 
         await UniTask.WaitUntil(() => pd.Is_Init);
 
-        before_pd.Release();
-        before_pd = null;
+        if (before_pd != null)
+        {
+            before_pd.Release();
+        }
     }
 
     #region UI Animation Events

@@ -23,14 +23,14 @@ public class EssenceTransferPopup : PopupBase
     {
         base.Spawned();
 
-        Chara_Texture = new RenderTexture(1920, GameDefine.SCREEN_BASE_HEIGHT, 16);
+        Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, GameDefine.SCREEN_UI_BASE_HEIGHT, 16);
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.targetTexture = Chara_Texture;
         Chara_Image.texture = Chara_Texture;
         InputCanvas.Instance.RenderImage = Chara_Image;
         InputCanvas.Instance.RenderCamera = over_cam;
 
-        pd = Factory.Instantiate<Producer>(1010001, MEMORIAL_TYPE.MEMORIAL);
+        pd = Factory.Instantiate<Producer>(1010101, MEMORIAL_TYPE.MEMORIAL);
         GestureManager.Instance.Enable = true;
     }
 
