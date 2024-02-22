@@ -123,7 +123,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
                 new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Unit_Data.GetAutoRecoveryLife().ToPercentage())
             };
 
-            popup.ShowPopup(ConstString.StatusPopup.ABILITY_TITLE, status_list);
+            popup.ShowPopup(ConstString.StatusPopup.ABILITY_TITLE, status_list, 0);
         });
     }
 

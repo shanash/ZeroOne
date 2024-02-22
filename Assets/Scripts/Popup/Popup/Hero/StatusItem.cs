@@ -2,6 +2,7 @@
 using Gpm.Ui;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatusItem : InfiniteScrollItem
 {
@@ -11,6 +12,9 @@ public class StatusItem : InfiniteScrollItem
     [SerializeField]
     TMP_Text Value_UI;
 
+    [SerializeField]
+    GameObject Focus_UI;
+
     public override void UpdateData(InfiniteScrollData scroll_data)
     {
         base.UpdateData(scroll_data);
@@ -19,5 +23,6 @@ public class StatusItem : InfiniteScrollItem
 
         Subject_UI.text = data.Subject;
         Value_UI.text = data.Value;
+        Focus_UI.SetActive(data.IsFocus);
     }
 }

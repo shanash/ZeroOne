@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class HeroInfoBoxEssence : MonoBehaviour
 {
-    const int PERCENT = 60;
-    const int FOUNDED_SPOT_NUM = 3;
     const int DATE_COUNT = 2;
 
     /// <summary>
@@ -86,6 +84,12 @@ public class HeroInfoBoxEssence : MonoBehaviour
     TMP_Text Transfer_Resources_Value;
 
     /// <summary>
+    /// 근원 전달 버튼
+    /// </summary>
+    [SerializeField]
+    UIButtonBase TransferEssence_Button;
+
+    /// <summary>
     /// "근원 전달"
     /// </summary>
     [SerializeField]
@@ -98,10 +102,11 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     List<RelationshipToggleItemData> Toggle_Datas;
     int Selected_Relationship_Index = 0;
+    BattlePcData Unit_Data = null;
 
-    public void SetHeroData(BattleUnitData _/*data*/)
+    public void SetHeroData(BattlePcData data)
     {
-        //Unit_Data = data;
+        Unit_Data = data;
         FixedUpdatePopup();
     }
 
@@ -114,7 +119,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         FoundSpot_Skip_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_SKIP;
         TransferEssence_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER;
 
-        int percent = PERCENT;
+        //int percent = PERCENT;
 
         TransferReaction_Buttons_View.Clear();
 
@@ -158,7 +163,9 @@ public class HeroInfoBoxEssence : MonoBehaviour
         for (int i = 0; i < 4; i++ )
         {
             var obj = Instantiate(FoundSpot_Base_Object, FoundSpot_Base_Object.transform.parent);
-            FoundSpot_Value.Add(obj);
+            obj.SetActive(true);
+            
+            FoundSpot_Value.Add(obj.transform.GetChild(0).gameObject);
         }
 
         Refresh();
@@ -166,8 +173,9 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     void Refresh()
     {
-        int percent = PERCENT;
-        int found_spot_number = FOUNDED_SPOT_NUM;
+        int count_of_date = Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
+        int percent = Unit_Data.User_Data.Essence_Founded_Percent;
+        int found_spot_number = Unit_Data.User_Data.Essence_Founded_Spot_Kind_Count;
 
         TransferEssencePercent_Value.text = percent.ToPercentage();
         TransferEssencePercent_Image.fillAmount = percent.ToPercentageFloat();
@@ -198,23 +206,30 @@ public class HeroInfoBoxEssence : MonoBehaviour
             FoundSpot_Value[i].SetActive(found_spot_number > i);
         }
 
-        Transfer_Resources_Value.text = $"{DATE_COUNT}/{DATE_COUNT}";
+        var mng = GameData.Instance.GetUserChargeItemDataManager();
+        var Charge_Item = mng.FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+
+        int cnt = Charge_Item.GetCount();
+
+        TransferEssence_Button.interactable = ((cnt > 0) && (DATE_COUNT > count_of_date) && (percent < 100));
+        Transfer_Resources_Value.text = $"{DATE_COUNT - count_of_date}/{DATE_COUNT}";
     }
 
     public void OnClickBuffDetailButton()
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
+            int percent = Unit_Data.User_Data.Essence_Founded_Percent;
             var data_list = MasterDataManager.Instance.Get_EssenceStatusDataRange(1, 100);
 
             List<StatusItemData> status_list = new List<StatusItemData>();
 
             foreach (var data in data_list)
             {
-                status_list.Add(new StatusItemData(data.essence_charge_per.ToPercentage(), data.ToStringForUI()));
+                status_list.Add(new StatusItemData(data.essence_charge_per.ToPercentage(), data.ToStringForUI(), (data.essence_charge_per.Equals(percent))));
             }
 
-            popup.ShowPopup(ConstString.StatusPopup.ESSENCE_TITLE, status_list);
+            popup.ShowPopup(ConstString.StatusPopup.ESSENCE_TITLE, status_list, percent);
         });
     }
 

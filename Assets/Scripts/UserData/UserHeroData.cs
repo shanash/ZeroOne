@@ -37,6 +37,21 @@ public class UserHeroData : UserDataBase
     /// </summary>
     SecureVar<int> Star_Grade = null;
 
+    /// <summary>
+    /// 오늘 하루 근원전달했던 횟수
+    /// </summary>
+    SecureVar<int> _Essence_Sended_Count_Of_Date = null;
+
+    /// <summary>
+    /// 근원전달 퍼센트(숫자)
+    /// </summary>
+    SecureVar<int> _Essence_Founded_Percent = null;
+
+    /// <summary>
+    /// 근원전달 했던 스팟 종류
+    /// </summary>
+    SecureVar<int> _Essence_Founded_Spot_Kind_Count = null;
+
     Player_Character_Level_Data Lv_Data = null;
     Player_Character_Love_Level_Data Love_Lv_Data = null;
     Star_Upgrade_Data Star_Data = null;
@@ -49,6 +64,9 @@ public class UserHeroData : UserDataBase
     public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
     public int Lobby_Choice_Num { get; protected set; } = 0;
     public bool Is_Choice_Lobby { get; protected set; } = false;
+    public int Essence_Sended_Count_Of_Date => _Essence_Sended_Count_Of_Date.Get();
+    public int Essence_Founded_Percent => _Essence_Founded_Percent.Get();
+    public int Essence_Founded_Spot_Kind_Count => _Essence_Founded_Spot_Kind_Count.Get();
     public bool Is_Clone { get; private set; } = false;
 
     public UserHeroData(LitJson.JsonData json_data)
@@ -88,6 +106,16 @@ public class UserHeroData : UserDataBase
 
         if (Love_Exp == null)               Love_Exp = new SecureVar<double>();
         else                                Love_Exp.Set(0);
+
+        if (_Essence_Sended_Count_Of_Date == null) _Essence_Sended_Count_Of_Date = new SecureVar<int>();
+        else _Essence_Sended_Count_Of_Date.Set(0);
+
+        if (_Essence_Founded_Percent == null) _Essence_Founded_Percent = new SecureVar<int>();
+        else _Essence_Founded_Percent.Set(0);
+
+        if (_Essence_Founded_Spot_Kind_Count == null) _Essence_Founded_Spot_Kind_Count = new SecureVar<int>();
+        else _Essence_Founded_Spot_Kind_Count.Set(0);
+
     }
 
     public void SetPlayerCharacterDataID(int player_character_id, int player_character_num)
@@ -733,6 +761,9 @@ public class UserHeroData : UserDataBase
         clone.Love_Level = new SecureVar<int>(Love_Level);
         clone.Love_Exp = new SecureVar<double>(Love_Exp);
         clone.Star_Grade = new SecureVar<int>(Star_Grade);
+        clone._Essence_Sended_Count_Of_Date = new SecureVar<int>(_Essence_Sended_Count_Of_Date);
+        clone._Essence_Founded_Percent = new SecureVar<int>(_Essence_Founded_Percent);
+        clone._Essence_Founded_Spot_Kind_Count = new SecureVar<int>(_Essence_Founded_Spot_Kind_Count);
         clone.Is_Clone = true;
 
         return clone;
@@ -755,6 +786,9 @@ public class UserHeroData : UserDataBase
         json[NODE_STAR_GRADE] = GetStarGrade();
         json[NODE_LOBBY_CHOICE_NUMBER] = Lobby_Choice_Num;
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
+        json[NODE_ESSENCE_SENDED_COUNT_OF_DATE] = _Essence_Sended_Count_Of_Date.Get();
+        json[NODE_ESSENCE_FOUNDED_PERCENT] = _Essence_Founded_Percent.Get();
+        json[NODE_ESSENCE_FOUNDED_SPOT_COUNT] = _Essence_Founded_Spot_Kind_Count.Get();
 
         return json;
     }
@@ -805,6 +839,18 @@ public class UserHeroData : UserDataBase
             {
                 Is_Choice_Lobby = ParseBool(json, NODE_IS_CHOICE);
             }
+            if (json.ContainsKey(NODE_ESSENCE_SENDED_COUNT_OF_DATE))
+            {
+                _Essence_Sended_Count_Of_Date.Set(ParseInt(json, NODE_ESSENCE_SENDED_COUNT_OF_DATE));
+            }
+            if (json.ContainsKey(NODE_ESSENCE_FOUNDED_PERCENT))
+            {
+                _Essence_Founded_Percent.Set(ParseInt(json, NODE_ESSENCE_FOUNDED_PERCENT));
+            }
+            if (json.ContainsKey(NODE_ESSENCE_FOUNDED_SPOT_COUNT))
+            {
+                _Essence_Founded_Spot_Kind_Count.Set(ParseInt(json, NODE_ESSENCE_FOUNDED_SPOT_COUNT));
+            }
         }
 
         InitMasterData();
@@ -824,4 +870,7 @@ public class UserHeroData : UserDataBase
     protected const string NODE_STAR_GRADE = "star";
     protected const string NODE_LOBBY_CHOICE_NUMBER = "cnum";
     protected const string NODE_IS_CHOICE = "choice";
+    protected const string NODE_ESSENCE_SENDED_COUNT_OF_DATE = "escnt";
+    protected const string NODE_ESSENCE_FOUNDED_PERCENT = "efper";
+    protected const string NODE_ESSENCE_FOUNDED_SPOT_COUNT = "efcnt";
 }

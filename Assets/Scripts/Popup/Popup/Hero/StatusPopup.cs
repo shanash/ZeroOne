@@ -14,6 +14,7 @@ public class StatusPopup : PopupBase
     InfiniteScroll Status_LIst_View;
 
     List<StatusItemData> Datas = null;
+    int Focus_Index = 0;
 
     void Reset()
     {
@@ -22,32 +23,47 @@ public class StatusPopup : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 2 || data[0] is not string || data[1] is not List<StatusItemData>)
+        if (data.Length != 3 || data[0] is not string || data[1] is not List<StatusItemData>)
         {
             return false;
         }
 
         Title.text = data[0] as string;
         Datas = data[1] as List<StatusItemData>;
-
-        FixedUpdatePopup();
+        Focus_Index = (int)data[2];
 
         return true;
     }
 
-    protected override void FixedUpdatePopup()
+    protected override void ShowPopupAniEndCallback()
     {
-        Status_LIst_View.Clear();
+        Status_LIst_View.gameObject.SetActive(true);
 
         foreach (var data in Datas)
         {
             Status_LIst_View.InsertData(data);
         }
+
+        if (Focus_Index > -1)
+        {
+            Status_LIst_View.MoveTo(Focus_Index, InfiniteScroll.MoveToType.MOVE_TO_CENTER);
+        }
+    }
+
+    protected override void OnUpdatePopup()
+    {
+        //Debug.Log($"Status_LIst_View : {Status_LIst_View.GetScrollPosition()}");
     }
 
     public void OnClickClose()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         HidePopup();
+    }
+
+    public override void Despawned()
+    {
+        Status_LIst_View.Clear();
+        Status_LIst_View.gameObject.SetActive(false);
     }
 }
