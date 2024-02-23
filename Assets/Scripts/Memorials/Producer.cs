@@ -32,7 +32,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     async Task InitializeAsync(L2d_Char_Skin_Data data, MEMORIAL_TYPE type, Transform parent)
     {
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
-        Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, LOVE_LEVEL_TYPE.NORMAL);
+        Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, LOVE_LEVEL_TYPE.NORMAL, type);
         /*
         if (!string.IsNullOrEmpty(data.l2d_bg_path))
         {

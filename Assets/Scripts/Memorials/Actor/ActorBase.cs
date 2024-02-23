@@ -518,7 +518,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         if (item == null)
         {
-            return null;
+            item = Interaction_Bases.Find(interaction => interaction.touch_type_01 == TOUCH_BODY_TYPE.NONE && interaction.gescure_type_01 == type);
+
+            return item;
         }
         
 
@@ -603,7 +605,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         return cam_pos.y + topHeightAtDistance;
     }
 
-    bool Initialize(Producer pd, L2d_Char_Skin_Data skin_data, LOVE_LEVEL_TYPE love_level)
+    bool Initialize(Producer pd, L2d_Char_Skin_Data skin_data, LOVE_LEVEL_TYPE love_level, MEMORIAL_TYPE type)
     {
         if (Skeleton == null)
         {
@@ -618,7 +620,14 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         float scale = this.transform.lossyScale.y;
         float[] vertex = null;
         this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
-        this.transform.position = new Vector3(ADDED_POS_X, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
+        if (type == MEMORIAL_TYPE.MAIN_LOBBY)
+        {
+            this.transform.position = new Vector3(ADDED_POS_X, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
+        }
+        else
+        {
+            this.transform.position = new Vector3(0, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
+        }
 
         InitField();
 

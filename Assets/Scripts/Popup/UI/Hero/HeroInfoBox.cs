@@ -28,13 +28,13 @@ public class HeroInfoBox : MonoBehaviour
 
     BattlePcData User_Hero_Data;
 
-    public void SetHeroData(BattlePcData data)
+    public void SetHeroData(BattlePcData data, Producer pd)
     {
         User_Hero_Data = data;
         Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
         Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
         Hero_Info_Box_Advance.SetHeroData(User_Hero_Data);
-        Hero_Info_Box_Essence.SetHeroData(User_Hero_Data);
+        Hero_Info_Box_Essence.SetHeroData(User_Hero_Data, pd);
 
         FixedUpdatePopup();
     }

@@ -1,3 +1,4 @@
+using Cinemachine;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
@@ -73,7 +74,8 @@ public class HeroInfoUI : PopupBase
         over_cam.targetTexture = Chara_Texture;
 
         //TODO: 일단 임시로 카메라로 위치를 세팅
-        over_cam.transform.localPosition = new Vector3(2, 0, 0);
+        over_cam.transform.localPosition = new Vector3(4, 0, 0);
+
         Hero_Stand.enabled = true;
         Hero_Stand.texture = Chara_Texture;
     }
@@ -111,7 +113,7 @@ public class HeroInfoUI : PopupBase
 
         pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, MEMORIAL_TYPE.MEMORIAL);
 
-        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data);
+        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, pd);
     }
 
     protected override void FixedUpdatePopup()
@@ -201,5 +203,12 @@ public class HeroInfoUI : PopupBase
 
         SetUserHero(index);
         UpdatePopup();
+    }
+
+    public override void Despawned()
+    {
+        //TODO: 일단 임시로 카메라로 위치를 세팅
+        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
+        over_cam.transform.localPosition = new Vector3(0, 0, 0);
     }
 }
