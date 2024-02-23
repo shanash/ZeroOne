@@ -117,9 +117,9 @@ public struct Effect_Queue_Data
 
 #region Exp Simulate Data
 /// <summary>
-/// 스킬/캐릭터 경험치 상승에 사용될 경험치 아이템의 사용 갯수 지정 데이터
+/// 아이템의 사용 갯수 지정 데이터
 /// </summary>
-public record USE_EXP_ITEM_DATA
+public record USABLE_ITEM_DATA
 {
     public ITEM_TYPE_V2 Item_Type;
     public int Item_ID;
@@ -132,9 +132,9 @@ public record USE_EXP_ITEM_DATA
 public struct EXP_SIMULATE_RESULT_DATA
 {
     public RESPONSE_TYPE Code;         //  레벨업 가능/불가능
+
     public int Result_Lv;           //  경험치 아이템 사용시 결과 레벨
     public double Result_Accum_Exp;       //  경험치 아이템 사용시 결과 경험치
-
 
     public double Add_Exp;          //  경험치 아이템 사용시 증가되는 경험치
     public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
@@ -143,6 +143,16 @@ public struct EXP_SIMULATE_RESULT_DATA
     public EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE code = default)
     {
         Code = code;
+        Result_Lv = 0;
+        Result_Accum_Exp = 0;
+        Add_Exp = 0;
+        Over_Exp = 0;
+        Need_Gold = 0;
+    }
+
+    public void Reset()
+    {
+        Code = RESPONSE_TYPE.FAILED;
         Result_Lv = 0;
         Result_Accum_Exp = 0;
         Add_Exp = 0;
@@ -159,6 +169,9 @@ public struct USE_EXP_ITEM_RESULT_DATA
 {
     public RESPONSE_TYPE Code;
 
+    public int Before_Lv;
+    public double Before_Accum_Exp;
+
     public int Result_Lv;               //  경험치 아이템 사용 후 결과 레벨
     public double Result_Accum_Exp;     //  경험치 아이템 사용 후 최종 경험치(누적 경험치)
 
@@ -168,6 +181,8 @@ public struct USE_EXP_ITEM_RESULT_DATA
     public void ResetAndResultCode(RESPONSE_TYPE code)
     {
         Code = code;
+        Before_Lv = 0;
+        Before_Accum_Exp = 0;
         Result_Lv = 0;
         Result_Accum_Exp = 0;
         Add_Exp = 0;

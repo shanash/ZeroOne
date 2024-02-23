@@ -37,6 +37,13 @@ public class MasterDataManager : BaseMasterDataManager
         return _Player_Character_Skill_Level_Data[lv];
     }
 
+    public Player_Character_Skill_Level_Data Get_PlayerCharacterSkillLevelDataByAccumExp(double accum_exp)
+    {
+        Check_Player_Character_Skill_Level_Data();
+        var list = _Player_Character_Skill_Level_Data.Values.OrderBy(x => x.level).ToList();
+        return list.FindLast(x => x.accum_exp <= accum_exp);
+    }
+
     /// <summary>
     /// 최대레벨을 넘어가지 않는 스킬레벨데이터를 가져옵니다
     /// </summary>
@@ -134,7 +141,9 @@ public class MasterDataManager : BaseMasterDataManager
     public IReadOnlyList<Item_Data> Get_ItemDataListByItemType(ITEM_TYPE_V2 itype)
     {
         Check_Item_Data();
-        return _Item_Data.Values.ToList().FindAll(x => x.item_type == itype);
+        var list = _Item_Data.Values.ToList().FindAll(x => x.item_type == itype);
+        list.Sort((a, b) => a.item_id.CompareTo(b.item_id));
+        return list;
     }
 
     public IReadOnlyList<Item_Data> Get_ItemDataList()

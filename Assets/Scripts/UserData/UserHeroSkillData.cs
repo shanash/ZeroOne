@@ -221,7 +221,7 @@ public class UserHeroSkillData : UserDataBase
     /// 최적의 시뮬레이션은 적용 전에 별도의 로직을 거쳐 알아내야 함
     /// </summary>
     /// <param name="use_list"></param>
-    public void AddExpUseItem(System.Action<USE_EXP_ITEM_RESULT_DATA> callback, List<USE_EXP_ITEM_DATA> use_list)
+    public void AddExpUseItem(System.Action<USE_EXP_ITEM_RESULT_DATA> callback, List<USABLE_ITEM_DATA> use_list)
     {
         var goods_mng = GameData.Instance.GetUserGoodsDataManager();
         var item_mng = GameData.Instance.GetUserItemDataManager();
@@ -232,6 +232,8 @@ public class UserHeroSkillData : UserDataBase
         //  result data 초기화
         USE_EXP_ITEM_RESULT_DATA result = new USE_EXP_ITEM_RESULT_DATA();
         result.Code = RESPONSE_TYPE.FAILED;
+        result.Before_Lv = GetLevel();
+        result.Before_Accum_Exp = GetExp();
         result.Result_Lv = GetLevel();
         result.Result_Accum_Exp = GetExp();
         result.Add_Exp = 0;
@@ -299,6 +301,8 @@ public class UserHeroSkillData : UserDataBase
 
             //  경험치 증가 및 레벨업
             result.Code = AddExp(result_simulate.Add_Exp);
+            result.Result_Lv = GetLevel();
+            result.Result_Accum_Exp = GetExp();
         } while (false);
 
         callback(result);
@@ -311,7 +315,7 @@ public class UserHeroSkillData : UserDataBase
     /// <param name="need_gold">필요골드</param>
     /// <param name="use_list">사용할 경험치 아이템</param>
     /// <returns></returns>
-    public RESPONSE_TYPE SumExpItemInfo(out double added_exp, out double need_gold, List<USE_EXP_ITEM_DATA> use_list)
+    public RESPONSE_TYPE SumExpItemInfo(out double added_exp, out double need_gold, List<USABLE_ITEM_DATA> use_list)
     {
         var m = MasterDataManager.Instance;
 
@@ -353,9 +357,9 @@ public class UserHeroSkillData : UserDataBase
     /// </summary>
     /// <param name="use_list"></param>
     /// <returns></returns>
-    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USE_EXP_ITEM_DATA> use_list)
+    public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USABLE_ITEM_DATA> use_list)
     {
-        RESPONSE_TYPE code;
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
 
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
@@ -372,34 +376,93 @@ public class UserHeroSkillData : UserDataBase
 
         var m = MasterDataManager.Instance;
 
-        double current_exp = GetExp();
-        double result_exp = current_exp + sum_items_exp;
+        EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
+        double cur_exp = GetExp();
+        result.Code = RESPONSE_TYPE.FAILED;
+        result.Result_Lv = GetLevel();
+        result.Result_Accum_Exp = cur_exp;
 
-        Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref result_exp, GetMaxLevel());
+        result.Need_Gold = sum_items_need_gold;
+        result.Add_Exp = 0;
+        result.Over_Exp = 0;
 
-        //  레벨 데이터가 없으면 failed
+        int max_level = GetMaxLevel();
+        Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByAccumExp(cur_exp + sum_items_exp);
+        //  레벨 데이터가 없으면 falied
         if (next_lv_data == null)
         {
             return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.FAILED);
         }
 
-        double add_exp = result_exp - current_exp;
-
-        //  레벨이 증가할 경우 해당 레벨로 적용
-        if (GetLevel() < next_lv_data.level)
+        //  최대 레벨을 초과할 경우, 최대 레벨에 맞춘다.
+        if (max_level <= next_lv_data.level)
         {
-            code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
+            next_lv_data = m.Get_PlayerCharacterSkillLevelData(max_level);
+        }
+        if (max_level <= next_lv_data.level)
+        {
+            if (next_lv_data.accum_exp < cur_exp + sum_items_exp)
+            {
+                result.Add_Exp = next_lv_data.accum_exp - cur_exp;
+            }
+            else
+            {
+                result.Add_Exp = sum_items_exp;
+            }
+        }
+        else
+        {
+            result.Add_Exp = sum_items_exp;
+        }
+        result.Result_Accum_Exp += result.Add_Exp;
+
+        //  레벨이 증가할 경우, 해당 레벨로 적용
+        if (result.Result_Lv < next_lv_data.level)
+        {
+            result.Result_Lv = next_lv_data.level;
+            result.Code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
+        }
+        else
+        {
+            result.Code = RESPONSE_TYPE.SUCCESS;
         }
 
-        var result = new EXP_SIMULATE_RESULT_DATA()
+        //  최대 레벨을 초과할 경우에만 계산
+        if (GetMaxLevel() <= result.Result_Lv)
         {
-            Code = code,
-            Result_Lv = next_lv_data.level,
-            Result_Accum_Exp = result_exp,
-            Add_Exp = add_exp,
-            Over_Exp = result_exp - next_lv_data.accum_exp,
-            Need_Gold = sum_items_need_gold,
-        };
+            result.Over_Exp = (cur_exp + sum_items_exp) - next_lv_data.accum_exp;
+        }
+
+        //double current_exp = GetExp();
+        //double result_exp = current_exp + sum_items_exp;
+
+        //Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref result_exp, GetMaxLevel());
+
+        ////  레벨 데이터가 없으면 failed
+        //if (next_lv_data == null)
+        //{
+        //    return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.FAILED);
+        //}
+
+        //double add_exp = result_exp - current_exp;
+
+        ////  레벨이 증가할 경우 해당 레벨로 적용
+        //if (GetLevel() < next_lv_data.level)
+        //{
+        //    code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
+        //}
+
+        //var result = new EXP_SIMULATE_RESULT_DATA()
+        //{
+        //    Code = code,
+        //    Result_Lv = next_lv_data.level,
+        //    Result_Accum_Exp = result_exp,
+        //    Add_Exp = add_exp,
+        //    Over_Exp = result_exp - next_lv_data.accum_exp,
+        //    Need_Gold = sum_items_need_gold,
+        //};
+
+        //return result;
 
         return result;
     }

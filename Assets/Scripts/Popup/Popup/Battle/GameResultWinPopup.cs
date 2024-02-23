@@ -477,7 +477,6 @@ public class GameResultWinPopup : PopupBase
         var pool = GameObjectPoolManager.Instance;
         //  보상 추가
         string reward_prefab = "Assets/AssetResources/Prefabs/UI/Card/BattleRewardItemCard";
-        var stage = (Stage_Data)Dungeon.GetDungeonData();
 
         //  first reward list (첫번째 보상인지 여부 체크 필요)
         if (!Dungeon.IsClearedDungeon())

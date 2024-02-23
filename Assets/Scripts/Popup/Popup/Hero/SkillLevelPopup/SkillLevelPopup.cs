@@ -45,8 +45,8 @@ public class SkillLevelPopup : PopupBase
 
     IReadOnlyList<UserHeroSkillData> Skill_Groups = null;
 
-    List<USE_EXP_ITEM_DATA> Use_Exp_Items = null;
-    List<UserItem_NormalItemData> Exist_Exp_Items = null;
+    List<USABLE_ITEM_DATA> Use_Exp_Items = null;
+    List<UserItemData> Exist_Exp_Items = null;
 
     int Selected_Index = -1;
 
@@ -64,8 +64,8 @@ public class SkillLevelPopup : PopupBase
 
         Skill_Groups = data[0] as IReadOnlyList<UserHeroSkillData>;
 
-        Use_Exp_Items = new List<USE_EXP_ITEM_DATA>();
-        Exist_Exp_Items = new List<UserItem_NormalItemData>();
+        Use_Exp_Items = new List<USABLE_ITEM_DATA>();
+        Exist_Exp_Items = new List<UserItemData>();
 
         FixedUpdatePopup();
         return true;
@@ -105,15 +105,15 @@ public class SkillLevelPopup : PopupBase
                 Exp_Items[i].gameObject.SetActive(false);
                 continue;
             }
-
-            if (!Use_Exp_Items.Exists(x => x.Item_ID == Exist_Exp_Items[i].Data.item_id))
+            var exp_item = Exist_Exp_Items[i];
+            if (!Use_Exp_Items.Exists(x => x.Item_ID == exp_item.Item_ID))
             {
-                Use_Exp_Items.Add(CreateExpItem(Exist_Exp_Items[i].Data.item_id, 0));
+                Use_Exp_Items.Add(CreateExpItem(exp_item.Item_ID, 0));
             }
 
-            Exp_Items[i].Initialize(Exist_Exp_Items[i], OnChangedUseItemCount);
-            Exp_Items[i].gameObject.SetActive(Exist_Exp_Items[i].GetCount() > 0);
-            var item = Use_Exp_Items.Find(x => x.Item_ID == Exist_Exp_Items[i].Item_ID);
+            Exp_Items[i].Initialize(exp_item, OnChangedUseItemCount);
+            Exp_Items[i].gameObject.SetActive(exp_item.GetCount() > 0);
+            var item = Use_Exp_Items.Find(x => x.Item_ID == exp_item.Item_ID);
             Exp_Items[i].SetUseCount(item.Use_Count);
         }
     }
@@ -139,7 +139,7 @@ public class SkillLevelPopup : PopupBase
         // 유저가 소유하고 있는 경험치 아이템 가져오기
         for (int i = 0; i < 5; i++)
         {
-            var data = (UserItem_NormalItemData)GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_SKILL, max_exp_item_id - i);
+            var data = GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_SKILL, max_exp_item_id - i);
             if (data != null)
             {
                 Exist_Exp_Items.Add(data);
@@ -289,7 +289,7 @@ public class SkillLevelPopup : PopupBase
 
     public void OnClickAutoSelect()
     {
-        List<USE_EXP_ITEM_DATA> use_item = new List<USE_EXP_ITEM_DATA>();
+        List<USABLE_ITEM_DATA> use_item = new List<USABLE_ITEM_DATA>();
 
         double total_exp = 0;
         bool up_to_max_level = false;
@@ -351,12 +351,13 @@ public class SkillLevelPopup : PopupBase
         UpdateExpItemButtons();
     }
 
-    USE_EXP_ITEM_DATA CreateExpItem(int item_id, int count)
+    USABLE_ITEM_DATA CreateExpItem(int item_id, int count)
     {
-        return new USE_EXP_ITEM_DATA()
+        var item_data = MasterDataManager.Instance.Get_ItemData(item_id);
+        return new USABLE_ITEM_DATA()
         {
-            Item_ID = item_id,
-            Item_Type = ITEM_TYPE_V2.EXP_SKILL,
+            Item_ID = item_data.item_id,
+            Item_Type = item_data.item_type,
             Use_Count = count,
         };
     }

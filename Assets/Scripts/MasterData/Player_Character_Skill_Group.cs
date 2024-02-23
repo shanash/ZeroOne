@@ -14,6 +14,12 @@ public class Player_Character_Skill_Group : System.IDisposable
 	int _pc_skill_group_id;
 
 	///	<summary>
+	///	스킬 이름 아이디
+	///	</summary>
+	public string name_id => _name_id;
+	string _name_id;
+
+	///	<summary>
 	///	스킬 이름
 	///	</summary>
 	public string name_kr => _name_kr;
@@ -68,6 +74,7 @@ public class Player_Character_Skill_Group : System.IDisposable
 	public Player_Character_Skill_Group(Raw_Player_Character_Skill_Group raw_data)
 	{
 		_pc_skill_group_id = raw_data.pc_skill_group_id;
+		_name_id = raw_data.name_id;
 		_name_kr = raw_data.name_kr;
 		_skill_use_delay = raw_data.skill_use_delay;
 		_skill_type = raw_data.skill_type;
@@ -100,6 +107,7 @@ public class Player_Character_Skill_Group : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[pc_skill_group_id] = <color=yellow>{0}</color>", pc_skill_group_id).AppendLine();
+		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[skill_use_delay] = <color=yellow>{0}</color>", skill_use_delay).AppendLine();
 		sb.AppendFormat("[skill_type] = <color=yellow>{0}</color>", skill_type).AppendLine();

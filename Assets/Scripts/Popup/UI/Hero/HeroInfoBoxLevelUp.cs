@@ -1,28 +1,38 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
+using FluffyDuck.Util;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
-using UI.SkillLevelPopup;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HeroInfoBoxLevelUp : MonoBehaviour
 {
-    const int MAX_EXP_ITEM_ID = 10;
-
     [SerializeField]
     TMP_Text Level_Text = null;
+
+    [SerializeField, Tooltip("Result Level Box")]
+    RectTransform Result_Level_Box;
 
     [SerializeField]
     TMP_Text Result_Level_Text = null;
 
     [SerializeField]
-    Slider Exp_Bar = null;
+    Slider Current_Exp_Bar = null;
 
-    [SerializeField]
-    TMP_Text[] Stat_Text = null;
+    [SerializeField, Tooltip("Result Exp Bar")]
+    Slider Result_Exp_Bar;
 
-    [SerializeField, Tooltip("경험치 아이템")]
-    SkillExpItem[] Exp_Items = null;
+    [SerializeField, Tooltip("Exp Count")]
+    TMP_Text Exp_Count;
+
+    [SerializeField, Tooltip("영웅 스탯 정보")]
+    List<HeroStatusInfoNode> Status_Info_Nodes;
+
+    [SerializeField, Tooltip("사용 가능한 아이템(경험치 아이템)")]
+    List<UsableItemCard> Usable_Items;
 
     [SerializeField, Tooltip("사용 골드 수치 텍스트")]
     TMP_Text Need_Gold_Text = null;
@@ -34,33 +44,33 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
     UIButtonBase Up_Button = null;
 
     BattlePcData Unit_Data = null;
-    List<USE_EXP_ITEM_DATA> Use_Exp_Items = null;
-    List<UserItem_NormalItemData> Exist_Exp_Items = null;
+    List<USABLE_ITEM_DATA> Use_Exp_Items = new List<USABLE_ITEM_DATA>();
+
+    EXP_SIMULATE_RESULT_DATA? Simulate_Result = null;
+
+    Coroutine Simulate_Coroutine;
+    Coroutine Level_Up_Coroutine;
+
 
     public void SetHeroData(BattlePcData data)
     {
         Unit_Data = data;
-
-        Use_Exp_Items = new List<USE_EXP_ITEM_DATA>();
-        Exist_Exp_Items = new List<UserItem_NormalItemData>();
-
+        Simulate_Result = null;
         FixedUpdatePopup();
     }
 
     public void FixedUpdatePopup()
     {
-        Exist_Exp_Items.Clear();
-        // 유저가 소유하고 있는 경험치 아이템 가져오기
-        for (int i = 0; i < 5; i++)
+        var item_data_list = MasterDataManager.Instance.Get_ItemDataListByItemType(ITEM_TYPE_V2.EXP_POTION_C);
+        for (int i = 0; i < item_data_list.Count; i++)
         {
-            var data = (UserItem_NormalItemData)GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_POTION_C, MAX_EXP_ITEM_ID - i);
-            if (data != null)
+            var item_data = item_data_list[i];
+            if (i < Usable_Items.Count)
             {
-                Exist_Exp_Items.Add(data);
+                Usable_Items[i].SetUserItemData(item_data.item_type, item_data.item_id, OnChangeUsableItemCount);
             }
         }
 
-        UpdateExpItemButtons();
         Refresh();
     }
 
@@ -73,7 +83,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
 
         Use_Exp_Items.Clear();
         UpdateExpItemButtons();
-
+        UpdateHeroStatusInfoNodes(Unit_Data.GetLevel());
         UpdateUI();
     }
 
@@ -81,7 +91,22 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
     {
         Level_Text.text = Unit_Data.GetLevel().ToString();
 
-        Exp_Bar.value = Unit_Data.User_Data.GetExpPercetage();
+        //  result level
+        Result_Level_Box.gameObject.SetActive(false);
+
+        //  exp bar
+        float per = Unit_Data.User_Data.GetExpPercetage();
+
+        Current_Exp_Bar.value = per;
+        Result_Exp_Bar.value = per;
+
+        //  exp count
+        double cur_exp = Unit_Data.User_Data.GetLevelExp();
+        double next_exp = Unit_Data.User_Data.GetNextExp();
+        Exp_Count.text = ZString.Format("{0:N0} / {1:N0}", cur_exp, next_exp);
+
+        //  need gold init
+        Need_Gold_Text.text = "0";
     }
 
     /// <summary>
@@ -91,51 +116,348 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
     /// </summary>
     void UpdateExpItemButtons()
     {
-        for (int i = 0; i < Exp_Items.Length; i++)
+        int cnt = Usable_Items.Count;
+        for (int i = 0; i < cnt; i++)
         {
-            if (Exist_Exp_Items.Count <= i)
-            {
-                Exp_Items[i].gameObject.SetActive(false);
-                continue;
-            }
+            Usable_Items[i].ResetUsableCount();
+        }
+    }
 
-            if (!Use_Exp_Items.Exists(x => x.Item_ID == Exist_Exp_Items[i].Data.item_id))
-            {
-                Use_Exp_Items.Add(CreateExpItem(Exist_Exp_Items[i].Data.item_id, 0));
-            }
-
-            Exp_Items[i].Initialize(Exist_Exp_Items[i], OnChangedUseItemCount);
-            Exp_Items[i].gameObject.SetActive(Exist_Exp_Items[i].GetCount() > 0);
-            var item = Use_Exp_Items.Find(x => x.Item_ID == Exist_Exp_Items[i].Item_ID);
-            Exp_Items[i].SetUseCount(item.Use_Count);
+    void UpdateHeroStatusInfoNodes(int next_lv)
+    {
+        int cnt = Status_Info_Nodes.Count;
+        BattlePcData clone_unit_data = clone_unit_data = Unit_Data.GetSimulateLevelUpData(next_lv);
+        
+        for (int i = 0; i < cnt; i++)
+        {
+            Status_Info_Nodes[i].SetBattleUnitData(Unit_Data, clone_unit_data);
         }
     }
 
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         Refresh();
     }
-
+    public void OnClickAutoSelect()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+    }
     public void OnClickLevelUp()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Use_Exp_Items.Clear();
+        for (int i = 0; i < Usable_Items.Count; i++)
+        {
+            Use_Exp_Items.Add(Usable_Items[i].GetUsableItemData());
+        }
+        int sum = Use_Exp_Items.Sum(x => x.Use_Count);
+        if (sum == 0)
+        {
+            ShowNoticePopup("경험치 아이템을 선택해 주세요.", 1.5f);
+            return;
+        }
+
         Unit_Data.User_Data.AddExpUseItem(OnResponseLevelup, Use_Exp_Items);
     }
-
+    /// <summary>
+    /// 캐릭터 레벨업 결과
+    /// </summary>
+    /// <param name="result"></param>
     void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
     {
         if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
-            //Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
+            if (result.Code == RESPONSE_TYPE.NOT_ENOUGH_GOLD)
+            {
+                ShowNoticePopup("골드가 부족합니다.", 1.5f);
+            }
+            else if (result.Code == RESPONSE_TYPE.NOT_ENOUGH_ITEM)
+            {
+                ShowNoticePopup("경험치 아이템이 부족합니다.", 1.5f);
+            }
             return;
         }
+
 
         GameData.Instance.GetUserHeroDataManager().Save();
         GameData.Instance.GetUserGoodsDataManager().Save();
         GameData.Instance.GetUserItemDataManager().Save();
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_GOLD);
 
         Use_Exp_Items.Clear();
+        if (Level_Up_Coroutine != null)
+        {
+            StopCoroutine(Level_Up_Coroutine);
+        }
+        if (Simulate_Coroutine != null)
+        {
+            StopCoroutine(Simulate_Coroutine);
+        }
+        Simulate_Coroutine = null;
+
+        Level_Up_Coroutine = StartCoroutine(StartLevelUpExpGaugeAnim(result));
+        
+    }
+
+    void OnChangeUsableItemCount(bool is_add, System.Action<bool> result_cb)
+    {
+        if (Unit_Data.User_Data.IsMaxLevel())
+        {
+            result_cb?.Invoke(false);
+            ShowNoticePopup("최대 레벨에 도달했습니다.", 1.5f);
+            return;
+        }
+        if (is_add)
+        {
+            //  더하기만 체크. 이전 시뮬레이션 정보에서 이미 최대레벨에 도달한 경우, 아이템 추가하지 않음
+            if (Simulate_Result != null && Simulate_Result.Value.Result_Lv >= Unit_Data.User_Data.GetMaxLevel())
+            {
+                result_cb?.Invoke(false);
+                return;
+            }
+        }
+        RESPONSE_TYPE result = RESPONSE_TYPE.NOT_WORK;
+        Use_Exp_Items.Clear();
+        for (int i = 0; i < Usable_Items.Count; i++)
+        {
+            Use_Exp_Items.Add(Usable_Items[i].GetUsableItemData());
+        }
+        if (Use_Exp_Items.Count > 0)
+        {
+            var simulate = Unit_Data.User_Data.GetCalcSimulateExp(Use_Exp_Items);
+            result = simulate.Code;
+            if (simulate.Code == RESPONSE_TYPE.SUCCESS || simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
+            {
+                //  current exp bar(시뮬레이션 결과가 현재 레벨보다 클 경우 현재 경험치 바는 숨겨준다)
+                Current_Exp_Bar.gameObject.SetActive(Unit_Data.User_Data.GetLevel() == simulate.Result_Lv);
+                //  레벨 상승이 있으면, 상승 결과 레벨을 보여준다.
+                Result_Level_Box.gameObject.SetActive(Unit_Data.User_Data.GetLevel() != simulate.Result_Lv);
+                //  next level
+                //Result_Level_Text.text = Simulate_Result.Value.Result_Lv.ToString();
+                //  exp bar
+                var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(simulate.Result_Lv);
+                double need_exp = lv_data.need_exp;
+                double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+                //float per = (float)(lv_exp / need_exp);
+                //Result_Exp_Bar.value = per;
+                //  exp count
+                Exp_Count.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
+
+                //  need gold (골드가 부족하면 빨간색)
+                if (GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, simulate.Need_Gold))
+                {
+                    Need_Gold_Text.text = simulate.Need_Gold.ToString("N0");
+                }
+                else
+                {
+                    Need_Gold_Text.text = ZString.Format("<color=#ff0000>{0:N0}</color>", simulate.Need_Gold);
+                }
+
+                //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
+                if (simulate.Over_Exp > 0)
+                {
+                    string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                    ShowNoticePopup(msg, 1.5f);
+                }
+
+                if (is_add)
+                {
+                    if (Simulate_Coroutine != null)
+                    {
+                        StopCoroutine(Simulate_Coroutine);
+                    }
+                    EXP_SIMULATE_RESULT_DATA? before = Simulate_Result;
+                    Simulate_Result = simulate;
+                    Simulate_Coroutine = StartCoroutine(StartSimulateLevelExpGaugeAnim(before, simulate));
+                }
+                else
+                {
+                    if (Simulate_Coroutine != null)
+                    {
+                        StopCoroutine(Simulate_Coroutine);
+                    }
+                    Simulate_Coroutine = null;
+                    Simulate_Result = simulate;
+                    //  next level
+                    Result_Level_Text.text = Simulate_Result.Value.Result_Lv.ToString();
+                    //  exp bar
+                    float per = (float)(lv_exp / need_exp);
+                    Result_Exp_Bar.value = per;
+
+                }
+
+            }
+            else
+            {
+                UpdateUI();
+            }
+        }
+        
+        result_cb?.Invoke(true);
+        
+    }
+
+    IEnumerator StartSimulateLevelExpGaugeAnim(EXP_SIMULATE_RESULT_DATA? before_simulate, EXP_SIMULATE_RESULT_DATA? after_simulate)
+    {
+        int before_lv = Unit_Data.User_Data.GetLevel();
+        float before_exp_per = Unit_Data.User_Data.GetExpPercetage();
+        
+        if (before_simulate != null)
+        {
+            before_lv = before_simulate.Value.Result_Lv;
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(before_simulate.Value.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = before_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
+            before_exp_per = (float)(lv_exp / need_exp);
+        }
+        
+        Result_Level_Text.text = before_lv.ToString();
+        Result_Exp_Bar.value = before_exp_per;
+
+        int gauge_full_count = after_simulate.Value.Result_Lv - before_lv;
+        float speed = 3f;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  게이지 풀 횟수
+        while (loop_count < gauge_full_count)
+        {
+            delta += Time.deltaTime;
+
+            Result_Exp_Bar.value = Mathf.Clamp01(delta);
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Result_Exp_Bar.value = 0f;
+                ++loop_count;
+                int lv = before_lv + loop_count;
+                Result_Level_Text.text = lv.ToString();
+
+                UpdateHeroStatusInfoNodes(lv);
+                if (loop_count >= gauge_full_count)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                yield return wait;
+            }
+        }
+
+        //  남은 경험치 게이지 이동
+        delta = 0f;
+        float after_exp_per = 0f;
+        {
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(after_simulate.Value.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = after_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
+            after_exp_per = (float)(lv_exp / need_exp);
+        }
+        duration = Mathf.Abs(after_exp_per - Result_Exp_Bar.value);
+        if (after_exp_per > 0f)
+        {
+            while (true)
+            {
+                delta += Time.deltaTime;
+                Result_Exp_Bar.value = Mathf.MoveTowards(Result_Exp_Bar.value, after_exp_per, duration * Time.deltaTime * speed);
+                if (delta >= duration)
+                {
+                    Result_Exp_Bar.value = after_exp_per;
+                    break;
+                }
+                else
+                {
+                    yield return wait;
+                }
+            }
+        }
+        Simulate_Coroutine = null;
+    }
+
+    IEnumerator StartLevelUpExpGaugeAnim(USE_EXP_ITEM_RESULT_DATA result)
+    {
         UpdateExpItemButtons();
+
+        Current_Exp_Bar.gameObject.SetActive(true);
+        Result_Exp_Bar.value = 0f;
+
+        int before_lv = result.Before_Lv;
+        float before_exp_per = 0f;
+        {
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(result.Before_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = result.Before_Accum_Exp - lv_data.accum_exp;
+            before_exp_per = (float)(lv_exp / need_exp);
+        }
+
+        Result_Level_Text.text = before_lv.ToString();
+        Current_Exp_Bar.value = before_exp_per;
+
+        int gauge_full_count = result.Result_Lv - before_lv;
+        float speed = 1f;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  게이지 풀 횟수
+        while (loop_count < gauge_full_count)
+        {
+            delta += Time.deltaTime;
+
+            Current_Exp_Bar.value = Mathf.Clamp01(delta);
+
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Current_Exp_Bar.value = 0f;
+                ++loop_count;
+                int lv = before_lv + loop_count;
+                Result_Level_Text.text = lv.ToString();
+                UpdateHeroStatusInfoNodes(lv);
+                if (loop_count >= gauge_full_count)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                yield return wait;
+            }
+        }
+
+        //  남은 경험치 게이지 이동
+        delta = 0f;
+        float after_exp_per = 0f;
+        {
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(result.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = result.Result_Accum_Exp - lv_data.accum_exp;
+            after_exp_per = (float)(lv_exp / need_exp);
+        }
+        //duration = Mathf.Abs(after_exp_per - Current_Exp_Bar.value);
+        duration = 1f;
+        if (after_exp_per > 0f)
+        {
+            while (true)
+            {
+                delta += Time.deltaTime;
+                Current_Exp_Bar.value = Mathf.MoveTowards(Current_Exp_Bar.value, after_exp_per, duration * Time.deltaTime * speed);
+                if (delta >= duration)
+                {
+                    Current_Exp_Bar.value = after_exp_per;
+                    break;
+                }
+                else
+                {
+                    yield return wait;
+                }
+            }
+        }
+        
         UpdateUI();
 
         if (result.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
@@ -145,28 +467,18 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
                 popup.ShowPopup();
             });
         }
+        
+        Level_Up_Coroutine = null;
     }
+    
 
-    public RESPONSE_TYPE OnChangedUseItemCount(int item_id, int count)
+    void ShowNoticePopup(string msg, float duration)
     {
-        if (Unit_Data.User_Data.GetMaxLevel() == Unit_Data.User_Data.GetLevel())
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            return RESPONSE_TYPE.ALREADY_MAX_LEVEL;
-        }
+            popup.ShowPopup(duration, msg);
+        });
 
-        var item = Use_Exp_Items.Find(x => x.Item_ID == item_id);
-        item.Use_Count = count;
-
-        return RESPONSE_TYPE.SUCCESS;
     }
 
-    USE_EXP_ITEM_DATA CreateExpItem(int item_id, int count)
-    {
-        return new USE_EXP_ITEM_DATA()
-        {
-            Item_ID = item_id,
-            Item_Type = ITEM_TYPE_V2.EXP_POTION_C,
-            Use_Count = count,
-        };
-    }
 }

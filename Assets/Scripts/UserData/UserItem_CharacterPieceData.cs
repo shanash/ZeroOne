@@ -15,4 +15,9 @@ public class UserItem_CharacterPieceData : UserItemData
     {
         return Data;
     }
+
+    public override string GetIconPath()
+    {
+        return Data.icon_path;
+    }
 }

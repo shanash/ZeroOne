@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2016.Excel;
 using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
@@ -40,6 +41,11 @@ public class UserItemData : UserDataBase
     /// </summary>
     /// <returns></returns>
     public virtual object GetItemData() {  return null; }
+    /// <summary>
+    /// 아이콘 패스
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetIconPath() { return string.Empty; }
 
     public double GetCount()
     {

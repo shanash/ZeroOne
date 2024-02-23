@@ -499,6 +499,19 @@ public class BattlePcData : BattleUnitData
         return clone;
     }
 
+    /// <summary>
+    /// 객체를 복사한 후, 해당 객체의 레벨을 지정.<br/>
+    /// 변경된 스탯 값을 가져올 수 있다.
+    /// </summary>
+    /// <param name="lv"></param>
+    /// <returns></returns>
+    public BattlePcData GetSimulateLevelUpData(int lv)
+    {
+        var clone = (BattlePcData)this.Clone();
+        clone.User_Data.SetLevel(lv);
+        return clone;
+    }
+
     public override object Clone()
     {
         BattlePcData clone = (BattlePcData)this.MemberwiseClone();
