@@ -48,7 +48,6 @@ public class SCManager : Singleton<SCManager>
 
     public void ChangeScene(SceneName scene_name = SceneName.None/*, string detailPage = ""*/)
     {
-        Debug.Log($"ChangeScene => {Is_Changing} {scene_name}");
         if (Is_Changing)
             return;
         if (scene_name == SceneName.None)
@@ -75,7 +74,6 @@ public class SCManager : Singleton<SCManager>
 
     private async UniTask ChangeSceneAsync(SceneName sceneName/*, string detailPage*/)
     {
-        Debug.Log($"ChangeSceneAsync => [{sceneName}] [{Current_SceneName}]");
         Is_Changing = true;
 
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
@@ -84,21 +82,16 @@ public class SCManager : Singleton<SCManager>
 
         await Resources.UnloadUnusedAssets();
         System.GC.Collect();
-        Debug.Log($"ChangeSceneAsync : [1]");
         // SetCurrent가 호출될때까지 기다립니다
         await UniTask.WaitUntil(() => sceneName == Current_SceneName);
-        Debug.Log($"ChangeSceneAsync : [2]");
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
-        Debug.Log($"ChangeSceneAsync : [3]");
         Is_Changing = false;
     }
 
     public async UniTask LoadSceneImmidiatlyAsync(string sceneName)
     {
-        Debug.Log($"LoadSceneImmidiatlyAsync => [{sceneName}]");
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;
-        Debug.Log($"LoadSceneImmidiatlyAsync => Before While");
         while (!op.isDone)
         {
             await UniTask.Yield();
@@ -111,8 +104,5 @@ public class SCManager : Singleton<SCManager>
                 break;
             }
         }
-        Debug.Log($"LoadSceneImmidiatlyAsync => After While");
-        
-        SceneManager.LoadScene(sceneName);
     }
 }
