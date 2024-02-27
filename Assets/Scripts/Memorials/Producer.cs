@@ -10,13 +10,13 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
     GameObject root = null;
 
-    MEMORIAL_TYPE Type = MEMORIAL_TYPE.NONE;
+    SPINE_CHARA_LOCATION_TYPE Type = SPINE_CHARA_LOCATION_TYPE.NONE;
 
     public bool Is_Init => (Stage != null && Actor != null);
 
     Producer() { }
 
-    bool Initialize(int memorial_id, MEMORIAL_TYPE type, Transform parent)
+    bool Initialize(int memorial_id, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
     {
         Type = type;
         
@@ -26,17 +26,17 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         return true;
     }
 
-    bool Initialize(int memorial_id, MEMORIAL_TYPE type)
+    bool Initialize(int memorial_id, SPINE_CHARA_LOCATION_TYPE type)
     {
         return Initialize(memorial_id, type, null);
     }
 
-    async Task InitializeAsync(L2d_Char_Skin_Data data, MEMORIAL_TYPE type, Transform parent)
+    async Task InitializeAsync(L2d_Char_Skin_Data data, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
     {
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
         Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, LOVE_LEVEL_TYPE.NORMAL, type);
 
-        if (type == MEMORIAL_TYPE.MEMORIAL)
+        if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO || type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
         {
             GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }

@@ -33,14 +33,13 @@ public class EssenceTransferPopup : PopupBase
     {
         base.Spawned();
 
-        Screen.orientation = ScreenOrientation.Portrait;
-
         Chara_Texture = new RenderTexture((int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), GameDefine.SCREEN_UI_BASE_WIDTH, 16);
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.targetTexture = Chara_Texture;
         Chara_Image.texture = Chara_Texture;
         InputCanvas.Instance.RenderImage = Chara_Image;
         InputCanvas.Instance.RenderCamera = over_cam;
+        Screen.orientation = ScreenOrientation.Portrait;
 
         //TODO: 일단 임시로 카메라로 위치를 세팅
         local_origin_pos = over_cam.transform.localPosition;
@@ -50,10 +49,9 @@ public class EssenceTransferPopup : PopupBase
         var brain = Camera.main.gameObject.GetComponent<CinemachineBrain>();
         var vCam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
         fov = vCam.m_Lens.FieldOfView;
-        vCam.transform.localPosition = new Vector3(0, ADDED_Y, -10);
         vCam.m_Lens.FieldOfView = FOV;
 
-        //pd = Factory.Instantiate<Producer>(1010101, MEMORIAL_TYPE.MEMORIAL);
+        //pd = Factory.Instantiate<Producer>(1010101, SPINE_CHARA_LOCATION_TYPE.MEMORIAL);
         //GestureManager.Instance.Enable = true;
     }
 
@@ -64,7 +62,7 @@ public class EssenceTransferPopup : PopupBase
             GestureManager.Instance.Enable = false;
             base.Despawned();
 
-            Screen.orientation = ScreenOrientation.LandscapeRight;
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
             Screen.orientation = ScreenOrientation.AutoRotation;
         }
         catch (Exception ex)
@@ -85,7 +83,6 @@ public class EssenceTransferPopup : PopupBase
         over_cam.fieldOfView = fov;
         var brain = Camera.main.gameObject.GetComponent<CinemachineBrain>();
         var vCam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
-        vCam.transform.localPosition = new Vector3(0, 0, -10);
         vCam.m_Lens.FieldOfView = fov;
     }
 
@@ -97,7 +94,7 @@ public class EssenceTransferPopup : PopupBase
         }
 
         Battle_Pc_Data = data[0] as BattlePcData;
-        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, MEMORIAL_TYPE.MEMORIAL);
+        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
 
         GestureManager.Instance.Enable = true;
 
@@ -136,26 +133,5 @@ public class EssenceTransferPopup : PopupBase
         }
         ToVerticalButton.SetActive(true);
         ToHorizontalButton.SetActive(false);
-    }
-
-    protected override void OnUpdatePopup()
-    {
-        base.OnUpdatePopup();
-
-        switch (Screen.orientation)
-        {
-            case ScreenOrientation.LandscapeLeft:
-                if (Input.deviceOrientation == DeviceOrientation.LandscapeRight)
-                {
-                    Screen.orientation = ScreenOrientation.LandscapeRight;
-                }
-                break;
-            case ScreenOrientation.LandscapeRight:
-                if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft)
-                {
-                    Screen.orientation = ScreenOrientation.LandscapeLeft;
-                }
-                break;
-        }
     }
 }

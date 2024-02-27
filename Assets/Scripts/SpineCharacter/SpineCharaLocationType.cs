@@ -1,0 +1,7 @@
+enum SPINE_CHARA_LOCATION_TYPE
+{
+    NONE = 0,
+    LOBBY,
+    HERO_INFO,
+    TRANSFER_ESSENCE,
+}

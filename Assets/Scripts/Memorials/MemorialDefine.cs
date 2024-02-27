@@ -1,13 +1,6 @@
 
 using System;
 
-public enum MEMORIAL_TYPE
-{
-    NONE = 0,
-    MAIN_LOBBY,         //  메인 로비에서 사용 - 기능이 다름
-    MEMORIAL,           //  메모리얼 페이지에서 사용
-}
-
 public class MemorialDefine
 {
     public static bool TryParseEvent(string eventName, out SPINE_EVENT result)

@@ -111,7 +111,7 @@ public class HeroInfoUI : PopupBase
             pd = null;
         }
 
-        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, MEMORIAL_TYPE.MEMORIAL);
+        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
 
         Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, pd);
     }
