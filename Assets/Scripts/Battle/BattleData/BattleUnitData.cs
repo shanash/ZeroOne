@@ -83,6 +83,11 @@ public abstract class BattleUnitData : BattleDataBase
         }
         return point;
     }
+    /// <summary>
+    /// 표시 아이콘
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetIconPath() { return string.Empty; }
 
     /// <summary>
     /// 유닛의 레벨 설정

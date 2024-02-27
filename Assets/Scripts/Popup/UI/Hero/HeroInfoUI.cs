@@ -62,7 +62,7 @@ public class HeroInfoUI : PopupBase
     RenderTexture Chara_Texture = null;
     Producer pd = null;
 
-    void Reset()
+    void ResetUI()
     {
         User_Hero_Datas = null;
         Current_Hero_Data_Index = -1;
@@ -71,7 +71,7 @@ public class HeroInfoUI : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        Reset();
+        ResetUI();
 
         if (data.Length != 2 || data[0] is not List<UserHeroData> || data[1] is not int)
         {
@@ -129,8 +129,6 @@ public class HeroInfoUI : PopupBase
 
     public override void UpdatePopup()
     {
-        base.UpdatePopup();
-
         var Hero_Base_Data = (Player_Character_Data)User_Hero_Battle_Data.GetUnitData();
         var Unit_Data = (UserHeroData)User_Hero_Battle_Data.GetUserUnitData();
 
@@ -194,6 +192,7 @@ public class HeroInfoUI : PopupBase
 
     public void OnClickLeft()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         int index = Current_Hero_Data_Index - 1;
         if (index < 0)
         {
@@ -206,6 +205,7 @@ public class HeroInfoUI : PopupBase
 
     public void OnClickRight()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         int index = Current_Hero_Data_Index + 1;
         if (index == User_Hero_Datas.Count)
         {

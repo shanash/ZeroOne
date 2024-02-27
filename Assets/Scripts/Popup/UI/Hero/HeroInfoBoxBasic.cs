@@ -90,6 +90,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         Refresh();
     }
 

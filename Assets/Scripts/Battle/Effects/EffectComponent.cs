@@ -77,6 +77,9 @@ public class EffectComponent : MonoBehaviour
     [SerializeField, Tooltip("이펙트 반복 재생 여부")]
     public bool Is_Loop;
 
+    [SerializeField, Tooltip("딜레이 시간 - 스킬 효과를 주기위한 대기 시간")]
+    public float Delay_Time;
+
     [Header("투사체 관련 정의")]
     [SerializeField, Tooltip("투사체 시작 위치\n 시전자의 본체에서 찾는다.")]
     public CASTER_START_POS_TYPE Projectile_Start_Pos_Type = CASTER_START_POS_TYPE.NONE;

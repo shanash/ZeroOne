@@ -205,8 +205,6 @@ public class PartySettingPopup : PopupBase
             hero.UpdateCellItem();
         }
         user_deck_mng.Save();
-
-
     }
 
     void PartySlotCardChoiceCallback(PartySlotNode slot)
@@ -223,7 +221,7 @@ public class PartySettingPopup : PopupBase
 
         //  영웅 리스트 업데이트
         Character_LIst_View.UpdateAllData();
-
+        user_deck_mng.Save();
     }
 
     #region OnClick Funcs

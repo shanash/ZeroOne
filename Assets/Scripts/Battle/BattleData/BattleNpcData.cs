@@ -57,6 +57,11 @@ public class BattleNpcData : BattleUnitData
         return Battle_Data;
     }
 
+    public override string GetIconPath()
+    {
+        return Data.icon_path;
+    }
+
     public override int GetUnitID()
     {
         if (Data != null)

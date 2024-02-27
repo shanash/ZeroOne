@@ -76,6 +76,11 @@ public class BattlePcData : BattleUnitData
         return (float)Data.scale;
     }
 
+    public override string GetIconPath()
+    {
+        return Data.icon_path;
+    }
+
     public override object GetBattleData()
     {
         return Battle_Data;

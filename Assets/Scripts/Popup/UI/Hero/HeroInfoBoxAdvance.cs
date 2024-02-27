@@ -19,6 +19,9 @@ public class HeroInfoBoxAdvance : MonoBehaviour
     [SerializeField, Tooltip("캐릭터 조각 게이지")]
     Slider Piece_Gauge;
 
+    [SerializeField, Tooltip("캐릭터 아이콘")]
+    Image Character_Icon;
+
     [SerializeField, Tooltip("골드 필요 갯수 UI 텍스트")]
     TMP_Text Need_Gold_Text = null;
 
@@ -88,6 +91,12 @@ public class HeroInfoBoxAdvance : MonoBehaviour
         Next_StarGrade_Arrow.SetActive(!is_already_max_level);
         Next_StarGrade.SetActive(!is_already_max_level);
 
+        //  character icon
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Battle_PC_Data.GetIconPath(), (spr) =>
+        {
+            Character_Icon.sprite = spr;
+        });
+
         string piece_color_code = "#67afff";
         string gold_color_code = "#5C606A";
 
@@ -140,11 +149,6 @@ public class HeroInfoBoxAdvance : MonoBehaviour
     public void OnClickAdvanceBtn()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/AdvanceStarGradePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-        //{
-        //    popup.ShowPopup(Battle_PC_Data);
-        //    popup.AddClosedCallbackDelegate(OnConfirmAdvance);
-        //});
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StarGradeLevelUpPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
@@ -155,32 +159,12 @@ public class HeroInfoBoxAdvance : MonoBehaviour
 
     public void OnConfirmAdvance(params object[] data)
     {
-        //Battle_PC_Data.AdvanceStarGrade(OnResponseAdvance);
         Refresh();
     }
 
-    //void OnResponseAdvance(RESPONSE_TYPE code)
-    //{
-    //    if (RESPONSE_TYPE.SUCCESS != code)
-    //    {
-    //        Debug.Assert(false, "성급진화 실패???");
-    //        return;
-    //    }
-
-    //    GameData.Instance.GetUserGoodsDataManager().Save();
-    //    GameData.Instance.GetUserItemDataManager().Save();
-    //    GameData.Instance.GetUserHeroDataManager().Save();
-
-    //    PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-    //    {
-    //        popup.ShowPopup();
-    //    });
-
-    //    Refresh();
-    //}
-
     public void OnSelectedTab(Gpm.Ui.Tab tab)
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         Refresh();
     }
 }

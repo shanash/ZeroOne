@@ -11,8 +11,15 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
     public override void StartParticle(float duration, bool loop)
     {
         var ec = GetEffectComponent();
+        this.Delay = ec.Delay_Time / Effect_Speed_Multiple;
+        this.Use_Delay = this.Delay > 0f;
         base.StartParticle(ec.Effect_Duration, loop);
-        Send_Data.Onetime?.ExecSkill(Send_Data);
+        if (this.Delay == 0f)
+        {
+            this.Use_Delay = false;
+            Send_Data.Onetime?.ExecSkill(Send_Data);
+        }
+        
     }
 
     private void Update()
@@ -20,6 +27,15 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
         if (Is_Action && !Is_Pause)
         {
             Delta += Time.deltaTime;
+
+            if (this.Use_Delay)
+            {
+                if (Delta >= this.Delay)
+                {
+                    this.Use_Delay = false;
+                    Send_Data.Onetime?.ExecSkill(Send_Data);
+                }
+            }
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

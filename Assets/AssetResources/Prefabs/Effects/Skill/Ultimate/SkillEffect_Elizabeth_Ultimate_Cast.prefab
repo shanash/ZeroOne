@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5560931730262665827}
   - component: {fileID: 8227259450955382399}
+  - component: {fileID: 6560105099826165299}
+  - component: {fileID: -3450294530669905082}
+  - component: {fileID: 2406754183424091942}
   m_Layer: 0
   m_Name: SkillEffect_Elizabeth_Ultimate_Cast
   m_TagString: Untagged
@@ -49,6 +52,7 @@ MonoBehaviour:
   Effect_Type: 1
   Effect_Duration: 4
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -62,6 +66,44 @@ MonoBehaviour:
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
+--- !u!114 &6560105099826165299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913540429589665150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 51
+--- !u!210 &-3450294530669905082
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913540429589665150}
+  m_Enabled: 1
+  m_SortingLayerID: -1384048999
+  m_SortingLayer: 6
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &2406754183424091942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913540429589665150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9afc975f1e0f3143bb35a13d6935615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 750985861030478340}
 --- !u!1 &1274972001105271034
 GameObject:
   m_ObjectHideFlags: 0

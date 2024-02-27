@@ -206,6 +206,12 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override void UnitStateWaveRunBegin()
     {
+        //  강제로 전투가 종료되고 다음 스테이지로 이동할 경우, 애니메이션이 완료되지 않아
+        //  스킬 다음 패턴 이동이 안되는 경우가 있는것 같음.
+        if (GetPreviousState() == UNIT_STATES.ATTACK_1)
+        {
+            GetSkillManager().SetNextSkillPattern();
+        }
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
     }
     public override void UnitStateWaveRun()

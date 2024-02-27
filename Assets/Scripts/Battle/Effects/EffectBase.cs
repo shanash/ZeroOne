@@ -27,6 +27,8 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
 
     protected float Delta;
     protected float Duration;
+    protected float Delay;
+    protected bool Use_Delay;
     /// <summary>
     /// 전투 배속에 따른 속도 배율
     /// </summary>

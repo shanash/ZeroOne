@@ -396,7 +396,7 @@ public class BattleSkillManager : BattleDataBase
             if (Remove_Reserved_Battle_Duration_Data_List.Count > 0)
             {
                 int reserved_cnt = Remove_Reserved_Battle_Duration_Data_List.Count;
-                for (int i = 0; i < cnt; i++)
+                for (int i = 0; i < reserved_cnt; i++)
                 {
                     var duration = Remove_Reserved_Battle_Duration_Data_List[i];
                     Used_Battle_Duration_Data_List.Remove(duration);
