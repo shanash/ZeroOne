@@ -8,6 +8,8 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     Background Background = null;
     ActorBase Actor = null;
 
+    GameObject root = null;
+
     MEMORIAL_TYPE Type = MEMORIAL_TYPE.NONE;
 
     public bool Is_Init => (Stage != null && Actor != null);
@@ -44,6 +46,13 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         {
             GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }
+
+        root = Stage.gameObject;
+    }
+
+    public void SetActive(bool value)
+    {
+        root.SetActive(value);
     }
 
     public void Pause()

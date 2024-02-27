@@ -39,8 +39,8 @@ public class LobbyManager : SceneControllerBase
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
         var pmng = PopupManager.Instance;
-        pmng.SetRootOnEnter(() => pd.Resume());
-        pmng.SetRootOnExit(() => pd.Pause());
+        pmng.SetRootOnEnter(() => OnRootEnter());
+        pmng.SetRootOnExit(() => OnRootExit());
 
         L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
 
@@ -124,6 +124,8 @@ public class LobbyManager : SceneControllerBase
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
                 {
                     popup.ShowPopup();
+                    popup.AddClosedCallbackDelegate(OnReturn);
+                    pd.SetActive(false);
                 });
                 break;
             case "LeftMemorialBtn":
@@ -268,6 +270,25 @@ public class LobbyManager : SceneControllerBase
         {
             before_pd.Release();
         }
+    }
+
+    public void OnReturn(params object[] param)
+    {
+        pd.SetActive(true);
+    }
+
+    void OnRootEnter()
+    {
+        Debug.Log("OnRootEnter");
+        pd.SetActive(true);
+        pd.Resume();
+    }
+
+    void OnRootExit()
+    {
+        Debug.Log("OnRootExit");
+        pd.Pause();
+        pd.SetActive(false);
     }
 
     #region UI Animation Events

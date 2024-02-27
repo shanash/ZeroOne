@@ -82,11 +82,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             if (Idle_Animation_Datas.Count == 0
                 || !Idle_Animation_Datas.ContainsKey(Current_State_Id))
             {
-                Debug.Assert(false, $"기본 아이들 애니메이션이 설정되지 않았습니다. State_Animation_Datas.Count: {Idle_Animation_Datas.Count}, State_Animation_Datas.ContainsKey(Current_State_Id): {Idle_Animation_Datas.ContainsKey(Current_State_Id)}");
+                Debug.Assert(false, $"기본 아이들 애니메이션이 설정되지 않았습니다. State_Animation_Datas.Count: {Idle_Animation_Datas.Count}, State_Animation_Datas.ContainsKey(Current_State_Id): {Idle_Animation_Datas.ContainsKey(Current_State_Id)} : {Current_State_Id}");
                 return null;
             }
-
-            return Idle_Animation_Datas[Current_State_Id];
+            IdleAnimationData result = null;
+            try
+            {
+                result = Idle_Animation_Datas[Current_State_Id];
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+            return result;
         }
     }
 
@@ -686,6 +694,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     void InitField()
     {
+        Debug.Log("InitField");
         Idle_Animation_Datas = null;
         Current_Love_Level_Type = LOVE_LEVEL_TYPE.NONE;
         Idle_Played_Count = 0;
