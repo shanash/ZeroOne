@@ -1,7 +1,8 @@
 enum SPINE_CHARA_LOCATION_TYPE
 {
     NONE = 0,
-    LOBBY,
-    HERO_INFO,
-    TRANSFER_ESSENCE,
+    LOBBY,              // 메인로비
+    HERO_INFO,          // 정보창
+    TRANSFER_ESSENCE,   // 근원 전달
+    MERRY,              // 서약
 }
