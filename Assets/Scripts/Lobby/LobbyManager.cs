@@ -38,10 +38,6 @@ public class LobbyManager : SceneControllerBase
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
-        var pmng = PopupManager.Instance;
-        pmng.SetRootOnEnter(() => OnRootEnter());
-        pmng.SetRootOnExit(() => OnRootExit());
-
         L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
 
         if (L2d_List.Count == 0)
@@ -76,8 +72,11 @@ public class LobbyManager : SceneControllerBase
                 popup.ShowPopup();
             });
         }
-
         SCManager.Instance.SetCurrent(this);
+
+        var pmng = PopupManager.Instance;
+        pmng.SetRootOnEnter(OnRootEnter);
+        pmng.SetRootOnExit(OnRootExit);
     }
 
     void InitCameraForL2dChar(CinemachineVirtualCamera camera)
@@ -124,8 +123,6 @@ public class LobbyManager : SceneControllerBase
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
                 {
                     popup.ShowPopup();
-                    popup.AddClosedCallbackDelegate(OnReturn);
-                    pd.SetActive(false);
                 });
                 break;
             case "LeftMemorialBtn":
