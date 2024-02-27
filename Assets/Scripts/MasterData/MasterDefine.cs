@@ -113,140 +113,20 @@ public enum TARGET_RULE_TYPE
 	NEAREST_ADD_ARROUND_RANGE = 10,
 	/// <summary>11 가장 거리가 먼 적 우선 선택 (순번 컬럼을 연동하여 뒤에서부터의 순서대로) 후 일정 영역내의 (주변) 타겟 추가 선택</summary>
 	FURTHEST_ADD_ARROUND_RANGE = 11,
-	/// <summary>3001 남은 체력이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_VALUE = 3001,
-	/// <summary>3003 공격력이 가장 낮은 타겟 선택</summary>
-	LOWEST_ATTACK = 3003,
-	/// <summary>3004 방어력이 가장 낮은 타겟 선택</summary>
-	LOWEST_DEFENSE = 3004,
-	/// <summary>2003 공격력이 가장 높은 타겟 선택</summary>
-	HIGHEST_ATTACK = 2003,
-	/// <summary>2004 방어력이 가장 높은 타겟 선택</summary>
-	HIGHEST_DEFENSE = 2004,
-	/// <summary>9999 가장 가까운 상대 타겟 선택(화면상에서 적에게 접근하기 위한 용도)</summary>
+	/// <summary>21 나를 포함한 내 주변 지정 거리 이내 아군 선택</summary>
+	ARROUND_RANGE_WITH_ME = 21,
+	/// <summary>22 나를 포함한 내 뒤 지정 거리 이내 아군 선택</summary>
+	BACK_RANGE_WITH_ME = 22,
+	/// <summary>23 나를 포함한 내 앞 지정 거리 이내 아군 선택</summary>
+	FRONT_RANGE_WITH_ME = 23,
+	/// <summary>24 나를 제외한 내 주변 지정 거리 이내 아군 선택</summary>
+	ARROUND_RANGE_WITHOUT_ME = 24,
+	/// <summary>25 나를 제외한 내 뒤 지정 거리 이내 아군 선택</summary>
+	BACK_RANGE_WITHOUT_ME = 25,
+	/// <summary>26 나를 제외한 내 앞 지정 거리 이내 아군 선택</summary>
+	FRONT_RANGE_WITHOUT_ME = 26,
+	/// <summary>9999 접근 거리 타겟</summary>
 	APPROACH = 9999,
-	/// <summary>1001 리더 선택 (리더 없음)</summary>
-	LEADER_HIGH_PRIORITY = 1001,
-	/// <summary>2001 남은 체력이 가장 많은 타겟 선택</summary>
-	HIGHEST_LIFE_VALUE = 2001,
-	/// <summary>2002 남은 체력 비율이 가장 높은 타겟 선택</summary>
-	HIGHEST_LIFE_RATE = 2002,
-	/// <summary>2006 명중률이 가장 높은 타겟 선택 (명중률 속성이 있다면)</summary>
-	HIGHEST_ACCURACY = 2006,
-	/// <summary>2007 회피율이 가장 높은 타겟 선택 (회피율 속성이 있다면)</summary>
-	HIGHEST_EVASION = 2007,
-	/// <summary>2008 남은 체력이 가장 높은 인간 종족 선택</summary>
-	HIGHEST_LIFE_VALUE_HUMAN = 2008,
-	/// <summary>2009 남은 체력이 가장 높은 엘프 종족 선택</summary>
-	HIGHEST_LIFE_VALUE_ELF = 2009,
-	/// <summary>2010 남은 체력이 가장 높은 수인 종족 선택</summary>
-	HIGHEST_LIFE_VALUE_WEREBEAST = 2010,
-	/// <summary>2011 남은 체력이 가장 높은 안드로이드 선택</summary>
-	HIGHEST_LIFE_VALUE_ANDROID = 2011,
-	/// <summary>2012 남은 체력이 가장 높은 악마 선택</summary>
-	HIGHEST_LIFE_VALUE_DEVIL = 2012,
-	/// <summary>2013 남은 체력이 가장 높은 천사 선택</summary>
-	HIGHEST_LIFE_VALUE_ANGEL = 2013,
-	/// <summary>2014 자신을 제외한 체력이 가장 높은 타겟 선택</summary>
-	HIGHEST_LIFE_VALUE_WITHOUT_ME = 2014,
-	/// <summary>2015 자신을 제외한 체력 비율이 가장 높은 타겟 선택</summary>
-	HIGHEST_LIFE_RATE_WITHOUT_ME = 2015,
-	/// <summary>2016 자신을 제외한 공격력이 가장 높은 타겟 선택</summary>
-	HIGHEST_ATTACK_WITHOUT_ME = 2016,
-	/// <summary>2017 자신을 제외한 방어력이 가장 높은 타겟 선택</summary>
-	HIGHEST_DEFENSE_WITHOUT_ME = 2017,
-	/// <summary>2018 자신을 제외한 공속이 가장 높은 타겟 선택</summary>
-	HIGHEST_RAPIDITY_WITHOUT_ME = 2018,
-	/// <summary>2019 자신을 제외한 명중률이 가장 높은 타겟 선택 (명중률 속성이 있다면)</summary>
-	HIGHEST_ACCURACY_WITHOUT_ME = 2019,
-	/// <summary>2020 자신을 제외한 회피율이 가장 높은 타겟 선택 (회피율 속성이 있다면)</summary>
-	HIGHEST_EVASION_WITHOUT_ME = 2020,
-	/// <summary>3002 남은 체력 비율이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_RATE = 3002,
-	/// <summary>3005 속도게이지가 가장 낮은 타겟 선택</summary>
-	LOWEST_ACCUM_RAPIDITY_POINT = 3005,
-	/// <summary>3006 명중률이 가장 낮은 타겟 선택</summary>
-	LOWEST_ACCURACY = 3006,
-	/// <summary>3007 회피율이 가장 낮은 타겟 선택</summary>
-	LOWEST_EVASION = 3007,
-	/// <summary>3008 남은 체력이 가장 낮은 인간 종족 선택</summary>
-	LOWEST_LIFE_VALUE_HUMAN = 3008,
-	/// <summary>3009 남은 체력이 가장 낮은 엘프 종족 선택</summary>
-	LOWEST_LIFE_VALUE_ELF = 3009,
-	/// <summary>3010 남은 체력이 가장 낮은 수인 종족 선택</summary>
-	LOWEST_LIFE_VALUE_WEREBEAST = 3010,
-	/// <summary>3011 남은 체력이 가장 낮은 안드로이드 선택</summary>
-	LOWEST_LIFE_VALUE_ANDROID = 3011,
-	/// <summary>3012 남은 체력이 가장 낮은 악마 종족 선택</summary>
-	LOWEST_LIFE_VALUE_DEVIL = 3012,
-	/// <summary>3013 남은 체력이 가장 낮은 천사 종족 선택</summary>
-	LOWEST_LIFE_VALUE_ANGEL = 3013,
-	/// <summary>3014 자신을 제외한 남은 체력이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_VALUE_WITHOUT_ME = 3014,
-	/// <summary>3015 자신을 제외한 남은 체력 비율이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_RATE_WITHOUT_ME = 3015,
-	/// <summary>3016 자신을 제외한 공격력이 가장 낮은 타겟 선택</summary>
-	LOWEST_ATTACK_WITHOUT_ME = 3016,
-	/// <summary>3017 자신을 제외한 방어력이 가장 낮은 타겟 선택</summary>
-	LOWEST_DEFENSE_WITHOUT_ME = 3017,
-	/// <summary>3018 자신을 제외한 공속이 가장 낮은 타겟 선택</summary>
-	LOWEST_RAPIDITY_WITHOUT_ME = 3018,
-	/// <summary>3019 자신을 제외한 명중률이 가장 낮은 타겟 선택</summary>
-	LOWEST_ACCURACY_WITHOUT_ME = 3019,
-	/// <summary>3020 자신을 제외한 회피율이 가장 낮은 타겟 선택</summary>
-	LOWEST_EVASION_WITHOUT_ME = 3020,
-	/// <summary>3021 자신을 포함한 남은 체력이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_VALUE_WITH_ME = 3021,
-	/// <summary>3022 자신을 포함한 남은 체력 비율이 가장 낮은 타겟 선택</summary>
-	LOWEST_LIFE_RATE_WITH_ME = 3022,
-	/// <summary>3023 자신을 포함한 공격력이 가장 낮은 타겟 선택</summary>
-	LOWEST_ATTACK_WITH_ME = 3023,
-	/// <summary>3024 자신을 포함한 방어력이 가장 낮은 타겟 선택</summary>
-	LOWEST_DEFENSE_WITH_ME = 3024,
-	/// <summary>3025 자신을 포함한 공속이 가장 낮은 타겟 선택</summary>
-	LOWEST_RAPIDITY_WITH_ME = 3025,
-	/// <summary>3026 자신을 포함한 명중률이 가장 낮은 타겟 선택</summary>
-	LOWEST_ACCURACY_WITH_ME = 3026,
-	/// <summary>3027 자신을 포함한 회피율이 가장 낮은 타겟 선택</summary>
-	LOWEST_EVASION_WITH_ME = 3027,
-	/// <summary>4001 자신보다 약한 속성 타겟 선택 (상성 시스템이 있을 경우)</summary>
-	WEAK_ELEMENT = 4001,
-	/// <summary>4002 자신보다 강한 속성 타겟 선택 (상성 시스템이 있을 경우)</summary>
-	STRONG_ELEMENT = 4002,
-	/// <summary>5001 버프 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION = 5001,
-	/// <summary>5002 버프 효과 중 공격력 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_ATTACK_INC = 5002,
-	/// <summary>5003 버프 효과 중 방어력 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_DEFENSE_INC = 5003,
-	/// <summary>5004 버프 효과 중 공속 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_RAPIDITY_INC = 5004,
-	/// <summary>5005 버프 효과 중 회피율 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_EVASION_INC = 5005,
-	/// <summary>5006 버프 효과 중 치명타 확률 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_CRITICAL_RATE_INC = 5006,
-	/// <summary>5007 버프 효과 중 치명타 피해량 증가 효과가 있는 타겟 선택</summary>
-	GAIN_BUFF_DURATION_CRITICAL_DAMAGE_INC = 5007,
-	/// <summary>6001 디버프 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION = 6001,
-	/// <summary>6002 디버프 효과 중 공격력 감소 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_ATTACK_DEC = 6002,
-	/// <summary>6003 디버프 효과 중 방어력 감소 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_DEFENSE_DEC = 6003,
-	/// <summary>6004 디버프 효과 중 화상 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_BURN = 6004,
-	/// <summary>6005 디버프 효과 중 출혈 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_BLEEDING = 6005,
-	/// <summary>6006 디버프 효과 중 중독 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_POISON = 6006,
-	/// <summary>6007 디버프 효과 중 공속 감소 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_RAPIDITY_DEC = 6007,
-	/// <summary>6008 디버프 효과 중 수면 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_SLEEP = 6008,
-	/// <summary>6009 디버프 효과 중 치명상 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_FATAL_WOUNDS = 6009,
-	/// <summary>6010 디버프 효과 중 명중률 감소 효과가 있는 타겟 선택</summary>
-	GAIN_DEBUFF_DURATION_ACCURACY_DEC = 6010,
 	/// <summary>10001 현재 체력이 가장 낮은 대상</summary>
 	LOW_HP_VALUE = 10001,
 	/// <summary>10002 현재 체력이 가장 높은 대상</summary>

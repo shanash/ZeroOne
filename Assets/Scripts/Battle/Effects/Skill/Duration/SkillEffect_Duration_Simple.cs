@@ -13,7 +13,10 @@ public class SkillEffect_Duration_Simple : SkillEffect_Duration_Base
             ec.SetFollowingTarget(target);
         }
         //  add duration skill data
-        Send_Data.Duration?.SetSkillEffect(this);
+        if (loop)
+        {
+            Send_Data.Duration?.SetSkillEffect(this);
+        }
         Send_Data.Duration?.ExecSkill(Send_Data);
 
     }

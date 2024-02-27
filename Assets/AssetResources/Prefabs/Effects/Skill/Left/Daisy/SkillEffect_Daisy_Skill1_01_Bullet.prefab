@@ -24778,6 +24778,7 @@ GameObject:
   - component: {fileID: 8213294517858716386}
   - component: {fileID: 7919712017514123}
   - component: {fileID: 1119562672353657240}
+  - component: {fileID: 5824527524091882735}
   m_Layer: 0
   m_Name: SkillEffect_Daisy_Skill1_01_Bullet
   m_TagString: Untagged
@@ -24825,7 +24826,7 @@ MonoBehaviour:
   End_Curve_Dist: 0
   Parabola: {fileID: 0}
   Parabola_Height: 0
-  Mover: {fileID: 0}
+  Mover: {fileID: 5824527524091882735}
   Projectile_Velocity: 200
   Use_Hide_Transforms: 1
   Hide_Transforms:
@@ -24870,6 +24871,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 2415425359006395818}
+--- !u!114 &5824527524091882735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8102002192930422809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4befcb966d0172458fd1e4947588dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8973144634849482813
 GameObject:
   m_ObjectHideFlags: 0
