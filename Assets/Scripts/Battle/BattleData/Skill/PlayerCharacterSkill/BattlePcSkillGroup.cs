@@ -64,6 +64,10 @@ public class BattlePcSkillGroup : BattleSkillGroup
         }
         return remain_cooltime;
     }
+    public override string GetSkillActionName()
+    {
+        return Skill_Group.action_name;
+    }
     public override string GetSkillName()
     {
         if (Skill_Group != null)

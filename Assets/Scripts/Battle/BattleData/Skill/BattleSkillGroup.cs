@@ -78,6 +78,12 @@ public abstract class BattleSkillGroup : BattleDataBase
     public virtual double GetRemainCooltime() { return 0; }
 
     /// <summary>
+    /// 스킬 동작 애니메이션 이름 반환
+    /// </summary>
+    /// <returns></returns>
+    public abstract string GetSkillActionName();
+
+    /// <summary>
     /// 스킬 이름 반환
     /// </summary>
     /// <returns></returns>

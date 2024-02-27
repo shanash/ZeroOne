@@ -10,8 +10,8 @@ using ZeroOne.Input;
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
 {
     // 보정 X, Y값
-    const float ADDED_POS_X = -2.2f;
-    const float ADDED_POS_Y = -1.3f;
+    const float ADDED_POS_X = 0f;
+    const float ADDED_POS_Y = -0.75496f;
 
     protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
@@ -628,13 +628,22 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         float scale = this.transform.lossyScale.y;
         float[] vertex = null;
         this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
+        float added_pos_x = ADDED_POS_X;
+        float added_pos_y = ADDED_POS_Y;
         if (type == MEMORIAL_TYPE.MAIN_LOBBY)
         {
-            this.transform.position = new Vector3(ADDED_POS_X, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
+            // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다 -_- 나중에 쓸데 없으면 바로 제거해주자
+            var tr = this.transform.Find("Sprite");
+            if (tr != null)
+            {
+                added_pos_x = -2.2f;
+                added_pos_y = -1.3f;
+            }
+            this.transform.position = new Vector3(added_pos_x, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
         }
         else
         {
-            this.transform.position = new Vector3(0, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + ADDED_POS_Y, this.transform.position.z);
+            this.transform.position = new Vector3(0, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
         }
 
         InitField();

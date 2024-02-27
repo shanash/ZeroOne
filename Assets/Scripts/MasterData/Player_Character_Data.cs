@@ -1,4 +1,4 @@
-#if UNITY_5_3_OR_NEWER
+﻿#if UNITY_5_3_OR_NEWER
 using FluffyDuck.Util;
 #endif
 using System.Linq;
@@ -100,8 +100,8 @@ public class Player_Character_Data : System.IDisposable
 	///	<summary>
 	///	로비 서약 스탠딩
 	///	</summary>
-	public int lobby_essence_id => _lobby_essence_id;
-	int _lobby_essence_id;
+	public int lobby_merry_id => _lobby_merry_id;
+	int _lobby_merry_id;
 
 	///	<summary>
 	///	캐릭터 아이콘
