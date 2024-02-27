@@ -67,17 +67,6 @@ public class HeroInfoUI : PopupBase
         User_Hero_Datas = null;
         Current_Hero_Data_Index = -1;
         User_Hero_Battle_Data = null;
-
-        Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, (int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), 16);
-        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
-        over_cam.fieldOfView = Camera.main.fieldOfView;
-        over_cam.targetTexture = Chara_Texture;
-
-        //TODO: 일단 임시로 카메라로 위치를 세팅
-        over_cam.transform.localPosition = new Vector3(4, 0, 0);
-
-        Hero_Stand.enabled = true;
-        Hero_Stand.texture = Chara_Texture;
     }
 
     protected override bool Initialize(object[] data)
@@ -113,7 +102,22 @@ public class HeroInfoUI : PopupBase
 
         pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
 
-        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, pd);
+        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, this);
+    }
+
+    void SetRenderTextureAndCamera()
+    {
+        Debug.Log("SetRenderTAC");
+        Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, (int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), 16);
+        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
+        over_cam.fieldOfView = Camera.main.fieldOfView;
+        over_cam.targetTexture = Chara_Texture;
+
+        //TODO: 일단 임시로 카메라로 위치를 세팅
+        over_cam.transform.localPosition = new Vector3(4, 0, 0);
+
+        Hero_Stand.enabled = true;
+        Hero_Stand.texture = Chara_Texture;
     }
 
     protected override void FixedUpdatePopup()
@@ -154,7 +158,14 @@ public class HeroInfoUI : PopupBase
         Role_Icon.sprite = Role_Icon_Sprites[index];
         Role_Text.text = ConstString.Hero.ROLE[(int)Hero_Base_Data.role_type];
 
+        SetRenderTextureAndCamera();
+
         Hero_Info_Box.Refresh();
+    }
+
+    public void SetActivePd(bool value)
+    {
+        pd.SetActive(value);
     }
 
     public void OnClickProfileButton()

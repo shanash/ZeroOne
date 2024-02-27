@@ -630,7 +630,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
         float added_pos_x = ADDED_POS_X;
         float added_pos_y = ADDED_POS_Y;
-        if (type == SPINE_CHARA_LOCATION_TYPE.LOBBY)
+        if (type == SPINE_CHARA_LOCATION_TYPE.LOBBY || type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO)
         {
             // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다 -_- 나중에 쓸데 없으면 바로 제거해주자
             var tr = this.transform.Find("Sprite");
@@ -640,10 +640,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 added_pos_y = -1.3f;
             }
             this.transform.position = new Vector3(added_pos_x, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
-        }
-        else if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO)
-        {
-            this.transform.position = new Vector3(0, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
         }
         else if (type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
         {

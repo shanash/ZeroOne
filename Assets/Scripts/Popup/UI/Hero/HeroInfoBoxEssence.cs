@@ -103,12 +103,13 @@ public class HeroInfoBoxEssence : MonoBehaviour
     List<RelationshipToggleItemData> Toggle_Datas;
     int Selected_Relationship_Index = 0;
     BattlePcData Unit_Data = null;
-    Producer pd = null;
 
-    public void SetHeroData(BattlePcData data, Producer pd)
+    HeroInfoUI Info_UI = null;
+
+    public void SetHeroData(BattlePcData data, HeroInfoUI info_ui)
     {
         Unit_Data = data;
-        this.pd = pd;
+        Info_UI = info_ui;
         FixedUpdatePopup();
     }
 
@@ -278,7 +279,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferEssenceButton()
     {
-        pd.SetActive(false);
+        Info_UI.SetActivePd(false);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceTransferPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup(Unit_Data);
@@ -288,7 +289,8 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     void OnClosedTransferEssence(params object[] param)
     {
-        pd.SetActive(true);
+        Info_UI.SetActivePd(true);
+        Info_UI.UpdatePopup();
     }
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)

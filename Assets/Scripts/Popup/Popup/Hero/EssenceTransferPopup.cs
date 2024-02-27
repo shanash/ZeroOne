@@ -105,6 +105,8 @@ public class EssenceTransferPopup : PopupBase
     public void OnClickBackButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Closed_Delegate?.Invoke();
+
         PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.DIALOG_TYPE);
     }
 
