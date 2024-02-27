@@ -1,4 +1,4 @@
-﻿#nullable disable
+#nullable disable
 
 
 [System.Serializable]
@@ -19,7 +19,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 	public string sd_prefab_path {get; set;}
 	public int lobby_basic_id {get; set;}
 	public int essence_id {get; set;}
-	public int lobby_essence_id {get; set;}
+	public int lobby_merry_id {get; set;}
 	public string icon_path {get; set;}
 	public string Illustration_path {get; set;}
 	public string script {get; set;}
@@ -44,7 +44,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 		sd_prefab_path = string.Empty;
 		lobby_basic_id = 0;
 		essence_id = 0;
-		lobby_essence_id = 0;
+		lobby_merry_id = 0;
 		icon_path = string.Empty;
 		Illustration_path = string.Empty;
 		script = string.Empty;

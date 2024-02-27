@@ -278,10 +278,17 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferEssenceButton()
     {
+        pd.SetActive(false);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceTransferPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(pd);
+            popup.ShowPopup(Unit_Data);
+            popup.AddClosedCallbackDelegate(OnClosedTransferEssence);
         });
+    }
+
+    void OnClosedTransferEssence(params object[] param)
+    {
+        pd.SetActive(true);
     }
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)

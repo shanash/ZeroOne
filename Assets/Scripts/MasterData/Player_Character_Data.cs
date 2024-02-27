@@ -1,4 +1,4 @@
-﻿#if UNITY_5_3_OR_NEWER
+#if UNITY_5_3_OR_NEWER
 using FluffyDuck.Util;
 #endif
 using System.Linq;
@@ -153,7 +153,7 @@ public class Player_Character_Data : System.IDisposable
 		_sd_prefab_path = raw_data.sd_prefab_path;
 		_lobby_basic_id = raw_data.lobby_basic_id;
 		_essence_id = raw_data.essence_id;
-		_lobby_essence_id = raw_data.lobby_essence_id;
+		_lobby_merry_id = raw_data.lobby_merry_id;
 		_icon_path = raw_data.icon_path;
 		_Illustration_path = raw_data.Illustration_path;
 		_script = raw_data.script;
@@ -205,7 +205,7 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[sd_prefab_path] = <color=yellow>{0}</color>", sd_prefab_path).AppendLine();
 		sb.AppendFormat("[lobby_basic_id] = <color=yellow>{0}</color>", lobby_basic_id).AppendLine();
 		sb.AppendFormat("[essence_id] = <color=yellow>{0}</color>", essence_id).AppendLine();
-		sb.AppendFormat("[lobby_essence_id] = <color=yellow>{0}</color>", lobby_essence_id).AppendLine();
+		sb.AppendFormat("[lobby_merry_id] = <color=yellow>{0}</color>", lobby_merry_id).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();

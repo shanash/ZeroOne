@@ -20,11 +20,14 @@ public class EssenceTransferPopup : PopupBase
     [SerializeField]
     RawImage Chara_Image = null;
 
+    BattlePcData Battle_Pc_Data = null;
     RenderTexture Chara_Texture = null;
     Producer pd = null;
 
     Vector3 local_origin_pos = Vector3.zero;
     float fov = 0.0f;
+
+
 
     public override void Spawned()
     {
@@ -69,6 +72,12 @@ public class EssenceTransferPopup : PopupBase
             Debug.LogException(ex);
         }
 
+        if (pd != null)
+        {
+            pd.Release();
+            pd = null;
+        }
+
         //TODO: 일단 임시로 카메라로 위치를 세팅
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.transform.localPosition = local_origin_pos;
@@ -82,14 +91,15 @@ public class EssenceTransferPopup : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 1 || data[0] is not Producer)
+        if (data.Length != 1 || data[0] is not BattlePcData)
         {
             return false;
         }
 
-        pd = data[0] as Producer;
-        GestureManager.Instance.Enable = true;
+        Battle_Pc_Data = data[0] as BattlePcData;
+        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, MEMORIAL_TYPE.MEMORIAL);
 
+        GestureManager.Instance.Enable = true;
 
         OnClickToVerticalButton();
         return true;
