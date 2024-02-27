@@ -276,14 +276,12 @@ public class LobbyManager : SceneControllerBase
 
     void OnRootEnter()
     {
-        Debug.Log("OnRootEnter");
         pd.SetActive(true);
         pd.Resume();
     }
 
     void OnRootExit()
     {
-        Debug.Log("OnRootExit");
         pd.Pause();
         pd.SetActive(false);
     }
