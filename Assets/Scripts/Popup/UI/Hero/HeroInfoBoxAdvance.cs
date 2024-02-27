@@ -2,8 +2,8 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeroInfoBoxAdvance : MonoBehaviour
 {
@@ -15,6 +15,9 @@ public class HeroInfoBoxAdvance : MonoBehaviour
 
     [SerializeField, Tooltip("캐릭터 조각 소유/필요 갯수 UI 텍스트")]
     TMP_Text Need_Piece_Text = null;
+
+    [SerializeField, Tooltip("캐릭터 조각 게이지")]
+    Slider Piece_Gauge;
 
     [SerializeField, Tooltip("골드 필요 갯수 UI 텍스트")]
     TMP_Text Need_Gold_Text = null;
@@ -117,6 +120,9 @@ public class HeroInfoBoxAdvance : MonoBehaviour
         Need_Piece_Text.text = $"{cur_piece_count.WithColorTag(piece_color_code)}/{need_piece_count}";
         Need_Gold_Text.text = Battle_PC_Data.User_Data.GetNeedGold().ToString("N0").WithColorTag(gold_color_code);
 
+        float per = (float)piece_data.GetCount() / (float)Battle_PC_Data.User_Data.GetNeedPiece();
+        Piece_Gauge.value = Mathf.Clamp01(per);
+
         for (int i = 0; i < Current_Star_Img.Length; i++)
         {
             Current_Star_Img[i].SetActive(i < cur_grade);
@@ -134,37 +140,44 @@ public class HeroInfoBoxAdvance : MonoBehaviour
     public void OnClickAdvanceBtn()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/AdvanceStarGradePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/AdvanceStarGradePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        //{
+        //    popup.ShowPopup(Battle_PC_Data);
+        //    popup.AddClosedCallbackDelegate(OnConfirmAdvance);
+        //});
+
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StarGradeLevelUpPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(Battle_PC_Data);
             popup.AddClosedCallbackDelegate(OnConfirmAdvance);
+            popup.ShowPopup(Battle_PC_Data);
         });
     }
 
     public void OnConfirmAdvance(params object[] data)
     {
-        Battle_PC_Data.AdvanceStarGrade(OnResponseAdvance);
-    }
-
-    void OnResponseAdvance(RESPONSE_TYPE code)
-    {
-        if (RESPONSE_TYPE.SUCCESS != code)
-        {
-            Debug.Assert(false, "성급진화 실패???");
-            return;
-        }
-
-        GameData.Instance.GetUserGoodsDataManager().Save();
-        GameData.Instance.GetUserItemDataManager().Save();
-        GameData.Instance.GetUserHeroDataManager().Save();
-
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-        {
-            popup.ShowPopup();
-        });
-
+        //Battle_PC_Data.AdvanceStarGrade(OnResponseAdvance);
         Refresh();
     }
+
+    //void OnResponseAdvance(RESPONSE_TYPE code)
+    //{
+    //    if (RESPONSE_TYPE.SUCCESS != code)
+    //    {
+    //        Debug.Assert(false, "성급진화 실패???");
+    //        return;
+    //    }
+
+    //    GameData.Instance.GetUserGoodsDataManager().Save();
+    //    GameData.Instance.GetUserItemDataManager().Save();
+    //    GameData.Instance.GetUserHeroDataManager().Save();
+
+    //    PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+    //    {
+    //        popup.ShowPopup();
+    //    });
+
+    //    Refresh();
+    //}
 
     public void OnSelectedTab(Gpm.Ui.Tab tab)
     {

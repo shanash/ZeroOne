@@ -143,6 +143,17 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
     public void OnClickAutoSelect()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        var result = Unit_Data.User_Data.GetAutoSimulateExp();
+        for (int i = 0; i < result.Auto_Item_Data_List.Count; i++)
+        {
+            var data = result.Auto_Item_Data_List[i];
+            var slot = Usable_Items.Find(x => x.GetItemType() == data.Item_Type && x.GetItemID() == data.Item_ID);
+            if (slot != null)
+            {
+                slot.SetUsableCount(data.Use_Count);
+            }
+        }
+        UpdateAutoSimulateResult(result);
     }
     public void OnClickLevelUp()
     {
@@ -296,7 +307,58 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         }
         
         result_cb?.Invoke(true);
-        
+    }
+
+    void UpdateAutoSimulateResult(EXP_SIMULATE_RESULT_DATA simulate)
+    {
+        if (simulate.Code == RESPONSE_TYPE.SUCCESS || simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
+        {
+            //  current exp bar(시뮬레이션 결과가 현재 레벨보다 클 경우 현재 경험치 바는 숨겨준다)
+            Current_Exp_Bar.gameObject.SetActive(Unit_Data.User_Data.GetLevel() == simulate.Result_Lv);
+            //  레벨 상승이 있으면, 상승 결과 레벨을 보여준다.
+            Result_Level_Box.gameObject.SetActive(Unit_Data.User_Data.GetLevel() != simulate.Result_Lv);
+            //  exp bar
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(simulate.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+            //  exp count
+            Exp_Count.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
+
+            //  need gold (골드가 부족하면 빨간색)
+            if (GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, simulate.Need_Gold))
+            {
+                Need_Gold_Text.text = simulate.Need_Gold.ToString("N0");
+            }
+            else
+            {
+                Need_Gold_Text.text = ZString.Format("<color=#ff0000>{0:N0}</color>", simulate.Need_Gold);
+            }
+
+            //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
+            if (simulate.Over_Exp > 0)
+            {
+                string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                ShowNoticePopup(msg, 1.5f);
+            }
+
+            if (Simulate_Coroutine != null)
+            {
+                StopCoroutine(Simulate_Coroutine);
+            }
+            Simulate_Coroutine = null;
+            Simulate_Result = simulate;
+            //  next level
+            Result_Level_Text.text = Simulate_Result.Value.Result_Lv.ToString();
+            //  exp bar
+            float per = (float)(lv_exp / need_exp);
+            Result_Exp_Bar.value = per;
+
+
+        }
+        else
+        {
+            UpdateUI();
+        }
     }
 
     IEnumerator StartSimulateLevelExpGaugeAnim(EXP_SIMULATE_RESULT_DATA? before_simulate, EXP_SIMULATE_RESULT_DATA? after_simulate)
@@ -307,7 +369,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         if (before_simulate != null)
         {
             before_lv = before_simulate.Value.Result_Lv;
-            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(before_simulate.Value.Result_Lv);
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(before_lv);
             double need_exp = lv_data.need_exp;
             double lv_exp = before_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
             before_exp_per = (float)(lv_exp / need_exp);
@@ -325,7 +387,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime;
+            delta += Time.deltaTime * 4;
 
             Result_Exp_Bar.value = Mathf.Clamp01(delta);
             if (delta >= duration)
@@ -357,7 +419,8 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             double lv_exp = after_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
             after_exp_per = (float)(lv_exp / need_exp);
         }
-        duration = Mathf.Abs(after_exp_per - Result_Exp_Bar.value);
+        //duration = Mathf.Abs(after_exp_per - Result_Exp_Bar.value);
+        duration = 1f;
         if (after_exp_per > 0f)
         {
             while (true)
@@ -377,7 +440,11 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         }
         Simulate_Coroutine = null;
     }
-
+    /// <summary>
+    /// 경험치 아이템 사용 결과 보여주기
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
     IEnumerator StartLevelUpExpGaugeAnim(USE_EXP_ITEM_RESULT_DATA result)
     {
         UpdateExpItemButtons();
@@ -406,7 +473,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime;
+            delta += Time.deltaTime * 4f;
 
             Current_Exp_Bar.value = Mathf.Clamp01(delta);
 

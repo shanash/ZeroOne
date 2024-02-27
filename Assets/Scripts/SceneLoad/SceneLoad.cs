@@ -21,6 +21,11 @@ public class SceneLoad : SceneControllerBase
 
     public static string Start_Scene_Name;
 
+    protected override void Initialize()
+    {
+        SCManager.Instance.SetCurrent(this);
+    }
+
     void SetText(string text)
     {
         if (_UI_Text != null)
@@ -66,8 +71,13 @@ public class SceneLoad : SceneControllerBase
         {
             await Task.Yield();
         }
-
+        Debug.Log("===== Before Change Scene ===== ");
+#if UNITY_ANDROID && !UNITY_EDITOR_WIN
+        SCManager.Instance.ChangeScene(SceneName.home);
+#else   
         SCManager.Instance.ChangeScene();
+#endif
+        
     }
 }
 

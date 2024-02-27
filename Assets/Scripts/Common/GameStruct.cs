@@ -140,6 +140,8 @@ public struct EXP_SIMULATE_RESULT_DATA
     public double Over_Exp;         //  경험치 아이템 사용시 가능한 최대 레벨을 오버할 경우, 오버되는 경험치양
     public double Need_Gold;        //  겅혐치 아이템 사용시 필요 골드
 
+    public List<USABLE_ITEM_DATA> Auto_Item_Data_List;      //  자동 설정시 아이템 리스트
+
     public EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE code = default)
     {
         Code = code;
@@ -148,6 +150,7 @@ public struct EXP_SIMULATE_RESULT_DATA
         Add_Exp = 0;
         Over_Exp = 0;
         Need_Gold = 0;
+        Auto_Item_Data_List = new List<USABLE_ITEM_DATA>();
     }
 
     public void Reset()
@@ -158,6 +161,11 @@ public struct EXP_SIMULATE_RESULT_DATA
         Add_Exp = 0;
         Over_Exp = 0;
         Need_Gold = 0;
+        if (Auto_Item_Data_List == null)
+        {
+            Auto_Item_Data_List = new List<USABLE_ITEM_DATA>();
+        }
+        Auto_Item_Data_List.Clear();
     }
 }
 /// <summary>

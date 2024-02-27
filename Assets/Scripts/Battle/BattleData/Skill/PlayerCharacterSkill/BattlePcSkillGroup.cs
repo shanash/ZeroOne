@@ -34,6 +34,11 @@ public class BattlePcSkillGroup : BattleSkillGroup
         ResetDelayTime();
     }
 
+    public UserHeroSkillData GetUserHeroSkillData()
+    {
+        return User_Data;
+    }
+
     public override void ResetDelayTime()
     {
         if (Is_First_Skill)
@@ -62,7 +67,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
     {
         if (Skill_Group != null)
         {
-            return Skill_Group.action_name;
+            return GameDefine.GetLocalizeString(Skill_Group.name_id);
         }
         return null;
     }
@@ -90,6 +95,28 @@ public class BattlePcSkillGroup : BattleSkillGroup
             return User_Data.GetLevel();
         }
         return 0;
+    }
+
+    /// <summary>
+    /// 객체를 복사한 후, 해당 객체의 레벨을 지정<br/>
+    /// 변경된 스탯 값을 가져올 수 있다.
+    /// </summary>
+    /// <param name="lv"></param>
+    /// <returns></returns>
+    public BattlePcSkillGroup GetCloneSimulateLevelUpData(int lv)
+    {
+        BattlePcSkillGroup clone = (BattlePcSkillGroup)this.Clone();
+        clone.User_Data.SetLevel(lv);
+        return clone;
+    }
+
+    public override object Clone()
+    {
+        BattlePcSkillGroup clone = (BattlePcSkillGroup)MemberwiseClone();
+        clone.User_Data = (UserHeroSkillData)User_Data.Clone();
+        clone.Battle_Skill_Data_List.Clear();
+        clone.SetSkillGroupID(User_Data.GetSkillGroupID());
+        return clone;
     }
 
 }

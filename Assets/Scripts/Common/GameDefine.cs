@@ -156,7 +156,7 @@ public class GameDefine : MonoBehaviour
     public static string GetLocalizeString(string str_id)
     {
         var lang = Application.systemLanguage;
-        var splits = str_id.Split("_");
+        var splits = str_id.Trim().Split("_");
         if (splits.Length == 0)
             return string.Empty;
         string table_name = splits[0].ToLower();

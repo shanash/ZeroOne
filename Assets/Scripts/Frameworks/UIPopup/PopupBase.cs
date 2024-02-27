@@ -266,6 +266,10 @@ namespace FluffyDuck.UI
             {
                 Ease_Base.transform.localScale = new Vector2(0f, 0f);
             }
+            else if (Ease_Base != null && Ease_Base is UIEaseSlide)
+            {
+                Ease_Base.transform.localPosition = new Vector2(3000f, 0f);
+            }
         }
 
         public virtual void Despawned()

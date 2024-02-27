@@ -1,23 +1,21 @@
 using FluffyDuck.UI;
 using Gpm.Ui;
 using System.Collections.Generic;
-using UI.SkillLevelPopup;
 using UnityEngine;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
 using FluffyDuck.Util;
+using Cysharp.Text;
+using System.Collections;
 
 public class SkillLevelPopup : PopupBase
 {
-    const int max_exp_item_id = 20;
-    readonly SKILL_TYPE[] skill_type_by_index = { SKILL_TYPE.SPECIAL_SKILL, SKILL_TYPE.SKILL_01, SKILL_TYPE.SKILL_02, /*차후에 패시브*/ };
-
     [SerializeField, Tooltip("탭 컨트롤러")]
-    TabController TabController = null;
+    TabController TabCtrl = null;
 
     [SerializeField, Tooltip("스킬 탭")]
-    SkillInfoTab[] Skill_Tab_Ui = null;
+    List<SkillInfoTab> Skill_Tab_Ui = null;
 
     [SerializeField, Tooltip("스킬 이름")]
     TMP_Text Skill_Name = null;
@@ -26,13 +24,17 @@ public class SkillLevelPopup : PopupBase
     SkillInfo[] skillInfos = null;
 
     [SerializeField, Tooltip("경험치 텍스트\'0/100\'")]
-    TMP_Text Add_Exp_Text = null;
+    TMP_Text Exp_Text = null;
 
     [SerializeField, Tooltip("경험치 바")]
-    Slider Add_Exp_Bar = null;
+    Slider Exp_Bar = null;
+
+    [SerializeField, Tooltip("시뮬레이션 경험치 바")]
+    Slider Result_Exp_Bar;
 
     [SerializeField, Tooltip("경험치 아이템")]
-    SkillExpItem[] Exp_Items = null;
+    
+    List<UsableItemCard> Usable_Items;
 
     [SerializeField, Tooltip("사용 골드 수치 텍스트")]
     TMP_Text Need_Gold_Text = null;
@@ -43,17 +45,28 @@ public class SkillLevelPopup : PopupBase
     [SerializeField, Tooltip("레벨업 버튼")]
     UIButtonBase Up_Button = null;
 
-    IReadOnlyList<UserHeroSkillData> Skill_Groups = null;
+    /// <summary>
+    /// 스킬 데이터
+    /// </summary>
+    List<BattlePcSkillGroup> Battle_Skill_Groups = new List<BattlePcSkillGroup>();
 
-    List<USABLE_ITEM_DATA> Use_Exp_Items = null;
-    List<UserItemData> Exist_Exp_Items = null;
+    /// <summary>
+    /// 사용 가능한 아이템 선택 정보
+    /// </summary>
+    List<USABLE_ITEM_DATA> Use_Exp_Items = new List<USABLE_ITEM_DATA>();
 
-    int Selected_Index = -1;
+    //  시뮬레이션 결과
+    EXP_SIMULATE_RESULT_DATA? Simulate_Result = null;
 
-    UserHeroSkillData[] Current_SkillGroups = null;
+    /// <summary>
+    /// 시뮬레이션 경험치 게이지
+    /// </summary>
+    Coroutine Simulate_Coroutine;
+    /// <summary>
+    /// 실제 경험치 게이지
+    /// </summary>
+    Coroutine Level_Up_Coroutine;
 
-    UserHeroSkillData Current_SkillGroup => Current_SkillGroups[Selected_Index];
-    UserHeroSkillData After_SkillGroup { get; set; } = null;
 
     protected override bool Initialize(object[] data)
     {
@@ -61,223 +74,375 @@ public class SkillLevelPopup : PopupBase
         {
             return false;
         }
+        Simulate_Result = null;
+        var user_skills = ((IReadOnlyList<UserHeroSkillData>)data[0]).ToList();
+        Battle_Skill_Groups.Clear();
+        List<SKILL_TYPE> skill_order = new List<SKILL_TYPE>();
+        skill_order.Add(SKILL_TYPE.SPECIAL_SKILL);
+        skill_order.Add(SKILL_TYPE.SKILL_01);
+        skill_order.Add(SKILL_TYPE.SKILL_02);
 
-        Skill_Groups = data[0] as IReadOnlyList<UserHeroSkillData>;
+        for (int i = 0; i < skill_order.Count; i++)
+        {
+            SKILL_TYPE stype = skill_order[i];
+            var user_skill = user_skills.Find(x => x.GetSkillType() == stype);
+            if (user_skill != null)
+            {
+                var battle_skill = new BattlePcSkillGroup(user_skill);
+                battle_skill.SetSkillGroupID(user_skill.GetSkillGroupID());
+                Battle_Skill_Groups.Add(battle_skill);
+            }
+        }
+        SetUsableItemsCallback();
 
-        Use_Exp_Items = new List<USABLE_ITEM_DATA>();
-        Exist_Exp_Items = new List<UserItemData>();
-
-        FixedUpdatePopup();
+        UpdateTabUI();
+        if (Battle_Skill_Groups.Exists(x => x.GetSkillType() == SKILL_TYPE.SPECIAL_SKILL))
+        {
+            TabCtrl.GetTab(0).SetBlockTab(false);
+            TabCtrl.Select(0);
+            
+        }
+        else
+        {
+            TabCtrl.GetTab(0).SetBlockTab(true);
+            TabCtrl.Select(1);
+        }
+        
         return true;
     }
 
-    protected override void OnUpdatePopup()
+    void UpdateTabUI()
     {
-        base.OnUpdatePopup();
-
-        if (Current_SkillGroups == null)
+        if (Battle_Skill_Groups.Count == 0)
         {
             return;
         }
-
-        UpdateExpItemButtons();
-        UpdateUI();
+        for (int i = 0; i < Battle_Skill_Groups.Count; i++)
+        {
+            var skill = Battle_Skill_Groups[i];
+            var find_tab = Skill_Tab_Ui.Find(x => x.GetSkillType() == skill.GetSkillType());
+            if (find_tab != null)
+            {
+                find_tab.SetBattlePcSkillGroup(skill);
+            }
+        }
     }
 
-    RESPONSE_TYPE UpdateUI(bool use_levelup_animation = false)
+    void SetUsableItemsCallback()
     {
-        Skill_Name.text = Current_SkillGroup.Group_Data.name_kr;
-
-        return UpdateLevelupInfoUI(use_levelup_animation);
+        var item_data_list = MasterDataManager.Instance.Get_ItemDataListByItemType(ITEM_TYPE_V2.EXP_SKILL);
+        for (int i = 0; i < item_data_list.Count; i++)
+        {
+            var item_data = item_data_list[i];
+            if (i < Usable_Items.Count)
+            {
+                Usable_Items[i].SetUserItemData(item_data.item_type, item_data.item_id, OnChangeUsableItemCount);
+            }
+        }
     }
-
     /// <summary>
-    /// 경험치 아이템 버튼 업데이트<br />
-    /// 경험치 아이템 버튼을 눌렀을때 업데이트 시켜주면 순환 호출을 하기 때문에<br />
-    /// UpdateUI에서는 별도로 분리
+    /// 경험치 아이템 추가 및 제거시 호출 함수
     /// </summary>
-    void UpdateExpItemButtons()
+    /// <param name="is_add"></param>
+    /// <param name="result_cb"></param>
+    void OnChangeUsableItemCount(bool is_add, System.Action<bool> result_cb)
     {
-        for (int i = 0; i < Exp_Items.Length; i++)
+        var skill = GetSelectedSkillGroup();
+        if (skill == null)
         {
-            if (Exist_Exp_Items.Count <= i)
-            {
-                Exp_Items[i].gameObject.SetActive(false);
-                continue;
-            }
-            var exp_item = Exist_Exp_Items[i];
-            if (!Use_Exp_Items.Exists(x => x.Item_ID == exp_item.Item_ID))
-            {
-                Use_Exp_Items.Add(CreateExpItem(exp_item.Item_ID, 0));
-            }
-
-            Exp_Items[i].Initialize(exp_item, OnChangedUseItemCount);
-            Exp_Items[i].gameObject.SetActive(exp_item.GetCount() > 0);
-            var item = Use_Exp_Items.Find(x => x.Item_ID == exp_item.Item_ID);
-            Exp_Items[i].SetUseCount(item.Use_Count);
-        }
-    }
-
-    protected override void FixedUpdatePopup()
-    {
-        TabController.GetTab(3).SetBlockTab(true);
-
-        Current_SkillGroups = new UserHeroSkillData[Skill_Tab_Ui.Length];
-
-        for (int i = 0; i < Skill_Tab_Ui.Length; i++)
-        {
-            var skill_group = Skill_Groups.FirstOrDefault(x => x.Group_Data.skill_type == skill_type_by_index[i]);
-            TabController.GetTab(i).SetBlockTab(skill_group == null);
-
-            Current_SkillGroups[i] = skill_group;
-            Skill_Tab_Ui[i].Set(skill_group);
+            result_cb?.Invoke(false);
+            return;
         }
 
-        After_SkillGroup = Current_SkillGroup;
-
-        Exist_Exp_Items.Clear();
-        // 유저가 소유하고 있는 경험치 아이템 가져오기
-        for (int i = 0; i < 5; i++)
+        if (skill.GetUserHeroSkillData().IsMaxLevel())
         {
-            var data = GameData.Instance.GetUserItemDataManager().FindUserItem(ITEM_TYPE_V2.EXP_SKILL, max_exp_item_id - i);
-            if (data != null)
-            {
-                Exist_Exp_Items.Add(data);
-            }
+            result_cb?.Invoke(false);
+            ShowNoticePopup("최대 레벨에 도달했습니다.", 1.5f);
+            return;
         }
 
-        UpdatePopup();
-    }
-
-    public override void UpdatePopup()
-    {
-        base.UpdatePopup();
-        
-        if (Selected_Index > -1)
+        if (is_add)
         {
-            if (Current_SkillGroup == null)
+            //  더하기만 체크. 이전 시뮬레이션 정보에서 이미 최대레벨에 도달한 경우, 아이템 추가하지 않음.
+            if (Simulate_Result != null && Simulate_Result.Value.Result_Lv >= skill.GetUserHeroSkillData().GetMaxLevel())
             {
-                // TODO: M1 개발도중 아직 궁극기가 전부 구현되지 않았기 때문에 예외처리만 해준다.. 이후에는 Assert로 변경하든지 합시다.
+                result_cb?.Invoke(false);
                 return;
             }
-
-            UpdateExpItemButtons();
-            UpdateUI();
-        }
-    }
-
-    /// <summary>
-    /// 레벨업 관련 정보 세팅
-    /// </summary>
-    /// <param name="use_levelup_animation"></param>
-    /// <returns></returns>
-    RESPONSE_TYPE UpdateLevelupInfoUI(bool use_levelup_animation)
-    {
-        RESPONSE_TYPE result_code = RESPONSE_TYPE.SUCCESS;
-        After_SkillGroup = Current_SkillGroup;
-
-        double need_golds = 0;
-        bool exist_enough_golds = true;
-        double not_used_exp = 0;
-
-        result_code = Current_SkillGroup.SumExpItemInfo(out double items_total_exp, out need_golds, Use_Exp_Items);
-
-        if (result_code != RESPONSE_TYPE.SUCCESS)
-        {
-            Debug.Assert(false, $"잘못된 아이템 에러 : {result_code}");
-            return result_code;
         }
 
-        if (items_total_exp > 0)
+        RESPONSE_TYPE result = RESPONSE_TYPE.NOT_WORK;
+        Use_Exp_Items.Clear();
+        for (int i = 0; i < Usable_Items.Count; i++)
         {
+            Use_Exp_Items.Add(Usable_Items[i].GetUsableItemData());
+        }
 
-            exist_enough_golds = GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, need_golds);
-            After_SkillGroup = Current_SkillGroup.GetAddedExpSkillGroup(items_total_exp, out result_code);
-
-            if (After_SkillGroup == null)
+        if (Use_Exp_Items.Count > 0)
+        {
+            var simulate = skill.GetUserHeroSkillData().GetCalcSimulateExp(Use_Exp_Items);
+            result = simulate.Code;
+            if (simulate.Code == RESPONSE_TYPE.SUCCESS || simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
             {
-                Debug.Assert(false, $"스킬레벨업 에러 : {result_code}");
-                return result_code;
+                //  cur exp bar (시뮬레이션 결과가 현재 레벨보다 클 경우 현재 경험치 바는 숨겨준다)
+                Exp_Bar.gameObject.SetActive(skill.GetUserHeroSkillData().GetLevel() == simulate.Result_Lv);
+
+                //  레벨 상승이 있으면, 상승 레벨 결과를 보여준다.
+                if (skill.GetSkillLevel() == simulate.Result_Lv)
+                {
+                    skillInfos[0].SetBattlePcSkillGroup(skill);
+                    skillInfos[1].SetBattlePcSkillGroup(skill);
+                }
+                else
+                {
+                    if (Simulate_Result != null)
+                    {
+                        skillInfos[0].SetBattlePcSkillGroup(skill);
+                        if (Simulate_Result.Value.Result_Lv < simulate.Result_Lv)
+                        {
+                            var clone = skill.GetCloneSimulateLevelUpData(Simulate_Result.Value.Result_Lv);
+                            skillInfos[1].SetBattlePcSkillGroup(clone);
+                        }
+                        else
+                        {
+                            var clone = skill.GetCloneSimulateLevelUpData(simulate.Result_Lv);
+                            skillInfos[1].SetBattlePcSkillGroup(clone);
+                        }
+                    }
+                    else
+                    {
+                        skillInfos[0].SetBattlePcSkillGroup(skill);
+                        skillInfos[1].SetBattlePcSkillGroup(skill);
+                    }
+                    
+                }
+
+                //  exp count
+                var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(simulate.Result_Lv);
+                double need_exp = lv_data.need_exp;
+                double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+                Exp_Text.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
+
+                //  필요 골드가 부족하면 빨간색
+                if (GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, simulate.Need_Gold))
+                {
+                    Need_Gold_Text.text = simulate.Need_Gold.ToString("N0");
+                }
+                else
+                {
+                    Need_Gold_Text.text = ZString.Format("<color=#ff0000>{0:N0}</color>", simulate.Need_Gold);
+                }
+
+                //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
+                if (simulate.Over_Exp > 0)
+                {
+                    string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                    ShowNoticePopup(msg, 1.5f);
+                }
+
+                if (is_add)
+                {
+                    if (Simulate_Coroutine != null)
+                    {
+                        StopCoroutine(Simulate_Coroutine);
+                    }
+                    EXP_SIMULATE_RESULT_DATA? before = Simulate_Result;
+                    Simulate_Result = simulate;
+                    //  coroutine
+                    Simulate_Coroutine = StartCoroutine(StartSimulateLevelExpGaugeAnim(before, simulate));
+                }
+                else
+                {
+                    if (Simulate_Coroutine != null)
+                    {
+                        StopCoroutine(Simulate_Coroutine);
+                    }
+                    Simulate_Coroutine = null;
+                    Simulate_Result = simulate;
+
+                    //  exp bar
+                    float per = (float)(lv_exp / need_exp);
+                    Result_Exp_Bar.value = per;
+                }
+
             }
-
-            var add_exp = (After_SkillGroup.GetExp() - Current_SkillGroup.GetExp());
-            not_used_exp = items_total_exp - add_exp;
+            else
+            {
+                UpdatePopup();
+            }
         }
-
-        // 스킬정보 박스
-        skillInfos[0].SetData(Current_SkillGroup);
-        skillInfos[1].SetData(After_SkillGroup);
-
-        // 경험치 텍스트 및 바
-        double cur_exp = After_SkillGroup.IsMaxLevel() ? not_used_exp : After_SkillGroup.GetLevelExp(); // 초과될때는 초과된만큼의 경험치를 표시
-        double next_exp = After_SkillGroup.GetNextExp();
-        string exp_text = $"{cur_exp}/{next_exp}";
-        exp_text = After_SkillGroup.IsMaxLevel() ? exp_text.WithColorTag(Color.red) : exp_text; // 초과될때 빨간색
-        Add_Exp_Text.text = exp_text;
-
-        float exp_bar_val = After_SkillGroup.IsMaxLevel() ? (float)(not_used_exp / After_SkillGroup.GetNextExp()) : After_SkillGroup.GetExpPercentage();
-        Add_Exp_Bar.value = exp_bar_val;
-        Add_Exp_Bar.image.color = After_SkillGroup.IsMaxLevel() ? Color.red : Color.white; // 초과될때 빨간색
-
-        //골드 소모 텍스트
-        string gold_string = ((int)need_golds).ToString("N0");
-        Need_Gold_Text.text = (exist_enough_golds) ? gold_string : gold_string.WithColorTag(Color.red); // 돈이 부족할때는 빨간색
-
-        // 버튼 활성/비활성화
-        AutoSelect_Button.enabled = !Current_SkillGroup.IsMaxLevel();
-        Up_Button.enabled = !Current_SkillGroup.IsMaxLevel() && items_total_exp > 0 && exist_enough_golds; // !최대레벨 && 사용하려는 경험치가 있어야 && 소모하기에 충분한 돈
-
-        return result_code;
+        result_cb?.Invoke(true);
     }
-
-    public RESPONSE_TYPE OnChangedUseItemCount(int item_id, int count)
+    /// <summary>
+    /// 경험치 아이템 사용 시뮬레이션 결과 보여주기
+    /// </summary>
+    /// <param name="before_simulate"></param>
+    /// <param name="after_simulate"></param>
+    /// <returns></returns>
+    IEnumerator StartSimulateLevelExpGaugeAnim(EXP_SIMULATE_RESULT_DATA? before_simulate, EXP_SIMULATE_RESULT_DATA? after_simulate)
     {
-        if (After_SkillGroup.IsMaxLevel())
+        var m = MasterDataManager.Instance;
+        var skill = GetSelectedSkillGroup();
+        int before_lv = skill.GetSkillLevel();
+        float before_exp_per = skill.GetUserHeroSkillData().GetExpPercentage();
+        if (before_simulate != null)
         {
-            return RESPONSE_TYPE.ALREADY_MAX_LEVEL;
+            before_lv = before_simulate.Value.Result_Lv;
+            var lv_data = m.Get_PlayerCharacterSkillLevelData(before_lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = before_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
+            before_exp_per = (float)(lv_exp / need_exp);
+        }
+        //  시작전 게이지바
+        Result_Exp_Bar.value = before_exp_per;
+
+        int gauge_full_count = after_simulate.Value.Result_Lv - before_lv;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  게이지 풀 횟수
+        while (loop_count < gauge_full_count)
+        {
+            delta += Time.deltaTime * 4f;
+
+            Result_Exp_Bar.value = Mathf.Clamp01(delta);
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Result_Exp_Bar.value = 0f;
+                ++loop_count;
+                int lv = before_lv + loop_count;
+                var clone = skill.GetCloneSimulateLevelUpData(lv);
+                skillInfos[1].SetBattlePcSkillGroup(clone);
+                if (loop_count >= gauge_full_count)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                yield return wait;
+            }
         }
 
-        var item = Use_Exp_Items.Find(x => x.Item_ID == item_id);
-        item.Use_Count = count;
+        //  남은 경험치 게이지 이동
+        delta = 0f;
+        float after_exp_per = 0f;
+        {
+            var lv_data = m.Get_PlayerCharacterSkillLevelData(after_simulate.Value.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = after_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
+            after_exp_per = (float)(lv_exp / need_exp);
+        }
 
-        return UpdateUI();
+        duration = 1f;
+        if (after_exp_per > 0f)
+        {
+            while (true)
+            {
+                delta += Time.deltaTime;
+                Result_Exp_Bar.value = Mathf.MoveTowards(Result_Exp_Bar.value, after_exp_per, duration * Time.deltaTime);
+                if (delta >= duration)
+                {
+                    Result_Exp_Bar.value = after_exp_per;
+                    break;
+                }
+                else 
+                {
+                    yield return wait;
+                }
+            }
+        }
+        Simulate_Coroutine = null;
     }
-
-    public void OnSelected(Tab tab)
+    /// <summary>
+    /// 경험치 아이템 사용 결과 보여주기
+    /// </summary>
+    /// <param name="result"></param>
+    /// <returns></returns>
+    IEnumerator StartLevelUpExpGaugeAnim(USE_EXP_ITEM_RESULT_DATA result)
     {
-        Selected_Index = TabController.GetTabIndex(tab);
-
-        if (Skill_Groups == null)
-        {
-            return;
-        }
-        Use_Exp_Items.Clear();
-
+        var m = MasterDataManager.Instance;
+        var skill = GetSelectedSkillGroup();
         UpdateExpItemButtons();
-        UpdateUI();
-    }
 
-    public void OnClickLevelup()
-    {
-        Current_SkillGroup.AddExpUseItem(OnResponseLevelup, Use_Exp_Items);
-    }
+        Exp_Bar.gameObject.SetActive(true);
+        Result_Exp_Bar.value = 0f;
 
-    void OnResponseLevelup(USE_EXP_ITEM_RESULT_DATA result)
-    {
-        if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
+        int before_lv = result.Before_Lv;
+        float before_exp_per = 0f;
         {
-            Debug.Assert(false, $"스킬 레벨업 에러 ERROR_CODE :{result.Code}");
-            return;
+            var lv_data = m.Get_PlayerCharacterSkillLevelData(before_lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = result.Before_Accum_Exp - lv_data.accum_exp;
+            before_exp_per = (float)(lv_exp / need_exp);
+        }
+        //  강화전 초기값
+        {
+            var clone = skill.GetCloneSimulateLevelUpData(before_lv);
+            skillInfos[1].SetBattlePcSkillGroup(clone);
+        }
+        Exp_Bar.value = before_exp_per;
+
+        int gauge_full_count = result.Result_Lv - before_lv;
+        float duration = 1f;
+        float delta = 0f;
+        var wait = new WaitForSeconds(0.01f);
+        int loop_count = 0;
+        //  게이지 풀 횟수
+        while (loop_count < gauge_full_count)
+        {
+            delta += Time.deltaTime * 4f;
+            Exp_Bar.value = Mathf.Clamp01(delta);
+            if (delta >= duration)
+            {
+                delta = 0f;
+                Exp_Bar.value = 0f;
+                ++loop_count;
+                int lv = before_lv + loop_count;
+                var clone = skill.GetCloneSimulateLevelUpData(lv);
+                skillInfos[1].SetBattlePcSkillGroup(clone);
+                if (loop_count >= gauge_full_count)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                yield return wait;
+            }
         }
 
-        GameData.Instance.GetUserHeroSkillDataManager().Save();
-        GameData.Instance.GetUserGoodsDataManager().Save();
-        GameData.Instance.GetUserItemDataManager().Save();
+        //  남은 경험치 게이지 이동
+        delta = 0f;
+        float after_exp_per = 0f;
+        {
+            var lv_data = m.Get_PlayerCharacterSkillLevelData(result.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = result.Result_Accum_Exp - lv_data.accum_exp;
+            after_exp_per = (float)(lv_exp / need_exp);
+        }
+        duration = 1f;
+        if (after_exp_per > 0f)
+        {
+            while (true)
+            {
+                delta += Time.deltaTime;
+                Exp_Bar.value = Mathf.MoveTowards(Exp_Bar.value, after_exp_per, duration * Time.deltaTime);
+                if (delta >= duration)
+                {
+                    Exp_Bar.value = after_exp_per;
+                    break;
+                }
+                else
+                {
+                    yield return wait;
+                }
+            }
+        }
 
-        Use_Exp_Items.Clear();
-        UpdateExpItemButtons();
-        UpdateUI(true);
-
+        //  레벨업 팝업
         if (result.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
@@ -285,80 +450,295 @@ public class SkillLevelPopup : PopupBase
                 popup.ShowPopup();
             });
         }
+        Level_Up_Coroutine = null;
+        Simulate_Result = null;
+        UpdatePopup();
+    }
+
+    void UpdateExpItemButtons()
+    {
+        if (Battle_Skill_Groups.Count == 0)
+        {
+            return;
+        }
+        int cnt = Usable_Items.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Usable_Items[i].ResetUsableCount();
+        }
+    }
+
+    protected override void FixedUpdatePopup()
+    {
+        if (Battle_Skill_Groups.Count == 0)
+        {
+            return;
+        }
+        if (!Battle_Skill_Groups.Exists(x => x.GetSkillType() == SKILL_TYPE.SPECIAL_SKILL))
+        {
+            TabCtrl.GetTab(0).SetBlockTab(true);
+        }
+        TabCtrl.GetTab(3).SetBlockTab(true);
+
+        //for (int i = 0; i < Battle_Skill_Groups.Count; i++)
+        //{
+        //    var skill = Battle_Skill_Groups[i];
+        //    var find_tab = Skill_Tab_Ui.Find(x => x.GetSkillType() == skill.GetSkillType());
+        //    if (find_tab != null)
+        //    {
+        //        find_tab.SetBattlePcSkillGroup(skill);
+        //    }
+        //}
+        
+    }
+
+    BattlePcSkillGroup GetSelectedSkillGroup()
+    {
+        int selected_idx = TabCtrl.GetSelectedIndex();
+        var tab = Skill_Tab_Ui[selected_idx];
+        var skill = Battle_Skill_Groups.Find(x => x.GetSkillType() == tab.GetSkillType());
+        return skill;
+    }
+
+    public override void UpdatePopup()
+    {
+        if (Battle_Skill_Groups.Count == 0)
+        {
+            return;
+        }
+
+        var skill = GetSelectedSkillGroup();
+        if (skill == null)
+        {
+            Exp_Text.text = "0/0";
+            Exp_Bar.value = 0;
+            Result_Exp_Bar.value = 0;
+            for (int i = 0; i < skillInfos.Length; i++)
+            {
+                skillInfos[i].SetBattlePcSkillGroup(null);
+            }
+            return;
+        }
+
+        //  skill name
+        Skill_Name.text = skill.GetSkillActionName();
+
+        //  current skill info
+        skillInfos[0].SetBattlePcSkillGroup(skill);
+        //  next skill info
+        if (Simulate_Result != null)
+        {
+            var clone = skill.GetCloneSimulateLevelUpData(Simulate_Result.Value.Result_Lv);
+            skillInfos[1].SetBattlePcSkillGroup(clone);
+
+            if (GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, Simulate_Result.Value.Need_Gold))
+            {
+                Need_Gold_Text.text = Simulate_Result.Value.Need_Gold.ToString("N0");
+            }
+            else
+            {
+                Need_Gold_Text.text = ZString.Format("<color=#ff0000>{0:N0}</color>", Simulate_Result.Value.Need_Gold);
+            }
+        }
+        else
+        {
+            skillInfos[1].SetBattlePcSkillGroup(skill);
+
+            Need_Gold_Text.text = "0";
+        }
+
+        //  skill exp & gauge
+        double cur_exp = skill.GetUserHeroSkillData().GetLevelExp();
+        double next_exp = skill.GetUserHeroSkillData().GetNextExp();
+        float per = skill.GetUserHeroSkillData().GetExpPercentage();
+
+        Exp_Text.text = ZString.Format("{0:N0}/{1:N0}", cur_exp, next_exp);
+        Exp_Bar.value = per;
+        Result_Exp_Bar.value = per;
+
+
+        
+    }
+
+    
+
+    public void OnSelected(Tab tab)
+    {
+        Use_Exp_Items.Clear();
+        Simulate_Result = null;
+        FixedUpdatePopup();
+        UpdatePopup();
+        UpdateExpItemButtons();
     }
 
     public void OnClickAutoSelect()
     {
-        List<USABLE_ITEM_DATA> use_item = new List<USABLE_ITEM_DATA>();
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        double total_exp = 0;
-        bool up_to_max_level = false;
-
-        for (int i = 0; i < Exist_Exp_Items.Count; i++)
+        var skill = GetSelectedSkillGroup();
+        if (skill != null)
         {
-            int item_id = Exist_Exp_Items[i].Item_ID;
-            int count = 1;
-            var use_item_copy = use_item.ToList();
-            bool exist_enough_golds = true;
-
-            while (exist_enough_golds && !up_to_max_level)
+            var result = skill.GetUserHeroSkillData().GetAutoSimulateExp();
+            for (int i = 0; i < result.Auto_Item_Data_List.Count; i++)
             {
-                use_item_copy.RemoveAll(x => x.Item_ID == item_id);
-                use_item_copy.Add(CreateExpItem(item_id, count));
-
-                Current_SkillGroup.SumExpItemInfo(out double _total_exp, out double need_golds, use_item_copy);
-                exist_enough_golds = GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, need_golds);
-
-                if (exist_enough_golds)
+                var data = result.Auto_Item_Data_List[i];
+                var slot = Usable_Items.Find(x => x.GetItemType() == data.Item_Type && x.GetItemID() == data.Item_ID);
+                if (slot != null)
                 {
-                    var after_data = Current_SkillGroup.GetAddedExpSkillGroup(_total_exp, out RESPONSE_TYPE result_code);
-                    if (result_code != RESPONSE_TYPE.SUCCESS && result_code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
-                    {
-                        Debug.Assert(false, $"오류!! : {result_code}");
-
-                        Debug.Log($"total_exp : {total_exp} : {up_to_max_level}");
-
-                        foreach (var item in use_item)
-                        {
-                            Debug.Log($"item : {item.Item_ID} : {item.Use_Count}");
-                        }
-
-                        return;
-                    }
-                    up_to_max_level = after_data.IsMaxLevel();
-                    total_exp = _total_exp;
-                    use_item = use_item_copy.ToList();
-                    count++;
+                    slot.SetUsableCount(data.Use_Count);
                 }
             }
+
+            UpdateAutoSimulateResult(result);
         }
+    }
 
-        /*
-        Current_SkillGroup.SumExpItemInfo(out double exp, out double golds, use_item);
-        Debug.Log($"exp : {exp}, gold : {golds}");
-        */
-
-        if (use_item.Count == 0)
+    void UpdateAutoSimulateResult(EXP_SIMULATE_RESULT_DATA simulate)
+    {
+        if (simulate.Code == RESPONSE_TYPE.SUCCESS || simulate.Code == RESPONSE_TYPE.LEVEL_UP_SUCCESS)
         {
-            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+            var skill = GetSelectedSkillGroup();
+            //  cur exp bar (시뮬레이션 결과가 현재 레벨보다 클 경우 현재 경험치 바는 숨겨준다)
+            Exp_Bar.gameObject.SetActive(skill.GetUserHeroSkillData().GetLevel() == simulate.Result_Lv);
+
+            //  레벨 상승이 있으면, 상승 레벨 결과를 보여준다.
+            if (skill.GetSkillLevel() == simulate.Result_Lv)
             {
-                popup.ShowPopup(3f, "경험치 아이템이나 골드가 모자라서 선택할 수 없습니다");
-            });
+                skillInfos[0].SetBattlePcSkillGroup(skill);
+                skillInfos[1].SetBattlePcSkillGroup(skill);
+            }
+            else
+            {
+                if (Simulate_Result != null)
+                {
+                    skillInfos[0].SetBattlePcSkillGroup(skill);
+                    if (Simulate_Result.Value.Result_Lv < simulate.Result_Lv)
+                    {
+                        var clone = skill.GetCloneSimulateLevelUpData(Simulate_Result.Value.Result_Lv);
+                        skillInfos[1].SetBattlePcSkillGroup(clone);
+                    }
+                    else
+                    {
+                        var clone = skill.GetCloneSimulateLevelUpData(simulate.Result_Lv);
+                        skillInfos[1].SetBattlePcSkillGroup(clone);
+                    }
+                }
+                else
+                {
+                    var clone = skill.GetCloneSimulateLevelUpData(simulate.Result_Lv);
+                    skillInfos[1].SetBattlePcSkillGroup(clone);
+                }
+
+            }
+
+            //  exp count
+            var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(simulate.Result_Lv);
+            double need_exp = lv_data.need_exp;
+            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+            Exp_Text.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
+
+            //  필요 골드가 부족하면 빨간색
+            if (GameData.Instance.GetUserGoodsDataManager().IsUsableGoodsCount(GOODS_TYPE.GOLD, simulate.Need_Gold))
+            {
+                Need_Gold_Text.text = simulate.Need_Gold.ToString("N0");
+            }
+            else
+            {
+                Need_Gold_Text.text = ZString.Format("<color=#ff0000>{0:N0}</color>", simulate.Need_Gold);
+            }
+
+            //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
+            if (simulate.Over_Exp > 0)
+            {
+                string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                ShowNoticePopup(msg, 1.5f);
+            }
+
+            if (Simulate_Coroutine != null)
+            {
+                StopCoroutine(Simulate_Coroutine);
+            }
+            Simulate_Coroutine = null;
+            Simulate_Result = simulate;
+
+            //  exp bar
+            float per = (float)(lv_exp / need_exp);
+            Result_Exp_Bar.value = per;
+
+
+        }
+        else
+        {
+            UpdatePopup();
+        }
+    }
+
+    public void OnClickLevelUp()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Use_Exp_Items.Clear();
+        for (int i = 0; i < Usable_Items.Count; i++)
+        {
+            Use_Exp_Items.Add(Usable_Items[i].GetUsableItemData());
+        }
+        int sum = Use_Exp_Items.Sum(x => x.Use_Count);
+        if (sum == 0)
+        {
+            ShowNoticePopup("경험치 아이템을 선택해 주세요.", 1.5f);
+            return;
+        }
+        var skill = GetSelectedSkillGroup();
+        if (skill != null)
+        {
+            skill.GetUserHeroSkillData().AddExpUseItem(OnResponseLevelUp, Use_Exp_Items);
+        }
+    }
+    /// <summary>
+    /// 스킬 레벨업 결과
+    /// </summary>
+    /// <param name="result"></param>
+    void OnResponseLevelUp(USE_EXP_ITEM_RESULT_DATA result)
+    {
+        if (result.Code != RESPONSE_TYPE.SUCCESS && result.Code != RESPONSE_TYPE.LEVEL_UP_SUCCESS)
+        {
+            if (result.Code == RESPONSE_TYPE.NOT_ENOUGH_GOLD)
+            {
+                ShowNoticePopup("골드가 부족합니다.", 1.5f);
+            }
+            else if (result.Code == RESPONSE_TYPE.NOT_ENOUGH_ITEM)
+            {
+                ShowNoticePopup("경험치 아이템이 부족합니다.", 1.5f);
+            }
             return;
         }
 
-        Use_Exp_Items = use_item;
-        UpdateExpItemButtons();
+        var gd = GameData.Instance;
+        gd.GetUserHeroSkillDataManager().Save();
+        gd.GetUserGoodsDataManager().Save();
+        gd.GetUserItemDataManager().Save();
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_GOLD);
+
+        Use_Exp_Items.Clear();
+        if (Level_Up_Coroutine != null)
+        {
+            StopCoroutine(Level_Up_Coroutine);
+        }
+        if (Simulate_Coroutine != null)
+        {
+            StopCoroutine(Simulate_Coroutine);
+        }
+        Simulate_Coroutine = null;
+        Level_Up_Coroutine = StartCoroutine(StartLevelUpExpGaugeAnim(result));
     }
 
-    USABLE_ITEM_DATA CreateExpItem(int item_id, int count)
+
+    void ShowNoticePopup(string msg, float duration)
     {
-        var item_data = MasterDataManager.Instance.Get_ItemData(item_id);
-        return new USABLE_ITEM_DATA()
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            Item_ID = item_data.item_id,
-            Item_Type = item_data.item_type,
-            Use_Count = count,
-        };
+            popup.ShowPopup(duration, msg);
+        });
+
     }
+
 }

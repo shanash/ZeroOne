@@ -297,7 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Box_Rect: {fileID: 8777516386075448484}
   Popup_Type: 2
-  Ease_Base: {fileID: 7859686533493302097}
+  Ease_Base: {fileID: 9061703830118315331}
   Popup_Title: {fileID: 6175410968851445145}
   Cancel_Btn: {fileID: 6593209329815616497}
   Confirm_Btn: {fileID: 5733973519276078272}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 6109629935219260474}
   - component: {fileID: 5061656366323261342}
   - component: {fileID: 2574252617554348732}
-  - component: {fileID: 7859686533493302097}
+  - component: {fileID: 9061703830118315331}
   m_Layer: 20
   m_Name: Container
   m_TagString: Untagged
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7859686533493302097
+--- !u!114 &9061703830118315331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -669,18 +669,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5348089904528533949}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 963d15e4b35f7804b80683b7ecdfc746, type: 3}
+  m_Script: {fileID: 11500000, guid: bf47b065fe0d1e94391553cfd9910266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Ease_Data_List:
   - Move_Type: 1
     Ease_Type: 27
-    Ease_Vector: {x: 1, y: 1}
+    Ease_Vector: {x: 0, y: 0}
     Ease_Float: 0
     Ease_Duration: 0.3
   - Move_Type: 2
     Ease_Type: 26
-    Ease_Vector: {x: 0, y: 0}
+    Ease_Vector: {x: 3000, y: 0}
     Ease_Float: 0
     Ease_Duration: 0.3
 --- !u!1 &5705893913667926714

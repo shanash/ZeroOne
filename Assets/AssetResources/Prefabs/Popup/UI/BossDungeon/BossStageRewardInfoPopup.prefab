@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Box_Rect: {fileID: 6313904091599414452}
   Popup_Type: 2
-  Ease_Base: {fileID: 0}
+  Ease_Base: {fileID: 1222958207904852755}
   Boss_Stage_Name: {fileID: 3140878398960364834}
   Limit_Time: {fileID: 7931499084067856601}
   First_Reward_Tag: {fileID: 3664582837447236855}
@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 3111672600430461590}
   - component: {fileID: 7114703098635499668}
   - component: {fileID: 68980791936753360}
+  - component: {fileID: 1222958207904852755}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -136,6 +137,29 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1222958207904852755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802076556652047418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf47b065fe0d1e94391553cfd9910266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Ease_Data_List:
+  - Move_Type: 1
+    Ease_Type: 27
+    Ease_Vector: {x: 0, y: 0}
+    Ease_Float: 0
+    Ease_Duration: 0.3
+  - Move_Type: 2
+    Ease_Type: 26
+    Ease_Vector: {x: 3000, y: 0}
+    Ease_Float: 0
+    Ease_Duration: 0.3
 --- !u!1 &997492548147140344
 GameObject:
   m_ObjectHideFlags: 0

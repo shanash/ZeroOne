@@ -45,6 +45,28 @@ public class UsableItemCard : UIBase
         UpdateItemCard();
     }
 
+    public ITEM_TYPE_V2 GetItemType()
+    {
+        if (Data != null)
+        {
+            return Data.item_type;
+        }
+        return ITEM_TYPE_V2.NONE;
+    }
+    public int GetItemID()
+    {
+        if (Data != null)
+        {
+            return Data.item_id;
+        }
+        return 0;
+    }
+
+    public void SetUsableCount(int cnt)
+    {
+        Use_Item.Use_Count = cnt;
+        UpdateItemCard();
+    }
     public void ResetUsableCount()
     {
         Use_Item.Use_Count = 0;

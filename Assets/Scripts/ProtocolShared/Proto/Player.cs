@@ -23,8 +23,27 @@ namespace ProtocolShared.Proto
         public string AideSelect { get; set; }
     }
 
+    public class ChargeInfo
+    {
+        public REWARD_TYPE RewardType { get; set; } = REWARD_TYPE.NONE;
+        public int ChargeCount { get; set; } = 0;   
+        public int AfterCount { get; set; } = 0;
+        public DateTime LastChargeTime { get; set; } = DateTime.Now;
+    }
+    public class ChargeCheckRequest
+    {
+        [Required]
+        public REWARD_TYPE[] CheckRewardTypes { get; set; } = new REWARD_TYPE[0];
+    }
+
+    public class ChargeCheckResponse
+    {
+        public ChargeInfo[] Charges { get; set; } = new ChargeInfo[0];
+    }
+
     public class UsePlayerExpItemRequest
     {
+        [Required]
         public UseItemInfo[] UseItems { get; set; }
     }
 

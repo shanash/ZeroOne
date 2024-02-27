@@ -1,6 +1,7 @@
 using FluffyDuck.Util;
 using LitJson;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UserHeroSkillData : UserDataBase
@@ -102,10 +103,15 @@ public class UserHeroSkillData : UserDataBase
         }
     }
 
-    void SetLevel(int lv)
+    public void SetLevel(int lv)
     {
         Level.Set(lv);
         Level_Data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(lv);
+    }
+
+    public void SetExp(double exp)
+    {
+        Exp.Set(exp);
     }
 
     public int GetSkillGroupID() { return Skill_Group_ID.Get(); }  
@@ -116,6 +122,14 @@ public class UserHeroSkillData : UserDataBase
 
     public Player_Character_Skill_Group GetSkillGroupData() { return Group_Data; }
 
+    public SKILL_TYPE GetSkillType()
+    {
+        if (Group_Data != null)
+        {
+            return Group_Data.skill_type;
+        }
+        return SKILL_TYPE.NONE;
+    }
     /// <summary>
     /// 스킬의 최대 레벨은 영웅의 현재 레벨
     /// </summary>
@@ -349,6 +363,89 @@ public class UserHeroSkillData : UserDataBase
 
         return result;
     }
+    /// <summary>
+    /// 자동으로 캐릭터 스킬의 경험치 아이템 사용 <br/>
+    /// 기준은 최대 경험치 양을 초과할 수 없도록, 약간 모자라는 수준으로 맞춰준다.
+    /// </summary>
+    /// <returns></returns>
+    public EXP_SIMULATE_RESULT_DATA GetAutoSimulateExp()
+    {
+        EXP_SIMULATE_RESULT_DATA result = new EXP_SIMULATE_RESULT_DATA();
+        double cur_exp = GetExp();
+
+        result.Reset();
+        result.Code = RESPONSE_TYPE.NOT_WORK;
+        result.Result_Lv = GetLevel();
+        result.Result_Accum_Exp = cur_exp;
+
+        if (IsMaxLevel())
+        {
+            return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.ALREADY_MAX_LEVEL);
+        }
+        var m = MasterDataManager.Instance;
+        //  경험치 아이템
+        var item_list = m.Get_ItemDataListByItemType(ITEM_TYPE_V2.EXP_SKILL).ToList();
+        //  경험치 사용량이 큰 아이템부터 정렬(내림차순)
+        item_list.Sort((a, b) => b.int_var1.CompareTo(a.int_var2));
+
+        //  최대 레벨 정보
+        int max_level = GetMaxLevel();
+        var max_level_data = m.Get_PlayerCharacterSkillLevelData(max_level);
+
+        var item_mng = GameData.Instance.GetUserItemDataManager();
+
+        double add_exp = 0;
+        double need_gold = 0;
+        for (int i = 0; i < item_list.Count; i++)
+        {
+            var item_data = item_list[i];
+            var user_item = item_mng.FindUserItem(item_data.item_type, item_data.item_id);
+            if (user_item == null)
+            {
+                continue;
+            }
+            USABLE_ITEM_DATA usable_item = new USABLE_ITEM_DATA
+            {
+                Item_Type = item_data.item_type,
+                Item_ID = item_data.item_id,
+            };
+            int ucnt = (int)user_item.GetCount();
+            for (int u = 0; u < ucnt; u++)
+            {
+                if (cur_exp + add_exp + item_data.int_var1 > max_level_data.accum_exp)
+                {
+                    break;
+                }
+                add_exp += item_data.int_var1;
+                need_gold += item_data.int_var2;
+                usable_item.Use_Count += 1;
+            }
+            if (usable_item.Use_Count > 0)
+            {
+                result.Auto_Item_Data_List.Add(usable_item);
+            }
+        }
+
+        result.Result_Accum_Exp += add_exp;
+        result.Add_Exp = add_exp;
+        result.Need_Gold = need_gold;
+        var next_lv_data = m.Get_PlayerCharacterSkillLevelDataByAccumExp(result.Result_Accum_Exp);
+        if (result.Result_Lv < next_lv_data.level)
+        {
+            result.Result_Lv = next_lv_data.level;
+            result.Code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
+        }
+        else
+        {
+            result.Code = RESPONSE_TYPE.SUCCESS;
+        }
+        //  최대 레벨을 초과할 경우에만 계산
+        if (GetMaxLevel() <= result.Result_Lv)
+        {
+            result.Over_Exp = (cur_exp + add_exp) - next_lv_data.accum_exp;
+        }
+        return result;
+    }
 
     /// <summary>
     /// 경험치 증가 시뮬레이션.<br/>
@@ -359,14 +456,13 @@ public class UserHeroSkillData : UserDataBase
     /// <returns></returns>
     public EXP_SIMULATE_RESULT_DATA GetCalcSimulateExp(List<USABLE_ITEM_DATA> use_list)
     {
-        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
-
         //  이미 최대레벨일 경우 강화 불가
         if (IsMaxLevel())
         {
             return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.ALREADY_MAX_LEVEL);
         }
 
+        RESPONSE_TYPE code = RESPONSE_TYPE.FAILED;
         code = SumExpItemInfo(out double sum_items_exp, out double sum_items_need_gold, use_list);
 
         if (RESPONSE_TYPE.SUCCESS != code)
@@ -432,37 +528,6 @@ public class UserHeroSkillData : UserDataBase
         {
             result.Over_Exp = (cur_exp + sum_items_exp) - next_lv_data.accum_exp;
         }
-
-        //double current_exp = GetExp();
-        //double result_exp = current_exp + sum_items_exp;
-
-        //Player_Character_Skill_Level_Data next_lv_data = m.Get_PlayerCharacterSkillLevelDataByExpAdjustingMaxLevel(ref result_exp, GetMaxLevel());
-
-        ////  레벨 데이터가 없으면 failed
-        //if (next_lv_data == null)
-        //{
-        //    return new EXP_SIMULATE_RESULT_DATA(RESPONSE_TYPE.FAILED);
-        //}
-
-        //double add_exp = result_exp - current_exp;
-
-        ////  레벨이 증가할 경우 해당 레벨로 적용
-        //if (GetLevel() < next_lv_data.level)
-        //{
-        //    code = RESPONSE_TYPE.LEVEL_UP_SUCCESS;
-        //}
-
-        //var result = new EXP_SIMULATE_RESULT_DATA()
-        //{
-        //    Code = code,
-        //    Result_Lv = next_lv_data.level,
-        //    Result_Accum_Exp = result_exp,
-        //    Add_Exp = add_exp,
-        //    Over_Exp = result_exp - next_lv_data.accum_exp,
-        //    Need_Gold = sum_items_need_gold,
-        //};
-
-        //return result;
 
         return result;
     }

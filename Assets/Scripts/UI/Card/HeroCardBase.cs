@@ -18,6 +18,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Hero Icon Image")]
     protected Image Hero_Icon_Image;
 
+
     [SerializeField, Tooltip("Card Frame")]
     protected Image Card_Frame;
 

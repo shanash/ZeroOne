@@ -459,50 +459,50 @@ public enum TOUCH_BODY_TYPE
 {
 	/// <summary>캐릭터 클릭이지만, 퍼즐 클릭이 아님</summary>
 	NONE = 0,
-	/// <summary>1 몸체</summary>
-	BODY = 1,
-	/// <summary>2 가슴</summary>
-	BREAST = 2,
-	/// <summary>3 머리</summary>
-	HEAD = 3,
-	/// <summary>4 입</summary>
-	MOUTH = 4,
-	/// <summary>5 골반</summary>
-	PELVIS = 5,
-	/// <summary>6 다리</summary>
-	LEG = 6,
-	/// <summary>7 눈</summary>
-	EYE = 7,
-	/// <summary>8 코</summary>
-	NOSE = 8,
-	/// <summary>9 귀</summary>
-	EAR = 9,
-	/// <summary>10 볼</summary>
-	CHEEK = 10,
-	/// <summary>11 턱</summary>
-	JAW = 11,
-	/// <summary>12 이마</summary>
-	BROW = 12,
-	/// <summary>13 얼굴</summary>
-	FACE = 13,
-	/// <summary>14 엉덩이</summary>
-	HIP = 14,
-	/// <summary>15 브라</summary>
-	BRA = 15,
-	/// <summary>16 팬티</summary>
-	PANTY = 16,
-	/// <summary>17 뿔</summary>
-	HORN = 17,
-	/// <summary>18 꼬리</summary>
-	TOY = 18,
-	/// <summary>19 기타 소품 및 의상 1</summary>
-	PROP_1 = 19,
-	/// <summary>20 기타 소품 및 의상 2</summary>
-	PROP_2 = 20,
-	/// <summary>21 기타 소품 및 의상 3</summary>
-	PROP_3 = 21,
-	/// <summary>22 기타 소품 및 의상 4</summary>
-	PROP_4 = 22,
+	/// <summary>Part 1</summary>
+	PART1 = 1,
+	/// <summary>Part 2</summary>
+	PART2 = 2,
+	/// <summary>Part 3</summary>
+	PART3 = 3,
+	/// <summary>Part 4</summary>
+	PART4 = 4,
+	/// <summary>Part 5</summary>
+	PART5 = 5,
+	/// <summary>Part 6</summary>
+	PART6 = 6,
+	/// <summary>Part 7</summary>
+	PART7 = 7,
+	/// <summary>Part 8</summary>
+	PART8 = 8,
+	/// <summary>Part 9</summary>
+	PART9 = 9,
+	/// <summary>Part 10</summary>
+	PART10 = 10,
+	/// <summary>Part 11</summary>
+	PART11 = 11,
+	/// <summary>Part 12</summary>
+	PART12 = 12,
+	/// <summary>Part 13</summary>
+	PART13 = 13,
+	/// <summary>Part 14</summary>
+	PART14 = 14,
+	/// <summary>Part 15</summary>
+	PART15 = 15,
+	/// <summary>Part 16</summary>
+	PART16 = 16,
+	/// <summary>Part 17</summary>
+	PART17 = 17,
+	/// <summary>Part 18</summary>
+	PART18 = 18,
+	/// <summary>Part 19</summary>
+	PART19 = 19,
+	/// <summary>Part 20</summary>
+	PART20 = 20,
+	/// <summary>Part 21</summary>
+	PART21 = 21,
+	/// <summary>Part 22</summary>
+	PART22 = 22,
 }
 
 ///	<summary>
@@ -716,6 +716,8 @@ public enum SKILL_TYPE
 	SKILL_02 = 3,
 	/// <summary>4 궁극기</summary>
 	SPECIAL_SKILL = 4,
+	/// <summary>5 패시브</summary>
+	PASSIVE_SKILL = 5,
 }
 
 ///	<summary>
