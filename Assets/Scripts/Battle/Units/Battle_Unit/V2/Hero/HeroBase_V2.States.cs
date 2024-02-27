@@ -242,7 +242,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override void UnitStateAttack01Begin()
     {
-        string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillActionName();
+        string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillName();
         var name_list = skill_action_name.Split('_');
         int track = 0;
         if (name_list.Length > 0)

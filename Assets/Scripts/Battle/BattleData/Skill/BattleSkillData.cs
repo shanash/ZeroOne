@@ -183,4 +183,9 @@ public abstract class BattleSkillData : BattleDataBase
     /// 스킬 사용 후 데이터 리셋
     /// </summary>
     public virtual void ResetSkill() { }
+    /// <summary>
+    /// 스킬 설명
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetSkillDesc() { return string.Empty; }
 }

@@ -5,6 +5,7 @@
 public class Raw_Player_Character_Skill_Data : System.IDisposable
 {
 	public int pc_skill_id {get; set;}
+	public string[] pc_skill_desc_id {get; set;}
 	public int pc_skill_group_id {get; set;}
 	public TARGET_TYPE target_type {get; set;}
 	public TARGET_RULE_TYPE target_rule_type {get; set;}

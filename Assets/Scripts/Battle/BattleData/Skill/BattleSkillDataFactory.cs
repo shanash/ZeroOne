@@ -1,6 +1,7 @@
 
 using FluffyDuck.Util;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleSkillDataFactory
@@ -126,13 +127,30 @@ public class BattleSkillDataFactory
                     case DURATION_EFFECT_TYPE.FREEZE:
                         return typeof(BattlePcDurationSkillData_Freeze);
                     case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_ATTACK_UP:
                         return typeof(BattlePcDurationSkillData_AttackUp);
                     case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_DEFEND_UP:
                         return typeof(BattlePcDurationSkillData_DefenseUp);
                     case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_ATTACK_DOWN:
                         return typeof(BattlePcDurationSkillData_AttackDown);
                     case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_DEFEND_DOWN:
                         return typeof(BattlePcDurationSkillData_DefenseDown);
+                    case DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_UP:
+                        return typeof(BattlePcDurationSkillData_CriticalChanceUp);
+                    case DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_DOWN:
+                        return typeof(BattlePcDurationSkillData_CriticalChanceDown);
+                    case DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP:
+                        return typeof(BattlePcDurationSkillData_CriticalPowerAddUp);
+                    case DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_DOWN:
+                        return typeof(BattlePcDurationSkillData_CriticalPowerAddDown);
+
                     default:
                         Debug.Assert(false, "PC 버프 스킬데이터가 정상적이지 않습니다!!!");
                         return typeof(BattlePcDurationSkillData);
@@ -155,12 +173,16 @@ public class BattleSkillDataFactory
                     case DURATION_EFFECT_TYPE.FREEZE:
                         return typeof(BattleNpcDurationSkillData_Freeze);
                     case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_ATTACK_UP:
                         return typeof(BattleNpcDurationSkillData_AttackUp);
                     case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP:
+                    case DURATION_EFFECT_TYPE.MAGIC_DEFEND_UP:
                         return typeof(BattleNpcDurationSkillData_DefenseUp);
                     case DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_ATTACK_DOWN:
                         return typeof(BattleNpcDurationSkillData_AttackDown);
                     case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN:
+                    case DURATION_EFFECT_TYPE.MAGIC_DEFEND_DOWN:
                         return typeof(BattleNpcDurationSkillData_DefenseDown);
                     default:
                         Debug.Assert(false, "NPC 버프 스킬데이터가 정상적이지 않습니다!!!");

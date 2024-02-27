@@ -14,6 +14,12 @@ public class Player_Character_Skill_Data : System.IDisposable
 	int _pc_skill_id;
 
 	///	<summary>
+	///	스킬 설명
+	///	</summary>
+	public string[] pc_skill_desc_id => _pc_skill_desc_id;
+	string[] _pc_skill_desc_id;
+
+	///	<summary>
 	///	스킬 그룹 ID
 	///	</summary>
 	public int pc_skill_group_id => _pc_skill_group_id;
@@ -131,6 +137,8 @@ public class Player_Character_Skill_Data : System.IDisposable
 	public Player_Character_Skill_Data(Raw_Player_Character_Skill_Data raw_data)
 	{
 		_pc_skill_id = raw_data.pc_skill_id;
+		if(raw_data.pc_skill_desc_id != null)
+			_pc_skill_desc_id = raw_data.pc_skill_desc_id.ToArray();
 		_pc_skill_group_id = raw_data.pc_skill_group_id;
 		_target_type = raw_data.target_type;
 		_target_rule_type = raw_data.target_rule_type;
@@ -176,6 +184,16 @@ public class Player_Character_Skill_Data : System.IDisposable
 		int cnt = 0;
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[pc_skill_id] = <color=yellow>{0}</color>", pc_skill_id).AppendLine();
+		sb.AppendLine("[pc_skill_desc_id]");
+		if(pc_skill_desc_id != null)
+		{
+			cnt = pc_skill_desc_id.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", pc_skill_desc_id[i]).AppendLine();
+			}
+		}
+
 		sb.AppendFormat("[pc_skill_group_id] = <color=yellow>{0}</color>", pc_skill_group_id).AppendLine();
 		sb.AppendFormat("[target_type] = <color=yellow>{0}</color>", target_type).AppendLine();
 		sb.AppendFormat("[target_rule_type] = <color=yellow>{0}</color>", target_rule_type).AppendLine();

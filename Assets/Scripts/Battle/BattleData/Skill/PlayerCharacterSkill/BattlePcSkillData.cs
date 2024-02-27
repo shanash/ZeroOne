@@ -1,3 +1,8 @@
+using Cysharp.Text;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+
 public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProduct
 {
     Player_Character_Skill_Data Data;
@@ -210,6 +215,92 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     {
         Effect_Weight_Index = 0;
     }
+
+    public override string GetSkillDesc()
+    {
+        var sb = ZString.CreateStringBuilder();
+        string pattern = @"\[[^\]]+\]";
+        
+        List<object> skill_effect_list = new List<object>();
+        skill_effect_list.AddRange(Onetime_Skill_List);
+        skill_effect_list.AddRange(Duration_Skill_List);
+
+
+        for (int i = 0; i < Data.pc_skill_desc_id.Length; i++)
+        {
+            string desc = GameDefine.GetLocalizeString(Data.pc_skill_desc_id[i]);
+            UnityEngine.Debug.Log(desc);
+            MatchCollection matches = Regex.Matches(desc, pattern);
+            int cnt = matches.Count;
+            if (cnt > 0)
+            {
+                for (int c = 0; c < cnt; c++)
+                {
+                    var match = matches[c];
+                    if (c < skill_effect_list.Count)
+                    {
+                        string replace_str = ConvertSkillValue(match.Value, skill_effect_list[c]);
+                        desc = desc.Replace(match.Value, replace_str);
+                    }
+                }
+            }
+            sb.AppendLine(desc);
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 패턴 문자열에 따라 구분<br/>
+    /// [0]: onetime시트의 multiple_type을 참조하여 해당 효과 연산식에 맞춰서 multiple + value 를 적용 (데미지, 힐량 등)<br/>
+    /// [1]: onetime시트의 multiple 값을 백분률(*100)화 하여 출력(피해량 퍼센테이지 표현 등)<br/>
+    /// [2]: duriation시트의 rate 값을 백분률(*100)화 하여 출력(상태이상 적중률)<br/>
+    /// [3]: duriation시트의 time 값을 출력(상태 지속시간 초)<br/>
+    /// [4]: duriation시트의 count 값을 출력(도트 데미지를 몇 회 준다, 등)<br/>
+    /// [5]: duriation시트의 multiple_type을 참조하여 해당 효과 연산식에 맞춰서* multiple + value 를 적용<br/>
+    /// [6]: duriation시트의 multiple 값을 백분률(*100)화 하여 출력<br/>
+    /// [7]: duriation시트의 value 값을 출력<br/>
+    /// </summary>
+    /// <param name="pattern"></param>
+    /// <param name="skill">일회성 또는 지속성 효과 데이터</param>
+    /// <returns></returns>
+    string ConvertSkillValue(string pattern, object skill)
+    {
+        string convert = $"<color=#00ff00>Test => {pattern}</color>";
+        if (skill is BattleOnetimeSkillData)
+        {
+            //  onetime
+        }
+        else if (skill is BattleDurationSkillData)
+        {
+            //  duration
+        }
+
+        switch (pattern)
+        {
+            case "[0]":
+                break;
+            case "[1]":
+                break;
+            case "[2]":
+                break;
+            case "[3]":
+                break;
+            case "[4]":
+                break;
+            case "[5]":
+                break;
+            case "[6]":
+                break;
+            case "[7]":
+                break;
+            default:
+                break;
+        }
+        return convert;
+    }
+
+
+    
 
     public override object Clone()
     {

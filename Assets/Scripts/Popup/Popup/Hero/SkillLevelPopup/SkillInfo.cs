@@ -35,6 +35,7 @@ public class SkillInfo : MonoBehaviour
         Skill_Cooltime.text = ZString.Format("쿨타임 {0}초", Skill_Group.GetCooltime());
 
         //  skill info [todo]
+        Skill_Info.text = Skill_Group.GetSkillDesc();
 
     }
 

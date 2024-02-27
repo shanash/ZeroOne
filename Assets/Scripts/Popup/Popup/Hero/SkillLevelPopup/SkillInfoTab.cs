@@ -39,7 +39,7 @@ public class SkillInfoTab : MonoBehaviour
             Icon.sprite = spr;
         });
 
-        Name.text = Skill_Group.GetSkillActionName();
+        Name.text = Skill_Group.GetSkillName();
     }
 
     public SKILL_TYPE GetSkillType()

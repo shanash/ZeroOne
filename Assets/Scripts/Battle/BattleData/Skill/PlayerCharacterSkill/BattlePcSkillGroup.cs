@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using System.Collections.Generic;
 
 public class BattlePcSkillGroup : BattleSkillGroup
@@ -63,13 +64,38 @@ public class BattlePcSkillGroup : BattleSkillGroup
         }
         return remain_cooltime;
     }
-    public override string GetSkillActionName()
+    public override string GetSkillName()
     {
         if (Skill_Group != null)
         {
             return GameDefine.GetLocalizeString(Skill_Group.name_id);
         }
         return null;
+    }
+
+    public override string GetSkillDesc()
+    {
+        var sb = ZString.CreateStringBuilder();
+        for (int i = 0; i < Battle_Skill_Data_List.Count; i++)
+        {
+            sb.Append(Battle_Skill_Data_List[i].GetSkillDesc());
+        }
+
+        return sb.ToString();
+    }
+
+    public override List<string> GetSkillDescList()
+    {
+        List<string> list = new List<string>();
+        for (int i = 0; i < Battle_Skill_Data_List.Count; i++)
+        {
+            var desc = Battle_Skill_Data_List[i].GetSkillDesc();
+            if (!string.IsNullOrEmpty(desc))
+            {
+                list.Add(desc);
+            }
+        }
+        return list;
     }
 
     public override SKILL_TYPE GetSkillType()

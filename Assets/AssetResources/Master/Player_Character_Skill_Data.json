@@ -1,6 +1,9 @@
 ﻿[
   {
     "pc_skill_id": 100001,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100001,
     "target_type": 1,
     "target_rule_type": 6,
@@ -30,6 +33,9 @@
   },
   {
     "pc_skill_id": 100002,
+    "pc_skill_desc_id": [
+      "skill_desc_lucia_01_1"
+    ],
     "pc_skill_group_id": 100002,
     "target_type": 0,
     "target_rule_type": 10001,
@@ -59,6 +65,9 @@
   },
   {
     "pc_skill_id": 100003,
+    "pc_skill_desc_id": [
+      "skill_desc_lucia_02_1"
+    ],
     "pc_skill_group_id": 100003,
     "target_type": 1,
     "target_rule_type": 6,
@@ -88,6 +97,9 @@
   },
   {
     "pc_skill_id": 100004,
+    "pc_skill_desc_id": [
+      "skill_desc_lucia_03_1"
+    ],
     "pc_skill_group_id": 100004,
     "target_type": 0,
     "target_rule_type": 2,
@@ -117,6 +129,9 @@
   },
   {
     "pc_skill_id": 100101,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100101,
     "target_type": 1,
     "target_rule_type": 6,
@@ -146,6 +161,9 @@
   },
   {
     "pc_skill_id": 100102,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_01_1"
+    ],
     "pc_skill_group_id": 100102,
     "target_type": 1,
     "target_rule_type": 6,
@@ -175,6 +193,9 @@
   },
   {
     "pc_skill_id": 100103,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_01_2"
+    ],
     "pc_skill_group_id": 100102,
     "target_type": 1,
     "target_rule_type": 1,
@@ -204,6 +225,9 @@
   },
   {
     "pc_skill_id": 100104,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_02_1"
+    ],
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -233,6 +257,9 @@
   },
   {
     "pc_skill_id": 100105,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_02_2"
+    ],
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -262,6 +289,9 @@
   },
   {
     "pc_skill_id": 100106,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_02_3"
+    ],
     "pc_skill_group_id": 100103,
     "target_type": 1,
     "target_rule_type": 6,
@@ -293,6 +323,9 @@
   },
   {
     "pc_skill_id": 100107,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_03_1"
+    ],
     "pc_skill_group_id": 100104,
     "target_type": 1,
     "target_rule_type": 2,
@@ -322,6 +355,9 @@
   },
   {
     "pc_skill_id": 100108,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_03_2"
+    ],
     "pc_skill_group_id": 100104,
     "target_type": 1,
     "target_rule_type": 2,
@@ -351,6 +387,9 @@
   },
   {
     "pc_skill_id": 100109,
+    "pc_skill_desc_id": [
+      "skill_desc_laila_03_3"
+    ],
     "pc_skill_group_id": 100104,
     "target_type": 1,
     "target_rule_type": 2,
@@ -383,6 +422,9 @@
   },
   {
     "pc_skill_id": 100201,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100201,
     "target_type": 1,
     "target_rule_type": 6,
@@ -394,10 +436,12 @@
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      33,
+      33,
+      34
     ],
     "onetime_effect_ids": [
-      100007
+      10020101
     ],
     "duration_effect_ids": [
       0
@@ -412,6 +456,9 @@
   },
   {
     "pc_skill_id": 100202,
+    "pc_skill_desc_id": [
+      "skill_desc_violet_01_1"
+    ],
     "pc_skill_group_id": 100202,
     "target_type": 1,
     "target_rule_type": 6,
@@ -426,7 +473,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100008
+      10020201
     ],
     "duration_effect_ids": [
       0
@@ -437,44 +484,47 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "shoot"
+    "event_name": "shoot",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
     "pc_skill_id": 100203,
+    "pc_skill_desc_id": [
+      "skill_desc_violet_02_1"
+    ],
     "pc_skill_group_id": 100203,
-    "target_type": 1,
-    "target_rule_type": 10,
+    "target_type": 0,
+    "target_rule_type": 1,
     "target_order": 0,
-    "target_count": 5,
-    "target_range": 7.0,
+    "target_count": 1,
+    "target_range": 0.0,
     "effect_count_type": 0,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
+    "second_target_rule": 2,
+    "max_second_target_count": 4,
+    "second_target_range": 3.0,
     "effect_weight": [
-      15,
-      15,
-      15,
-      15,
-      15,
-      25
+      100
     ],
     "onetime_effect_ids": [
-      100009
+      0
     ],
     "duration_effect_ids": [
-      0
+      10020311
     ],
     "second_target_onetime_effect_ids": [
       0
     ],
     "second_target_duration_effect_ids": [
-      0
+      10020311
     ],
-    "event_name": "shoot"
+    "event_name": "apply_1",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
   },
   {
     "pc_skill_id": 100204,
+    "pc_skill_desc_id": [
+      "skill_desc_violet_03_1"
+    ],
     "pc_skill_group_id": 100204,
     "target_type": 1,
     "target_rule_type": 6,
@@ -494,7 +544,75 @@
       25
     ],
     "onetime_effect_ids": [
-      100009
+      10020401
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
+  },
+  {
+    "pc_skill_id": 100205,
+    "pc_skill_desc_id": [
+      "skill_desc_violet_03_2"
+    ],
+    "pc_skill_group_id": 100204,
+    "target_type": 0,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      10020511
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "apply_1",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
+  },
+  {
+    "pc_skill_id": 100301,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
+    "pc_skill_group_id": 100301,
+    "target_type": 1,
+    "target_rule_type": 6,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      33,
+      33,
+      34
+    ],
+    "onetime_effect_ids": [
+      10030101
     ],
     "duration_effect_ids": [
       0
@@ -508,37 +626,10 @@
     "event_name": "shoot"
   },
   {
-    "pc_skill_id": 100301,
-    "pc_skill_group_id": 100301,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "target_range": 0.0,
-    "effect_count_type": 2,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      100010
-    ],
-    "duration_effect_ids": [
-      0
-    ],
-    "second_target_onetime_effect_ids": [
-      0
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "shoot",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
-  },
-  {
     "pc_skill_id": 100302,
+    "pc_skill_desc_id": [
+      "skill_desc_daisy_01_1"
+    ],
     "pc_skill_group_id": 100302,
     "target_type": 1,
     "target_rule_type": 6,
@@ -550,41 +641,14 @@
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      20,
+      20,
+      20,
+      20,
+      20
     ],
     "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500006
-    ],
-    "second_target_onetime_effect_ids": [
-      0
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "debuff",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
-  },
-  {
-    "pc_skill_id": 100303,
-    "pc_skill_group_id": 100303,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "target_range": 0.0,
-    "effect_count_type": 2,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      50,
-      50
-    ],
-    "onetime_effect_ids": [
-      100011
+      10030201
     ],
     "duration_effect_ids": [
       0
@@ -599,7 +663,43 @@
     "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
-    "pc_skill_id": 1003034,
+    "pc_skill_id": 100303,
+    "pc_skill_desc_id": [
+      "skill_desc_daisy_02_1"
+    ],
+    "pc_skill_group_id": 100303,
+    "target_type": 0,
+    "target_rule_type": 1,
+    "target_order": 0,
+    "target_count": 1,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 1,
+    "max_second_target_count": 4,
+    "second_target_range": 3.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      10030311
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      10030311
+    ],
+    "event_name": "apply_1",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
+  },
+  {
+    "pc_skill_id": 100304,
+    "pc_skill_desc_id": [
+      "skill_desc_daisy_03_1"
+    ],
     "pc_skill_group_id": 100304,
     "target_type": 1,
     "target_rule_type": 6,
@@ -611,11 +711,27 @@
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      50,
-      50
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      15
     ],
     "onetime_effect_ids": [
-      100011
+      10030401
     ],
     "duration_effect_ids": [
       0
@@ -630,7 +746,43 @@
     "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
   },
   {
+    "pc_skill_id": 100305,
+    "pc_skill_desc_id": [
+      "skill_desc_daisy_03_2"
+    ],
+    "pc_skill_group_id": 100304,
+    "target_type": 0,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      10030511
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "apply_1",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
+  },
+  {
     "pc_skill_id": 100401,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100401,
     "target_type": 1,
     "target_rule_type": 6,
@@ -645,7 +797,7 @@
       100
     ],
     "onetime_effect_ids": [
-      100012
+      10040101
     ],
     "duration_effect_ids": [
       0
@@ -661,6 +813,9 @@
   },
   {
     "pc_skill_id": 100402,
+    "pc_skill_desc_id": [
+      "skill_desc_ailyn_01_1"
+    ],
     "pc_skill_group_id": 100402,
     "target_type": 1,
     "target_rule_type": 6,
@@ -678,7 +833,7 @@
       0
     ],
     "duration_effect_ids": [
-      11040211
+      10040211
     ],
     "second_target_onetime_effect_ids": [
       0
@@ -691,6 +846,9 @@
   },
   {
     "pc_skill_id": 100403,
+    "pc_skill_desc_id": [
+      "skill_desc_ailyn_02_1"
+    ],
     "pc_skill_group_id": 100403,
     "target_type": 0,
     "target_rule_type": 1,
@@ -721,6 +879,9 @@
   },
   {
     "pc_skill_id": 100404,
+    "pc_skill_desc_id": [
+      "skill_desc_ailyn_03_1"
+    ],
     "pc_skill_group_id": 100404,
     "target_type": 0,
     "target_rule_type": 2,
@@ -750,6 +911,9 @@
   },
   {
     "pc_skill_id": 100405,
+    "pc_skill_desc_id": [
+      "skill_desc_ailyn_03_2"
+    ],
     "pc_skill_group_id": 100404,
     "target_type": 0,
     "target_rule_type": 2,
@@ -779,6 +943,9 @@
   },
   {
     "pc_skill_id": 100406,
+    "pc_skill_desc_id": [
+      "skill_desc_ailyn_03_3"
+    ],
     "pc_skill_group_id": 100404,
     "target_type": 1,
     "target_rule_type": 1,
@@ -808,6 +975,9 @@
   },
   {
     "pc_skill_id": 100501,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100501,
     "target_type": 1,
     "target_rule_type": 6,
@@ -837,6 +1007,9 @@
   },
   {
     "pc_skill_id": 100502,
+    "pc_skill_desc_id": [
+      "skill_desc_claire_01_1"
+    ],
     "pc_skill_group_id": 100502,
     "target_type": 0,
     "target_rule_type": 1,
@@ -866,6 +1039,9 @@
   },
   {
     "pc_skill_id": 100503,
+    "pc_skill_desc_id": [
+      "skill_desc_claire_02_1"
+    ],
     "pc_skill_group_id": 100503,
     "target_type": 1,
     "target_rule_type": 6,
@@ -895,6 +1071,9 @@
   },
   {
     "pc_skill_id": 100504,
+    "pc_skill_desc_id": [
+      "skill_desc_claire_03_2"
+    ],
     "pc_skill_group_id": 100504,
     "target_type": 0,
     "target_rule_type": 1,
@@ -924,6 +1103,9 @@
   },
   {
     "pc_skill_id": 100601,
+    "pc_skill_desc_id": [
+      "skill_desc_pc_001"
+    ],
     "pc_skill_group_id": 100601,
     "target_type": 1,
     "target_rule_type": 6,
@@ -953,6 +1135,9 @@
   },
   {
     "pc_skill_id": 100602,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_01_1"
+    ],
     "pc_skill_group_id": 100602,
     "target_type": 1,
     "target_rule_type": 6,
@@ -982,6 +1167,9 @@
   },
   {
     "pc_skill_id": 100603,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_01_2"
+    ],
     "pc_skill_group_id": 100602,
     "target_type": 1,
     "target_rule_type": 6,
@@ -1011,6 +1199,9 @@
   },
   {
     "pc_skill_id": 100604,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_02_1"
+    ],
     "pc_skill_group_id": 100603,
     "target_type": 1,
     "target_rule_type": 2,
@@ -1040,6 +1231,9 @@
   },
   {
     "pc_skill_id": 100605,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_02_2"
+    ],
     "pc_skill_group_id": 100603,
     "target_type": 1,
     "target_rule_type": 2,
@@ -1069,6 +1263,9 @@
   },
   {
     "pc_skill_id": 100606,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_03_1"
+    ],
     "pc_skill_group_id": 100604,
     "target_type": 1,
     "target_rule_type": 2,
@@ -1100,6 +1297,9 @@
   },
   {
     "pc_skill_id": 100607,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_03_2"
+    ],
     "pc_skill_group_id": 100604,
     "target_type": 1,
     "target_rule_type": 2,
@@ -1129,6 +1329,9 @@
   },
   {
     "pc_skill_id": 100608,
+    "pc_skill_desc_id": [
+      "skill_desc_elizabath_03_3"
+    ],
     "pc_skill_group_id": 100604,
     "target_type": 1,
     "target_rule_type": 2,

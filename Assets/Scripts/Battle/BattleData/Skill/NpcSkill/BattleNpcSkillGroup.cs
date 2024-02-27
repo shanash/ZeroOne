@@ -51,7 +51,7 @@ public class BattleNpcSkillGroup : BattleSkillGroup
         return Skill_Group.skill_use_delay;
     }
 
-    public override string GetSkillActionName()
+    public override string GetSkillName()
     {
         if (Skill_Group != null)
         {

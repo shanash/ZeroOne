@@ -521,7 +521,7 @@ public class SkillLevelPopup : PopupBase
         }
 
         //  skill name
-        Skill_Name.text = skill.GetSkillActionName();
+        Skill_Name.text = skill.GetSkillName();
 
         //  current skill info
         skillInfos[0].SetBattlePcSkillGroup(skill);

@@ -78,10 +78,21 @@ public abstract class BattleSkillGroup : BattleDataBase
     public virtual double GetRemainCooltime() { return 0; }
 
     /// <summary>
-    /// 스킬 액션 이름 반환
+    /// 스킬 이름 반환
     /// </summary>
     /// <returns></returns>
-    public abstract string GetSkillActionName();
+    public abstract string GetSkillName();
+
+    /// <summary>
+    /// 스킬 내용
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetSkillDesc() { return string.Empty; }
+    /// <summary>
+    /// 스킬의 내용을 각 스킬의 설명 단위로 리스트 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual List<string> GetSkillDescList() { return null; }
 
     /// <summary>
     /// 첫번째 스킬의 경우 선쿨타임이 없음

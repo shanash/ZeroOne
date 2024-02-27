@@ -122,7 +122,7 @@
     "script": "원거리 전방 1명 공격 (즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_1"
+    "action_name": "00_common"
   },
   {
     "pc_skill_group_id": 100202,
@@ -133,7 +133,7 @@
     "script": "원거리 전방 1명 공격(즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_2"
+    "action_name": "00_skill_01"
   },
   {
     "pc_skill_group_id": 100203,
@@ -144,7 +144,18 @@
     "script": "원거리 전방 적을 타겟하고 범위 데미지 (즉발형 6히트) - 주변 스플래쉬",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_3"
+    "action_name": "00_skill_02"
+  },
+  {
+    "pc_skill_group_id": 100204,
+    "name_id": "skill_title_violet_03",
+    "name_kr": "섬광 폭발",
+    "skill_use_delay": 16.0,
+    "skill_type": 4,
+    "script": "원거리 전방 1명을 공격하고, 뒤에 있는 아군에게 버프",
+    "target_skill_id": 100204,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_ultimate"
   },
   {
     "pc_skill_group_id": 100301,
@@ -155,7 +166,7 @@
     "script": "원거리 전방 1명 공격(투사체형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_1"
+    "action_name": "00_common"
   },
   {
     "pc_skill_group_id": 100302,
@@ -166,7 +177,7 @@
     "script": "원거리 전방 1명의 방어력 감소",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_2"
+    "action_name": "00_skill_01"
   },
   {
     "pc_skill_group_id": 100303,
@@ -177,7 +188,18 @@
     "script": "원거리 전방 적을 타겟하고 범위 데미지 (투사체형 2히트) - 피격자 뒤로 스플래쉬",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_3"
+    "action_name": "00_skill_02"
+  },
+  {
+    "pc_skill_group_id": 100304,
+    "name_id": "skill_title_daisy_03",
+    "name_kr": "집중광선",
+    "skill_use_delay": 16.0,
+    "skill_type": 4,
+    "script": "원거리 전방 1명을 공격하고, 주변에 있는 아군에게 버프",
+    "target_skill_id": 100304,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_ultimate"
   },
   {
     "pc_skill_group_id": 100401,
@@ -188,7 +210,7 @@
     "script": "원거리 전방 1명 공격(즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_1"
+    "action_name": "00_common"
   },
   {
     "pc_skill_group_id": 100402,
@@ -199,7 +221,7 @@
     "script": "체력이 가장 낮은 아군 체력 회복",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_2"
+    "action_name": "00_skill_01"
   },
   {
     "pc_skill_group_id": 100403,
@@ -210,7 +232,7 @@
     "script": "원거리 전방 1명 공격(즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_3"
+    "action_name": "00_skill_02"
   },
   {
     "pc_skill_group_id": 100404,
@@ -219,9 +241,9 @@
     "skill_use_delay": 15.0,
     "skill_type": 4,
     "script": "자신 체력 회복하고 범위 버프(물리 방어력 증가)",
-    "target_skill_id": 1,
+    "target_skill_id": 100404,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "1_attack_3"
+    "action_name": "00_ultimate"
   },
   {
     "pc_skill_group_id": 100501,

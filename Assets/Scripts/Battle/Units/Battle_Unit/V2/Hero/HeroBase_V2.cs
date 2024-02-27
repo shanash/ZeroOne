@@ -468,7 +468,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (state == UNIT_STATES.ATTACK_1)
         {
             var skill = GetSkillManager().GetCurrentSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            if (animation_name.Equals(skill.GetSkillName()))
             {
                 SpawnSkillCastEffect(skill);
             }
@@ -508,7 +508,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             var skill = GetSkillManager().GetCurrentSkillGroup();
 
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            if (animation_name.Equals(skill.GetSkillName()))
             {
                 GetSkillManager().SetNextSkillPattern();
                 FindApproachTargets();
@@ -565,7 +565,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (state == UNIT_STATES.ATTACK_1)
         {
             var skill = GetSkillManager().GetCurrentSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            if (animation_name.Equals(skill.GetSkillName()))
             {
                 var exec_list = skill.GetExecuableSkillDatas(evt_name);
                 if (exec_list.Count > 0)
@@ -581,7 +581,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         else if (state == UNIT_STATES.SKILL_1)
         {
             var skill = GetSkillManager().GetSpecialSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            if (animation_name.Equals(skill.GetSkillName()))
             {
                 var exec_list = skill.GetExecuableSkillDatas(evt_name);
                 if (exec_list.Count > 0)
