@@ -150,7 +150,22 @@ public class BattleSkillDataFactory
                     case DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_DOWN:
                     case DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_DOWN:
                         return typeof(BattlePcDurationSkillData_CriticalPowerAddDown);
-
+                    case DURATION_EFFECT_TYPE.ACCURACY_UP:
+                        return typeof(BattlePcDurationSkillData_AccuracyUp);
+                    case DURATION_EFFECT_TYPE.ACCURACY_DOWN:
+                        return typeof(BattlePcDurationSkillData_AccuracyDown);
+                    case DURATION_EFFECT_TYPE.EVASION_UP:
+                        return typeof(BattlePcDurationSkillData_EvasionUp);
+                    case DURATION_EFFECT_TYPE.EVASION_DOWN:
+                        return typeof(BattlePcDurationSkillData_EvasionDown);
+                    case DURATION_EFFECT_TYPE.HEAL_UP:
+                        return typeof(BattlePcDurationSkillData_HealUp);
+                    case DURATION_EFFECT_TYPE.HEAL_DOWN:
+                        return typeof(BattlePcDurationSkillData_HealDown);
+                    case DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_UP:
+                        return typeof(BattlePcDurationSkillData_AttackLifeRecoveryUp);
+                    case DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_DOWN:
+                        return typeof(BattlePcDurationSkillData_AttackLifeRecoveryDown);
                     default:
                         Debug.Assert(false, "PC 버프 스킬데이터가 정상적이지 않습니다!!!");
                         return typeof(BattlePcDurationSkillData);
@@ -184,6 +199,22 @@ public class BattleSkillDataFactory
                     case DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN:
                     case DURATION_EFFECT_TYPE.MAGIC_DEFEND_DOWN:
                         return typeof(BattleNpcDurationSkillData_DefenseDown);
+                    case DURATION_EFFECT_TYPE.ACCURACY_UP:
+                        return typeof(BattleNpcDurationSkillData_AccuracyUp);
+                    case DURATION_EFFECT_TYPE.ACCURACY_DOWN:
+                        return typeof(BattleNpcDurationSkillData_AccuracyUp);
+                    case DURATION_EFFECT_TYPE.EVASION_UP:
+                        return typeof(BattleNpcDurationSkillData_EvasionUp);
+                    case DURATION_EFFECT_TYPE.EVASION_DOWN:
+                        return typeof(BattleNpcDurationSkillData_EvasionDown);
+                    case DURATION_EFFECT_TYPE.HEAL_UP:
+                        return typeof(BattleNpcDurationSkillData_HealUp);
+                    case DURATION_EFFECT_TYPE.HEAL_DOWN:
+                        return typeof(BattleNpcDurationSkillData_HealDown);
+                    case DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_UP:
+                        return typeof(BattleNpcDurationSkillData_AttackLifeRecoveryUp);
+                    case DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_DOWN:
+                        return typeof(BattleNpcDurationSkillData_AttackLifeRecoveryDown);
                     default:
                         Debug.Assert(false, "NPC 버프 스킬데이터가 정상적이지 않습니다!!!");
                         return typeof(BattleNpcDurationSkillData);

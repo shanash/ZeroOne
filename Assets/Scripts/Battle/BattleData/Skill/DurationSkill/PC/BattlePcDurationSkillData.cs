@@ -10,6 +10,13 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
         return true;
     }
 
+    bool Initialize(Player_Character_Skill_Duration_Data data, BATTLE_SEND_DATA send_data)
+    {
+        SetDurationSkillData(data);
+        SetBattleSendData(send_data);
+        return true;
+    }
+
     bool Initialize(Player_Character_Skill_Duration_Data data, BATTLE_SEND_DATA send_data, SkillEffectBase skill_effect)
     {
         SetDurationSkillData(data);
@@ -139,6 +146,13 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
 
     public override object Clone()
     {
-        return FluffyDuck.Util.Factory.Instantiate<BattlePcDurationSkillData>(Data, Send_Data.Clone(), Skill_Effect);
+        if (Skill_Effect != null)
+        {
+            return FluffyDuck.Util.Factory.Instantiate<BattlePcDurationSkillData>(Data, Send_Data.Clone(), Skill_Effect);
+        }
+        else
+        {
+            return FluffyDuck.Util.Factory.Instantiate<BattlePcDurationSkillData>(Data, Send_Data.Clone());
+        }
     }
 }

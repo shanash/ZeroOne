@@ -14692,6 +14692,7 @@ GameObject:
   - component: {fileID: 1491534354446352578}
   - component: {fileID: 2719745125869699512}
   - component: {fileID: 4059227654200313555}
+  - component: {fileID: 3121645795436590192}
   m_Layer: 0
   m_Name: SkillEffect_Elizabeth_Attack_01_Bullet
   m_TagString: Untagged
@@ -14739,7 +14740,7 @@ MonoBehaviour:
   End_Curve_Dist: 0
   Parabola: {fileID: 0}
   Parabola_Height: 0
-  Mover: {fileID: 0}
+  Mover: {fileID: 3121645795436590192}
   Projectile_Velocity: 20
   Use_Hide_Transforms: 1
   Hide_Transforms:
@@ -14786,6 +14787,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 5160079400507146199}
+--- !u!114 &3121645795436590192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575268587384583182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4befcb966d0172458fd1e4947588dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4545813323081381220
 GameObject:
   m_ObjectHideFlags: 0
