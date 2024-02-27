@@ -92,10 +92,16 @@ public class Player_Character_Data : System.IDisposable
 	int _lobby_basic_id;
 
 	///	<summary>
+	///	근원전달 스탠딩
+	///	</summary>
+	public int essence_id => _essence_id;
+	int _essence_id;
+
+	///	<summary>
 	///	로비 서약 스탠딩
 	///	</summary>
-	public int lobby_merry_id => _lobby_merry_id;
-	int _lobby_merry_id;
+	public int lobby_essence_id => _lobby_essence_id;
+	int _lobby_essence_id;
 
 	///	<summary>
 	///	캐릭터 아이콘
@@ -146,7 +152,8 @@ public class Player_Character_Data : System.IDisposable
 		_prefab_path = raw_data.prefab_path;
 		_sd_prefab_path = raw_data.sd_prefab_path;
 		_lobby_basic_id = raw_data.lobby_basic_id;
-		_lobby_merry_id = raw_data.lobby_merry_id;
+		_essence_id = raw_data.essence_id;
+		_lobby_essence_id = raw_data.lobby_essence_id;
 		_icon_path = raw_data.icon_path;
 		_Illustration_path = raw_data.Illustration_path;
 		_script = raw_data.script;
@@ -197,7 +204,8 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
 		sb.AppendFormat("[sd_prefab_path] = <color=yellow>{0}</color>", sd_prefab_path).AppendLine();
 		sb.AppendFormat("[lobby_basic_id] = <color=yellow>{0}</color>", lobby_basic_id).AppendLine();
-		sb.AppendFormat("[lobby_merry_id] = <color=yellow>{0}</color>", lobby_merry_id).AppendLine();
+		sb.AppendFormat("[essence_id] = <color=yellow>{0}</color>", essence_id).AppendLine();
+		sb.AppendFormat("[lobby_essence_id] = <color=yellow>{0}</color>", lobby_essence_id).AppendLine();
 		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[Illustration_path] = <color=yellow>{0}</color>", Illustration_path).AppendLine();
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();

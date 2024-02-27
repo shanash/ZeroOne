@@ -294,6 +294,7 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
             case "[7]":
                 break;
             default:
+                Debug.Assert(false);
                 break;
         }
         return convert;
