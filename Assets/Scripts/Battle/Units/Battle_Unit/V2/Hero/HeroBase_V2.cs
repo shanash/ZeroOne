@@ -528,10 +528,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
-                //List<HeroBase_V2> targets = new List<HeroBase_V2>();
-                //targets.Add(this);
-                //targets.AddRange(Attack_Targets);
-                //Battle_Mng.ShowAllUnitWithoutTargets(targets);
                 Battle_Mng.ShowAllUnits();
 
                 UnsetPlayableDirector();

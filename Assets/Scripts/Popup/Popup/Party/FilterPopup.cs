@@ -56,7 +56,7 @@ public class FilterPopup : PopupBase
             var filter_btn = select_toggle.GetComponent<FilterRadioBtn>();
             if (filter_btn != null)
             {
-                GameConfig.Instance.SetGameConfig<CHARACTER_SORT>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, filter_btn.GetCharacterFilterType());
+                GameConfig.Instance.SetGameConfig<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, filter_btn.GetCharacterFilterType());
             }
         }
         HidePopup();

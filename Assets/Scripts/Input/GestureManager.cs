@@ -12,7 +12,7 @@ namespace ZeroOne.Input
     public class GestureManager : Singleton<GestureManager>
     {
         // 더블터치와 롱프레스를 감지하기 위한 시간 및 거리 임계값
-        const float DOUBLETOUCH_THRESHOLD = 0.2f; // 더블터치 간 시간 간격
+        const float DOUBLETOUCH_THRESHOLD = 0.01f; // 더블터치 간 시간 간격
         const float TOUCH_DISTANCE_MAX = 10f; // 터치로 인정할 최대 거리
         const float DRAG_THRESHOLD = 0.01f; // 드래그로 인정할 최소 이동 거리의 제곱
 
