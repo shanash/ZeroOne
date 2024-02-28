@@ -16,25 +16,25 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
     Producer() { }
 
-    bool Initialize(int memorial_id, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
+    bool Initialize(int skin_id, LOVE_LEVEL_TYPE selected_relationship, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
     {
         Type = type;
         
-        var data = MasterDataManager.Instance.Get_L2DCharSkinData(memorial_id);
-        _ = InitializeAsync(data, Type, parent);
+        var data = MasterDataManager.Instance.Get_L2DCharSkinData(skin_id);
+        _ = InitializeAsync(data, selected_relationship, Type, parent);
 
         return true;
     }
 
-    bool Initialize(int memorial_id, SPINE_CHARA_LOCATION_TYPE type)
+    bool Initialize(int memorial_id, LOVE_LEVEL_TYPE selected_relationship, SPINE_CHARA_LOCATION_TYPE type)
     {
-        return Initialize(memorial_id, type, null);
+        return Initialize(memorial_id, selected_relationship, type, null);
     }
 
-    async Task InitializeAsync(L2d_Char_Skin_Data data, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
+    async Task InitializeAsync(L2d_Char_Skin_Data data, LOVE_LEVEL_TYPE selected_relationship, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
     {
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
-        Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, LOVE_LEVEL_TYPE.NORMAL, type);
+        Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, selected_relationship, type);
 
         if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO || type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
         {

@@ -320,6 +320,22 @@ namespace FluffyDuck.Util
         }
 
         /// <summary>
+        /// 오브젝트의 하이라키 경로를 가져온다
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string GetGameObjectPath(GameObject obj)
+        {
+            string path = obj.name;
+            while (obj.transform.parent != null)
+            {
+                obj = obj.transform.parent.gameObject;
+                path = obj.name + "/" + path;
+            }
+            return path;
+        }
+
+        /// <summary>
         /// Addressable Asset 에서 리소스 가져오기.
         /// 호출하는 쪽에서 async / await을 사용해야 함
         /// </summary>

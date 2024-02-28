@@ -282,7 +282,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         Info_UI.SetActivePd(false);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceTransferPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(Unit_Data);
+            popup.ShowPopup(Unit_Data, Selected_Relationship_Index);
             popup.AddClosedCallbackDelegate(OnClosedTransferEssence);
         });
     }

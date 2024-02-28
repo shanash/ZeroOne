@@ -9,7 +9,6 @@ using ZeroOne.Input;
 public class EssenceTransferPopup : PopupBase
 {
     const float FOV = 90;
-    const float ADDED_Y = -3.8f;
 
     [SerializeField, Tooltip("화면을 가로로 돌리는 버튼")]
     GameObject ToHorizontalButton = null;
@@ -21,12 +20,13 @@ public class EssenceTransferPopup : PopupBase
     RawImage Chara_Image = null;
 
     BattlePcData Battle_Pc_Data = null;
+    LOVE_LEVEL_TYPE Selected_Relationship;
+
     RenderTexture Chara_Texture = null;
     Producer pd = null;
 
     Vector3 local_origin_pos = Vector3.zero;
     float fov = 0.0f;
-
 
 
     public override void Spawned()
@@ -50,9 +50,6 @@ public class EssenceTransferPopup : PopupBase
         var vCam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
         fov = vCam.m_Lens.FieldOfView;
         vCam.m_Lens.FieldOfView = FOV;
-
-        //pd = Factory.Instantiate<Producer>(1010101, SPINE_CHARA_LOCATION_TYPE.MEMORIAL);
-        //GestureManager.Instance.Enable = true;
     }
 
     public override void Despawned()
@@ -88,17 +85,17 @@ public class EssenceTransferPopup : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 1 || data[0] is not BattlePcData)
+        if (data.Length != 2 || data[0] is not BattlePcData || data[1] is not int)
         {
             return false;
         }
 
         Battle_Pc_Data = data[0] as BattlePcData;
-        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
+        Selected_Relationship = (LOVE_LEVEL_TYPE)((int)data[1] + 1);// 인덱스 + 1 = 실제 호감도
 
+        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         GestureManager.Instance.Enable = true;
 
-        OnClickToVerticalButton();
         return true;
     }
 
@@ -116,6 +113,7 @@ public class EssenceTransferPopup : PopupBase
         PopupManager.Instance.CloseAll();
     }
 
+    // TODO: 현재는 사용하지 않는 버튼입니다. 오래 방치되면 지워줄것
     public void OnClickToVerticalButton()
     {
         Screen.orientation = ScreenOrientation.Portrait;
@@ -123,6 +121,7 @@ public class EssenceTransferPopup : PopupBase
         ToHorizontalButton.SetActive(true);
     }
 
+    // TODO: 현재는 사용하지 않는 버튼입니다. 오래 방치되면 지워줄것
     public void OnClickToHorizontalButton()
     {
         if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft)

@@ -75,7 +75,7 @@ public abstract partial class ActorBase : MonoBehaviour
         {
             need_set_anim = true;
         }
-        else if (!te.Animation.Name.Equals(Current_State_Data.Animation_Idle_Name))
+        else if (!te.Animation.Name.Equals(Idle_Animation_Data.Animation_Idle_Name))
         {
             need_set_anim = true;
             mix_duration = 0.2f;
@@ -83,7 +83,7 @@ public abstract partial class ActorBase : MonoBehaviour
 
         if (need_set_anim)
         {
-            Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
+            Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Idle_Animation_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
         }
     }
 
@@ -96,6 +96,7 @@ public abstract partial class ActorBase : MonoBehaviour
             throw new InvalidTrackException(track_num);
         }
 
+        Debug.Log($"Play Animation : {chat_motion_data.animation_name}");
         var te = Skeleton.AnimationState.SetAnimation(track_num, chat_motion_data.animation_name, false);
 
         // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
@@ -137,9 +138,9 @@ public abstract partial class ActorBase : MonoBehaviour
     {
         DisappearBalloon();
 
-        if (Current_Interaction != null && Current_Interaction.after_state_id != 0)
+        if (Current_State_Id != Current_Interaction.after_state_id)
         {
-            Current_State_Id = Current_Interaction.after_state_id;
+            SetActor(Current_Interaction.after_state_id);
         }
 
         react_track_entry = null;

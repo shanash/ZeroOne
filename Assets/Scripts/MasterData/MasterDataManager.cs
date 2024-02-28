@@ -815,6 +815,17 @@ public class MasterDataManager : BaseMasterDataManager
             .ToDictionary(x => x.love_level_type, x => x);
     }
 
+    public L2d_Love_State_Data Get_L2D_LoveState(int char_skin_id, LOVE_LEVEL_TYPE love_lv)
+    {
+        return _L2d_Love_State_Data.Values.ToList()
+            .Find(x => x.l2d_id == char_skin_id && x.love_level_type == love_lv);
+    }
+
+    public L2d_Skin_Ani_State_Data Get_L2D_SkinAniState(int state_id)
+    {
+        return _L2d_Skin_Ani_State_Data[state_id];
+    }
+
     public Dictionary<int, L2d_Skin_Ani_State_Data> Get_L2D_SkinAniStates(List<int> state_ids)
     {
         return state_ids
@@ -827,6 +838,13 @@ public class MasterDataManager : BaseMasterDataManager
     public List<L2d_Interaction_Base_Data> Get_L2D_InteractionBases(List<int> interaction_group_ids)
     {
         return interaction_group_ids.SelectMany(id => _L2d_Interaction_Base_Data.Values.ToList().FindAll(x => x.interaction_group_id == id)).ToList();
+    }
+
+    public Dictionary<Tuple<TOUCH_BODY_TYPE, TOUCH_GESTURE_TYPE, bool>, L2d_Interaction_Base_Data> Get_L2D_InteractionBases(int interaction_group_id, bool is_success_transfer_essence)
+    {
+        return _L2d_Interaction_Base_Data.Values
+            .Where(item => item.interaction_group_id == interaction_group_id)
+            .ToDictionary(item => Tuple.Create(item.touch_type_01, item.gescure_type_01, item.check_using_essense), item => item);
     }
     #endregion
 

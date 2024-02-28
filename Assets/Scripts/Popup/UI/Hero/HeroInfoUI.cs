@@ -100,14 +100,13 @@ public class HeroInfoUI : PopupBase
             pd = null;
         }
 
-        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
+        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
 
         Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, this);
     }
 
     void SetRenderTextureAndCamera()
     {
-        Debug.Log("SetRenderTAC");
         Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, (int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), 16);
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.fieldOfView = Camera.main.fieldOfView;

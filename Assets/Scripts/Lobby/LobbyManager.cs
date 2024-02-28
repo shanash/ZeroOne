@@ -259,7 +259,7 @@ public class LobbyManager : SceneControllerBase
     async UniTask UpdateLobbyChar()
     {
         var before_pd = pd;
-        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, SPINE_CHARA_LOCATION_TYPE.LOBBY, Memorial_Parent);
+        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.LOBBY, Memorial_Parent);
 
         await UniTask.WaitUntil(() => pd.Is_Init);
 

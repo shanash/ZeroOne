@@ -1,4 +1,5 @@
 using Cinemachine;
+using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
@@ -12,6 +13,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     // 보정 X, Y값
     const float ADDED_POS_X = 0f;
     const float ADDED_POS_Y = -0.75496f;
+    const float ESSENCE_POS_Y = -8f;
 
     protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
@@ -33,7 +35,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     Vector2 Current_Face_Direction;// 얼굴 방향
 
     ////////////////////////// 상태
-    protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
+    //protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
+    protected IdleAnimationData Idle_Animation_Data;
     KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int> Gesture_Touch_Counts;
     protected int Idle_Played_Count;
 
@@ -44,13 +47,21 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     //List<Me_Interaction_Data>[,] Touch_Type_Interactions;
     L2d_Interaction_Base_Data Current_Interaction;
 
-    Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> LoveStates;
-    LOVE_LEVEL_TYPE Current_Love_Level_Type;
+    //Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> LoveStates;
+    L2d_Love_State_Data LoveState;
+    LOVE_LEVEL_TYPE Current_Love_Level_Type => LoveState.love_level_type;
 
+    //Dictionary<int, L2d_Skin_Ani_State_Data> SkinAniStates;
+    protected L2d_Skin_Ani_State_Data SkinAniState;
+    protected L2d_Char_Skin_Data SkinData;
 
-    Dictionary<int, L2d_Skin_Ani_State_Data> SkinAniStates;
-    List<L2d_Interaction_Base_Data> Interaction_Bases;
-    protected Dictionary<int, Me_Chat_Motion_Data> Idle_Chat_Motions;
+    // 키의 bool 값은 근원전달 성공 실패 값이다
+    // 근원 전달이 아닌 상황에서는 false로 찾아주세요
+    protected Dictionary<Tuple<TOUCH_BODY_TYPE, TOUCH_GESTURE_TYPE, bool>, L2d_Interaction_Base_Data> Interaction_Bases;
+    //TOUCH_BODY_TYPE Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
+
+    //protected Dictionary<int, Me_Chat_Motion_Data> Idle_Chat_Motions;
+    protected Me_Chat_Motion_Data Idle_Chat_Motion;
     protected Dictionary<int, Me_Chat_Motion_Data> Reaction_Chat_Motions;
 
     protected int Current_Chat_Motion_Id;
@@ -72,31 +83,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected abstract Spine.AnimationState AnimationState { get; }
 
-    protected int Current_State_Id { get; set; }
+    protected int Current_State_Id => SkinAniState.state_id;
 
-    // 상태 ID에 기반한 상태 데이터를 가져옵니다
-    protected IdleAnimationData Current_State_Data
-    {
-        get
-        {
-            if (Idle_Animation_Datas.Count == 0
-                || !Idle_Animation_Datas.ContainsKey(Current_State_Id))
-            {
-                Debug.Assert(false, $"기본 아이들 애니메이션이 설정되지 않았습니다. State_Animation_Datas.Count: {Idle_Animation_Datas.Count}, State_Animation_Datas.ContainsKey(Current_State_Id): {Idle_Animation_Datas.ContainsKey(Current_State_Id)} : {Current_State_Id}");
-                return null;
-            }
-            IdleAnimationData result = null;
-            try
-            {
-                result = Idle_Animation_Datas[Current_State_Id];
-            }
-            catch (Exception ex)
-            {
-                Debug.LogException(ex);
-            }
-            return result;
-        }
-    }
 
     #region MonoBehaviour Methods
 
@@ -155,25 +143,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             //Debug.Log($"SpineAnimationComplete : {entry.Animation.Name}".WithColorTag(Color.red));
         }
 
-        if (FSM.CurrentTransitionID == ACTOR_STATES.IDLE)
-        {
-            if (Current_State_Data.Bored_Count > 0)
-            {
-                Idle_Played_Count++;
-                if (Idle_Played_Count % Current_State_Data.Bored_Count == 0)
-                {
-                    int index = Idle_Played_Count / Current_State_Data.Bored_Count - 1;
-                    Current_Chat_Motion_Id = Current_State_Data.Bored_Chatmotion_Ids[index];
-                    if (Current_State_Data.Bored_Chatmotion_Ids.Length - 1 == index)
-                    {
-                        Idle_Played_Count = 0;
-                    }
-
-                    FSM.ChangeState(ACTOR_STATES.REACT);
-                }
-            }
-        }
-        else if (FSM.CurrentTransitionID == ACTOR_STATES.REACT)
+        if (FSM.CurrentTransitionID == ACTOR_STATES.REACT)
         {
             if (react_track_entry == entry)
             {
@@ -183,7 +153,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 }
                 else
                 {
-                    Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Current_State_Data.Animation_Idle_Name, true);
+                    Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Idle_Animation_Data.Animation_Idle_Name, true);
                 }
 
                 react_track_entry = null;
@@ -323,6 +293,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     #region Gesture Callbacks
     protected virtual void OnTap(ICursorInteractable comp)
     {
+        if (!this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         if (FSM.CurrentTransitionID != ACTOR_STATES.IDLE)
         {
             return;
@@ -348,6 +323,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnDoubleTap(ICursorInteractable comp)
     {
+        if (!this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         if (FSM.CurrentTransitionID != ACTOR_STATES.IDLE)
         {
             return;
@@ -373,6 +353,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnDrag(ICursorInteractable comp, Vector2 position, Vector2 drag_vector, int state)
     {
+        if (!this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         bool isDragValid = (FSM.CurrentTransitionID == ACTOR_STATES.DRAG || FSM.CurrentTransitionID == ACTOR_STATES.EYE_TRACKER) && state >= 1;
         bool isIdleValid = FSM.CurrentTransitionID == ACTOR_STATES.IDLE && state == 0;
         if (!isDragValid && !isIdleValid)
@@ -460,6 +445,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnNade(ICursorInteractable obj, Vector2 position, Vector2 delta, int state)
     {
+        if (!this.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         /*
         bool isNadeValid = FSM.CurrentTransitionID == ACTOR_STATES.NADE && state >= 1;
         bool isIdleValid = FSM.CurrentTransitionID == ACTOR_STATES.IDLE && state == 0;
@@ -521,18 +511,20 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     L2d_Interaction_Base_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
     {
-        Debug.Log($"type : {type}, boundingBox : {bounding_box}");
-        var item = Interaction_Bases.Find(interaction => interaction.touch_type_01 == bounding_box.GetTouchBodyType() && interaction.gescure_type_01 == type);
+        var key = Tuple.Create(bounding_box.GetTouchBodyType(), type, false);
 
-        if (item == null)
+        if (!Interaction_Bases.ContainsKey(key))
         {
-            item = Interaction_Bases.Find(interaction => interaction.touch_type_01 == TOUCH_BODY_TYPE.NONE && interaction.gescure_type_01 == type);
+            key = Tuple.Create(TOUCH_BODY_TYPE.NONE, type, false);
+            if (!Interaction_Bases.ContainsKey(key))
+            {
+                Debug.Assert(false, "반응 애니메이션을 찾을 수 없습니다.");
 
-            return item;
+                return null;
+            }
         }
-        
 
-        return item;
+        return Interaction_Bases[key];
 
             /*
         var interaction_datas = Touch_Type_Interactions[(int)type, (int)bounding_box.GetTouchBodyType()];
@@ -643,7 +635,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
         else if (type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
         {
-            this.transform.position = new Vector3(0, -8f, this.transform.position.z);
+            this.transform.position = new Vector3(0, ESSENCE_POS_Y, this.transform.position.z);
+            //Essence_Success_Body = (TOUCH_BODY_TYPE)UnityEngine.Random.Range(1, 5);
         }
 
         InitField();
@@ -654,45 +647,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
 
         Producer = pd;
+        SkinData = skin_data;
 
-        LoveStates = MasterDataManager.Instance.Get_L2D_LoveStates(skin_data.l2d_id);
-
-        var state_ids = LoveStates.Values.Select(x => x.state_id).Distinct().ToList();
-        SkinAniStates = MasterDataManager.Instance.Get_L2D_SkinAniStates(state_ids);
-
-        var idle_ani_ids = SkinAniStates.Values.Select(x => x.base_ani_id).Distinct().ToList();
-        Idle_Chat_Motions = MasterDataManager.Instance.Get_AniData(idle_ani_ids);
-
-        var interaction_group_ids = SkinAniStates.Values.Select(x => x.interaction_group_id).Distinct().ToList();
-        Interaction_Bases = MasterDataManager.Instance.Get_L2D_InteractionBases(interaction_group_ids);
-
-        var reaction_ani_ids = Interaction_Bases.Select(i => i.reaction_ani_id).ToList();
-        Reaction_Chat_Motions = MasterDataManager.Instance.Get_AniData(reaction_ani_ids);
-
-        var serifu_ids = Reaction_Chat_Motions.Values.SelectMany(chat_motion_data => chat_motion_data.serifu_ids).ToList();
-
-        Serifues = MasterDataManager.Instance.Get_SerifuData(serifu_ids);
-
-        List<string> audio_keys = Serifues.Values
-            .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_key))
-            .Select(serifu => serifu.audio_clip_key)
-            .ToList();
-
-        AudioManager.Instance.PreloadAudioClipsAsync(audio_keys, null);
-
-        Idle_Animation_Datas = SkinAniStates.ToDictionary(
-            data => data.Key,
-            data => new IdleAnimationData
-            {
-                Animation_Idle_Name = Idle_Chat_Motions[data.Value.base_ani_id].animation_name,
-                Bored_Chatmotion_Ids = null,
-                Bored_Count = 0
-            });
-
-        Current_Love_Level_Type = love_level;
-        Current_State_Id = LoveStates[Current_Love_Level_Type].state_id;
-
-        Gesture_Touch_Counts = default;
+        SetActor(love_level);
 
         Lazy_Init(ACTOR_STATES.IDLE);
 
@@ -703,9 +660,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     void InitField()
     {
-        Debug.Log("InitField");
-        Idle_Animation_Datas = null;
-        Current_Love_Level_Type = LOVE_LEVEL_TYPE.NONE;
         Idle_Played_Count = 0;
         Gesture_Touch_Counts = default;
         Face = null;
@@ -713,7 +667,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Producer = null;
         //Touch_Type_Interactions = null;
         Current_Interaction = null;
-        Idle_Chat_Motions = null;
         Reaction_Chat_Motions = null;
         Serifues = null;
         Drag_Track_Entry = null;
@@ -724,6 +677,39 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Dragged_Canvas_Position = Vector2.zero;
         Current_Face_Direction = Vector2.zero;
         Is_Quit = false;
+    }
+
+    void SetActor(LOVE_LEVEL_TYPE type)
+    {
+        LoveState = MasterDataManager.Instance.Get_L2D_LoveState(SkinData.l2d_id, type);
+        SetActor(LoveState.state_id);
+    }
+
+    void SetActor(int state_id)
+    {
+        SkinAniState = MasterDataManager.Instance.Get_L2D_SkinAniState(state_id);
+        Idle_Chat_Motion = MasterDataManager.Instance.Get_MemorialChatMotion_(SkinAniState.base_ani_id);
+        Interaction_Bases = MasterDataManager.Instance.Get_L2D_InteractionBases(SkinAniState.interaction_group_id, false);
+        var reaction_ani_ids = Interaction_Bases.Values.Select(i => i.reaction_ani_id).ToList();
+        Reaction_Chat_Motions = MasterDataManager.Instance.Get_AniData(reaction_ani_ids);
+        var serifu_ids = Reaction_Chat_Motions.Values.SelectMany(chat_motion_data => chat_motion_data.serifu_ids).ToList();
+        Serifues = MasterDataManager.Instance.Get_SerifuData(serifu_ids);
+
+        List<string> audio_keys = Serifues.Values
+            .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_key))
+            .Select(serifu => serifu.audio_clip_key)
+            .ToList();
+
+        AudioManager.Instance.PreloadAudioClipsAsync(audio_keys, null);
+
+        Idle_Animation_Data = new IdleAnimationData
+        {
+            Animation_Idle_Name = Idle_Chat_Motion.animation_name,
+            Bored_Chatmotion_Ids = null,
+            Bored_Count = 0
+        };
+
+        Gesture_Touch_Counts = default;
     }
 
     bool GetSkeletonComponents()
