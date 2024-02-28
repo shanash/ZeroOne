@@ -1452,7 +1452,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     SpawnQueueEffect(edata);
 
-                    Effect_Queue_Interval = 0.15f;
+                    Effect_Queue_Interval = 0.15f / Battle_Speed_Multiple;
                 }
 
             }

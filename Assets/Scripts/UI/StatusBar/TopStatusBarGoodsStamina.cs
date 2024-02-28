@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TopStatusBarGoodsStamina : TopStatusBarGoodsBase
@@ -12,14 +13,30 @@ public class TopStatusBarGoodsStamina : TopStatusBarGoodsBase
 
     UserChargeItemData Charge_Item;
 
+    Coroutine Stamina_Coroutine;
+
     protected override void InitStatusBar()
     {
         var mng = GameData.Instance.GetUserChargeItemDataManager();
         Charge_Item = mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
-
-        StartCoroutine(StartOnUpdate(1f));
+        UpdateGoodsItem();
     }
 
+    private void OnEnable()
+    {
+        if (Stamina_Coroutine != null)
+        {
+            StopCoroutine(Stamina_Coroutine);
+        }
+        Stamina_Coroutine = StartCoroutine(StartOnUpdate(1f));
+    }
+    private void OnDisable()
+    {
+        if (Stamina_Coroutine != null)
+        {
+            StopCoroutine(Stamina_Coroutine);
+        }
+    }
     IEnumerator StartOnUpdate(float delay)
     {
         var wait = new WaitForSeconds(delay);

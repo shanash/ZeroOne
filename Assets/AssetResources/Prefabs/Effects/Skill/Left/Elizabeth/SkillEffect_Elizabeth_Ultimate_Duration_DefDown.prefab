@@ -24683,6 +24683,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6966825709458236527}
   - component: {fileID: 7135728961946293894}
+  - component: {fileID: 2185932126717919000}
+  - component: {fileID: -144899763739427497}
+  - component: {fileID: -4298924438190614642}
   m_Layer: 0
   m_Name: SkillEffect_Elizabeth_Ultimate_Duration_DefDown
   m_TagString: Untagged
@@ -24737,6 +24740,44 @@ MonoBehaviour:
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
+--- !u!114 &2185932126717919000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5918618062783483364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 51
+--- !u!210 &-144899763739427497
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5918618062783483364}
+  m_Enabled: 1
+  m_SortingLayerID: -1384048999
+  m_SortingLayer: 6
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &-4298924438190614642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5918618062783483364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d43d0d258105941849ef1a85810860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 8192638600142903476}
 --- !u!1 &8606837641570238898
 GameObject:
   m_ObjectHideFlags: 0
