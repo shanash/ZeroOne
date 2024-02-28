@@ -5075,8 +5075,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.6
-      minScalar: 0.4
+      scalar: 0.5
+      minScalar: 0.35
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5246,8 +5246,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.3
-      minScalar: 1.7
+      scalar: 1.4
+      minScalar: 1.8
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5511,8 +5511,8 @@ ParticleSystem:
     startRotation:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.3962634
-      minScalar: 1.7453293
+      scalar: 1.4486233
+      minScalar: 1.6929693
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5710,7 +5710,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.3
+      value: 0.25
       mode: 0
       spread: 0
       speed:
@@ -5989,8 +5989,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 12
-      repeatInterval: 0.25
+      cycleCount: 14
+      repeatInterval: 0.2
       probability: 1
   SizeModule:
     enabled: 1
@@ -6265,8 +6265,8 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5235988
-      minScalar: -0.5235988
+      scalar: 0.34906584
+      minScalar: -0.34906584
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -14732,6 +14732,7 @@ MonoBehaviour:
   Effect_Type: 2
   Effect_Duration: 0
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 1
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 1
@@ -14742,6 +14743,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 3121645795436590192}
   Projectile_Velocity: 20
+  Projectile_Duration: 0
   Use_Hide_Transforms: 1
   Hide_Transforms:
   - {fileID: 5545172600036835351}
@@ -24927,7 +24929,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.4
+      scalar: 1.2
       minScalar: 0.5
       maxCurve:
         serializedVersion: 2
