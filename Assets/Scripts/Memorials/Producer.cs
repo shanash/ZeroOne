@@ -15,6 +15,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     SPINE_CHARA_LOCATION_TYPE Type = SPINE_CHARA_LOCATION_TYPE.NONE;
 
     public bool Is_Init => (Stage != null && Actor != null);
+    public string Name => root != null ? root.name : Index.ToString();
 
     Producer() { }
 
@@ -39,6 +40,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
         Stage.gameObject.name = $"{Stage.gameObject.name}_{Index}_{data.l2d_id}";
         Index++;
+        root = Stage.gameObject;
 
         Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, selected_relationship, type);
 
@@ -47,7 +49,6 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
             GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }
 
-        root = Stage.gameObject;
         ScreenEffectManager.I.SetBlockInputUI(false);
     }
 

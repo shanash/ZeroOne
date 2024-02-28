@@ -36,6 +36,7 @@ namespace ZeroOne.Input
         public event TapEventHandler OnTap;
         public event TapEventHandler OnDoubleTap;
         public event DragEventHandler OnDrag;
+
         //public event NadeEventHandler OnNade;
 
         public bool Enable { get; set; } = true;
