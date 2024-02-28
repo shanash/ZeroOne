@@ -52,6 +52,7 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 3
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
@@ -62,6 +63,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -390,8 +392,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 6
+      scalar: 14
+      minScalar: 11
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -15210,8 +15212,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.5
-      minScalar: 2.5
+      scalar: 2.5
+      minScalar: 3.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -15263,8 +15265,8 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.8
-      minScalar: 1.5
+      scalar: 1.4
+      minScalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -20123,8 +20125,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2.5
-      minScalar: 3.5
+      scalar: 3.5
+      minScalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -20176,8 +20178,8 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.8
-      minScalar: 2
+      scalar: 1.7
+      minScalar: 3.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -24749,7 +24751,7 @@ ParticleSystemRenderer:
   m_NormalDirection: 1
   m_ShadowBias: 0
   m_RenderAlignment: 0
-  m_Pivot: {x: 0.5, y: 0, z: 0}
+  m_Pivot: {x: 0.45, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1

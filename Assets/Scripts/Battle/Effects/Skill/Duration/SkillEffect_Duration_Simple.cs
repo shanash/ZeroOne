@@ -39,6 +39,23 @@ public class SkillEffect_Duration_Simple : SkillEffect_Duration_Base
     }
 
 
+    private void Update()
+    {
+        if (!Is_Loop)
+        {
+            if (Is_Action && !Is_Pause)
+            {
+                Delta += Time.deltaTime;
+
+                if (Delta > Duration)
+                {
+                    Finish_Callback?.Invoke(this);
+                    UnusedEffect();
+                }
+            }
+        }
+    }
+
 
     public override void Spawned()
     {
