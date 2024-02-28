@@ -131,7 +131,7 @@ public class LobbyManager : SceneControllerBase
                 {
                     Current_L2d_Index = L2d_List.Count - 1;
                 }
-                UpdateLobbyChar();
+                _ = UpdateLobbyChar();
                 break;
             case "RightMemorialBtn":
                 Current_L2d_Index++;
@@ -139,7 +139,7 @@ public class LobbyManager : SceneControllerBase
                 {
                     Current_L2d_Index = 0;
                 }
-                UpdateLobbyChar();
+                _ = UpdateLobbyChar();
                 break;
             case "PlayBtn":
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
@@ -253,7 +253,7 @@ public class LobbyManager : SceneControllerBase
     {
         L2d_List = l2d_list;
         Current_L2d_Index = 0;
-        UpdateLobbyChar();
+        _ = UpdateLobbyChar();
     }
 
     async UniTask UpdateLobbyChar()

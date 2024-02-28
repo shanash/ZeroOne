@@ -44,13 +44,16 @@ namespace FluffyDuck.UI
         /// <param name="popup"></param>
         void AddOnEnter(PopupBase popup)
         {
-            if (Popup_List.Count == 0)
+            if (popup.GetPopupType() != POPUP_TYPE.NOTI_TYPE)
             {
-                Root_On_Exit?.Invoke();
-            }
-            else
-            {
-                Popup_List[Popup_List.Count - 1].OnExit();
+                if (Popup_List.Count == 0)
+                {
+                    Root_On_Exit?.Invoke();
+                }
+                else
+                {
+                    Popup_List[Popup_List.Count - 1].OnExit();
+                }
             }
             popup.OnEnter();
             Popup_List.Add(popup);
