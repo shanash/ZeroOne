@@ -54,7 +54,7 @@ public class HeroInfoUI : PopupBase
     [SerializeField, Tooltip("Hero Basic Info Box")]
     HeroInfoBox Hero_Info_Box;
 
-    List<UserHeroData> User_Hero_Datas;
+    List<BattlePcData> User_Hero_Datas;
     int Current_Hero_Data_Index;
     BattlePcData User_Hero_Battle_Data;
 
@@ -72,12 +72,12 @@ public class HeroInfoUI : PopupBase
     {
         ResetUI();
 
-        if (data.Length != 2 || data[0] is not List<UserHeroData> || data[1] is not int)
+        if (data.Length != 2 || data[0] is not List<BattlePcData> || data[1] is not int)
         {
             return false;
         }
 
-        User_Hero_Datas = data[0] as List<UserHeroData>;
+        User_Hero_Datas = data[0] as List<BattlePcData>;
         SetUserHero((int)data[1]);
         FixedUpdatePopup();
 
@@ -88,10 +88,7 @@ public class HeroInfoUI : PopupBase
     {
         Current_Hero_Data_Index = hero_data_index;
 
-        var user_hero_data = User_Hero_Datas[Current_Hero_Data_Index];
-
-        User_Hero_Battle_Data = new BattlePcData();
-        User_Hero_Battle_Data.SetUnitID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+        User_Hero_Battle_Data = User_Hero_Datas[Current_Hero_Data_Index];
 
         if (pd != null)
         {
