@@ -74,6 +74,11 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
         }
     }
 
+    public void SetBlockInputUI(bool value)
+    {
+        Container.Block_UI.SetActive(value);
+    }
+
     public void StartSequenceActions()
     {
         if (DoingSequenceActions)

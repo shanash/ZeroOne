@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Producer : FluffyDuck.Util.Factory.IProduct
 {
+    static int Index = 0;
+
     StageBase Stage = null;
     Background Background = null;
     ActorBase Actor = null;
@@ -33,7 +35,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
     async Task InitializeAsync(L2d_Char_Skin_Data data, LOVE_LEVEL_TYPE selected_relationship, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
     {
+        ScreenEffectManager.I.SetBlockInputUI(true);
         Stage = await MonoFactory.CreateAsync<StageBase>("Assets/AssetResources/Prefabs/Memorial/StageBase", parent);
+        Stage.gameObject.name = $"{Stage.gameObject.name}_{Index}_{data.l2d_id}";
+        Index++;
+
         Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, selected_relationship, type);
 
         if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO || type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
@@ -42,6 +48,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         }
 
         root = Stage.gameObject;
+        ScreenEffectManager.I.SetBlockInputUI(false);
     }
 
     public void SetActive(bool value)
@@ -61,11 +68,6 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
     public void Release()
     {
-        GameObject.Destroy(Actor.gameObject);
-        if (Background != null)
-        {
-            GameObject.Destroy(Background.gameObject);
-        }
-        GameObject.Destroy(Stage.gameObject);
+        GameObject.Destroy(root);
     }
 }

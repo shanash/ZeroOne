@@ -93,8 +93,6 @@ public class LobbyManager : SceneControllerBase
 
     public void OnConfirmPopup(params object[] data)
     {
-        Debug.Assert(data.Length > 0, "확인 데이터가 없습니다.");
-
         var popup_name = (string)data[0];
         switch(popup_name)
         {
@@ -131,7 +129,7 @@ public class LobbyManager : SceneControllerBase
                 {
                     Current_L2d_Index = L2d_List.Count - 1;
                 }
-                _ = UpdateLobbyChar();
+                UpdateLobbyChar();
                 break;
             case "RightMemorialBtn":
                 Current_L2d_Index++;
@@ -139,7 +137,7 @@ public class LobbyManager : SceneControllerBase
                 {
                     Current_L2d_Index = 0;
                 }
-                _ = UpdateLobbyChar();
+                UpdateLobbyChar();
                 break;
             case "PlayBtn":
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/MissionGateUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
@@ -253,20 +251,17 @@ public class LobbyManager : SceneControllerBase
     {
         L2d_List = l2d_list;
         Current_L2d_Index = 0;
-        _ = UpdateLobbyChar();
+        UpdateLobbyChar();
     }
 
-    async UniTask UpdateLobbyChar()
+    void UpdateLobbyChar()
     {
-        var before_pd = pd;
-        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.LOBBY, Memorial_Parent);
-
-        await UniTask.WaitUntil(() => pd.Is_Init);
-
-        if (before_pd != null)
+        if (pd != null)
         {
-            before_pd.Release();
+            pd.Release();
         }
+
+        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.LOBBY, Memorial_Parent);
     }
 
     public void OnReturn(params object[] param)
