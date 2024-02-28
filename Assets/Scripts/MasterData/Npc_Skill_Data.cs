@@ -78,6 +78,12 @@ public class Npc_Skill_Data : System.IDisposable
 	double _second_target_range;
 
 	///	<summary>
+	///	첫번째 이펙트만 사용
+	///	</summary>
+	public bool is_only_first_effect => _is_only_first_effect;
+	bool _is_only_first_effect;
+
+	///	<summary>
 	///	효과 비중
 	///	힛 횟수에 따라 비중 조절
 	///	총 합이 100이 되어야 한다.
@@ -137,6 +143,7 @@ public class Npc_Skill_Data : System.IDisposable
 		_second_target_rule = raw_data.second_target_rule;
 		_max_second_target_count = raw_data.max_second_target_count;
 		_second_target_range = raw_data.second_target_range;
+		_is_only_first_effect = raw_data.is_only_first_effect;
 		if(raw_data.effect_weight != null)
 			_effect_weight = raw_data.effect_weight.ToArray();
 		if(raw_data.onetime_effect_ids != null)
@@ -182,6 +189,7 @@ public class Npc_Skill_Data : System.IDisposable
 		sb.AppendFormat("[second_target_rule] = <color=yellow>{0}</color>", second_target_rule).AppendLine();
 		sb.AppendFormat("[max_second_target_count] = <color=yellow>{0}</color>", max_second_target_count).AppendLine();
 		sb.AppendFormat("[second_target_range] = <color=yellow>{0}</color>", second_target_range).AppendLine();
+		sb.AppendFormat("[is_only_first_effect] = <color=yellow>{0}</color>", is_only_first_effect).AppendLine();
 		sb.AppendLine("[effect_weight]");
 		if(effect_weight != null)
 		{

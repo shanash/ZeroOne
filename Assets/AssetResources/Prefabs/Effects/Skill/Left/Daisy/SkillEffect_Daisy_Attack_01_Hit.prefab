@@ -4886,6 +4886,7 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 3
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
@@ -4896,6 +4897,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -5224,8 +5226,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 7
-      minScalar: 9
+      scalar: 10
+      minScalar: 15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5277,8 +5279,8 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 6
+      scalar: 5
+      minScalar: 8
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -10156,7 +10158,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.3
-      minScalar: 1
+      minScalar: 1.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11907,7 +11909,7 @@ ParticleSystem:
     radial:
       serializedVersion: 2
       minMaxState: 2
-      scalar: 90
+      scalar: 120
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -15086,8 +15088,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 32
-      minScalar: 11
+      scalar: 40
+      minScalar: 14
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -24930,8 +24932,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 6
+      scalar: 7
+      minScalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -24983,8 +24985,8 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 6
+      scalar: 7
+      minScalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -26984,8 +26986,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 5
+      scalar: 2
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -27037,8 +27039,8 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 5
+      scalar: 2
+      minScalar: 7
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -29906,8 +29908,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 4
-      minScalar: 6
+      scalar: 8
+      minScalar: 11
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -29959,8 +29961,8 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2.5
-      minScalar: 4
+      scalar: 4
+      minScalar: 7
       maxCurve:
         serializedVersion: 2
         m_Curve:

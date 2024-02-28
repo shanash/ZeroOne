@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json.Serialization;
 using System;
 using UnityEngine;
@@ -46,6 +47,12 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE_RATE:
                     recovery_hp = t.Life * Data.multiple;
+                    break;
+                case STAT_MULTIPLE_TYPE.HEAL_RATE:
+                    recovery_hp = t.Life_Recovery_Inc * Data.multiple;
+                    break;
+                case STAT_MULTIPLE_TYPE.HEAL_VALUE:
+                    recovery_hp = Data.value;
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);

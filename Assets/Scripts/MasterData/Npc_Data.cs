@@ -16,6 +16,12 @@ public class Npc_Data : System.IDisposable
 	///	<summary>
 	///	이름
 	///	</summary>
+	public string name_id => _name_id;
+	string _name_id;
+
+	///	<summary>
+	///	이름
+	///	</summary>
 	public string name_kr => _name_kr;
 	string _name_kr;
 
@@ -66,6 +72,7 @@ public class Npc_Data : System.IDisposable
 	public Npc_Data(Raw_Npc_Data raw_data)
 	{
 		_npc_data_id = raw_data.npc_data_id;
+		_name_id = raw_data.name_id;
 		_name_kr = raw_data.name_kr;
 		_tribe_type = raw_data.tribe_type;
 		_npc_type = raw_data.npc_type;
@@ -96,6 +103,7 @@ public class Npc_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[npc_data_id] = <color=yellow>{0}</color>", npc_data_id).AppendLine();
+		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
 		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();

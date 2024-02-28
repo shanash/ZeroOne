@@ -774,5 +774,16 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
+    /// <summary>
+    /// 팀원 전체를 최상위로 올려준다.
+    /// </summary>
+    public void SetTeamLastSibling()
+    {
+        for (int i = 0; i < Used_Members.Count; i++)
+        {
+            Used_Members[i].transform.SetAsLastSibling();
+        }
+    }
+
 
 }

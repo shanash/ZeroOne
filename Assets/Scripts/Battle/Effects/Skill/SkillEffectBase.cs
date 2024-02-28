@@ -131,7 +131,15 @@ public class SkillEffectBase : EffectBase
                 if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
                 {
                     float distance = Vector3.Distance(this.transform.position, target_trans.position);
-                    float flying_time = distance / ec.Projectile_Velocity;
+                    float flying_time = 0f;
+                    if (ec.Projectile_Duration > 0f)
+                    {
+                        flying_time = ec.Projectile_Duration;
+                    }
+                    else
+                    {
+                        flying_time = distance / ec.Projectile_Velocity;
+                    }
                     effect.MoveTarget(target_trans, flying_time);
                 }
                 else if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
@@ -250,7 +258,15 @@ public class SkillEffectBase : EffectBase
                     if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
                     {
                         float distance = Vector3.Distance(this.transform.position, target_trans.position);
-                        float flying_time = distance / ec.Projectile_Velocity;
+                        float flying_time = 0f;
+                        if (ec.Projectile_Duration > 0f)
+                        {
+                            flying_time = ec.Projectile_Duration;
+                        }
+                        else
+                        {
+                            flying_time = distance / ec.Projectile_Velocity;
+                        }
                         effect.MoveTarget(target_trans, flying_time);
                     }
                     else if(ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)

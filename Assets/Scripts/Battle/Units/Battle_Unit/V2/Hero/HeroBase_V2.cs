@@ -1,10 +1,12 @@
 using Cysharp.Text;
+using DocumentFormat.OpenXml.Drawing;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
@@ -857,7 +859,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                         effect.transform.position = start_pos;
 
                         float distance = Vector3.Distance(start_pos, target_pos);
-                        float flying_time = distance / ec.Projectile_Velocity;
+                        float flying_time = 0f;
+                        if (ec.Projectile_Duration > 0f)
+                        {
+                            flying_time = ec.Projectile_Duration;
+                        }
+                        else
+                        {
+                            flying_time = distance / ec.Projectile_Velocity;
+                        }
 
                         effect.MoveTarget(target_trans, flying_time);
                     }
@@ -917,30 +927,155 @@ public partial class HeroBase_V2 : UnitBase_V2
                 dmg.Magic_Attack_Point = GetMagicAttackPoint();
                 dmg.Effect_Weight_Index = effect_weight_index;
 
-                //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
-                trigger_effect.SetBattleSendData(dmg);
-
-                var ec = trigger_effect.GetEffectComponent();
-                Transform target_trans = ec.GetTargetReachPosition(this);
-                var target_pos = target_trans.position;
-
-                //  즉발형인지
-                if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                //  첫번재 이펙트만 보여줘야 하므로
+                if (effect_weight_index == 0)
                 {
-                    target_pos.z = target_trans.position.z;
-                    trigger_effect.transform.position = target_pos;
-                    trigger_effect.StartParticle(ec.Effect_Duration);
-                }
-                else if(ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) //  투사체인지
-                {
-                    //  nothing (현재까지 투사체 샘플이 없음)
+                    //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
+                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
+                    trigger_effect.SetBattleSendData(dmg);
+
+                    var ec = trigger_effect.GetEffectComponent();
+                    Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                    var target_pos = target_trans.position;
+
+                    //  즉발형인지
+                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                    {
+                        target_pos.z = target_trans.position.z;
+                        trigger_effect.transform.position = target_pos;
+                        trigger_effect.StartParticle(ec.Effect_Duration);
+                    }
+                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) //  투사체인지
+                    {
+                        //  nothing (현재까지 투사체 샘플이 없음)
+
+                        Transform start_trans = ec.GetProjectileStartTransform(this);
+                        var start_pos = start_trans.position;
+                        start_pos.z = start_trans.position.z;
+
+                        trigger_effect.transform.position = start_pos;
+
+                        float distance = Vector3.Distance(start_pos, target_pos);
+                        float flying_time = 0f;
+                        if (ec.Projectile_Duration > 0f)
+                        {
+                            flying_time = ec.Projectile_Duration;
+                        }
+                        else
+                        {
+                            flying_time = distance / ec.Projectile_Velocity;
+                        }
+
+                        trigger_effect.MoveTarget(target_trans, flying_time);
+                    }
+                    else
+                    {
+                        Debug.Assert(false);
+                    }
                 }
                 else
                 {
-                    Debug.Assert(false);
-                }
+                    //  일회성 / 지속성 효과만 적용
+                    //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
+                    for (int i = 0; i < target_cnt; i++)
+                    {
+                        var target = Attack_Targets[i];
 
+                        //  onetime skill
+                        var onetime_list = skill.GetOnetimeSkillDataList();
+                        int one_cnt = onetime_list.Count;
+                        for (int o = 0; o < one_cnt; o++)
+                        {
+                            var onetime = onetime_list[o];
+                            string effect_path = onetime.GetEffectPrefab();
+                            if (string.IsNullOrEmpty(effect_path))
+                            {
+                                dmg.Onetime = onetime;
+                                onetime.ExecSkill(dmg);
+                                continue;
+                            }
+                            dmg.Onetime = onetime;
+
+                            var effect = (SkillEffectBase)factory.CreateEffect(effect_path, GetUnitScale());
+                            effect.SetBattleSendData(dmg);
+
+                            var ec = effect.GetEffectComponent();
+                            Transform target_trans = ec.GetTargetReachPosition(target);
+                            var target_pos = target_trans.position;
+                            //  즉발형 이펙트
+                            if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                            {
+                                target_pos.z = target_trans.position.z;
+                                effect.transform.position = target_pos;
+                                effect.StartParticle(ec.Effect_Duration);
+                            }
+                            else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) // 투사체 이펙트
+                            {
+                                Transform start_trans = ec.GetProjectileStartTransform(this);
+                                var start_pos = start_trans.position;
+                                start_pos.z = start_trans.position.z;
+
+                                effect.transform.position = start_pos;
+
+                                float distance = Vector3.Distance(start_pos, target_pos);
+                                float flying_time = 0f;
+                                if (ec.Projectile_Duration > 0f)
+                                {
+                                    flying_time = ec.Projectile_Duration;
+                                }
+                                else
+                                {
+                                    flying_time = distance / ec.Projectile_Velocity;
+                                }
+
+                                effect.MoveTarget(target_trans, flying_time);
+                            }
+                            else
+                            {
+                                Debug.Assert(false);
+                            }
+                        }
+
+                        //  duration skill
+                        var duration_list = skill.GetDurationSkillDataList();
+                        int dur_cnt = duration_list.Count;
+                        for (int d = 0; d < dur_cnt; d++)
+                        {
+                            var duration = duration_list[d];
+                            string effect_path = duration.GetEffectPrefab();
+                            if (string.IsNullOrEmpty(effect_path))
+                            {
+                                dmg.Duration = duration;
+                                duration.ExecSkill(dmg);
+                                continue;
+                            }
+                            dmg.Duration = duration;
+
+                            var effect = (SkillEffectBase)factory.CreateEffect(effect_path, target.GetUnitScale());
+                            effect.SetBattleSendData(dmg);
+
+                            var ec = effect.GetEffectComponent();
+                            Transform target_trans = ec.GetTargetReachPosition(target);
+                            var target_pos = target_trans.position;
+                            if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+                            {
+                                target_pos.z = target_trans.position.z;
+                                effect.transform.position = target_pos;
+                                effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
+                            }
+                            else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
+                            {
+                                //  nothing - 아직 투사체로 날아가서 발생하는 지속성 효과는 없음
+                            }
+                            else
+                            {
+                                Debug.Assert(false);
+                            }
+
+                        }
+                    }
+
+                }
             }
             else  // 각 타겟별 이펙트
             {
@@ -980,7 +1115,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                         trigger_effect.transform.position = start_pos;
 
                         float distance = Vector3.Distance(start_pos, target_pos);
-                        float flying_time = distance / ec.Projectile_Velocity;
+                        float flying_time = 0f;
+                        if (ec.Projectile_Duration > 0f)
+                        {
+                            flying_time = ec.Projectile_Duration;
+                        }
+                        else
+                        {
+                            flying_time = distance / ec.Projectile_Velocity;
+                        }
 
                         trigger_effect.MoveTarget(target_trans, flying_time);
                     }

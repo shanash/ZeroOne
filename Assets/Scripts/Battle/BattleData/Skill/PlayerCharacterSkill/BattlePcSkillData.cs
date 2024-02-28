@@ -225,9 +225,13 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
         skill_effect_list.AddRange(Onetime_Skill_List);
         skill_effect_list.AddRange(Duration_Skill_List);
 
-
         for (int i = 0; i < Data.pc_skill_desc_id.Length; i++)
         {
+            string skill_desc_id = Data.pc_skill_desc_id[i];
+            if (string.IsNullOrEmpty(skill_desc_id))
+            {
+                continue;
+            }
             string desc = GameDefine.GetLocalizeString(Data.pc_skill_desc_id[i]);
             UnityEngine.Debug.Log(desc);
             MatchCollection matches = Regex.Matches(desc, pattern);

@@ -359,6 +359,8 @@ public partial class BattleManager_V2 : SceneControllerBase
             {
                 enemy_team.SpawnHeros();
             }
+            //  아군 최상위로 올려주기
+            my_team.SetTeamLastSibling();
             
             Fade_In_Out_Layer.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, () =>
             {

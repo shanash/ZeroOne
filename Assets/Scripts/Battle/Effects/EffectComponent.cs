@@ -111,6 +111,9 @@ public class EffectComponent : MonoBehaviour
     [SerializeField, Tooltip("투사체 이동 속도\n 이동속도는 초당 이동 거리를 지정한다.")]
     public float Projectile_Velocity;
 
+    [SerializeField, Tooltip("투사체 이동 시간\n이동 속도 이용하지 않고 시간을 지정.")]
+    public float Projectile_Duration;
+
     [SerializeField, Tooltip("투사체 이동 후 감추기 사용 여부")]
     public bool Use_Hide_Transforms;
 

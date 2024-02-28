@@ -36,6 +36,8 @@ public class EffectComponent_Inspector : Editor
 
     //  Velocity
     SerializedProperty Projectile_Velocity_Property;
+    //  Projectile duration
+    SerializedProperty Projectile_Duration_Property;
 
     //  Hide Objects
     SerializedProperty Use_Hide_Transforms_Property;
@@ -75,6 +77,7 @@ public class EffectComponent_Inspector : Editor
 
         //  이동 속도
         Projectile_Velocity_Property = serializedObject.FindProperty("Projectile_Velocity");
+        Projectile_Duration_Property = serializedObject.FindProperty("Projectile_Duration");
 
         //  투사체 이동 종료 후 오브젝트 감추기
         Use_Hide_Transforms_Property = serializedObject.FindProperty("Use_Hide_Transforms");
@@ -164,6 +167,8 @@ public class EffectComponent_Inspector : Editor
 
         //  Velocity
         EditorGUILayout.PropertyField(Projectile_Velocity_Property);
+        //  Proejectile duration
+        EditorGUILayout.PropertyField(Projectile_Duration_Property);
 
         //  Hide Objects
         EditorGUILayout.PropertyField(Use_Hide_Transforms_Property);
@@ -199,6 +204,7 @@ public class EffectComponent_Inspector : Editor
             Mover_Property.objectReferenceValue = null;
 
             Projectile_Velocity_Property.floatValue = 0f;
+            Projectile_Duration_Property.floatValue = 0f;
 
             Hide_Transforms_Property.ClearArray();
             Hide_After_Delay_Time_Property.floatValue = 0f;
@@ -257,17 +263,20 @@ public class EffectComponent_Inspector : Editor
                 case THROWING_TYPE.LINEAR:
                     EditorGUILayout.PropertyField(Mover_Property);
                     EditorGUILayout.PropertyField(Projectile_Velocity_Property);
+                    EditorGUILayout.PropertyField(Projectile_Duration_Property);
                     break;
                 case THROWING_TYPE.PARABOLA:
                     EditorGUILayout.PropertyField(Parabola_Property);
                     EditorGUILayout.PropertyField(Parabola_Height_Property);
                     EditorGUILayout.PropertyField(Projectile_Velocity_Property);
+                    EditorGUILayout.PropertyField(Projectile_Duration_Property);
                     break;
                 case THROWING_TYPE.BEZIER:
                     EditorGUILayout.PropertyField(Curve_Property);
                     EditorGUILayout.PropertyField(Start_Curve_Dist_Property);
                     EditorGUILayout.PropertyField(End_Curve_Dist_Property);
                     EditorGUILayout.PropertyField(Projectile_Velocity_Property);
+                    EditorGUILayout.PropertyField(Projectile_Duration_Property);
                     break;
             }
         }

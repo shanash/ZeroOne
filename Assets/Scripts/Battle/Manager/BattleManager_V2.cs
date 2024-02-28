@@ -122,6 +122,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         var myteam = FindTeamManager(TEAM_TYPE.LEFT);
         Skill_Slot_Mng.SetHeroMembers(myteam.GetMembers());
+        myteam.SetTeamLastSibling();
     }
 
 
