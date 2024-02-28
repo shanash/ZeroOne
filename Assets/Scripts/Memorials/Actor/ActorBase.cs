@@ -587,7 +587,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected void RemoveGestureEventListener()
     {
         //GestureManager.Instance.OnNade -= OnNade;
-        if (GestureManager.Instance == null)
+        if (GestureManager.Instance != null)
         {
             GestureManager.Instance.OnTap -= OnTap;
             GestureManager.Instance.OnDoubleTap -= OnDoubleTap;
