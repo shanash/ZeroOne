@@ -153,6 +153,9 @@ public abstract class BattleUnitData : BattleDataBase
             GetSumSkillsLevel());
     }
 
+    public virtual double GetTotalAttackPoint() { return 0; }
+    public virtual double GetTotalDefensePoint() { return 0; }
+
     /// <summary>
     /// 물리 공격 포인트
     /// </summary>

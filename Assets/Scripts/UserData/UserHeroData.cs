@@ -711,6 +711,8 @@ public class UserHeroData : UserDataBase
         Battle_Data = m.Get_PlayerCharacterBattleData(Hero_Data.battle_info_id, grade);
         Star_Data = m.Get_StarUpgradeData(grade);
     }
+    
+
     public ATTRIBUTE_TYPE GetAttributeType()
     {
         if (Hero_Data != null)

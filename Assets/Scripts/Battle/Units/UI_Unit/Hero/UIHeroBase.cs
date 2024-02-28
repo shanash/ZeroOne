@@ -36,8 +36,8 @@ public class UIHeroBase : UnitBase_V2
                 case HERO_PLAY_ANIMATION_TYPE.WIN_01:
                     {
 
-                        Skeleton.AnimationState.SetAnimation(1, "1_win", false);
-                        Skeleton.AnimationState.AddAnimation(1, "1_idle", true, 0);
+                        Skeleton.AnimationState.SetAnimation(0, "00_win", false);
+                        Skeleton.AnimationState.AddAnimation(0, "00_win_loop", true, 0);
                     }
                     break;
             }

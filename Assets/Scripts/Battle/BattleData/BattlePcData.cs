@@ -135,6 +135,15 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
+    public override double GetTotalAttackPoint()
+    {
+        return GetPhysicsAttackPoint() + GetMagicAttackPoint();
+    }
+    public override double GetTotalDefensePoint()
+    {
+        return GetPhysicsDefensePoint() + GetMagicDefensePoint();
+    }
+
     public override double GetPhysicsAttackPoint() => GetPhysicsAttackPoint(Battle_Data);
     double GetPhysicsAttackPoint(Player_Character_Battle_Data battle_data)
     {

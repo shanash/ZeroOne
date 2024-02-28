@@ -587,9 +587,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected void RemoveGestureEventListener()
     {
         //GestureManager.Instance.OnNade -= OnNade;
-        GestureManager.Instance.OnTap -= OnTap;
-        GestureManager.Instance.OnDoubleTap -= OnDoubleTap;
-        GestureManager.Instance.OnDrag -= OnDrag;
+        if (GestureManager.Instance == null)
+        {
+            GestureManager.Instance.OnTap -= OnTap;
+            GestureManager.Instance.OnDoubleTap -= OnDoubleTap;
+            GestureManager.Instance.OnDrag -= OnDrag;
+        }
     }
 
     float CalculateTop(Vector3 cam_pos, float fov, Vector3 target)

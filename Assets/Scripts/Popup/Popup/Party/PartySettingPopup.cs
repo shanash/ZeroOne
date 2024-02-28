@@ -56,6 +56,7 @@ public class PartySettingPopup : PopupBase
     TMP_Text Confirm_Btn_Text;
 
     CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
+    SORT_ORDER Sort_Order = SORT_ORDER.ASC;
 
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     int Dungeon_ID;
@@ -72,6 +73,7 @@ public class PartySettingPopup : PopupBase
 
         Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+        Sort_Order = (SORT_ORDER)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.SORT_ORDER_TYPE, SORT_ORDER.ASC);
         UpdateFilterType();
         InitPopupUI();
 
@@ -113,7 +115,150 @@ public class PartySettingPopup : PopupBase
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
         List<UserHeroData> user_hero_list = new List<UserHeroData>();
+        var battle_hero_list = new List<BattlePcData>();
+        
         hero_mng.GetUserHeroDataList(ref user_hero_list);
+
+        //  sort
+        if (Sort_Order == SORT_ORDER.ASC)
+        {
+            switch (Filter_Type)
+            {
+                case CHARACTER_SORT.NAME:
+                    user_hero_list.Sort((a, b) => GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id)));
+                    break;
+                case CHARACTER_SORT.LEVEL_CHARACTER:
+                    user_hero_list.Sort((a, b) => a.GetLevel().CompareTo(b.GetLevel()));
+                    break;
+                case CHARACTER_SORT.STAR:
+                    user_hero_list.Sort((a, b) => a.GetStarGrade().CompareTo(b.GetStarGrade()));
+                    break;
+                case CHARACTER_SORT.DESTINY:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.SKILL_LEVEL:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.EX_SKILL_LEVEL:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.ATTACK:
+                    //  todo
+                    {
+                        for (int i = 0; i < user_hero_list.Count; i++)
+                        {
+                            var user_hero = user_hero_list[i];
+                            var b = new BattlePcData();
+                            b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
+                            battle_hero_list.Add(b);
+                        }
+                        battle_hero_list.Sort((a, b) => a.GetTotalAttackPoint().CompareTo(b.GetTotalAttackPoint()));
+                        user_hero_list.Clear();
+                        for (int i = 0; i < battle_hero_list.Count; i++)
+                        {
+                            user_hero_list.Add(battle_hero_list[i].User_Data);
+                        }
+                    }
+                    break;
+                case CHARACTER_SORT.DEFEND:
+                    {
+                        {
+                            for (int i = 0; i < user_hero_list.Count; i++)
+                            {
+                                var user_hero = user_hero_list[i];
+                                var b = new BattlePcData();
+                                b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
+                                battle_hero_list.Add(b);
+                            }
+                            battle_hero_list.Sort((a, b) => a.GetTotalDefensePoint().CompareTo(b.GetTotalDefensePoint()));
+                            user_hero_list.Clear();
+                            for (int i = 0; i < battle_hero_list.Count; i++)
+                            {
+                                user_hero_list.Add(battle_hero_list[i].User_Data);
+                            }
+                        }
+                    }
+                    //  todo
+                    break;
+                case CHARACTER_SORT.RANGE:
+                    //  todo
+                    user_hero_list.Sort((a, b) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
+                    break;
+                case CHARACTER_SORT.LIKEABILITY:
+                    //  not m2
+                    break;
+            }
+        }
+        else
+        {
+            switch (Filter_Type)
+            {
+                case CHARACTER_SORT.NAME:
+                    user_hero_list.Sort((b, a) => GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id)));
+                    break;
+                case CHARACTER_SORT.LEVEL_CHARACTER:
+                    user_hero_list.Sort((b, a) => a.GetLevel().CompareTo(b.GetLevel()));
+                    break;
+                case CHARACTER_SORT.STAR:
+                    user_hero_list.Sort((b, a) => a.GetStarGrade().CompareTo(b.GetStarGrade()));
+                    break;
+                case CHARACTER_SORT.DESTINY:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.SKILL_LEVEL:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.EX_SKILL_LEVEL:
+                    //  not m2
+                    break;
+                case CHARACTER_SORT.ATTACK:
+                    //  todo
+                    {
+                        for (int i = 0; i < user_hero_list.Count; i++)
+                        {
+                            var user_hero = user_hero_list[i];
+                            var b = new BattlePcData();
+                            b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
+                            battle_hero_list.Add(b);
+                        }
+                        battle_hero_list.Sort((b, a) => a.GetTotalAttackPoint().CompareTo(b.GetTotalAttackPoint()));
+                        user_hero_list.Clear();
+                        for (int i = 0; i < battle_hero_list.Count; i++)
+                        {
+                            user_hero_list.Add(battle_hero_list[i].User_Data);
+                        }
+                    }
+                    break;
+                case CHARACTER_SORT.DEFEND:
+                    {
+                        {
+                            for (int i = 0; i < user_hero_list.Count; i++)
+                            {
+                                var user_hero = user_hero_list[i];
+                                var b = new BattlePcData();
+                                b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
+                                battle_hero_list.Add(b);
+                            }
+                            battle_hero_list.Sort((b, a) => a.GetTotalDefensePoint().CompareTo(b.GetTotalDefensePoint()));
+                            user_hero_list.Clear();
+                            for (int i = 0; i < battle_hero_list.Count; i++)
+                            {
+                                user_hero_list.Add(battle_hero_list[i].User_Data);
+                            }
+                        }
+                    }
+                    //  todo
+                    break;
+                case CHARACTER_SORT.RANGE:
+                    //  todo
+                    user_hero_list.Sort((b, a) => a.GetApproachDistance().CompareTo(b.GetApproachDistance()));
+                    break;
+                case CHARACTER_SORT.LIKEABILITY:
+                    //  not m2
+                    break;
+            }
+        }
+
 
         //  가로 컬럼 5개(보유중인 영웅 리스트 불러오기)
         int start = 0;
@@ -151,6 +296,10 @@ public class PartySettingPopup : PopupBase
     void UpdateFilterType()
     {
         Filter_Name.text = ConstString.Hero.SORT_FILLTER[(int)Filter_Type];
+
+        var arrow_scale = Arrow_Icon.transform.localScale;
+        arrow_scale.y = Sort_Order == SORT_ORDER.ASC ? 1 : -1;
+        Arrow_Icon.transform.localScale = arrow_scale;
     }
 
     public override void UpdatePopup()
@@ -238,7 +387,7 @@ public class PartySettingPopup : PopupBase
         {
             popup.SetHideCompleteCallback(() =>
             {
-                Filter_Type = GameConfig.Instance.GetGameConfigValue<CHARACTER_SORT>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+                Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
                 FixedUpdatePopup();
             });
             popup.ShowPopup();
@@ -247,6 +396,16 @@ public class PartySettingPopup : PopupBase
     public void OnClickSort()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        if (Sort_Order == SORT_ORDER.ASC)
+        {
+            Sort_Order = SORT_ORDER.DESC;
+        }
+        else
+        {
+            Sort_Order = SORT_ORDER.ASC;
+        }
+        GameConfig.Instance.SetGameConfig<int>(GAME_CONFIG_KEY.SORT_ORDER_TYPE, (int)Sort_Order);
+        FixedUpdatePopup();
     }
 
     public void OnClickTeamSynergy()

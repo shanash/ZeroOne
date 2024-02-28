@@ -1210,7 +1210,12 @@ public partial class HeroBase_V2 : UnitBase_V2
             Utility = GetComponent<SkeletonUtility>();
         }
 
-        
+        if (Shadow != null && Shadow.color.a != 1f)
+        {
+            var color = Shadow.color;
+            color.a = 1f;
+            Shadow.color = color;
+        }
     }
     public override void Despawned()
     {
@@ -1452,7 +1457,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     SpawnQueueEffect(edata);
 
-                    Effect_Queue_Interval = 0.15f / Battle_Speed_Multiple;
+                    Effect_Queue_Interval = 0.09f / Battle_Speed_Multiple;
                 }
 
             }
@@ -1465,9 +1470,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <param name="edata"></param>
     void SpawnQueueEffect(Effect_Queue_Data edata)
     {
-        //var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path, UI_Mng.GetDamageContainer());
         var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path);
-        //(effect.transform as RectTransform).anchoredPosition3D = RectTransformUtility.WorldToScreenPoint(Camera.main, edata.Target_Position.position);
         effect.transform.position = edata.Target_Position.position;
         effect.SetData(edata.Data);
         effect.StartParticle(edata.Duration);
