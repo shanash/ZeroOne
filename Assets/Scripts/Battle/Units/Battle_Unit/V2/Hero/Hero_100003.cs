@@ -10,8 +10,14 @@ public class Hero_100003 : HeroBase_V2
 
     #region States
 
-
-
+    public override void UnitStateSkillReady01Begin()
+    {
+        SetPlayableDirector();
+    }
+    public override void UnitStateSkillReady01()
+    {
+        ChangeState(UNIT_STATES.SKILL_1);
+    }
 
 
     #endregion

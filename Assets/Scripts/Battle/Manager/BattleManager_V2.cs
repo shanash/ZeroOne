@@ -203,6 +203,15 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].ShowAllUnitWithoutTargets(targets);
         }
     }
+
+    public void ShowAllUnits()
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].ShowAllUnits();
+        }
+    }
     
     public void AllPauseUnitWithoutHero(HeroBase_V2 hero)
     {

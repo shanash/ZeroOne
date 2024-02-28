@@ -528,13 +528,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
-                //Battle_Mng.AllResumeUnitWithoutHero(this);
-                //Battle_Mng.GetEffectFactory().OnResumeAndShow();
-
-                List<HeroBase_V2> targets = new List<HeroBase_V2>();
-                targets.Add(this);
-                targets.AddRange(Attack_Targets);
-                Battle_Mng.ShowAllUnitWithoutTargets(targets);
+                //List<HeroBase_V2> targets = new List<HeroBase_V2>();
+                //targets.Add(this);
+                //targets.AddRange(Attack_Targets);
+                //Battle_Mng.ShowAllUnitWithoutTargets(targets);
+                Battle_Mng.ShowAllUnits();
 
                 UnsetPlayableDirector();
                 var skill = GetSkillManager().GetSpecialSkillGroup();
@@ -542,7 +540,6 @@ public partial class HeroBase_V2 : UnitBase_V2
                 {
                     skill.ResetSkill();
                 }
-                //ChangeState(UNIT_STATES.ATTACK_READY_1);
                 Battle_Mng.FinishUltimateSkill(this);
             }
         }
@@ -610,6 +607,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (Render_Texture == null)
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
+        }
+        if (Render_Texture.enabled == render_enable)
+        {
+            return;
         }
         Render_Texture.SetAlphaAnimation(alpha, duration, render_enable);
         ShadowAlphaAnimation(alpha, duration);

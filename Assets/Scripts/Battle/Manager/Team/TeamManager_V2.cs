@@ -505,6 +505,19 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
     /// <summary>
+    /// 모든 유닛 보여줌
+    /// </summary>
+    public void ShowAllUnits()
+    {
+        var member_list = GetMembers();
+        int cnt = member_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            member_list[i].SetAlphaAnimation(1f, 0.5f, false);
+        }
+    }
+
+    /// <summary>
     /// 살아있는 모든 유닛을 궁극기 사용을 위해 멈춤<br/>
     /// 궁극기 사용 유닛만 남김
     /// </summary>

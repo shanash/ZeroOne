@@ -69,9 +69,4 @@ public class Hero_100009 : HeroBase_V2
     #endregion
 
 
-
-
-
-
-
 }

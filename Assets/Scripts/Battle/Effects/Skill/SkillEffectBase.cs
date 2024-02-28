@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
@@ -337,6 +338,7 @@ public class SkillEffectBase : EffectBase
         base.Spawned();
         CheckEffectComponent();
         CheckRenderSortingZ();
+        GetEffectComponent().ShowObjects(true);
         Send_Data.Reset();
     }
 
