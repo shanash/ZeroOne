@@ -944,6 +944,13 @@ public partial class HeroBase_V2 : UnitBase_V2
                 //  첫번재 이펙트만 보여줘야 하므로
                 if (effect_weight_index == 0)
                 {
+                    //  onetime skill
+                    var onetime_list = skill.GetOnetimeSkillDataList();
+                    if (onetime_list.Count > 0)
+                    {
+                        dmg.Onetime = onetime_list[0];
+                    }
+
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
                     var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
                     trigger_effect.SetBattleSendData(dmg);

@@ -11,14 +11,20 @@ public class TouchCanvas : MonoBehaviour
     /// 터치이펙트에 네이티브 세로사이즈에 따라서 곱해줄 배율
     /// </summary>
     static float Scale_Multiple_Value = 1f;
-    public static TouchCanvas Instance { get; private set; }
 
     /// <summary>
     /// 프리팹 패스
     /// </summary>
-    string Touch_Effect_Prefab_Path = "VFX/Prefabs/Touch_Effect_Pink";
+    string Touch_Effect_Prefab_Path = "VFX/Prefabs/Touch_Effect_Blue";
     RectTransform Effect_Container;
     List<TouchEffectNode> Used_Touch_Effects = new List<TouchEffectNode>();
+
+    /// <summary>
+    /// 터치 이펙트의 생성 여부
+    /// </summary>
+    bool Touch_Effect_Enable = true;
+
+    public static TouchCanvas Instance { get; private set; }
 
     /// <summary>
     /// 씬 로딩 이후 터치 캔버스 컴포넌트를 추가
@@ -110,7 +116,10 @@ public class TouchCanvas : MonoBehaviour
     /// <param name="position"></param>
     void OnClickDown(Vector2 position, ICollection<ICursorInteractable> components)
     {
-        SpawnTouchEffectNode(position);
+        if (Touch_Effect_Enable)
+        {
+            SpawnTouchEffectNode(position);
+        }
     }
 
     /// <summary>
@@ -121,6 +130,11 @@ public class TouchCanvas : MonoBehaviour
     /// <param name="position"></param>
     void OnClickDragging(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position)
     {
+        if (!Touch_Effect_Enable)
+        {
+            return;
+        }
+
         switch (phase)
         {
             case InputActionPhase.Started:      //  드래그 시작
@@ -215,5 +229,18 @@ public class TouchCanvas : MonoBehaviour
         Used_Touch_Effects.Add(node);
         node.StartParticle(UnusedTouchEffectNode);
         return node;
+    }
+
+    /// <summary>
+    /// 터치 이펙트의 생성여부
+    /// </summary>
+    /// <param name="value"></param>
+    public void EnableTouchEffect(bool value)
+    {
+        Touch_Effect_Enable = value;
+        if (!Touch_Effect_Enable)
+        {
+            ClearTouchEffect();
+        }
     }
 }

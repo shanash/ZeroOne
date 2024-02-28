@@ -49,6 +49,7 @@ MonoBehaviour:
   Effect_Type: 2
   Effect_Duration: 0
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 1
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 1
@@ -59,6 +60,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 20
+  Projectile_Duration: 0
   Use_Hide_Transforms: 1
   Hide_Transforms:
   - {fileID: 6005466311005764474}
@@ -10834,7 +10836,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
