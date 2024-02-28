@@ -293,7 +293,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     #region Gesture Callbacks
     protected virtual void OnTap(ICursorInteractable comp)
     {
-        if (this.gameObject == null)
+        if (this == null)
         {
             RemoveGestureEventListener();
             return;
@@ -329,7 +329,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnDoubleTap(ICursorInteractable comp)
     {
-        if (this.gameObject == null)
+        if (this == null)
         {
             RemoveGestureEventListener();
             return;
@@ -365,7 +365,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected virtual void OnDrag(ICursorInteractable comp, Vector2 position, Vector2 drag_vector, int state)
     {
-        if (this.gameObject == null)
+        if (this == null)
         {
             RemoveGestureEventListener();
             return;

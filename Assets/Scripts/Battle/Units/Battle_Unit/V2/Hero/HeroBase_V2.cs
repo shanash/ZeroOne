@@ -837,12 +837,21 @@ public partial class HeroBase_V2 : UnitBase_V2
                     effect.SetBattleSendData(dmg);
 
                     var ec = effect.GetEffectComponent();
-                    Transform target_trans = ec.GetTargetReachPosition(target);
-                    var target_pos = target_trans.position;
+                    Vector3 target_pos = Vector3.zero;
+                    //  적들의 중앙 위치 찾기
+                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                    {
+                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                    }
+                    else
+                    {
+                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                        target_pos = target_trans.position;
+                    }
+
                     //  즉발형 이펙트
                     if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                     {
-                        target_pos.z = target_trans.position.z;
                         effect.transform.position = target_pos;
                         effect.StartParticle(ec.Effect_Duration);
                     }
@@ -865,7 +874,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                             flying_time = distance / ec.Projectile_Velocity;
                         }
 
-                        effect.MoveTarget(target_trans, flying_time);
+                        effect.MoveTarget(target_pos, flying_time);
                     }
                     else
                     {
@@ -890,11 +899,20 @@ public partial class HeroBase_V2 : UnitBase_V2
                     effect.SetBattleSendData(dmg);
 
                     var ec = effect.GetEffectComponent();
-                    Transform target_trans = ec.GetTargetReachPosition(target);
-                    var target_pos = target_trans.position;
+                    Vector3 target_pos = Vector3.zero;
+                    //  적들의 중앙 위치 찾기
+                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                    {
+                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                    }
+                    else
+                    {
+                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                        target_pos = target_trans.position;
+                    }
+
                     if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                     {
-                        target_pos.z = target_trans.position.z;
                         effect.transform.position = target_pos;
                         effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
                     }
@@ -931,13 +949,21 @@ public partial class HeroBase_V2 : UnitBase_V2
                     trigger_effect.SetBattleSendData(dmg);
 
                     var ec = trigger_effect.GetEffectComponent();
-                    Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                    var target_pos = target_trans.position;
-
+                    
+                    Vector3 target_pos = Vector3.zero;
+                    //  적들의 중앙 위치 찾기
+                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                    {
+                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                    }
+                    else
+                    {
+                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                        target_pos = target_trans.position;
+                    }
                     //  즉발형인지
                     if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                     {
-                        target_pos.z = target_trans.position.z;
                         trigger_effect.transform.position = target_pos;
                         trigger_effect.StartParticle(ec.Effect_Duration);
                     }
@@ -962,7 +988,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                             flying_time = distance / ec.Projectile_Velocity;
                         }
 
-                        trigger_effect.MoveTarget(target_trans, flying_time);
+                        trigger_effect.MoveTarget(target_pos, flying_time);
                     }
                     else
                     {
@@ -996,12 +1022,22 @@ public partial class HeroBase_V2 : UnitBase_V2
                             effect.SetBattleSendData(dmg);
 
                             var ec = effect.GetEffectComponent();
-                            Transform target_trans = ec.GetTargetReachPosition(target);
-                            var target_pos = target_trans.position;
+                            Vector3 target_pos = Vector3.zero;
+                            //  적들의 중앙 위치 찾기
+                            if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                            {
+                                target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                            }
+                            else
+                            {
+                                Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                                target_pos = target_trans.position;
+                            }
+
+
                             //  즉발형 이펙트
                             if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                             {
-                                target_pos.z = target_trans.position.z;
                                 effect.transform.position = target_pos;
                                 effect.StartParticle(ec.Effect_Duration);
                             }
@@ -1024,7 +1060,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                                     flying_time = distance / ec.Projectile_Velocity;
                                 }
 
-                                effect.MoveTarget(target_trans, flying_time);
+                                //effect.MoveTarget(target_trans, flying_time);
+                                effect.MoveTarget(target_pos, flying_time);
                             }
                             else
                             {
@@ -1051,11 +1088,20 @@ public partial class HeroBase_V2 : UnitBase_V2
                             effect.SetBattleSendData(dmg);
 
                             var ec = effect.GetEffectComponent();
-                            Transform target_trans = ec.GetTargetReachPosition(target);
-                            var target_pos = target_trans.position;
+                            Vector3 target_pos = Vector3.zero;
+                            //  적들의 중앙 위치 찾기
+                            if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                            {
+                                target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                            }
+                            else
+                            {
+                                Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                                target_pos = target_trans.position;
+                            }
+
                             if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                             {
-                                target_pos.z = target_trans.position.z;
                                 effect.transform.position = target_pos;
                                 effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
                             }
@@ -1093,12 +1139,20 @@ public partial class HeroBase_V2 : UnitBase_V2
 
                     var ec = trigger_effect.GetEffectComponent();
 
-                    Transform target_trans = ec.GetTargetReachPosition(target);
-                    var target_pos = target_trans.position;
+                    Vector3 target_pos = Vector3.zero;
+                    //  적들의 중앙 위치 찾기
+                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+                    {
+                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+                    }
+                    else
+                    {
+                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
+                        target_pos = target_trans.position;
+                    }
 
                     if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                     {
-                        target_pos.z = target_trans.position.z;
                         trigger_effect.transform.position = target_pos;
                         trigger_effect.StartParticle(ec.Effect_Duration);
                     }
@@ -1121,7 +1175,8 @@ public partial class HeroBase_V2 : UnitBase_V2
                             flying_time = distance / ec.Projectile_Velocity;
                         }
 
-                        trigger_effect.MoveTarget(target_trans, flying_time);
+                        //trigger_effect.MoveTarget(target_trans, flying_time);
+                        trigger_effect.MoveTarget(target_pos, flying_time);
                     }
                     else
                     {

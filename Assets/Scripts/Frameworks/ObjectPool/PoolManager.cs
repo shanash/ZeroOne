@@ -96,10 +96,14 @@ namespace FluffyDuck.Util
                 }
             }
 
-            var component = item.GetComponent<IPoolableComponent>();
-            if (component != null)
+            var comp_list = item.GetComponents<IPoolableComponent>();
+            if (comp_list != null)
             {
-                component.Spawned();
+                int len = comp_list.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    comp_list[i].Spawned();
+                }
             }
 
             return item;
@@ -131,10 +135,14 @@ namespace FluffyDuck.Util
                 }
                 item.transform.position = pos;
             }
-            var component = item.GetComponent<IPoolableComponent>();
-            if (component != null)
+            var comp_list = item.GetComponents<IPoolableComponent>();
+            if (comp_list != null)
             {
-                component.Spawned();
+                int len = comp_list.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    comp_list[i].Spawned();
+                }
             }
 
             return item;
@@ -173,10 +181,14 @@ namespace FluffyDuck.Util
                 }
             }
 
-            var component = item.GetComponent<IPoolableComponent>();
-            if (component != null)
+            var comp_list = item.GetComponents<IPoolableComponent>();
+            if (comp_list != null)
             {
-                component.Spawned();
+                int len = comp_list.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    comp_list[i].Spawned();
+                }
             }
 
             return item;
@@ -221,10 +233,15 @@ namespace FluffyDuck.Util
                 //  already in pool
                 return;
             }
-            var component = obj.GetComponent<IPoolableComponent>();
-            if (component != null)
+            
+            var comp_list = obj.GetComponents<IPoolableComponent>();
+            if (comp_list != null)
             {
-                component.Despawned();
+                int len = comp_list.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    comp_list[i].Despawned();
+                }
             }
             obj.transform.SetParent(Recycled_Object_Container);
             if (is_out_move)

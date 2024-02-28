@@ -23,20 +23,20 @@ public class SkillEffect_Duration_Simple : SkillEffect_Duration_Base
 
 
 
-    public override void MoveTarget(Transform target, float duration)
-    {
-        base.MoveTarget(target, duration);
+    //public override void MoveTarget(Transform target, float duration)
+    //{
+    //    base.MoveTarget(target, duration);
 
-        Is_Loop = duration == 0f;
-        var ec = GetEffectComponent();
-        if (ec != null)
-        {
-            ec.SetFollowingTarget(target);
-        }
+    //    Is_Loop = duration == 0f;
+    //    var ec = GetEffectComponent();
+    //    if (ec != null)
+    //    {
+    //        ec.SetFollowingTarget(target);
+    //    }
 
-        Send_Data.Duration?.SetSkillEffect(this);
-        Send_Data.Duration?.ExecSkill(Send_Data);
-    }
+    //    Send_Data.Duration?.SetSkillEffect(this);
+    //    Send_Data.Duration?.ExecSkill(Send_Data);
+    //}
 
 
     private void Update()

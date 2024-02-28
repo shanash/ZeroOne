@@ -9,14 +9,15 @@ using UnityEngine;
 /// </summary>
 public class SkillEffect_Missile : SkillEffectBase
 {
-    public override void MoveTarget(Transform target, float duration)
+    public override void MoveTarget(Vector3 target, float duration)
     {
-        base.MoveTarget(target, duration);
-        var ec = GetEffectComponent();
-        ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration / Effect_Speed_Multiple);
-        ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
-        
+        //base.MoveTarget(target, duration);
+        //var ec = GetEffectComponent();
+        //ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration / Effect_Speed_Multiple);
+        //ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
+
     }
+
 
     /// <summary>
     /// 이동 완료 후 콜백

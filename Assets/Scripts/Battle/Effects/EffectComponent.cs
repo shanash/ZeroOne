@@ -32,6 +32,8 @@ public enum TARGET_REACH_POS_TYPE
     BODY,
     FOOT,
 
+
+    TARGET_CENTER,              //  타겟의 중앙(다수의 타겟의 위치중 중앙 위치 찾기)
     LEFT_TEAM_CENTER,         //  아군 팀 중앙
     RIGHT_TEAM_CENTER,      //  상대 팀(적군) 중앙
     WORLD_ZERO,             //  월드 0,0
@@ -185,5 +187,21 @@ public class EffectComponent : MonoBehaviour
             return unit.GetStartPosTypeTransform(Projectile_Start_Pos_Type);
         }
         return unit.transform;
+    }
+    /// <summary>
+    /// 타겟의 중앙 위치 찾기
+    /// </summary>
+    /// <param name="targets"></param>
+    /// <returns></returns>
+    public Vector3 GetTargetsCenterPosition(List<HeroBase_V2> targets)
+    {
+        Vector3 sum = Vector3.zero;
+        int cnt = targets.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            sum += targets[i].transform.position;
+        }
+        Vector3 center = sum / cnt;
+        return center;
     }
 }

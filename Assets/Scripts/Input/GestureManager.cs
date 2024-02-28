@@ -141,7 +141,14 @@ namespace ZeroOne.Input
                 {
                     foreach (var component in components)
                     {
-                        OnDoubleTap(component);
+                        if (OnDoubleTap != null)
+                        {
+                            List<TapEventHandler> subs = new List<TapEventHandler>(OnDoubleTap.GetInvocationList().Cast<TapEventHandler>());
+                            foreach (TapEventHandler sub in subs)
+                            {
+                                sub?.Invoke(component);
+                            }
+                        }
                         OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DOUBLE_CLICK, component, position, 0);
                     }
                 }
@@ -207,7 +214,14 @@ namespace ZeroOne.Input
                 int cnt = TouchDown_Components.Count;
                 for (int i = 0; i < cnt; ++i)
                 {
-                    OnDrag?.Invoke(TouchDown_Components[i], position, drag_origin, 0);
+                    if (OnDrag != null)
+                    {
+                        List<DragEventHandler> subs = new List<DragEventHandler>(OnDrag.GetInvocationList().Cast<DragEventHandler>());
+                        foreach (DragEventHandler sub in subs)
+                        {
+                            sub?.Invoke(TouchDown_Components[i], position, drag_origin, 0);
+                        }
+                    }
                     OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DRAG, TouchDown_Components[i], drag_origin, Drag_Id);
                 }
             }
@@ -216,7 +230,14 @@ namespace ZeroOne.Input
                 int cnt = TouchDown_Components.Count;
                 for (int i = 0; i < cnt; ++i)
                 {
-                    OnDrag?.Invoke(TouchDown_Components[i], position, drag_origin, 1);
+                    if (OnDrag != null)
+                    {
+                        List<DragEventHandler> subs = new List<DragEventHandler>(OnDrag.GetInvocationList().Cast<DragEventHandler>());
+                        foreach (DragEventHandler sub in subs)
+                        {
+                            sub?.Invoke(TouchDown_Components[i], position, drag_origin, 1);
+                        }
+                    }
                     OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.DRAG, TouchDown_Components[i], drag_origin, Drag_Id);
                 }
             }
@@ -241,7 +262,14 @@ namespace ZeroOne.Input
                 foreach (var component in matched_components)
                 {
                     OnGestureDetected?.Invoke(TOUCH_GESTURE_TYPE.CLICK, component, position, 0);
-                    OnTap?.Invoke(component);
+                    if (OnTap != null)
+                    {
+                        List<TapEventHandler> subs = new List<TapEventHandler>(OnTap.GetInvocationList().Cast<TapEventHandler>());
+                        foreach (TapEventHandler sub in subs)
+                        {
+                            sub?.Invoke(component);
+                        }
+                    }
                 }
             }
 

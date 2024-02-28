@@ -101,6 +101,21 @@ public class EffectBase : MonoBehaviour, IPoolableComponent
             Particle_Effect.Play();
         }
     }
+
+    public virtual void StartParticle(Vector3 target, float duration, bool loop = false)
+    {
+        this.Target_Position = target;
+        this.Duration = duration / Effect_Speed_Multiple;
+        this.Delta = 0f;
+        Is_Action = true;
+        Is_Loop = loop;
+        if (Particle_Effect != null)
+        {
+            SetParticleAllSpeedMultiple(Particle_Effect, Effect_Speed_Multiple);
+            Particle_Effect.Play();
+        }
+    }
+
     /// <summary>
     /// 해당 오브젝트 내의 모든 파티클을 찾아서 배속을 조절한다.
     /// </summary>

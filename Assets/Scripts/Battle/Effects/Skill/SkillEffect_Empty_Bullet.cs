@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SkillEffect_Empty_Bullet : SkillEffectBase
 {
-    public override void MoveTarget(Transform target, float duration)
+    public override void MoveTarget(Vector3 target, float duration)
     {
         var ec = GetEffectComponent();
         if (ec != null)
@@ -13,11 +13,11 @@ public class SkillEffect_Empty_Bullet : SkillEffectBase
             {
                 case THROWING_TYPE.LINEAR:
                     ec.Mover.SetEasing(FluffyDuck.Util.EasingFunction.Ease.Linear, 0, duration / Effect_Speed_Multiple);
-                    ec.Mover.StartEasing(Target_Transform, MoveEndCallback);
+                    ec.Mover.StartEasing(target, MoveEndCallback);
                     break;
                 case THROWING_TYPE.PARABOLA:
                     {
-                        float dist = Vector3.Distance(this.transform.position, target.position);
+                        float dist = Vector3.Distance(this.transform.position, target);
                         float height = ec.Parabola_Height;
                         float velocity = ec.Projectile_Velocity;
                         if (dist < 5)
@@ -35,7 +35,7 @@ public class SkillEffect_Empty_Bullet : SkillEffectBase
                             height = ec.Parabola_Height;
                             velocity = ec.Projectile_Velocity * Effect_Speed_Multiple;
                         }
-                        ec.Parabola.Move(this.transform.position, target.position, height, velocity, MoveEndCallback);
+                        ec.Parabola.Move(this.transform.position, target, height, velocity, MoveEndCallback);
                     }
                     break;
                 case THROWING_TYPE.BEZIER:
@@ -128,10 +128,6 @@ public class SkillEffect_Empty_Bullet : SkillEffectBase
     public override void Spawned()
     {
         base.Spawned();
-        var ec = GetEffectComponent();
-        if (ec != null && ec.Use_Hide_Transforms)
-        {
-            ec.ShowObjects(true);
-        }
     }
+
 }

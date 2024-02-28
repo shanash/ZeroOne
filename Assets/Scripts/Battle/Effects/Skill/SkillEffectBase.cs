@@ -140,7 +140,7 @@ public class SkillEffectBase : EffectBase
                     {
                         flying_time = distance / ec.Projectile_Velocity;
                     }
-                    effect.MoveTarget(target_trans, flying_time);
+                    effect.MoveTarget(target_pos, flying_time);
                 }
                 else if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                 {
@@ -267,7 +267,7 @@ public class SkillEffectBase : EffectBase
                         {
                             flying_time = distance / ec.Projectile_Velocity;
                         }
-                        effect.MoveTarget(target_trans, flying_time);
+                        effect.MoveTarget(target_pos, flying_time);
                     }
                     else if(ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
                     {
@@ -278,28 +278,6 @@ public class SkillEffectBase : EffectBase
                         Debug.Assert(false);
                     }
                 }
-                //else
-                //{
-                //    PROJECTILE_TYPE ptype = duration.GetProjectileType();
-                //    var target_trans = target.GetBodyPositionByProjectileType(ptype);
-
-                //    var target_pos = target_trans.position;
-                //    target_pos.z = target.transform.position.z;
-                //    effect.transform.position = target_pos;
-
-                //    float eff_dur = (float)duration.GetEffectDuration();
-                //    if (duration.IsThrowingNode())
-                //    {
-                //        effect.MoveTarget(target_trans, eff_dur);
-                //    }
-                //    else
-                //    {
-                //        effect.StartParticle(target_trans, eff_dur, eff_dur == 0);
-
-                //    }
-                //}
-
-
             }
         }
     }
