@@ -220,36 +220,39 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     {
         var sb = ZString.CreateStringBuilder();
         string pattern = @"\[[^\]]+\]";
-        
-        List<object> skill_effect_list = new List<object>();
-        skill_effect_list.AddRange(Onetime_Skill_List);
-        skill_effect_list.AddRange(Duration_Skill_List);
-
-        for (int i = 0; i < Data.pc_skill_desc_id.Length; i++)
+        if (Data.pc_skill_desc_id != null)
         {
-            string skill_desc_id = Data.pc_skill_desc_id[i];
-            if (string.IsNullOrEmpty(skill_desc_id))
+            List<object> skill_effect_list = new List<object>();
+            skill_effect_list.AddRange(Onetime_Skill_List);
+            skill_effect_list.AddRange(Duration_Skill_List);
+
+            for (int i = 0; i < Data.pc_skill_desc_id.Length; i++)
             {
-                continue;
-            }
-            string desc = GameDefine.GetLocalizeString(Data.pc_skill_desc_id[i]);
-            UnityEngine.Debug.Log(desc);
-            MatchCollection matches = Regex.Matches(desc, pattern);
-            int cnt = matches.Count;
-            if (cnt > 0)
-            {
-                for (int c = 0; c < cnt; c++)
+                string skill_desc_id = Data.pc_skill_desc_id[i];
+                if (string.IsNullOrEmpty(skill_desc_id))
                 {
-                    var match = matches[c];
-                    if (c < skill_effect_list.Count)
+                    continue;
+                }
+                string desc = GameDefine.GetLocalizeString(Data.pc_skill_desc_id[i]);
+                UnityEngine.Debug.Log(desc);
+                MatchCollection matches = Regex.Matches(desc, pattern);
+                int cnt = matches.Count;
+                if (cnt > 0)
+                {
+                    for (int c = 0; c < cnt; c++)
                     {
-                        string replace_str = ConvertSkillValue(match.Value, skill_effect_list[c]);
-                        desc = desc.Replace(match.Value, replace_str);
+                        var match = matches[c];
+                        if (c < skill_effect_list.Count)
+                        {
+                            string replace_str = ConvertSkillValue(match.Value, skill_effect_list[c]);
+                            desc = desc.Replace(match.Value, replace_str);
+                        }
                     }
                 }
+                sb.AppendLine(desc);
             }
-            sb.AppendLine(desc);
         }
+
         return sb.ToString();
     }
 
