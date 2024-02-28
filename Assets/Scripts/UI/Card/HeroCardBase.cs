@@ -72,18 +72,18 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     public event TouchUpAction TouchUp;
     public event ClickAction Click;
 
-    public void SetHeroData(UserHeroData data, CHARACTER_SORT filter_type)
+    public void SetHeroData(BattlePcData data, CHARACTER_SORT filter_type)
     {
-        Data = data.GetPlayerCharacterData();
-        Battle_Data = data.GetPlayerCharacterBattleData();
+        Data = data.Data;
+        Battle_Data = data.Battle_Data;
 
         SetLevel(data.GetLevel());
         // star
         SetStarGrade(data.GetStarGrade());
         // role type
-        SetRoleType(data.GetPlayerCharacterData().role_type);
+        SetRoleType(Data.role_type);
         // 
-        SetName(GameDefine.GetLocalizeString(data.GetPlayerCharacterData().name_id));
+        SetName(GameDefine.GetLocalizeString(Data.name_id));
 
         SetFilter(data, filter_type);
 
@@ -150,7 +150,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         Name_Text.text = name;
     }
 
-    public void SetFilter(UserHeroData data, CHARACTER_SORT filter_type)
+    public void SetFilter(BattlePcData data, CHARACTER_SORT filter_type)
     {
         // Filter
         Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
@@ -164,7 +164,38 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
                 filter_text = new string('★', data.GetStarGrade());
                 break;
             case CHARACTER_SORT.NAME:
-                Filter_Text.text = GameDefine.GetLocalizeString(Data.name_id);
+                filter_text = GameDefine.GetLocalizeString(Data.name_id);
+                break;
+                /*
+            case CHARACTER_SORT.SKILL_LEVEL:
+                filter_text = $"Lv.{data.GetSumSkillsLevel()}";
+                break;
+            case CHARACTER_SORT.EX_SKILL_LEVEL:
+                filter_text = $"Lv.{data.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel()}";
+                break;
+                */
+            case CHARACTER_SORT.ATTACK:
+                filter_text = (data.GetPhysicsAttackPoint() + data.GetMagicAttackPoint()).ToString("N0");
+                break;
+            case CHARACTER_SORT.DEFEND:
+                filter_text = (data.GetPhysicsDefensePoint() + data.GetMagicDefensePoint()).ToString("N0");
+                break;
+            case CHARACTER_SORT.RANGE:
+                switch (data.GetPositionType())
+                {
+                    case POSITION_TYPE.FRONT:
+                        filter_text = "전열 배치";
+                        break;
+                    case POSITION_TYPE.BACK:
+                        filter_text = "후열 배치";
+                        break;
+                    case POSITION_TYPE.MIDDLE:
+                        filter_text = "중열 배치";
+                        break;
+                }
+                break;
+            case CHARACTER_SORT.LIKEABILITY:
+                filter_text = ConstString.Hero.LOVE_LEVEL[data.User_Data.GetLoveLevel()];
                 break;
             default:
                 Filter_Text.text = "미구현";

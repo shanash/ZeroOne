@@ -12,18 +12,18 @@ public class HeroListItem : MonoBehaviour
 
     CHARACTER_SORT Filter_Type;
 
-    public UserHeroData User_Data { get; private set; }
+    public BattlePcData BattlePcData { get; private set; }
 
-    public void SetUserHeroData(UserHeroData ud, CHARACTER_SORT filter = CHARACTER_SORT.NAME)
+    public void SetUserHeroData(BattlePcData ud, CHARACTER_SORT filter = CHARACTER_SORT.NAME)
     {
-        User_Data = ud;
+        BattlePcData = ud;
         Filter_Type = filter;
         UpdateCellItem();
     }
 
     public void UpdateCellItem()
     {
-        if (User_Data == null)
+        if (BattlePcData == null)
         {
             Box.gameObject.SetActive(false);
             return;
@@ -33,7 +33,7 @@ public class HeroListItem : MonoBehaviour
             Box.gameObject.SetActive(true);
         }
 
-        Card.SetHeroData(User_Data, Filter_Type);
+        Card.SetHeroData(BattlePcData, Filter_Type);
     }
 
     public void SetClickHeroCallback(System.Action<HeroListItem> callback)
@@ -61,7 +61,7 @@ public class HeroListItem : MonoBehaviour
     {
         if (result == TOUCH_RESULT_TYPE.CLICK)
         {
-            if (User_Data == null)
+            if (BattlePcData == null)
             {
                 return;
             }

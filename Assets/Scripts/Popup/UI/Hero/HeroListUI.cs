@@ -19,13 +19,13 @@ public class HeroListUI : PopupBase
     [SerializeField, Tooltip("Filter Arrow Image's RectTransform By Sort Direction")]
     RectTransform Filter_Sort_Direction_Image;
 
-    List<UserHeroData> User_Hero_Datas;
+    List<BattlePcData> Battle_Pc_Data;
     CHARACTER_SORT Filter_Type;
     bool Is_Ascended_Sort;
 
     void Reset()
     {
-        User_Hero_Datas = null;
+        Battle_Pc_Data = null;
         Filter_Type = CHARACTER_SORT.NAME;
         Is_Ascended_Sort = true;
     }
@@ -53,32 +53,42 @@ public class HeroListUI : PopupBase
         const int column_count = 5;
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
-        User_Hero_Datas = new List<UserHeroData>();
-        hero_mng.GetUserHeroDataList(ref User_Hero_Datas);
+        var user_hero_datas = new List<UserHeroData>();
+        hero_mng.GetUserHeroDataList(ref user_hero_datas);
+
+        Battle_Pc_Data = new List<BattlePcData>();
+
+        foreach (var data in user_hero_datas)
+        {
+            var battle_pc_data = new BattlePcData();
+            battle_pc_data.SetUnitID(data.GetPlayerCharacterID(), data.Player_Character_Num);
+
+            GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(battle_pc_data.User_Data.GetPlayerCharacterID(), battle_pc_data.User_Data.Player_Character_Num);
+            Battle_Pc_Data.Add(battle_pc_data);
+        }
 
         switch (Filter_Type)
         {
             case CHARACTER_SORT.NAME:
-                User_Hero_Datas.Sort((a, b) =>
+                Battle_Pc_Data.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
-                    GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id)) :
-                    GameDefine.GetLocalizeString(b.GetPlayerCharacterData().name_id).CompareTo(GameDefine.GetLocalizeString(a.GetPlayerCharacterData().name_id));
+                    GameDefine.GetLocalizeString(a.Data.name_id).CompareTo(GameDefine.GetLocalizeString(b.Data.name_id)) :
+                    GameDefine.GetLocalizeString(b.Data.name_id).CompareTo(GameDefine.GetLocalizeString(a.Data.name_id));
                 });
                 break;
             case CHARACTER_SORT.LEVEL_CHARACTER:
-                User_Hero_Datas.Sort((a, b) =>
+                Battle_Pc_Data.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
                     a.GetLevel().CompareTo(b.GetLevel()) :
                     b.GetLevel().CompareTo(a.GetLevel());
                 });
-                User_Hero_Datas.Sort((a, b) => a.GetLevel().CompareTo(b.GetLevel()));
                 break;
             case CHARACTER_SORT.STAR:
-                User_Hero_Datas.Sort((a, b) =>
+                Battle_Pc_Data.Sort((a, b) =>
                 {
                     return
                     Is_Ascended_Sort ?
@@ -87,24 +97,71 @@ public class HeroListUI : PopupBase
                 });
                 break;
             case CHARACTER_SORT.DESTINY:
+                // TODO: 미구현
                 break;
             case CHARACTER_SORT.SKILL_LEVEL:
+                /*
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    a.GetSumSkillsLevel().CompareTo(b.GetSumSkillsLevel()) :
+                    b.GetSumSkillsLevel().CompareTo(a.GetSumSkillsLevel());
+                });
+                */
                 break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
+                /*
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    a.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel().CompareTo(b.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel()) :
+                    b.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel().CompareTo(a.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel());
+                });
+                */
                 break;
             case CHARACTER_SORT.ATTACK:
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    (a.GetPhysicsAttackPoint() + a.GetMagicAttackPoint()).CompareTo(b.GetPhysicsAttackPoint() + b.GetMagicAttackPoint()) :
+                    (b.GetPhysicsAttackPoint() + b.GetMagicAttackPoint()).CompareTo(a.GetPhysicsAttackPoint() + a.GetMagicAttackPoint());
+                });
                 break;
             case CHARACTER_SORT.DEFEND:
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    (a.GetPhysicsDefensePoint() + a.GetMagicDefensePoint()).CompareTo(b.GetPhysicsDefensePoint() + b.GetMagicDefensePoint()) :
+                    (b.GetPhysicsDefensePoint() + b.GetMagicDefensePoint()).CompareTo(a.GetPhysicsDefensePoint() + a.GetMagicDefensePoint());
+                });
                 break;
             case CHARACTER_SORT.RANGE:
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    a.GetApproachDistance().CompareTo(b.GetApproachDistance()) :
+                    b.GetApproachDistance().CompareTo(a.GetApproachDistance());
+                });
                 break;
             case CHARACTER_SORT.LIKEABILITY:
+                Battle_Pc_Data.Sort((a, b) =>
+                {
+                    return
+                    Is_Ascended_Sort ?
+                    a.User_Data.GetLoveLevel().CompareTo(b.User_Data.GetLoveLevel()) :
+                    b.User_Data.GetLoveLevel().CompareTo(a.User_Data.GetLoveLevel());
+                });
                 break;
         }
 
         //  가로 컬럼 5개(보유중인 영웅 리스트 불러오기)
         int start = 0;
-        int hero_count = User_Hero_Datas.Count;
+        int hero_count = Battle_Pc_Data.Count;
         int rows = hero_count / column_count;
         if (hero_count % column_count > 0)
         {
@@ -120,11 +177,11 @@ public class HeroListUI : PopupBase
 
             if (start + column_count < hero_count)
             {
-                new_data.SetUserHeroDataList(User_Hero_Datas.GetRange(start, column_count));
+                new_data.SetUserHeroDataList(Battle_Pc_Data.GetRange(start, column_count));
             }
             else
             {
-                new_data.SetUserHeroDataList(User_Hero_Datas.GetRange(start, hero_count - start));
+                new_data.SetUserHeroDataList(Battle_Pc_Data.GetRange(start, hero_count - start));
             }
             Character_LIst_View.InsertData(new_data);
         }
@@ -146,11 +203,11 @@ public class HeroListUI : PopupBase
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
-        int index = User_Hero_Datas.IndexOf(hero.User_Data);
+        int index = Battle_Pc_Data.IndexOf(hero.BattlePcData);
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
         {
-            popup.ShowPopup(User_Hero_Datas, index);
+            popup.ShowPopup(Battle_Pc_Data, index);
         });
     }
 
@@ -178,6 +235,7 @@ public class HeroListUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
         Is_Ascended_Sort = !Is_Ascended_Sort;
+        Debug.Log($"Is_Ascended_Sort : {Is_Ascended_Sort}");
 
         UpdatePopup();
     }

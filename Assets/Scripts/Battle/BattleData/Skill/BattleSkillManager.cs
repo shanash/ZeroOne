@@ -127,13 +127,14 @@ public class BattleSkillManager : BattleDataBase
         }
         return null;
     }
+
     /// <summary>
     /// 궁극기 스킬 데이터 반환
     /// </summary>
     /// <returns></returns>
     public BattleSkillGroup GetSpecialSkillGroup()
     {
-        return FindSkillType(SKILL_TYPE.SPECIAL_SKILL);
+        return GetSkillGroup(SKILL_TYPE.SPECIAL_SKILL);
     }
 
     /// <summary>
@@ -180,7 +181,7 @@ public class BattleSkillManager : BattleDataBase
     /// </summary>
     /// <param name="stype"></param>
     /// <returns></returns>
-    public BattleSkillGroup FindSkillType(SKILL_TYPE stype)
+    public BattleSkillGroup GetSkillGroup(SKILL_TYPE stype)
     {
         return _Skill_Groups.Find(x => x.GetSkillType() == stype);
     }

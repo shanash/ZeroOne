@@ -1,4 +1,3 @@
-using Cinemachine;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
