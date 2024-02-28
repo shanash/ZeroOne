@@ -304,14 +304,26 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
 
+        //LandscapeCamera - 스테이지캠과 초기값 같음. 확대 축소 등 필요시컨트롤해서 사용(컴포넌트 혹은 애니메이션 트랙 활용)
+        //CharacterCamera - 시전자 팔로우 캠
+        //ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
+        //TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
+        //FreeCamera - 스테이지캠 초기값과 같음. 임의로 자유롭게 연출용으로 사용할 예정.
+
         var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
         var virtual_cam = Battle_Mng.GetVirtualCineManager();
         var brain_cam = virtual_cam.GetBrainCam();
+        
         var stage_cam = virtual_cam.GetStageCamera();
-
         var character_cam = virtual_cam.GetCharacterCamera();
         var free_cam = virtual_cam.GetFreeCamera();
         var land_cam = virtual_cam.GetLandscapeCamera();
+        var active_group_cam = virtual_cam.GetActiveTargetGroupCamera();
+        var active_group = virtual_cam.GetActiveTargetGroup();
+
+        var target_group_cam = virtual_cam.GetTargetGroupCamera();
+        var target_group = virtual_cam.GetTargetGroup();
+        
 
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
@@ -361,6 +373,18 @@ public partial class HeroBase_V2 : UnitBase_V2
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, land_cam);
                             }
+                            //else if (shot.DisplayName.Equals("TargetGroupCamera"))
+                            //{
+                            //    //  TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
+                            //    //target_group.AddMember(this);
+                            //    Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, target_group_cam);
+                            //}
+                            //else if (shot.DisplayName.Equals("ActiveGroupCamera"))
+                            //{
+                            //    //  ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
+                            //    //active_group.AddMember()
+                            //    Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, active_group_cam);
+                            //}
                         }
                     }
                 }
@@ -1311,7 +1335,11 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         //  todo
-        double last_damage = data.Physics_Attack_Point;
+        ONETIME_EFFECT_TYPE etype = data.Onetime.GetOnetimeEffectType();
+
+        //  물리 마법 결정 데미지
+        double last_damage = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? data.Magic_Attack_Point : data.Physics_Attack_Point;
+
         var target = data.Targets[0];
         double vampire_hp = last_damage * Attack_Life_Recovery / (Attack_Life_Recovery + target.GetLevel() + 100);
         vampire_hp = Math.Truncate(vampire_hp);

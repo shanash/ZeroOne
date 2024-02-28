@@ -97,6 +97,9 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
     public CinemachineVirtualCamera GetActiveTargetGroupCamera() { return FindCamera(CAMERA_TYPE.ACTIVE_TARGET_GROUP_CAM); }
     public CinemachineTargetGroup GetActiveTargetGroup() { return FindTargetGroup(CAMERA_TYPE.ACTIVE_TARGET_GROUP_CAM); }
 
+    public CinemachineVirtualCamera GetTargetGroupCamera() { return FindCamera(CAMERA_TYPE.TARGET_GROUP_CAM); }
+    public CinemachineTargetGroup GetTargetGroup() { return FindTargetGroup(CAMERA_TYPE.TARGET_GROUP_CAM); }
+
     /// <summary>
     /// Follow Offset / FOV 등 카메라 연출 전 초기화가 필요한 부분 초기화
     /// </summary>
