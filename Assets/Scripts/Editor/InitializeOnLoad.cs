@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using DocumentFormat.OpenXml.Drawing;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.AddressableAssets;

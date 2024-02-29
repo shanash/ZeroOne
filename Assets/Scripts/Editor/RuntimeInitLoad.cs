@@ -1,13 +1,35 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class RuntimeInitLoad
 {
+    static readonly Type GameViewType = Type.GetType("UnityEditor.GameView,UnityEditor");
+    static readonly PropertyInfo ShowToolbarProperty = GameViewType.GetProperty("showToolbar", BindingFlags.Instance | BindingFlags.NonPublic);
+    static readonly object False = false;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void BeforeSetup()
     {
+        bool is_full_screen = EditorPrefs.GetBool(FluffyDuck.EditorUtil.UpperMenu.FluffyDuck.TogglePlayFullscreen_PrefKey, false);
+
+        if (is_full_screen)
+        {
+            EditorWindow instance = (EditorWindow)ScriptableObject.CreateInstance(GameViewType);
+
+            ShowToolbarProperty?.SetValue(instance, False);
+
+            var desktopResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+            var fullscreenRect = new Rect(Vector2.zero, desktopResolution);
+            instance.ShowPopup();
+            instance.position = fullscreenRect;
+            instance.Focus();
+        }
+
         var numScenes = SceneManager.sceneCountInBuildSettings;
         List<string> scenes_in_build_names = new List<string>(numScenes);
         for (int i = 0; i < numScenes; ++i)
@@ -39,3 +61,4 @@ public static class RuntimeInitLoad
     {
     }
 }
+#endif

@@ -162,6 +162,31 @@ namespace FluffyDuck.EditorUtil.UpperMenu
 
             AssetDatabase.Refresh();
         }
+
+        const string TogglePlayFullscreen_MenuItemName = "FluffyDuck/Toggle Play FullScreen";
+        public const string TogglePlayFullscreen_PrefKey = "FullScreenChecked";
+
+        /// <summary>
+        /// 풀스크린을 위한 값 저장만 합니다.
+        /// </summary>
+        [MenuItem(TogglePlayFullscreen_MenuItemName, false, 300)]
+        static void TogglePlayFullscreen()
+        {
+            bool currentState = EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false);
+            EditorPrefs.SetBool(TogglePlayFullscreen_PrefKey, !currentState);
+        }
+
+        /// <summary>
+        /// 메뉴 아이템의 체크 상태를 설정하는 validate 함수입니다.
+        /// </summary>
+        /// <returns></returns>
+        [MenuItem(TogglePlayFullscreen_MenuItemName, true)]
+        private static bool ToggleActionValidate()
+        {
+            // 메뉴 아이템의 체크 상태를 EditorPrefs에서 가져온 값으로 설정합니다.
+            Menu.SetChecked(TogglePlayFullscreen_MenuItemName, EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false));
+            return true; // 메뉴 아이템이 항상 활성화되어 있도록 true를 반환합니다.
+        }
     }
 }
 #endif
