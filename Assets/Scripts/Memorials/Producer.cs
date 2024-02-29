@@ -17,6 +17,10 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     public bool Is_Init => (Stage != null && Actor != null);
     public string Name => root != null ? root.name : Index.ToString();
 
+    public delegate void TransferEssenceHandler(TOUCH_BODY_TYPE type);
+
+    public event TransferEssenceHandler OnSuccessTransferEssence;
+
     Producer() { }
 
     bool Initialize(int skin_id, LOVE_LEVEL_TYPE selected_relationship, SPINE_CHARA_LOCATION_TYPE type, Transform parent)
@@ -50,6 +54,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         }
 
         ScreenEffectManager.I.SetBlockInputUI(false);
+    }
+
+    public void NotifySuccessTransferEssence(TOUCH_BODY_TYPE type)
+    {
+        OnSuccessTransferEssence?.Invoke(type);
     }
 
     public void SetActive(bool value)

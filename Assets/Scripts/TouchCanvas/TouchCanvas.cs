@@ -7,6 +7,10 @@ using ZeroOne.Input;
 
 public class TouchCanvas : MonoBehaviour
 {
+    public const string Effect_Purple_Path = "VFX/Prefabs/Touch_Effect_Purple";
+    public const string Effect_Blue_Path = "VFX/Prefabs/Touch_Effect_Blue";
+    public const string Effect_Pink_Path = "VFX/Prefabs/Touch_Effect_Pink";
+
     /// <summary>
     /// 터치이펙트에 네이티브 세로사이즈에 따라서 곱해줄 배율
     /// </summary>
@@ -22,7 +26,7 @@ public class TouchCanvas : MonoBehaviour
     /// <summary>
     /// 터치 이펙트의 생성 여부
     /// </summary>
-    bool Touch_Effect_Enable = true;
+    public bool Touch_Effect_Enable { get; private set; } = true;
 
     public static TouchCanvas Instance { get; private set; }
 
@@ -219,7 +223,7 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>
-    TouchEffectNode SpawnTouchEffectNode(Vector2 pos)
+    public TouchEffectNode SpawnTouchEffectNode(Vector2 pos)
     {
         var pool = GameObjectPoolManager.Instance;
         var obj = pool.GetGameObject(Touch_Effect_Prefab_Path, Effect_Container);

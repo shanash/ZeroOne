@@ -154,7 +154,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         {
             foreach (var obj in FoundSpot_Value)
             {
-                Destroy(obj);
+                Destroy(obj.transform.parent.gameObject);
             }
             FoundSpot_Value.Clear();
         }
@@ -178,7 +178,8 @@ public class HeroInfoBoxEssence : MonoBehaviour
     {
         int count_of_date = Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
         int percent = Unit_Data.User_Data.Essence_Founded_Percent;
-        int found_spot_number = Unit_Data.User_Data.Essence_Founded_Spot_Kind_Count;
+
+        bool[] found_spot_parts = Unit_Data.User_Data.Essence_Founded_Spot_Part;
 
         TransferEssencePercent_Value.text = percent.ToPercentage();
         TransferEssencePercent_Image.fillAmount = percent.ToPercentageFloat();
@@ -206,7 +207,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
         for (int i = 0; i < FoundSpot_Value.Count; i++)
         {
-            FoundSpot_Value[i].SetActive(found_spot_number > i);
+            FoundSpot_Value[i].SetActive(found_spot_parts[i]);
         }
 
         var mng = GameData.Instance.GetUserChargeItemDataManager();

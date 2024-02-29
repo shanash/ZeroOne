@@ -23,7 +23,7 @@ public class EssenceTransferPopup : PopupBase
     LOVE_LEVEL_TYPE Selected_Relationship;
 
     RenderTexture Chara_Texture = null;
-    Producer pd = null;
+    Producer Producer = null;
 
     Vector3 local_origin_pos = Vector3.zero;
     float fov = 0.0f;
@@ -50,6 +50,8 @@ public class EssenceTransferPopup : PopupBase
         var vCam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
         fov = vCam.m_Lens.FieldOfView;
         vCam.m_Lens.FieldOfView = FOV;
+
+        TouchCanvas.Instance.EnableTouchEffect(false);
     }
 
     public override void Despawned()
@@ -67,10 +69,10 @@ public class EssenceTransferPopup : PopupBase
             Debug.LogException(ex);
         }
 
-        if (pd != null)
+        if (Producer != null)
         {
-            pd.Release();
-            pd = null;
+            Producer.Release();
+            Producer = null;
         }
 
         //TODO: 일단 임시로 카메라로 위치를 세팅
@@ -81,6 +83,9 @@ public class EssenceTransferPopup : PopupBase
         var brain = Camera.main.gameObject.GetComponent<CinemachineBrain>();
         var vCam = brain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
         vCam.m_Lens.FieldOfView = fov;
+
+        TouchCanvas.Instance.EnableTouchEffect(true);
+
     }
 
     protected override bool Initialize(object[] data)
@@ -93,10 +98,18 @@ public class EssenceTransferPopup : PopupBase
         Battle_Pc_Data = data[0] as BattlePcData;
         Selected_Relationship = (LOVE_LEVEL_TYPE)((int)data[1] + 1);// 인덱스 + 1 = 실제 호감도
 
-        pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
+        Producer = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
+        Producer.OnSuccessTransferEssence += OnSuccessTransfer;
+
         GestureManager.Instance.Enable = true;
 
         return true;
+    }
+
+    public void OnSuccessTransfer(TOUCH_BODY_TYPE type)
+    {
+        Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
+        GameData.Instance.GetUserHeroDataManager().Save();
     }
 
     public void OnClickBackButton()

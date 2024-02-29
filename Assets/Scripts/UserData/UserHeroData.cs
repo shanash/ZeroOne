@@ -51,7 +51,7 @@ public class UserHeroData : UserDataBase
     /// <summary>
     /// 근원전달 했던 스팟 종류
     /// </summary>
-    SecureVar<int> _Essence_Founded_Spot_Kind_Count = null;
+    SecureVar<bool>[] _Essence_Founded_Spot_Part = null;
 
     Player_Character_Level_Data Lv_Data = null;
     Player_Character_Love_Level_Data Love_Lv_Data = null;
@@ -65,10 +65,23 @@ public class UserHeroData : UserDataBase
     public Player_Character_Battle_Data Battle_Data { get; private set; } = null;
     public int Lobby_Choice_Num { get; protected set; } = 0;
     public bool Is_Choice_Lobby { get; protected set; } = false;
-    public int Essence_Sended_Count_Of_Date => _Essence_Sended_Count_Of_Date.Get();
-    public int Essence_Founded_Percent => _Essence_Founded_Percent.Get();
-    public int Essence_Founded_Spot_Kind_Count => _Essence_Founded_Spot_Kind_Count.Get();
+    public int Essence_Sended_Count_Of_Date { get => _Essence_Sended_Count_Of_Date.Get(); protected set => _Essence_Sended_Count_Of_Date.Set(value); }
+    public int Essence_Founded_Percent { get => _Essence_Founded_Percent.Get(); protected set => _Essence_Founded_Percent.Set(value); }
     public bool Is_Clone { get; private set; } = false;
+    public bool[] Essence_Founded_Spot_Part
+    {
+        get
+        {
+            if (_Essence_Founded_Spot_Part == null) return null;
+
+            bool[] result = new bool[_Essence_Founded_Spot_Part.Length];
+            for (int i = 0; i < _Essence_Founded_Spot_Part.Length; i++)
+            {
+                result[i] = _Essence_Founded_Spot_Part[i].Get();
+            }
+            return result;
+        }
+    }
 
     public UserHeroData(LitJson.JsonData json_data)
     {
@@ -114,9 +127,12 @@ public class UserHeroData : UserDataBase
         if (_Essence_Founded_Percent == null) _Essence_Founded_Percent = new SecureVar<int>();
         else _Essence_Founded_Percent.Set(0);
 
-        if (_Essence_Founded_Spot_Kind_Count == null) _Essence_Founded_Spot_Kind_Count = new SecureVar<int>();
-        else _Essence_Founded_Spot_Kind_Count.Set(0);
-
+        if (_Essence_Founded_Spot_Part == null) _Essence_Founded_Spot_Part = new SecureVar<bool>[(int)TOUCH_BODY_TYPE.PART4];
+        for (int i = 0; i < _Essence_Founded_Spot_Part.Length; i++)
+        {
+            if (_Essence_Founded_Spot_Part[i] == null) _Essence_Founded_Spot_Part[i] = new SecureVar<bool>(false);
+            else _Essence_Founded_Spot_Part[i].Set(false);
+        }
     }
 
     public void SetPlayerCharacterDataID(int player_character_id, int player_character_num)
@@ -866,6 +882,33 @@ public class UserHeroData : UserDataBase
         Lobby_Choice_Num = num;
         Is_Choice_Lobby = Lobby_Choice_Num > 0;
     }
+
+    public void SetDataSendedEssence(TOUCH_BODY_TYPE type)
+    {
+        int index = (int)type;
+        if (index == 0 || 4 < index)
+        {
+            Debug.Assert(false, $"잘못된 신체 부위의 근원 전달입니다 : {type}");
+            return;
+        }
+
+        if (Essence_Founded_Percent >= 100)
+        {
+            Debug.Assert(false, $"근원전달이 이미 100일때는 되면 안됩니다");
+            return;
+        }
+
+        if (Essence_Sended_Count_Of_Date >= 2)
+        {
+            Debug.Assert(false, $"근원전달 오늘 두번이상 했습니다");
+            return;
+        }
+
+        Essence_Founded_Percent++;
+        Essence_Sended_Count_Of_Date++;
+        _Essence_Founded_Spot_Part[(int)type - 1].Set(true);
+    }
+
     public void ReleaseLobbyChoice()
     {
         SetLobbyChoiceNumber(0);
@@ -882,7 +925,7 @@ public class UserHeroData : UserDataBase
         clone.Star_Grade = new SecureVar<int>(Star_Grade);
         clone._Essence_Sended_Count_Of_Date = new SecureVar<int>(_Essence_Sended_Count_Of_Date);
         clone._Essence_Founded_Percent = new SecureVar<int>(_Essence_Founded_Percent);
-        clone._Essence_Founded_Spot_Kind_Count = new SecureVar<int>(_Essence_Founded_Spot_Kind_Count);
+        clone._Essence_Founded_Spot_Part = _Essence_Founded_Spot_Part.ToArray();
         clone.Is_Clone = true;
 
         return clone;
@@ -907,7 +950,14 @@ public class UserHeroData : UserDataBase
         json[NODE_IS_CHOICE] = Is_Choice_Lobby;
         json[NODE_ESSENCE_SENDED_COUNT_OF_DATE] = _Essence_Sended_Count_Of_Date.Get();
         json[NODE_ESSENCE_FOUNDED_PERCENT] = _Essence_Founded_Percent.Get();
-        json[NODE_ESSENCE_FOUNDED_SPOT_COUNT] = _Essence_Founded_Spot_Kind_Count.Get();
+
+        var arr = new LitJson.JsonData();
+
+        foreach (var item in Essence_Founded_Spot_Part)
+        {
+            arr.Add(item);
+        }
+        json[NODE_ESSENCE_FOUNDED_PART] = arr;
 
         return json;
     }
@@ -966,9 +1016,18 @@ public class UserHeroData : UserDataBase
             {
                 _Essence_Founded_Percent.Set(ParseInt(json, NODE_ESSENCE_FOUNDED_PERCENT));
             }
-            if (json.ContainsKey(NODE_ESSENCE_FOUNDED_SPOT_COUNT))
+            if (json.ContainsKey(NODE_ESSENCE_FOUNDED_PART))
             {
-                _Essence_Founded_Spot_Kind_Count.Set(ParseInt(json, NODE_ESSENCE_FOUNDED_SPOT_COUNT));
+                var arr = json[NODE_ESSENCE_FOUNDED_PART];
+                int cnt = arr.Count;
+                for (int i = 0; i < cnt; i++)
+                {
+                    var jdata = arr[i];
+                    if (bool.TryParse(jdata.ToString(), out bool result))
+                    {
+                        _Essence_Founded_Spot_Part[i].Set(result);
+                    }
+                }
             }
         }
 
@@ -991,5 +1050,5 @@ public class UserHeroData : UserDataBase
     protected const string NODE_IS_CHOICE = "choice";
     protected const string NODE_ESSENCE_SENDED_COUNT_OF_DATE = "escnt";
     protected const string NODE_ESSENCE_FOUNDED_PERCENT = "efper";
-    protected const string NODE_ESSENCE_FOUNDED_SPOT_COUNT = "efcnt";
+    protected const string NODE_ESSENCE_FOUNDED_PART = "efpart";
 }

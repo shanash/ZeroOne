@@ -97,6 +97,7 @@ public class BattleSkillManager : BattleDataBase
             AddNpcBattleSkillGroup(skill_group_id, i);
         }
     }
+
     public void SetNpcSpecialSkillGroup(int special_skill_id)
     {
         if (special_skill_id == 0)
@@ -105,6 +106,7 @@ public class BattleSkillManager : BattleDataBase
         }
         AddNpcBattleSkillGroup(special_skill_id, 10);
     }
+
     void AddNpcBattleSkillGroup(int skill_group_id, int order)
     {
         var grp = new BattleNpcSkillGroup();
@@ -244,6 +246,7 @@ public class BattleSkillManager : BattleDataBase
             duration_skill = null;
         }
     }
+
     /// <summary>
     /// 지속성 스킬 효과 데이터를 모두 제거<br/>
     /// 데이터를 제거하면 자동으로 이펙트도 사라지도록 구현되어 있음
@@ -261,6 +264,7 @@ public class BattleSkillManager : BattleDataBase
             Used_Battle_Duration_Data_List.Clear();
         }
     }
+
     /// <summary>
     /// 지속성 효과의 시간을 계산 해주기.<br/>
     /// 반복/종료 등 지속성 효과의 유지 및 효과도 적용 계산
@@ -474,6 +478,7 @@ public class BattleSkillManager : BattleDataBase
         }
         return sum;
     }
+
     /// <summary>
     /// 지속성 효과 중 지정 타입의 절대 값 총합 반환
     /// </summary>
@@ -503,5 +508,4 @@ public class BattleSkillManager : BattleDataBase
         int sum = Skill_Groups.Sum(x => x.GetSkillLevel());
         return sum;
     }
-
 }

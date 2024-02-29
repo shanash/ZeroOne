@@ -89,6 +89,9 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateReactBegin()
     {
+        // UI버튼들 입력을 애니메이션 끝날때까지 막는다.
+        ScreenEffectManager.I.SetBlockInputUI(true);
+
         // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
         var chat_motion_data = Reaction_Chat_Motions[Current_Chat_Motion_Id];
         if (!TryGetTrackNum(chat_motion_data.animation_name, out int track_num))
@@ -96,7 +99,6 @@ public abstract partial class ActorBase : MonoBehaviour
             throw new InvalidTrackException(track_num);
         }
 
-        Debug.Log($"Play Animation : {chat_motion_data.animation_name}");
         var te = Skeleton.AnimationState.SetAnimation(track_num, chat_motion_data.animation_name, false);
 
         // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
@@ -145,6 +147,9 @@ public abstract partial class ActorBase : MonoBehaviour
 
         react_track_entry = null;
         Current_Chat_Motion_Id = -1;
+
+        // 애니메이션 끝나면 풉니다.
+        ScreenEffectManager.I.SetBlockInputUI(false);
     }
 
     public virtual void ActorStateDragBegin()

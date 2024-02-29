@@ -18,8 +18,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
     protected const int MOUTH_TRACK = 17;
-    const string FACE_BONE_NAME = "touch_center";
-    const string BALLOON_BONE_NAME = "balloon";
+    //const string FACE_BONE_NAME = "touch_center";
+    //const string BALLOON_BONE_NAME = "balloon";
 
     [SerializeField]
     protected SkeletonAnimation Skeleton;
@@ -35,7 +35,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     Vector2 Current_Face_Direction;// 얼굴 방향
 
     ////////////////////////// 상태
-    //protected Dictionary<int, IdleAnimationData> Idle_Animation_Datas;
     protected IdleAnimationData Idle_Animation_Data;
     KeyValuePair<(TOUCH_GESTURE_TYPE geture_type, TOUCH_BODY_TYPE body_type), int> Gesture_Touch_Counts;
     protected int Idle_Played_Count;
@@ -44,23 +43,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected Bone Balloon; // 말풍선 위치 본
 
     Producer Producer;
-    //List<Me_Interaction_Data>[,] Touch_Type_Interactions;
     L2d_Interaction_Base_Data Current_Interaction;
 
-    //Dictionary<LOVE_LEVEL_TYPE, L2d_Love_State_Data> LoveStates;
     L2d_Love_State_Data LoveState;
     LOVE_LEVEL_TYPE Current_Love_Level_Type => LoveState.love_level_type;
 
-    //Dictionary<int, L2d_Skin_Ani_State_Data> SkinAniStates;
     protected L2d_Skin_Ani_State_Data SkinAniState;
     protected L2d_Char_Skin_Data SkinData;
 
     // 키의 bool 값은 근원전달 성공 실패 값이다
     // 근원 전달이 아닌 상황에서는 false로 찾아주세요
     protected Dictionary<Tuple<TOUCH_BODY_TYPE, TOUCH_GESTURE_TYPE, bool>, L2d_Interaction_Base_Data> Interaction_Bases;
-    //TOUCH_BODY_TYPE Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
+    TOUCH_BODY_TYPE Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
 
-    //protected Dictionary<int, Me_Chat_Motion_Data> Idle_Chat_Motions;
     protected Me_Chat_Motion_Data Idle_Chat_Motion;
     protected Dictionary<int, Me_Chat_Motion_Data> Reaction_Chat_Motions;
 
@@ -72,8 +67,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     string Current_Mouth_Anim_Name;
 
     TrackEntry Drag_Track_Entry;
-
-    //float Nade_Point = 0;
 
     float Origin_Mouth_Alpha = 0; // 원래 입 크기
     float Dest_Mouth_Alpha = 0; // 움직이기 위한 목표로 하는 입 크기
@@ -197,7 +190,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 if (serifu == null)
                 {
                     Debug.LogWarning($"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
-                    //Debug.Assert(false, $"출력할 대사가 없습니다. {Current_Chat_Motion_ID} :: {Current_Serifu_Index}");
                     return;
                 }
 
@@ -322,6 +314,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
+        if (!TouchCanvas.Instance.Touch_Effect_Enable)
+        {
+            TouchCanvas.Instance.SetTouchEffectPrefabPath(Current_Interaction.check_using_essense ? TouchCanvas.Effect_Pink_Path : TouchCanvas.Effect_Blue_Path);
+        }
+
         SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.CLICK, bounding_box);
 
         FSM.ChangeState(ACTOR_STATES.REACT);
@@ -383,66 +380,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
-        //Vector2 drag_dest;
-
         switch (comp)
         {
-            /*
-            case SpineBoundingBox bounding_box:
-                var data = GetInteractionData(TOUCH_GESTURE_TYPE.DRAG, bounding_box);
-
-                if (data == null)
-                {
-                    return;
-                }
-
-                drag_dest = bounding_box.GetPtDirection();
-
-                if (drag_dest.Equals(Vector2.zero))
-                {
-                    Debug.Assert(false, "ActorBase::OnDrag : 해당 터치에는 포인트가 없어서 드래그할 수 없습니다");
-                    return;
-                }
-
-                if (drag_vector.sqrMagnitude.Equals(0.0f))
-                {
-                    drag_vector = drag_dest * 0.001f;
-                }
-
-                if (!string.IsNullOrEmpty(data.drag_animation_name))
-                {
-                    switch (state)
-                    {
-                        case 0:
-                            Current_Interaction = data;
-                            SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.DRAG, bounding_box);
-
-                            FSM.ChangeState(ACTOR_STATES.DRAG);
-                            break;
-                        case 1:
-                            float close_value = // 드래그한 정도가 얼만큼 drag_dest와 일치했는가 (0~1 이외의 값은 크게 의미 없다)
-                                (drag_vector.sqrMagnitude / drag_dest.sqrMagnitude) // 드래그한 길이가 얼마나 대상과 비슷한가
-                                * CommonUtils.Math.Cos(drag_dest, drag_vector); // 드래그한 방향이 얼마나 대상과 비슷한가
-
-                            if (Drag_Track_Entry != null)
-                            {
-                                if (close_value < 1)
-                                {
-                                    Drag_Track_Entry.TrackTime = close_value;
-                                }
-                                else
-                                {
-                                    FSM.ChangeState(ACTOR_STATES.REACT);
-                                }
-                            }
-                            break;
-                        case 2:
-                            FSM.ChangeState(ACTOR_STATES.IDLE);
-                            break;
-                    }
-                }
-                break;
-            */
             case Background:
                 Dragged_Canvas_Position = position;
 
@@ -467,52 +406,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             return;
         }
-
-        /*
-        bool isNadeValid = FSM.CurrentTransitionID == ACTOR_STATES.NADE && state >= 1;
-        bool isIdleValid = FSM.CurrentTransitionID == ACTOR_STATES.IDLE && state == 0;
-
-        if (!isIdleValid && !isNadeValid)
-        {
-            return;
-        }
-
-        var bounding_box = obj as SpineBoundingBox;
-        if (bounding_box == null)
-        {
-            return;
-        }
-
-        var data = GetInteractionData(TOUCH_GESTURE_TYPE.NADE, bounding_box);
-
-        if (data == null)
-        {
-            return;
-        }
-
-        Dragged_Canvas_Position = position;
-
-        switch (state)
-        {
-            case 0:
-                Current_Interaction = data;
-                SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.NADE, bounding_box);
-                Nade_Point = 0;
-
-                FSM.ChangeState(ACTOR_STATES.NADE);
-                break;
-            case 1:
-                Nade_Point += delta.sqrMagnitude * 0.00001f;
-                if (Nade_Point > 10)
-                {
-                    FSM.ChangeState(ACTOR_STATES.REACT);
-                }
-                break;
-            case 2:
-                Dragged_Canvas_Position = Vector2.zero;
-                break;
-        }
-        */
     }
     #endregion
 
@@ -529,7 +422,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     L2d_Interaction_Base_Data GetInteractionData(TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
     {
-        var key = Tuple.Create(bounding_box.GetTouchBodyType(), type, false);
+        bool is_essence_success =
+            bounding_box.GetTouchBodyType() == Essence_Success_Body
+            && Essence_Success_Body != TOUCH_BODY_TYPE.NONE;
+
+        var key = Tuple.Create(bounding_box.GetTouchBodyType(), type, is_essence_success);
 
         if (!Interaction_Bases.ContainsKey(key))
         {
@@ -541,41 +438,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 return null;
             }
         }
+        else if (is_essence_success)
+        {
+            Producer.NotifySuccessTransferEssence(Essence_Success_Body);
+            Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
+        }
 
         return Interaction_Bases[key];
-
-            /*
-        var interaction_datas = Touch_Type_Interactions[(int)type, (int)bounding_box.GetTouchBodyType()];
-
-        if (interaction_datas == null || interaction_datas.Count == 0)
-        {
-            return null;
-        }
-
-        int count = 1 + GetConsecutiveGestureCount(type, bounding_box.GetTouchBodyType());
-
-        try
-        {
-            return interaction_datas
-                .Where(data => (data.condition_state_ids == null || data.condition_state_ids.Length == 0 || data.condition_state_ids.Contains(Current_State_Id)))
-                .Where(data => string.IsNullOrEmpty(data.touch_body_direction) || bounding_box.GetTouchBodyDirection().ToString().Equals(data.touch_body_direction))
-                .Where(data => (data.condition_max_gesture_count == 0 && data.condition_min_gesture_count == 0) // min max 둘다 0이면 통과
-                || ((data.condition_min_gesture_count == 0 || data.condition_min_gesture_count <= count) // condition_min_gesture_count 0이면 조건이 없는걸로 취급
-                && (data.condition_max_gesture_count == 0 || count <= data.condition_max_gesture_count))) // condition_max_gesture_count 0이면 조건이 없는걸로 취급
-                .First();
-        }
-        catch (InvalidOperationException)
-        {
-            // 조건들을 통과 못하는 경우는 그냥 패스
-        }
-        catch (Exception e)
-        {
-            // 이외의 예외는 확인해봅니다
-            Debug.LogError($"Current_State_Id : {Current_State_Id}");
-            Debug.LogException(e);
-        }
-            */
-        //return null;
     }
 
     void SetReactionData(L2d_Interaction_Base_Data data, TOUCH_GESTURE_TYPE type, SpineBoundingBox bounding_box)
@@ -586,12 +455,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
         Current_Interaction = data;
         Current_Chat_Motion_Id = data.reaction_ani_id;
-        /*
-        int index = GetConsecutiveGestureCount(type, bounding_box.GetTouchBodyType()) % data.chat_motion_ids.Length;
-
-        Current_Interaction = data;
-        Current_Chat_Motion_Id = data.chat_motion_ids[index];
-        */
     }
 
     protected void AddGestureEventListener()
@@ -657,7 +520,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         else if (type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
         {
             this.transform.position = new Vector3(0, ESSENCE_POS_Y, this.transform.position.z);
-            //Essence_Success_Body = (TOUCH_BODY_TYPE)UnityEngine.Random.Range(1, 5);
+            Essence_Success_Body = (TOUCH_BODY_TYPE)UnityEngine.Random.Range(1, 5);
         }
 
         InitField();
