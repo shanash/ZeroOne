@@ -780,6 +780,12 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         _Voice_Src.clip = null;
     }
 
+    public float GetClipLength(string clip_key)
+    {
+        var clip_control = GetAudioClipController(clip_key);
+        return clip_control.Clip.length;
+    }
+
     /// <summary>
     /// 재생할 음원들 미리 로드
     /// </summary>

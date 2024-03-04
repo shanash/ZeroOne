@@ -10,6 +10,9 @@ public class EssenceController : SceneControllerBase
     [SerializeField]
     RawImage Chara_Image = null;
 
+    [SerializeField]
+    SerifuBox Serifu_Box = null;
+
     List<UserL2dData> L2d_List = null;
     Producer pd = null;
     RenderTexture Chara_Texture = null;
@@ -61,6 +64,7 @@ public class EssenceController : SceneControllerBase
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         pd.OnSuccessTransferEssence += OnSuccessTransfer;
+        pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
         GestureManager.Instance.Enable = true;
 

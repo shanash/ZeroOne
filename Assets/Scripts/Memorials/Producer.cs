@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     static int Index = 0;
 
     StageBase Stage = null;
-    Background Background = null;
     ActorBase Actor = null;
 
     GameObject root = null;
@@ -20,6 +20,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     public delegate void TransferEssenceHandler(TOUCH_BODY_TYPE type);
 
     public event TransferEssenceHandler OnSuccessTransferEssence;
+    public event Action<string, float> OnSendActorMessage { add => Actor.OnSendMessage += value; remove => Actor.OnSendMessage -= value; }
 
     Producer() { }
 
@@ -59,6 +60,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     public void NotifySuccessTransferEssence(TOUCH_BODY_TYPE type)
     {
         OnSuccessTransferEssence?.Invoke(type);
+    }
+
+    public void OnSendMessage(string message, float during)
+    {
+        Debug.Log($"OnSendMessage :{message} : {during}");
     }
 
     public void SetActive(bool value)

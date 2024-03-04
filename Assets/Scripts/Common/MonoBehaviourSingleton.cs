@@ -88,7 +88,6 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
 
     protected abstract bool _Is_DontDestroyOnLoad { get; }
 
-
     protected virtual void OnAwake() { }
 
     #region Monobehaviour Callback

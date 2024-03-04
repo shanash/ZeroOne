@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 
 namespace FluffyDuck.EditorUtil.UpperMenu
 {

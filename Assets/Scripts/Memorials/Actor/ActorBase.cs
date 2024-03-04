@@ -75,9 +75,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     bool Is_Quit = false;
 
     protected abstract Spine.AnimationState AnimationState { get; }
-
     protected int Current_State_Id => SkinAniState.state_id;
-
+    public event Action<string, float> OnSendMessage;
 
     #region MonoBehaviour Methods
 
@@ -193,10 +192,19 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     return;
                 }
 
+                string sound_key = serifu.audio_clip_key;
+                float voice_length = 0.0f;
+                if (!string.IsNullOrEmpty(sound_key))
+                {
+                    voice_length = AudioManager.Instance.GetClipLength(serifu.audio_clip_key);
+                    AudioManager.Instance.PlayVoice(serifu.audio_clip_key, false, OnAudioStateAndVolumeChanged);
+                }
+
                 if (!string.IsNullOrEmpty(serifu.text_kr))
                 {
+                    OnSendMessage(serifu.text_kr, voice_length);
+                        /*
                     DisappearBalloon();
-
                     SpeechBalloonManager.Instance.CreateBalloon(
                         (balloon_id) =>
                         {
@@ -207,12 +215,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                         new Vector2(460, 170),
                         SpeechBalloon.BalloonSizeType.FixedWidth,
                         SpeechBalloon.Pivot.Right);
-                }
-
-                string sound_key = serifu.audio_clip_key;
-                if (!string.IsNullOrEmpty(sound_key))
-                {
-                    AudioManager.Instance.PlayVoice(serifu.audio_clip_key, false, OnAudioStateAndVolumeChanged);
+                        */
                 }
                 break;
         }
