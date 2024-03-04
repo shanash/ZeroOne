@@ -2,15 +2,19 @@
 using System.Diagnostics;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 
 namespace FluffyDuck.EditorUtil.UpperMenu
 {
     public static class FluffyDuck
     {
-        [MenuItem("FluffyDuck/Build Launcher/Build Asset For Local Editor _%#/", false, 0)]
-        static void BuildLauncher_BuildAssetForLocalEditor()
+        /// <summary>
+        /// 어드레서블 에셋을 포함한 뒤 실행해서 Refresh해야 합니다
+        /// </summary>
+        [MenuItem("FluffyDuck/Build Launcher/Update Asset For Local Editor _%#/", false, 0)]
+        static void BuildLauncher_UpdateAssetForLocalEditor()
         {
-            BuildLauncher.BuildAssetForLocalEditor();
+            BuildLauncher.UpdateAsssetBundleForLocalEditor();
         }
 
         [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 1)]
@@ -60,52 +64,37 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             SkillEditor.ShowWindow();
         }
 
-
         [MenuItem("FluffyDuck/Move Scene/Title _&1", false, 31)]
         static void MoveScene_Title()
         {
-            string go_scene = "title";
-            string scene_name = EditorSceneManager.GetActiveScene().name;
-            if (scene_name.Equals(go_scene))
-            {
-                return;
-            }
-            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+            MoveScene("title");
         }
 
         [MenuItem("FluffyDuck/Move Scene/Lobby _&2", false, 32)]
         static void MoveScene_Lobby()
         {
-            string go_scene = "home";
-            string scene_name = EditorSceneManager.GetActiveScene().name;
-            if (scene_name.Equals(go_scene))
-            {
-                return;
-            }
-            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+            MoveScene("home");
         }
         [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
         static void MoveScene_Battle()
         {
-            string go_scene = "battle";
-            string scene_name = EditorSceneManager.GetActiveScene().name;
-            if (scene_name.Equals(go_scene))
-            {
-                return;
-            }
-            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+            MoveScene("battle");
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Memorial _&4", false, 34)]
-        static void MoveScene_Memorial()
+        [MenuItem("FluffyDuck/Move Scene/Essence _&4", false, 34)]
+        static void MoveScene_Essence()
         {
-            string go_scene = "memorial";
-            string scene_name = EditorSceneManager.GetActiveScene().name;
-            if (scene_name.Equals(go_scene))
+            MoveScene("essence");
+        }
+
+        static void MoveScene(string name)
+        {
+            string scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            if (scene_name.Equals(name))
             {
                 return;
             }
-            EditorSceneManager.OpenScene($"Assets/Scenes/{go_scene}.unity");
+            EditorSceneManager.OpenScene($"Assets/Scenes/{name}.unity");
         }
 
         [MenuItem("FluffyDuck/Persistent/Open Folder _%#o", false, 50)]
@@ -181,7 +170,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         /// </summary>
         /// <returns></returns>
         [MenuItem(TogglePlayFullscreen_MenuItemName, true)]
-        private static bool ToggleActionValidate()
+        static bool ToggleActionValidate()
         {
             // 메뉴 아이템의 체크 상태를 EditorPrefs에서 가져온 값으로 설정합니다.
             Menu.SetChecked(TogglePlayFullscreen_MenuItemName, EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false));

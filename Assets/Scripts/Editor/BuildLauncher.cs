@@ -162,7 +162,7 @@ namespace FluffyDuck.EditorUtil
         }
         */
 
-        public static void BuildAssetForLocalEditor()
+        public static void UpdateAsssetBundleForLocalEditor()
         {
             IsRemotePath = false;
             IsAddressablesBuild = true;
@@ -476,16 +476,23 @@ namespace FluffyDuck.EditorUtil
                 EditorUtility.SetDirty(s_Settings);
                 AssetDatabase.SaveAssets();
 
-                AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult result);
-
-                bool success = string.IsNullOrEmpty(result.Error);
-
-                if (!success)
+                if (IsRemotePath || IsPlayerBuild)
                 {
-                    Debug.LogError("Addressables build error encountered: " + result.Error);
+                    AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult result);
+                    bool success = string.IsNullOrEmpty(result.Error);
+
+                    if (!success)
+                    {
+                        Debug.LogError("Addressables build error encountered: " + result.Error);
+                    }
+                    return success;
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog("Addressable", "Asset Bundle 데이터 업데이트 완료", "확인");
                 }
 
-                return success;
+                return true;
             }
             catch (Exception e)
             {
