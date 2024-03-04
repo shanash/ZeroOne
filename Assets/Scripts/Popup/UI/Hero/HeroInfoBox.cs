@@ -28,13 +28,17 @@ public class HeroInfoBox : MonoBehaviour
 
     BattlePcData User_Hero_Data;
 
-    public void SetHeroData(BattlePcData data, HeroInfoUI info_ui)
+    public void SetData(BattlePcData data, HeroInfoUI info_ui, int select_tab_index)
     {
         User_Hero_Data = data;
         Hero_Info_Box_Basic.SetHeroData(User_Hero_Data);
         Hero_Info_Box_LevelUp.SetHeroData(User_Hero_Data);
         Hero_Info_Box_Advance.SetHeroData(User_Hero_Data);
         Hero_Info_Box_Essence.SetHeroData(User_Hero_Data, info_ui);
+
+        // 근원전달은 에일린만 활성화
+        Tab_Controller.GetTab(3).SetBlockTab(User_Hero_Data.Data.player_character_id != 100006);
+        Tab_Controller.Select(select_tab_index);
 
         FixedUpdatePopup();
     }
@@ -48,10 +52,6 @@ public class HeroInfoBox : MonoBehaviour
             Tab_Off_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
             Tab_On_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
         }
-
-        // 근원전달은 에일린만 활성화
-        Tab_Controller.GetTab(3).SetBlockTab(User_Hero_Data.Data.player_character_id != 100006);
-        Tab_Controller.SelectFirstTab();
 
         Refresh();
     }

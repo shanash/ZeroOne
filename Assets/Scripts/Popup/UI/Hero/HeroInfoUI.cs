@@ -72,19 +72,27 @@ public class HeroInfoUI : PopupBase
     {
         ResetUI();
 
-        if (data.Length != 2 || data[0] is not List<BattlePcData> || data[1] is not int)
+        if (data.Length < 2 || data[0] is not List<BattlePcData> || data[1] is not int)
         {
             return false;
         }
 
+        int select_tab_index = 0;
+
+        if (data.Length == 3 && data[2] is int)
+        {
+            select_tab_index = (int)data[2];
+        }
+
         User_Hero_Datas = data[0] as List<BattlePcData>;
-        SetUserHero((int)data[1]);
+        SetData((int)data[1], select_tab_index);
+
         FixedUpdatePopup();
 
         return true;
     }
 
-    void SetUserHero(int hero_data_index)
+    void SetData(int hero_data_index, int select_tab_index = 0)
     {
         Current_Hero_Data_Index = hero_data_index;
 
@@ -98,7 +106,7 @@ public class HeroInfoUI : PopupBase
 
         pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
 
-        Hero_Info_Box.SetHeroData(User_Hero_Battle_Data, this);
+        Hero_Info_Box.SetData(User_Hero_Battle_Data, this, select_tab_index);
     }
 
     void SetRenderTextureAndCamera()
@@ -194,7 +202,7 @@ public class HeroInfoUI : PopupBase
             index = User_Hero_Datas.Count -1;
         }
 
-        SetUserHero(index);
+        SetData(index);
         UpdatePopup();
     }
 
@@ -207,7 +215,7 @@ public class HeroInfoUI : PopupBase
             index = 0;
         }
 
-        SetUserHero(index);
+        SetData(index);
         UpdatePopup();
     }
 

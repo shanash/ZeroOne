@@ -42,7 +42,7 @@ public class HeroListUI : PopupBase
 
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
             {
-                popup.ShowPopup(Battle_Pc_Data, index);
+                popup.ShowPopup(Battle_Pc_Data, index, 3);
             });
         }
 
