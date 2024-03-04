@@ -45,7 +45,8 @@ public static class RuntimeInitLoad
         {
             var index = scenes_in_build_names.FindIndex(x => x == str_scene_name);
             // Scenes In Build에 포함되어 있지 않은 애들은
-            if (index.Equals(4))
+            // - 무조건 index가 5로 오게 된다. 현재 0 ~ 4까지 쓰고 있어서
+            if (index.Equals(5))
             {
                 // 로딩 후 지금 열려있는 Scene으로 다시 오게 해 준다.
                 SCManager.I.Default_Scene = scene_name;
