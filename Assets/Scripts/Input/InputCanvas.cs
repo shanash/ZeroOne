@@ -105,7 +105,7 @@ namespace ZeroOne.Input
         #region Input System Methods
         public void OnTapListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
-            //Debug.Log($"OnListenTap : {context.phase}");
+            Debug.Log($"OnListenTap : {context.phase}");
             Input_Down_Hold_Reference += (context.phase == InputActionPhase.Started ? 1 : -1);
 
             if (context.phase == InputActionPhase.Performed)
