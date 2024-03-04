@@ -94,9 +94,8 @@ namespace ZeroOne.Input
 
         protected override void OnAwake()
         {
-            var map = _PlayerInput.actions.FindActionMap("Input");
-            Hold_Action = map.FindAction("Hold");
-            Tap_Action = map.FindAction("Tap");
+            Hold_Action = _PlayerInput.actions.FindAction("Hold");
+            Tap_Action = _PlayerInput.actions.FindAction("Tap");
 
             // GraphicRaycaster 및 EventSystem 참조를 가져옵니다.
             graphicRaycaster = GetComponent<GraphicRaycaster>();
@@ -106,13 +105,11 @@ namespace ZeroOne.Input
         #region Input System Methods
         public void OnTapListen(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
-            
-            Input_Down_Hold_Reference += (context.phase == InputActionPhase.Started ? 1 : 0);
-            Input_Down_Hold_Reference += (context.phase == InputActionPhase.Canceled ? -1 : 0);
+            //Debug.Log($"OnListenTap : {context.phase}");
+            Input_Down_Hold_Reference += (context.phase == InputActionPhase.Started ? 1 : -1);
 
             if (context.phase == InputActionPhase.Performed)
             {
-                Debug.Log($"OnListenTap : {context.phase}");
                 // OnInputUp 처리
                 if (Enable)
                 {

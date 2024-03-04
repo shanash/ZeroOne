@@ -10,6 +10,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 
     float Game_Over_Delta;
+    float Time_Out_Delta;
 
     private void Awake()
     {
@@ -31,7 +32,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         {
             case GAME_TYPE.STORY_MODE:
                 {
-                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.DUNGEON_ID, 100001);
+                    int stage_id = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.DUNGEON_ID, 1001101);
                     board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);     //  스테이지 id를 받은 후 해당 데이터를 삭제
 
                     Dungeon_Data = new BattleDungeon_StoryStageData();
@@ -112,7 +113,6 @@ public partial class BattleManager_V2 : SceneControllerBase
             player_team.GetHeroPrefabsPath(ref list);
         }
 
-
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(list, PreloadCallback);
     }
 
@@ -148,6 +148,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         FSM.AddTransition(new GameStateNextWaveV2());
         FSM.AddTransition(new GameStateWaveRunV2());
         FSM.AddTransition(new GameStatePauseV2());
+        FSM.AddTransition(new GameStateTimeOutV2());
         FSM.AddTransition(new GameStateGameOverWinV2());
         FSM.AddTransition(new GameStateGameOverLoseV2());
         FSM.AddTransition(new GameStateEndV2());
@@ -200,6 +201,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateInitBegin()
     {
         InitBattleField();
+        UI_Mng.UpdateTimeLimit(Dungeon_Data.Dungeon_Limit_Time);
     }
     public virtual void GameStateInit()
     {
@@ -290,12 +292,14 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         UI_Mng.ShowBattleUI(false);
     }
-    public virtual void GameStateUltimateSkill() { }
+    public virtual void GameStateUltimateSkill() 
+    {
+        CalcDungeonLimitTime();
+    }
     public virtual void GameStateUltimateSkillExit() 
     {
         UI_Mng.ShowBattleUI(true);
     }
-
 
     public virtual void GameStatePlayingBegin()
     {
@@ -305,7 +309,6 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
 
         UI_Mng.UpdateWaveCount();
-        //TeamMembersChangeState(UNIT_STATES.ATTACK_READY_1);
     }
     public virtual void GameStatePlaying()
     {
@@ -332,6 +335,7 @@ public partial class BattleManager_V2 : SceneControllerBase
                 ChangeState(GAME_STATES.GAME_OVER_LOSE);
             }
         }
+        CalcDungeonLimitTime();
     }
     public virtual void GameStatePlayingExit() { }
 
@@ -343,7 +347,6 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
         //  지속성 효과를 제외한 다른 모든 이펙트들을 제거해야 하는데...
         GetEffectFactory().ClearAllEffects();
-
 
         if (Dungeon_Data.NextWave())
         {
@@ -465,6 +468,23 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
     }
     public virtual void GameStateGameOverLoseExit() { }
+
+    public virtual void GameStateTimeOutBegin() 
+    {
+        GetEffectFactory().ClearAllEffects();
+        //  동작 정지
+        TeamMembersChangeState(UNIT_STATES.TIME_OUT);
+        Time_Out_Delta = 1f;
+    }
+    public virtual void GameStateTimeOut() 
+    {
+        Time_Out_Delta -= Time.deltaTime;
+        if (Time_Out_Delta < 0f)
+        {
+            ChangeState(GAME_STATES.GAME_OVER_LOSE);
+        }
+    }
+    public virtual void GameStateTimeOutExit() { }
 
     public virtual void GameStateEndBegin() { }
     public virtual void GameStateEnd() { }

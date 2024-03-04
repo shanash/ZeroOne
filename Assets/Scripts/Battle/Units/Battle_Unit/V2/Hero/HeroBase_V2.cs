@@ -237,8 +237,8 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     }
 
-    public void SetTeamFieldPosition(Vector3 pos) 
-    { 
+    public void SetTeamFieldPosition(Vector3 pos)
+    {
         Team_Field_Position = pos;
         this.transform.localPosition = Team_Field_Position;
     }
@@ -268,7 +268,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             {
                 Ultimate_Skill_Playable_Director.playableGraph.GetRootPlayable(0).SetSpeed(Battle_Speed_Multiple);
             }
-            
+
         }
     }
 
@@ -313,7 +313,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         var unit_back_bg = Battle_Mng.GetBattleField().GetUnitBackFaceBG();
         var virtual_cam = Battle_Mng.GetVirtualCineManager();
         var brain_cam = virtual_cam.GetBrainCam();
-        
+
         var stage_cam = virtual_cam.GetStageCamera();
         var character_cam = virtual_cam.GetCharacterCamera();
         var free_cam = virtual_cam.GetFreeCamera();
@@ -323,7 +323,7 @@ public partial class HeroBase_V2 : UnitBase_V2
 
         var target_group_cam = virtual_cam.GetTargetGroupCamera();
         var target_group = virtual_cam.GetTargetGroup();
-        
+
 
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
@@ -484,7 +484,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 스파인 애니메이션 시작시 호출되는 리스너
     /// </summary>
     /// <param name="entry"></param>
-    protected virtual void SpineAnimationStart(TrackEntry entry) 
+    protected virtual void SpineAnimationStart(TrackEntry entry)
     {
         string animation_name = entry.Animation.Name;
         entry.TimeScale = Battle_Speed_Multiple;
@@ -552,7 +552,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
-                Battle_Mng.ShowAllUnits();
+                //Battle_Mng.ShowAllUnits();
 
                 UnsetPlayableDirector();
                 var skill = GetSkillManager().GetSpecialSkillGroup();
@@ -621,7 +621,12 @@ public partial class HeroBase_V2 : UnitBase_V2
         Team_Type = Team_Mng.Team_Type;
     }
 
-    
+    /// <summary>
+    /// 유닛 알파값 변경 애니메이션
+    /// </summary>
+    /// <param name="alpha"></param>
+    /// <param name="duration"></param>
+    /// <param name="render_enable"></param>
     public void SetAlphaAnimation(float alpha, float duration, bool render_enable)
     {
         if (Render_Texture == null)
@@ -632,13 +637,19 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        Render_Texture.SetAlphaAnimation(alpha, duration, render_enable);
-        ShadowAlphaAnimation(alpha, duration);
+        float dur = duration / Battle_Speed_Multiple;
+        Render_Texture.SetAlphaAnimation(alpha, dur, render_enable);
+        ShadowAlphaAnimation(alpha, dur);
         if (alpha == 0f)
         {
             Life_Bar_V2.HideLifeBar();
         }
     }
+    /// <summary>
+    /// 유닛의 렌더 텍스쳐 사용 여부<br/>
+    /// 알파 값을 사용하기 위해서는 렌더 텍스쳐의 활성화가 필요함
+    /// </summary>
+    /// <param name="enable"></param>
     public void UnitRenderTextureEnable(bool enable)
     {
         Render_Texture.enabled = enable;
@@ -772,7 +783,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         return Unit_Data.GetUnitScale();
     }
-
+    /// <summary>
+    /// 캐스팅 이펙트 소환(아무런 효과가 없이 이펙트만 표현)
+    /// </summary>
+    /// <param name="skill_grp"></param>
     protected virtual void SpawnSkillCastEffect(BattleSkillGroup skill_grp)
     {
         string[] effect_paths = skill_grp.GetSkillCastEffectPath();
@@ -780,7 +794,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
-        
+
         var factory = Battle_Mng.GetEffectFactory();
         int cnt = effect_paths.Length;
         for (int i = 0; i < cnt; i++)
@@ -810,8 +824,117 @@ public partial class HeroBase_V2 : UnitBase_V2
                 animator.speed = Battle_Speed_Multiple;
             }
         }
+    }
 
-        
+    /// <summary>
+    /// 1회성 효과 이펙트 호출
+    /// </summary>
+    /// <param name="effect_path"></param>
+    /// <param name="send_data"></param>
+    /// <param name="target"></param>
+    /// <param name="targets"></param>
+    void SpawnOnetimeEffect(string effect_path, BATTLE_SEND_DATA send_data, HeroBase_V2 target, List<HeroBase_V2> targets)
+    {
+        if (string.IsNullOrEmpty(effect_path))
+        {
+            return;
+        }
+        var factory = Battle_Mng.GetEffectFactory();
+        var effect = (SkillEffectBase)factory.CreateEffect(effect_path, GetUnitScale());
+        effect.SetBattleSendData(send_data);
+
+        var ec = effect.GetEffectComponent();
+        Vector3 target_pos = Vector3.zero;
+        //  적들의 중앙 위치 찾기
+        if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+        {
+            target_pos = ec.GetTargetsCenterPosition(targets);
+        }
+        else
+        {
+            Transform target_trans = ec.GetTargetReachPosition(targets.First());
+            if (target != null)
+            {
+                target_trans = ec.GetTargetReachPosition(target);
+            }
+            target_pos = target_trans.position;
+        }
+
+        //  즉발형 이펙트
+        if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+        {
+            effect.transform.position = target_pos;
+            effect.StartParticle(ec.Effect_Duration);
+        }
+        else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) // 투사체 이펙트
+        {
+            Transform start_trans = ec.GetProjectileStartTransform(this);
+            var start_pos = start_trans.position;
+            start_pos.z = start_trans.position.z;
+
+            effect.transform.position = start_pos;
+
+            float distance = Vector3.Distance(start_pos, target_pos);
+            float flying_time = 0f;
+            if (ec.Projectile_Duration > 0f)
+            {
+                flying_time = ec.Projectile_Duration;
+            }
+            else
+            {
+                flying_time = distance / ec.Projectile_Velocity;
+            }
+
+            effect.MoveTarget(target_pos, flying_time);
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
+    }
+    /// <summary>
+    /// 지속성 효과 이펙트 소환
+    /// </summary>
+    /// <param name="effect_path"></param>
+    /// <param name="send_data"></param>
+    /// <param name="target"></param>
+    /// <param name="targets"></param>
+    void SpawnDurationEffect(string effect_path, BATTLE_SEND_DATA send_data, HeroBase_V2 target, List<HeroBase_V2> targets)
+    {
+        if (string.IsNullOrEmpty(effect_path))
+        {
+            return;
+        }
+        var factory = Battle_Mng.GetEffectFactory();
+        var effect = (SkillEffectBase)factory.CreateEffect(effect_path, target.GetUnitScale());
+        effect.SetBattleSendData(send_data);
+
+        var ec = effect.GetEffectComponent();
+        Vector3 target_pos = Vector3.zero;
+        //  적들의 중앙 위치 찾기
+        if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
+        {
+            target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+        }
+        else
+        {
+            Transform target_trans = ec.GetTargetReachPosition(target);
+            target_pos = target_trans.position;
+        }
+
+        if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
+        {
+            effect.transform.position = target_pos;
+            effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
+        }
+        else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
+        {
+            //  nothing - 아직 투사체로 날아가서 발생하는 지속성 효과는 없음
+        }
+        else
+        {
+            Debug.Assert(false);
+        }
     }
 
     /// <summary>
@@ -830,19 +953,20 @@ public partial class HeroBase_V2 : UnitBase_V2
         int effect_weight_index = skill.GetEffectWeightIndex();
 
         string skill_trigger_effect_prefab = skill.GetTriggerEffectPrefabPath();
+        //  트리거 이펙트가 없을 경우
         if (string.IsNullOrEmpty(skill_trigger_effect_prefab))
         {
             //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
             for (int i = 0; i < target_cnt; i++)
             {
                 var target = Attack_Targets[i];
-                BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-                dmg.Caster = this;
-                dmg.AddTarget(target);
-                dmg.Skill = skill;
-                dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
-                dmg.Magic_Attack_Point = GetMagicAttackPoint();
-                dmg.Effect_Weight_Index = effect_weight_index;
+                BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
+                send_data.Caster = this;
+                send_data.AddTarget(target);
+                send_data.Skill = skill;
+                send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
+                send_data.Magic_Attack_Point = GetMagicAttackPoint();
+                send_data.Effect_Weight_Index = effect_weight_index;
 
                 //  onetime skill
                 var onetime_list = skill.GetOnetimeSkillDataList();
@@ -853,57 +977,14 @@ public partial class HeroBase_V2 : UnitBase_V2
                     string effect_path = onetime.GetEffectPrefab();
                     if (string.IsNullOrEmpty(effect_path))
                     {
+                        send_data.Onetime = onetime;
+                        onetime.ExecSkill(send_data);
                         continue;
                     }
-                    dmg.Onetime = onetime;
+                    send_data.Onetime = onetime;
 
-                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path, GetUnitScale());
-                    effect.SetBattleSendData(dmg);
+                    SpawnOnetimeEffect(effect_path, send_data, target, Attack_Targets);
 
-                    var ec = effect.GetEffectComponent();
-                    Vector3 target_pos = Vector3.zero;
-                    //  적들의 중앙 위치 찾기
-                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                    {
-                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                    }
-                    else
-                    {
-                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                        target_pos = target_trans.position;
-                    }
-
-                    //  즉발형 이펙트
-                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                    {
-                        effect.transform.position = target_pos;
-                        effect.StartParticle(ec.Effect_Duration);
-                    }
-                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) // 투사체 이펙트
-                    {
-                        Transform start_trans = ec.GetProjectileStartTransform(this);
-                        var start_pos = start_trans.position;
-                        start_pos.z = start_trans.position.z;
-
-                        effect.transform.position = start_pos;
-
-                        float distance = Vector3.Distance(start_pos, target_pos);
-                        float flying_time = 0f;
-                        if (ec.Projectile_Duration > 0f)
-                        {
-                            flying_time = ec.Projectile_Duration;
-                        }
-                        else
-                        {
-                            flying_time = distance / ec.Projectile_Velocity;
-                        }
-
-                        effect.MoveTarget(target_pos, flying_time);
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
                 }
 
                 //  duration skill
@@ -917,53 +998,23 @@ public partial class HeroBase_V2 : UnitBase_V2
                     {
                         continue;
                     }
-                    dmg.Duration = duration;
-
-                    var effect = (SkillEffectBase)factory.CreateEffect(effect_path, target.GetUnitScale());
-                    effect.SetBattleSendData(dmg);
-
-                    var ec = effect.GetEffectComponent();
-                    Vector3 target_pos = Vector3.zero;
-                    //  적들의 중앙 위치 찾기
-                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                    {
-                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                    }
-                    else
-                    {
-                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                        target_pos = target_trans.position;
-                    }
-
-                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                    {
-                        effect.transform.position = target_pos;
-                        effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
-                    }
-                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
-                    {
-                        //  nothing - 아직 투사체로 날아가서 발생하는 지속성 효과는 없음
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
-
+                    send_data.Duration = duration;
+                    SpawnDurationEffect(effect_path, send_data, target, Attack_Targets);
                 }
             }
         }
-        else
+        else //     트리거 이펙트가 있을 경우
         {
-            //  단일 이펙트
+            //  단일 이펙트 (대표 이펙트 - 1개의 초기 이펙트만 표현하고, 이후에는 이벤트에 따른 데미지 또는 추가 이펙트 정도만 표현해준다)
             if (skill.GetEffectCountType() == EFFECT_COUNT_TYPE.SINGLE_EFFECT)
             {
-                BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-                dmg.Caster = this;
-                dmg.AddTargets(Attack_Targets);
-                dmg.Skill = skill;
-                dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
-                dmg.Magic_Attack_Point = GetMagicAttackPoint();
-                dmg.Effect_Weight_Index = effect_weight_index;
+                BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
+                send_data.Caster = this;
+                send_data.AddTargets(Attack_Targets);
+                send_data.Skill = skill;
+                send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
+                send_data.Magic_Attack_Point = GetMagicAttackPoint();
+                send_data.Effect_Weight_Index = effect_weight_index;
 
                 //  첫번재 이펙트만 보여줘야 하므로
                 if (effect_weight_index == 0)
@@ -972,59 +1023,11 @@ public partial class HeroBase_V2 : UnitBase_V2
                     var onetime_list = skill.GetOnetimeSkillDataList();
                     if (onetime_list.Count > 0)
                     {
-                        dmg.Onetime = onetime_list[0];
+                        send_data.Onetime = onetime_list[0];
                     }
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
-                    trigger_effect.SetBattleSendData(dmg);
-
-                    var ec = trigger_effect.GetEffectComponent();
-                    
-                    Vector3 target_pos = Vector3.zero;
-                    //  적들의 중앙 위치 찾기
-                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                    {
-                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                    }
-                    else
-                    {
-                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                        target_pos = target_trans.position;
-                    }
-                    //  즉발형인지
-                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                    {
-                        trigger_effect.transform.position = target_pos;
-                        trigger_effect.StartParticle(ec.Effect_Duration);
-                    }
-                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) //  투사체인지
-                    {
-                        //  nothing (현재까지 투사체 샘플이 없음)
-
-                        Transform start_trans = ec.GetProjectileStartTransform(this);
-                        var start_pos = start_trans.position;
-                        start_pos.z = start_trans.position.z;
-
-                        trigger_effect.transform.position = start_pos;
-
-                        float distance = Vector3.Distance(start_pos, target_pos);
-                        float flying_time = 0f;
-                        if (ec.Projectile_Duration > 0f)
-                        {
-                            flying_time = ec.Projectile_Duration;
-                        }
-                        else
-                        {
-                            flying_time = distance / ec.Projectile_Velocity;
-                        }
-
-                        trigger_effect.MoveTarget(target_pos, flying_time);
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
+                    SpawnOnetimeEffect(skill_trigger_effect_prefab, send_data, Attack_Targets.First(),  Attack_Targets);
                 }
                 else
                 {
@@ -1043,61 +1046,13 @@ public partial class HeroBase_V2 : UnitBase_V2
                             string effect_path = onetime.GetEffectPrefab();
                             if (string.IsNullOrEmpty(effect_path))
                             {
-                                dmg.Onetime = onetime;
-                                onetime.ExecSkill(dmg);
+                                send_data.Onetime = onetime;
+                                onetime.ExecSkill(send_data);
                                 continue;
                             }
-                            dmg.Onetime = onetime;
+                            send_data.Onetime = onetime;
 
-                            var effect = (SkillEffectBase)factory.CreateEffect(effect_path, GetUnitScale());
-                            effect.SetBattleSendData(dmg);
-
-                            var ec = effect.GetEffectComponent();
-                            Vector3 target_pos = Vector3.zero;
-                            //  적들의 중앙 위치 찾기
-                            if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                            {
-                                target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                            }
-                            else
-                            {
-                                Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                                target_pos = target_trans.position;
-                            }
-
-
-                            //  즉발형 이펙트
-                            if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                            {
-                                effect.transform.position = target_pos;
-                                effect.StartParticle(ec.Effect_Duration);
-                            }
-                            else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE) // 투사체 이펙트
-                            {
-                                Transform start_trans = ec.GetProjectileStartTransform(this);
-                                var start_pos = start_trans.position;
-                                start_pos.z = start_trans.position.z;
-
-                                effect.transform.position = start_pos;
-
-                                float distance = Vector3.Distance(start_pos, target_pos);
-                                float flying_time = 0f;
-                                if (ec.Projectile_Duration > 0f)
-                                {
-                                    flying_time = ec.Projectile_Duration;
-                                }
-                                else
-                                {
-                                    flying_time = distance / ec.Projectile_Velocity;
-                                }
-
-                                //effect.MoveTarget(target_trans, flying_time);
-                                effect.MoveTarget(target_pos, flying_time);
-                            }
-                            else
-                            {
-                                Debug.Assert(false);
-                            }
+                            SpawnOnetimeEffect(effect_path, send_data, target, Attack_Targets);
                         }
 
                         //  duration skill
@@ -1109,41 +1064,13 @@ public partial class HeroBase_V2 : UnitBase_V2
                             string effect_path = duration.GetEffectPrefab();
                             if (string.IsNullOrEmpty(effect_path))
                             {
-                                dmg.Duration = duration;
-                                duration.ExecSkill(dmg);
+                                send_data.Duration = duration;
+                                duration.ExecSkill(send_data);
                                 continue;
                             }
-                            dmg.Duration = duration;
+                            send_data.Duration = duration;
 
-                            var effect = (SkillEffectBase)factory.CreateEffect(effect_path, target.GetUnitScale());
-                            effect.SetBattleSendData(dmg);
-
-                            var ec = effect.GetEffectComponent();
-                            Vector3 target_pos = Vector3.zero;
-                            //  적들의 중앙 위치 찾기
-                            if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                            {
-                                target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                            }
-                            else
-                            {
-                                Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                                target_pos = target_trans.position;
-                            }
-
-                            if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                            {
-                                effect.transform.position = target_pos;
-                                effect.StartParticle(target.transform, ec.Effect_Duration, ec.Is_Loop);
-                            }
-                            else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
-                            {
-                                //  nothing - 아직 투사체로 날아가서 발생하는 지속성 효과는 없음
-                            }
-                            else
-                            {
-                                Debug.Assert(false);
-                            }
+                            SpawnDurationEffect(effect_path, send_data, target, Attack_Targets);
 
                         }
                     }
@@ -1165,61 +1092,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                     dmg.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    var trigger_effect = (SkillEffectBase)factory.CreateEffect(skill_trigger_effect_prefab, GetUnitScale());
-                    trigger_effect.SetBattleSendData(dmg);
-
-                    var ec = trigger_effect.GetEffectComponent();
-
-                    Vector3 target_pos = Vector3.zero;
-                    //  적들의 중앙 위치 찾기
-                    if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
-                    {
-                        target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
-                    }
-                    else
-                    {
-                        Transform target_trans = ec.GetTargetReachPosition(Attack_Targets.First());
-                        target_pos = target_trans.position;
-                    }
-
-                    if (ec.Effect_Type == SKILL_EFFECT_TYPE.IMMEDIATE)
-                    {
-                        trigger_effect.transform.position = target_pos;
-                        trigger_effect.StartParticle(ec.Effect_Duration);
-                    }
-                    else if (ec.Effect_Type == SKILL_EFFECT_TYPE.PROJECTILE)
-                    {
-                        Transform start_trans = ec.GetProjectileStartTransform(this);
-                        var start_pos = start_trans.position;
-                        start_pos.z = start_trans.position.z;
-
-                        trigger_effect.transform.position = start_pos;
-
-                        float distance = Vector3.Distance(start_pos, target_pos);
-                        float flying_time = 0f;
-                        if (ec.Projectile_Duration > 0f)
-                        {
-                            flying_time = ec.Projectile_Duration;
-                        }
-                        else
-                        {
-                            flying_time = distance / ec.Projectile_Velocity;
-                        }
-
-                        //trigger_effect.MoveTarget(target_trans, flying_time);
-                        trigger_effect.MoveTarget(target_pos, flying_time);
-                    }
-                    else
-                    {
-                        Debug.Assert(false);
-                    }
+                    SpawnOnetimeEffect(skill_trigger_effect_prefab, dmg, target, Attack_Targets);
+                    
                 }
             }
-            
+
         }
     }
 
-   
+
 
     /// <summary>
     /// 현재 재생중인 애니메이션을 일시 정지.<br/>
@@ -1580,57 +1461,6 @@ public partial class HeroBase_V2 : UnitBase_V2
             return;
         }
         GetSkillManager().AddDurationSkillEffect(duration_skill);
-
-        //int rate = UnityEngine.Random.Range(0, 10000);
-        //if (rate < duration_skill.GetRate())
-        //{
-        //    lock (Duration_Lock)
-        //    {
-        //        var d_type = duration_skill.GetDurationEffectType();
-        //        if (duration_skill.IsOverlapable())
-        //        {
-        //            Used_Battle_Duration_Data_List.Add(duration_skill);
-                    
-        //            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
-        //        }
-        //        else
-        //        {
-        //            //  같은 스킬 효과가 있을 경우 교체(나중에 로직에 따라 변경하자)
-        //            var found = Used_Battle_Duration_Data_List.Find(x => x.GetDurationEffectType() == duration_skill.GetDurationEffectType());
-        //            if (found != null)
-        //            {
-        //                Used_Battle_Duration_Data_List.Remove(found);
-        //                found.Dispose();
-        //                found = null;
-        //            }
-
-        //            if (d_type == DURATION_EFFECT_TYPE.FREEZE)
-        //            {
-        //                ChangeState(UNIT_STATES.FREEZE);
-        //            }
-        //            else if (d_type == DURATION_EFFECT_TYPE.STUN)
-        //            {
-        //                ChangeState(UNIT_STATES.STUN);
-        //            }
-        //            else if (d_type == DURATION_EFFECT_TYPE.BIND)
-        //            {
-        //                ChangeState(UNIT_STATES.BIND);
-        //            }
-
-        //            Used_Battle_Duration_Data_List.Add(duration_skill);
-                    
-        //            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
-
-        //        }
-        //        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
-        //    }
-
-        //}
-        //else
-        //{
-        //    duration_skill.Dispose();
-        //    duration_skill = null;
-        //}
     }
 
     public void SendSlotEvent(SKILL_SLOT_EVENT_TYPE etype)
@@ -1836,7 +1666,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         sb.AppendLine($"{nameof(state)} => {state}");
         sb.AppendLine($"{nameof(Life)} => {Life}");
         sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
-        
+
 
         return sb.ToString();
     }

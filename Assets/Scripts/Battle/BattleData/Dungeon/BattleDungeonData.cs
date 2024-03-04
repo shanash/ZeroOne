@@ -15,6 +15,11 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     public int Wave { get; protected set; } = 0;
 
+    /// <summary>
+    /// 던전 제한 시간
+    /// </summary>
+    public float Dungeon_Limit_Time { get; protected set; } = 0f;
+
     public BattleDungeonData(GAME_TYPE gtype) { Game_Type = gtype; }
     /// <summary>
     /// 던전 정보 세팅
@@ -56,12 +61,22 @@ public class BattleDungeonData : BattleDataBase
     {
         return GetWave() < GetMaxWaveCount();
     }
-
+    /// <summary>
+    /// 다음 웨이브로 이동
+    /// </summary>
+    /// <returns>다음 웨이브가 있으면 <b>true</b>, 마지막 웨이브면 <b>false</b></returns>
     public virtual bool NextWave() { return false; }
 
     public virtual void GetMonsterPrefabsPath(ref List<string> path) { }
 
     public virtual object GetWaveData() { return null; }
+
+    /// <summary>
+    /// 던전 제한 시간 계산<br/>
+    /// </summary>
+    /// <param name="dt"></param>
+    /// <returns>제한시간이 남아 있으면 <b>false</b>, 제한시간이 모두 소진되었으면 <b>true</b></returns>
+    public virtual bool CalcDundeonLimitTime(float dt) { return false; }
 
     /// <summary>
     /// NPC의 스킬에 사용될 이펙트 프리팹 경로들을 가져온다

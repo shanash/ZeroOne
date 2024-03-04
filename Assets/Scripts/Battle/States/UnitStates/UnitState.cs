@@ -15,17 +15,17 @@ public enum UNIT_STATES
 
     ATTACK_READY_1,
     ATTACK_1,                 //  몬스터에만 적용. 공격 후 ATTACK_READY 상태로 변경
-    ATTACK_READY_2,
-    ATTACK_2,                 //  몬스터에만 적용. 공격 후 ATTACK_READY 상태로 변경
+    //ATTACK_READY_2,
+    //ATTACK_2,                 //  몬스터에만 적용. 공격 후 ATTACK_READY 상태로 변경
 
     ATTACK_END,
 
     SKILL_READY_1,
     SKILL_1,
-    SKILL_READY_2,
-    SKILL_2,
-    SKILL_READY_3,
-    SKILL_3,
+    //SKILL_READY_2,
+    //SKILL_2,
+    //SKILL_READY_3,
+    //SKILL_3,
 
     SKILL_END,
 
@@ -36,9 +36,9 @@ public enum UNIT_STATES
 
     ULTIMATE_PAUSE,         //  궁극기 사용시 일시 정지 상태
 
-    TURN_END,               //  사용 안함. v2 기본 작업 완료 후 삭제 예정
     WAVE_RUN,               //  전투 종료 후 나가기
 
+    TIME_OUT,
     PAUSE,
     DEATH,
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public class BattleDungeon_StoryStageData : BattleDungeonData
 {
@@ -13,6 +14,8 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         var m = MasterDataManager.Instance;
         Stage = m.Get_StageData(dungeon_id);
         m.Get_WaveDataList(Stage.wave_group_id, ref Wave_Datas);
+
+        Dungeon_Limit_Time = Wave_Datas.Sum(x => x.wave_time);
 
         var mng = GameData.Instance.GetUserStoryStageDataManager();
         User_Data = mng.FindUserStoryStageData(Stage.stage_id);
@@ -145,4 +148,14 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         return Stage.star_reward_group_id;
     }
 
+    public override bool CalcDundeonLimitTime(float dt)
+    {
+        Dungeon_Limit_Time -= dt;
+        if (Dungeon_Limit_Time < 0f)
+        {
+            Dungeon_Limit_Time = 0f;
+            return true;
+        }
+        return false;
+    }
 }

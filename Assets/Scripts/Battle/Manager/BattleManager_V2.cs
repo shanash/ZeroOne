@@ -157,7 +157,9 @@ public partial class BattleManager_V2 : SceneControllerBase
     }
     public void FinishUltimateSkill(HeroBase_V2 caster)
     {
+        ShowAllUnits();
         var all_death_team = Used_Team_List.Find(x => !x.IsAliveMembers());
+        //  궁극기 사용 후 전멸한 팀이 존재할 경우
         if (all_death_team != null)
         {
             //  wait and playing
@@ -171,7 +173,13 @@ public partial class BattleManager_V2 : SceneControllerBase
             ChangeState(GAME_STATES.PLAYING);
         }
     }
-
+    /// <summary>
+    /// 궁극기 사용 후 전멸한 팀이 존재할 경우<br/>
+    /// 잠시 대기 후 상태 변경
+    /// </summary>
+    /// <param name="delay"></param>
+    /// <param name="caster"></param>
+    /// <returns></returns>
     IEnumerator DelayChangeStatePlaying(float delay, HeroBase_V2 caster)
     {
         yield return new WaitForSeconds(delay);
@@ -179,13 +187,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         AllResumeUnitWithoutHero(caster);
         GetEffectFactory().OnResumeAndShow();
         ChangeState(GAME_STATES.PLAYING);
-
     }
-
-    //void DelayChangeStatePlaying()
-    //{
-    //    ChangeState(GAME_STATES.PLAYING);
-    //}
 
     public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {
@@ -269,5 +271,21 @@ public partial class BattleManager_V2 : SceneControllerBase
         {
             Used_Team_List[i].RevertStateTeamMembers();
         }
+    }
+    /// <summary>
+    /// 던전 제한시간 갱신
+    /// </summary>
+    protected void CalcDungeonLimitTime()
+    {
+        float dt = Time.deltaTime * Battle_Speed_Multiple;
+        if (Dungeon_Data.CalcDundeonLimitTime(dt))
+        {
+            //  타임 아웃
+            if (GetCurrentState() != GAME_STATES.ULTIMATE_SKILL)
+            {
+                ChangeState(GAME_STATES.TIME_OUT);
+            }
+        }
+        UI_Mng.UpdateTimeLimit(Dungeon_Data.Dungeon_Limit_Time);
     }
 }

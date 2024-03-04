@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BattleDungeon_BossStageData : BattleDungeonData
@@ -15,6 +16,8 @@ public class BattleDungeon_BossStageData : BattleDungeonData
         var m = MasterDataManager.Instance;
         Stage = m.Get_BossStageData(dungeon_id);
         m.Get_WaveDataList(Stage.wave_group_id, ref Wave_Datas);
+
+        Dungeon_Limit_Time = Wave_Datas.Sum(x => x.wave_time);
 
         var mng = GameData.Instance.GetUserBossStageDataManager();
         User_Data = mng.FindUserBossDungeonData(Stage.boss_stage_id);
@@ -124,5 +127,16 @@ public class BattleDungeon_BossStageData : BattleDungeonData
     public override int GetRepeatRewardGroupID()
     {
         return Stage.repeat_reward_group_id;
+    }
+
+    public override bool CalcDundeonLimitTime(float dt)
+    {
+        Dungeon_Limit_Time -= dt;
+        if (Dungeon_Limit_Time < 0f)
+        {
+            Dungeon_Limit_Time = 0f;
+            return true;
+        }
+        return false;
     }
 }

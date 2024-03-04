@@ -123,12 +123,11 @@ namespace ZeroOne.Input
 
         private void HandleTap(Vector2 position, ICollection<ICursorInteractable> components)
         {
-            Debug.Log($"HandleTap Try : {position}");
             if (!Enable)
             {
                 return;
             }
-            Debug.Log($"HandleTap : {position}");
+
             bool isWithinDistance = Vector2.Distance(Last_TouchPosition, position) < TOUCH_DISTANCE_MAX;
 
             if (Wait_For_Double_Touch == null)
@@ -277,7 +276,7 @@ namespace ZeroOne.Input
                 {
                     if (matched_components.Length == 0)
                     {
-                        TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Blue_Path);
+                        TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Purple_Path);
                     }
                     TouchCanvas.Instance.SpawnTouchEffectNode(position);
                 }

@@ -15,6 +15,7 @@ public enum GAME_STATES
     WAVE_RUN,
 
     PAUSE,
+    TIME_OUT,           //  제한 시간 초과
     GAME_OVER_WIN,
     GAME_OVER_LOSE,
 

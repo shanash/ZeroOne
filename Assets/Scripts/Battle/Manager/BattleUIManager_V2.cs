@@ -1,6 +1,7 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -135,6 +136,16 @@ public class BattleUIManager_V2 : MonoBehaviour
     public void ShowBattleUI(bool show)
     {
         Box_Rect.gameObject.SetActive(show);
+    }
+
+    /// <summary>
+    /// 던전 제한시간 업데이트
+    /// </summary>
+    /// <param name="limit_time"></param>
+    public void UpdateTimeLimit(float limit_time)
+    {
+        var time_span = TimeSpan.FromSeconds(limit_time);
+        Timer_Text.text = ZString.Format("{0:D2} : {1:D2}", time_span.Minutes, time_span.Seconds);
     }
 
     #region OnClick Funcs

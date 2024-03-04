@@ -121,13 +121,6 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     public virtual void UnitStateAttack01() { }
     public virtual void UnitStateAttack01Exit() { }
 
-    public virtual void UnitStateAttackReady02Begin() { }
-    public virtual void UnitStateAttackReady02() { }
-    public virtual void UnitStateAttackReady02Exit() { }
-
-    public virtual void UnitStateAttack02Begin() { }
-    public virtual void UnitStateAttack02() { }
-    public virtual void UnitStateAttack02Exit() { }
 
     public virtual void UnitStateAttackEndBegin() { }
     public virtual void UnitStateAttackEnd() { }
@@ -142,23 +135,7 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     public virtual void UnitStateSkill01() { }
     public virtual void UnitStateSkill01Exit() { }
 
-    public virtual void UnitStateSkillReady02Begin() { }
-    public virtual void UnitStateSkillReady02() { }
-    public virtual void UnitStateSkillReady02Exit() { }
-
-    public virtual void UnitStateSkill02Begin() { }
-    public virtual void UnitStateSkill02() { }
-    public virtual void UnitStateSkill02Exit() { }
-
-    public virtual void UnitStateSkillReady03Begin() { }
-    public virtual void UnitStateSkillReady03() { }
-    public virtual void UnitStateSkillReady03Exit() { }
-
-    public virtual void UnitStateSkill03Begin() { }
-    public virtual void UnitStateSkill03() { }
-    public virtual void UnitStateSkill03Exit() { }
-
-
+    
     public virtual void UnitStateSkillEndBegin() { }
     public virtual void UnitStateSkillEnd() { }
     public virtual void UnitStateSkillEndExit() { }
@@ -203,6 +180,10 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
     {
         OnResume();
     }
+
+    public virtual void UnitStateTimeOutBegin() { }
+    public virtual void UnitStateTimeOut() { }
+    public virtual void UnitStateTimeOutExit() { }
 
     public virtual void UnitStateDeathBegin() { }
     public virtual void UnitStateDeath() { }
