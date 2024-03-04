@@ -22,6 +22,12 @@ public class LobbyManager : SceneControllerBase
     [SerializeField, Tooltip("Memorial Vcam")]
     CinemachineVirtualCamera Memorial_Camera;
 
+    [SerializeField, Tooltip("Left UI")]
+    GameObject Left_UI;
+
+    [SerializeField, Tooltip("Right UI")]
+    GameObject Right_UI;
+
     Producer pd = null;
 
     List<UserL2dData> L2d_List = null;
@@ -38,9 +44,9 @@ public class LobbyManager : SceneControllerBase
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
-        L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+        var l2d_list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
 
-        if (L2d_List.Count == 0)
+        if (l2d_list.Count == 0)
         {
             string msg = "정상적으로 데이터가 설정되지 않았습니다.\nPersistent 데이터를 지워주세요";
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
@@ -54,7 +60,7 @@ public class LobbyManager : SceneControllerBase
 
         GestureManager.Instance.Enable = false;
         InitCameraForL2dChar(Memorial_Camera);
-        SetLobbyChar(L2d_List);
+        SetLobbyChar(l2d_list);
 
         _ = InitializeAsync();
     }
@@ -264,6 +270,8 @@ public class LobbyManager : SceneControllerBase
     void SetLobbyChar(List<UserL2dData> l2d_list)
     {
         L2d_List = l2d_list;
+        Left_UI.SetActive(L2d_List.Count > 1);
+        Right_UI.SetActive(L2d_List.Count > 1);
         Current_L2d_Index = 0;
         UpdateLobbyChar();
     }
