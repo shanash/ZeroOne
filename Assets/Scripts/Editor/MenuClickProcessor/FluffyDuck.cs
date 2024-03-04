@@ -17,7 +17,25 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             BuildLauncher.UpdateAsssetBundleForLocalEditor();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 1)]
+        [MenuItem("FluffyDuck/Build Launcher/Validate Assets", false, 1)]
+        static void BuildLaucher_ValidateAssets()
+        {
+            var missing_asset_pathes = BuildLauncher.ValidateAssets();
+            if (missing_asset_pathes == null)
+            {
+                EditorUtility.DisplayDialog("문제 발견", "Addressables Settings를 확인할 수 없습니다.", "확인");
+            }
+            else if (missing_asset_pathes.Count > 0)
+            {
+                EditorUtility.DisplayDialog("문제 발견", "Addressables에 빠진 Asset이 존재합니다. Addressable Group을 확인해주세요", "확인");
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("완료", "Addressables에서 빠진 Asset이 없습니다.", "확인");
+            }
+        }
+
+        [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 2)]
         static void BuildLauncher_ShowWindow()
         {
             // Unity의 Build Settings 윈도우를 엽니다.

@@ -1025,6 +1025,38 @@ namespace FluffyDuck.EditorUtil
             return targetSlashIndex != -1 ? targetString.Substring(0, targetSlashIndex) : targetString;
         }
 
+        public static List<string> ValidateAssets()
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null)
+            {
+                Debug.LogError("AddressableAssetSettings not found!");
+                return null;
+            }
+
+            List<string> missing_assets_pathes = new List<string>();
+
+            foreach (var group in settings.groups)
+            {
+                ValidateGroupAssets(ref missing_assets_pathes, group);
+            }
+
+            return missing_assets_pathes;
+        }
+
+        static void ValidateGroupAssets(ref List<string> missing_assets_pathes, AddressableAssetGroup group)
+        {
+            foreach (var entry in group.entries)
+            {
+                // Check if entry has a missing path
+                if (entry.MainAsset == null)
+                {
+                    Debug.LogWarning($"missing asset : {entry.address}");
+                    missing_assets_pathes.Add(entry.address);
+                }
+            }
+        }
+
         /*
         static async Task FetchAndroidDeviceInfos()
         {
