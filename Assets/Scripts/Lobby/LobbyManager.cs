@@ -72,7 +72,7 @@ public class LobbyManager : SceneControllerBase
                 popup.ShowPopup();
             });
         }
-        SCManager.Instance.SetCurrent(this);
+        SCManager.Instance.SetCurrent(this, "OnPopupHeroInfoUI");
 
         var pmng = PopupManager.Instance;
         pmng.SetRootOnEnter(OnRootEnter);
@@ -91,6 +91,16 @@ public class LobbyManager : SceneControllerBase
         camera.m_Lens.FieldOfView = fov;
     }
 
+    bool OnPopupHeroInfoUI(BattlePcData data)
+    {
+        // 캐릭터 정보창을 띄웁니다.
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroListUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+        {
+            popup.ShowPopup(data);
+        });
+        return true;
+    }
+
     public void OnConfirmPopup(params object[] data)
     {
         var popup_name = (string)data[0];
@@ -107,8 +117,12 @@ public class LobbyManager : SceneControllerBase
     public override void OnClick(UIButtonBase button)
     {
         base.OnClick(button);
+        OnClick_Except_Button_Sound(button.name);
+    }
 
-        switch (button.name)
+    void OnClick_Except_Button_Sound(string button_name)
+    {
+        switch (button_name)
         {
             case "ChageCharacterBtn":
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Lobby/SelectLobbyCharacterPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>

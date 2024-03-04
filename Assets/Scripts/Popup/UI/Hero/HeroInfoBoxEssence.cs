@@ -221,6 +221,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickBuffDetailButton()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/StatusPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             int percent = Unit_Data.User_Data.Essence_Founded_Percent;
@@ -239,6 +240,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickReactionInfoButton()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
@@ -252,6 +254,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
             return;
         }
 
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         for (int i = 0; i < Toggle_Datas.Count; i++)
         {
             Toggle_Datas[i].Selected = (i == index);
@@ -264,6 +267,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickSpotInfoSkipButton()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
@@ -272,6 +276,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferReactionInfoButton()
     {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
             popup.ShowPopup(3f, ConstString.Message.NOT_YET);
@@ -280,12 +285,8 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferEssenceButton()
     {
-        Info_UI.SetActivePd(false);
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceTransferPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
-        {
-            popup.ShowPopup(Unit_Data, Selected_Relationship_Index);
-            popup.AddClosedCallbackDelegate(OnClosedTransferEssence);
-        });
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index);
     }
 
     void OnClosedTransferEssence(params object[] param)

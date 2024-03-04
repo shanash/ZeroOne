@@ -35,6 +35,17 @@ public class HeroListUI : PopupBase
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         FixedUpdatePopup();
 
+        if (data.Length == 1 && data[0] is BattlePcData)
+        {
+            var pc_data = data[0] as BattlePcData;
+            int index = Battle_Pc_Data.FindIndex(x => x.User_Data.Player_Character_Num == pc_data.User_Data.Player_Character_Num);
+
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+            {
+                popup.ShowPopup(Battle_Pc_Data, index);
+            });
+        }
+
         return true;
     }
 
@@ -201,8 +212,6 @@ public class HeroListUI : PopupBase
     /// <param name="ud"></param>
     void SelectCharacterCallback(HeroListItem hero)
     {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
         int index = Battle_Pc_Data.IndexOf(hero.BattlePcData);
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>

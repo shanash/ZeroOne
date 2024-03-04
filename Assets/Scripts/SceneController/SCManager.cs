@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using System;
+using System.Linq;
 
 public enum SceneName
 {
@@ -10,6 +11,7 @@ public enum SceneName
     title,
     load,
     home,
+    essence,
     battle,
     skill_editor,
     skill_preview,
@@ -18,8 +20,10 @@ public enum SceneName
 public class SCManager : Singleton<SCManager>
 {
     #region Variable Members
-    private bool Is_Changing = false;
-    private SceneName Current_SceneName = SceneName.None;
+    bool Is_Changing = false;
+    SceneName Current_SceneName = SceneName.None;
+
+    string[] Callback_Method_Names = null;
     #endregion
 
     public SceneControllerBase Current_Controller { get; private set; }
@@ -40,13 +44,14 @@ public class SCManager : Singleton<SCManager>
     /// 호출하지 않으면 ChangeSceneAsync가 종료되지 않는다 
     /// </summary>
     /// <param name="current"></param>
-    public void SetCurrent(SceneControllerBase current)
+    public void SetCurrent(SceneControllerBase current, params string[] callback_method_names)
     {
         Current_Controller = current;
+        Callback_Method_Names = callback_method_names;
         Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
     }
 
-    public void ChangeScene(SceneName scene_name = SceneName.None/*, string detailPage = ""*/)
+    public void ChangeScene(SceneName scene_name = SceneName.None, params object[] parameters)
     {
         if (Is_Changing)
             return;
@@ -69,10 +74,10 @@ public class SCManager : Singleton<SCManager>
             return;
 
         // TODO: 올바른 scene이름인지 확인합니다.
-        _ = ChangeSceneAsync(scene_name/*, detailPage*/);
+        _ = ChangeSceneAsync(scene_name, parameters);
     }
 
-    private async UniTask ChangeSceneAsync(SceneName sceneName/*, string detailPage*/)
+    private async UniTask ChangeSceneAsync(SceneName sceneName, params object[] parameters)
     {
         Is_Changing = true;
 
@@ -82,9 +87,18 @@ public class SCManager : Singleton<SCManager>
 
         await Resources.UnloadUnusedAssets();
         System.GC.Collect();
+
         // SetCurrent가 호출될때까지 기다립니다
         await UniTask.WaitUntil(() => sceneName == Current_SceneName);
+
+        // 리플렉션을 사용하여 OnReceiveData 메소드 동적 호출
+        if (parameters.Length > 0)
+        {
+            InvokeOnReceiveData(Current_Controller, Callback_Method_Names, parameters);
+        }
+
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
+
         Is_Changing = false;
     }
 
@@ -104,5 +118,49 @@ public class SCManager : Singleton<SCManager>
                 break;
             }
         }
+    }
+
+    private void InvokeOnReceiveData(SceneControllerBase controller, string[] callback_method_names, object[] parameters)
+    {
+        // 현재 컨트롤러에서 모든 메소드를 가져옵니다.
+        var methods = controller.GetType().GetMethods(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        
+        foreach (var method in methods)
+        {
+            if (callback_method_names.Contains(method.Name))
+            {
+                if (method.GetParameters().Length == parameters.Length)
+                {
+                    // 파라미터 타입이 일치하는지 확인합니다.
+                    var paramInfos = method.GetParameters();
+                    bool match = true;
+                    for (int i = 0; i < paramInfos.Length; i++)
+                    {
+                        if (!paramInfos[i].ParameterType.IsAssignableFrom(parameters[i].GetType()))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match)
+                    {
+                        // 일치하는 메소드를 찾았으므로 호출합니다.
+                        /*var result = */method.Invoke(controller, parameters);
+                        
+                        //if (result is bool)
+                        //{
+                            // 결과 처리 (필요한 경우)
+                        //    Debug.Log("OnReceiveData 호출 성공: " + success);
+                        //}
+
+                        return; // 메소드를 호출했으므로 반복문을 종료합니다.
+                    }
+                }
+            }
+        }
+
+        // 일치하는 메소드를 찾지 못한 경우의 처리
+        Debug.LogWarning("적절한 OnReceiveData 메소드를 찾지 못했습니다.");
     }
 }

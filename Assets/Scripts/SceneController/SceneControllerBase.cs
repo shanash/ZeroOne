@@ -16,6 +16,10 @@ public class SceneControllerBase : MonoBehaviour
     #endregion
 
     #region Private Method
+    /// <summary>
+    /// SceneController에서 초기화 할것이 있다면 override해서 사용합니다.</br>
+    /// SetCurrent를 하지 않으면
+    /// </summary>
     protected virtual void Initialize()
     {
         SCManager.Instance.SetCurrent(this);

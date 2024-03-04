@@ -71,7 +71,6 @@ public class SceneLoad : SceneControllerBase
         {
             await Task.Yield();
         }
-        Debug.Log("===== Before Change Scene ===== ");
 #if UNITY_ANDROID && !UNITY_EDITOR_WIN
         SCManager.Instance.ChangeScene(SceneName.home);
 #else   
