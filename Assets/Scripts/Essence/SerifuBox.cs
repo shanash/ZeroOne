@@ -15,10 +15,17 @@ public class SerifuBox : MonoBehaviour
     [SerializeField]
     float wait_seconds = 2.0f;
 
+    Coroutine Animate = null;
+
     public void OnReceiveSpineMessage(string message, float duration)
     {
+        if (Animate != null)
+        {
+            StopCoroutine(Animate);
+            Animate = null;
+        }
         Serifu.text = message;
-        StartCoroutine(AnimateTextGradient(duration));
+        Animate = StartCoroutine(AnimateTextGradient(duration));
     }
 
     IEnumerator AnimateTextGradient(float duration)
@@ -30,14 +37,13 @@ public class SerifuBox : MonoBehaviour
         float alphaDuration = duration * CANVAS_ALPHA_DURATION_PERCENT; // CanvasGroup.alpha가 1이 되는 데까지 걸리는 시간
         float time = 0;
 
-        CanvasGroup.alpha = 0; // CanvasGroup의 투명도를 초기화합니다.
-
+        float canvasgroup_origin_alpha = CanvasGroup.alpha;
         while (time < duration)
         {
             if (time <= alphaDuration)
             {
                 // 전체 duration의 20% 동안 CanvasGroup.alpha를 0에서 1까지 부드럽게 증가시킵니다.
-                CanvasGroup.alpha = Mathf.Clamp01(time / alphaDuration);
+                CanvasGroup.alpha =  Mathf.Lerp(canvasgroup_origin_alpha, 1, time / alphaDuration);
             }
             else
             {

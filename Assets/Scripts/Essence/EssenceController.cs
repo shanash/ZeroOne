@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks.Triggers;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
@@ -11,6 +12,9 @@ public class EssenceController : SceneControllerBase
     RawImage Chara_Image = null;
 
     [SerializeField]
+    GameObject Effect_Node = null;
+
+    [SerializeField]
     SerifuBox Serifu_Box = null;
 
     List<UserL2dData> L2d_List = null;
@@ -22,12 +26,17 @@ public class EssenceController : SceneControllerBase
 
     protected override void Initialize()
     {
+        List<string> asset_list = new List<string>();
+        asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup");
+        GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
+
         Screen.orientation = ScreenOrientation.Portrait;
 
         var audio = AudioManager.Instance;
 
         List<string> audio_clip_list = new List<string>();
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/success");
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
         L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
@@ -53,8 +62,15 @@ public class EssenceController : SceneControllerBase
         InputCanvas.Instance.RenderCamera = over_cam;
 
         TouchCanvas.Instance.EnableTouchEffect(false);
+    }
 
-        SCManager.I.SetCurrent(this, "OnReceiveData");
+    void PreloadCallback(int load_cnt, int total_cnt)
+    {
+        if (load_cnt == total_cnt)
+        {
+            SCManager.I.SetCurrent(this, "OnReceiveData");
+            return;
+        }
     }
 
     bool OnReceiveData(BattlePcData data, int index)
@@ -73,7 +89,12 @@ public class EssenceController : SceneControllerBase
 
     public void OnSuccessTransfer(TOUCH_BODY_TYPE type)
     {
-        Debug.Log("Success");
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
+        Effect_Node.SetActive(true);
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        {
+            popup.ShowPopup();
+        });
         Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
         GameData.Instance.GetUserHeroDataManager().Save();
     }
