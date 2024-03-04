@@ -236,7 +236,7 @@ public class TouchCanvas : MonoBehaviour
     }
 
     /// <summary>
-    /// 터치 이펙트의 생성여부
+    /// 터치 이펙트의 자동 생성여부
     /// </summary>
     /// <param name="value"></param>
     public void EnableTouchEffect(bool value)
