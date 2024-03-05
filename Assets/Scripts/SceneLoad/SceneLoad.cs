@@ -84,12 +84,13 @@ public class SceneLoad : SceneControllerBase
             SetProgressCallback(0);
         }
 
-        float duration = 2f;
-        while (duration > 0f)
+        float duration = 2f - (2f * Progress_Min_Value);
+        float delta = 0f;
+        while (delta < duration)
         {
-            duration -= Time.deltaTime;
+            delta += Time.deltaTime;
             await Task.Delay(100);
-            SetProgressCallback(1f - (duration / 2f));
+            SetProgressCallback((delta / duration));
         }
 
 #if UNITY_ANDROID && !UNITY_EDITOR_WIN

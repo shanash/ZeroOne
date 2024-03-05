@@ -22,6 +22,7 @@ public class UIHeroBase : UnitBase_V2
                 case HERO_PLAY_ANIMATION_TYPE.IDLE_02:
                     break;
                 case HERO_PLAY_ANIMATION_TYPE.RUN_01:
+                    Skeleton.AnimationState.SetAnimation(0, "00_run", true);
                     break;
                 case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
                     break;

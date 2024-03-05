@@ -43,10 +43,12 @@ public class SceneLoadingPopup : PopupBase
     /// <summary>
     /// 달리기 영웅 (scale = 0.2)
     /// </summary>
+    [SerializeField, Tooltip("달리기 영웅")]
     UIHeroBase Running_Hero;
 
     protected override bool Initialize(object[] data)
     {
+        Running_Hero.PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
         return true;
     }
 
