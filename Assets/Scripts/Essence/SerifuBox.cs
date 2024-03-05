@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SerifuBox : MonoBehaviour
 {
@@ -10,12 +11,25 @@ public class SerifuBox : MonoBehaviour
     CanvasGroup CanvasGroup;
 
     [SerializeField]
+    RawImage Head_Image;
+
+    [SerializeField]
     TextMeshProUGUI Serifu;
 
     [SerializeField]
     float wait_seconds = 2.0f;
 
     Coroutine Animate = null;
+    RenderTexture Head_Texture = null;
+
+    void Start()
+    {
+        Head_Texture = new RenderTexture(190, 190, 16);
+        var over_cam = Camera.main.transform.Find("Head Camera").GetComponent<Camera>();
+        over_cam.targetTexture = Head_Texture;
+        Head_Image.texture = Head_Texture;
+        Head_Image.color = Color.white;
+    }
 
     public void OnReceiveSpineMessage(string message, float duration)
     {
