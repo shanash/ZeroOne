@@ -950,6 +950,11 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Story_Lang_Data();
         return _Story_Lang_Data[str_id];
     }
+    public Voice_Lang_Data Get_VoiceLangData(string str_id)
+    {
+        Check_Story_Lang_Data();
+        return _Voice_Lang_Data[str_id];
+    }
     #endregion
 
     #region Custom Table

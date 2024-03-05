@@ -195,17 +195,17 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     return;
                 }
 
-                string sound_key = serifu.audio_clip_key;
+                string sound_key = GameDefine.GetLocalizeString(serifu.audio_clip_id);
                 float voice_length = 0.0f;
                 if (!string.IsNullOrEmpty(sound_key))
                 {
-                    voice_length = AudioManager.Instance.GetClipLength(serifu.audio_clip_key);
-                    AudioManager.Instance.PlayVoice(serifu.audio_clip_key, false, OnAudioStateAndVolumeChanged);
+                    voice_length = AudioManager.Instance.GetClipLength(GameDefine.GetLocalizeString(serifu.audio_clip_id));
+                    AudioManager.Instance.PlayVoice(GameDefine.GetLocalizeString(serifu.audio_clip_id), false, OnAudioStateAndVolumeChanged);
                 }
 
-                if (!string.IsNullOrEmpty(serifu.text_kr))
+                if (!string.IsNullOrEmpty(GameDefine.GetLocalizeString(serifu.dialogue_text_id)))
                 {
-                    OnSendMessage(serifu.text_kr, voice_length, !IsColliderVisible(Head));
+                    OnSendMessage(GameDefine.GetLocalizeString(serifu.dialogue_text_id), voice_length, !IsColliderVisible(Head));
                         /*
                     DisappearBalloon();
                     SpeechBalloonManager.Instance.CreateBalloon(
@@ -595,12 +595,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         var serifu_ids = Reaction_Chat_Motions.Values.SelectMany(chat_motion_data => chat_motion_data.serifu_ids).ToList();
         Serifues = MasterDataManager.Instance.Get_SerifuData(serifu_ids);
 
-        List<string> audio_keys = Serifues.Values
-            .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_key))
-            .Select(serifu => serifu.audio_clip_key)
+        List<string> audio_clip_pathes = Serifues.Values
+            .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_id))
+            .Select(serifu => GameDefine.GetLocalizeString(serifu.audio_clip_id))
             .ToList();
 
-        AudioManager.Instance.PreloadAudioClipsAsync(audio_keys, null);
+        AudioManager.Instance.PreloadAudioClipsAsync(audio_clip_pathes, null);
 
         Idle_Animation_Data = new IdleAnimationData
         {

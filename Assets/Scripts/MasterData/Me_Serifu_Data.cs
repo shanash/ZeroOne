@@ -20,16 +20,16 @@ public class Me_Serifu_Data : System.IDisposable
 	int _player_character_id;
 
 	///	<summary>
-	///	말풍선 텍스트
+	///	캐릭터 대사
 	///	</summary>
-	public string text_kr => _text_kr;
-	string _text_kr;
+	public string dialogue_text_id => _dialogue_text_id;
+	string _dialogue_text_id;
 
 	///	<summary>
-	///	오디오 클립 키
+	///	보이스 파일 아이디_스트링 테이블 참조
 	///	</summary>
-	public string audio_clip_key => _audio_clip_key;
-	string _audio_clip_key;
+	public string audio_clip_id => _audio_clip_id;
+	string _audio_clip_id;
 
 	private bool disposed = false;
 
@@ -37,8 +37,8 @@ public class Me_Serifu_Data : System.IDisposable
 	{
 		_serifu_id = raw_data.serifu_id;
 		_player_character_id = raw_data.player_character_id;
-		_text_kr = raw_data.text_kr;
-		_audio_clip_key = raw_data.audio_clip_key;
+		_dialogue_text_id = raw_data.dialogue_text_id;
+		_audio_clip_id = raw_data.audio_clip_id;
 	}
 
 	public void Dispose()
@@ -62,8 +62,8 @@ public class Me_Serifu_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[serifu_id] = <color=yellow>{0}</color>", serifu_id).AppendLine();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
-		sb.AppendFormat("[text_kr] = <color=yellow>{0}</color>", text_kr).AppendLine();
-		sb.AppendFormat("[audio_clip_key] = <color=yellow>{0}</color>", audio_clip_key).AppendLine();
+		sb.AppendFormat("[dialogue_text_id] = <color=yellow>{0}</color>", dialogue_text_id).AppendLine();
+		sb.AppendFormat("[audio_clip_id] = <color=yellow>{0}</color>", audio_clip_id).AppendLine();
 		return sb.ToString();
 	}
 }

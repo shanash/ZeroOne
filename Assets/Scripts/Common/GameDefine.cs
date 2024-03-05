@@ -253,6 +253,22 @@ public class GameDefine : MonoBehaviour
                 find_string = lang_data.eng;
             }
         }
+        else if (table_name.Equals("voice"))
+        {
+            var lang_data = m.Get_VoiceLangData(str_id);
+            if (lang == SystemLanguage.Korean)
+            {
+                find_string = lang_data.kor;
+            }
+            else if (lang == SystemLanguage.Japanese)
+            {
+                find_string = lang_data.jpn;
+            }
+            else
+            {
+                find_string = lang_data.eng;
+            }
+        }
         else
         {
             find_string = str_id;

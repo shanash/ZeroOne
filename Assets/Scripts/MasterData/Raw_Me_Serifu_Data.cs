@@ -6,8 +6,8 @@ public class Raw_Me_Serifu_Data : System.IDisposable
 {
 	public int serifu_id {get; set;}
 	public int player_character_id {get; set;}
-	public string text_kr {get; set;}
-	public string audio_clip_key {get; set;}
+	public string dialogue_text_id {get; set;}
+	public string audio_clip_id {get; set;}
 
 	private bool disposed = false;
 
@@ -15,8 +15,8 @@ public class Raw_Me_Serifu_Data : System.IDisposable
 	{
 		serifu_id = 0;
 		player_character_id = 0;
-		text_kr = string.Empty;
-		audio_clip_key = string.Empty;
+		dialogue_text_id = string.Empty;
+		audio_clip_id = string.Empty;
 	}
 
 	public void Dispose()

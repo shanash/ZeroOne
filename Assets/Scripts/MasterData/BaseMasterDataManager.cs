@@ -471,6 +471,14 @@ public class BaseMasterDataManager
 	///	<summary>
 	///	 <b>key_1 string : string_id </b><br/>
 	///	</summary>
+	protected Dictionary<string, Voice_Lang_Data> _Voice_Lang_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<string, Voice_Lang_Data>();
+	///	<summary>
+	///	 <b>key_1 string : string_id </b><br/>
+	///	</summary>
 	protected Dictionary<string, Story_Lang_Data> _Story_Lang_Data
 	{
 		get;
@@ -547,6 +555,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Skill_Lang_Data();
 		await LoadMaster_Item_Lang_Data();
 		await LoadMaster_Dialog_Lang_Data();
+		await LoadMaster_Voice_Lang_Data();
 		await LoadMaster_Story_Lang_Data();
 		is_init_load = true;
 	}
@@ -1356,6 +1365,20 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async Task LoadMaster_Voice_Lang_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Voice_Lang_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Voice_Lang_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Voice_Lang_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Voice_Lang_Data.Add(raw_data.string_id, new Voice_Lang_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_Story_Lang_Data()
 	{
 #if UNITY_5_3_OR_NEWER
@@ -1815,6 +1838,14 @@ public class BaseMasterDataManager
 		if(_Dialog_Lang_Data == null)
 		{
 			await LoadMaster_Dialog_Lang_Data();
+		}
+	}
+
+	protected async void Check_Voice_Lang_Data()
+	{
+		if(_Voice_Lang_Data == null)
+		{
+			await LoadMaster_Voice_Lang_Data();
 		}
 	}
 
