@@ -75,7 +75,7 @@ public class GPMCommand : MonoBehaviour
 
         string key = cheat_key.ToLower();
 
-        var gd = GameData.Instance;
+        //var gd = GameData.Instance;
         string[] keys = key.Split(" ");
         if (keys[0].Equals("gold"))
         {
@@ -97,11 +97,11 @@ public class GPMCommand : MonoBehaviour
         {
             GainHero(cheat_key);
         }
-        else if (key[0].Equals("zone"))
+        else if (keys[0].Equals("zone"))
         {
             ClearZone(cheat_key);
         }
-        else if (key[0].Equals("story"))
+        else if (keys[0].Equals("story"))
         {
             ClearStoryStage(cheat_key);
         }
@@ -109,7 +109,7 @@ public class GPMCommand : MonoBehaviour
     /// <summary>
     /// 스토리 존 클리어(지정 존의 스테이지를 모두 클리어) - 존 ID(난이도 포함)
     /// </summary>
-    /// <param name="cheat_key"></param>
+    /// <param name="cheat_key">zone [zone_id] [star_count]</param>
     void ClearZone(string cheat_key)
     {
         if (string.IsNullOrEmpty(cheat_key))
@@ -122,12 +122,13 @@ public class GPMCommand : MonoBehaviour
 
         string[] keys = key.Split(" ");
 
-        if (key.Length == 2)
+        if (key.Length == 3)
         {
             var stage_mng = gd.GetUserStoryStageDataManager();
-            if (int.TryParse(keys[1], out int zone_id))
+            if (int.TryParse(keys[1], out int zone_id) && int.TryParse(keys[2], out int star_point))
             {
                 var zone_data = m.Get_ZoneData(zone_id);
+                bool is_all_clear = true;
                 if (zone_data != null)
                 {
                     var stage_list = m.Get_StageDataListByStageGroupID(zone_data.stage_group_id);
@@ -138,8 +139,17 @@ public class GPMCommand : MonoBehaviour
                         if (found == null)
                         {
                             CommonUtils.ShowToast($"{stage_data.stage_id} 스테이지가 오픈되지 않았습니다.", TOAST_BOX_LENGTH.SHORT);
+                            is_all_clear = false;
                             break;
                         }
+                        found.AddChallenageCount();
+                        stage_mng.StoryStageWin(stage_data.stage_id);
+                        stage_mng.SetStageStarPoint(stage_data.stage_id, star_point);
+                    }
+                    if (is_all_clear)
+                    {
+                        CommonUtils.ShowToast($"{zone_data.zone_name} 이 모두 클리어 되었습니다.", TOAST_BOX_LENGTH.SHORT);
+                        stage_mng.Save();
                     }
                 }
                 else
@@ -148,12 +158,16 @@ public class GPMCommand : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            CommonUtils.ShowToast("Usage => zone [zone_id] [star_count]", TOAST_BOX_LENGTH.SHORT);
+        }
 
     }
     /// <summary>
     /// 지정 스토리 스테이지 클리어
     /// </summary>
-    /// <param name="cheat_key"></param>
+    /// <param name="cheat_key">story [stage_id] [star_count]</param>
     void ClearStoryStage(string cheat_key)
     {
         if (string.IsNullOrEmpty(cheat_key))
@@ -165,16 +179,17 @@ public class GPMCommand : MonoBehaviour
 
         string[] keys = key.Split(" ");
 
-        if (key.Length == 2)
+        if (keys.Length == 3)
         {
             var stage_mng = gd.GetUserStoryStageDataManager();
-            if (int.TryParse(keys[1], out int stage_id))
+            if (int.TryParse(keys[1], out int stage_id) && int.TryParse(keys[2], out int star_point))
             {
                 var stage = stage_mng.FindUserStoryStageData(stage_id);
                 if (stage != null)
                 {
                     stage.AddChallenageCount();
                     stage_mng.StoryStageWin(stage_id);
+                    stage_mng.SetStageStarPoint(stage_id, star_point);
                     stage_mng.Save();
                     CommonUtils.ShowToast($"[{stage_id}] 스테이지가 클리어 되었습니다.", TOAST_BOX_LENGTH.SHORT);
                 }
@@ -183,6 +198,11 @@ public class GPMCommand : MonoBehaviour
                     CommonUtils.ShowToast($"[{stage_id}] 스테이지가 오픈되지 않았습니다.", TOAST_BOX_LENGTH.SHORT);
                 }
             }
+        }
+        else
+        {
+            string msg = $"Usage => story [stage_id] [star_count]";
+            CommonUtils.ShowToast(msg, TOAST_BOX_LENGTH.SHORT);
         }
 
     }
