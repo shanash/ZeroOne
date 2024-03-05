@@ -78,12 +78,88 @@ public class UserStoryStageDataManager : ManagerBase
         Is_Update_Data = true;
     }
 
+
     public void SetCurrentWorldID(int world_id)
     {
         Current_World_ID = world_id;
         Current_World = MasterDataManager.Instance.Get_WorldData(Current_World_ID);
         Is_Update_Data = true;
     }
+    /// <summary>
+    /// 이전 존이 존재하는지 여부 반환
+    /// </summary>
+    /// <returns></returns>
+    public bool IsOpenPrevZone()
+    {
+        var m = MasterDataManager.Instance;
+        var zone_list = m.Get_ZoneDataListByDifficulty(GetCurrentStageDifficultyType());
+        if (zone_list.Count > 0)
+        {
+            var find_zone = zone_list.FindLast(x => x.zone_id < Current_Zone.zone_id);
+            if (find_zone != null)
+            {
+                return User_Story_Stage_Data.Exists(x => x.GetStageGroupID() == find_zone.stage_group_id);
+            }
+        }
+        return false;
+    }
+    /// <summary>
+    /// 다음 존이 오픈되어 있는지 여부 반환
+    /// </summary>
+    /// <returns></returns>
+    public bool IsOpenNextZone()
+    {
+        var m = MasterDataManager.Instance;
+        var zone_list = m.Get_ZoneDataListByDifficulty(GetCurrentStageDifficultyType());
+        if (zone_list.Count > 0)
+        {
+            var find_zone = zone_list.Find(x => x.zone_id > Current_Zone.zone_id);
+            if (find_zone != null)
+            {
+                return User_Story_Stage_Data.Exists(x => x.GetStageGroupID() == find_zone.stage_group_id);
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 이전 존으로 이동
+    /// </summary>
+    /// <returns></returns>
+    public bool MovePrevZone()
+    {
+        if (!IsOpenPrevZone())
+        {
+            return false;
+        }
+        var m = MasterDataManager.Instance;
+        var zone_list = m.Get_ZoneDataListByDifficulty(GetCurrentStageDifficultyType());
+        if (zone_list.Count > 0)
+        {
+            var find_zone = zone_list.FindLast(x => x.zone_id < Current_Zone.zone_id);
+            SetCurrentZoneID(find_zone.zone_id);
+            return true;
+        }
+        return false;
+    }
+
+    public bool MoveNextZone()
+    {
+        if (!IsOpenNextZone())
+        {
+            return false;
+        }
+        var m = MasterDataManager.Instance;
+        var zone_list = m.Get_ZoneDataListByDifficulty(GetCurrentStageDifficultyType());
+        if (zone_list.Count > 0)
+        {
+            var find_zone = zone_list.Find(x => x.zone_id > Current_Zone.zone_id);
+            SetCurrentZoneID(find_zone.zone_id);
+            return true;
+        }
+        return false;
+    }
+    
 
     public STAGE_DIFFICULTY_TYPE GetCurrentStageDifficultyType()
     {

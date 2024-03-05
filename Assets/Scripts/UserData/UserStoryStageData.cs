@@ -72,6 +72,10 @@ public class UserStoryStageData : UserDataBase
     public void SetStarPoint(int pt)
     {
         int star_point = GetStarPoint();
+        if (pt > 3)
+        {
+            pt = 3;
+        }
         if (star_point < pt)
         {
             Star_Point.Set(pt);

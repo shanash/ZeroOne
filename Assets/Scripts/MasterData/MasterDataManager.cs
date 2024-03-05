@@ -508,6 +508,19 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Zone_Data();
         return _Zone_Data[zone_id];
     }
+    /// <summary>
+    /// 지정 난이도의 존 리스트 반환
+    /// </summary>
+    /// <param name="dtype"></param>
+    /// <returns></returns>
+    public List<Zone_Data> Get_ZoneDataListByDifficulty(STAGE_DIFFICULTY_TYPE dtype)
+    {
+        Check_Zone_Data();
+        var list = _Zone_Data.Values.ToList().FindAll(x => x.zone_difficulty == dtype);
+        list.Sort((a, b) => a.zone_id.CompareTo(b.zone_id));
+        return list;
+    }
+    
 
     public Zone_Data Get_ZoneDataByStageGroupID(int stage_group_id)
     {

@@ -122,7 +122,7 @@ public class GPMCommand : MonoBehaviour
 
         string[] keys = key.Split(" ");
 
-        if (key.Length == 3)
+        if (keys.Length == 3)
         {
             var stage_mng = gd.GetUserStoryStageDataManager();
             if (int.TryParse(keys[1], out int zone_id) && int.TryParse(keys[2], out int star_point))
