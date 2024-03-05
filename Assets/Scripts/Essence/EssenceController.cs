@@ -52,15 +52,14 @@ public class EssenceController : SceneControllerBase
             return;
         }
 
-        Chara_Texture = new RenderTexture((int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), GameDefine.SCREEN_UI_BASE_WIDTH, 16);
-        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
-        over_cam.targetTexture = Chara_Texture;
-        Chara_Image.texture = Chara_Texture;
-        Chara_Image.color = Color.white;
-        InputCanvas.Instance.RenderImage = Chara_Image;
-        InputCanvas.Instance.RenderCamera = over_cam;
-
         TouchCanvas.Instance.EnableTouchEffect(false);
+
+        ScreenEffectManager.I.SetShaderEffect("Shaders/Glow");
+        ScreenEffectManager.I.Shader_Material.SetColor("_GlowColor", Color.red);
+        ScreenEffectManager.I.Shader_Material.SetFloat("_GlowIntensity", 1.5f);
+        ScreenEffectManager.I.Shader_Material.SetFloat("_Threshold", 0.85f);
+
+        ScreenEffectManager.I.ShaderEffectActive(false);
     }
 
     void PreloadCallback(int load_cnt, int total_cnt)
@@ -79,6 +78,7 @@ public class EssenceController : SceneControllerBase
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         pd.OnSuccessTransferEssence += OnSuccessTransfer;
+        pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
         GestureManager.Instance.Enable = true;
@@ -88,6 +88,7 @@ public class EssenceController : SceneControllerBase
 
     public void OnSuccessTransfer(TOUCH_BODY_TYPE type)
     {
+        ScreenEffectManager.I.ShaderEffectActive(true);
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
         Effect_Node.SetActive(true);
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
@@ -96,6 +97,11 @@ public class EssenceController : SceneControllerBase
         });
         Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
         GameData.Instance.GetUserHeroDataManager().Save();
+    }
+
+    public void OnCompleteTransferEssence()
+    {
+        ScreenEffectManager.I.ShaderEffectActive(false);
     }
 
     public override void OnClick(UIButtonBase button)

@@ -80,6 +80,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected abstract Spine.AnimationState AnimationState { get; }
     protected int Current_State_Id => SkinAniState.state_id;
     public event Action<string, float, bool> OnSendMessage;
+    public event Action OnCompleteTransferEssence;
+
+    bool Is_Playing_Success_Transfer_Essence = false;
 
     #region MonoBehaviour Methods
 
@@ -462,6 +465,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             Producer.NotifySuccessTransferEssence(Essence_Success_Body);
             Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
+            Is_Playing_Success_Transfer_Essence = true;
         }
 
         return Interaction_Bases[key];

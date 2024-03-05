@@ -20,6 +20,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     public delegate void TransferEssenceHandler(TOUCH_BODY_TYPE type);
 
     public event TransferEssenceHandler OnSuccessTransferEssence;
+    public event Action OnCompleteTransferEssence { add => Actor.OnCompleteTransferEssence += value; remove => Actor.OnCompleteTransferEssence -= value; }
     public event Action<string, float, bool> OnSendActorMessage { add => Actor.OnSendMessage += value; remove => Actor.OnSendMessage -= value; }
 
     Producer() { }

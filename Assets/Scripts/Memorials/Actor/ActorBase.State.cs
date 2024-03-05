@@ -138,7 +138,15 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateReactExit()
     {
-        DisappearBalloon();
+        if (Is_Playing_Success_Transfer_Essence)
+        {
+            Is_Playing_Success_Transfer_Essence = false;
+            OnCompleteTransferEssence();
+        }
+        if (OnSendMessage == null)
+        {
+            DisappearBalloon();
+        }
 
         if (Current_State_Id != Current_Interaction.after_state_id)
         {

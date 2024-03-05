@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 
 public enum ScreenEffect
 {
@@ -21,9 +22,14 @@ public enum ScreenEffect
 
 public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
 {
-    ScreenEffectUIContainer Container;
+    ScreenEffectUIContainer Container = null;
     Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)> Sequence_Actions;
-    bool DoingSequenceActions;
+    bool DoingSequenceActions = false;
+    
+    ShaderEffect Shader_Effect = null;
+
+    public Material Shader_Material => _Shader_Material;
+    Material _Shader_Material = null;
 
     protected override bool ResetInstanceOnChangeScene => false;
     protected override bool Is_DontDestroyOnLoad => true;
@@ -39,6 +45,34 @@ public class ScreenEffectManager : MonoSingleton<ScreenEffectManager>
         DoingSequenceActions = false;
         Sequence_Actions = new Queue<(InnerActionType action_type, object param, Action cb, float duration, float pre_delay, float post_delay, EasingFunction.Ease ease)>();
         Container = GameObjectPoolManager.Instance.GetGameObject("Prefabs/Canvas_ScreenEffect", this.transform).GetComponent<ScreenEffectUIContainer>();
+    }
+
+    public void SetShaderEffect(string resources_path)
+    {
+        if (_Shader_Material == null)
+        {
+            _Shader_Material = Resources.Load<Material>("Materials/CameraEffect");
+        }
+
+        if (Shader_Effect == null)
+        {
+            var effect = Camera.main.GetComponent<ShaderEffect>();
+            if (effect != null)
+            {
+                Shader_Effect = effect;
+            }
+            else
+            {
+                Shader_Effect = Camera.main.AddComponent<ShaderEffect>();
+            }
+            Shader_Effect.Init(_Shader_Material);
+        }
+        _Shader_Material.shader = Resources.Load<Shader>(resources_path);
+    }
+
+    public void ShaderEffectActive(bool value)
+    {
+        Shader_Effect.Effect_Enable = value;
     }
 
     public void StartAction(ScreenEffect effect, Action cb = null, float duration = 1, float pre_delay = 0, float post_delay = 0, EasingFunction.Ease ease = EasingFunction.Ease.Linear)
