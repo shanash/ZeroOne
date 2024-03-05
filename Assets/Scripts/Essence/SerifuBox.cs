@@ -8,13 +8,19 @@ public class SerifuBox : MonoBehaviour
     const float CANVAS_ALPHA_DURATION_PERCENT = 0.2f; // 20퍼센트 시간이 지나면 창이 완전히 보임
 
     [SerializeField]
-    CanvasGroup CanvasGroup;
+    Camera Head_Camera = null;
 
     [SerializeField]
-    RawImage Head_Image;
+    CanvasGroup CanvasGroup = null;
 
     [SerializeField]
-    TextMeshProUGUI Serifu;
+    GameObject Head_UI = null;
+
+    [SerializeField]
+    RawImage Head_Image = null;
+
+    [SerializeField]
+    TextMeshProUGUI Serifu = null;
 
     [SerializeField]
     float wait_seconds = 2.0f;
@@ -25,14 +31,15 @@ public class SerifuBox : MonoBehaviour
     void Start()
     {
         Head_Texture = new RenderTexture(190, 190, 16);
-        var over_cam = Camera.main.transform.Find("Head Camera").GetComponent<Camera>();
-        over_cam.targetTexture = Head_Texture;
+        Head_Camera.targetTexture = Head_Texture;
         Head_Image.texture = Head_Texture;
         Head_Image.color = Color.white;
     }
 
-    public void OnReceiveSpineMessage(string message, float duration)
+    public void OnReceiveSpineMessage(string message, float duration, bool show_chara_head)
     {
+        Head_UI.SetActive(show_chara_head);
+
         if (Animate != null)
         {
             StopCoroutine(Animate);

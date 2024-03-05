@@ -24,6 +24,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     [SerializeField]
     protected SkeletonAnimation Skeleton;
 
+    [SerializeField]
+    Collider2D Head;
+
     // 입모양 애니메이션
     [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
     float Talk_Mouth_Wide_Multiple = 10.0f;
@@ -76,7 +79,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected abstract Spine.AnimationState AnimationState { get; }
     protected int Current_State_Id => SkinAniState.state_id;
-    public event Action<string, float> OnSendMessage;
+    public event Action<string, float, bool> OnSendMessage;
 
     #region MonoBehaviour Methods
 
@@ -202,7 +205,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
                 if (!string.IsNullOrEmpty(serifu.text_kr))
                 {
-                    OnSendMessage(serifu.text_kr, voice_length);
+                    OnSendMessage(serifu.text_kr, voice_length, !IsColliderVisible(Head));
                         /*
                     DisappearBalloon();
                     SpeechBalloonManager.Instance.CreateBalloon(
@@ -273,7 +276,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 Dest_Mouth_Alpha = Mathf.Clamp(volume_rms * Talk_Mouth_Wide_Multiple, 0, 1);
                 break;
             case AudioManager.AUDIO_STATES.END:
-                DisappearBalloon();
+                //DisappearBalloon();
                 te = FindTrack(MOUTH_TRACK);
                 if (te != null)
                 {
@@ -283,6 +286,16 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             default:
                 break;
         }
+    }
+
+    bool IsColliderVisible(Collider2D collider)
+    {
+        Camera cam = Camera.main;
+        float camHeight = 2f * cam.orthographicSize;
+        float camWidth = camHeight * cam.aspect;
+        Bounds camBounds = new Bounds(cam.transform.position, new Vector3(camWidth, camHeight, 100));
+
+        return camBounds.Intersects(collider.bounds);
     }
 
     #region Gesture Callbacks

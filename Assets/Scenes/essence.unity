@@ -914,7 +914,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1824374165}
-  - {fileID: 1202215145}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45.2, y: 0, z: 0}
 --- !u!1 &1173870967
@@ -1190,11 +1189,11 @@ Transform:
   m_GameObject: {fileID: 1202215144}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.2, z: 0}
+  m_LocalPosition: {x: 0, y: 7.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 957569762}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1202215146
 Camera:
@@ -1272,7 +1271,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344123838}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21025369, y: -8.484713e-16, z: -7.0603624e-17, w: 0.9776469}
+  m_LocalRotation: {x: 0.2102537, y: 0.000000014568075, z: -0.0000000031330245, w: 0.9776469}
   m_LocalPosition: {x: 0, y: 20, z: -44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1710,7 +1709,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfe7a43b11410ab47bb3ac9317354ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Head_Camera: {fileID: 1202215146}
   CanvasGroup: {fileID: 1577215469}
+  Head_UI: {fileID: 2104021776}
   Head_Image: {fileID: 1518872698}
   Serifu: {fileID: 1346234689}
   wait_seconds: 2
@@ -2076,7 +2077,7 @@ GameObject:
   - component: {fileID: 2104021779}
   - component: {fileID: 2104021778}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Head_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4919,6 +4920,7 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1202215145}
   - {fileID: 957569762}
   - {fileID: 1646267883}
   - {fileID: 98548302}
