@@ -33,6 +33,11 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("Stage List View")]
     InfiniteScroll Stage_List_View;
 
+    [SerializeField, Tooltip("존 이동 버튼(이전 존)")]
+    UIButtonBase Left_Arrow_Btn;
+    [SerializeField, Tooltip("존 이동 버튼(다음 존)")]
+    UIButtonBase Right_Arrow_Btn;
+
     int Zone_ID;
     Zone_Data Zone;
 
@@ -125,4 +130,14 @@ public class SelectStageUI : PopupBase
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
     }
+
+    public void OnClickLeftMoveZone()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+    }
+    public void OnClickRightMoveZone()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+    }
+
 }

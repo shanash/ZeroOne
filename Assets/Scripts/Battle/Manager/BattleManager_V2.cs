@@ -133,6 +133,11 @@ public partial class BattleManager_V2 : SceneControllerBase
         ChangeState(GAME_STATES.MOVE_IN);
     }
 
+    protected void TimeOutInfoCloseCallback()
+    {
+        ChangeState(GAME_STATES.GAME_OVER_LOSE);
+    }
+
     private void OnDestroy()
     {
         int cnt = Used_Team_List.Count;

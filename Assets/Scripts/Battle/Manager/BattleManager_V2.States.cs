@@ -10,7 +10,6 @@ public partial class BattleManager_V2 : SceneControllerBase
     protected GameStateSystem<BattleManager_V2, BattleUIManager_V2> FSM = null;
 
     float Game_Over_Delta;
-    float Time_Out_Delta;
 
     private void Awake()
     {
@@ -232,7 +231,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateWaveInfoBegin()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Battle/WaveInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/WaveInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(WaveInfoCloseCallback);
             Wave_Data wdata = (Wave_Data)Dungeon_Data.GetWaveData();
@@ -294,7 +293,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     }
     public virtual void GameStateUltimateSkill() 
     {
-        CalcDungeonLimitTime();
+        //CalcDungeonLimitTime();
     }
     public virtual void GameStateUltimateSkillExit() 
     {
@@ -474,16 +473,14 @@ public partial class BattleManager_V2 : SceneControllerBase
         GetEffectFactory().ClearAllEffects();
         //  동작 정지
         TeamMembersChangeState(UNIT_STATES.TIME_OUT);
-        Time_Out_Delta = 1f;
-    }
-    public virtual void GameStateTimeOut() 
-    {
-        Time_Out_Delta -= Time.deltaTime;
-        if (Time_Out_Delta < 0f)
+        
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/TimeOutInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            ChangeState(GAME_STATES.GAME_OVER_LOSE);
-        }
+            popup.SetHideCompleteCallback(TimeOutInfoCloseCallback);
+            popup.ShowPopup(1f);
+        });
     }
+    public virtual void GameStateTimeOut() { }
     public virtual void GameStateTimeOutExit() { }
 
     public virtual void GameStateEndBegin() { }

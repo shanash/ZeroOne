@@ -544,13 +544,16 @@ public class MasterDataManager : BaseMasterDataManager
     {
         Check_Stage_Data();
         var stage_list = _Stage_Data.Values.OrderBy(x => x.stage_id).ToList();
+        stage_list.Sort((a, b) => a.stage_id.CompareTo(b.stage_id));
         return stage_list.Find(x => x.stage_id > stage_id);
     }
 
     public IReadOnlyList<Stage_Data> Get_StageDataListByStageGroupID(int stage_group_id)
     {
         Check_Stage_Data();
-        return _Stage_Data.Values.ToList().FindAll(x => x.stage_group_id == stage_group_id);
+        var list = _Stage_Data.Values.ToList().FindAll(x => x.stage_group_id == stage_group_id);
+        list.Sort((a, b) => a.stage_ordering.CompareTo(b.stage_ordering));
+        return list;
     }
 
 

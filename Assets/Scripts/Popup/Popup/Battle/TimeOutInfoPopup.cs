@@ -1,39 +1,30 @@
 using FluffyDuck.UI;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class WaveInfoUI : PopupBase
+public class TimeOutInfoPopup : PopupBase
 {
-    [SerializeField, Tooltip("Wave Info Text")]
-    TMP_Text Wave_Info_Text;
-
-    Wave_Data Data;
+    [SerializeField, Tooltip("Time Out")]
+    TMP_Text Time_Out_Text;
 
     float Delay_Time;
     bool Is_Action;
 
     protected override bool Initialize(object[] data)
     {
-        if (data == null || data.Length < 2)
+        if (data == null || data.Length != 1)
         {
             return false;
         }
-        Data = (Wave_Data)data[0];
-        Delay_Time = (float)data[1];
-
+        Delay_Time = (float)data[0];
         return true;
     }
 
     protected override void ShowPopupAniEndCallback()
     {
         Is_Action = true;
-        FixedUpdatePopup();
-    }
-
-
-    protected override void FixedUpdatePopup()
-    {
-        Wave_Info_Text.text = $"Wave {Data.wave_sequence}";
     }
 
     protected override void OnUpdatePopup()

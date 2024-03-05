@@ -184,8 +184,6 @@ public class UserStoryStageDataManager : ManagerBase
         return RESPONSE_TYPE.SUCCESS;
     }
 
-
-
     /// <summary>
     /// 다음 스테이지 오픈
     /// </summary>

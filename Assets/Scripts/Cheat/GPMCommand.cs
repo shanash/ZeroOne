@@ -74,124 +74,294 @@ public class GPMCommand : MonoBehaviour
         }
 
         string key = cheat_key.ToLower();
-        //Debug.Log($"{key}");
 
         var gd = GameData.Instance;
         string[] keys = key.Split(" ");
         if (keys[0].Equals("gold"))
         {
-            if (keys.Length > 1)
-            {
-                if (double.TryParse(keys[1], out double gold))
-                {
-                    gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
-                    gd.Save();
-                    UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
-
-                    CommonUtils.ShowToast($"골드 {gold} 획득 완료", TOAST_BOX_LENGTH.SHORT);
-                }
-            }
+            GainGold(cheat_key);
         }
         else if (keys[0].Equals("dia"))
         {
-            if (keys.Length > 1)
-            {
-                if (double.TryParse(keys[1], out double dia))
-                {
-                    gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
-                    gd.Save();
-                    UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
-
-                    CommonUtils.ShowToast($"보석 {dia} 획득 완료", TOAST_BOX_LENGTH.SHORT);
-                }
-            }
+            GainDia(cheat_key);
         }
         else if (keys[0].Equals("cpiece"))
         {
-            //  using => cpiece character_id count
-            if (keys.Length == 3)
-            {
-                if (int.TryParse(keys[1], out int pc_id) && double.TryParse(keys[2], out double count))
-                {
-                    var pc_data = MasterDataManager.Instance.Get_PlayerCharacterData(pc_id);
-                    if (pc_data != null)
-                    {
-                        gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
-                        gd.Save();
-                        CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(pc_data.name_id)} 조각을 {count}개 획득 했습니다.", TOAST_BOX_LENGTH.SHORT);
-                    }
-                    else
-                    {
-                        CommonUtils.ShowToast("캐릭터 조각을 찾을 수 없습니다.\nUsage => [cpiece] [character_id] [count]", TOAST_BOX_LENGTH.SHORT);
-                    }
-                }
-            }
+            GainCharacterPiece(cheat_key);
         }
         else if (keys[0].Equals("item"))
         {
-            //  using => item item_id count
-            if (keys.Length == 3)
-            {
-                if (int.TryParse(keys[1], out int item_id) && double.TryParse(keys[2], out double count))
-                {
-                    Item_Data data = MasterDataManager.Instance.Get_ItemData(item_id);
-                    if (data != null)
-                    {
-                        gd.GetUserItemDataManager().AddUserItemCount(data.item_type, data.item_id, count);
-                        gd.Save();
-
-                        CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(data.name_id)}를 {count}개 획득했습니다.", TOAST_BOX_LENGTH.SHORT);
-                    }
-                    else
-                    {
-                        CommonUtils.ShowToast("존재하지 않는 아이템 아이디 입니다.\nUsage => [item] [item_id] [count]", TOAST_BOX_LENGTH.SHORT);
-                    }
-                    
-                }
-            }
+            GainItem(cheat_key);
         }
         else if (keys[0].Equals("hero"))
         {
-            //  using => hero character_id
-            string show_msg = string.Empty;
-            bool notice_format = true;
-            do
+            GainHero(cheat_key);
+        }
+        else if (key[0].Equals("zone"))
+        {
+            ClearZone(cheat_key);
+        }
+        else if (key[0].Equals("story"))
+        {
+            ClearStoryStage(cheat_key);
+        }
+    }
+    /// <summary>
+    /// 스토리 존 클리어(지정 존의 스테이지를 모두 클리어) - 존 ID(난이도 포함)
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void ClearZone(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        var m = MasterDataManager.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+
+        if (key.Length == 2)
+        {
+            var stage_mng = gd.GetUserStoryStageDataManager();
+            if (int.TryParse(keys[1], out int zone_id))
             {
-                if (keys.Length != 2)
+                var zone_data = m.Get_ZoneData(zone_id);
+                if (zone_data != null)
                 {
-                    show_msg += "입력값이 형식에 맞지 않습니다.\n";
-                    break;
+                    var stage_list = m.Get_StageDataListByStageGroupID(zone_data.stage_group_id);
+                    for (int i = 0; i < stage_list.Count; i++)
+                    {
+                        var stage_data = stage_list[i];
+                        var found = stage_mng.FindUserStoryStageData(stage_data.stage_id);
+                        if (found == null)
+                        {
+                            CommonUtils.ShowToast($"{stage_data.stage_id} 스테이지가 오픈되지 않았습니다.", TOAST_BOX_LENGTH.SHORT);
+                            break;
+                        }
+                    }
                 }
-
-                if (!int.TryParse(keys[1], out int hero_id))
+                else
                 {
-                    show_msg += "입력한 캐릭터 ID가 숫자가 아닙니다.\n";
-                    break;
+                    CommonUtils.ShowToast($"[{zone_id}] 존이 존재하지 않습니다.", TOAST_BOX_LENGTH.SHORT);
                 }
-
-                try
-                {
-                    var hero_mng = GameData.I.GetUserHeroDataManager();
-                    var hero = hero_mng.AddUserHeroData(hero_id);
-                    hero_mng.AddUserHeroSkillData(hero);
-
-                    hero_mng.Save();
-                    GameData.I.GetUserHeroSkillDataManager().Save();
-                }
-                catch (Exception ex)
-                {
-                    show_msg += $"다음 예외사항이 발생했습니다. {ex.ToString()}";
-                    notice_format = false;
-                    break;
-                }
-
-            } while (false);
-
-            if (!show_msg.Equals(string.Empty))
-            {
-                show_msg += notice_format ? "Usage => [hero] [character_id]" : "";
-                CommonUtils.ShowToast(show_msg, TOAST_BOX_LENGTH.SHORT);
             }
+        }
+
+    }
+    /// <summary>
+    /// 지정 스토리 스테이지 클리어
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void ClearStoryStage(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+
+        if (key.Length == 2)
+        {
+            var stage_mng = gd.GetUserStoryStageDataManager();
+            if (int.TryParse(keys[1], out int stage_id))
+            {
+                var stage = stage_mng.FindUserStoryStageData(stage_id);
+                if (stage != null)
+                {
+                    stage.AddChallenageCount();
+                    stage_mng.StoryStageWin(stage_id);
+                    stage_mng.Save();
+                    CommonUtils.ShowToast($"[{stage_id}] 스테이지가 클리어 되었습니다.", TOAST_BOX_LENGTH.SHORT);
+                }
+                else
+                {
+                    CommonUtils.ShowToast($"[{stage_id}] 스테이지가 오픈되지 않았습니다.", TOAST_BOX_LENGTH.SHORT);
+                }
+            }
+        }
+
+    }
+
+    void GainGold(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+
+        if (keys.Length == 2)
+        {
+            if (double.TryParse(keys[1], out double gold))
+            {
+                gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.GOLD, gold);
+                gd.Save();
+                UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
+
+                CommonUtils.ShowToast($"골드 {gold} 획득 완료", TOAST_BOX_LENGTH.SHORT);
+            }
+        }
+    }
+    /// <summary>
+    /// 보석 획득
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void GainDia(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+
+        if (keys.Length == 2)
+        {
+            if (double.TryParse(keys[1], out double dia))
+            {
+                gd.GetUserGoodsDataManager().AddUserGoodsCount(GOODS_TYPE.DIA, dia);
+                gd.Save();
+                UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ALL);
+
+                CommonUtils.ShowToast($"보석 {dia} 획득 완료", TOAST_BOX_LENGTH.SHORT);
+            }
+        }
+    }
+    /// <summary>
+    /// 캐릭터 조각 획득
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void GainCharacterPiece(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+
+        //  using => cpiece character_id count
+        if (keys.Length == 3)
+        {
+            if (int.TryParse(keys[1], out int pc_id) && double.TryParse(keys[2], out double count))
+            {
+                var pc_data = MasterDataManager.Instance.Get_PlayerCharacterData(pc_id);
+                if (pc_data != null)
+                {
+                    gd.GetUserItemDataManager().AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, pc_id, count);
+                    gd.Save();
+                    CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(pc_data.name_id)} 조각을 {count}개 획득 했습니다.", TOAST_BOX_LENGTH.SHORT);
+                }
+                else
+                {
+                    CommonUtils.ShowToast("캐릭터 조각을 찾을 수 없습니다.\nUsage => [cpiece] [character_id] [count]", TOAST_BOX_LENGTH.SHORT);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템 획득
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void GainItem(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+        //  using => item item_id count
+        if (keys.Length == 3)
+        {
+            if (int.TryParse(keys[1], out int item_id) && double.TryParse(keys[2], out double count))
+            {
+                Item_Data data = MasterDataManager.Instance.Get_ItemData(item_id);
+                if (data != null)
+                {
+                    gd.GetUserItemDataManager().AddUserItemCount(data.item_type, data.item_id, count);
+                    gd.Save();
+
+                    CommonUtils.ShowToast($"{GameDefine.GetLocalizeString(data.name_id)}를 {count}개 획득했습니다.", TOAST_BOX_LENGTH.SHORT);
+                }
+                else
+                {
+                    CommonUtils.ShowToast("존재하지 않는 아이템 아이디 입니다.\nUsage => [item] [item_id] [count]", TOAST_BOX_LENGTH.SHORT);
+                }
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// 영웅 획득
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void GainHero(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+        var gd = GameData.Instance;
+        string key = cheat_key.ToLower();
+        //Debug.Log($"{key}");
+
+        string[] keys = key.Split(" ");
+        //  using => hero character_id
+        string show_msg = string.Empty;
+        bool notice_format = true;
+        do
+        {
+            if (keys.Length != 2)
+            {
+                show_msg += "입력값이 형식에 맞지 않습니다.\n";
+                break;
+            }
+
+            if (!int.TryParse(keys[1], out int hero_id))
+            {
+                show_msg += "입력한 캐릭터 ID가 숫자가 아닙니다.\n";
+                break;
+            }
+
+            try
+            {
+                var hero_mng = gd.GetUserHeroDataManager();
+                var hero = hero_mng.AddUserHeroData(hero_id);
+                hero_mng.AddUserHeroSkillData(hero);
+
+                hero_mng.Save();
+                GameData.I.GetUserHeroSkillDataManager().Save();
+            }
+            catch (Exception ex)
+            {
+                show_msg += $"다음 예외사항이 발생했습니다. {ex.ToString()}";
+                notice_format = false;
+                break;
+            }
+
+        } while (false);
+
+        if (!show_msg.Equals(string.Empty))
+        {
+            show_msg += notice_format ? "Usage => [hero] [character_id]" : "";
+            CommonUtils.ShowToast(show_msg, TOAST_BOX_LENGTH.SHORT);
         }
     }
 }

@@ -3,7 +3,7 @@ public class GameStateTimeOutV2 : GameState<BattleManager_V2, BattleUIManager_V2
 {
     public GameStateTimeOutV2()
     {
-        TransID = GAME_STATES.PAUSE;
+        TransID = GAME_STATES.TIME_OUT;
     }
 
     public override void EnterState(BattleManager_V2 mng, BattleUIManager_V2 ui)
