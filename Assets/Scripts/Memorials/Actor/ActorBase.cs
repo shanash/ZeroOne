@@ -205,20 +205,21 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
                 if (!string.IsNullOrEmpty(GameDefine.GetLocalizeString(serifu.dialogue_text_id)))
                 {
-                    OnSendMessage(GameDefine.GetLocalizeString(serifu.dialogue_text_id), voice_length, !IsColliderVisible(Head));
-                        /*
-                    DisappearBalloon();
-                    SpeechBalloonManager.Instance.CreateBalloon(
-                        (balloon_id) =>
-                        {
-                            Current_Balloon_ID = balloon_id;
-                        },
-                        serifu.text_kr,
-                        this,
-                        new Vector2(460, 170),
-                        SpeechBalloon.BalloonSizeType.FixedWidth,
-                        SpeechBalloon.Pivot.Right);
-                        */
+                    OnSendMessage?.Invoke(GameDefine.GetLocalizeString(serifu.dialogue_text_id), voice_length, !IsColliderVisible(Head));
+                    if (OnSendMessage == null)
+                    {
+                        DisappearBalloon();
+                        SpeechBalloonManager.Instance.CreateBalloon(
+                            (balloon_id) =>
+                            {
+                                Current_Balloon_ID = balloon_id;
+                            },
+                            GameDefine.GetLocalizeString(serifu.dialogue_text_id),
+                            this,
+                            new Vector2(200, 170),
+                            SpeechBalloon.BalloonSizeType.FixedWidth,
+                            SpeechBalloon.Pivot.Right);
+                    }
                 }
                 break;
         }
@@ -276,7 +277,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                 Dest_Mouth_Alpha = Mathf.Clamp(volume_rms * Talk_Mouth_Wide_Multiple, 0, 1);
                 break;
             case AudioManager.AUDIO_STATES.END:
-                //DisappearBalloon();
+                if (OnSendMessage == null)
+                {
+                    DisappearBalloon();
+                }
                 te = FindTrack(MOUTH_TRACK);
                 if (te != null)
                 {
@@ -796,6 +800,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     /// <returns></returns>
     public Vector3 GetBalloonWorldPosition()
     {
+        if (Balloon == null)
+        {
+            return new Vector3(-1.5f, 2.6f, 0);
+        }
+
         return Balloon.GetWorldPosition(Skeleton.transform);
     }
 
