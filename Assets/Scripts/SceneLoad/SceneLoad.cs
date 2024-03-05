@@ -53,12 +53,19 @@ public class SceneLoad : SceneControllerBase
 
     async void Start()
     {
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
+        {
+            Loading_Popup = (SceneLoadingPopup)popup;
+            Loading_Popup.ShowPopup();
+        });
+
         SetText("다운로더 초기화중입니다.");
         if (!await _Downloader.Init())
         {
             SetText("초기화 실패");
             return;
         }
+
         SetText("버전 확인중입니다.");
         if (_Downloader.HasNewDataVersion())
         {
@@ -71,12 +78,6 @@ public class SceneLoad : SceneControllerBase
         SetText("시작 준비 완료");
 
         Progress_Min_Value = 0f;
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
-        {
-            Loading_Popup = (SceneLoadingPopup)popup;
-            Loading_Popup.ShowPopup();
-
-        });
 
         while (!MasterDataManager.Instance.IsLoaded)
         {
