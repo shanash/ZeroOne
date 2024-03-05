@@ -29,6 +29,7 @@ public class SCManager : Singleton<SCManager>
     public SceneControllerBase Current_Controller { get; private set; }
     public SceneName Default_Scene { get; set; } = SceneName.home;
 
+    
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void CallInstance()
     {
@@ -50,6 +51,7 @@ public class SCManager : Singleton<SCManager>
         Callback_Method_Names = callback_method_names;
         Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
     }
+
 
     public void ChangeScene(SceneName scene_name = SceneName.None, params object[] parameters)
     {
@@ -106,18 +108,33 @@ public class SCManager : Singleton<SCManager>
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;
-        while (!op.isDone)
-        {
-            await UniTask.Yield();
+        //while (!op.isDone)
+        //{
+        //    await UniTask.Yield();
 
+        //    // TODO: 로딩 이미지는 이 수치로 업데이트 하면 됩니다
+        //    //Debug.Log($"op.progress : {op.progress}");
+        //    Progress_Callback?.Invoke(op.progress);
+        //    if (op.progress >= 0.9f)
+        //    {
+        //        //op.allowSceneActivation = true;
+        //        break;
+        //    }
+        //}
+        do 
+        {
             // TODO: 로딩 이미지는 이 수치로 업데이트 하면 됩니다
             //Debug.Log($"op.progress : {op.progress}");
             if (op.progress >= 0.9f)
             {
-                op.allowSceneActivation = true;
+                //op.allowSceneActivation = true;
                 break;
             }
-        }
+
+            await UniTask.Yield();
+        } while (!op.isDone);
+        op.allowSceneActivation = true;
+        
     }
 
     private void InvokeOnReceiveData(SceneControllerBase controller, string[] callback_method_names, object[] parameters)

@@ -1,5 +1,7 @@
 using FluffyDuck.Addressable;
+using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -20,6 +22,7 @@ public class SceneLoad : SceneControllerBase
     Slider _UI_Progress = null;
 
     public static string Start_Scene_Name;
+    SceneLoadingPopup Loading_Popup;    //  Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup
 
     protected override void Initialize()
     {
@@ -67,15 +70,51 @@ public class SceneLoad : SceneControllerBase
         }
         SetText("시작 준비 완료");
 
+        Progress_Min_Value = 0f;
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
+        {
+            Loading_Popup = (SceneLoadingPopup)popup;
+            Loading_Popup.ShowPopup();
+
+        });
+
         while (!MasterDataManager.Instance.IsLoaded)
         {
             await Task.Yield();
+            SetProgressCallback(0);
         }
+
+        float duration = 2f;
+        while (duration > 0f)
+        {
+            duration -= Time.deltaTime;
+            await Task.Delay(100);
+            SetProgressCallback(1f - (duration / 2f));
+        }
+
 #if UNITY_ANDROID && !UNITY_EDITOR_WIN
         SCManager.Instance.ChangeScene(SceneName.home);
-#else   
+#else
         SCManager.Instance.ChangeScene();
 #endif
+
+    }
+
+    float Progress_Min_Value = 0f;
+    void SetProgressCallback(float progress)
+    {
+        
+        if (!MasterDataManager.Instance.IsLoaded) 
+        {
+            Progress_Min_Value += 0.001f;
+            Loading_Popup?.SetProgressCallback(Progress_Min_Value);
+        }
+        else
+        {
+            float max_value = 1f - Progress_Min_Value;
+            float value = Mathf.Clamp01(progress * max_value + Progress_Min_Value);
+            Loading_Popup?.SetProgressCallback(value);
+        }
         
     }
 }

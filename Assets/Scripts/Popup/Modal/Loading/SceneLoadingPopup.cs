@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks.Triggers;
 using FluffyDuck.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,5 +48,11 @@ public class SceneLoadingPopup : PopupBase
     protected override bool Initialize(object[] data)
     {
         return true;
+    }
+
+    public void SetProgressCallback(float progress)
+    {
+        Debug.Log($"SetProgressCallback => {progress * 100f}");
+        Loading_Gauge.value = Mathf.Clamp01(progress);
     }
 }
