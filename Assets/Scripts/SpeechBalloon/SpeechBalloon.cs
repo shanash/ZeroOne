@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class SpeechBalloon : MonoBehaviour, IPoolableComponent
 {
-    public const string PREFAB_NAME = "Assets/AssetResources/Prefabs/SpeechBalloon/SpeechBalloon";
+    public const string PREFAB_NAME = "Assets/AssetResources/Prefabs/UI/SpeechBalloon";
     const int BALLOON_LINE_THICKNESS = 2;
 
     public enum BalloonSizeType
