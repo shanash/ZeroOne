@@ -1,19 +1,21 @@
 using FluffyDuck.Addressable;
 using FluffyDuck.UI;
-using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Addressable 예시를 위해 만든 에셋 다운로드 스크립트
+/// Addressable 로딩
 /// </summary>
 public class SceneLoad : SceneControllerBase
 {
+    /// <summary>
+    /// 로딩팝업 최소 노출 보장시간
+    /// </summary>
+    const float SHOW_LOADINGPOPUP_MIN_DURATION = 8.0f;
+
     AddressableContentDownloader _Downloader = new AddressableContentDownloader();
 
     [SerializeField]
@@ -53,7 +55,18 @@ public class SceneLoad : SceneControllerBase
 
     async void Start()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
+        // 처음시간 체크
+        float start_time = Time.time;
+
+        List<string> popup_prefabs = new List<string>();
+        popup_prefabs.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup");
+        popup_prefabs.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup_Claire");
+        popup_prefabs.Add("Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup_Lucia");
+        
+        int r = Random.Range(0, popup_prefabs.Count);
+        string prefab = popup_prefabs[r];
+
+        PopupManager.Instance.Add(prefab, POPUP_TYPE.MODAL_TYPE, (popup) =>
         {
             Loading_Popup = (SceneLoadingPopup)popup;
             Loading_Popup.ShowPopup();
@@ -77,22 +90,42 @@ public class SceneLoad : SceneControllerBase
         }
         SetText("시작 준비 완료");
 
-        Progress_Min_Value = 0f;
+        float progress_min_value = 0f;
 
+        // 로딩 종료 전까지는 느리게
         while (!MasterDataManager.Instance.IsLoaded)
         {
             await Task.Yield();
-            SetProgressCallback(0);
+            SetProgressCallback(ref progress_min_value, 0);
         }
 
-        float duration = 2f - (2f * Progress_Min_Value);
-        float delta = 0f;
-        while (delta < duration)
+        // 만약 더 채울 게이지가 있다면 추가적으로 채워줍니다
+        if (progress_min_value < 1)
         {
-            delta += Time.deltaTime;
-            await Task.Delay(100);
-            SetProgressCallback((delta / duration));
+            // 처음부터 여기까지 걸린시간
+            float past_time = Time.time - start_time;
+
+            // 남은 시간 체크
+            float remain_time = SHOW_LOADINGPOPUP_MIN_DURATION - past_time;
+
+            // 남은시간 없으면 그래도 최소치(0.2초 정도?)는 보정해줍니다
+            if (remain_time < 0)
+            {
+                remain_time = 0.2f;
+            }
+
+            float delta = 0f;
+            while (delta < remain_time)
+            {
+                await Task.Yield();
+                delta += Time.deltaTime;
+                SetProgressCallback(ref progress_min_value, (delta / remain_time));
+            }
+
+            // 확실하게 풀로 채워준다
+            SetProgressCallback(ref progress_min_value, 1);
         }
+
 
 #if UNITY_ANDROID && !UNITY_EDITOR_WIN
         SCManager.Instance.ChangeScene(SceneName.home);
@@ -102,19 +135,19 @@ public class SceneLoad : SceneControllerBase
 
     }
 
-    float Progress_Min_Value = 0f;
-    void SetProgressCallback(float progress)
+    void SetProgressCallback(ref float progress_min_value, float progress)
     {
         
         if (!MasterDataManager.Instance.IsLoaded) 
         {
-            Progress_Min_Value += 0.001f;
-            Loading_Popup?.SetProgressCallback(Progress_Min_Value);
+            progress_min_value += 0.001f;
+            progress_min_value = Mathf.Clamp01(progress_min_value);
+            Loading_Popup?.SetProgressCallback(progress_min_value);
         }
         else
         {
-            float max_value = 1f - Progress_Min_Value;
-            float value = Mathf.Clamp01(progress * max_value + Progress_Min_Value);
+            float max_value = 1f - progress_min_value;
+            float value = Mathf.Clamp01(progress * max_value + progress_min_value);
             Loading_Popup?.SetProgressCallback(value);
         }
         

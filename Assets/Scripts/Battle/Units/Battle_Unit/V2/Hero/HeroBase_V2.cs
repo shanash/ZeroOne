@@ -1222,7 +1222,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         double last_damage = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? data.Magic_Attack_Point : data.Physics_Attack_Point;
 
         var target = data.Targets[0];
-        double vampire_hp = last_damage * Attack_Life_Recovery / (Attack_Life_Recovery + target.GetLevel() + 100);
+        //double vampire_hp = last_damage * Attack_Life_Recovery / (Attack_Life_Recovery + target.GetLevel() + 100);
+        double vampire_hp = last_damage * (Attack_Life_Recovery / (500 + Attack_Life_Recovery));
         vampire_hp = Math.Truncate(vampire_hp);
         if (vampire_hp > 0)
         {

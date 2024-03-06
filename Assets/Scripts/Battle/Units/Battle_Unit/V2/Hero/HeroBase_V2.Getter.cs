@@ -92,17 +92,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected double GetDurationSkillTypesMultiples(DURATION_EFFECT_TYPE dtype)
     {
-        //double sum = 0;
-        //int cnt = Used_Battle_Duration_Data_List.Count;
-        //for (int i = 0; i < cnt; i++)
-        //{
-        //    var dur = Used_Battle_Duration_Data_List[i];
-        //    if (dur.GetDurationEffectType() == dtype)
-        //    {
-        //        sum += dur.GetMultipleByMultipleType();
-        //    }
-        //}
-        //return sum;
         return GetSkillManager().GetDurationMultiplesByDurEffectType(dtype);
     }
     /// <summary>
@@ -112,17 +101,6 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <returns></returns>
     protected double GetDurationSkillTypesValues(DURATION_EFFECT_TYPE dtype)
     {
-        //double sum = 0;
-        //int cnt = Used_Battle_Duration_Data_List.Count;
-        //for (int i = 0; i < cnt; i++)
-        //{
-        //    var dur = Used_Battle_Duration_Data_List[i];
-        //    if (dur.GetDurationEffectType() == dtype)
-        //    {
-        //        sum += dur.GetValuesByMultipleType();
-        //    }
-        //}
-        //return sum;
         return GetSkillManager().GetDurationValuesByDurEffectType(dtype);
     }
 

@@ -1,5 +1,3 @@
-
-
 using System;
 
 public class BattleOnetimeSkillData : BattleDataBase, FluffyDuck.Util.Factory.IProduct

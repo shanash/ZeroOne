@@ -47,7 +47,7 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
                     recovery_hp = t.Life * Data.multiple;
                     break;
                 case STAT_MULTIPLE_TYPE.HEAL_RATE:
-                    recovery_hp = send_data.Caster.Life_Recovery_Inc * Data.multiple;
+                    recovery_hp = (send_data.Caster.Magic_Attack * Data.multiple * 0.6) + (send_data.Caster.Life_Recovery_Inc * Data.multiple * 0.9) + Data.value;
                     break;
                 case STAT_MULTIPLE_TYPE.HEAL_VALUE:
                     recovery_hp = Data.value;
