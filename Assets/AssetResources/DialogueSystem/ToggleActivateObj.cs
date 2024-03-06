@@ -14,11 +14,13 @@ public class ToggleActivateObj : MonoBehaviour
     {
         if (toggleCheck)
         {
+            toggleCheck = false;
             onStartObj.SetActive(true);
             toggleActivateObj.SetActive(false);
         }
         else
         {
+            toggleCheck = true;
             onStartObj.SetActive(false);
             toggleActivateObj.SetActive(true);
         }
