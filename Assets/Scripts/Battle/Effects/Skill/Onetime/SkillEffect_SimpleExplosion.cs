@@ -36,6 +36,25 @@ public class SkillEffect_SimpleExplosion : SkillEffectBase
                     Send_Data.Onetime?.ExecSkill(Send_Data);
                 }
             }
+
+            var ec = GetEffectComponent();
+            if (ec.Change_Sort_Type != SORTING_TYPE.NONE)
+            {
+                if (Delta > ec.Change_Sorting_Layer_Delay_Time)
+                {
+                    if (!Sort_Group.sortingLayerName.Equals(ec.Change_Sort_Type.ToString()))
+                    {
+                        Sort_Group.sortingLayerName = ec.Change_Sort_Type.ToString();
+                    }
+                }
+            }
+
+            if (CheckParticleComplete())
+            {
+                Finish_Callback?.Invoke(this);
+                UnusedEffect();
+                return;
+            }
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

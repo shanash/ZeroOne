@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleNpcSkillGroup : BattleSkillGroup
 {
     protected Npc_Skill_Group Skill_Group;
+    protected int Skill_Level;
 
     public BattleNpcSkillGroup() : base(UNIT_SKILL_TYPE.NPC_SKILL) { }
 
@@ -79,9 +80,16 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     {
         return Skill_Group.target_skill_id;
     }
-
+    public override void SetSkillLevel(int lv)
+    {
+        Skill_Level  = lv;
+        for (int i = 0; i < Battle_Skill_Data_List.Count; i++)
+        {
+            Battle_Skill_Data_List[i].SetSkillLevel(Skill_Level);
+        }
+    }
     public override int GetSkillLevel()
     {
-        return 1;
+        return Skill_Level;
     }
 }

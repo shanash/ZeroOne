@@ -344,7 +344,6 @@ public partial class TeamManager_V2 : IDisposable
         Total_Member_Count = len;
         Alive_Member_Count = len;
 
-
         var lv_list = wdata.npc_levels;
         var stat_list = wdata.npc_stat_ids;
         var skill_lv_list = wdata.npc_skill_levels;
@@ -357,17 +356,18 @@ public partial class TeamManager_V2 : IDisposable
             //  npc id, npc lv, stat id, skill lv, ultimate lv
             npc.SetUnitID(wdata.enemy_appearance_info[i], lv_list[i], stat_list[i], skill_lv_list[i], ultimate_skill_lv_list[i]);
 
-            //if (i < lv_list.Length)
-            //{
-            //    npc.SetLevel(lv_list[i]);
-            //}
-            //if (i < stat_list.Length)
-            //{
-            //    npc.SetStatDataID(stat_list[i]);
-            //}
-
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
-            obj.transform.localScale = new Vector2(npc.GetUnitScale(), npc.GetUnitScale());
+            //  npc 중 pc 캐릭터와 같이 사용하는 캐릭터는 x 스케일을 -로 적용해 줘야함
+            var local_scale = obj.transform.localScale;
+            if (local_scale.x < 0)
+            {
+                obj.transform.localScale = new Vector2(-npc.GetUnitScale(), npc.GetUnitScale());
+            }
+            else
+            {
+                obj.transform.localScale = new Vector2(npc.GetUnitScale(), npc.GetUnitScale());
+            }
+            
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 

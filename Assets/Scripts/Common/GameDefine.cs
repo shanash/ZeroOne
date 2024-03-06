@@ -65,6 +65,8 @@ public enum HERO_PLAY_ANIMATION_TYPE
 
     DEATH_01,
 
+    ULTIMATE_01,
+
     WIN_01,
 
 }

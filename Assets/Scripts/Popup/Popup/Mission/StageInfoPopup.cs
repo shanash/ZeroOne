@@ -119,7 +119,7 @@ public class StageInfoPopup : PopupBase
 
         Stage_Number.text = ZString.Format("{0}-{1}", Zone.zone_ordering, Stage.stage_ordering);
 
-        Stage_Name.text = Stage.stage_name;
+        Stage_Name.text = GameDefine.GetLocalizeString(Stage.stage_name_id);
 
         int cnt = 0;
         //  npc list

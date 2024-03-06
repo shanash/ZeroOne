@@ -13,6 +13,7 @@ public class SkillEffectCast : SkillEffectBase
     {
         if (Is_Action && !Is_Pause)
         {
+            
             if (CheckParticleComplete())
             {
                 Finish_Callback?.Invoke(this);
@@ -22,6 +23,19 @@ public class SkillEffectCast : SkillEffectBase
             }
 
             Delta += Time.deltaTime;
+
+            var ec = GetEffectComponent();
+            if (ec.Change_Sort_Type != SORTING_TYPE.NONE)
+            {
+                if (Delta > ec.Change_Sorting_Layer_Delay_Time)
+                {
+                    if (!Sort_Group.sortingLayerName.Equals(ec.Change_Sort_Type.ToString()))
+                    {
+                        Sort_Group.sortingLayerName = ec.Change_Sort_Type.ToString();
+                    }
+                }
+            }
+
             if (Delta > Duration)
             {
                 Finish_Callback?.Invoke(this);

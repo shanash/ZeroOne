@@ -32,7 +32,13 @@ public class Stage_Data : System.IDisposable
 	int _stage_ordering;
 
 	///	<summary>
-	///	스테이지 명칭
+	///	스테이지 이름 ID
+	///	</summary>
+	public string stage_name_id => _stage_name_id;
+	string _stage_name_id;
+
+	///	<summary>
+	///	기획팀 체크용
 	///	</summary>
 	public string stage_name => _stage_name;
 	string _stage_name;
@@ -79,6 +85,30 @@ public class Stage_Data : System.IDisposable
 	public int star_reward_group_id => _star_reward_group_id;
 	int _star_reward_group_id;
 
+	///	<summary>
+	///	스케쥴 ID
+	///	</summary>
+	public int schedule_id => _schedule_id;
+	int _schedule_id;
+
+	///	<summary>
+	///	입장 제한 횟수
+	///	</summary>
+	public int entrance_limit_count => _entrance_limit_count;
+	int _entrance_limit_count;
+
+	///	<summary>
+	///	대표 보상 타입
+	///	</summary>
+	public int reward_type => _reward_type;
+	int _reward_type;
+
+	///	<summary>
+	///	대표 보상 ID
+	///	</summary>
+	public int reward_id => _reward_id;
+	int _reward_id;
+
 	private bool disposed = false;
 
 	public Stage_Data(Raw_Stage_Data raw_data)
@@ -87,6 +117,7 @@ public class Stage_Data : System.IDisposable
 		_stage_group_id = raw_data.stage_group_id;
 		_wave_group_id = raw_data.wave_group_id;
 		_stage_ordering = raw_data.stage_ordering;
+		_stage_name_id = raw_data.stage_name_id;
 		_stage_name = raw_data.stage_name;
 		_use_stamina = raw_data.use_stamina;
 		_character_exp = raw_data.character_exp;
@@ -95,6 +126,10 @@ public class Stage_Data : System.IDisposable
 		_repeat_reward_group_id = raw_data.repeat_reward_group_id;
 		_first_reward_group_id = raw_data.first_reward_group_id;
 		_star_reward_group_id = raw_data.star_reward_group_id;
+		_schedule_id = raw_data.schedule_id;
+		_entrance_limit_count = raw_data.entrance_limit_count;
+		_reward_type = raw_data.reward_type;
+		_reward_id = raw_data.reward_id;
 	}
 
 	public void Dispose()
@@ -120,6 +155,7 @@ public class Stage_Data : System.IDisposable
 		sb.AppendFormat("[stage_group_id] = <color=yellow>{0}</color>", stage_group_id).AppendLine();
 		sb.AppendFormat("[wave_group_id] = <color=yellow>{0}</color>", wave_group_id).AppendLine();
 		sb.AppendFormat("[stage_ordering] = <color=yellow>{0}</color>", stage_ordering).AppendLine();
+		sb.AppendFormat("[stage_name_id] = <color=yellow>{0}</color>", stage_name_id).AppendLine();
 		sb.AppendFormat("[stage_name] = <color=yellow>{0}</color>", stage_name).AppendLine();
 		sb.AppendFormat("[use_stamina] = <color=yellow>{0}</color>", use_stamina).AppendLine();
 		sb.AppendFormat("[character_exp] = <color=yellow>{0}</color>", character_exp).AppendLine();
@@ -128,6 +164,10 @@ public class Stage_Data : System.IDisposable
 		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
 		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[star_reward_group_id] = <color=yellow>{0}</color>", star_reward_group_id).AppendLine();
+		sb.AppendFormat("[schedule_id] = <color=yellow>{0}</color>", schedule_id).AppendLine();
+		sb.AppendFormat("[entrance_limit_count] = <color=yellow>{0}</color>", entrance_limit_count).AppendLine();
+		sb.AppendFormat("[reward_type] = <color=yellow>{0}</color>", reward_type).AppendLine();
+		sb.AppendFormat("[reward_id] = <color=yellow>{0}</color>", reward_id).AppendLine();
 		return sb.ToString();
 	}
 }

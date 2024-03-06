@@ -8,6 +8,7 @@ public class Raw_Stage_Data : System.IDisposable
 	public int stage_group_id {get; set;}
 	public int wave_group_id {get; set;}
 	public int stage_ordering {get; set;}
+	public string stage_name_id {get; set;}
 	public string stage_name {get; set;}
 	public int use_stamina {get; set;}
 	public int character_exp {get; set;}
@@ -16,6 +17,10 @@ public class Raw_Stage_Data : System.IDisposable
 	public int repeat_reward_group_id {get; set;}
 	public int first_reward_group_id {get; set;}
 	public int star_reward_group_id {get; set;}
+	public int schedule_id {get; set;}
+	public int entrance_limit_count {get; set;}
+	public int reward_type {get; set;}
+	public int reward_id {get; set;}
 
 	private bool disposed = false;
 
@@ -25,6 +30,7 @@ public class Raw_Stage_Data : System.IDisposable
 		stage_group_id = 0;
 		wave_group_id = 0;
 		stage_ordering = 0;
+		stage_name_id = string.Empty;
 		stage_name = string.Empty;
 		use_stamina = 0;
 		character_exp = 0;
@@ -33,6 +39,10 @@ public class Raw_Stage_Data : System.IDisposable
 		repeat_reward_group_id = 0;
 		first_reward_group_id = 0;
 		star_reward_group_id = 0;
+		schedule_id = 0;
+		entrance_limit_count = 0;
+		reward_type = 0;
+		reward_id = 0;
 	}
 
 	public void Dispose()

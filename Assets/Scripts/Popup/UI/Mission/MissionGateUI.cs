@@ -92,7 +92,7 @@ public class MissionGateUI : PopupBase
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
             {
                 var stage = MasterDataManager.Instance.Get_StageData(boss_mng.GetNeedClearDungeonStageID());
-                string msg = ZString.Format("{0}를 클리어 해야 합니다.", stage.stage_name);
+                string msg = ZString.Format("{0}를 클리어 해야 합니다.", GameDefine.GetLocalizeString(stage.stage_name_id));
                 popup.ShowPopup(3f, msg);
             });
             return;

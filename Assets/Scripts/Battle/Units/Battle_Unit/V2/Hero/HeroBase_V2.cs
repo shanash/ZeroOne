@@ -500,11 +500,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            //var skill = GetSkillManager().GetSpecialSkillGroup();
-            //if (animation_name.Equals(skill.GetSkillActionName()))
-            //{
-            //    SpawnSkillCastEffect(skill);
-            //}
+            var skill = GetSkillManager().GetSpecialSkillGroup();
+            if (animation_name.Equals(skill.GetSkillActionName()))
+            {
+                SpawnSkillCastEffect(skill);
+            }
         }
 
     }
@@ -543,7 +543,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                 }
                 else
                 {
-                    ChangeState(UNIT_STATES.ATTACK_READY_1);
+                    AttackAnimationComplete();
                 }
                 return;
             }
@@ -552,8 +552,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             if (animation_name.Equals("00_ultimate"))
             {
-                //Battle_Mng.ShowAllUnits();
-
                 UnsetPlayableDirector();
                 var skill = GetSkillManager().GetSpecialSkillGroup();
                 if (skill != null)
@@ -561,6 +559,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                     skill.ResetSkill();
                 }
                 Battle_Mng.FinishUltimateSkill(this);
+            }
+            else if (animation_name.Equals("00_ultimate_enemy"))
+            {
+                var skill = GetSkillManager().GetSpecialSkillGroup();
+                if (skill != null)
+                {
+                    skill.ResetSkill();
+                }
+                ChangeState(UNIT_STATES.ATTACK_READY_1);
             }
         }
     }
@@ -614,6 +621,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
     }
 
+
+    protected virtual void AttackAnimationComplete()
+    {
+        ChangeState(UNIT_STATES.ATTACK_READY_1);
+    }
     public void SetTeamManager(TeamManager_V2 mng)
     {
         Team_Mng = mng;
@@ -1607,7 +1619,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// <summary>
     /// 궁극기 시전 요청
     /// </summary>
-    public virtual void SpecialSkillExec()
+    public virtual void UltimateSkillExec()
     {
         var battle_state = Battle_Mng.GetCurrentState();
         if (battle_state != GAME_STATES.PLAYING)

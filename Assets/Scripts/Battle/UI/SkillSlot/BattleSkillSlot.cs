@@ -107,7 +107,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             }
             if (skill_group.IsPrepareCooltime())
             {
-                Hero?.SpecialSkillExec();
+                Hero?.UltimateSkillExec();
             }
         }
         else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)

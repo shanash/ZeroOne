@@ -92,12 +92,20 @@ public class BattleDungeonData : BattleDataBase
         var bdata = m.Get_NpcBattleData(npc.npc_battle_id);
         if (bdata != null)
         {
-            int grp_cnt = bdata.skill_pattern.Length;
+            List<int> skill_group_ids = new List<int>();
+            skill_group_ids.AddRange(bdata.skill_pattern);
+            skill_group_ids.Add(bdata.special_skill_group_id);
+            int grp_cnt = skill_group_ids.Count;
 
             for (int g = 0; g < grp_cnt; g++)
             {
+                int gid = skill_group_ids[g];
+                if (gid == 0)
+                {
+                    continue;
+                }
                 //  skill group
-                var skill_group = m.Get_NpcSkillGroup(bdata.skill_pattern[g]);
+                var skill_group = m.Get_NpcSkillGroup(gid);
                 if (skill_group == null)
                 {
                     UnityEngine.Debug.Assert(false);

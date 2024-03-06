@@ -16,6 +16,10 @@ public class SkillEffectBase : EffectBase
 
     protected RendererSortingZ Sorting_Z;
 
+    protected SortingGroup Sort_Group;
+
+    protected string Origin_Sorting_Layer;
+
 
     public void SetBattleSendData(BATTLE_SEND_DATA d)
     {
@@ -304,6 +308,15 @@ public class SkillEffectBase : EffectBase
         }
     }
 
+    protected void CheckSortingGroup()
+    {
+        if (Sort_Group == null)
+        {
+            Sort_Group = GetComponent<SortingGroup>();
+            Origin_Sorting_Layer = Sort_Group.sortingLayerName;
+        }
+    }
+
     public override void Show(bool show)
     {
         CheckRenderSortingZ();
@@ -315,6 +328,7 @@ public class SkillEffectBase : EffectBase
         base.Spawned();
         CheckEffectComponent();
         CheckRenderSortingZ();
+        CheckSortingGroup();
         GetEffectComponent().ShowObjects(true);
         Send_Data.Reset();
     }
@@ -323,7 +337,9 @@ public class SkillEffectBase : EffectBase
     {
         base.Despawned();
         CheckRenderSortingZ();
+        CheckSortingGroup();
         Sorting_Z.ResetSortingZ();
+        Sort_Group.sortingLayerName = Origin_Sorting_Layer;
     }
 
 

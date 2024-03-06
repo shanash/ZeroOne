@@ -36,7 +36,7 @@ public class StageListCellNode : InfiniteScrollItem
         Stage_Number.text = ZString.Format("{0}-{1}", data.Zone.zone_ordering, data.Stage.stage_ordering);
 
         //  stage name
-        Stage_Name.text = data.Stage.stage_name;
+        Stage_Name.text = GameDefine.GetLocalizeString(data.Stage.stage_name_id);
 
         //  star point
         if (data.IsExistUserData())

@@ -14,7 +14,13 @@ public class Zone_Data : System.IDisposable
 	int _zone_id;
 
 	///	<summary>
-	///	존 명칭
+	///	존 이름 ID
+	///	</summary>
+	public string zone_name_id => _zone_name_id;
+	string _zone_name_id;
+
+	///	<summary>
+	///	존 명칭(기획)
 	///	</summary>
 	public string zone_name => _zone_name;
 	string _zone_name;
@@ -50,30 +56,38 @@ public class Zone_Data : System.IDisposable
 	string _zone_img_path;
 
 	///	<summary>
-	///	존 설명
+	///	존 툴 팁 아이디
+	///	</summary>
+	public string zone_tooltip_id => _zone_tooltip_id;
+	string _zone_tooltip_id;
+
+	///	<summary>
+	///	존 설명(기획)
 	///	</summary>
 	public string zone_tooltip => _zone_tooltip;
 	string _zone_tooltip;
 
 	///	<summary>
-	///	해금 조건
+	///	오픈 던전 완료 ID
 	///	</summary>
-	public LIMIT_TYPE limit_type => _limit_type;
-	LIMIT_TYPE _limit_type;
+	public int open_stage_id => _open_stage_id;
+	int _open_stage_id;
 
 	private bool disposed = false;
 
 	public Zone_Data(Raw_Zone_Data raw_data)
 	{
 		_zone_id = raw_data.zone_id;
+		_zone_name_id = raw_data.zone_name_id;
 		_zone_name = raw_data.zone_name;
 		_zone_group_id = raw_data.zone_group_id;
 		_stage_group_id = raw_data.stage_group_id;
 		_zone_ordering = raw_data.zone_ordering;
 		_zone_difficulty = raw_data.zone_difficulty;
 		_zone_img_path = raw_data.zone_img_path;
+		_zone_tooltip_id = raw_data.zone_tooltip_id;
 		_zone_tooltip = raw_data.zone_tooltip;
-		_limit_type = raw_data.limit_type;
+		_open_stage_id = raw_data.open_stage_id;
 	}
 
 	public void Dispose()
@@ -96,14 +110,16 @@ public class Zone_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[zone_id] = <color=yellow>{0}</color>", zone_id).AppendLine();
+		sb.AppendFormat("[zone_name_id] = <color=yellow>{0}</color>", zone_name_id).AppendLine();
 		sb.AppendFormat("[zone_name] = <color=yellow>{0}</color>", zone_name).AppendLine();
 		sb.AppendFormat("[zone_group_id] = <color=yellow>{0}</color>", zone_group_id).AppendLine();
 		sb.AppendFormat("[stage_group_id] = <color=yellow>{0}</color>", stage_group_id).AppendLine();
 		sb.AppendFormat("[zone_ordering] = <color=yellow>{0}</color>", zone_ordering).AppendLine();
 		sb.AppendFormat("[zone_difficulty] = <color=yellow>{0}</color>", zone_difficulty).AppendLine();
 		sb.AppendFormat("[zone_img_path] = <color=yellow>{0}</color>", zone_img_path).AppendLine();
+		sb.AppendFormat("[zone_tooltip_id] = <color=yellow>{0}</color>", zone_tooltip_id).AppendLine();
 		sb.AppendFormat("[zone_tooltip] = <color=yellow>{0}</color>", zone_tooltip).AppendLine();
-		sb.AppendFormat("[limit_type] = <color=yellow>{0}</color>", limit_type).AppendLine();
+		sb.AppendFormat("[open_stage_id] = <color=yellow>{0}</color>", open_stage_id).AppendLine();
 		return sb.ToString();
 	}
 }

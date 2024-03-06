@@ -17,6 +17,10 @@ public class EffectComponent_Inspector : Editor
     SerializedProperty Is_Loop_Property;
     SerializedProperty Delay_Time_Property;
 
+    //  소팅 레이어 변경
+    SerializedProperty Change_Sorting_Layer_Delay_Time_Property;
+    SerializedProperty Change_Sort_Type_Property;
+
     //  투사체 관련 정의
     SerializedProperty Projectile_Start_Pos_Type_Property;
     SerializedProperty Projectile_Reach_Pos_Type_Property;
@@ -57,6 +61,10 @@ public class EffectComponent_Inspector : Editor
         Effect_Duration_Property = serializedObject.FindProperty("Effect_Duration");
         Is_Loop_Property = serializedObject.FindProperty("Is_Loop");
         Delay_Time_Property = serializedObject.FindProperty("Delay_Time");
+
+        //  소팅 레이어 변경
+        Change_Sorting_Layer_Delay_Time_Property = serializedObject.FindProperty("Change_Sorting_Layer_Delay_Time");
+        Change_Sort_Type_Property = serializedObject.FindProperty("Change_Sort_Type");
 
         //  투사체 관련 정의
         Projectile_Start_Pos_Type_Property = serializedObject.FindProperty("Projectile_Start_Pos_Type");
@@ -114,6 +122,11 @@ public class EffectComponent_Inspector : Editor
                     break;
                 case SKILL_EFFECT_TYPE.CASTING:
                     EditorGUILayout.PropertyField(Effect_Duration_Property);
+                    EditorGUILayout.PropertyField(Change_Sort_Type_Property);
+                    if (Change_Sort_Type_Property.enumValueIndex != 0)
+                    {
+                        EditorGUILayout.PropertyField(Change_Sorting_Layer_Delay_Time_Property);
+                    }
                     LayoutReachTargetPosTypeGUI();
                     break;
                 case SKILL_EFFECT_TYPE.PROJECTILE:
@@ -125,6 +138,11 @@ public class EffectComponent_Inspector : Editor
                     if (!Is_Loop_Property.boolValue)
                     {
                         EditorGUILayout.PropertyField(Effect_Duration_Property);
+                    }
+                    EditorGUILayout.PropertyField(Change_Sort_Type_Property);
+                    if (Change_Sort_Type_Property.enumValueIndex != 0)
+                    {
+                        EditorGUILayout.PropertyField(Change_Sorting_Layer_Delay_Time_Property);
                     }
                     LayoutReachTargetPosTypeGUI();
                     break;
@@ -190,6 +208,10 @@ public class EffectComponent_Inspector : Editor
             Effect_Duration_Property.floatValue = 0f;
             Is_Loop_Property.boolValue = false;
             Delay_Time_Property.floatValue = 0f;
+
+            Change_Sorting_Layer_Delay_Time_Property.floatValue = 0f;
+            Change_Sort_Type_Property.enumValueIndex = 0;
+
             Projectile_Start_Pos_Type_Property.enumValueIndex = 0;
             Projectile_Reach_Pos_Type_Property.enumValueIndex = 0;
             Throwing_Type_Property.enumValueIndex = 0;

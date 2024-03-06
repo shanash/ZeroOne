@@ -62,6 +62,14 @@ public enum THROWING_TYPE
     BEZIER,                 //  곡선형
 }
 
+public enum SORTING_TYPE
+{
+    NONE = 0,
+    Unit_Back,
+    Unit,
+    Unit_Front
+}
+
 
 public class EffectComponent : MonoBehaviour
 {
@@ -81,6 +89,11 @@ public class EffectComponent : MonoBehaviour
 
     [SerializeField, Tooltip("딜레이 시간 - 스킬 효과를 주기위한 대기 시간")]
     public float Delay_Time;
+
+    [SerializeField, Tooltip("소팅 레이어 변경 대기 시간")]
+    public float Change_Sorting_Layer_Delay_Time;
+    [SerializeField, Tooltip("변경할 소팅 그룹")]
+    public SORTING_TYPE Change_Sort_Type = SORTING_TYPE.NONE;
 
     [Header("투사체 관련 정의")]
     [SerializeField, Tooltip("투사체 시작 위치\n 시전자의 본체에서 찾는다.")]

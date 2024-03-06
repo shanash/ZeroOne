@@ -16,7 +16,6 @@ public class Raw_Player_Character_Skill_Data : System.IDisposable
 	public SECOND_TARGET_RULE_TYPE second_target_rule {get; set;}
 	public int max_second_target_count {get; set;}
 	public double second_target_range {get; set;}
-	public bool is_only_first_effect {get; set;}
 	public int[] effect_weight {get; set;}
 	public int[] onetime_effect_ids {get; set;}
 	public int[] duration_effect_ids {get; set;}
@@ -38,7 +37,6 @@ public class Raw_Player_Character_Skill_Data : System.IDisposable
 		effect_count_type = EFFECT_COUNT_TYPE.NONE;
 		second_target_rule = SECOND_TARGET_RULE_TYPE.NONE;
 		max_second_target_count = 0;
-		is_only_first_effect = false;
 		event_name = string.Empty;
 		trigger_effect_path = string.Empty;
 	}
