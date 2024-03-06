@@ -49,9 +49,11 @@ public class StageInfoPopup : PopupBase
     Stage_Data Stage;
     UserStoryStageData User_Data;
 
-
     List<NpcCardBase> Used_Npc_List = new List<NpcCardBase>();
     List<RewardItemCard> Used_Reward_Item_List = new List<RewardItemCard>();
+
+    // 현재 표시되고 있는 몬스터 툴팁
+    GameObject Tooltip = null;
 
     bool Is_Animation_End;
     bool Is_Load_Complete;
@@ -76,6 +78,7 @@ public class StageInfoPopup : PopupBase
         List<string> asset_list = new List<string>();
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/NpcCard");
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/RewardItemCard");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/MonsterInfoTooltip");
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -161,6 +164,9 @@ public class StageInfoPopup : PopupBase
             var npc_card = obj.GetComponent<NpcCardBase>();
             npc_card.SetNpcID(npc.GetUnitID());
             Used_Npc_List.Add(npc_card);
+
+            npc_card.OnStartLongPress += OnShowTooltip;
+            npc_card.OnFinishLongPress += OnHideTooltip;
         }
 
         //  리워드
@@ -262,6 +268,18 @@ public class StageInfoPopup : PopupBase
         {
             Stage_Star_Points[i].gameObject.SetActive(true);
         }
+    }
+
+    void OnShowTooltip(Rect hole, Npc_Data npc_data)
+    {
+        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/MonsterInfoTooltip", transform.parent);
+        var tooltip = Tooltip.GetComponent<Tooltip>();
+        tooltip.Initialize(hole, npc_data);
+    }
+
+    void OnHideTooltip()
+    {
+        GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
     }
 
     public void OnClickCancel()

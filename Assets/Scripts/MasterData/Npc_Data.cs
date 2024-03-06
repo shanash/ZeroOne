@@ -26,6 +26,12 @@ public class Npc_Data : System.IDisposable
 	string _name_kr;
 
 	///	<summary>
+	///	설명
+	///	</summary>
+	public string desc_id => _desc_id;
+	string _desc_id;
+
+	///	<summary>
 	///	종족
 	///	</summary>
 	public TRIBE_TYPE tribe_type => _tribe_type;
@@ -74,6 +80,7 @@ public class Npc_Data : System.IDisposable
 		_npc_data_id = raw_data.npc_data_id;
 		_name_id = raw_data.name_id;
 		_name_kr = raw_data.name_kr;
+		_desc_id = raw_data.desc_id;
 		_tribe_type = raw_data.tribe_type;
 		_npc_type = raw_data.npc_type;
 		_attribute_type = raw_data.attribute_type;
@@ -105,6 +112,7 @@ public class Npc_Data : System.IDisposable
 		sb.AppendFormat("[npc_data_id] = <color=yellow>{0}</color>", npc_data_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
+		sb.AppendFormat("[desc_id] = <color=yellow>{0}</color>", desc_id).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();
 		sb.AppendFormat("[npc_type] = <color=yellow>{0}</color>", npc_type).AppendLine();
 		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
