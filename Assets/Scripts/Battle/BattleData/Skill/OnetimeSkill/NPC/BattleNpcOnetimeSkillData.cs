@@ -27,21 +27,23 @@ public class BattleNpcOnetimeSkillData : BattleOnetimeSkillData
     {
         return Data.attribute_type;
     }
+    public override STAT_MULTIPLE_TYPE GetStatMultipleType()
+    {
+        return Data.multiple_type;
+    }
     public override string GetEffectPrefab()
     {
         return Data.effect_path;
     }
 
-    //public override double GetEffectDuration()
-    //{
-    //    return Data.effect_duration;
-    //}
-
-    //public override PROJECTILE_TYPE GetProjectileType()
-    //{
-    //    return Data.projectile_type;
-    //}
-
+    public override double GetValue()
+    {
+        return Data.value + (GetSkillLevel() - 1) * Data.up_value;
+    }
+    public override double GetMultiple()
+    {
+        return Data.multiple + (GetSkillLevel() - 1) * Data.up_multiple;
+    }
 
 
     public override string ToString()

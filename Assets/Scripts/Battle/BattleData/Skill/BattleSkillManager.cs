@@ -194,7 +194,6 @@ public class BattleSkillManager : BattleDataBase
     /// <param name="duration_skill"></param>
     public void AddDurationSkillEffect(BattleDurationSkillData duration_skill)
     {
-        //var caster = duration_skill.GetBattleSendData().Caster;
         int rate = UnityEngine.Random.Range(0, 10000);
         if (rate < duration_skill.GetRate())
         {
@@ -473,7 +472,7 @@ public class BattleSkillManager : BattleDataBase
             var dur = Used_Battle_Duration_Data_List[i];
             if (dur.GetDurationEffectType() == dtype)
             {
-                sum += dur.GetMultipleByMultipleType();
+                sum += dur.GetMultiple();
             }
         }
         return sum;
@@ -493,7 +492,7 @@ public class BattleSkillManager : BattleDataBase
             var dur = Used_Battle_Duration_Data_List[i];
             if (dur.GetDurationEffectType() == dtype)
             {
-                sum += dur.GetValuesByMultipleType();
+                sum += dur.GetValue();
             }
         }
         return sum;

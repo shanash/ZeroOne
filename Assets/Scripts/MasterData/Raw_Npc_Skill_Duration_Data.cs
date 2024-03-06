@@ -16,6 +16,10 @@ public class Raw_Npc_Skill_Duration_Data : System.IDisposable
 	public int value {get; set;}
 	public double multiple {get; set;}
 	public double rate {get; set;}
+	public double up_value {get; set;}
+	public double up_multiple {get; set;}
+	public double up_rate {get; set;}
+	public string icon_path {get; set;}
 	public string effect_path {get; set;}
 	public bool is_overlapable {get; set;}
 
@@ -29,6 +33,7 @@ public class Raw_Npc_Skill_Duration_Data : System.IDisposable
 		count = 0;
 		multiple_type = STAT_MULTIPLE_TYPE.NONE;
 		value = 0;
+		icon_path = string.Empty;
 		effect_path = string.Empty;
 		is_overlapable = false;
 	}

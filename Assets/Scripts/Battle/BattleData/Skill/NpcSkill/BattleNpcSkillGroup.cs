@@ -79,4 +79,9 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     {
         return Skill_Group.target_skill_id;
     }
+
+    public override int GetSkillLevel()
+    {
+        return 1;
+    }
 }

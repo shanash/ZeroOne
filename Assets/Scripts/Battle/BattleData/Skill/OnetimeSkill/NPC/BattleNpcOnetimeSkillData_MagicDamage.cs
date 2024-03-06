@@ -19,22 +19,22 @@ public class BattleNpcOnetimeSkillData_MagicDamage : BattleNpcOnetimeSkillData
             var t = data.Targets[i];
             send_data.AddTarget(t);
 
-            switch (Data.multiple_type)
+            switch (GetStatMultipleType())
             {
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
-                    send_data.Magic_Attack_Point = Data.value;
+                    send_data.Magic_Attack_Point = GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Attack * Data.multiple;
+                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Attack * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Defense * Data.multiple;
+                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Defense * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Max_Life * Data.multiple;
+                    send_data.Magic_Attack_Point = send_data.Caster.Max_Life * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Life * Data.multiple;
+                    send_data.Magic_Attack_Point = send_data.Caster.Life * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);

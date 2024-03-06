@@ -69,8 +69,11 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
     {
         return Data.effect_path;
     }
-    
 
+    public override string GetIconPath()
+    {
+        return Data.icon_path;
+    }
     public override bool IsUseRepeatInterval()
     {
         return Data.repeat_interval > 0;
@@ -83,11 +86,7 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
 
 
 
-    public override double GetRate()
-    {
-        return Data.rate;
-    }
-
+   
     public override DURATION_EFFECT_TYPE GetDurationEffectType()
     {
         return Data.duration_effect_type;
@@ -101,13 +100,24 @@ public class BattleNpcDurationSkillData : BattleDurationSkillData
     {
         return Data.is_overlapable;
     }
-    public override double GetMultipleByMultipleType()
+
+    public override STAT_MULTIPLE_TYPE GetStatMultipleType()
     {
-        return Data.multiple;
+        return Data.multiple_type;
     }
-    public override double GetValuesByMultipleType()
+
+    public override double GetRate()
     {
-        return Data.value;
+        return Data.rate + (GetSkillLevel() - 1) * Data.up_rate;
+    }
+
+    public override double GetMultiple()
+    {
+        return Data.multiple + (GetSkillLevel() - 1) * Data.up_multiple;
+    }
+    public override double GetValue()
+    {
+        return Data.value + (GetSkillLevel() - 1) * Data.up_value;
     }
 
 

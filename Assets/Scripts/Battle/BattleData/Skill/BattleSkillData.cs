@@ -42,6 +42,8 @@ public abstract class BattleSkillData : BattleDataBase
     /// </summary>
     public UNIT_SKILL_TYPE Unit_Skill_Type { get; protected set; } = UNIT_SKILL_TYPE.NONE;
 
+    protected int Skill_Level;
+
     protected BattleSkillData(UNIT_SKILL_TYPE stype) : base() { Unit_Skill_Type = stype; }
 
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
@@ -62,6 +64,21 @@ public abstract class BattleSkillData : BattleDataBase
     }
 
     public virtual void SetSkillID(int skill_id) { }
+
+    public void SetSkillLevel(int lv) 
+    { 
+        Skill_Level = lv;
+        int cnt = Onetime_Skill_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Onetime_Skill_List[i].SetSkillLevel(lv);
+        }
+        cnt = Duration_Skill_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Duration_Skill_List[i].SetSkillLevel(lv);
+        }
+    }
 
     protected void AddOnetimeSkillData(BattleOnetimeSkillData onetime)
     {

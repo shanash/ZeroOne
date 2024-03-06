@@ -19,7 +19,7 @@ public class BattleNpcOnetimeSkillData_LifeRecovery : BattleNpcOnetimeSkillData
             var t = data.Targets[i];
             send_data.AddTarget(t);
 
-            switch (Data.multiple_type)
+            switch (GetStatMultipleType())
             {
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:
                     Debug.Assert(false);
@@ -30,11 +30,23 @@ public class BattleNpcOnetimeSkillData_LifeRecovery : BattleNpcOnetimeSkillData
                 case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
                     Debug.Assert(false);
                     break;
+                case STAT_MULTIPLE_TYPE.MAX_LIFE:
+                    recovery_hp = GetValue();
+                    break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
-                    recovery_hp = t.Max_Life * Data.multiple;
+                    recovery_hp = t.Max_Life * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:
-                    Debug.Assert(false);
+                    recovery_hp = GetValue();
+                    break;
+                case STAT_MULTIPLE_TYPE.LIFE_RATE:
+                    recovery_hp = t.Life * GetMultiple();
+                    break;
+                case STAT_MULTIPLE_TYPE.HEAL_RATE:
+                    recovery_hp = (send_data.Caster.Magic_Attack * GetMultiple() * 0.6) + (send_data.Caster.Life_Recovery_Inc * GetMultiple() * 0.9) + GetValue();
+                    break;
+                case STAT_MULTIPLE_TYPE.HEAL_VALUE:
+                    recovery_hp = GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);

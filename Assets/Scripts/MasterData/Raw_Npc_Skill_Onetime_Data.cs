@@ -10,6 +10,8 @@ public class Raw_Npc_Skill_Onetime_Data : System.IDisposable
 	public STAT_MULTIPLE_TYPE multiple_type {get; set;}
 	public int value {get; set;}
 	public double multiple {get; set;}
+	public double up_value {get; set;}
+	public double up_multiple {get; set;}
 	public string effect_path {get; set;}
 
 	private bool disposed = false;

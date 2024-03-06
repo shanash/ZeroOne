@@ -21,22 +21,22 @@ public class BattlePcOnetimeSkillData_PhysicsDamage : BattlePcOnetimeSkillData
             var t = data.Targets[i];
             send_data.AddTarget(t);
 
-            switch (Data.multiple_type)
+            switch (GetStatMultipleType())
             {
                 case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
-                    damage_point = Data.value;
+                    damage_point = GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
-                    damage_point = send_data.Caster.Physics_Attack * Data.multiple;
+                    damage_point = send_data.Caster.Physics_Attack * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    damage_point = send_data.Caster.Physics_Defense * Data.multiple;
+                    damage_point = send_data.Caster.Physics_Defense * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    damage_point = send_data.Caster.Max_Life * Data.multiple;
+                    damage_point = send_data.Caster.Max_Life * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE:
-                    damage_point = send_data.Caster.Life * Data.multiple;
+                    damage_point = send_data.Caster.Life * GetMultiple();
                     break;
                 case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
                     Debug.Assert(false);

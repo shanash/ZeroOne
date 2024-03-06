@@ -76,9 +76,9 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
     {
         return Data.effect_path;
     }
-    public override double GetRate()
+    public override string GetIconPath()
     {
-        return Data.rate;
+        return Data.icon_path;
     }
     public override bool IsUseRepeatInterval()
     {
@@ -103,14 +103,21 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
     {
         return Data.is_overlapable;
     }
-
-    public override double GetMultipleByMultipleType()
+    public override STAT_MULTIPLE_TYPE GetStatMultipleType()
     {
-        return Data.multiple;
+        return Data.multiple_type;
     }
-    public override double GetValuesByMultipleType()
+    public override double GetRate()
     {
-        return Data.value;
+        return Data.rate + (GetSkillLevel() - 1) * Data.up_rate;
+    }
+    public override double GetMultiple()
+    {
+        return Data.multiple + (GetSkillLevel() - 1) * Data.up_multiple;
+    }
+    public override double GetValue()
+    {
+        return Data.value + (GetSkillLevel() - 1) * Data.up_value;
     }
 
     public override DURATION_CALC_RESULT_TYPE CalcDuration_V2(float dt)

@@ -44,6 +44,18 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 	double _multiple;
 
 	///	<summary>
+	///	LvUp고정
+	///	</summary>
+	public double up_value => _up_value;
+	double _up_value;
+
+	///	<summary>
+	///	LvUp배율
+	///	</summary>
+	public double up_multiple => _up_multiple;
+	double _up_multiple;
+
+	///	<summary>
 	///	이펙트 프리팹
 	///	</summary>
 	public string effect_path => _effect_path;
@@ -59,6 +71,8 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 		_multiple_type = raw_data.multiple_type;
 		_value = raw_data.value;
 		_multiple = raw_data.multiple;
+		_up_value = raw_data.up_value;
+		_up_multiple = raw_data.up_multiple;
 		_effect_path = raw_data.effect_path;
 	}
 
@@ -87,6 +101,8 @@ public class Npc_Skill_Onetime_Data : System.IDisposable
 		sb.AppendFormat("[multiple_type] = <color=yellow>{0}</color>", multiple_type).AppendLine();
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();
+		sb.AppendFormat("[up_value] = <color=yellow>{0}</color>", up_value).AppendLine();
+		sb.AppendFormat("[up_multiple] = <color=yellow>{0}</color>", up_multiple).AppendLine();
 		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
 		return sb.ToString();
 	}

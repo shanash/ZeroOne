@@ -24,6 +24,11 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
     public double Repeat_Interval { get; protected set; }
 
     /// <summary>
+    /// 스킬 레벨
+    /// </summary>
+    protected int Skill_Level;
+
+    /// <summary>
     /// 반복 주기마다 적용되는 일회성 효과
     /// </summary>
     protected List<BattleOnetimeSkillData> Repeat_Onetime_Effect_Data_List = new List<BattleOnetimeSkillData>();
@@ -39,6 +44,9 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
         Skill_Effect = null;
         Duration = 0;
         Effect_Count = 0;
+        Skill_Level = 0;
+        Repeat_Interval = 0;
+
 
         int cnt = Repeat_Onetime_Effect_Data_List.Count;
         for (int i = 0; i < cnt; i++)
@@ -58,6 +66,9 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
     {
         Skill_Effect = effect;
     }
+    public void SetSkillLevel(int lv) { Skill_Level = lv; }
+    public int GetSkillLevel() {  return Skill_Level; }
+
     public void SetBattleSendData(BATTLE_SEND_DATA data)
     {
         Send_Data = data;
@@ -71,6 +82,7 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
 
     public virtual string GetEffectPrefab() { return null; }
 
+    public virtual string GetIconPath() { return null; }
     
 
     public virtual DURATION_EFFECT_TYPE GetDurationEffectType() { return DURATION_EFFECT_TYPE.NONE; }
@@ -88,15 +100,21 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
     public virtual bool IsOverlapable() { return false; }
 
     /// <summary>
+    /// 스탯 멀티플 타입
+    /// </summary>
+    /// <returns></returns>
+    public virtual STAT_MULTIPLE_TYPE GetStatMultipleType() { return STAT_MULTIPLE_TYPE.NONE; }
+
+    /// <summary>
     /// 스탯 타입의 배율 값
     /// </summary>
     /// <returns></returns>
-    public virtual double GetMultipleByMultipleType() { return 0; }
+    public virtual double GetMultiple() { return 0; }
     /// <summary>
     /// 스탯 타입의 절대 값
     /// </summary>
     /// <returns></returns>
-    public virtual double GetValuesByMultipleType() { return 0; }
+    public virtual double GetValue() { return 0; }
 
 
     /// <summary>
@@ -192,6 +210,7 @@ public class BattleDurationSkillData : BattleDataBase, FluffyDuck.Util.Factory.I
         }
         return false;
     }
+    
 
     public virtual void ExecSkill(BATTLE_SEND_DATA data)
     {

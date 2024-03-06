@@ -115,5 +115,50 @@
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
     "action_name": "1_attack_2"
+  },
+  {
+    "npc_skill_group_id": 210001,
+    "name_kr": "일반공격",
+    "skill_use_delay": 3.5,
+    "skill_type": 1,
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_common"
+  },
+  {
+    "npc_skill_group_id": 210002,
+    "name_kr": "절망의 구슬",
+    "skill_use_delay": 4.5,
+    "skill_type": 2,
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_skill_01",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Elizabeth/SkillEffect_Elizabeth_Skill1_01_Cast"
+    ]
+  },
+  {
+    "npc_skill_group_id": 210003,
+    "name_kr": "암흑의 포식",
+    "skill_use_delay": 5.5,
+    "skill_type": 3,
+    "target_skill_id": 0,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_skill_02",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Elizabeth/SkillEffect_Elizabeth_Skill2_01_Cast"
+    ]
+  },
+  {
+    "npc_skill_group_id": 210004,
+    "name_kr": "공포의 강림",
+    "skill_use_delay": 6.5,
+    "skill_type": 4,
+    "target_skill_id": 210006,
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "action_name": "00_ultimate",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Elizabeth_Ultimate_Cast"
+    ]
   }
 ]

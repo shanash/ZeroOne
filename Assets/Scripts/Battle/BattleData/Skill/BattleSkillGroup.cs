@@ -204,6 +204,7 @@ public abstract class BattleSkillGroup : BattleDataBase
     public virtual string GetSkillIconPath() { return "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy"; }
 
     public virtual int GetSkillLevel() { return 0; }
+    public virtual void SetSkillLevel(int lv) { }
 
     public override string ToString()
     {

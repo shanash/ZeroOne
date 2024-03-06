@@ -82,6 +82,30 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 	double _rate;
 
 	///	<summary>
+	///	LvUp고정
+	///	</summary>
+	public double up_value => _up_value;
+	double _up_value;
+
+	///	<summary>
+	///	LvUp배율
+	///	</summary>
+	public double up_multiple => _up_multiple;
+	double _up_multiple;
+
+	///	<summary>
+	///	LvUp확률
+	///	</summary>
+	public double up_rate => _up_rate;
+	double _up_rate;
+
+	///	<summary>
+	///	상태이상효과 아이콘
+	///	</summary>
+	public string icon_path => _icon_path;
+	string _icon_path;
+
+	///	<summary>
 	///	이펙트 프리팹
 	///	</summary>
 	public string effect_path => _effect_path;
@@ -111,6 +135,10 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 		_value = raw_data.value;
 		_multiple = raw_data.multiple;
 		_rate = raw_data.rate;
+		_up_value = raw_data.up_value;
+		_up_multiple = raw_data.up_multiple;
+		_up_rate = raw_data.up_rate;
+		_icon_path = raw_data.icon_path;
 		_effect_path = raw_data.effect_path;
 		_is_overlapable = raw_data.is_overlapable;
 	}
@@ -165,6 +193,10 @@ public class Npc_Skill_Duration_Data : System.IDisposable
 		sb.AppendFormat("[value] = <color=yellow>{0}</color>", value).AppendLine();
 		sb.AppendFormat("[multiple] = <color=yellow>{0}</color>", multiple).AppendLine();
 		sb.AppendFormat("[rate] = <color=yellow>{0}</color>", rate).AppendLine();
+		sb.AppendFormat("[up_value] = <color=yellow>{0}</color>", up_value).AppendLine();
+		sb.AppendFormat("[up_multiple] = <color=yellow>{0}</color>", up_multiple).AppendLine();
+		sb.AppendFormat("[up_rate] = <color=yellow>{0}</color>", up_rate).AppendLine();
+		sb.AppendFormat("[icon_path] = <color=yellow>{0}</color>", icon_path).AppendLine();
 		sb.AppendFormat("[effect_path] = <color=yellow>{0}</color>", effect_path).AppendLine();
 		sb.AppendFormat("[is_overlapable] = <color=yellow>{0}</color>", is_overlapable).AppendLine();
 		return sb.ToString();

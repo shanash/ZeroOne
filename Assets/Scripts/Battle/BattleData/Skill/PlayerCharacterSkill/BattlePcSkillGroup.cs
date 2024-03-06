@@ -24,6 +24,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
         {
             var skill = skill_list[i];
             var battle_skill = FluffyDuck.Util.Factory.Instantiate<BattlePcSkillData>(skill);
+            battle_skill.SetSkillLevel(GetSkillLevel());
             Battle_Skill_Data_List.Add(battle_skill);
         }
 
