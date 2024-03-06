@@ -50,7 +50,7 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
 
         Actor = await MonoFactory.CreateAsync<ActorBase>(data.l2d_skin_path, Stage.Actor_Parent, this, data, selected_relationship, type);
 
-        if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO || type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
+        if (type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO)
         {
             GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }

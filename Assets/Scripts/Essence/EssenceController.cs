@@ -14,6 +14,9 @@ public class EssenceController : SceneControllerBase
     GameObject Effect_Node = null;
 
     [SerializeField]
+    ParticleSystem Success_Effect = null;
+
+    [SerializeField]
     SerifuBox Serifu_Box = null;
 
     List<UserL2dData> L2d_List = null;
@@ -52,6 +55,7 @@ public class EssenceController : SceneControllerBase
             return;
         }
 
+        /*
         TouchCanvas.Instance.EnableTouchEffect(false);
 
         ScreenEffectManager.I.SetShaderEffect("Shaders/Glow");
@@ -60,6 +64,7 @@ public class EssenceController : SceneControllerBase
         ScreenEffectManager.I.Shader_Material.SetFloat("_Threshold", 0.85f);
 
         ScreenEffectManager.I.ShaderEffectActive(false);
+        */
     }
 
     void PreloadCallback(int load_cnt, int total_cnt)
@@ -88,20 +93,24 @@ public class EssenceController : SceneControllerBase
 
     public void OnSuccessTransfer(TOUCH_BODY_TYPE type)
     {
-        ScreenEffectManager.I.ShaderEffectActive(true);
+        //ScreenEffectManager.I.ShaderEffectActive(true);
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
-        Effect_Node.SetActive(true);
+        //Effect_Node.SetActive(true);
+        /*
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup();
         });
+        */
+
+        Success_Effect.Play(true);
         Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
         GameData.Instance.GetUserHeroDataManager().Save();
     }
 
     public void OnCompleteTransferEssence()
     {
-        ScreenEffectManager.I.ShaderEffectActive(false);
+        //ScreenEffectManager.I.ShaderEffectActive(false);
     }
 
     public override void OnClick(UIButtonBase button)
