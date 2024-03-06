@@ -449,9 +449,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             bounding_box.GetTouchBodyType() == Essence_Success_Body
             && Essence_Success_Body != TOUCH_BODY_TYPE.NONE;
 
-        Debug.Log($"bounding_box.GetTouchBodyType() : {bounding_box.GetTouchBodyType()}");
-        Debug.Log($"Essence_Success_Body : {Essence_Success_Body}");
-
         var key = Tuple.Create(bounding_box.GetTouchBodyType(), type, is_essence_success);
 
         if (!Interaction_Bases.ContainsKey(key))

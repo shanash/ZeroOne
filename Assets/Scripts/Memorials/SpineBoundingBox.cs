@@ -60,6 +60,7 @@ public class SpineBoundingBox : MonoBehaviour, ICursorInteractable
     public TOUCH_BODY_TYPE GetTouchBodyType() { return Body_Type; }
     public TOUCH_BODY_DIRECTION GetTouchBodyDirection() { return Body_Direction; }
     public string AttachName { get { return Attach_Name; } }
+    public string GameObjectName => name;
 
     private void Start()
     {

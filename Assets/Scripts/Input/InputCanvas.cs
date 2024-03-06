@@ -321,22 +321,37 @@ namespace ZeroOne.Input
             mpos = Camera.main.ScreenToWorldPoint(mpos);
             hits = Physics2D.RaycastAll(mpos, Vector2.zero);
 
-            int hit_cnt = hits.Length;
             List<ICursorInteractable> components = new List<ICursorInteractable>();
-            for (int i = 0; i < hit_cnt; i++)
+            foreach (var hit in hits)
             {
-                // 여러개 감지해야 할 경우도 있어서 List에 담았다가 Array로 돌려줍니다
-                var hit = hits[i];
-                var b = hit.collider.gameObject.GetComponent<ICursorInteractable>();
+                var b = hit.collider.GetComponent<ICursorInteractable>();
                 if (b != null)
                 {
-                    if (!_Is_Multiple_Input)
-                    {
-                        return new ICursorInteractable[] { b };
-                    }
-
                     components.Add(b);
                 }
+            }
+
+            if (!_Is_Multiple_Input)
+            {
+                // 지금 Spine Chara 터치하는 과정에서 다른 바운딩박스들이 겹치는 문제가 있습니다
+                // 일단 "bd_part" 문자열애들을 최우선적으로 골라냅니다
+                // TODO: 뭔가 나중에 수정이 필요할 것 같습니다
+                var part_index = components.FindIndex(i_cursor => i_cursor.GameObjectName.Equals("bd_part"));
+                if (part_index >= 0)
+                {
+                    return new ICursorInteractable[] { components[part_index] };
+                }
+            }
+
+            foreach (var b in components)
+            {
+                // 여러개 감지해야 할 경우도 있어서 List에 담았다가 Array로 돌려줍니다
+                if (!_Is_Multiple_Input)
+                {
+                    return new ICursorInteractable[] { b };
+                }
+
+                components.Add(b);
             }
 
             return components.ToArray();

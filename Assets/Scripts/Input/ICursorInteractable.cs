@@ -7,7 +7,8 @@ namespace ZeroOne.Input
     /// </summary>
     public interface ICursorInteractable
     {
-        // TODO: 이 메소드를 구현할 필요 없으면 이후에 지웁시다 
+        abstract string GameObjectName { get; }
+
         virtual void OnInputDown(Vector2 position) { }
         virtual void OnInputUp(Vector2 position) { }
         virtual void OnDrag(Vector2 position) { }
