@@ -63,6 +63,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         OnSuccessTransferEssence?.Invoke(type);
     }
 
+    public void SetEssenceBodyPart(TOUCH_BODY_TYPE type = TOUCH_BODY_TYPE.NONE)
+    {
+        Actor.SetEssenceBodyPart(type);
+    }
+
     public void SetActive(bool value)
     {
         root.SetActive(value);

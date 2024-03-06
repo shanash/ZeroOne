@@ -17,6 +17,9 @@ public class EssenceController : SceneControllerBase
     ParticleSystem Success_Effect = null;
 
     [SerializeField]
+    ParticleSystem Climax_Effect = null;
+
+    [SerializeField]
     SerifuBox Serifu_Box = null;
 
     List<UserL2dData> L2d_List = null;
@@ -25,6 +28,7 @@ public class EssenceController : SceneControllerBase
 
     BattlePcData Battle_Pc_Data = null;
     LOVE_LEVEL_TYPE Selected_Relationship;
+    int Remain_Count = 0;
 
     protected override void Initialize()
     {
@@ -76,15 +80,21 @@ public class EssenceController : SceneControllerBase
         }
     }
 
-    bool OnReceiveData(BattlePcData data, int index)
+    bool OnReceiveData(BattlePcData data, int index, int remain_count_of_chance_send_essence)
     {
         Battle_Pc_Data = data;
         Selected_Relationship = (LOVE_LEVEL_TYPE)(index + 1);// 인덱스 + 1 = 실제 호감도
+        Remain_Count = remain_count_of_chance_send_essence;
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         pd.OnSuccessTransferEssence += OnSuccessTransfer;
         pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
+
+        if (Remain_Count > 0)
+        {
+            pd.SetEssenceBodyPart();
+        }
 
         GestureManager.Instance.Enable = true;
 
@@ -111,6 +121,13 @@ public class EssenceController : SceneControllerBase
     public void OnCompleteTransferEssence()
     {
         //ScreenEffectManager.I.ShaderEffectActive(false);
+        Climax_Effect.Play(true);
+
+        Remain_Count--;
+        if (Remain_Count > 0)
+        {
+            pd.SetEssenceBodyPart();
+        }
     }
 
     public override void OnClick(UIButtonBase button)

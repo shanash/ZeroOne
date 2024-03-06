@@ -106,6 +106,8 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     HeroInfoUI Info_UI = null;
 
+    int Remain_Count_Of_Chance_Sending_Essence => DATE_COUNT - Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
+
     public void SetHeroData(BattlePcData data, HeroInfoUI info_ui)
     {
         Unit_Data = data;
@@ -176,7 +178,6 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     void Refresh()
     {
-        int count_of_date = Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
         int percent = Unit_Data.User_Data.Essence_Founded_Percent;
 
         bool[] found_spot_parts = Unit_Data.User_Data.Essence_Founded_Spot_Part;
@@ -215,8 +216,8 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
         int cnt = Charge_Item.GetCount();
 
-        TransferEssence_Button.interactable = ((cnt > 0) && (DATE_COUNT > count_of_date) && (percent < 100));
-        Transfer_Resources_Value.text = $"{DATE_COUNT - count_of_date}/{DATE_COUNT}";
+        TransferEssence_Button.interactable = ((cnt > 0) && (Remain_Count_Of_Chance_Sending_Essence > 0) && (percent < 100));
+        Transfer_Resources_Value.text = $"{Remain_Count_Of_Chance_Sending_Essence}/{DATE_COUNT}";
     }
 
     public void OnClickBuffDetailButton()
@@ -286,7 +287,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
     public void OnClickTransferEssenceButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index);
+        SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index, Remain_Count_Of_Chance_Sending_Essence);
     }
 
     void OnClosedTransferEssence(params object[] param)
