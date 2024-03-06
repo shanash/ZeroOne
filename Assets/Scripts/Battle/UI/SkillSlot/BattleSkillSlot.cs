@@ -1,5 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,6 +49,8 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     UserHeroData User_Data;
     HeroBase_V2 Hero;
+
+    List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
 
     Vector2 Tooltip_Upper_Pos = new Vector2(0, 280f);
 
@@ -170,7 +173,33 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     }
     void UpdateDurationSkillIcons()
     {
+        if (Hero == null)
+        {
+            return;
+        }
         //  todo
+        ClearDurationSkillIcons();
+        var pool = GameObjectPoolManager.Instance;
+        var dur_list = Hero.GetSkillManager().GetDurationSkillDataList();
+        int cnt = dur_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode", Buff_Icon_Container);
+            var node = obj.GetComponent<BattleDurationSkillIconNode>();
+            node.SetBattleDurationSkillData(dur_list[i]);
+            Used_Duration_Skill_Icons.Add(node);
+        }
+    }
+
+    void ClearDurationSkillIcons()
+    {
+        var pool = GameObjectPoolManager.Instance;
+        int cnt = Used_Duration_Skill_Icons.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            pool.UnusedGameObject(Used_Duration_Skill_Icons[i].gameObject);
+        }
+        Used_Duration_Skill_Icons.Clear();
     }
 
     void UpdateDeath()
@@ -245,7 +274,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         Cooltime_Gauge.gameObject.SetActive(false);
 
         CustomUpdateManager.Instance.RegistCustomUpdateComponent(this);
-
     }
 
     public override void Despawned()

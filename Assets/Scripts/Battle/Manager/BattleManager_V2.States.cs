@@ -100,7 +100,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect");
+
+        //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
+        list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode");
 
 
         //  npc prefabs

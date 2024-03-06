@@ -39195,14 +39195,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6282705674960415196}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.98078537}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1861090270534086329}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.5, y: 0, z: 0}
 --- !u!114 &947216519429298459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39219,8 +39219,11 @@ MonoBehaviour:
   Effect_Type: 1
   Effect_Duration: 7
   Is_Loop: 0
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
-  Projectile_Reach_Pos_Type: 6
+  Projectile_Reach_Pos_Type: 7
   Throwing_Type: 0
   Curve: {fileID: 0}
   Start_Curve_Dist: 0
@@ -39229,6 +39232,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0

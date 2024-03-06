@@ -74036,7 +74036,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 25
+      scalar: 45
       minScalar: 2
       maxCurve:
         serializedVersion: 2
@@ -78949,7 +78949,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 14
+      scalar: 18
       minScalar: 4
       maxCurve:
         serializedVersion: 2
@@ -123204,14 +123204,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8436347516699857345}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.98078537}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4860443375408624353}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.5, y: 0, z: 0}
 --- !u!114 &2941192893093364056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123228,6 +123228,9 @@ MonoBehaviour:
   Effect_Type: 1
   Effect_Duration: 5.4
   Is_Loop: 0
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -123238,6 +123241,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -138568,7 +138572,7 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+      minColor: {r: 1, g: 1, b: 1, a: 0.47058824}
       maxColor: {r: 1, g: 1, b: 1, a: 0.11764706}
       maxGradient:
         serializedVersion: 2
@@ -138633,7 +138637,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2.4
+      scalar: 2.8
       minScalar: 0.5
       maxCurve:
         serializedVersion: 2
@@ -139017,7 +139021,7 @@ ParticleSystem:
     radiusThickness: 0.3
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 110}
+    m_Rotation: {x: 0, y: 0, z: 100}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -139097,7 +139101,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 22
+      value: 25
       mode: 0
       spread: 0
       speed:
@@ -139154,7 +139158,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 140
+      value: 160
       mode: 0
       spread: 0
       speed:
@@ -139376,8 +139380,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 7
-      repeatInterval: 0.05
+      cycleCount: 11
+      repeatInterval: 0.03
       probability: 1
   SizeModule:
     enabled: 1
@@ -158284,7 +158288,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.7
+      scalar: 0.9
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -158668,7 +158672,7 @@ ParticleSystem:
     radiusThickness: 0.3
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
-    m_Rotation: {x: 0, y: 0, z: 60}
+    m_Rotation: {x: 0, y: 0, z: 70}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
@@ -158748,7 +158752,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 20
+      value: 25
       mode: 0
       spread: 0
       speed:
@@ -158805,7 +158809,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 240
+      value: 220
       mode: 0
       spread: 0
       speed:
@@ -159027,8 +159031,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 6
-      repeatInterval: 0.06
+      cycleCount: 12
+      repeatInterval: 0.03
       probability: 1
   SizeModule:
     enabled: 0
@@ -160063,7 +160067,7 @@ ParticleSystem:
     radial:
       serializedVersion: 2
       minMaxState: 2
-      scalar: 100
+      scalar: 120
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -162067,7 +162071,7 @@ ParticleSystem:
     lifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
+      scalar: 0.4
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
