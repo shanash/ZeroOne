@@ -15,7 +15,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     const float ADDED_POS_Y = -0.75496f;
     const float ESSENCE_POS_Y = -8f;
 
-    protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.SCREEN_BASE_HEIGHT / 4;
+    protected static readonly float FACE_MOVE_MAX_DISTANCE = (float)GameDefine.RESOLUTION_SCREEN_HEIGHT / 4;
     protected const int IDLE_BASE_TRACK = 0;
     protected const int MOUTH_TRACK = 17;
     //const string FACE_BONE_NAME = "touch_center";

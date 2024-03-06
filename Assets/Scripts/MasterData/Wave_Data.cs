@@ -45,6 +45,18 @@ public class Wave_Data : System.IDisposable
 	int[] _npc_levels;
 
 	///	<summary>
+	///	NPC 스킬 레벨 정보
+	///	</summary>
+	public int[] npc_skill_levels => _npc_skill_levels;
+	int[] _npc_skill_levels;
+
+	///	<summary>
+	///	NPC 궁극기 스킬 레벨 정보
+	///	</summary>
+	public int[] npc_ultimate_skill_levels => _npc_ultimate_skill_levels;
+	int[] _npc_ultimate_skill_levels;
+
+	///	<summary>
 	///	NPC 스탯 증가 정보
 	///	</summary>
 	public int[] npc_stat_ids => _npc_stat_ids;
@@ -68,6 +80,10 @@ public class Wave_Data : System.IDisposable
 			_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
 		if(raw_data.npc_levels != null)
 			_npc_levels = raw_data.npc_levels.ToArray();
+		if(raw_data.npc_skill_levels != null)
+			_npc_skill_levels = raw_data.npc_skill_levels.ToArray();
+		if(raw_data.npc_ultimate_skill_levels != null)
+			_npc_ultimate_skill_levels = raw_data.npc_ultimate_skill_levels.ToArray();
 		if(raw_data.npc_stat_ids != null)
 			_npc_stat_ids = raw_data.npc_stat_ids.ToArray();
 		_wave_time = raw_data.wave_time;
@@ -114,6 +130,26 @@ public class Wave_Data : System.IDisposable
 			for(int i = 0; i< cnt; i++)
 			{
 				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", npc_levels[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[npc_skill_levels]");
+		if(npc_skill_levels != null)
+		{
+			cnt = npc_skill_levels.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", npc_skill_levels[i]).AppendLine();
+			}
+		}
+
+		sb.AppendLine("[npc_ultimate_skill_levels]");
+		if(npc_ultimate_skill_levels != null)
+		{
+			cnt = npc_ultimate_skill_levels.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", npc_ultimate_skill_levels[i]).AppendLine();
 			}
 		}
 

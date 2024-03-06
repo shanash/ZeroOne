@@ -12,30 +12,42 @@ public class BattleNpcData : BattleUnitData
 
     public BattleNpcData() : base(CHARACTER_TYPE.NPC) { }
 
-
+    /// <summary>
+    /// npc id, npc lv, stat id, skill lv, ultimate lv
+    /// </summary>
+    /// <param name="unit_ids"></param>
+    /// <returns></returns>
     public override BattleUnitData SetUnitID(params int[] unit_ids)
     {
-        if (unit_ids.Length != 1)
+        if (unit_ids.Length != 5)
         {
             return null;
         }
         int npc_id = unit_ids[0];
+        int lv = unit_ids[1];
+        int stat_id = unit_ids[2];
+        int skill_lv = unit_ids[3];
+        int ultimate_skill_lv = unit_ids[4];
+
         var m = MasterDataManager.Instance;
         Data = m.Get_NpcData(npc_id);
 
         Battle_Data = m.Get_NpcBattleData(Data.npc_battle_id);
-        CreateSkillManager();
+        SetLevel(lv);
+        SetStatDataID(stat_id);
+
+        CreateSkillManager(skill_lv, ultimate_skill_lv);
 
         return this;
     }
 
-    void CreateSkillManager()
+    void CreateSkillManager(int skill_lv, int ultimate_lv)
     {
         if (Skill_Mng == null)
         {
             Skill_Mng = new BattleSkillManager();
-            Skill_Mng.SetNpcSkillGroups(GetSkillPattern());
-            Skill_Mng.SetNpcSpecialSkillGroup(GetSpecialSkillID());
+            Skill_Mng.SetNpcSkillGroups(GetSkillPattern(), skill_lv);
+            Skill_Mng.SetNpcSpecialSkillGroup(GetSpecialSkillID(), ultimate_lv);
             if (Hero != null)
             {
                 Skill_Mng.SetHeroBase(Hero);
@@ -262,6 +274,8 @@ public class BattleNpcData : BattleUnitData
         }
         return null;
     }
+
+    
 
     public override int GetSpecialSkillID()
     {

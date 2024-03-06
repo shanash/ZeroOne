@@ -138,11 +138,15 @@ public class StageInfoPopup : PopupBase
             for (int e = 0; e < wave.enemy_appearance_info.Length; e++)
             {
                 int npc_id = wave.enemy_appearance_info[e];
+                int npc_lv = wave.npc_levels[e];
+                int stat_id = wave.npc_stat_ids[e];
+                int skill_lv = wave.npc_skill_levels[e];
+                int ultimate_lv = wave.npc_ultimate_skill_levels[e];
 
                 if (!npc_data_list.Exists(x => x.GetUnitID() == npc_id))
                 {
                     var new_data = new BattleNpcData();
-                    new_data.SetUnitID(npc_id);
+                    new_data.SetUnitID(npc_id, npc_lv, stat_id, skill_lv, ultimate_lv);
                     npc_data_list.Add(new_data);
                 }
             }

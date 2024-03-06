@@ -84,7 +84,7 @@ public class BattleSkillManager : BattleDataBase
     /// npc 의 스킬 패턴에 따른 스킬 그룹 추가
     /// </summary>
     /// <param name="skill_patterns"></param>
-    public void SetNpcSkillGroups(int[] skill_patterns)
+    public void SetNpcSkillGroups(int[] skill_patterns, int skill_lv)
     {
         int len = skill_patterns.Length;
         for (int i = 0; i < len; i++)
@@ -94,24 +94,25 @@ public class BattleSkillManager : BattleDataBase
             {
                 continue;
             }
-            AddNpcBattleSkillGroup(skill_group_id, i);
+            AddNpcBattleSkillGroup(skill_group_id, i, skill_lv);
         }
     }
 
-    public void SetNpcSpecialSkillGroup(int special_skill_id)
+    public void SetNpcSpecialSkillGroup(int special_skill_id, int skill_lv)
     {
         if (special_skill_id == 0)
         {
             return;
         }
-        AddNpcBattleSkillGroup(special_skill_id, 10);
+        AddNpcBattleSkillGroup(special_skill_id, 10, skill_lv);
     }
 
-    void AddNpcBattleSkillGroup(int skill_group_id, int order)
+    void AddNpcBattleSkillGroup(int skill_group_id, int order, int lv)
     {
         var grp = new BattleNpcSkillGroup();
         grp.SetSkillOrder(order);
-        grp.SetSkillGroupID(skill_group_id) ;
+        grp.SetSkillGroupID(skill_group_id);
+        grp.SetSkillLevel(lv);
         _Skill_Groups.Add(grp);
     }
 

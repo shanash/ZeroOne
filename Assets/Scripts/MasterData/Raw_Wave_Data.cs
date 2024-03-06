@@ -10,6 +10,8 @@ public class Raw_Wave_Data : System.IDisposable
 	public int enemy_appearance_count {get; set;}
 	public int[] enemy_appearance_info {get; set;}
 	public int[] npc_levels {get; set;}
+	public int[] npc_skill_levels {get; set;}
+	public int[] npc_ultimate_skill_levels {get; set;}
 	public int[] npc_stat_ids {get; set;}
 	public int wave_time {get; set;}
 

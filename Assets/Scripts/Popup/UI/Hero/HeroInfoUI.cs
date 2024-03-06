@@ -111,7 +111,7 @@ public class HeroInfoUI : PopupBase
 
     void SetRenderTextureAndCamera()
     {
-        Chara_Texture = new RenderTexture(GameDefine.SCREEN_UI_BASE_WIDTH, (int)(Screen.height * ((float)GameDefine.SCREEN_UI_BASE_WIDTH / (float)Screen.width)), 16);
+        Chara_Texture = new RenderTexture(GameDefine.RESOLUTION_SCREEN_WIDTH, (int)(Screen.height * ((float)GameDefine.RESOLUTION_SCREEN_WIDTH / (float)Screen.width)), 16);
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.fieldOfView = Camera.main.fieldOfView;
         over_cam.targetTexture = Chara_Texture;

@@ -37,7 +37,7 @@ public class TouchCanvas : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void AfterSetUp()
     {
-        Scale_Multiple_Value = ((float)Screen.height / GameDefine.SCREEN_BASE_HEIGHT);
+        Scale_Multiple_Value = ((float)Screen.height / GameDefine.RESOLUTION_SCREEN_HEIGHT);
 
         var obj = new GameObject("TouchCanvas");
         Instance = obj.AddComponent<TouchCanvas>();

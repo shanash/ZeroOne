@@ -49,6 +49,7 @@ MonoBehaviour:
   Effect_Type: 1
   Effect_Duration: 3
   Is_Loop: 0
+  Delay_Time: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -59,6 +60,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -10954,8 +10956,8 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 13
-      repeatInterval: 0.075
+      cycleCount: 19
+      repeatInterval: 0.04
       probability: 1
   SizeModule:
     enabled: 0

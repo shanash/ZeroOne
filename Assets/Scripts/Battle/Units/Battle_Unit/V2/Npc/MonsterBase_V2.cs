@@ -7,9 +7,6 @@ public class MonsterBase_V2 : HeroBase_V2
         
         Unit_Data = unit_dt;
         Unit_Data.SetHeroBase(this);
-        
-        //Skill_Mng = new BattleSkillManager();
-        //Skill_Mng.SetNpcSkillGroups(Unit_Data.GetSkillPattern());
 
     }
 
@@ -32,36 +29,5 @@ public class MonsterBase_V2 : HeroBase_V2
 
 
     #endregion
-
-    //protected override void UnitTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag(GameDefine.TAG_MONSTER))
-    //    {
-    //        var monster = other.gameObject.GetComponent<MonsterBase_V2>();
-    //        if (monster != null)
-    //        {
-    //            if (monster.Deck_Order < Deck_Order)
-    //            {
-    //                //  change reposition
-    //                Is_Reposition = true;
-    //            }
-    //        }
-    //    }
-    //}
-    //protected override void UnitTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag(GameDefine.TAG_MONSTER))
-    //    {
-    //        var monster = other.gameObject.GetComponent<MonsterBase_V2>();
-    //        if (monster != null)
-    //        {
-    //            if (monster.Deck_Order < Deck_Order)
-    //            {
-    //                //  stop reposition
-    //                Is_Reposition = false;
-    //            }
-    //        }
-    //    }
-    //}
 
 }

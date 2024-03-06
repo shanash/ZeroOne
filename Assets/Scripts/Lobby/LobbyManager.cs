@@ -88,7 +88,7 @@ public class LobbyManager : SceneControllerBase
     void InitCameraForL2dChar(CinemachineVirtualCamera camera)
     {
         var before_fov = camera.m_Lens.FieldOfView;
-        var fov = CalculateAdjustedFOVForAspectRatio(before_fov, GameDefine.SCREEN_UI_BASE_WIDTH, GameDefine.SCREEN_UI_BASE_HEIGHT);
+        var fov = CalculateAdjustedFOVForAspectRatio(before_fov, GameDefine.RESOLUTION_SCREEN_WIDTH, GameDefine.RESOLUTION_SCREEN_HEIGHT);
 
         var top = CalculateTop(camera.transform.position, before_fov, Vector3.zero);
         var m_top = CalculateTop(camera.transform.position, fov, Vector3.zero);

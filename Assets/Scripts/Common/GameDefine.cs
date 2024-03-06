@@ -97,14 +97,23 @@ public class GameDefine : MonoBehaviour
     /// </summary>
     public static readonly string DATE_FORMAT = "yyyy-MM-dd";
 
-    public static readonly int SCREEN_BASE_WIDTH = 1440;
-    public static readonly int SCREEN_BASE_HEIGHT = 1080;
-    public static readonly int SCREEN_UI_BASE_WIDTH = 1920;
-    public static readonly int SCREEN_UI_BASE_HEIGHT = 1080;
-    public static readonly Vector2 SCREEN_BASE_SIZE = new Vector2(SCREEN_BASE_WIDTH, SCREEN_BASE_HEIGHT);
+    //public static readonly int SCREEN_BASE_WIDTH = 1440;
+    //public static readonly int SCREEN_BASE_HEIGHT = 1080;
+    //public static readonly int SCREEN_UI_BASE_WIDTH = 1920;
+    //public static readonly int SCREEN_UI_BASE_HEIGHT = 1080;
+    //public static readonly Vector2 SCREEN_BASE_SIZE = new Vector2(SCREEN_BASE_WIDTH, SCREEN_BASE_HEIGHT);
 
     public static readonly string TAG_HERO = "Hero";
     public static readonly string TAG_MONSTER = "Monster";
+
+    /// <summary>
+    /// 스크린 리솔루션을 위한 기준 가로
+    /// </summary>
+    public static readonly int RESOLUTION_SCREEN_WIDTH = 2340;
+    /// <summary>
+    /// 스크린 리솔루션을 위한 기준 세로
+    /// </summary>
+    public static readonly int RESOLUTION_SCREEN_HEIGHT = 1080;
 
 
     /// <summary>
