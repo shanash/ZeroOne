@@ -22,7 +22,7 @@ namespace FluffyDuck.Util
                 hex = hex.Substring(1); // "#" 문자 제거
             }
 
-            if (hex.Length != 6)
+            if (hex.Length != 6 && hex.Length != 8)
             {
                 throw new ArgumentException("Hex color code must be 6 characters long.", nameof(hex));
             }
@@ -34,6 +34,12 @@ namespace FluffyDuck.Util
             c.r = (float)int.Parse(r, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
             c.g = (float)int.Parse(g, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
             c.b = (float)int.Parse(b, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
+
+            if (hex.Length == 8)
+            {
+                string a = hex.Substring(6, 2);
+                c.a = (float)int.Parse(a, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
+            }
             return c;
         }
     }
