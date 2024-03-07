@@ -336,7 +336,7 @@ namespace ZeroOne.Input
                 // 지금 Spine Chara 터치하는 과정에서 다른 바운딩박스들이 겹치는 문제가 있습니다
                 // 일단 "bd_part" 문자열애들을 최우선적으로 골라냅니다
                 // TODO: 뭔가 나중에 수정이 필요할 것 같습니다
-                var part_index = components.FindIndex(i_cursor => i_cursor.GameObjectName.Equals("bd_part"));
+                var part_index = components.FindIndex(i_cursor => i_cursor.GameObjectName.Contains("bd_part"));
                 if (part_index >= 0)
                 {
                     return new ICursorInteractable[] { components[part_index] };

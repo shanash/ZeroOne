@@ -17,9 +17,9 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
     public bool Is_Init => (Stage != null && Actor != null);
     public string Name => root != null ? root.name : Index.ToString();
 
-    public delegate void TransferEssenceHandler(TOUCH_BODY_TYPE type);
+    public delegate void TransferEssenceHandler(bool is_success, TOUCH_BODY_TYPE type);
 
-    public event TransferEssenceHandler OnSuccessTransferEssence;
+    public event TransferEssenceHandler OnResultTransferEssence;
     public event Action OnCompleteTransferEssence { add => Actor.OnCompleteTransferEssence += value; remove => Actor.OnCompleteTransferEssence -= value; }
     public event Action<string, float, bool> OnSendActorMessage { add => Actor.OnSendMessage += value; remove => Actor.OnSendMessage -= value; }
 
@@ -58,9 +58,9 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         ScreenEffectManager.I.SetBlockInputUI(false);
     }
 
-    public void NotifySuccessTransferEssence(TOUCH_BODY_TYPE type)
+    public void NotifyResultTransferEssence(bool is_success, TOUCH_BODY_TYPE type)
     {
-        OnSuccessTransferEssence?.Invoke(type);
+        OnResultTransferEssence?.Invoke(is_success, type);
     }
 
     public void SetEssenceBodyPart(TOUCH_BODY_TYPE type = TOUCH_BODY_TYPE.NONE)

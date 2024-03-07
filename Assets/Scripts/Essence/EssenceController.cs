@@ -1,6 +1,7 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using ZeroOne.Input;
@@ -28,6 +29,25 @@ public class EssenceController : SceneControllerBase
     BattlePcData Battle_Pc_Data = null;
     LOVE_LEVEL_TYPE Selected_Relationship;
     int Remain_Count = 0;
+
+    // TODO: 하드코딩 근원전달 강제 플로우
+    Queue<TOUCH_BODY_TYPE>[] Essence_Force_Flow = new Queue<TOUCH_BODY_TYPE>[]
+    {
+        new Queue<TOUCH_BODY_TYPE>(new List<TOUCH_BODY_TYPE> // 처음
+        {
+            TOUCH_BODY_TYPE.PART2, // 얼굴
+            TOUCH_BODY_TYPE.PART4, // 사타구니
+            TOUCH_BODY_TYPE.PART3, // 가슴
+        }),
+        new Queue<TOUCH_BODY_TYPE>(new List<TOUCH_BODY_TYPE> // 두번째
+        {
+            TOUCH_BODY_TYPE.PART1, // 머리
+            TOUCH_BODY_TYPE.PART3, // 가슴
+            TOUCH_BODY_TYPE.PART4, // 사타구니
+        })
+    };
+
+    int Essence_Force_Flow_Index { get { if (Remain_Count == 2) return 0; else if (Remain_Count == 1) return 1; return -1; }}
 
     protected override void Initialize()
     {
@@ -57,17 +77,6 @@ public class EssenceController : SceneControllerBase
             SCManager.Instance.SetCurrent(this);
             return;
         }
-
-        /*
-        TouchCanvas.Instance.EnableTouchEffect(false);
-
-        ScreenEffectManager.I.SetShaderEffect("Shaders/Glow");
-        ScreenEffectManager.I.Shader_Material.SetColor("_GlowColor", Color.red);
-        ScreenEffectManager.I.Shader_Material.SetFloat("_GlowIntensity", 1.5f);
-        ScreenEffectManager.I.Shader_Material.SetFloat("_Threshold", 0.85f);
-
-        ScreenEffectManager.I.ShaderEffectActive(false);
-        */
     }
 
     void PreloadCallback(int load_cnt, int total_cnt)
@@ -86,32 +95,42 @@ public class EssenceController : SceneControllerBase
         Remain_Count = remain_count_of_chance_send_essence;
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
-        pd.OnSuccessTransferEssence += OnSuccessTransfer;
+        pd.OnResultTransferEssence += OnResultTransferEssence;
         pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
         //TODO:하드코딩된 부분은 나중에 제외하기
+        /*
         if (Remain_Count > 0)
         {
-            pd.SetEssenceBodyPart(TOUCH_BODY_TYPE.PART3);
+            pd.SetEssenceBodyPart();
         }
+        */
 
         GestureManager.Instance.Enable = true;
 
         return true;
     }
 
-    public void OnSuccessTransfer(TOUCH_BODY_TYPE type)
+
+    public void OnResultTransferEssence(bool is_success, TOUCH_BODY_TYPE type)
     {
-        //ScreenEffectManager.I.ShaderEffectActive(true);
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
-        //Effect_Node.SetActive(true);
-        /*
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        Debug.Log($"OnResultTransferEssence : {is_success} : {type}");
+        //TODO: 원래라면 실패라서 아무것도 안하지만 M2용 근원전달 플로우를 위해서 존재하는 코드
+        if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
         {
-            popup.ShowPopup();
-        });
-        */
+            Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
+        }
+        if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
+        {
+            if (Essence_Force_Flow[Essence_Force_Flow_Index].Count == 1)
+            {
+                pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Peek());
+            }
+            return;
+        }
+
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
 
         Success_Effect.Play(true);
         Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
@@ -126,13 +145,22 @@ public class EssenceController : SceneControllerBase
 
     public void OnCompleteTransferEssence()
     {
-        //ScreenEffectManager.I.ShaderEffectActive(false);
-        Climax_Effect.Play(true);
-
-        Remain_Count--;
-        if (Remain_Count > 0)
+        // TODO: M2 근원전달 플로우를 위해서는 실패처리
+        if (Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
         {
-            pd.SetEssenceBodyPart();
+            Debug.Assert(Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0, "근원전달 플로우가 더 이상 남아있지 않는 상황 자체가 에러");
+            pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue());
+        }
+        else
+        {
+            Climax_Effect.Play(true);
+
+            Remain_Count--;
+            if (Remain_Count > 0)
+            {
+                //pd.SetEssenceBodyPart();
+                pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue());
+            }
         }
     }
 

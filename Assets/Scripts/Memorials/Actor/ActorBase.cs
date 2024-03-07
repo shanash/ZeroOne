@@ -1,5 +1,4 @@
 using Cinemachine;
-using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
@@ -311,6 +310,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     #region Gesture Callbacks
     protected virtual void OnTap(ICursorInteractable comp)
     {
+        Debug.Log($"OnTap : {comp.GameObjectName}");
         if (this == null)
         {
             RemoveGestureEventListener();
@@ -466,10 +466,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
         else if (is_essence_success)
         {
-            Producer.NotifySuccessTransferEssence(Essence_Success_Body);
             Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
             Is_Playing_Success_Transfer_Essence = true;
         }
+        Producer.NotifyResultTransferEssence(is_essence_success, bounding_box.GetTouchBodyType());
 
         return Interaction_Bases[key];
     }
