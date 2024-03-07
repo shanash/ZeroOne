@@ -255,10 +255,10 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         {
             Card.RemoveTouchEventCallback(TouchEventCallback);
         }
-        if (Hero != null)
-        {
-            Hero.Slot_Events -= SkillSlotEventCallback;
-        }
+        //if (Hero != null)
+        //{
+        //    Hero.Slot_Events -= SkillSlotEventCallback;
+        //}
     }
 
     public override void Spawned()

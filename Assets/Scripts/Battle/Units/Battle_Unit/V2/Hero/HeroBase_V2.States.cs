@@ -58,7 +58,8 @@ public partial class HeroBase_V2 : UnitBase_V2
 
     public override void UnitStateReadyBegin()
     {
-        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT);
+        //Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT);
+        SendSlotEvent(SKILL_SLOT_EVENT_TYPE.COOLTIME_INIT);
         
     }
     public override void UnitStateReady()
@@ -264,7 +265,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         RemoveLifeBar();
         ClearDurationSkillDataList();
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.DEATH_01);
-        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DEATH);
+        //Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.DEATH);
+        SendSlotEvent(SKILL_SLOT_EVENT_TYPE.DEATH);
     }
 
     public override void UnitStateWinBegin()

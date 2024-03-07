@@ -176,7 +176,7 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void LeftTeamPosition()
     {
-        float field_size = 13f;
+        float field_size = 14f;
         //  front
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
@@ -244,7 +244,7 @@ public partial class TeamManager_V2 : IDisposable
     /// </summary>
     void RightTeamPosition()
     {
-        float field_size = 13f;
+        float field_size = 14f;
         //  front
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
@@ -483,7 +483,7 @@ public partial class TeamManager_V2 : IDisposable
             var member = member_list[i];
             if (!targets.Contains(member))
             {
-                member.SetAlphaAnimation(0f, 0.5f, true);
+                member.SetAlphaAnimation(0f, 0.3f, true);
             }
         }
     }
@@ -502,7 +502,7 @@ public partial class TeamManager_V2 : IDisposable
             var member = member_list[i];
             if (!targets.Contains(member))
             {
-                member.SetAlphaAnimation(1f, 0.5f, false);
+                member.SetAlphaAnimation(1f, 0.3f, true);
             }
         }
     }
@@ -515,7 +515,19 @@ public partial class TeamManager_V2 : IDisposable
         int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            member_list[i].SetAlphaAnimation(1f, 0.5f, false);
+            member_list[i].SetAlphaAnimation(1f, 0.3f, true);
+        }
+    }
+    /// <summary>
+    /// 모든 유닛 숨김
+    /// </summary>
+    public void HideAllUnits()
+    {
+        var member_list = GetMembers();
+        int cnt = member_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            member_list[i].SetAlphaAnimation(0f, 0.3f, true);
         }
     }
 

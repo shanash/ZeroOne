@@ -434,6 +434,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         var win_team = FindTeamManager(TEAM_TYPE.LEFT);
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
+        win_team.HideAllUnits();
         UI_Mng.ShowBattleUI(false);
         Game_Over_Delta = 1f;
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
@@ -455,6 +456,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         var win_team = FindTeamManager(TEAM_TYPE.RIGHT);
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
+        win_team.HideAllUnits();
 
         Game_Over_Delta = 1f;
         UI_Mng.ShowBattleUI(false);
@@ -478,6 +480,11 @@ public partial class BattleManager_V2 : SceneControllerBase
         GetEffectFactory().ClearAllEffects();
         //  동작 정지
         TeamMembersChangeState(UNIT_STATES.TIME_OUT);
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].HideAllUnits();
+        }
         
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/TimeOutInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {

@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Bibliography;
 using FluffyDuck.Util;
 using LitJson;
 using System;
@@ -309,13 +310,65 @@ public class UserChargeItemData : UserDataBase
     /// 반복 주기 체크(n일)
     /// </summary>
     RESPONSE_TYPE CheckDays() 
-    { 
+    {
+        RESPONSE_TYPE code = RESPONSE_TYPE.NOT_WORK;
         if (Schedule == null)
         {
-            return RESPONSE_TYPE.NOT_WORK;
+            //  not work
+            return code;
+        }
+        
+        if (!IsOpenSchedule())
+        {
+            return code;
         }
 
-        return RESPONSE_TYPE.NOT_WORK; 
+        int now_count = GetCount();
+        if (GetMaxBound() != 0 && now_count > GetMaxBound())
+        {
+            //  not work
+            return code;
+        }
+
+        var now = DateTime.Now.ToLocalTime();
+        var last_dt = GetLastUseDateTime();
+        if (last_dt == DateTime.MinValue)
+        {
+            Last_Used_Date = now;
+            Last_Used_Dt = Last_Used_Date.ToString(GameDefine.DATE_TIME_FORMAT);
+            Is_Update_Data = true;
+            return RESPONSE_TYPE.SUCCESS;
+        }
+
+        if (last_dt.Date < now.Date)
+        {
+            var open_time = TimeSpan.Parse(Schedule.time_open);
+            //  마지막 접속 시간을 기준으로 익일 새벽 시간을 찾는다.
+            var refresh_dt = last_dt.Date.Add(open_time);
+            if (refresh_dt <= last_dt)
+            {
+                refresh_dt = refresh_dt.AddDays(1);
+            }
+
+            //  현재 접속 시간과 갱신 시간을 체크해서, 현재 시간이 갱신 시간을 넘었을 경우 갱신 해줌
+            if (now >= refresh_dt)
+            {
+                //  갱신일이 아니라면 갱신하지 않음
+                if (!IsExistDayOfWeeks((int)refresh_dt.DayOfWeek))
+                {
+                    return RESPONSE_TYPE.NOT_WORK;
+                }
+
+                var max_data = MasterDataManager.Instance.Get_MaxBoundInfoData(Charge_Item_Type);
+                Count.Set((int)max_data.base_max);
+                Last_Used_Date = DateTime.MinValue;
+                Last_Used_Dt = string.Empty;
+                Is_Update_Data = true;
+                code = RESPONSE_TYPE.SUCCESS;
+            }
+        }
+        
+        return code; 
     }
     /// <summary>
     /// 반복 주기 체크(n주간)
@@ -330,6 +383,43 @@ public class UserChargeItemData : UserDataBase
     /// </summary>
     RESPONSE_TYPE CheckYears() { return RESPONSE_TYPE.NOT_WORK; }
 
+    /// <summary>
+    /// 해당 요일이 갱신 지정일로 정해져 있는지 여부 반환
+    /// </summary>
+    /// <param name="day_of_week"></param>
+    /// <returns></returns>
+    bool IsExistDayOfWeeks(int day_of_week)
+    {
+        bool is_exist = false;
+        for (int i = 0; i < Schedule.day_of_weeks.Length; i++)
+        {
+            if (Schedule.day_of_weeks[i] == day_of_week)
+            {
+                is_exist = true;
+                break;
+            }
+        }
+        return is_exist;
+    }
+    /// <summary>
+    /// 해당 스케쥴 시간이 오픈된 시간인지 여부 체크<br/>
+    /// 스케쥴 ID가 없을 경우 항상 오픈
+    /// </summary>
+    /// <returns></returns>
+    bool IsOpenSchedule()
+    {
+        if (Schedule != null)
+        {
+            var begin_dt = DateTime.Parse(Schedule.date_start);
+            var end_dt = DateTime.Parse(Schedule.date_end);
+            var now = DateTime.Now.ToLocalTime();
+            if (begin_dt > now || now > end_dt)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public override JsonData Serialized()
     {

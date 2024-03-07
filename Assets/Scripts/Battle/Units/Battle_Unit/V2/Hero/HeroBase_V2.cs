@@ -462,10 +462,8 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         float per = (float)(Life / Max_Life);
         Life_Bar_V2?.SetLifePercent(per);
-        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
+        SendSlotEvent(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
-
-
 
 
     /// <summary>
@@ -658,7 +656,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         ShadowAlphaAnimation(alpha, dur);
         if (alpha == 0f)
         {
-            Life_Bar_V2.HideLifeBar();
+            Life_Bar_V2?.HideLifeBar();
         }
     }
     /// <summary>
@@ -1124,15 +1122,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected override void OnPause()
     {
-        var all_tracks = FindAllTrakcs();
-        if (all_tracks != null)
-        {
-            int len = all_tracks.Length;
-            for (int i = 0; i < len; i++)
-            {
-                all_tracks[i].TimeScale = 0f;
-            }
-        }
+        //var all_tracks = FindAllTrakcs();
+        //if (all_tracks != null)
+        //{
+        //    int len = all_tracks.Length;
+        //    for (int i = 0; i < len; i++)
+        //    {
+        //        all_tracks[i].TimeScale = 0f;
+        //    }
+        //}
+        Skeleton.timeScale = 0f;
     }
     /// <summary>
     /// 현재 일시정지 중인 애니메이션을 재생<br/>
@@ -1140,18 +1139,19 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected override void OnResume()
     {
-        var all_tracks = FindAllTrakcs();
-        if (all_tracks != null)
-        {
-            int len = all_tracks.Length;
-            for (int i = 0; i < len; i++)
-            {
-                var track = all_tracks[i];
-                if (track == null)
-                    continue;
-                track.TimeScale = Battle_Speed_Multiple;
-            }
-        }
+        //var all_tracks = FindAllTrakcs();
+        //if (all_tracks != null)
+        //{
+        //    int len = all_tracks.Length;
+        //    for (int i = 0; i < len; i++)
+        //    {
+        //        var track = all_tracks[i];
+        //        if (track == null)
+        //            continue;
+        //        track.TimeScale = Battle_Speed_Multiple;
+        //    }
+        //}
+        Skeleton.timeScale = Battle_Speed_Multiple;
     }
     /// <summary>
     /// 지속성 스킬 효과 데이터를 모두 제거<br/>
@@ -1159,18 +1159,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected void ClearDurationSkillDataList()
     {
-        //lock (Duration_Lock)
-        //{
-        //    int cnt = Used_Battle_Duration_Data_List.Count;
-        //    for (int i = 0; i < cnt; i++)
-        //    {
-        //        var duration = Used_Battle_Duration_Data_List[i];
-        //        duration.Dispose();
-        //    }
-        //    Used_Battle_Duration_Data_List.Clear();
-        //}
         GetSkillManager().ClearDurationSkillDataList();
-
     }
 
     public override void Spawned()
@@ -1183,10 +1172,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
         }
-        if (Render_Texture.quad != null)
-        {
+        //if (Render_Texture.quad != null)
+        //{
 
-        }
+        //}
 
         if (Utility == null)
         {
@@ -1354,7 +1343,8 @@ public partial class HeroBase_V2 : UnitBase_V2
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
         UpdateLifeBar();
 
-        Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
+        //Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
+        SendSlotEvent(SKILL_SLOT_EVENT_TYPE.HITTED);
     }
     /// <summary>
     /// 체력 회복
