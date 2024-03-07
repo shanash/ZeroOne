@@ -154,19 +154,28 @@ public class EssenceController : SceneControllerBase
     public void OnResultTransferEssence(bool is_success, TOUCH_BODY_TYPE type)
     {
         Debug.Log($"OnResultTransferEssence : {is_success} : {type}");
+
         //TODO: 원래라면 실패라서 아무것도 안하지만 M2용 근원전달 플로우를 위해서 존재하는 코드
-        if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
+        if (Remain_Count > 0)
         {
-            Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
-            StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3));
+            if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
+            {
+                Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
+                StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3));
+            }
+
+            if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
+            {
+                if (Essence_Force_Flow[Essence_Force_Flow_Index].Count == 1)
+                {
+                    pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Peek());
+                }
+                return;
+            }
         }
 
-        if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
+        if (!is_success)
         {
-            if (Essence_Force_Flow[Essence_Force_Flow_Index].Count == 1)
-            {
-                pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Peek());
-            }
             return;
         }
 
