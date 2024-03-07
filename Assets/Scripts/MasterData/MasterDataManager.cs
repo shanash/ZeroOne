@@ -893,6 +893,20 @@ public class MasterDataManager : BaseMasterDataManager
 
         return list;
     }
+
+    public void Sum_EssenceStatusList(List<Essence_Status_Data> list, out int add_phy_atk, out int add_mag_atk, out int add_phy_def, out int add_mag_def, out int add_hp)
+    {
+        add_phy_atk = add_mag_atk = add_phy_def = add_mag_def = add_hp = 0;
+
+        foreach (var data in list)
+        {
+            add_phy_atk += data.add_atk;
+            add_mag_atk += data.add_matk;
+            add_phy_def += data.add_def;
+            add_mag_def += data.add_mdef;
+            add_hp += data.add_hp;
+        }
+    }
     #endregion
 
 

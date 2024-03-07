@@ -135,17 +135,21 @@ public class HeroInfoBoxBasic : MonoBehaviour
         {
             List<StatusItemData> status_list = new List<StatusItemData>
             {
-                new StatusItemData(ConstString.Hero.COMBAT_POWER, Unit_Data.GetCombatPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.LIFE_POINT, Unit_Data.GetMaxLifePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ATTACK_DAMAGE, Unit_Data.GetPhysicsAttackPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.MAGIC_DAMAGE, Unit_Data.GetMagicAttackPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ATTACK_DEFENSE, Unit_Data.GetPhysicsDefensePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.MAGIC_DEFENSE, Unit_Data.GetMagicDefensePoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.APPROACH_DISTANCE, Unit_Data.GetApproachDistance().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ATTACK_RECOVERY, Unit_Data.GetAttackLifeRecovery().ToPercentage()),
-                new StatusItemData(ConstString.Hero.EVASION_POINT, Unit_Data.GetEvasionPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.ACCURACY_POINT, Unit_Data.GetAccuracyPoint().ToString("N0")),
-                new StatusItemData(ConstString.Hero.AUTO_RECORVERY, Unit_Data.GetAutoRecoveryLife().ToPercentage())
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_battlepower"), Unit_Data.GetCombatPoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_life"), Unit_Data.GetMaxLifePoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_physics_attack"), Unit_Data.GetPhysicsAttackPoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_magic_attack"), Unit_Data.GetMagicAttackPoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_physics_defence"), Unit_Data.GetPhysicsDefensePoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_magic_defence"), Unit_Data.GetMagicDefensePoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_physics_critical_chance"), Unit_Data.GetPhysicsCriticalChance().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_magic_critical_chance"), Unit_Data.GetMagicCriticalChance().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_physics_critical_power_add"), Unit_Data.GetPhysicsCriticalPowerAdd().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_magic_critical_power_add"), Unit_Data.GetMagicCriticalPowerAdd().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_attack_life_recovery"), Unit_Data.GetAttackLifeRecovery().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_evasion"), Unit_Data.GetEvasionPoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_accuracy"), Unit_Data.GetAccuracyPoint().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_heal"), Unit_Data.GetLifeRecoveryInc().ToString("N0")),
+                new StatusItemData(GameDefine.GetLocalizeString("system_stat_resist"), Unit_Data.GetResistPoint().ToString("N0"))
             };
 
             popup.ShowPopup(ConstString.StatusPopup.ABILITY_TITLE, status_list, 0);

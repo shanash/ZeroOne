@@ -11,6 +11,23 @@ public class BattlePcData : BattleUnitData
 
     protected override int Level { get => User_Data.GetLevel(); set { } }
 
+    protected int _Essence_Founded_Percent = 0;
+    protected int Essence_Founded_Percent
+    {
+        get
+        {
+            Update_Essence_Added_Stat();
+            return _Essence_Founded_Percent;
+        }
+    }
+
+    protected int Essence_Add_PhysicsAttackPoint { get; set; } = 0;
+    protected int Essence_Add_MagicAttackPoint { get; set; } = 0;
+    protected int Essence_Add_PhysicsDefensePoint { get; set; } = 0;
+    protected int Essence_Add_MagicDefensePoint { get; set; } = 0;
+    protected int Essence_Add_LifePoint { get; set; } = 0;
+
+
     public BattlePcData() : base(CHARACTER_TYPE.PC) { }
 
     public override BattleUnitData SetUnitID(params int[] unit_ids)
@@ -25,6 +42,10 @@ public class BattlePcData : BattleUnitData
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
         CheckStatData();
         CreateSkillManager();
+
+        Init_Essence_Added_Stat();
+        Update_Essence_Added_Stat();
+
         return this;
     }
 
@@ -39,6 +60,43 @@ public class BattlePcData : BattleUnitData
             {
                 Skill_Mng.SetHeroBase(Hero);
             }
+        }
+    }
+
+    void Init_Essence_Added_Stat()
+    {
+        _Essence_Founded_Percent = 0;
+        Essence_Add_PhysicsAttackPoint = 0;
+        Essence_Add_MagicAttackPoint = 0;
+        Essence_Add_PhysicsDefensePoint = 0;
+        Essence_Add_MagicDefensePoint = 0;
+        Essence_Add_LifePoint = 0;
+    }
+
+    void Update_Essence_Added_Stat()
+    {
+        if (_Essence_Founded_Percent > User_Data.Essence_Founded_Percent)
+        {
+            Init_Essence_Added_Stat();
+        }
+
+        if (!User_Data.Essence_Founded_Percent.Equals(_Essence_Founded_Percent))
+        {
+            var list = MasterDataManager.Instance.Get_EssenceStatusDataRange(_Essence_Founded_Percent + 1, User_Data.Essence_Founded_Percent);
+            MasterDataManager.Instance.Sum_EssenceStatusList(list, out int add_phy_atk, out int add_mag_atk, out int add_phy_def, out int add_mag_def, out int add_hp);
+            Essence_Add_PhysicsAttackPoint += add_phy_atk;
+            Essence_Add_MagicAttackPoint += add_mag_atk;
+            Essence_Add_PhysicsDefensePoint += add_phy_def;
+            Essence_Add_MagicDefensePoint += add_mag_def;
+            Essence_Add_LifePoint += add_hp;
+
+            UnityEngine.Debug.Log($"Essence_Add_PhysicsAttackPoint : {Essence_Add_PhysicsAttackPoint}");
+            UnityEngine.Debug.Log($"Essence_Add_MagicAttackPoint : {Essence_Add_MagicAttackPoint}");
+            UnityEngine.Debug.Log($"Essence_Add_PhysicsDefensePoint : {Essence_Add_PhysicsDefensePoint}");
+            UnityEngine.Debug.Log($"Essence_Add_MagicDefensePoint : {Essence_Add_MagicDefensePoint}");
+            UnityEngine.Debug.Log($"Essence_Add_LifePoint : {Essence_Add_LifePoint}");
+
+            _Essence_Founded_Percent = User_Data.Essence_Founded_Percent;
         }
     }
 
@@ -156,6 +214,7 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * team_synergy_inc;
             }
+
             //  지속성 효과 (공격력 증가/감소)
             double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP);
             double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN);
@@ -163,6 +222,9 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            // 근원전달 포인트 추가
+            point += Essence_Add_PhysicsAttackPoint;
 
             return point;
         }
@@ -189,6 +251,9 @@ public class BattlePcData : BattleUnitData
                 point += point * (dur_inc - dur_dec);
             }
 
+            // 근원전달 포인트 추가
+            point += Essence_Add_MagicAttackPoint;
+
             return point;
         }
         return 0;
@@ -207,6 +272,10 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            // 근원전달 포인트 추가
+            point += Essence_Add_PhysicsDefensePoint;
+
             return point;
         }
         return 0;
@@ -225,6 +294,10 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            // 근원전달 포인트 추가
+            point += Essence_Add_MagicDefensePoint;
+
             return point;
         }
         return 0;

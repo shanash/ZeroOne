@@ -74,7 +74,6 @@ public class HeroListUI : PopupBase
             var battle_pc_data = new BattlePcData();
             battle_pc_data.SetUnitID(data.GetPlayerCharacterID(), data.Player_Character_Num);
 
-            GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(battle_pc_data.User_Data.GetPlayerCharacterID(), battle_pc_data.User_Data.Player_Character_Num);
             Battle_Pc_Data.Add(battle_pc_data);
         }
 
