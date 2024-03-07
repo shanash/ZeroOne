@@ -469,8 +469,7 @@ public class UserBossStageDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
-
+        var json = base.Serialized();
 
         json[NODE_ENTRANCE_COUNT] = GetCount();
         if (!string.IsNullOrEmpty(Last_Used_Dt))
@@ -503,10 +502,11 @@ public class UserBossStageDataManager : ManagerBase
     }
     public override bool Deserialized(JsonData json)
     {
-        if (json == null)
+        if (!base.Deserialized(json))
         {
             return false;
         }
+
         InitDungeonData();
 
         if (json.ContainsKey(NODE_ENTRANCE_COUNT))

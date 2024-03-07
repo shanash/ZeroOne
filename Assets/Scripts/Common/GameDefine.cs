@@ -173,9 +173,15 @@ public class GameDefine : MonoBehaviour
 
         string find_string = string.Empty;
         var m = MasterDataManager.Instance;
+        if (m == null)
+        {
+            return string.Empty;
+        }
+
         if (table_name.Equals("system"))
         {
             var lang_data = m.Get_SystemLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -192,6 +198,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("character") || table_name.Equals("monster"))
         {
             var lang_data = m.Get_CharacterLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -208,6 +215,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("skill"))
         {
             var lang_data = m.Get_SkillLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -224,6 +232,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("item"))
         {
             var lang_data = m.Get_ItemLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -240,6 +249,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("dialog"))
         {
             var lang_data = m.Get_DialogLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -256,6 +266,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("story"))
         {
             var lang_data = m.Get_StoryLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;
@@ -272,6 +283,7 @@ public class GameDefine : MonoBehaviour
         else if (table_name.Equals("voice"))
         {
             var lang_data = m.Get_VoiceLangData(str_id);
+            if (lang_data == null) return str_id;
             if (lang == SystemLanguage.Korean)
             {
                 find_string = lang_data.kor;

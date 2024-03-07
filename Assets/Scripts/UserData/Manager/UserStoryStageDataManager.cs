@@ -292,7 +292,7 @@ public class UserStoryStageDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new LitJson.JsonData();
+        var json = base.Serialized();
         json[NODE_CURRENT_WORLD_ID] = Current_World_ID;
         json[NODE_CURRENT_ZONE_ID] = Current_Zone_ID;
 
@@ -323,10 +323,11 @@ public class UserStoryStageDataManager : ManagerBase
 
     public override bool Deserialized(JsonData json)
     {
-        if (json == null)
+        if (!base.Deserialized(json))
         {
             return false;
         }
+
         if (json.ContainsKey(NODE_CURRENT_WORLD_ID))
         {
             int world_id = ParseInt(json, NODE_CURRENT_WORLD_ID);

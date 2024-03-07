@@ -212,8 +212,7 @@ namespace FluffyDuck.UI
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        [Obsolete]
-        public PopupBase Add(string path)
+        public PopupBase AddFromResources(string path)
         {
             PopupBase popup = null;
 

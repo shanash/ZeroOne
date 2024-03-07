@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ public class UserChargeItemDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
+        var json = base.Serialized();
 
         var arr = new JsonData();
 
@@ -103,7 +104,10 @@ public class UserChargeItemDataManager : ManagerBase
     }
     public override bool Deserialized(JsonData json)
     {
-        if (json == null) return false;
+        if (!base.Deserialized(json))
+        {
+            return false;
+        }
 
         if (json.ContainsKey(NODE_CHARGE_ITEM_DATA_LIST))
         {

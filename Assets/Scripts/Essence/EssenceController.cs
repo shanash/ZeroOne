@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ using ZeroOne.Input;
 
 public class EssenceController : SceneControllerBase
 {
+    [SerializeField, Tooltip("애니메이션 재생시에 안보이게 가릴 UI")]
+    CanvasGroup HideableUI = null;
+
     [SerializeField, Tooltip("성공 파티클")]
     ParticleSystem Success_Effect = null;
 
@@ -33,6 +37,7 @@ public class EssenceController : SceneControllerBase
     BattlePcData Battle_Pc_Data = null;
     LOVE_LEVEL_TYPE Selected_Relationship;
     int Remain_Count = 0;
+    private CancellationTokenSource Token_MoveToTargetAlpha = null;
 
     // TODO: 하드코딩 근원전달 강제 플로우
     Queue<TOUCH_BODY_TYPE>[] Essence_Force_Flow = new Queue<TOUCH_BODY_TYPE>[]
@@ -164,7 +169,10 @@ public class EssenceController : SceneControllerBase
             if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
             {
                 Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
-                _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3);
+                if (!is_success)
+                {
+                    _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3);
+                }
             }
 
             if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
@@ -181,6 +189,11 @@ public class EssenceController : SceneControllerBase
         {
             return;
         }
+
+        Token_MoveToTargetAlpha?.Cancel();
+        Token_MoveToTargetAlpha = new CancellationTokenSource();
+
+        MoveToTargetAlpha(Token_MoveToTargetAlpha.Token, HideableUI, 0).Forget();
 
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/success");
 
@@ -204,10 +217,18 @@ public class EssenceController : SceneControllerBase
         Remain_Count--;
         if (Remain_Count > 0)
         {
-            _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
+            _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3);
+            MoveToTargetAlpha(Token_MoveToTargetAlpha.Token, HideableUI, 1).Forget();
+        }
+        else
+        {
+            Essence_Charge.gameObject.SetActive(false);
         }
 
         _ = BlockInputWhenEndingClimaxEffect();
+
+        Token_MoveToTargetAlpha?.Cancel();
+        Token_MoveToTargetAlpha = new CancellationTokenSource();
     }
 
     async UniTask BlockInputWhenEndingClimaxEffect()
@@ -222,6 +243,36 @@ public class EssenceController : SceneControllerBase
         {
             ChangeScene(SceneName.home, Battle_Pc_Data);
         }
+        else
+        {
+            _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
+        }
+    }
+
+    //static int index = 0;
+
+    async UniTaskVoid MoveToTargetAlpha(CancellationToken token, CanvasGroup canvas_group, float target_alpha, float duraion = 0.3f)
+    {
+        //int local_index = index;
+        //index++;
+        //Debug.Log($"MoveToTargetAlpha{local_index} Start : {target_alpha}".WithColorTag(Color.white));
+        float origin_alpha = canvas_group.alpha;
+        float elapsed_time = 0.0f;
+        float gap = target_alpha - origin_alpha;
+        while (elapsed_time < duraion)
+        {
+            await UniTask.Yield();
+            if (token.IsCancellationRequested)
+            {
+                break;
+            }
+
+            elapsed_time += Time.deltaTime;
+            canvas_group.alpha = origin_alpha + gap * (elapsed_time / duraion);
+            //Debug.Log($"MoveToTargetAlpha{local_index} Time {elapsed_time} SetAlpha {canvas_group.alpha}".WithColorTag(Color.white));
+        }
+        canvas_group.alpha = target_alpha;
+        //Debug.Log($"MoveToTargetAlpha{local_index} End".WithColorTag(Color.white));
     }
 
     public override void OnClick(UIButtonBase button)

@@ -16,6 +16,7 @@ public class GameData : Singleton<GameData>
 
     void InitGameData()
     {
+        bool is_need_recharge_essence_point = false;
         //  player data
         {
             var mng = new UserPlayerInfoDataManager(USER_DATA_MANAGER_TYPE.USER_PLAYER_INFO_DATA_MANAGER);
@@ -52,8 +53,15 @@ public class GameData : Singleton<GameData>
             {
                 mng.InitDataManager();
             }
+            mng.Save(); 
+
             User_Data_Manager_List.Add(mng);
-        }
+
+            if (CommonUtils.DidPassTime(CommonUtils.GetDateTime(mng.Last_Saved_Unix_Time_Seconds, 9), 5))
+            {
+                is_need_recharge_essence_point = true;
+            }
+}
 
         //  hero skill data
         {
@@ -73,6 +81,11 @@ public class GameData : Singleton<GameData>
                 mng.InitDataManager();
             }
             User_Data_Manager_List.Add(mng);
+
+            if (CommonUtils.DidPassTime(CommonUtils.GetDateTime(mng.Last_Saved_Unix_Time_Seconds, 9), 5))
+            {
+                is_need_recharge_essence_point = true;
+            }
         }
 
         //  hero deck mount data
@@ -123,6 +136,28 @@ public class GameData : Singleton<GameData>
             }
             User_Data_Manager_List.Add(mng);
         }
+
+        // 근원전달 재화 충전 및 캐릭터별 찬스 리셋
+        if (is_need_recharge_essence_point)
+        {
+            RechargeEssencePoint();
+        }
+    }
+
+    public void RechargeEssencePoint()
+    {
+        var hero_mng = GetUserHeroDataManager();
+        var hero_list = hero_mng.GetUserHeroDataList();
+        for (int i = 0; i < hero_list.Count; i++)
+        {
+            var hero = hero_list[i];
+            hero.ResetSendedEssenceCount();
+        }
+        hero_mng.Save();
+
+        var charge_item = GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+        charge_item.FullChargeItem();
+        GetUserChargeItemDataManager().Save();
     }
 
     T FindUserDataManager<T>(USER_DATA_MANAGER_TYPE utype) where T : ManagerBase

@@ -64,7 +64,7 @@ public class UserPlayerInfoDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
+        var json = base.Serialized();
 
         var arr = new JsonData();
         int cnt = User_Player_Info_Data_List.Count;
@@ -91,10 +91,11 @@ public class UserPlayerInfoDataManager : ManagerBase
     }
     public override bool Deserialized(JsonData json)
     {
-        if (json == null)
+        if (!base.Deserialized(json))
         {
             return false;
         }
+
 
         if (json.ContainsKey(NODE_PLAYER_INFO_DATA_LIST))
         {

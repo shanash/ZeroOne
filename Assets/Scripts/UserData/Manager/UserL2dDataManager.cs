@@ -244,7 +244,7 @@ public class UserL2dDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
+        var json = base.Serialized();
 
         var arr = new JsonData();
         int cnt = User_L2d_Data_List.Count;
@@ -271,8 +271,10 @@ public class UserL2dDataManager : ManagerBase
 
     public override bool Deserialized(JsonData json)
     {
-        if (json == null)
+        if (!base.Deserialized(json))
+        {
             return false;
+        }
 
         if (json.ContainsKey(NODE_MEMORIAL_DATA_LIST))
         {

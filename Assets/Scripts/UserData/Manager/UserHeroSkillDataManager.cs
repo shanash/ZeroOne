@@ -105,7 +105,7 @@ public class UserHeroSkillDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
+        var json = base.Serialized();
 
         var arr = new JsonData();
         int cnt = User_Hero_Skill_Data_List.Count;
@@ -132,7 +132,10 @@ public class UserHeroSkillDataManager : ManagerBase
     }
     public override bool Deserialized(JsonData json)
     {
-        if (json == null) return false;
+        if (!base.Deserialized(json))
+        {
+            return false;
+        }
 
         if (json.ContainsKey(NODE_HERO_SKILL_DATA_LIST))
         {

@@ -54,7 +54,6 @@ public class SceneLoadingPopup : PopupBase
 
     public void SetProgressCallback(float progress)
     {
-        Debug.Log($"SetProgressCallback => {progress * 100f}");
         Loading_Gauge.value = Mathf.Clamp01(progress);
     }
 }

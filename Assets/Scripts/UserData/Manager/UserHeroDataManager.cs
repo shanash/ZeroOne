@@ -117,9 +117,9 @@ public class UserHeroDataManager : ManagerBase
         return hero;
     }
 
-    public override LitJson.JsonData Serialized()
+    public override JsonData Serialized()
     {
-        var json = new LitJson.JsonData();
+        var json = base.Serialized();
 
         var arr = new LitJson.JsonData();
 
@@ -148,10 +148,11 @@ public class UserHeroDataManager : ManagerBase
 
     public override bool Deserialized(JsonData json)
     {
-        if (json == null)
+        if (!base.Deserialized(json))
         {
             return false;
         }
+
         if (json.ContainsKey(NODE_HERO_DATA_LIST))
         {
             var arr = json[NODE_HERO_DATA_LIST];

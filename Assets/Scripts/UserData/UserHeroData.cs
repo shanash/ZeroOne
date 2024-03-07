@@ -6,6 +6,7 @@ using Spine;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Linq;
+using LitJson;
 
 public class UserHeroData : UserDataBase
 {
@@ -936,7 +937,7 @@ public class UserHeroData : UserDataBase
         return clone;
     }
 
-    public override LitJson.JsonData Serialized()
+    public override JsonData Serialized()
     {
         //if (!IsUpdateData())
         //{

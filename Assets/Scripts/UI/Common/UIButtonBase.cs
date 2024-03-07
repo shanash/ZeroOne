@@ -16,6 +16,16 @@ public class UIButtonBase : Selectable, IPointerClickHandler
     protected UIButtonEvent OnClick = new UIButtonEvent();
 
 
+    public void AddClickListener(UnityAction<UIButtonBase> listener)
+    {
+        OnClick.AddListener(listener);
+    }
+
+    public void RemoveClickListener(UnityAction<UIButtonBase> listener)
+    {
+        OnClick.RemoveListener(listener);
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!interactable)

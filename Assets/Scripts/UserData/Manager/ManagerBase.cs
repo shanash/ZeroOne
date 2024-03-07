@@ -31,6 +31,7 @@ public class ManagerBase : IDisposable
     /// 어쩌면 실시간으로 갱신 정보를 서버와 통신할 수 있기 때문에 사용하지 않을 수도 있음.
     /// </summary>
     protected bool Is_Update_Data;
+    public long Last_Saved_Unix_Time_Seconds { get; private set; }
 
     protected USER_DATA_MANAGER_TYPE Manager_Type = USER_DATA_MANAGER_TYPE.NONE;
 
@@ -84,8 +85,28 @@ public class ManagerBase : IDisposable
 
     public USER_DATA_MANAGER_TYPE GetManagerType() { return Manager_Type; }
 
-    public virtual LitJson.JsonData Serialized() { return null; }
-    public virtual bool Deserialized(LitJson.JsonData json) { return false; }
+    public virtual JsonData Serialized()
+    {
+        var json = new JsonData();
+
+        // UNIX 타임스탬프 기록
+        json[NODE_TIMESTAMP] = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+
+        return json;
+    }
+    public virtual bool Deserialized(LitJson.JsonData json)
+    {
+        if (json == null) return false;
+
+        if (json.ContainsKey(NODE_TIMESTAMP))
+        {
+            if (long.TryParse(json[NODE_TIMESTAMP].ToString(), out long timestamp))
+            {
+                Last_Saved_Unix_Time_Seconds = timestamp;
+            }
+        }
+        return true;
+    }
 
     public virtual RESPONSE_TYPE CheckDateAndTimeCharge()
     {
@@ -163,4 +184,9 @@ public class ManagerBase : IDisposable
         return ret;
     }
     #endregion
+
+    //-------------------------------------------------------------------------
+    // Json Node Name
+    //-------------------------------------------------------------------------
+    protected const string NODE_TIMESTAMP = "lastupdated";
 }

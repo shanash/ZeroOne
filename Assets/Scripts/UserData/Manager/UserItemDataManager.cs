@@ -154,7 +154,7 @@ public class UserItemDataManager : ManagerBase
 
     public override JsonData Serialized()
     {
-        var json = new JsonData();
+        var json = base.Serialized();
 
         var arr = new JsonData();
         int cnt = User_Item_Data_List.Count;
@@ -182,7 +182,10 @@ public class UserItemDataManager : ManagerBase
 
     public override bool Deserialized(JsonData json)
     {
-        if (json == null) return false;
+        if (!base.Deserialized(json))
+        {
+            return false;
+        }
 
         if (json.ContainsKey(NODE_ITEM_DATA_LIST))
         {

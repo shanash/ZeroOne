@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -360,6 +361,55 @@ namespace FluffyDuck.Util
             var handle = Addressables.LoadAssetAsync<T>(path);
             var result = await handle.Task;
             callback?.Invoke(result);
+        }
+
+        /// <summary>
+        /// UNIX 타임스탬프를 입력하여 해당 DateTime을 가져온다
+        /// </summary>
+        /// <param name="unix_time_stamp">유닉스 타임</param>
+        /// <param name="offset_hour">offset 시간</param>
+        /// <param name="offset_minutes">offset 분</param>
+        /// <returns></returns>
+        public static DateTime GetDateTime(long unix_time_stamp, int offset_hour = 0, int offset_minutes = 0)
+        {
+            // UNIX 타임스탬프를 DateTime으로 변환 (UTC 기준)
+            DateTime dateTimeUtc = DateTimeOffset.FromUnixTimeSeconds(unix_time_stamp).DateTime;
+            if (offset_hour == 0 && offset_minutes == 0)
+            {
+                return dateTimeUtc;
+            }
+
+            // 로컬 타임존 가져오기
+            TimeSpan localOffset = new TimeSpan(offset_hour, offset_minutes, 0);
+            TimeZoneInfo localTimeZone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(zone => zone.BaseUtcOffset == localOffset);
+
+            // UTC DateTime을 로컬 시간대로 변환
+            return TimeZoneInfo.ConvertTimeFromUtc(dateTimeUtc, localTimeZone);
+        }
+
+        /// <summary>
+        /// 현재 기준으로 과거 DateTime에서부터 특정 시각(예:오전5시)를 지났는지 확인
+        /// </summary>
+        /// <param name="past">과거 DateTime</param>
+        /// <param name="hour">몇시</param>
+        /// <returns></returns>
+        public static bool DidPassTime(DateTime past, int hour)
+        {
+            // 특정 시간을 나타내는 TimeSpan 객체 생성
+            TimeSpan specificTime = new TimeSpan(hour, 0, 0); // hour 시간
+
+            // startTime의 날짜에 대해 특정 시간을 나타내는 DateTime 생성
+            DateTime firstSpecificTime = past.Date + specificTime;
+
+            // startTime이 특정 시간 이전이라면, 그 날의 특정 시간을 검사 대상으로 설정
+            // startTime이 특정 시간 이후라면, 다음 날의 특정 시간을 검사 대상으로 설정
+            if (past.TimeOfDay >= specificTime)
+            {
+                firstSpecificTime = firstSpecificTime.AddDays(1);
+            }
+
+            // endTime이 firstSpecificTime보다 크거나 같으면, 최소한 한 번은 특정 시간을 넘겼다는 의미
+            return DateTime.Now >= firstSpecificTime;
         }
 
         public static class Math

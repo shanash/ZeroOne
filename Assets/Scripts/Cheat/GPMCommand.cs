@@ -65,23 +65,10 @@ public class GPMCommand : MonoBehaviour
     void RechargeEssenceCount()
     {
         var gd = GameData.Instance;
-        var hero_mng = gd.GetUserHeroDataManager();
-        var hero_list = hero_mng.GetUserHeroDataList();
-        for (int i = 0; i < hero_list.Count; i++)
-        {
-            var hero = hero_list[i];
-            hero.ResetSendedEssenceCount();
-        }
-        hero_mng.Save();
-
-        var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
-        charge_item.FullChargeItem();
-        GameData.Instance.GetUserChargeItemDataManager().Save();
+        gd.RechargeEssencePoint();
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
-
         Debug.Log("Completed Recharging Essence Count");
-
         PopupManager.Instance.CloseAll();
     }
 
