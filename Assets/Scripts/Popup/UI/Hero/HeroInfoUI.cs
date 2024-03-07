@@ -60,6 +60,13 @@ public class HeroInfoUI : PopupBase
 
     RenderTexture Chara_Texture = null;
     Producer pd = null;
+    GameObject Tooltip = null;
+
+    private void Start()
+    {
+        Hero_Info_Box.BoxBasic.OnShowTooltip += OnShowTooltip;
+        Hero_Info_Box.BoxBasic.OnHideTooltip += OnHideTooltip;
+    }
 
     void ResetUI()
     {
@@ -87,9 +94,26 @@ public class HeroInfoUI : PopupBase
         User_Hero_Datas = data[0] as List<BattlePcData>;
         SetData((int)data[1], select_tab_index);
 
-        FixedUpdatePopup();
+        InitAssets();
 
         return true;
+    }
+
+    void InitAssets()
+    {
+        List<string> asset_list = new List<string>();
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip");
+
+        GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
+    }
+
+    void PreloadCallback(int load_cnt, int total_cnt)
+    {
+        if (load_cnt == total_cnt)
+        {
+            FixedUpdatePopup();
+            return;
+        }
     }
 
     void SetData(int hero_data_index, int select_tab_index = 0)
@@ -168,6 +192,22 @@ public class HeroInfoUI : PopupBase
     {
         pd.SetActive(value);
     }
+
+    void OnShowTooltip(Rect hole, UserHeroSkillData data)
+    {
+        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
+        var tooltip = Tooltip.GetComponent<TooltipSkill>();
+        tooltip.Initialize(hole, data, false);
+    }
+
+    void OnHideTooltip()
+    {
+        if (Tooltip != null)
+        {
+            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+        }
+    }
+
 
     public void OnClickProfileButton()
     {

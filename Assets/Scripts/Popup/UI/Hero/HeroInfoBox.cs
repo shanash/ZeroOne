@@ -28,6 +28,8 @@ public class HeroInfoBox : MonoBehaviour
 
     BattlePcData User_Hero_Data;
 
+    public HeroInfoBoxBasic BoxBasic => Hero_Info_Box_Basic;
+
     public void SetData(BattlePcData data, HeroInfoUI info_ui, int select_tab_index)
     {
         User_Hero_Data = data;

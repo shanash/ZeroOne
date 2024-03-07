@@ -1,5 +1,6 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -37,7 +38,33 @@ public class HeroInfoBoxBasic : MonoBehaviour
     [SerializeField, Tooltip("Skill Icons")]
     protected List<Image> Skill_Icons;
 
-    BattlePcData Unit_Data;
+    [SerializeField, Tooltip("Skill Nodes")]
+    protected List<PartySelectSkillNode> Skills;
+
+    BattlePcData Unit_Data = null;
+    GameObject Tooltip = null;
+
+    public Action<Rect, UserHeroSkillData> OnShowTooltip;
+    public Action OnHideTooltip;
+
+    void Start()
+    {
+        foreach (var skill in Skills)
+        {
+            skill.OnStartLongPress += OnShowTooltip;
+            skill.OnFinishLongPress += OnHideTooltip;
+        }
+    }
+
+    void OnDestroy()
+    {
+        foreach (var skill in Skills)
+        {
+            skill.OnStartLongPress -= OnShowTooltip;
+            skill.OnFinishLongPress -= OnHideTooltip;
+        }
+    }
+
 
     public void SetHeroData(BattlePcData data)
     {
@@ -80,10 +107,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
         {
             // 콜백 참조 때문에 별도로 변수를 선언해야 합니다
             int sprite_index = i;
-            CommonUtils.GetResourceFromAddressableAsset<Sprite>(skill_group.Group_Data.icon, (spr) =>
-            {
-                Skill_Icons[sprite_index].sprite = spr;
-            });
+
+            Skills[i].Initialize(skill_group);
             i++;
         }
     }
