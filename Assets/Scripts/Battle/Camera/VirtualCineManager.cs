@@ -65,6 +65,11 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         return Virtual_Camera_List.Find(x => x.Camera_Type == ctype);
     }
 
+    VIRTUAL_CAMERA_DATA FindCameraData(CinemachineVirtualCamera cam)
+    {
+        return Virtual_Camera_List.Find(x => object.ReferenceEquals(x.Camera, cam));
+    }
+
     CinemachineVirtualCamera FindCamera(CAMERA_TYPE ctype)
     {
         if (Virtual_Camera_List.Exists(x => x.Camera_Type == ctype))
@@ -82,6 +87,8 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
         }
         return null;
     }
+
+
 
 
     public CinemachineVirtualCamera GetStageCamera() 
@@ -233,8 +240,17 @@ public class VirtualCineManager : MonoBehaviour, IEventTrigger
 
         if (ActiveVirtualCamera == null)
             return;
-        Vector3 vec = ActiveVirtualCamera.transform.TransformDirection(offset); // ActiveVirtualCamera의 local 방향은 다를 수 있으니 그 기준으로 틀어줍니다
-        transform.position = ORIGIN_POS + vec;
+        //Vector3 vec = ActiveVirtualCamera.transform.TransformDirection(offset); // ActiveVirtualCamera의 local 방향은 다를 수 있으니 그 기준으로 틀어줍니다
+        //transform.position = ORIGIN_POS + vec;
+
+        var cam_data = FindCameraData(ActiveVirtualCamera);
+        
+        CinemachineTransposer transposer = ActiveVirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        Vector3 vec = transposer.transform.TransformDirection(offset);
+        if (transposer != null)
+        {
+            transposer.m_FollowOffset = cam_data.Init_Follow_Offset + vec;
+        }
     }
 
     public void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)

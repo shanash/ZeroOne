@@ -654,7 +654,17 @@ public partial class HeroBase_V2 : UnitBase_V2
                     int cnt = exec_list.Count;
                     for (int i = 0; i < cnt; i++)
                     {
-                        SpawnSkillEffect_V3(exec_list[i]);
+                        var s = exec_list[i];
+                        if (evt_name.IndexOf("apply_") != -1)
+                        {
+
+                        }
+                        var targets = FindTargetsReturnLocal(s);
+                        if (targets != null)
+                        {
+
+                        }
+                        SpawnSkillEffect_V3(s);
                     }
                 }
             }
@@ -812,6 +822,18 @@ public partial class HeroBase_V2 : UnitBase_V2
     protected virtual void FindTargets(BattleSkillData skill)
     {
         Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Attack_Targets);
+    }
+    /// <summary>
+    /// 각 스킬에 지정되어 있는 타겟을 찾기<br/>
+    /// 로컬 데이터로 찾아서, 전체 타겟에 영향을 주지 않기 위해
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    protected virtual List<HeroBase_V2> FindTargetsReturnLocal(BattleSkillData skill)
+    {
+        List<HeroBase_V2> list = new List<HeroBase_V2>();
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref list);
+        return list;
     }
 
 
