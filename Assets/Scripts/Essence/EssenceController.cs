@@ -138,6 +138,8 @@ public class EssenceController : SceneControllerBase
         pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
+        UpdateUI();
+
         //TODO:하드코딩된 부분은 나중에 제외하기
         /*
         if (Remain_Count > 0)
@@ -151,10 +153,13 @@ public class EssenceController : SceneControllerBase
         return true;
     }
 
+    void UpdateUI()
+    {
+        Essence_Chance_Count.text = $"{GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE - Battle_Pc_Data.User_Data.Essence_Sended_Count_Of_Date}/{GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE}";
+    }
+
     public void OnResultTransferEssence(bool is_success, TOUCH_BODY_TYPE type)
     {
-        Debug.Log($"OnResultTransferEssence : {is_success} : {type}");
-
         //TODO: 원래라면 실패라서 아무것도 안하지만 M2용 근원전달 플로우를 위해서 존재하는 코드
         if (Remain_Count > 0)
         {
@@ -187,9 +192,11 @@ public class EssenceController : SceneControllerBase
         var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
         charge_item.UseChargeItem(1);
 
+        GameData.Instance.GetUserChargeItemDataManager().Save();
         GameData.Instance.GetUserHeroDataManager().Save();
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
+        UpdateUI();
     }
 
     public void OnCompleteTransferEssence()

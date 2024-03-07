@@ -138,6 +138,11 @@ public class GameDefine : MonoBehaviour
         { BATTLE_SPEED_TYPE.FAST_SPEED_X3, 3f },
     };
 
+    /// <summary>
+    /// 하루에 캐릭터별 전달 가능한 근원 수치
+    /// </summary>
+    public static readonly int SENDING_ESSENCE_CHANCE_COUNT_OF_DATE = 2;
+
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()

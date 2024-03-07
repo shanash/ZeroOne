@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class HeroInfoBoxEssence : MonoBehaviour
 {
-    const int DATE_COUNT = 2;
-
     /// <summary>
     /// "근원 전달 달성률"
     /// </summary>
@@ -106,7 +104,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     HeroInfoUI Info_UI = null;
 
-    int Remain_Count_Of_Chance_Sending_Essence => DATE_COUNT - Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
+    int Remain_Count_Of_Chance_Sending_Essence => GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE - Unit_Data.User_Data.Essence_Sended_Count_Of_Date;
 
     public void SetHeroData(BattlePcData data, HeroInfoUI info_ui)
     {
@@ -217,7 +215,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         //int cnt = Charge_Item.GetCount();
 
         TransferEssence_Button.interactable = ((mng.IsUsableChargeItemCount(REWARD_TYPE.SEND_ESSENCE, 1)) && (Remain_Count_Of_Chance_Sending_Essence > 0) && (percent < 100));
-        Transfer_Resources_Value.text = $"{Remain_Count_Of_Chance_Sending_Essence}/{DATE_COUNT}";
+        Transfer_Resources_Value.text = $"{Remain_Count_Of_Chance_Sending_Essence}/{GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE}";
     }
 
     public void OnClickBuffDetailButton()
