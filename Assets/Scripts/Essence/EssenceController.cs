@@ -1,6 +1,9 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,20 +11,20 @@ using ZeroOne.Input;
 
 public class EssenceController : SceneControllerBase
 {
-    [SerializeField]
-    RawImage Chara_Image = null;
-
-    [SerializeField]
-    GameObject Effect_Node = null;
-
-    [SerializeField]
+    [SerializeField, Tooltip("성공 파티클")]
     ParticleSystem Success_Effect = null;
 
-    [SerializeField]
+    [SerializeField, Tooltip("절정 파티클")]
     ParticleSystem Climax_Effect = null;
 
-    [SerializeField]
+    [SerializeField, Tooltip("대사창")]
     SerifuBox Serifu_Box = null;
+
+    [SerializeField, Tooltip("게이지 바")]
+    Slider Essence_Charge = null;
+
+    [SerializeField, Tooltip("게이지 플러스 텍스트")]
+    TMP_Text Essence_Charge_Plus_Text = null;
 
     List<UserL2dData> L2d_List = null;
     Producer pd = null;
@@ -56,12 +59,15 @@ public class EssenceController : SceneControllerBase
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
 
         Screen.orientation = ScreenOrientation.Portrait;
+        Essence_Charge_Plus_Text.alpha = 0;
 
         var audio = AudioManager.Instance;
 
         List<string> audio_clip_list = new List<string>();
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/success");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/DM-CGS-26");
+
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
         L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
@@ -88,6 +94,34 @@ public class EssenceController : SceneControllerBase
         }
     }
 
+    IEnumerator CoUpdateSlider(Slider slider, TMP_Text text, float value, float duration = 0.5f)
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/DM-CGS-26");
+
+        float elapsed_time = 0f;
+        float origin = slider.value;
+        int gap = (int)((value * 100) - (origin * 100));
+
+        text.text = $"+{gap.ToString("N0")}";
+        text.alpha = 0;
+        float text_origin_y = text.rectTransform.anchoredPosition.y;
+        float text_dest_y = text.rectTransform.anchoredPosition.y + 50;
+
+        while (elapsed_time < duration)
+        {
+            yield return null;
+            elapsed_time += Time.deltaTime;
+            float multiple = elapsed_time / duration;
+            slider.value = Mathf.Lerp(origin, value, multiple);
+            text.alpha = (multiple > 0.5f) ? (1 - multiple) * 2.0f : multiple * 2.0f;
+            text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, Mathf.Lerp(text.rectTransform.anchoredPosition.y, text_dest_y, multiple));
+        }
+
+        text.alpha = 0;
+        text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, text_origin_y);
+        slider.value = value;
+    }
+
     bool OnReceiveData(BattlePcData data, int index, int remain_count_of_chance_send_essence)
     {
         Battle_Pc_Data = data;
@@ -96,7 +130,6 @@ public class EssenceController : SceneControllerBase
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         pd.OnResultTransferEssence += OnResultTransferEssence;
-        pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
         //TODO:하드코딩된 부분은 나중에 제외하기
@@ -120,7 +153,9 @@ public class EssenceController : SceneControllerBase
         if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
         {
             Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
+            StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3));
         }
+
         if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
         {
             if (Essence_Force_Flow[Essence_Force_Flow_Index].Count == 1)
@@ -141,27 +176,6 @@ public class EssenceController : SceneControllerBase
         GameData.Instance.GetUserHeroDataManager().Save();
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
-    }
-
-    public void OnCompleteTransferEssence()
-    {
-        // TODO: M2 근원전달 플로우를 위해서는 실패처리
-        if (Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
-        {
-            Debug.Assert(Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0, "근원전달 플로우가 더 이상 남아있지 않는 상황 자체가 에러");
-            pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue());
-        }
-        else
-        {
-            Climax_Effect.Play(true);
-
-            Remain_Count--;
-            if (Remain_Count > 0)
-            {
-                //pd.SetEssenceBodyPart();
-                pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue());
-            }
-        }
     }
 
     public override void OnClick(UIButtonBase button)
