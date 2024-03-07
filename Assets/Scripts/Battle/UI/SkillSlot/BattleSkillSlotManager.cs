@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class BattleSkillSlotManager : MonoBehaviour
 {
     List<BattleSkillSlot> Used_Battle_Skill_Slots = new List<BattleSkillSlot>();
 
+    GameObject Tooltip = null;
 
     /// <summary>
     /// 슬롯 생성<br/>
@@ -24,6 +26,8 @@ public class BattleSkillSlotManager : MonoBehaviour
             var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot", this.transform);
             var slot = obj.GetComponent<BattleSkillSlot>();
             slot.SetHeroBase(hero);
+            slot.OnStartLongPress += OnShowTooltip;
+            slot.OnFinishLongPress += OnHideTooltip;
 
             Used_Battle_Skill_Slots.Add(slot);
 
@@ -44,5 +48,15 @@ public class BattleSkillSlotManager : MonoBehaviour
         Used_Battle_Skill_Slots.Clear();
     }
 
+    void OnShowTooltip(Rect hole, UserHeroSkillData skill_data)
+    {
+        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
+        var tooltip = Tooltip.GetComponent<TooltipSkill>();
+        tooltip.Initialize(hole, skill_data);
+    }
 
+    void OnHideTooltip()
+    {
+        GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+    }
 }

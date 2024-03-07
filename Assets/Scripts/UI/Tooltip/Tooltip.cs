@@ -20,13 +20,11 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     [SerializeField]
     TMP_Text Desc = null;
 
-    [SerializeField]
-    NpcCardBase Npc_Card = null;
-
     Material Shader_Mat = null;
     Texture2D Texture = null;
 
-    public void Initialize(Rect hole, Npc_Data npc_data)
+
+    protected virtual void Initialize(Rect hole, string title, string desc)
     {
         if (Box == null) return;
 
@@ -41,13 +39,11 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
         Box.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
         Box.material = Shader_Mat;
 
-        Box.material.SetVector("_Rect", new Vector4(hole.x/box_width, hole.y/box_height, hole.width/box_width, hole.height/box_height));
+        Box.material.SetVector("_Rect", new Vector4(hole.x / box_width, hole.y / box_height, hole.width / box_width, hole.height / box_height));
         Box.material.SetColor("_Color", Box.color);
 
-        Title.text = GameDefine.GetLocalizeString(npc_data.name_id);
-        Desc.text = GameDefine.GetLocalizeString(npc_data.desc_id);
-
-        Npc_Card.SetNpcData(npc_data);
+        Title.text = title;
+        Desc.text = desc;
 
         // 아이콘이 위에 위치
         if (hole.center.y > box_height / 2)

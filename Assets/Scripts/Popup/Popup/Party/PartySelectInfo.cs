@@ -1,5 +1,6 @@
 using Cysharp.Text;
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -39,6 +40,9 @@ public class PartySelectInfo : MonoBehaviour
 
     UserHeroData User_Data;
 
+    public Action<Rect, UserHeroSkillData> OnShowTooltip;
+    public Action OnHideTooltip;
+
     public void SetPlayerCharacterID(int pc_id, int pc_num)
     {
         User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
@@ -49,6 +53,8 @@ public class PartySelectInfo : MonoBehaviour
         {
             var skill_slot = Skill_List[i];
             skill_slot.SetPlayerCharacterID(pc_id, pc_num);
+            skill_slot.OnStartLongPress = OnShowTooltip;
+            skill_slot.OnFinishLongPress = OnHideTooltip;
         }
     }
 

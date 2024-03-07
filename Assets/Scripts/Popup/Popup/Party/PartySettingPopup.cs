@@ -55,11 +55,16 @@ public class PartySettingPopup : PopupBase
     [SerializeField, Tooltip("Confirm Btn Text")]
     TMP_Text Confirm_Btn_Text;
 
+    GameObject Tooltip = null;
+
     CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
     SORT_ORDER Sort_Order = SORT_ORDER.ASC;
 
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     int Dungeon_ID;
+
+    bool Is_Animation_End;
+    bool Is_Load_Complete;
 
     protected override bool Initialize(object[] data)
     {
@@ -74,10 +79,33 @@ public class PartySettingPopup : PopupBase
         Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
         Sort_Order = (SORT_ORDER)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.SORT_ORDER_TYPE, SORT_ORDER.ASC);
+
+        InitAssets();
         UpdateFilterType();
         InitPopupUI();
 
         return true;
+    }
+
+    void InitAssets()
+    {
+        List<string> asset_list = new List<string>();
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip");
+
+        GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
+    }
+
+    void PreloadCallback(int load_cnt, int total_cnt)
+    {
+        if (load_cnt == total_cnt)
+        {
+            Is_Load_Complete = true;
+            if (Is_Load_Complete && Is_Animation_End)
+            {
+                FixedUpdatePopup();
+                return;
+            }
+        }
     }
 
     void InitPopupUI()
@@ -97,8 +125,12 @@ public class PartySettingPopup : PopupBase
 
     protected override void ShowPopupAniEndCallback()
     {
-        FixedUpdatePopup();
-        UpdatePopup();
+        Is_Animation_End = true;
+        if (Is_Animation_End && Is_Load_Complete)
+        {
+            FixedUpdatePopup();
+            UpdatePopup();
+        }
     }
 
     protected override void HidePopupAniEndCallback()
@@ -464,17 +496,40 @@ public class PartySettingPopup : PopupBase
         }
     }
 
+    void OnShowTooltip(Rect hole, UserHeroSkillData skill_data)
+    {
+        if (Tooltip != null)
+        {
+            OnHideTooltip();
+            return;
+        }
 
+        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
+        var tooltip = Tooltip.GetComponent<TooltipSkill>();
+        tooltip.Initialize(hole, skill_data);
+    }
+
+    void OnHideTooltip()
+    {
+        if (Tooltip != null)
+        {
+            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+            Tooltip = null;
+        }
+    }
     #endregion
-
 
     public override void Spawned()
     {
         base.Spawned();
         Selected_Info_Box.ShowInfoBox(false);
+        Selected_Info_Box.OnShowTooltip += OnShowTooltip;
+        Selected_Info_Box.OnHideTooltip += OnHideTooltip;
     }
     public override void Despawned()
     {
+        Selected_Info_Box.OnShowTooltip -= OnShowTooltip;
+        Selected_Info_Box.OnHideTooltip -= OnHideTooltip;
         base.Despawned();
     }
 }

@@ -1,12 +1,14 @@
 using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField, Tooltip("Box")]
     RectTransform Box;
@@ -24,25 +26,24 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
     TMP_Text Skill_Level;
 
     Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
-
+    public Action<Rect, UserHeroSkillData> OnStartLongPress;
+    public Action OnFinishLongPress;
+    Coroutine CheckForLongPress = null;
 
     UserHeroData User_Data;
     UserHeroSkillData Skill_Data;
 
-    private void Start()
+    void Start()
     {
-        switch (Skill_Type)
-        {
-            case SKILL_TYPE.SKILL_01:
-                Skill_Type_Text.text = "액티브 스킬 1";
-                break;
-            case SKILL_TYPE.SKILL_02:
-                Skill_Type_Text.text = "액티브 스킬 2";
-                break;
-            case SKILL_TYPE.SPECIAL_SKILL:
-                Skill_Type_Text.text = "궁극기";
-                break;
-        }
+        UpdateUI();
+    }
+
+    public void Initialize(UserHeroSkillData data)
+    {
+        Skill_Data = data;
+        Skill_Type = Skill_Data.GetSkillType();
+        UpdateSkillCard();
+        UpdateUI();
     }
 
     public void SetPlayerCharacterID(int pc_id, int pc_num)
@@ -76,6 +77,30 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         }
     }
 
+    void UpdateUI()
+    {
+        // text
+        if (Skill_Data != null)
+        {
+            Skill_Type_Text.text = Skill_Data.GetSkillTypeText();
+        }
+        else
+        {
+            switch (Skill_Type)
+            {
+                case SKILL_TYPE.SKILL_01:
+                    Skill_Type_Text.text = "액티브 스킬 1";
+                    break;
+                case SKILL_TYPE.SKILL_02:
+                    Skill_Type_Text.text = "액티브 스킬 2";
+                    break;
+                case SKILL_TYPE.SPECIAL_SKILL:
+                    Skill_Type_Text.text = "궁극기";
+                    break;
+            }
+        }
+    }
+
     void UpdateSkillCard()
     {
         //  icon
@@ -87,24 +112,57 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         Skill_Level.text = ZString.Format("Lv.{0}", Skill_Data.GetLevel());
     }
 
-
     public void OnPointerDown(PointerEventData eventData)
     {
-        Box.localScale = Press_Scale;
+        if (OnStartLongPress != null)
+        {
+            Box.localScale = Press_Scale;
+            StopCoroutine(ref CheckForLongPress);
+            CheckForLongPress = StartCoroutine(CoCheckForLongPress());
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Box.localScale = Vector2.one;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Party/SkillInfoTooltipPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        if (OnFinishLongPress != null)
         {
-            popup.ShowPopup(0, (Vector2)transform.position);
-        });
+            Box.localScale = Vector2.one;
+
+            bool is_stopped = StopCoroutine(ref CheckForLongPress);
+
+            // 제대로 OnStartLongPress가 실행되었어야지
+            // (CheckForLongPress == null) (is_stopped == false)
+            // OnFinishLongPress을 호출
+            if (!is_stopped)
+            {
+                OnFinishLongPress?.Invoke();
+            }
+        }
     }
 
+    IEnumerator CoCheckForLongPress()
+    {
+        float elapsed_time = 0;
+        while (Tooltip.PRESS_TIME_FOR_SHOW > elapsed_time)
+        {
+            yield return null;
+            elapsed_time += Time.deltaTime;
+        }
+
+        var rt = this.GetComponent<RectTransform>();
+        OnStartLongPress?.Invoke(GameObjectUtils.GetScreenRect(rt), Skill_Data);
+        CheckForLongPress = null;
+    }
+
+    bool StopCoroutine(ref Coroutine coroutine)
+    {
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return true;
+        }
+
+        return false;
+    }
 }

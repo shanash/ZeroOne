@@ -295,6 +295,18 @@ public class MasterDataManager : BaseMasterDataManager
         list.Clear();
         list.AddRange(_Player_Character_Skill_Data.Values.ToList().FindAll(x => x.pc_skill_group_id == skill_group_id));
     }
+
+    /// <summary>
+    /// 플레이어 캐릭터의 스킬 그룹에 포함되어 있는 스킬 데이터 리스트 반환
+    /// </summary>
+    /// <param name="skill_group_id"></param>
+    /// <param name="list"></param>
+    public List<Player_Character_Skill_Data> Get_PlayerCharacterSkillDataListBySkillGroup(int skill_group_id)
+    {
+        Check_Player_Character_Skill_Data();
+        return _Player_Character_Skill_Data.Values.ToList().FindAll(x => x.pc_skill_group_id == skill_group_id);
+    }
+
     /// <summary>
     /// 플레이어 캐릭터의 일회성 효과 스킬 데이터 반환
     /// </summary>

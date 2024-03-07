@@ -273,7 +273,7 @@ public class StageInfoPopup : PopupBase
     void OnShowTooltip(Rect hole, Npc_Data npc_data)
     {
         Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/MonsterInfoTooltip", transform.parent);
-        var tooltip = Tooltip.GetComponent<Tooltip>();
+        var tooltip = Tooltip.GetComponent<TooltipMonster>();
         tooltip.Initialize(hole, npc_data);
     }
 

@@ -15,6 +15,16 @@ public class UserHeroSkillData : UserDataBase
 
     public Player_Character_Skill_Group Group_Data { get; private set; } = null;
     public UserHeroData Hero_Data { get; private set; }
+    public string Name
+    {
+        get
+        {
+            Debug.Assert(Group_Data != null, "Group Data Null");
+            Debug.Assert(!string.IsNullOrEmpty(Group_Data.name_id), "name id null");
+            string result = GameDefine.GetLocalizeString(Group_Data.name_id);
+            return result;
+        }
+    }
 
     public UserHeroSkillData(UserHeroData hero, int skill_grp_id) : base()
     {
@@ -122,6 +132,11 @@ public class UserHeroSkillData : UserDataBase
 
     public Player_Character_Skill_Group GetSkillGroupData() { return Group_Data; }
 
+    public List<Player_Character_Skill_Data> GetSkillDataList()
+    {
+        return MasterDataManager.Instance.Get_PlayerCharacterSkillDataListBySkillGroup(GetSkillGroupID());
+    }
+
     public SKILL_TYPE GetSkillType()
     {
         if (Group_Data != null)
@@ -129,6 +144,33 @@ public class UserHeroSkillData : UserDataBase
             return Group_Data.skill_type;
         }
         return SKILL_TYPE.NONE;
+    }
+
+    public string GetSkillTypeText()
+    {
+        string result = string.Empty;
+        if (Group_Data != null)
+        {
+            switch (Group_Data.skill_type)
+            {
+                case SKILL_TYPE.NORMAL_ATTACK:
+                    result = "일반 공격";
+                    break;
+                case SKILL_TYPE.SKILL_01:
+                    result = "액티브 스킬 1";
+                    break;
+                case SKILL_TYPE.SKILL_02:
+                    result = "액티브 스킬 2";
+                    break;
+                case SKILL_TYPE.SPECIAL_SKILL:
+                    result = "궁극기";
+                    break;
+                case SKILL_TYPE.PASSIVE_SKILL:
+                    result = "패시브 스킬";
+                    break;
+            }
+        }
+        return result;
     }
     /// <summary>
     /// 스킬의 최대 레벨은 영웅의 현재 레벨
@@ -183,6 +225,20 @@ public class UserHeroSkillData : UserDataBase
         float lv_exp = (float)GetLevelExp();
         float need_exp = (float)GetNextExp();
         return lv_exp / need_exp;
+    }
+
+    public string GetDescription()
+    {
+        string result = string.Empty;
+        var skill_data_list = GetSkillDataList();
+        foreach(var data in skill_data_list)
+        {
+            var battle_skill = Factory.Instantiate<BattlePcSkillData>(data);
+            battle_skill.SetSkillLevel(GetLevel());
+
+            result += battle_skill.GetSkillDesc();
+        }
+        return result;
     }
 
     /// <summary>

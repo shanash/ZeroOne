@@ -1,8 +1,11 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public enum SKILL_SLOT_EVENT_TYPE
@@ -18,7 +21,7 @@ public enum SKILL_SLOT_EVENT_TYPE
 
 }
 
-public class BattleSkillSlot : UIBase, IUpdateComponent
+public class BattleSkillSlot : UIBase, IUpdateComponent, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField, Tooltip("Box")]
     RectTransform Box_Rect;
@@ -53,6 +56,11 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
 
     Vector2 Tooltip_Upper_Pos = new Vector2(0, 280f);
+
+    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
+    public Action<Rect, UserHeroSkillData> OnStartLongPress;
+    public Action OnFinishLongPress;
+    Coroutine CheckForLongPress = null;
 
     public void SetHeroBase(HeroBase_V2 hero)
     {
@@ -113,6 +121,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                 Hero?.UltimateSkillExec();
             }
         }
+        /*
         else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)
         {
             AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -125,6 +134,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                 popup.ShowPopup(0, pos);
             });
         }
+        */
     }
 
     /// <summary>
@@ -294,5 +304,62 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             return;
         }
         UpdateCooltime();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerDown");
+        if (OnStartLongPress != null)
+        {
+            Box_Rect.localScale = Press_Scale;
+            StopCoroutine(ref CheckForLongPress);
+            CheckForLongPress = StartCoroutine(CoCheckForLongPress());
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerUp");
+        if (OnFinishLongPress != null)
+        {
+            Box_Rect.localScale = Vector2.one;
+
+            bool is_stopped = StopCoroutine(ref CheckForLongPress);
+
+            // 제대로 OnStartLongPress가 실행되었어야지
+            // (CheckForLongPress == null) (is_stopped == false)
+            // OnFinishLongPress을 호출
+            if (!is_stopped)
+            {
+                OnFinishLongPress?.Invoke();
+            }
+        }
+    }
+
+    IEnumerator CoCheckForLongPress()
+    {
+        float elapsed_time = 0;
+        while (Tooltip.PRESS_TIME_FOR_SHOW > elapsed_time)
+        {
+            yield return null;
+            elapsed_time += Time.deltaTime;
+        }
+
+        var rt = this.GetComponent<RectTransform>();
+        var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup() as BattlePcSkillGroup;
+        OnStartLongPress?.Invoke(GameObjectUtils.GetScreenRect(rt), skill_group.GetUserHeroSkillData());
+        CheckForLongPress = null;
+    }
+
+    bool StopCoroutine(ref Coroutine coroutine)
+    {
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
+            return true;
+        }
+
+        return false;
     }
 }

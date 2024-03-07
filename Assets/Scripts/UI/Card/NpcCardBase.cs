@@ -23,6 +23,7 @@ public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
     protected bool Is_Boss;
 
     Vector2 Init_Scale = new Vector2(0.66f, 0.66f);
+    Vector2 Press_Scale = new Vector2(0.60f, 0.60f);
 
     public Action<Rect, Npc_Data> OnStartLongPress;
     public Action OnFinishLongPress;
@@ -74,20 +75,29 @@ public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        StopCoroutine(ref CheckForLongPress);
-        CheckForLongPress = StartCoroutine(CoCheckForLongPress());
+        if (OnStartLongPress != null)
+        {
+            this.transform.localScale = Press_Scale;
+            StopCoroutine(ref CheckForLongPress);
+            CheckForLongPress = StartCoroutine(CoCheckForLongPress());
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        bool is_stopped = StopCoroutine(ref CheckForLongPress);
-
-        // 제대로 OnStartLongPress가 실행되었어야지
-        // (CheckForLongPress == null) (is_stopped == false)
-        // OnFinishLongPress을 호출
-        if (!is_stopped)
+        if (OnFinishLongPress != null)
         {
-            OnFinishLongPress?.Invoke();
+            this.transform.localScale = Init_Scale;
+
+            bool is_stopped = StopCoroutine(ref CheckForLongPress);
+
+            // 제대로 OnStartLongPress가 실행되었어야지
+            // (CheckForLongPress == null) (is_stopped == false)
+            // OnFinishLongPress을 호출
+            if (!is_stopped)
+            {
+                OnFinishLongPress?.Invoke();
+            }
         }
     }
 
