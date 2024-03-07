@@ -36,6 +36,8 @@ public class GPMCommand : MonoBehaviour
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_PLAYER_INFO);
         Debug.Log("PlayerLevelUp");
+
+        PopupManager.Instance.CloseAll();
     }
 
     /// <summary>
@@ -56,6 +58,8 @@ public class GPMCommand : MonoBehaviour
         }
         hero_mng.Save();
         Debug.Log("AllCharacterLevelUp");
+
+        PopupManager.Instance.CloseAll();
     }
 
     void RechargeEssenceCount()
@@ -77,6 +81,8 @@ public class GPMCommand : MonoBehaviour
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
 
         Debug.Log("Completed Recharging Essence Count");
+
+        PopupManager.Instance.CloseAll();
     }
 
     /// <summary>

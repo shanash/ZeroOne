@@ -34,6 +34,12 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 	TOUCH_GESTURE_TYPE _gescure_type_01;
 
 	///	<summary>
+	///	재생 효과 타입
+	///	</summary>
+	public int reaction_effect_type => _reaction_effect_type;
+	int _reaction_effect_type;
+
+	///	<summary>
 	///	터치 반응 애니 id
 	///	</summary>
 	public int reaction_ani_id => _reaction_ani_id;
@@ -59,6 +65,7 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 		_check_using_essense = raw_data.check_using_essense;
 		_touch_type_01 = raw_data.touch_type_01;
 		_gescure_type_01 = raw_data.gescure_type_01;
+		_reaction_effect_type = raw_data.reaction_effect_type;
 		_reaction_ani_id = raw_data.reaction_ani_id;
 		_reaction_facial_id = raw_data.reaction_facial_id;
 		_after_state_id = raw_data.after_state_id;
@@ -87,6 +94,7 @@ public class L2d_Interaction_Base_Data : System.IDisposable
 		sb.AppendFormat("[check_using_essense] = <color=yellow>{0}</color>", check_using_essense).AppendLine();
 		sb.AppendFormat("[touch_type_01] = <color=yellow>{0}</color>", touch_type_01).AppendLine();
 		sb.AppendFormat("[gescure_type_01] = <color=yellow>{0}</color>", gescure_type_01).AppendLine();
+		sb.AppendFormat("[reaction_effect_type] = <color=yellow>{0}</color>", reaction_effect_type).AppendLine();
 		sb.AppendFormat("[reaction_ani_id] = <color=yellow>{0}</color>", reaction_ani_id).AppendLine();
 		sb.AppendFormat("[reaction_facial_id] = <color=yellow>{0}</color>", reaction_facial_id).AppendLine();
 		sb.AppendFormat("[after_state_id] = <color=yellow>{0}</color>", after_state_id).AppendLine();

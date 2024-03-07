@@ -7054,7 +7054,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 'SendMessage(NextBackground,,Background);
+        value: 'SendMessage(ChangeBackground,0,Background);
 
           SendMessage(ChangeColor,,Background);
 
@@ -8611,7 +8611,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 80.03094
-        y: 1876.9379
+        y: 1875.9379
         width: 160
         height: 30
     - id: 41
@@ -10290,7 +10290,7 @@ MonoBehaviour:
       - originConversationID: 6
         originDialogueID: 62
         destinationConversationID: 6
-        destinationDialogueID: 65
+        destinationDialogueID: 66
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -10456,7 +10456,7 @@ MonoBehaviour:
       - originConversationID: 6
         originDialogueID: 64
         destinationConversationID: 6
-        destinationDialogueID: 65
+        destinationDialogueID: 66
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -10539,7 +10539,7 @@ MonoBehaviour:
       - originConversationID: 6
         originDialogueID: 65
         destinationConversationID: 6
-        destinationDialogueID: 66
+        destinationDialogueID: 67
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -10550,7 +10550,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 2718.8452
+        y: 2768.8452
         width: 160
         height: 30
     - id: 66
@@ -10626,7 +10626,7 @@ MonoBehaviour:
       - originConversationID: 6
         originDialogueID: 66
         destinationConversationID: 6
-        destinationDialogueID: 67
+        destinationDialogueID: 65
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -10636,8 +10636,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 82.030945
-        y: 2769.8452
+        x: 83.030945
+        y: 2717.8452
         width: 160
         height: 30
     - id: 67
@@ -10720,7 +10720,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 2819.8452
+        y: 2823.8452
         width: 160
         height: 30
     - id: 68
@@ -10766,7 +10766,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 'SetPanel(Eileen, 1);
+        value: 'HidePanel(2);
+
+          HidePanel(3);
+
+          SetPanel(Eileen,
+          1);
 
           OpenPanel(1, open);
 
@@ -10807,7 +10812,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 2869.8452
+        y: 2873.8452
         width: 160
         height: 30
     - id: 69
@@ -10891,7 +10896,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 2918.8452
+        y: 2922.8452
         width: 160
         height: 30
     - id: 70
@@ -10974,7 +10979,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 2968.8452
+        y: 2972.8452
         width: 160
         height: 30
     - id: 71
@@ -11063,7 +11068,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 3018.8452
+        y: 3022.8452
         width: 160
         height: 30
     - id: 72
@@ -11146,7 +11151,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 3067.8452
+        y: 3071.8452
         width: 160
         height: 30
     - id: 73
@@ -11229,7 +11234,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 270.03094
-        y: 3069.8452
+        y: 3073.8452
         width: 160
         height: 30
     - id: 74
@@ -11312,7 +11317,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 82.030945
-        y: 3118.8452
+        y: 3122.8452
         width: 160
         height: 30
     - id: 75
@@ -11395,7 +11400,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 270.03094
-        y: 3119.8452
+        y: 3123.8452
         width: 160
         height: 30
     - id: 76
@@ -11478,7 +11483,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 270.03094
-        y: 3169.8452
+        y: 3173.8452
         width: 160
         height: 30
     - id: 77
@@ -11559,11 +11564,11 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 270.03094
-        y: 3219.8452
+        y: 3223.8452
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 1242}
+    canvasScrollPosition: {x: 0, y: 966}
     canvasZoom: 1
   - id: 7
     fields:
@@ -13319,7 +13324,7 @@ MonoBehaviour:
     Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
-    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
+    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
     Value","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Dialogue
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Parenthetical","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Audio
