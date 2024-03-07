@@ -168,7 +168,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         if (all_death_team != null)
         {
             //  wait and playing
-            StartCoroutine(DelayChangeStatePlaying(1f, caster));
+            StartCoroutine(DelayChangeStatePlaying(.4f / Battle_Speed_Multiple, caster));
         }
         else
         {

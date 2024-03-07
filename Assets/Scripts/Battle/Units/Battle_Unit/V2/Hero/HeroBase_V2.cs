@@ -345,6 +345,14 @@ public partial class HeroBase_V2 : UnitBase_V2
                 {
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, land_cam.GetComponent<Animator>());
                 }
+                else if (track.name.Equals("ActiveGroupCameraAnimationTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, active_group_cam.GetComponent<Animator>());
+                }
+                else if (track.name.Equals("TargetGroupCameraAnimationTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, target_group_cam.GetComponent<Animator>());
+                }
             }
             else if (track is CinemachineTrack)
             {
@@ -376,15 +384,25 @@ public partial class HeroBase_V2 : UnitBase_V2
                             //else if (shot.DisplayName.Equals("TargetGroupCamera"))
                             //{
                             //    //  TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
-                            //    //target_group.AddMember(this);
+                            //    for (int i = 0; i < Attack_Targets.Count; i++)
+                            //    {
+                            //        target_group.AddMember(Attack_Targets[i].transform, 1, 1);
+                            //    }
                             //    Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, target_group_cam);
                             //}
-                            //else if (shot.DisplayName.Equals("ActiveGroupCamera"))
-                            //{
-                            //    //  ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
-                            //    //active_group.AddMember()
-                            //    Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, active_group_cam);
-                            //}
+                            else if (shot.DisplayName.Equals("ActiveGroupCamera"))
+                            {
+                                //  ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
+                                active_group.AddMember(this.transform, 2, 1);
+                                for (int i = 0; i < Attack_Targets.Count; i++)
+                                {
+                                    if (!Attack_Targets.Contains(this))
+                                    {
+                                        active_group.AddMember(Attack_Targets[i].transform, 1, 1);
+                                    }
+                                }
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, active_group_cam);
+                            }
                         }
                     }
                 }
@@ -415,14 +433,31 @@ public partial class HeroBase_V2 : UnitBase_V2
             active_group_cam.Follow = null;
         }
 
+        var target_group_camp = virtual_mng.GetTargetGroupCamera();
+        if (target_group_camp != null)
+        {
+            target_group_camp.Follow = null;
+        }
 
         var active_target_group = virtual_mng.GetActiveTargetGroup();
         if (active_target_group != null)
         {
-            int cnt = Attack_Targets.Count;
-            for (int i = 0; i < cnt; i++)
+            var targets = active_target_group.m_Targets;
+            for (int i = 0; i < targets.Length; i++)
             {
-                active_target_group.RemoveMember(Attack_Targets[i].transform);
+                var t = targets[i];
+                active_target_group.RemoveMember(t.target);
+            }
+        }
+
+        var target_group = virtual_mng.GetTargetGroup();
+        if (target_group != null)
+        {
+            var targets = target_group.m_Targets;
+            for (int i = 0; i < targets.Length; i++)
+            {
+                var t = targets[i];
+                target_group.RemoveMember(t.target);
             }
         }
     }
@@ -552,6 +587,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
+            Debug.Log(animation_name);
             if (animation_name.Equals("00_ultimate"))
             {
                 UnsetPlayableDirector();
@@ -1119,16 +1155,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected override void OnPause()
     {
-        //var all_tracks = FindAllTrakcs();
-        //if (all_tracks != null)
-        //{
-        //    int len = all_tracks.Length;
-        //    for (int i = 0; i < len; i++)
-        //    {
-        //        all_tracks[i].TimeScale = 0f;
-        //    }
-        //}
-        Skeleton.timeScale = 0f;
+        var all_tracks = FindAllTrakcs();
+        if (all_tracks != null)
+        {
+            int len = all_tracks.Length;
+            for (int i = 0; i < len; i++)
+            {
+                all_tracks[i].TimeScale = 0f;
+            }
+        }
+        //Skeleton.timeScale = 0f;
     }
     /// <summary>
     /// 현재 일시정지 중인 애니메이션을 재생<br/>
@@ -1136,19 +1172,19 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     protected override void OnResume()
     {
-        //var all_tracks = FindAllTrakcs();
-        //if (all_tracks != null)
-        //{
-        //    int len = all_tracks.Length;
-        //    for (int i = 0; i < len; i++)
-        //    {
-        //        var track = all_tracks[i];
-        //        if (track == null)
-        //            continue;
-        //        track.TimeScale = Battle_Speed_Multiple;
-        //    }
-        //}
-        Skeleton.timeScale = Battle_Speed_Multiple;
+        var all_tracks = FindAllTrakcs();
+        if (all_tracks != null)
+        {
+            int len = all_tracks.Length;
+            for (int i = 0; i < len; i++)
+            {
+                var track = all_tracks[i];
+                if (track == null)
+                    continue;
+                track.TimeScale = Battle_Speed_Multiple;
+            }
+        }
+        //Skeleton.timeScale = Battle_Speed_Multiple;
     }
     /// <summary>
     /// 지속성 스킬 효과 데이터를 모두 제거<br/>

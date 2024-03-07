@@ -69,7 +69,7 @@ public class StageInfoPopup : PopupBase
         Stage = (Stage_Data)data[2];
         User_Data = GameData.Instance.GetUserStoryStageDataManager().FindUserStoryStageData(Stage.stage_id);
         InitAssets();
-
+        UpdatePopup();
         return true;
     }
 
@@ -85,7 +85,6 @@ public class StageInfoPopup : PopupBase
 
     void PreloadCallback(int load_cnt, int total_cnt)
     {
-
         if (load_cnt == total_cnt)
         {
             Is_Load_Complete = true;
@@ -118,7 +117,6 @@ public class StageInfoPopup : PopupBase
     {
         var m = MasterDataManager.Instance;
         var pool = GameObjectPoolManager.Instance;
-        //var zone = m.Get_ZoneData(Stage.zone_id);
 
         Stage_Number.text = ZString.Format("{0}-{1}", Zone.zone_ordering, Stage.stage_ordering);
 
@@ -127,8 +125,6 @@ public class StageInfoPopup : PopupBase
         int cnt = 0;
         //  npc list
         string npc_prefab = "Assets/AssetResources/Prefabs/UI/Card/NpcCard";
-        //List<Wave_Data> wave_data_list = new List<Wave_Data>();
-        //m.Get_WaveDataList(Stage.wave_group_id, ref wave_data_list);
         var wave_data_list = m.Get_WaveDataList(Stage.wave_group_id);
 
         List<BattleNpcData> npc_data_list = new List<BattleNpcData>();
@@ -221,6 +217,35 @@ public class StageInfoPopup : PopupBase
             Used_Reward_Item_List.Add(reward_item);
         }
 
+        ////  stamina
+        //int need_stamina = Stage.use_stamina;
+        //var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+
+        //Current_Stamina.text = stamina_item.GetCount().ToString("N0");
+
+        //int used_stamina_count = stamina_item.GetCount() - need_stamina;
+
+        //if (stamina_item.IsUsableChargeItemCount(need_stamina))
+        //{
+        //    Used_Stamina.text = ZString.Format("<color=#2B8FFF>{0:N0}</color>", used_stamina_count);
+        //}
+        //else
+        //{
+        //    Used_Stamina.text = ZString.Format("<color=#ff0000>{0:N0}</color>", used_stamina_count);
+        //}
+
+        //if (User_Data != null)
+        //{
+        //    MarkStarPoint(User_Data.GetStarPoint());
+        //}
+        //else
+        //{
+        //    MarkStarPoint(0);
+        //}
+    }
+
+    public override void UpdatePopup()
+    {
         //  stamina
         int need_stamina = Stage.use_stamina;
         var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
@@ -246,11 +271,6 @@ public class StageInfoPopup : PopupBase
         {
             MarkStarPoint(0);
         }
-    }
-
-    public override void UpdatePopup()
-    {
-
     }
 
     void MarkStarPoint(int pt)

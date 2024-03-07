@@ -24,7 +24,6 @@ public class EssenceController : SceneControllerBase
 
     List<UserL2dData> L2d_List = null;
     Producer pd = null;
-    RenderTexture Chara_Texture = null;
 
     BattlePcData Battle_Pc_Data = null;
     LOVE_LEVEL_TYPE Selected_Relationship;
@@ -91,9 +90,10 @@ public class EssenceController : SceneControllerBase
         pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
+        //TODO:하드코딩된 부분은 나중에 제외하기
         if (Remain_Count > 0)
         {
-            pd.SetEssenceBodyPart();
+            pd.SetEssenceBodyPart(TOUCH_BODY_TYPE.PART3);
         }
 
         GestureManager.Instance.Enable = true;
@@ -115,7 +115,13 @@ public class EssenceController : SceneControllerBase
 
         Success_Effect.Play(true);
         Battle_Pc_Data.User_Data.SetDataSendedEssence(type);
+
+        var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+        charge_item.UseChargeItem(1);
+
         GameData.Instance.GetUserHeroDataManager().Save();
+
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
     }
 
     public void OnCompleteTransferEssence()
