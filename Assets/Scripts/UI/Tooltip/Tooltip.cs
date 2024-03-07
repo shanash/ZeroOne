@@ -31,6 +31,17 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
 
+        // 해상도에 따른 hole 보정 값
+        if (box_height != Screen.height)
+        {
+            float multiple = box_height / Screen.height;
+            hole = new Rect(
+                hole.x * multiple,
+                hole.y * multiple,
+                hole.width * multiple,
+                hole.height * multiple);
+        }
+
         Texture = CreateSolidTexture((int)box_width, (int)box_height);
 
         Shader_Mat = new Material(Shader.Find("Standard"));
