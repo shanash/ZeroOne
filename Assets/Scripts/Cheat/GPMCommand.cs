@@ -1,13 +1,10 @@
 using FluffyDuck.Util;
 using Gpm.LogViewer;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GPMCommand : MonoBehaviour
 {
-
     private void Start()
     {
         InitCommand();
@@ -126,6 +123,10 @@ public class GPMCommand : MonoBehaviour
         {
             ClearStoryStage(cheat_key);
         }
+        else if (keys[0].Equals("ess"))
+        {
+            GainSendEssence(cheat_key);
+        }
     }
     /// <summary>
     /// 스토리 존 클리어(지정 존의 스테이지를 모두 클리어) - 존 ID(난이도 포함)
@@ -183,8 +184,8 @@ public class GPMCommand : MonoBehaviour
         {
             CommonUtils.ShowToast("Usage => zone [zone_id] [star_count]", TOAST_BOX_LENGTH.SHORT);
         }
-
     }
+
     /// <summary>
     /// 지정 스토리 스테이지 클리어
     /// </summary>
@@ -225,7 +226,6 @@ public class GPMCommand : MonoBehaviour
             string msg = $"Usage => story [stage_id] [star_count]";
             CommonUtils.ShowToast(msg, TOAST_BOX_LENGTH.SHORT);
         }
-
     }
 
     void GainGold(string cheat_key)
@@ -347,6 +347,72 @@ public class GPMCommand : MonoBehaviour
 
             }
         }
+    }
+
+    /// <summary>
+    /// 근원전달 재화 획득
+    /// </summary>
+    /// <param name="cheat_key"></param>
+    void GainSendEssence(string cheat_key)
+    {
+        if (string.IsNullOrEmpty(cheat_key))
+        {
+            return;
+        }
+
+        string key = cheat_key.ToLower();
+
+        string[] keys = key.Split(" ");
+        //  using => ess count
+        //  using => ess set count
+        int total_count = 0;
+        switch (keys.Length)
+        {
+            case 2:
+                if (int.TryParse(keys[1], out int count))
+                {
+                    var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+                    charge_item.AddChargeItem(count);
+
+                    total_count = charge_item.GetCount();
+                }
+                else
+                {
+                    CommonUtils.ShowToast($"Usage => [ess] [count]", TOAST_BOX_LENGTH.SHORT);
+                    return;
+                }
+                break;
+            case 3:
+                if (keys[1].Equals("set") && int.TryParse(keys[2], out int set_count))
+                {
+                    var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+                    int remain_count = charge_item.GetCount();
+                    int modify_count = set_count - remain_count;
+                    if (modify_count > 0)
+                    {
+                        charge_item.AddChargeItem(modify_count);
+                    }
+                    else if (modify_count < 0)
+                    {
+                        charge_item.UseChargeItem(-modify_count);
+                    }
+
+                    total_count = charge_item.GetCount();
+                }
+                else
+                {
+                    CommonUtils.ShowToast($"Usage => [ess] [set] [count]", TOAST_BOX_LENGTH.SHORT);
+                    return;
+                }
+                break;
+            default:
+                CommonUtils.ShowToast($"Usage => [ess] [count]\nUsage => [ess] [set] [count]", TOAST_BOX_LENGTH.SHORT);
+                return;
+        }
+        GameData.Instance.GetUserChargeItemDataManager().Save();
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
+
+        CommonUtils.ShowToast($"근원전달 재화가 총 {total_count}개가 되었습니다", TOAST_BOX_LENGTH.SHORT);
     }
 
     /// <summary>
