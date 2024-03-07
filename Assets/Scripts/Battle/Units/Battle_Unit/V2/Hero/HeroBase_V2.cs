@@ -381,15 +381,16 @@ public partial class HeroBase_V2 : UnitBase_V2
                             {
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, land_cam);
                             }
-                            //else if (shot.DisplayName.Equals("TargetGroupCamera"))
-                            //{
-                            //    //  TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
-                            //    for (int i = 0; i < Attack_Targets.Count; i++)
-                            //    {
-                            //        target_group.AddMember(Attack_Targets[i].transform, 1, 1);
-                            //    }
-                            //    Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, target_group_cam);
-                            //}
+                            else if (shot.DisplayName.Equals("TargetGroupCamera"))
+                            {
+                                //  TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
+                                for (int i = 0; i < Attack_Targets.Count; i++)
+                                {
+                                    target_group.AddMember(Attack_Targets[i].transform, 1, 1);
+                                }
+                                target_group_cam.Follow = target_group.transform;
+                                Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, target_group_cam);
+                            }
                             else if (shot.DisplayName.Equals("ActiveGroupCamera"))
                             {
                                 //  ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
@@ -401,6 +402,7 @@ public partial class HeroBase_V2 : UnitBase_V2
                                         active_group.AddMember(Attack_Targets[i].transform, 1, 1);
                                     }
                                 }
+                                active_group_cam.Follow = active_group.transform;
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, active_group_cam);
                             }
                         }
