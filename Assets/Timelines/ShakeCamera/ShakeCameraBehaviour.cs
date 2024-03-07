@@ -27,6 +27,7 @@ public class ShakeCameraBehaviour : PlayableBehaviour
     VirtualCineManager _VirtualCineManager = null;
     bool _BecameActiveThisFrame = false;
     float _PerlinNoiseSeed = 0.0f;
+    float _PerlinNoiseOtherSeed = 0.0f;
     float _ShakeSeconds = 0.0f;
 
     public TimelineClip Clip { get; set; }
@@ -73,9 +74,13 @@ public class ShakeCameraBehaviour : PlayableBehaviour
         if (_BecameActiveThisFrame) // 클립 플레이 후 첫 프레임만 실행
         {
             _PerlinNoiseSeed = UnityEngine.Random.Range(MinTickRange, MaxTickRange);
+            _PerlinNoiseOtherSeed = UnityEngine.Random.Range(MinTickRange, MaxTickRange);
             _BecameActiveThisFrame = false;
             _ShakeSeconds = 0;
             _VirtualCineManager = null;
+
+            Debug.Log($"_Vertical : {_Vertical}");
+            Debug.Log($"_Horizontal : {_Horizontal}");
         }
 
         float inputWeight = info.weight;
@@ -94,12 +99,14 @@ public class ShakeCameraBehaviour : PlayableBehaviour
             // 그래서 지형 생성에 주로 사용하는 편이라
             // 여기의 함수도 x, y값을 별도로 받고 있네요
             _ShakeSeconds += info.deltaTime;
+
             float perlinInput = _ShakeSeconds * _Roughness + _PerlinNoiseSeed;
-            float rand = UnityEngine.Random.Range(0f, 1f);
             Vector3 PositionCorrection = new Vector3(
-            _Horizontal ? Mathf.PerlinNoise(perlinInput, rand) - .5f : 0, // PerlinNoise의 결과값은 0~1이니 0.5를 빼서 -0.5 ~ 0.5를 만들어줘야 음수방향으로도 흔들어줘서 균형이 맞습니다.
-            _Vertical ? Mathf.PerlinNoise(rand, perlinInput) - .5f : 0,
+            _Horizontal ? Mathf.PerlinNoise(perlinInput, _PerlinNoiseOtherSeed) - .5f : 0, // PerlinNoise의 결과값은 0~1이니 0.5를 빼서 -0.5 ~ 0.5를 만들어줘야 음수방향으로도 흔들어줘서 균형이 맞습니다.
+            _Vertical ? Mathf.PerlinNoise(_PerlinNoiseOtherSeed, perlinInput) - .5f : 0,
             0f) * _Magnitude * inputWeight;
+
+            Debug.Log($"PositionCorrection : {PositionCorrection}");
 
             // VirtualCineManager를 직접 흔들어준다
             _VirtualCineManager.ShakeFromOriginalPositionBy(PositionCorrection);
