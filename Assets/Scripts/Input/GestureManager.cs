@@ -276,7 +276,7 @@ namespace ZeroOne.Input
                 {
                     if (matched_components.Length == 0)
                     {
-                        TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Purple_Path);
+                        TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Blue_Path);
                     }
                     TouchCanvas.Instance.SpawnTouchEffectNode(position);
                 }

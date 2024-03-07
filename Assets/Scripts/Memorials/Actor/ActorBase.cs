@@ -345,10 +345,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return;
         }
 
+        // TODO:M2 스펙때문에 실패도 성공 파티클이 보여야 하기 때문에 일단 막습니다.. 밖에 EssenceController에서 처리할겁니다
+        /*
         if (!TouchCanvas.Instance.Touch_Effect_Enable)
         {
             TouchCanvas.Instance.SetTouchEffectPrefabPath(Current_Interaction.check_using_essense ? TouchCanvas.Effect_Pink_Path : TouchCanvas.Effect_Blue_Path);
         }
+        */
 
         SetReactionData(Current_Interaction, TOUCH_GESTURE_TYPE.CLICK, bounding_box);
 

@@ -98,6 +98,7 @@ public class EssenceController : SceneControllerBase
         {
             SCManager.I.SetCurrent(this, "OnReceiveData");
             PopupManager.I.Container.SetEtcCanvasScaler(0);
+            TouchCanvas.Instance.EnableTouchEffect(false);
             return;
         }
     }
@@ -175,6 +176,12 @@ public class EssenceController : SceneControllerBase
                 {
                     _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3);
                 }
+
+                TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Pink_Path);
+            }
+            else
+            {
+                TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Blue_Path);
             }
 
             if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
@@ -183,8 +190,11 @@ public class EssenceController : SceneControllerBase
                 {
                     pd.SetEssenceBodyPart(Essence_Force_Flow[Essence_Force_Flow_Index].Peek());
                 }
-                return;
             }
+        }
+        else
+        {
+            TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Blue_Path);
         }
 
         if (!is_success)
