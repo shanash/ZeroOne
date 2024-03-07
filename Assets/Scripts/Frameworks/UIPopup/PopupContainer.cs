@@ -1,5 +1,6 @@
 using FluffyDuck.Util;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PopupContainer : MonoBehaviour, IPoolableComponent
 {
@@ -43,6 +44,11 @@ public class PopupContainer : MonoBehaviour, IPoolableComponent
                 _Etc_Page_Canvas.sortingLayerName = "Popup";
             }
         }
+    }
+
+    public void SetEtcCanvasScaler(float match)
+    {
+        _Etcs_Canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = match;
     }
 
     public void Despawned()

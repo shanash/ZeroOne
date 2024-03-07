@@ -90,12 +90,6 @@ public class BattlePcData : BattleUnitData
             Essence_Add_MagicDefensePoint += add_mag_def;
             Essence_Add_LifePoint += add_hp;
 
-            UnityEngine.Debug.Log($"Essence_Add_PhysicsAttackPoint : {Essence_Add_PhysicsAttackPoint}");
-            UnityEngine.Debug.Log($"Essence_Add_MagicAttackPoint : {Essence_Add_MagicAttackPoint}");
-            UnityEngine.Debug.Log($"Essence_Add_PhysicsDefensePoint : {Essence_Add_PhysicsDefensePoint}");
-            UnityEngine.Debug.Log($"Essence_Add_MagicDefensePoint : {Essence_Add_MagicDefensePoint}");
-            UnityEngine.Debug.Log($"Essence_Add_LifePoint : {Essence_Add_LifePoint}");
-
             _Essence_Founded_Percent = User_Data.Essence_Founded_Percent;
         }
     }

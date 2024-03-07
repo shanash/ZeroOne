@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using TMPro;
@@ -96,6 +97,7 @@ public class EssenceController : SceneControllerBase
         if (load_cnt == total_cnt)
         {
             SCManager.I.SetCurrent(this, "OnReceiveData");
+            PopupManager.I.Container.SetEtcCanvasScaler(0);
             return;
         }
     }
@@ -239,14 +241,28 @@ public class EssenceController : SceneControllerBase
         GestureManager.Instance.Enable = true;
         ScreenEffectManager.I.SetBlockInputUI(false);
 
+        var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+        
         if (Remain_Count == 0)
         {
             ChangeScene(SceneName.home, Battle_Pc_Data);
+        }
+        else if (charge_item.GetCount() == 0)
+        {
+            GestureManager.Instance.Enable = false;
+            var select_popup = (SelectPopup)PopupManager.I.AddFromResources("Prefabs/Popup/Modal/SelectPopup");
+            select_popup.SetVerticalScreen();
+            select_popup.ShowPopup(GameDefine.GetLocalizeString("system_information"), GameDefine.GetLocalizeString("system_notice_quit_essence_not_enough_point"), GameDefine.GetLocalizeString("system_answer_ok"), (Action<int>)OnClickNoticePopup);
         }
         else
         {
             _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
         }
+    }
+
+    void OnClickNoticePopup(int btn_index)
+    {
+        ChangeScene(SceneName.home, Battle_Pc_Data);
     }
 
     //static int index = 0;

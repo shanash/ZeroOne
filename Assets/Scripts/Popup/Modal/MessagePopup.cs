@@ -24,6 +24,11 @@ public class MessagePopup : PopupBase
         return true;
     }
 
+    protected void SetContainerScale(float scale)
+    {
+        Ease_Base.transform.localScale = new Vector3(scale, scale, 1);
+    }
+
     public void OnClick(UIButtonBase button)
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");

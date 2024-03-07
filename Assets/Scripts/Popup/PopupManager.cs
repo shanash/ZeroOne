@@ -13,7 +13,7 @@ public class PopupManager : PopupManagerBase<PopupManager>
         _ = Instance;
     }
 
-    protected override PopupContainer Container
+    public override PopupContainer Container
     {
         get
         {

@@ -22,7 +22,7 @@ namespace FluffyDuck.UI
         /// </summary>
         Action Root_On_Exit;
 
-        protected abstract PopupContainer Container { get; }
+        public abstract PopupContainer Container { get; }
 
         /// <summary>
         /// Scene이 변할때마다 재생성됩니다

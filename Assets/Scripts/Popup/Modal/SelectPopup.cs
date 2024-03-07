@@ -35,6 +35,7 @@ public class SelectPopup : MessagePopup
                 button.AddClickListener(OnClickButton);
             }
         }
+        Button_Src.gameObject.SetActive(false);
 
         return true;
     }
@@ -42,5 +43,18 @@ public class SelectPopup : MessagePopup
     public void OnClickButton(UIButtonBase btn)
     {
         Listener?.Invoke(int.Parse(btn.name));
+    }
+
+    public void SetVerticalScreen()
+    {
+        var rt = transform as RectTransform;
+        rt.localScale = Vector3.one;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+        rt.offsetMin = Vector2.zero;
+        SetContainerScale(2.5f);
     }
 }
