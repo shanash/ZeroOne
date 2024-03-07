@@ -212,11 +212,11 @@ public class HeroInfoBoxEssence : MonoBehaviour
         }
 
         var mng = GameData.Instance.GetUserChargeItemDataManager();
-        var Charge_Item = mng.FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+        //var Charge_Item = mng.FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
 
-        int cnt = Charge_Item.GetCount();
+        //int cnt = Charge_Item.GetCount();
 
-        TransferEssence_Button.interactable = ((cnt > 0) && (Remain_Count_Of_Chance_Sending_Essence > 0) && (percent < 100));
+        TransferEssence_Button.interactable = ((mng.IsUsableChargeItemCount(REWARD_TYPE.SEND_ESSENCE, 1)) && (Remain_Count_Of_Chance_Sending_Essence > 0) && (percent < 100));
         Transfer_Resources_Value.text = $"{Remain_Count_Of_Chance_Sending_Essence}/{DATE_COUNT}";
     }
 

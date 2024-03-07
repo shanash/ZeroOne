@@ -24,8 +24,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     [SerializeField]
     protected SkeletonAnimation Skeleton;
 
+    /*
     [SerializeField]
     Collider2D Head;
+    */
 
     // 입모양 애니메이션
     [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
@@ -83,6 +85,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     public event Action OnCompleteTransferEssence;
 
     bool Is_Playing_Success_Transfer_Essence = false;
+    SPINE_CHARA_LOCATION_TYPE Location_Type = SPINE_CHARA_LOCATION_TYPE.NONE;
 
     #region MonoBehaviour Methods
 
@@ -208,7 +211,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
                 if (!string.IsNullOrEmpty(GameDefine.GetLocalizeString(serifu.dialogue_text_id)))
                 {
-                    OnSendMessage?.Invoke(GameDefine.GetLocalizeString(serifu.dialogue_text_id), voice_length, !IsColliderVisible(Head));
+                    OnSendMessage?.Invoke(GameDefine.GetLocalizeString(serifu.dialogue_text_id), voice_length, true);
                     if (OnSendMessage == null)
                     {
                         DisappearBalloon();
@@ -530,6 +533,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         this.Skeleton.Skeleton.GetBounds(out float x, out float y, out float width, out float height, ref vertex);
         float added_pos_x = ADDED_POS_X;
         float added_pos_y = ADDED_POS_Y;
+        
+        Location_Type = type;
+
         if (type == SPINE_CHARA_LOCATION_TYPE.LOBBY || type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO)
         {
             // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다 -_- 나중에 쓸데 없으면 바로 제거해주자

@@ -9,6 +9,9 @@ public abstract partial class ActorBase : MonoBehaviour
     // 플레이되는 리액션 애니메이션 트랙들이 모두 종료되고서야 IDLE로 돌아가도록 하기 위해 체크할 트랙을 담아놓는다
     protected TrackEntry react_track_entry = null;
 
+    // 근원전달 및 다른곳에서 탈착해야 하는 장비가 있으면 여기에 설정
+    protected TrackEntry equip_track_entry = null;
+
     TrackEntry te_vert;
     TrackEntry te_horz;
 
@@ -42,6 +45,7 @@ public abstract partial class ActorBase : MonoBehaviour
     {
         FSM?.RevertState();
     }
+
     public ACTOR_STATES GetCurrentState()
     {
         if (FSM != null)
@@ -50,6 +54,7 @@ public abstract partial class ActorBase : MonoBehaviour
         }
         return ACTOR_STATES.NONE;
     }
+
     public ACTOR_STATES GetPreviousState()
     {
         if (FSM != null)
@@ -84,6 +89,10 @@ public abstract partial class ActorBase : MonoBehaviour
         if (need_set_anim)
         {
             Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Idle_Animation_Data.Animation_Idle_Name, true).MixDuration = mix_duration;
+            if (equip_track_entry == null || equip_track_entry.IsComplete)
+            {
+                equip_track_entry = Skeleton.AnimationState.SetAnimation(90, (Location_Type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE) ? "90_equipment_off" : "90_equipment_on", true);
+            }
         }
     }
 

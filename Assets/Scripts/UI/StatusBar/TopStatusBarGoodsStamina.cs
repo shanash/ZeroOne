@@ -36,6 +36,7 @@ public class TopStatusBarGoodsStamina : TopStatusBarGoodsBase
         {
             StopCoroutine(Stamina_Coroutine);
         }
+        Stamina_Coroutine = null;
     }
     IEnumerator StartOnUpdate(float delay)
     {

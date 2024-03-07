@@ -640,19 +640,16 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// </summary>
     /// <param name="alpha"></param>
     /// <param name="duration"></param>
-    /// <param name="render_enable"></param>
-    public void SetAlphaAnimation(float alpha, float duration, bool render_enable)
+    /// <param name="finish_render_enable">애니메이션 종료 후 렌더러 상태 적용</param>
+    public void SetAlphaAnimation(float alpha, float duration, bool finish_render_enable)
     {
         if (Render_Texture == null)
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
         }
-        if (Render_Texture.enabled == render_enable)
-        {
-            return;
-        }
+
         float dur = duration / Battle_Speed_Multiple;
-        Render_Texture.SetAlphaAnimation(alpha, dur, render_enable);
+        Render_Texture.SetAlphaAnimation(alpha, dur, finish_render_enable);
         ShadowAlphaAnimation(alpha, dur);
         if (alpha == 0f)
         {

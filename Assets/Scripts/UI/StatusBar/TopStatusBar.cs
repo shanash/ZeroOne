@@ -36,7 +36,7 @@ public class TopStatusBar : MonoBehaviour
         evt_dispatcher.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA, UpdateEventCallback);
         evt_dispatcher.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_GOLD, UpdateEventCallback);
         evt_dispatcher.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_DIA, UpdateEventCallback);
-        evt_dispatcher.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_SOURCE, UpdateEventCallback);
+        evt_dispatcher.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE, UpdateEventCallback);
     }
     private void OnDisable()
     {
@@ -49,7 +49,7 @@ public class TopStatusBar : MonoBehaviour
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA, UpdateEventCallback);
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_GOLD, UpdateEventCallback);
         evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_DIA, UpdateEventCallback);
-        evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_SOURCE, UpdateEventCallback);
+        evt_dispatcher.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE, UpdateEventCallback);
     }
     /// <summary>
     /// 업데이트 이벤트 콜백
@@ -93,7 +93,7 @@ public class TopStatusBar : MonoBehaviour
                     }
                 }
                 break;
-            case UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_SOURCE:
+            case UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE:
                 {
                     var found = FindGoods(TOP_STATUS_TYPE.SOURCE);
                     if (found != null)

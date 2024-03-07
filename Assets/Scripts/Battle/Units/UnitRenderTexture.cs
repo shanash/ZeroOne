@@ -20,6 +20,9 @@ public class UnitRenderTexture : SkeletonRenderTexture
     protected RendererSortingZ ZOrder;
     protected SortingGroup Sort_Group;
 
+    Coroutine Alpha_Coroutine;
+    Coroutine Hit_Coroutine;
+
 
     protected override void CreateQuadChild()
     {
@@ -46,28 +49,38 @@ public class UnitRenderTexture : SkeletonRenderTexture
         this.enabled = false;
     }
 
-    public void SetHitColor(Color pcolor, Color bcolor, float duration)
-    {
-        StartCoroutine(StartHitColor(pcolor, bcolor, duration));
-    }
+    //public void SetHitColor(Color pcolor, Color bcolor, float duration)
+    //{
+    //    if (Hit_Coroutine != null)
+    //    {
+    //        StopCoroutine(Hit_Coroutine);
+    //    }
+    //    Hit_Coroutine = StartCoroutine(StartHitColor(pcolor, bcolor, duration));
+    //}
 
-    IEnumerator StartHitColor(Color pcolor, Color bcolor, float duration)
-    {
-        this.enabled = true;
-        Property_Block.SetColor(Color_Property, pcolor);
-        Property_Block.SetColor(Black_Tint_Property, bcolor);
-        quadMeshRenderer.SetPropertyBlock(Property_Block);
-        yield return new WaitForSeconds(duration);
+    //IEnumerator StartHitColor(Color pcolor, Color bcolor, float duration)
+    //{
+    //    this.enabled = true;
+    //    Property_Block.SetColor(Color_Property, pcolor);
+    //    Property_Block.SetColor(Black_Tint_Property, bcolor);
+    //    quadMeshRenderer.SetPropertyBlock(Property_Block);
+    //    yield return new WaitForSeconds(duration);
 
-        Property_Block.SetColor(Color_Property, Color.white);
-        Property_Block.SetColor(Black_Tint_Property, Color.black);
-        quadMeshRenderer.SetPropertyBlock(Property_Block);
-        this.enabled = false;
-    }
+    //    Property_Block.SetColor(Color_Property, Color.white);
+    //    Property_Block.SetColor(Black_Tint_Property, Color.black);
+    //    quadMeshRenderer.SetPropertyBlock(Property_Block);
+    //    this.enabled = false;
+    //    Hit_Coroutine = null;
+    //}
 
     public void SetHitColorV2(Color col, float duration)
     {
-        StartCoroutine(StartHitWhite(col, duration));
+
+        if (Hit_Coroutine != null)
+        {
+            StopCoroutine(Hit_Coroutine);
+        }
+        Hit_Coroutine = StartCoroutine(StartHitWhite(col, duration));
     }
 
     IEnumerator StartHitWhite(Color white, float duration)
@@ -86,18 +99,27 @@ public class UnitRenderTexture : SkeletonRenderTexture
         quadMeshRenderer.SetPropertyBlock(Property_Block);
 
         this.enabled = false;
+
+        Hit_Coroutine = null;
     }
 
-    public void SetAlphaAnimation(float alpha, float duration, bool render_enable)
+
+    /// <summary>
+    /// </summary>
+    /// <param name="alpha"></param>
+    /// <param name="duration"></param>
+    /// <param name="finish_render_enable">애니메이션 종료 후 랜더러 상태 적용</param>
+    public void SetAlphaAnimation(float alpha, float duration, bool finish_render_enable)
     {
-        StartCoroutine(StartAlphaAnimation(alpha, duration, render_enable));
-    }
-    IEnumerator StartAlphaAnimation(float alpha, float duration, bool render_enable)
-    {
-        if (render_enable)
+        if (Alpha_Coroutine != null)
         {
-            this.enabled = true;
+            StopCoroutine(Alpha_Coroutine);
         }
+        Alpha_Coroutine = StartCoroutine(StartAlphaAnimation(alpha, duration, finish_render_enable));
+    }
+    IEnumerator StartAlphaAnimation(float alpha, float duration, bool finish_render_enable)
+    {
+        this.enabled = true;
         float delta = 0f;
         while (delta < duration)
         {
@@ -106,10 +128,9 @@ public class UnitRenderTexture : SkeletonRenderTexture
             yield return null;
         }
         this.color.a = alpha;
-        if (!render_enable)
-        {
-            this.enabled = false;
-        }
+        this.enabled = finish_render_enable;
+
+        Alpha_Coroutine = null;
     }
 
     public HeroBase_V2 GetHeroBase_V2()

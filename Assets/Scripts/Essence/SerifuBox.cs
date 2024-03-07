@@ -19,6 +19,9 @@ public class SerifuBox : MonoBehaviour
     [SerializeField]
     RawImage Head_Image = null;
 
+    [SerializeField, Tooltip("머리를 비추는 카메라 해상도이자 텍스쳐 사이즈")]
+    Vector2 Head_Texture_Size = new Vector2(190, 190);
+
     [SerializeField]
     TextMeshProUGUI Serifu = null;
 
@@ -30,7 +33,7 @@ public class SerifuBox : MonoBehaviour
 
     void Start()
     {
-        Head_Texture = new RenderTexture(190, 190, 16);
+        Head_Texture = new RenderTexture((int)Head_Texture_Size.x, (int)Head_Texture_Size.y, 16);
         Head_Camera.targetTexture = Head_Texture;
         Head_Image.texture = Head_Texture;
         Head_Image.color = Color.white;

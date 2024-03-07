@@ -909,6 +909,11 @@ public class UserHeroData : UserDataBase
         _Essence_Founded_Spot_Part[(int)type - 1].Set(true);
     }
 
+    public void ResetSendedEssenceCount()
+    {
+        Essence_Sended_Count_Of_Date = 0;
+    }
+
     public void ReleaseLobbyChoice()
     {
         SetLobbyChoiceNumber(0);

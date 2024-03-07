@@ -6,19 +6,39 @@ using UnityEngine;
 
 public class TopStatusBarGoodsSource : TopStatusBarGoodsBase
 {
-    [SerializeField, Tooltip("Remain Time")]
-    TMP_Text Remain_Time;
-
     UserChargeItemData Charge_Item;
+
+    Coroutine Essense_Coroutine;
 
     protected override void InitStatusBar()
     {
         var mng = GameData.Instance.GetUserChargeItemDataManager();
         Charge_Item = mng.FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
-
-        StartCoroutine(StartOnUpdate(1f));
+        UpdateGoodsItem();
+        StartCoroutine(StartOnUpdate(60f));
     }
 
+    private void OnEnable()
+    {
+        if (Essense_Coroutine != null)
+        {
+            StopCoroutine(Essense_Coroutine);
+        }
+        Essense_Coroutine = StartCoroutine(StartOnUpdate(1f));
+    }
+    private void OnDisable()
+    {
+        if (Essense_Coroutine != null)
+        {
+            StopCoroutine(Essense_Coroutine);
+        }
+        Essense_Coroutine = null;
+    }
+    /// <summary>
+    /// 하루 한번만 갱신되기 때문에, 1분에 한번씩만 돌면됨
+    /// </summary>
+    /// <param name="delay"></param>
+    /// <returns></returns>
     IEnumerator StartOnUpdate(float delay)
     {
         var wait = new WaitForSeconds(delay);
@@ -35,23 +55,11 @@ public class TopStatusBarGoodsSource : TopStatusBarGoodsBase
         {
             return;
         }
-        //Goods_Count.text = "10/10";
         int max_bound = Charge_Item.GetMaxBound();
         int cnt = Charge_Item.GetCount();
 
         //  stamina count
         Goods_Count.text = ZString.Format("{0}/{1}", cnt, max_bound);
-
-        //  remain time
-        var remain_time = Charge_Item.GetRemainChargeTime();
-        if (remain_time.TotalSeconds > 0)
-        {
-            Remain_Time.text = ZString.Format("{0:D2}:{1:D2}", remain_time.Minutes, remain_time.Seconds);
-        }
-        else
-        {
-            Remain_Time.text = "";
-        }
     }
 
     protected override void ClickCallback()
