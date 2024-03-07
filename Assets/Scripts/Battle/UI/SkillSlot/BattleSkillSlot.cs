@@ -50,7 +50,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent, IPointerDownHandler, IP
     [SerializeField, Tooltip("Shaker")]
     Shake2D Shake;
 
-    UserHeroData User_Data;
     HeroBase_V2 Hero;
 
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
@@ -67,31 +66,13 @@ public class BattleSkillSlot : UIBase, IUpdateComponent, IPointerDownHandler, IP
         Hero = hero;
         Hero.Slot_Events += SkillSlotEventCallback;
 
-        var battle_unit = Hero.GetBattleUnitData();
-        User_Data = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(battle_unit.GetUnitID(), battle_unit.GetUnitNum());
-
         UpdateSkillSlot();
-    }
-
-
-    /// <summary>
-    /// 캐릭터 ID/Num 비교
-    /// </summary>
-    /// <param name="pc_id"></param>
-    /// <param name="pc_num"></param>
-    /// <returns></returns>
-    public bool IsEqualPlayerCharacter(int pc_id, int pc_num)
-    {
-        if (User_Data != null)
-        {
-            return User_Data.GetPlayerCharacterID() == pc_id && User_Data.Player_Character_Num == pc_num;
-        }
-        return false;
     }
 
     void UpdateSkillSlot()
     {
-        Card.SetHeroDataID(User_Data.GetPlayerCharacterID());
+        //Card.SetHeroDataID(User_Data.GetPlayerCharacterID());
+        Card.SetHeroDataID(Hero.GetBattleUnitData().GetUnitID());
 
         UpdateLifeBar();
     }
@@ -195,6 +176,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent, IPointerDownHandler, IP
         for (int i = 0; i < cnt; i++)
         {
             var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode", Buff_Icon_Container);
+            obj.transform.localPosition = Vector3.zero;
             var node = obj.GetComponent<BattleDurationSkillIconNode>();
             node.SetBattleDurationSkillData(dur_list[i]);
             Used_Duration_Skill_Icons.Add(node);

@@ -86,38 +86,6 @@ public class BattleUIManager_V2 : MonoBehaviour
     }
 
     /// <summary>
-    /// 체력 게이지 추가
-    /// </summary>
-    /// <param name="t"></param>
-    /// <param name="ttype"></param>
-    /// <returns></returns>
-    public LifeBarNode AddLifeBarNode(Transform t, TEAM_TYPE ttype)
-    {
-        var pool = GameObjectPoolManager.Instance;
-        string prefab_name = "Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode";
-        if (ttype == TEAM_TYPE.RIGHT)
-        {
-            prefab_name = "Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode";
-        }
-        var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
-        var life = obj.GetComponent<LifeBarNode>();
-        life.SetTargetTransform(t);
-        life.ShowLifeBar(5f);
-
-        Used_Life_Bar_List.Add(life);
-        return life;
-    }
-    /// <summary>
-    /// 체력 게이지 제거
-    /// </summary>
-    /// <param name="bar"></param>
-    public void RemoveLifeBarNode(LifeBarNode bar)
-    {
-        Used_Life_Bar_List.Remove(bar);
-        GameObjectPoolManager.Instance.UnusedGameObject(bar.gameObject);
-    }
-
-    /// <summary>
     /// Wave Text update
     /// </summary>
     public void UpdateWaveCount()

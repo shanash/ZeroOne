@@ -104,6 +104,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode");
+        list.Add("Assets/AssetResources/Prefabs/UI/Battle/EnemyDurationSkillIconNode");
 
 
         //  npc prefabs

@@ -64,6 +64,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         }
     }
 
+
     public void SetLifePercent(float per)
     {
         float p = Mathf.Clamp01(per);

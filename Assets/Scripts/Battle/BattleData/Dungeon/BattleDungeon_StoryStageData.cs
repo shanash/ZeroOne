@@ -82,35 +82,56 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
 
     public override int GetPlayerExp()
     {
-        if (Stage != null)
+        var repeat_reward_data_list = MasterDataManager.Instance.Get_RewardSetDataList(GetRepeatRewardGroupID()).ToList();
+        if (repeat_reward_data_list.Count > 0)
         {
-            return Stage.use_stamina;
+            var found = repeat_reward_data_list.Find(x => x.reward_type == REWARD_TYPE.EXP_PLAYER);
+            if (found != null)
+            {
+                return found.var1;
+            }
         }
+
         return 0;
     }
 
     public override int GetPlayerCharacterExp()
     {
-        if (Stage != null)
+        var repeat_reward_data_list = MasterDataManager.Instance.Get_RewardSetDataList(GetRepeatRewardGroupID()).ToList();
+        if (repeat_reward_data_list.Count > 0)
         {
-            return Stage.character_exp;
+            var found = repeat_reward_data_list.Find(x => x.reward_type == REWARD_TYPE.EXP_CHARACTER);
+            if (found != null)
+            {
+                return found.var1;
+            }
         }
         return 0;
     }
     public override int GetPlayerCharacterDestinyExp()
     {
-        if (Stage != null)
+        var repeat_reward_data_list = MasterDataManager.Instance.Get_RewardSetDataList(GetRepeatRewardGroupID()).ToList();
+        if (repeat_reward_data_list.Count > 0)
         {
-            return Stage.destiny_exp;
+            var found = repeat_reward_data_list.Find(x => x.reward_type == REWARD_TYPE.FAVORITE);
+            if (found != null)
+            {
+                return found.var1;
+            }
         }
         return 0;
     }
 
     public override int GetDefaultClearReward()
     {
-        if (Stage != null)
+        var repeat_reward_data_list = MasterDataManager.Instance.Get_RewardSetDataList(GetRepeatRewardGroupID()).ToList();
+        if (repeat_reward_data_list.Count > 0)
         {
-            return Stage.gold;
+            var found = repeat_reward_data_list.Find(x => x.reward_type == REWARD_TYPE.GOLD);
+            if (found != null)
+            {
+                return found.var1;
+            }
         }
         return 0;
     }

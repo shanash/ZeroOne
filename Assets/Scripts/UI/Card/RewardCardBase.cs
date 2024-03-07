@@ -66,7 +66,7 @@ public class RewardCardBase : UIBase
                 Debug.Assert(false);
                 break;
             case REWARD_TYPE.FAVORITE:
-                Debug.Assert(false);    //  클라이언트에서 사용하지 않는 보상 타입
+                reward = new Reward_ItemData();
                 break;
             case REWARD_TYPE.EXP_PLAYER:
                 reward = new Reward_ItemData();

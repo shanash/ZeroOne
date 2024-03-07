@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameResultWinPopup : PopupBase
@@ -470,7 +469,9 @@ public class GameResultWinPopup : PopupBase
         Reward_Box_Ease_Alpha.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, RewardBoxEaseComplete);
         Reward_Box_Ease_Scale.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN);
     }
-
+    /// <summary>
+    /// 보상 박스 진입 완료 후 호출
+    /// </summary>
     void RewardBoxEaseComplete()
     {
         var m = MasterDataManager.Instance;
@@ -490,7 +491,7 @@ public class GameResultWinPopup : PopupBase
                     DROP_TYPE drop_type = f_reward_data_list[0].drop_type;
                     if (drop_type == DROP_TYPE.DROP_EACH)
                     {
-                        DropTypeEachReward(reward_prefab, f_reward_data_list);
+                        DropTypeEachReward(reward_prefab, false, f_reward_data_list);
                     }
                     else if (drop_type == DROP_TYPE.DROP_WEIGHT)
                     {
@@ -519,7 +520,7 @@ public class GameResultWinPopup : PopupBase
                     DROP_TYPE drop_type = star_reward_data_list[0].drop_type;
                     if (drop_type == DROP_TYPE.DROP_EACH)
                     {
-                        DropTypeEachReward(reward_prefab, star_reward_data_list);
+                        DropTypeEachReward(reward_prefab, false, star_reward_data_list);
                     }
                     else if (drop_type == DROP_TYPE.DROP_WEIGHT)
                     {
@@ -544,7 +545,7 @@ public class GameResultWinPopup : PopupBase
                 DROP_TYPE drop_type = repeat_reward_data_list[0].drop_type;
                 if (drop_type == DROP_TYPE.DROP_EACH)
                 {
-                    DropTypeEachReward(reward_prefab, repeat_reward_data_list);
+                    DropTypeEachReward(reward_prefab, true, repeat_reward_data_list);
                 }
                 else if (drop_type == DROP_TYPE.DROP_WEIGHT)
                 {
@@ -589,12 +590,14 @@ public class GameResultWinPopup : PopupBase
         
         GameData.Instance.Save();
     }
+    
+
     /// <summary>
     /// 각각의 아이템 드랍 확률에 따라 드랍한다.
     /// </summary>
     /// <param name="prefab"></param>
     /// <param name="list"></param>
-    void DropTypeEachReward(string prefab, IReadOnlyList<Reward_Set_Data> list)
+    void DropTypeEachReward(string prefab, bool is_repeat, IReadOnlyList<Reward_Set_Data> list)
     {
         int cnt = list.Count;
         var pool = GameObjectPoolManager.Instance;
@@ -604,14 +607,18 @@ public class GameResultWinPopup : PopupBase
             int r = Random.Range(0, 1000000);
             if (r < reward_data.drop_per)
             {
-                var obj = pool.GetGameObject(prefab, Reward_List_View.content);
-                var item = obj.GetComponent<BattleRewardItemCard>();
-                item.SetRewardSetData(reward_data);
-                Used_Reward_Item_List.Add(item);
+                //  스테이지 통상 보상 중, 플레이어 경험치/캐릭터 경험치/호감도 경험치 제외 (통상 보상 중 금화도 제외해야 하는데)
+                if (reward_data.reward_type != REWARD_TYPE.FAVORITE && reward_data.reward_type != REWARD_TYPE.EXP_PLAYER && reward_data.reward_type != REWARD_TYPE.EXP_CHARACTER && !(is_repeat && reward_data.reward_type == REWARD_TYPE.GOLD))
+                {
+                    var obj = pool.GetGameObject(prefab, Reward_List_View.content);
+                    var item = obj.GetComponent<BattleRewardItemCard>();
+                    item.SetRewardSetData(reward_data);
+                    Used_Reward_Item_List.Add(item);
 
-                //  보상 지급
-                int reward_cnt = AddUserItemReward(reward_data);
-                item.SetCount(reward_cnt);
+                    //  보상 지급
+                    int reward_cnt = AddUserItemReward(reward_data);
+                    item.SetCount(reward_cnt);
+                }
             }
         }
     }

@@ -14,14 +14,26 @@ public class LifeBarNode_V2 : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Blue Bar(Life Bar)")]
     SpriteRenderer Life_Bar;
 
-    const float Fill_Width = 3f;
+    [SerializeField, Tooltip("Buff Icon Container")]
+    Transform Buff_Icon_Container;
 
+    const float Fill_Width = 3f;
 
     Coroutine Flush_Coroutine;
 
     Coroutine Show_Coroutine;
 
+    HeroBase_V2 Hero;
+    /// <summary>
+    /// 지속성 효과 아이콘 리스트
+    /// </summary>
+    List<EnemyDurationSkillIconNode> Used_Duration_Skill_Icons = new List<EnemyDurationSkillIconNode>();
 
+    public void SetHeroBaseV2(HeroBase_V2 hero)
+    {
+        this.Hero = hero;
+        hero.Slot_Events += SkillSlotEventCallback;
+    }
     public void ShowLifeBar(float duration)
     {
         if (Show_Coroutine != null)
@@ -48,6 +60,57 @@ public class LifeBarNode_V2 : MonoBehaviour, IPoolableComponent
         yield return new WaitForSeconds(delay);
         Bar_BG.gameObject.SetActive(false);
         Show_Coroutine = null;
+    }
+
+    void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
+    {
+        if (etype == SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE)
+        {
+            UpdateDurationSkillIcons();
+        }
+    }
+    /// <summary>
+    /// 지속성 효과 아이콘 추가
+    /// </summary>
+    void UpdateDurationSkillIcons()
+    {
+        if (Hero == null)
+        {
+            return;
+        }
+        ClearDurationSkillIcons();
+        float interval = 0.7f;
+
+        var pool = GameObjectPoolManager.Instance;
+        var dur_list = Hero.GetSkillManager().GetDurationSkillDataList();
+        int cnt = dur_list.Count;
+        int col = 0;
+        int row = 0;
+        float x, y;
+        for (int i = 0; i < cnt; i++)
+        {
+            col = i % 5;
+            row = i / 5;
+            x = col * interval;
+            y = row * interval;
+
+            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/EnemyDurationSkillIconNode", Buff_Icon_Container);
+            obj.transform.localPosition = new Vector3(x, y, 0);
+            var node = obj.GetComponent<EnemyDurationSkillIconNode>();
+            node.SetBattleDurationSkillData(dur_list[i]);
+            Used_Duration_Skill_Icons.Add(node);
+        }
+    }
+
+    void ClearDurationSkillIcons()
+    {
+        var pool = GameObjectPoolManager.Instance;
+        int cnt = Used_Duration_Skill_Icons.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            pool.UnusedGameObject(Used_Duration_Skill_Icons[i].gameObject);
+        }
+        Used_Duration_Skill_Icons.Clear();
     }
 
     /// <summary>
