@@ -212,15 +212,17 @@ public class EssenceController : SceneControllerBase
 
     async UniTask BlockInputWhenEndingClimaxEffect()
     {
-        Debug.Log("Block UI");
         GestureManager.Instance.Enable = false;
         ScreenEffectManager.I.SetBlockInputUI(true);
         await UniTask.WaitUntil(() => !Climax_Effect.isPlaying);
         GestureManager.Instance.Enable = true;
         ScreenEffectManager.I.SetBlockInputUI(false);
-        Debug.Log("Release UI");
-    }
 
+        if (Remain_Count == 0)
+        {
+            ChangeScene(SceneName.home, Battle_Pc_Data);
+        }
+    }
 
     public override void OnClick(UIButtonBase button)
     {
@@ -229,16 +231,29 @@ public class EssenceController : SceneControllerBase
         switch (button.name)
         {
             case "HomeBtn":
-                SCManager.I.ChangeScene(SceneName.home);
+                ChangeScene(SceneName.home);
                 break;
             case "BackBtn":
-                SCManager.I.ChangeScene(SceneName.home, Battle_Pc_Data);
+                ChangeScene(SceneName.home, Battle_Pc_Data);
                 break;
         }
 
+    }
+
+    void ChangeScene(SceneName name, BattlePcData data = null)
+    {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.orientation = ScreenOrientation.AutoRotation;
 
         TouchCanvas.Instance.EnableTouchEffect(true);
+
+        if (data == null)
+        {
+            SCManager.I.ChangeScene(name);
+        }
+        else
+        {
+            SCManager.I.ChangeScene(name, data);
+        }
     }
 }

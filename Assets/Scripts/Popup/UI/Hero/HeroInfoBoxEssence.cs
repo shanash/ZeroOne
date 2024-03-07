@@ -284,6 +284,16 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void OnClickTransferEssenceButton()
     {
+        if (Remain_Count_Of_Chance_Sending_Essence == 0)
+        {
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+            {
+                popup.ShowPopup(3f, "오늘 횟수가 소진되어 더이상 근원전달을 할 수 없습니다.");
+            });
+
+            Refresh();
+            return;
+        }
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index, Remain_Count_Of_Chance_Sending_Essence);
     }
