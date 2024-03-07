@@ -18,6 +18,7 @@ public class ShakeCameraClipEditor : Editor
     SerializedProperty _Roughness = null;
     SerializedProperty _Vertical = null;
     SerializedProperty _Horizontal = null;
+    SerializedProperty _Magnitude_Vec = null;
 
     #region Editor Methods
     /// <summary>
@@ -31,6 +32,7 @@ public class ShakeCameraClipEditor : Editor
         _Roughness = _Template.FindPropertyRelative(nameof(_Roughness));
         _Vertical = _Template.FindPropertyRelative(nameof(_Vertical));
         _Horizontal = _Template.FindPropertyRelative(nameof(_Horizontal));
+        _Magnitude_Vec = _Template.FindPropertyRelative(nameof(_Magnitude_Vec));
 
         // 어느방향으로도 움직이지 않는 이상한 값은 수정펀치다.
         if (!_Vertical.boolValue && !_Horizontal.boolValue)
@@ -51,6 +53,7 @@ public class ShakeCameraClipEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.Slider(_Magnitude, 0, 100);
+        EditorGUILayout.PropertyField(_Magnitude_Vec);
         EditorGUILayout.Slider(_Roughness, 0, 100);
 
         int patternIndex = GetPatternIndex(_Vertical.boolValue, _Horizontal.boolValue);

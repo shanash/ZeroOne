@@ -15,6 +15,9 @@ public class ShakeCameraBehaviour : PlayableBehaviour
     [SerializeField, Range(0, 100), Tooltip("카메라가 흔들리는 최대치")]
     float _Magnitude = 0.0f;
 
+    [SerializeField, Tooltip("카메라가 흔들리는 최대치")]
+    Vector2 _Magnitude_Vec = Vector2.one;
+
     [SerializeField, Range(0, 100), Tooltip("높을수록 격렬하게 흔들고, 낮을수록 부드럽게 흔듬")]
     float _Roughness = 0.0f;
 
@@ -78,9 +81,6 @@ public class ShakeCameraBehaviour : PlayableBehaviour
             _BecameActiveThisFrame = false;
             _ShakeSeconds = 0;
             _VirtualCineManager = null;
-
-            Debug.Log($"_Vertical : {_Vertical}");
-            Debug.Log($"_Horizontal : {_Horizontal}");
         }
 
         float inputWeight = info.weight;
@@ -102,11 +102,9 @@ public class ShakeCameraBehaviour : PlayableBehaviour
 
             float perlinInput = _ShakeSeconds * _Roughness + _PerlinNoiseSeed;
             Vector3 PositionCorrection = new Vector3(
-            _Horizontal ? Mathf.PerlinNoise(perlinInput, _PerlinNoiseOtherSeed) - .5f : 0, // PerlinNoise의 결과값은 0~1이니 0.5를 빼서 -0.5 ~ 0.5를 만들어줘야 음수방향으로도 흔들어줘서 균형이 맞습니다.
-            _Vertical ? Mathf.PerlinNoise(_PerlinNoiseOtherSeed, perlinInput) - .5f : 0,
-            0f) * _Magnitude * inputWeight;
-
-            Debug.Log($"PositionCorrection : {PositionCorrection}");
+            (_Horizontal ? Mathf.PerlinNoise(perlinInput, _PerlinNoiseOtherSeed) - .5f : 0) * _Magnitude_Vec.x, // PerlinNoise의 결과값은 0~1이니 0.5를 빼서 -0.5 ~ 0.5를 만들어줘야 음수방향으로도 흔들어줘서 균형이 맞습니다.
+            (_Vertical ? Mathf.PerlinNoise(_PerlinNoiseOtherSeed, perlinInput) - .5f : 0) * _Magnitude_Vec.y,
+            0f) * inputWeight;
 
             // VirtualCineManager를 직접 흔들어준다
             _VirtualCineManager.ShakeFromOriginalPositionBy(PositionCorrection);
