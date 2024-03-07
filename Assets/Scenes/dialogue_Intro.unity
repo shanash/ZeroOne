@@ -290,7 +290,7 @@ MonoBehaviour:
     barkUIOffset: {x: 0, y: 2, z: 0}
   standardDialogueUISettings:
     subtitlePanelNumber: 2
-    customSubtitlePanel: {fileID: 732399007}
+    customSubtitlePanel: {fileID: 957799395}
     customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
     menuPanelNumber: 0
     customMenuPanel: {fileID: 0}
@@ -425,17 +425,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &454896890 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 11478606, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
-  m_PrefabInstance: {fileID: 957799394}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9a9540f98bb79346b296ec5feb51073, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &498898607 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7602884010026684761, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
@@ -600,7 +589,7 @@ MonoBehaviour:
     barkUIOffset: {x: 0, y: 2, z: 0}
   standardDialogueUISettings:
     subtitlePanelNumber: 2
-    customSubtitlePanel: {fileID: 531444431}
+    customSubtitlePanel: {fileID: 1710925595}
     customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
     menuPanelNumber: 0
     customMenuPanel: {fileID: 0}
@@ -750,12 +739,32 @@ PrefabInstance:
       value: VN Template Standard Dialogue UI
       objectReference: {fileID: 0}
     - target: {fileID: 11423316, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+      propertyPath: conversationUIElements.waitForMainPanelOpen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11423316, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+      propertyPath: conversationUIElements.defaultNPCSubtitlePanel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11423316, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+      propertyPath: conversationUIElements.dontDeactivateMainPanel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11423316, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
       propertyPath: conversationUIElements.subtitlePanels.Array.size
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11423316, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+      propertyPath: conversationUIElements.allowOpenSubtitlePanelsOnStartConversation
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11478606, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
       propertyPath: visibility
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11478606, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+      propertyPath: onlyShowNPCPortraits
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22422120, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1069,6 +1078,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1444062807}
   m_SourcePrefab: {fileID: 100100000, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+--- !u!114 &957799395 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3462410044394878966, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
+  m_PrefabInstance: {fileID: 957799394}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a9540f98bb79346b296ec5feb51073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,7 +1269,7 @@ MonoBehaviour:
     barkUIOffset: {x: 0, y: 2, z: 0}
   standardDialogueUISettings:
     subtitlePanelNumber: 2
-    customSubtitlePanel: {fileID: 1710925595}
+    customSubtitlePanel: {fileID: 29435829}
     customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
     menuPanelNumber: 0
     customMenuPanel: {fileID: 0}
@@ -1404,6 +1424,7 @@ GameObject:
   - component: {fileID: 1335325794}
   - component: {fileID: 1335325793}
   - component: {fileID: 1335325795}
+  - component: {fileID: 1335325796}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -1484,6 +1505,22 @@ MonoBehaviour:
   colorA: {r: 0, g: 0, b: 0, a: 1}
   colorB: {r: 1, g: 1, b: 1, a: 1}
   duration: 1
+--- !u!114 &1335325796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335325791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eedcbfd5001ffe41a9f14dc42358718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgList:
+  - {fileID: 21300000, guid: f3e39799c42a81b4ab31f14f67fe3605, type: 3}
+  bgIndex: 0
+  bgGameObj: {fileID: 1335325793}
 --- !u!1 &1444062803 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3945121160955644218, guid: d1b7749dcc0beaf4f8d455f24cc4f0f7, type: 3}
@@ -1541,7 +1578,7 @@ MonoBehaviour:
     barkUIOffset: {x: 0, y: 2, z: 0}
   standardDialogueUISettings:
     subtitlePanelNumber: 2
-    customSubtitlePanel: {fileID: 454896890}
+    customSubtitlePanel: {fileID: 732399007}
     customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
     menuPanelNumber: 0
     customMenuPanel: {fileID: 0}
@@ -1637,7 +1674,7 @@ MonoBehaviour:
     barkUIOffset: {x: 0, y: 2, z: 0}
   standardDialogueUISettings:
     subtitlePanelNumber: 2
-    customSubtitlePanel: {fileID: 29435829}
+    customSubtitlePanel: {fileID: 531444431}
     customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
     menuPanelNumber: 0
     customMenuPanel: {fileID: 0}
@@ -1674,8 +1711,8 @@ SceneRoots:
   - {fileID: 452029530}
   - {fileID: 1507528428}
   - {fileID: 1026281459}
-  - {fileID: 239424946}
-  - {fileID: 561732310}
   - {fileID: 2105807534}
+  - {fileID: 561732310}
+  - {fileID: 239424946}
   - {fileID: 549734185}
   - {fileID: 597015709}
