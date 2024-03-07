@@ -24,7 +24,7 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     Texture2D Texture = null;
 
 
-    protected virtual void Initialize(Rect hole, string title, string desc)
+    protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
         if (Box == null) return;
 
@@ -32,7 +32,7 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
         float box_height = Box.rectTransform.rect.size.y;
 
         // 해상도에 따른 hole 보정 값
-        if (box_height != Screen.height)
+        if (is_screen_modify && box_height != Screen.height)
         {
             float multiple = box_height / Screen.height;
             hole = new Rect(
@@ -88,7 +88,7 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     public void Spawned()
     {
         var rt = GetComponent<RectTransform>();
-        rt.anchoredPosition = Vector2.zero;
+        rt.localPosition = Vector3.zero;
     }
 
     public void Despawned()

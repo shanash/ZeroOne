@@ -31,19 +31,48 @@ namespace FluffyDuck.Util
             }
         }
 
-        public static Rect GetScreenRect(RectTransform rectTransform)
+        public static Rect GetScreenRect(RectTransform rectTransform, Vector2 fixed_resolution = default(Vector2))
         {
-            // RectTransform의 스크린에서의 위치와 크기를 얻기 위한 Corners 계산
+            Canvas canvas = rectTransform.GetComponentInParent<Canvas>();
+            if (canvas == null)
+            {
+                Debug.Assert(false, "Transform이 소속된 캔버스를 찾을 수 없습니다");
+                return Rect.zero;
+            }
+
             Vector3[] corners = new Vector3[4];
             rectTransform.GetWorldCorners(corners);
+
+            Camera camera = null; // ScreenSpaceOverlay의 경우 null을 그대로 사용
+            if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                camera = canvas.worldCamera; // ScreenSpaceCamera의 경우 캔버스에 설정된 카메라 사용
+            }
+
             for (int i = 0; i < corners.Length; i++)
             {
-                corners[i] = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
+                corners[i] = RectTransformUtility.WorldToScreenPoint(camera, corners[i]);
             }
 
             // Corners를 사용해 스크린에서의 Rect 정보 계산
             Vector2 rectPositionOnScreen = corners[0]; // 하단 왼쪽 코너
             Vector2 rectSizeOnScreen = corners[2] - corners[0]; // 오른쪽 상단 코너에서 하단 왼쪽 코너를 뺀 값
+
+            if (!fixed_resolution.Equals(default))
+            {
+                float multiple_width = fixed_resolution.x / Screen.width;
+                float modify_height = Screen.height / multiple_width;
+
+                rectPositionOnScreen = new Vector2(
+                    rectPositionOnScreen.x / Screen.width * fixed_resolution.x,
+                    (rectPositionOnScreen.y - (Screen.height - modify_height) / 2) / Screen.height * fixed_resolution.y
+                    );
+
+                rectSizeOnScreen = new Vector2(
+                    rectSizeOnScreen.x / Screen.width * fixed_resolution.x,
+                    rectSizeOnScreen.y * multiple_width
+                    );
+            }
 
             return new Rect(rectPositionOnScreen.x, rectPositionOnScreen.y, rectSizeOnScreen.x, rectSizeOnScreen.y);
         }

@@ -28,9 +28,11 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     protected UnityEvent<TOUCH_RESULT_TYPE> Touch_Callback;
 
     /// <summary>
-    /// 0.5초 이상 누르고 있으면 롱터치로 인식
+    /// 일정시간 이상 누르고 있으면 롱터치로 인식
     /// </summary>
-    const float LONG_PRESS_DURATION = 0.7f;
+    [SerializeField, Tooltip("Long Press Dutaion")]
+    protected float Long_Press_Duration = 0.7f;
+
     bool Is_Long_Press;
 
     Coroutine Long_Touch_Coroutine;
@@ -112,7 +114,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     IEnumerator StartLongTouch()
     {
         Is_Long_Press = false;
-        yield return new WaitForSeconds(LONG_PRESS_DURATION);
+        yield return new WaitForSeconds(Long_Press_Duration);
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 

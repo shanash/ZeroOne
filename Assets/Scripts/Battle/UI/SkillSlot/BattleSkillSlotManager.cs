@@ -52,11 +52,14 @@ public class BattleSkillSlotManager : MonoBehaviour
     {
         Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
         var tooltip = Tooltip.GetComponent<TooltipSkill>();
-        tooltip.Initialize(hole, skill_data);
+        tooltip.Initialize(hole, skill_data, false);
     }
 
     void OnHideTooltip()
     {
-        GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+        if (Tooltip != null)
+        {
+            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+        }
     }
 }

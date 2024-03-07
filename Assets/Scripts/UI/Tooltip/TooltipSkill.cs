@@ -15,9 +15,9 @@ public class TooltipSkill : Tooltip
     [SerializeField]
     PartySelectSkillNode Skill_Card = null;
 
-    public void Initialize(Rect hole, UserHeroSkillData skill_data)
+    public void Initialize(Rect hole, UserHeroSkillData skill_data, bool is_screen_modify = true)
     {
-        Initialize(hole, skill_data.Name, skill_data.GetDescription());
+        Initialize(hole, skill_data.Name, skill_data.GetDescription(), is_screen_modify);
 
         Skill_Card.Initialize(skill_data);
 
