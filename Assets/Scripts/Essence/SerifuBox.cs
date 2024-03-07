@@ -37,6 +37,7 @@ public class SerifuBox : MonoBehaviour
         Head_Camera.targetTexture = Head_Texture;
         Head_Image.texture = Head_Texture;
         Head_Image.color = Color.white;
+        CanvasGroup.alpha = 0.0f;
     }
 
     public void OnReceiveSpineMessage(string message, float duration, bool show_chara_head)
@@ -105,11 +106,11 @@ public class SerifuBox : MonoBehaviour
         // 애니메이션이 끝난 후, CanvasGroup.alpha가 확실히 1이 되도록 설정합니다.
         CanvasGroup.alpha = 1;
 
-        // 애니메이션 종료 후 1초 대기
-        yield return new WaitForSeconds(1);
+        // 애니메이션 종료 후 0.5초 대기
+        yield return new WaitForSeconds(0.5f);
 
-        // 1초 동안 CanvasGroup.alpha를 0으로 부드럽게 사라지게 함
-        float fadeOutDuration = 1f;
+        // 0.3초 동안 Serifu.alpha를 0으로 부드럽게 사라지게 함
+        float fadeOutDuration = 0.3f;
         float fadeOutStartTime = Time.time;
         while (Time.time - fadeOutStartTime < fadeOutDuration)
         {
@@ -119,8 +120,8 @@ public class SerifuBox : MonoBehaviour
 
         Serifu.alpha = 0;
 
-        // 1초 동안 CanvasGroup.alpha를 0으로 부드럽게 사라지게 함
-        fadeOutDuration = 1f;
+        // 0.3초 동안 CanvasGroup.alpha를 0으로 부드럽게 사라지게 함
+        fadeOutDuration = 0.3f;
         fadeOutStartTime = Time.time;
         while (Time.time - fadeOutStartTime < fadeOutDuration)
         {

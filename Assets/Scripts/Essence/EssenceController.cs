@@ -26,6 +26,9 @@ public class EssenceController : SceneControllerBase
     [SerializeField, Tooltip("게이지 플러스 텍스트")]
     TMP_Text Essence_Charge_Plus_Text = null;
 
+    [SerializeField, Tooltip("오늘 시도 가능한 횟수")]
+    TMP_Text Essence_Chance_Count = null;
+
     List<UserL2dData> L2d_List = null;
     Producer pd = null;
 
@@ -96,11 +99,10 @@ public class EssenceController : SceneControllerBase
 
     IEnumerator CoUpdateSlider(Slider slider, TMP_Text text, float value, float duration = 0.5f)
     {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/DM-CGS-26");
-
         float elapsed_time = 0f;
         float origin = slider.value;
         int gap = (int)((value * 100) - (origin * 100));
+        if (gap > 0) AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/DM-CGS-26");
 
         text.text = $"+{gap.ToString("N0")}";
         text.alpha = 0;
@@ -113,8 +115,11 @@ public class EssenceController : SceneControllerBase
             elapsed_time += Time.deltaTime;
             float multiple = elapsed_time / duration;
             slider.value = Mathf.Lerp(origin, value, multiple);
-            text.alpha = (multiple > 0.5f) ? (1 - multiple) * 2.0f : multiple * 2.0f;
-            text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, Mathf.Lerp(text.rectTransform.anchoredPosition.y, text_dest_y, multiple));
+            if (gap > 0)
+            {
+                text.alpha = (multiple > 0.5f) ? (1 - multiple) * 2.0f : multiple * 2.0f;
+                text.rectTransform.anchoredPosition = new Vector2(text.rectTransform.anchoredPosition.x, Mathf.Lerp(text.rectTransform.anchoredPosition.y, text_dest_y, multiple));
+            }
         }
 
         text.alpha = 0;
@@ -130,6 +135,7 @@ public class EssenceController : SceneControllerBase
 
         pd = Factory.Instantiate<Producer>(Battle_Pc_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE);
         pd.OnResultTransferEssence += OnResultTransferEssence;
+        pd.OnCompleteTransferEssence += OnCompleteTransferEssence;
         pd.OnSendActorMessage += Serifu_Box.OnReceiveSpineMessage;
 
         //TODO:하드코딩된 부분은 나중에 제외하기
@@ -144,7 +150,6 @@ public class EssenceController : SceneControllerBase
 
         return true;
     }
-
 
     public void OnResultTransferEssence(bool is_success, TOUCH_BODY_TYPE type)
     {
@@ -177,6 +182,19 @@ public class EssenceController : SceneControllerBase
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
     }
+
+    public void OnCompleteTransferEssence()
+    {
+        // TODO: M2 근원전달 플로우를 위해서는 실패처리
+        Climax_Effect.Play(true);
+
+        Remain_Count--;
+        if (Remain_Count > 0)
+        {
+            StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0));
+        }
+    }
+
 
     public override void OnClick(UIButtonBase button)
     {

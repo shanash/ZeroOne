@@ -80,7 +80,12 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     protected abstract Spine.AnimationState AnimationState { get; }
     protected int Current_State_Id => SkinAniState.state_id;
+
+    // 대사 전달
     public event Action<string, float, bool> OnSendMessage;
+    // 근원전달 성공 여부 전달
+    public event Action<bool, TOUCH_BODY_TYPE> OnResultTransferEssence;
+    // 근원전달 성공 애니메이션 종료
     public event Action OnCompleteTransferEssence;
 
     bool Is_Playing_Success_Transfer_Essence = false;
@@ -469,7 +474,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             Essence_Success_Body = TOUCH_BODY_TYPE.NONE;
             Is_Playing_Success_Transfer_Essence = true;
         }
-        Producer.NotifyResultTransferEssence(is_essence_success, bounding_box.GetTouchBodyType());
+        OnResultTransferEssence?.Invoke(is_essence_success, bounding_box.GetTouchBodyType());
 
         return Interaction_Bases[key];
     }
