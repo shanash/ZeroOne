@@ -127,6 +127,11 @@ public class GPMCommand : MonoBehaviour
         {
             GainSendEssence(cheat_key);
         }
+        else
+        {
+            return;
+        }
+        PopupManager.Instance.CloseAll();
     }
     /// <summary>
     /// 스토리 존 클리어(지정 존의 스테이지를 모두 클리어) - 존 ID(난이도 포함)

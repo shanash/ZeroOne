@@ -1,6 +1,7 @@
 using Spine;
 using System.Collections.Generic;
 using UnityEngine;
+using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour
 {
@@ -100,6 +101,7 @@ public abstract partial class ActorBase : MonoBehaviour
     {
         // UI버튼들 입력을 애니메이션 끝날때까지 막는다.
         ScreenEffectManager.I.SetBlockInputUI(true);
+        GestureManager.Instance.Enable = false;
 
         // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
         var chat_motion_data = Reaction_Chat_Motions[Current_Chat_Motion_Id];
@@ -147,6 +149,10 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateReactExit()
     {
+        // 애니메이션 끝나면 풉니다.
+        GestureManager.Instance.Enable = true;
+        ScreenEffectManager.I.SetBlockInputUI(false);
+
         if (Is_Playing_Success_Transfer_Essence)
         {
             Is_Playing_Success_Transfer_Essence = false;
@@ -164,9 +170,6 @@ public abstract partial class ActorBase : MonoBehaviour
 
         react_track_entry = null;
         Current_Chat_Motion_Id = -1;
-
-        // 애니메이션 끝나면 풉니다.
-        ScreenEffectManager.I.SetBlockInputUI(false);
     }
 
     public virtual void ActorStateDragBegin()

@@ -1,10 +1,8 @@
+using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using ZeroOne.Input;
@@ -97,7 +95,7 @@ public class EssenceController : SceneControllerBase
         }
     }
 
-    IEnumerator CoUpdateSlider(Slider slider, TMP_Text text, float value, float duration = 0.5f)
+    async UniTask _UpdateSlider(Slider slider, TMP_Text text, float value, float duration = 0.5f)
     {
         float elapsed_time = 0f;
         float origin = slider.value;
@@ -111,7 +109,7 @@ public class EssenceController : SceneControllerBase
 
         while (elapsed_time < duration)
         {
-            yield return null;
+            await UniTask.Yield(); 
             elapsed_time += Time.deltaTime;
             float multiple = elapsed_time / duration;
             slider.value = Mathf.Lerp(origin, value, multiple);
@@ -166,7 +164,7 @@ public class EssenceController : SceneControllerBase
             if (Essence_Force_Flow[Essence_Force_Flow_Index].Peek().Equals(type))
             {
                 Essence_Force_Flow[Essence_Force_Flow_Index].Dequeue();
-                StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3));
+                _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3);
             }
 
             if (!is_success && Essence_Force_Flow[Essence_Force_Flow_Index].Count > 0)
@@ -201,14 +199,26 @@ public class EssenceController : SceneControllerBase
 
     public void OnCompleteTransferEssence()
     {
-        // TODO: M2 근원전달 플로우를 위해서는 실패처리
         Climax_Effect.Play(true);
 
         Remain_Count--;
         if (Remain_Count > 0)
         {
-            StartCoroutine(CoUpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0));
+            _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
         }
+
+        _ = BlockInputWhenEndingClimaxEffect();
+    }
+
+    async UniTask BlockInputWhenEndingClimaxEffect()
+    {
+        Debug.Log("Block UI");
+        GestureManager.Instance.Enable = false;
+        ScreenEffectManager.I.SetBlockInputUI(true);
+        await UniTask.WaitUntil(() => !Climax_Effect.isPlaying);
+        GestureManager.Instance.Enable = true;
+        ScreenEffectManager.I.SetBlockInputUI(false);
+        Debug.Log("Release UI");
     }
 
 
