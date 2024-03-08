@@ -1,7 +1,7 @@
 
 using System;
 
-public class MemorialDefine
+public class SpineCharaDefine
 {
     public static bool TryParseEvent(string eventName, out SPINE_EVENT result)
     {
@@ -17,5 +17,6 @@ public class MemorialDefine
         NONE = 0,
         VOICE,
         MOUTH_SHAPE,
+        SOUND,
     }
 }

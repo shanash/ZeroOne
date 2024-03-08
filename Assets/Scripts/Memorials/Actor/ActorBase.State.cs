@@ -1,6 +1,7 @@
 using Spine;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour
@@ -103,23 +104,30 @@ public abstract partial class ActorBase : MonoBehaviour
         ScreenEffectManager.I.SetBlockInputUI(true);
         GestureManager.Instance.Enable = false;
 
-        // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
-        var chat_motion_data = Reaction_Chat_Motions[Current_Chat_Motion_Id];
-        if (!TryGetTrackNum(chat_motion_data.animation_name, out int track_num))
+        if (Current_Timeline_Id != 0)
         {
-            throw new InvalidTrackException(track_num);
+            Director.Play();
         }
-
-        var te = Skeleton.AnimationState.SetAnimation(track_num, chat_motion_data.animation_name, false);
-
-        // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
-        if (IDLE_BASE_TRACK == track_num)
+        else
         {
-            te.MixDuration = 0.2f;
-        }
+            // 챗모션 데이터로부터 해당 애니메이션 전부 플레이
+            var chat_motion_data = Reaction_Chat_Motions[Current_Chat_Motion_Id];
+            if (!TryGetTrackNum(chat_motion_data.animation_name, out int track_num))
+            {
+                throw new InvalidTrackException(track_num);
+            }
 
-        // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
-        react_track_entry = te;
+            var te = Skeleton.AnimationState.SetAnimation(track_num, chat_motion_data.animation_name, false);
+
+            // 아이들 트랙은 기존 아이들 애니메이션을 끊고 들어가야 하기 때문에 mix duration을 줍니다
+            if (IDLE_BASE_TRACK == track_num)
+            {
+                te.MixDuration = 0.2f;
+            }
+
+            // 이 엔트리들이 전부 재생완료 되면 React 상태가 종료되도록 합니다
+            react_track_entry = te;
+        }
         Current_Serifu_Index = -1;
 
         // 연속 제스쳐 카운트 갯수 하나 증가
@@ -144,6 +152,15 @@ public abstract partial class ActorBase : MonoBehaviour
         {
             Elapsed_Time_For_Mouth_Open += Time.deltaTime;
             te.Alpha = Mathf.Lerp(Origin_Mouth_Alpha, Dest_Mouth_Alpha, System.Math.Min(1.0f, Elapsed_Time_For_Mouth_Open / AudioManager.VOICE_TERM_SECONDS));
+        }
+
+        if (Current_Timeline_Id != 0 && Director.state == UnityEngine.Playables.PlayState.Paused)
+        {
+            GameObject.Find("Square").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+            Camera.main.gameObject.transform.position = new Vector3(0, 0, -10);
+            Camera.main.gameObject.transform.eulerAngles = Vector3.zero;
+            Camera.main.orthographicSize = 10;
+            FSM.ChangeState(ACTOR_STATES.IDLE);
         }
     }
 

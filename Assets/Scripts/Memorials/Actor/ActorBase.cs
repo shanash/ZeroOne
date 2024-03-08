@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
@@ -27,6 +29,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     [SerializeField]
     Collider2D Head;
     */
+
+    [SerializeField]
+    protected PlayableDirector Director = null;
 
     // 입모양 애니메이션
     [SerializeField, Tooltip("말할때 입 벌어지는 크기 배율 조정"), Range(1, 10)]
@@ -64,6 +69,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected Dictionary<int, Me_Chat_Motion_Data> Reaction_Chat_Motions;
 
     protected int Current_Chat_Motion_Id;
+    protected int Current_Timeline_Id;
     protected int Current_Serifu_Index;
     protected int Current_Balloon_ID = -1; // 표시되어 있는 말풍선 아이디
 
@@ -150,19 +156,22 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         if (FSM.CurrentTransitionID == ACTOR_STATES.REACT)
         {
-            if (react_track_entry == entry)
+            if (Current_Timeline_Id == 0)
             {
-                if (entry.TrackIndex != IDLE_BASE_TRACK)
+                if (react_track_entry == entry)
                 {
-                    Skeleton.AnimationState.SetEmptyAnimation(entry.TrackIndex, 0);
-                }
-                else
-                {
-                    Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Idle_Animation_Data.Animation_Idle_Name, true);
-                }
+                    if (entry.TrackIndex != IDLE_BASE_TRACK)
+                    {
+                        Skeleton.AnimationState.SetEmptyAnimation(entry.TrackIndex, 0);
+                    }
+                    else
+                    {
+                        Skeleton.AnimationState.SetAnimation(IDLE_BASE_TRACK, Idle_Animation_Data.Animation_Idle_Name, true);
+                    }
 
-                react_track_entry = null;
-                FSM.ChangeState(ACTOR_STATES.IDLE);
+                    react_track_entry = null;
+                    FSM.ChangeState(ACTOR_STATES.IDLE);
+                }
             }
         }
     }
@@ -184,13 +193,13 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
     protected virtual void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
     {
         Debug.Log($"SpineAnimationEvent : {entry.Animation.Name} : {evt.Data.Name} : {evt.String}");
-        MemorialDefine.TryParseEvent(evt.Data.Name.ToUpper(), out MemorialDefine.SPINE_EVENT eEvt);
+        SpineCharaDefine.TryParseEvent(evt.Data.Name.ToUpper(), out SpineCharaDefine.SPINE_EVENT eEvt);
         switch (eEvt)
         {
-            case MemorialDefine.SPINE_EVENT.MOUTH_SHAPE:
+            case SpineCharaDefine.SPINE_EVENT.MOUTH_SHAPE:
                 Current_Mouth_Anim_Name = evt.String.Equals("close") ? string.Empty : evt.String;
                 break;
-            case MemorialDefine.SPINE_EVENT.VOICE:
+            case SpineCharaDefine.SPINE_EVENT.VOICE:
                 if (Current_Chat_Motion_Id == -1)
                 {
                     Debug.Assert(false, $"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
@@ -231,6 +240,9 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                             SpeechBalloon.Pivot.Right);
                     }
                 }
+                break;
+            case SpineCharaDefine.SPINE_EVENT.SOUND:
+                AudioManager.Instance.PlayFX($"Assets/AssetResources/Audio/Voice/Eileen/{evt.String}");
                 break;
         }
     }
@@ -490,6 +502,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
         Current_Interaction = data;
         Current_Chat_Motion_Id = data.reaction_ani_id;
+        Current_Timeline_Id = data.reaction_timeline_id;
     }
 
     protected void AddGestureEventListener()
@@ -530,6 +543,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             Debug.Assert(false, $"프리팹 {this.GetType()} 컴포넌트의 인스펙터에 SkeletonAnimation이 없습니다");
             return false;
+        }
+
+        if (type == SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE)
+        {
+            InitTimeline();
         }
 
         var goCM = GameObject.Find("VirtualCineManager");
@@ -600,6 +618,27 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Is_Quit = false;
     }
 
+    void InitTimeline()
+    {
+        //Timeline_Asset = await CommonUtils.GetResourceFromAddressableAsset<TimelineAsset>("Assets/AssetResources/Prefabs/Standing/ST_Eileen/TL_Part3_Lv0");
+        //var tracks = Timeline_Asset.GetOutputTracks();
+        var Timeline_Asset = Director.playableAsset as TimelineAsset;
+
+        foreach (var track in Timeline_Asset.GetOutputTracks())
+        {
+            Debug.Log($"InitTimeline : {track.name}");
+            switch(track.name)
+            {
+                case "Animation Track":
+                    Director.SetGenericBinding(track, Camera.main.GetComponent<Animator>());
+                    break;
+                case "Animation Track (1)":
+                    Director.SetGenericBinding(track, GameObject.Find("Square").GetComponent<Animator>());
+                    break;
+            }
+        }
+    }
+
     void SetActor(LOVE_LEVEL_TYPE type)
     {
         LoveState = MasterDataManager.Instance.Get_L2D_LoveState(SkinData.l2d_id, type);
@@ -620,6 +659,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             .Where(serifu => !string.IsNullOrEmpty(serifu.audio_clip_id))
             .Select(serifu => GameDefine.GetLocalizeString(serifu.audio_clip_id))
             .ToList();
+
+        for (int i = 1; i < 5; i++)
+        {
+            audio_clip_pathes.Add($"Assets/AssetResources/Audio/Voice/Eileen/Moan_Eileen_{i}");
+        }
 
         AudioManager.Instance.PreloadAudioClipsAsync(audio_clip_pathes, null);
 

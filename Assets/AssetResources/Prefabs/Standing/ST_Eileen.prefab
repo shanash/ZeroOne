@@ -3993,6 +3993,7 @@ GameObject:
   - component: {fileID: 5135445881542874173}
   - component: {fileID: 4726776921575849091}
   - component: {fileID: 3370966206532438657}
+  - component: {fileID: -8798151097567208691}
   m_Layer: 0
   m_Name: ST_Eileen
   m_TagString: Untagged
@@ -4135,8 +4136,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Skeleton: {fileID: 5135445881542874173}
+  Director: {fileID: -8798151097567208691}
   Talk_Mouth_Wide_Multiple: 10
   Look_At_Speed: 3
+--- !u!320 &-8798151097567208691
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4140733540388995425}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: a69d8597597aea64f82aca068aa36049, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -6947588883198328294, guid: a69d8597597aea64f82aca068aa36049, type: 2}
+    value: {fileID: 5135445881542874173}
+  - key: {fileID: -4044375760099210882, guid: a69d8597597aea64f82aca068aa36049, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 4227086377053416347, guid: a69d8597597aea64f82aca068aa36049, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6551018983937595845, guid: a69d8597597aea64f82aca068aa36049, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &4237689170576159133
 GameObject:
   m_ObjectHideFlags: 0

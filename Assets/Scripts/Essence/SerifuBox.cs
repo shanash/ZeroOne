@@ -57,6 +57,8 @@ public class SerifuBox : MonoBehaviour
     {
         Serifu.ForceMeshUpdate();
         var textInfo = Serifu.textInfo;
+        Serifu.alpha = 1.0f;
+
         int characterCount = textInfo.characterCount;
 
         float alphaDuration = duration * CANVAS_ALPHA_DURATION_PERCENT; // CanvasGroup.alpha가 1이 되는 데까지 걸리는 시간
@@ -69,11 +71,13 @@ public class SerifuBox : MonoBehaviour
             {
                 // 전체 duration의 20% 동안 CanvasGroup.alpha를 0에서 1까지 부드럽게 증가시킵니다.
                 CanvasGroup.alpha =  Mathf.Lerp(canvasgroup_origin_alpha, 1, time / alphaDuration);
+                Debug.Log($"CanvasGroup.alpha : {CanvasGroup.alpha}");
             }
-            else
+            else if (CanvasGroup.alpha < 1)
             {
                 // 20% 시간이 지난 후에는 CanvasGroup.alpha를 1로 유지합니다.
                 CanvasGroup.alpha = 1;
+                Debug.Log($"CanvasGroup.alpha : {CanvasGroup.alpha}");
             }
 
             for (int characterIndex = 0; characterIndex < characterCount; characterIndex++)
@@ -87,9 +91,13 @@ public class SerifuBox : MonoBehaviour
 
                 float overlapFactor = 0.5f;
                 float timePerCharacter = (duration * overlapFactor) / characterCount;
+                Debug.Log($"timePerCharacter : {timePerCharacter}");
                 float characterStartTime = timePerCharacter * characterIndex;
+                Debug.Log($"characterStartTime : {characterStartTime}");
                 float characterElapsed = Mathf.Clamp01((time - characterStartTime) / (duration - characterStartTime));
+                Debug.Log($"characterElapsed : {characterElapsed}");
                 byte alphaByte = (byte)(255 * characterElapsed);
+                Debug.Log($"alphaByte : {(int)alphaByte}");
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -105,6 +113,7 @@ public class SerifuBox : MonoBehaviour
 
         // 애니메이션이 끝난 후, CanvasGroup.alpha가 확실히 1이 되도록 설정합니다.
         CanvasGroup.alpha = 1;
+        Debug.Log($"CanvasGroup.alpha : {CanvasGroup.alpha}");
 
         // 애니메이션 종료 후 0.5초 대기
         yield return new WaitForSeconds(0.5f);

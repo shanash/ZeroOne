@@ -659,9 +659,13 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             OnInit();
         }
         //  보이스를 플레이 중이라면 그냥 무시
+        // TODO: 였는데 일단 강제로 멈추고 플레이시킴
+        // 입모양 콜백쪽에 문제가 있을수 있으니 차후 확인
         if (_Voice_Play_Coroutine != null)
         {
-            return;
+            StopCoroutine( _Voice_Play_Coroutine );
+            _Voice_Play_Coroutine = null;
+            StopVoice();
         }
 
         var clip_control = GetAudioClipController(key);
