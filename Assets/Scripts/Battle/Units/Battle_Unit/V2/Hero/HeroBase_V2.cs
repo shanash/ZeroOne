@@ -589,7 +589,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            Debug.Log(animation_name);
             if (animation_name.Equals("00_ultimate"))
             {
                 UnsetPlayableDirector();
@@ -655,15 +654,15 @@ public partial class HeroBase_V2 : UnitBase_V2
                     for (int i = 0; i < cnt; i++)
                     {
                         var s = exec_list[i];
-                        if (evt_name.IndexOf("apply_") != -1)
-                        {
+                        //if (evt_name.IndexOf("apply_") != -1)
+                        //{
 
-                        }
-                        var targets = FindTargetsReturnLocal(s);
-                        if (targets != null)
-                        {
+                        //}
+                        //var targets = FindTargetsReturnLocal(s);
+                        //if (targets != null)
+                        //{
 
-                        }
+                        //}
                         SpawnSkillEffect_V3(s);
                     }
                 }
@@ -1021,6 +1020,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         var factory = Battle_Mng.GetEffectFactory();
         FindTargets(skill);
         int target_cnt = Attack_Targets.Count;
+        if (target_cnt == 0)
+        {
+            return;
+        }
         int effect_weight_index = skill.GetEffectWeightIndex();
 
         string skill_trigger_effect_prefab = skill.GetTriggerEffectPrefabPath();
@@ -1660,11 +1663,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         float move = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
         var pos = this.transform.localPosition;
         pos.x += move;
-        //if (Is_Reposition)
-        //{
-        //    float zmove = (float)Move_Speed * Time.deltaTime * Battle_Speed_Multiple;
-        //    pos.z += zmove;
-        //}
         this.transform.localPosition = pos;
     }
     /// <summary>
@@ -1677,6 +1675,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
+        //  궁극기를 사용할 수 없는 상태
         var state = GetCurrentState();
         if (state == UNIT_STATES.SKILL_1 || state == UNIT_STATES.SKILL_READY_1 || state == UNIT_STATES.SKILL_END || state == UNIT_STATES.ULTIMATE_PAUSE)
         {
@@ -1690,6 +1689,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         {
             return;
         }
+        //  궁극기가 쿨타임이 남아있을 경우 안됨
         if (!skill.IsPrepareCooltime())
         {
             return;
@@ -1698,6 +1698,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (target_skill != null)
         {
             FindTargets(target_skill);
+        }
+        //  타겟이 잡혀있지 않다면, 일단 스킬 사용 안되도록
+        if (Attack_Targets.Count == 0)
+        {
+            return;
         }
         //  주인공 이외의 모든 캐릭 pause
         Battle_Mng.AllPauseUnitWithoutHero(this);
@@ -1708,7 +1713,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
         List<HeroBase_V2> targets = new List<HeroBase_V2>();
         targets.Add(this);
-        targets.AddRange(Attack_Targets);
+        targets.AddRange(Attack_Targets.FindAll(x => object.ReferenceEquals(x, this)));
         Battle_Mng.HideAllUnitWithoutTargets(targets);
 
         Skeleton.AnimationState.ClearTracks();
@@ -1730,7 +1735,6 @@ public partial class HeroBase_V2 : UnitBase_V2
         sb.AppendLine($"{nameof(state)} => {state}");
         sb.AppendLine($"{nameof(Life)} => {Life}");
         sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
-
 
         return sb.ToString();
     }
