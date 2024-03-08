@@ -231,10 +231,10 @@ public class EssenceController : SceneControllerBase
         Climax_Effect.Play(true);
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/DM-CGS-45");
 
-        Remain_Count--;
-        if (Remain_Count > 0)
+        if (Remain_Count-1 > 0)
         {
             _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3, 1.0f);
+            Remain_Count--;
             MoveToTargetAlpha(Token_MoveToTargetAlpha.Token, HideableUI, 1).Forget();
         }
         else
@@ -271,7 +271,6 @@ public class EssenceController : SceneControllerBase
         }
         else
         {
-            await UniTask.WaitForSeconds(1);
             _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
         }
     }

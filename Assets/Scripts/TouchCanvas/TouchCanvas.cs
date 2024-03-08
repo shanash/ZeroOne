@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -103,15 +104,17 @@ public class TouchCanvas : MonoBehaviour
     /// </summary>
     public void ClearTouchEffect()
     {
-        var pool = GameObjectPoolManager.Instance;
-        int cnt = Used_Touch_Effects.Count;
-        for (int i = 0; i < cnt; i++)
+        try
         {
-            var node = Used_Touch_Effects[i];
-            node.StopParticle();
-            pool.UnusedGameObject(node.gameObject);
+            var pool = GameObjectPoolManager.Instance;
+            foreach (var node in Used_Touch_Effects)
+            {
+                node.StopParticle();
+                pool.UnusedGameObject(node.gameObject);
+            }
+            Used_Touch_Effects.Clear();
         }
-        Used_Touch_Effects.Clear();
+        catch (Exception) { }
     }
 
     /// <summary>

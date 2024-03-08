@@ -626,7 +626,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         foreach (var track in Timeline_Asset.GetOutputTracks())
         {
-            Debug.Log($"InitTimeline : {track.name}");
             switch(track.name)
             {
                 case "Animation Track":
