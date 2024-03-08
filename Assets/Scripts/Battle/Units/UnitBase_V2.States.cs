@@ -61,6 +61,15 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
         return UNIT_STATES.NONE;
     }
 
+    public bool IsReservedState(UNIT_STATES trans)
+    {
+        if (FSM != null)
+        {
+            return FSM.IsReservedState(trans);
+        }
+        return false;
+    }
+
     public bool IsPause()
     {
         return GetCurrentState() == UNIT_STATES.PAUSE;

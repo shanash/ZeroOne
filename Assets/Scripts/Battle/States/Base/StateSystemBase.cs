@@ -105,6 +105,8 @@ public class StateSystemBase<S>
 
     }
 
+    
+
     void RealChangeState(S trans)
     {
         if (trans.Equals(default(S)))
@@ -192,4 +194,14 @@ public class StateSystemBase<S>
     {
         return States_History;
     }
+    /// <summary>
+    /// 해당 상태가 예약되어 있는지 여부 체크
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <returns></returns>
+    public bool IsReservedState(S trans)
+    {
+        return Queue_States.Contains(trans);
+    }
+
 }

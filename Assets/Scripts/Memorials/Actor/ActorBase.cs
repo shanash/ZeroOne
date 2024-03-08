@@ -1,13 +1,10 @@
 using Cinemachine;
-using Cysharp.Threading.Tasks;
-using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Timeline;
 using ZeroOne.Input;
 
 public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider, FluffyDuck.Util.MonoFactory.IProduct
@@ -93,7 +90,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     bool Is_Playing_Success_Transfer_Essence = false;
     SPINE_CHARA_LOCATION_TYPE Location_Type = SPINE_CHARA_LOCATION_TYPE.NONE;
-    TimelineAsset Timeline_Asset = null;
 
     #region MonoBehaviour Methods
 
@@ -536,8 +532,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             return false;
         }
 
-        InitTimeline().Forget();
-
         var goCM = GameObject.Find("VirtualCineManager");
         var goMemCamera = goCM.transform.Find("MemorialCamera");
         var Vcam = goMemCamera.GetComponent<CinemachineVirtualCamera>();
@@ -604,12 +598,6 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         Dragged_Canvas_Position = Vector2.zero;
         Current_Face_Direction = Vector2.zero;
         Is_Quit = false;
-    }
-
-    async UniTaskVoid InitTimeline()
-    {
-        Timeline_Asset = await CommonUtils.GetResourceFromAddressableAsset<TimelineAsset>("Assets/AssetResources/Prefabs/Standing/ST_Eileen/TL_Part3_Lv0");
-        Timeline_Asset.GetOutputTracks();
     }
 
     void SetActor(LOVE_LEVEL_TYPE type)

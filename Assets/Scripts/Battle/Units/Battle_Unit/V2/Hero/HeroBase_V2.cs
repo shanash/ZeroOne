@@ -1713,7 +1713,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
         List<HeroBase_V2> targets = new List<HeroBase_V2>();
         targets.Add(this);
-        targets.AddRange(Attack_Targets.FindAll(x => object.ReferenceEquals(x, this)));
+        targets.AddRange(Attack_Targets.FindAll(x => !object.ReferenceEquals(x, this)));
         Battle_Mng.HideAllUnitWithoutTargets(targets);
 
         Skeleton.AnimationState.ClearTracks();

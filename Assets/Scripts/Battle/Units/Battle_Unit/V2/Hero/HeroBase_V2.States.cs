@@ -173,12 +173,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         if (Team_Type == TEAM_TYPE.LEFT)
         {
-            //MoveLeftTeam();
             MoveInLeftTeam();
         }
         else
         {
-            //MoveRightTeam();
             MoveInRightTeam();
         }
     }
@@ -192,6 +190,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (!IsAlive())
         {
             ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
+        if (IsReservedState(UNIT_STATES.ULTIMATE_PAUSE))
+        {
             return;
         }
         if (Team_Type == TEAM_TYPE.LEFT)
@@ -231,6 +233,10 @@ public partial class HeroBase_V2 : UnitBase_V2
         if (!IsAlive())
         {
             ChangeState(UNIT_STATES.DEATH);
+            return;
+        }
+        if (IsReservedState(UNIT_STATES.ULTIMATE_PAUSE))
+        {
             return;
         }
         float dt = Time.deltaTime * Battle_Speed_Multiple;
