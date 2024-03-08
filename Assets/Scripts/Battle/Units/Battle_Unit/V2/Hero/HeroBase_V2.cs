@@ -1214,7 +1214,7 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 지속성 스킬 효과 데이터를 모두 제거<br/>
     /// 데이터를 제거하면 자동으로 이펙트도 사라지도록 구현되어 있음
     /// </summary>
-    protected void ClearDurationSkillDataList()
+    public void ClearDurationSkillDataList()
     {
         GetSkillManager().ClearDurationSkillDataList();
     }

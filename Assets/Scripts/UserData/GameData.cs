@@ -61,7 +61,7 @@ public class GameData : Singleton<GameData>
             {
                 is_need_recharge_essence_point = true;
             }
-}
+        }
 
         //  hero skill data
         {

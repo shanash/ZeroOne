@@ -15,6 +15,8 @@ namespace FluffyDuck.Util
 
 
         UPDATE_TOP_PLAYER_INFO = 201,
+
+        UPDATE_HERO_DETAIL_INFO = 301,
     }
 
     public class UpdateEventDispatcher : MonoSingleton<UpdateEventDispatcher>

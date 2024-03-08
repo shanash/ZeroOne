@@ -485,6 +485,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
                 int lv = before_lv + loop_count;
                 Result_Level_Text.text = lv.ToString();
                 UpdateHeroStatusInfoNodes(lv);
+                
                 if (loop_count >= gauge_full_count)
                 {
                     break;
@@ -536,6 +537,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         }
         
         Level_Up_Coroutine = null;
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
     }
     
 

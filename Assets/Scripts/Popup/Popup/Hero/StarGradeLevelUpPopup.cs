@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -160,6 +161,7 @@ public class StarGradeLevelUpPopup : PopupBase
             });
             
         });
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
     }
 
     public void OnClickStarGradeUp()

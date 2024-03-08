@@ -272,11 +272,13 @@ public partial class HeroBase_V2 : UnitBase_V2
     public override void UnitStateWinBegin()
     {
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.WIN_01);
+        ClearDurationSkillDataList();
     }
 
     public override void UnitStateTimeOutBegin()
     {
         PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
+        ClearDurationSkillDataList();
     }
 
     public override void UnitStateEndBegin()

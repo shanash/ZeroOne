@@ -153,7 +153,8 @@ MonoBehaviour:
   m_Name: ShakeCameraClip
   m_EditorClassIdentifier: 
   _Template:
-    _Magnitude: 3
+    _Magnitude: 0
+    _Magnitude_Vec: {x: 50, y: 50}
     _Roughness: 30
     _Vertical: 1
     _Horizontal: 1
@@ -767,6 +768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Template:
     _Magnitude: 1.2
+    _Magnitude_Vec: {x: 10, y: 10}
     _Roughness: 30
     _Vertical: 1
     _Horizontal: 1
@@ -1404,7 +1406,7 @@ MonoBehaviour:
     m_Start: 2.6
     m_ClipIn: 0
     m_Asset: {fileID: 7997349756072122210}
-    m_Duration: 0.1333333333333333
+    m_Duration: 0.16666666666666652
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6164678229143514984}
     m_EaseInDuration: 0
@@ -1413,25 +1415,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1452,10 +1436,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: ShakeCameraClip
   - m_Version: 1
-    m_Start: 2.7333333333333334
+    m_Start: 2.7666666666666666
     m_ClipIn: 0
     m_Asset: {fileID: 8355327776289000906}
-    m_Duration: 0.10000000000000009
+    m_Duration: 0.1333333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6164678229143514984}
     m_EaseInDuration: 0
@@ -2026,9 +2010,10 @@ MonoBehaviour:
   m_Name: ShakeCameraClip
   m_EditorClassIdentifier: 
   _Template:
-    _Magnitude: 3.4
+    _Magnitude: 0
+    _Magnitude_Vec: {x: 3, y: 3}
     _Roughness: 20
-    _Vertical: 0
+    _Vertical: 1
     _Horizontal: 1
 --- !u!114 &8256294631061879902
 MonoBehaviour:
@@ -2084,7 +2069,8 @@ MonoBehaviour:
   m_Name: ShakeCameraClip
   m_EditorClassIdentifier: 
   _Template:
-    _Magnitude: 0.4
+    _Magnitude: 0
+    _Magnitude_Vec: {x: 3, y: 3}
     _Roughness: 20
     _Vertical: 1
     _Horizontal: 1

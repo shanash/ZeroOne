@@ -259,8 +259,23 @@ public class HeroInfoUI : PopupBase
         UpdatePopup();
     }
 
+    void UpdateEventDispatchCallback(UPDATE_EVENT_TYPE etype)
+    {
+        if (etype == UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO)
+        {
+            UpdatePopup();
+        }
+    }
+    public override void Spawned()
+    {
+        base.Spawned();
+        UpdateEventDispatcher.Instance.AddEventCallback(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO, UpdateEventDispatchCallback);
+    }
     public override void Despawned()
     {
+        base.Despawned();
+        UpdateEventDispatcher.Instance.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
+
         //TODO: 일단 임시로 카메라로 위치를 세팅
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
         over_cam.transform.localPosition = new Vector3(0, 0, 0);

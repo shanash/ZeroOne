@@ -74,7 +74,6 @@ public class EffectFactory : MonoBehaviour
         {
             UnusedEffectBase(remove_effects[i]);
         }
-
     }
 
 

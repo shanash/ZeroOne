@@ -453,6 +453,7 @@ public class SkillLevelPopup : PopupBase
         Level_Up_Coroutine = null;
         Simulate_Result = null;
         UpdatePopup();
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
     }
 
     void UpdateExpItemButtons()
