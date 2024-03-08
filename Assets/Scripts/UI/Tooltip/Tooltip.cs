@@ -44,8 +44,8 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 
         Texture = CreateSolidTexture((int)box_width, (int)box_height);
 
-        Shader_Mat = new Material(Shader.Find("Standard"));
-        Shader_Mat.shader = Resources.Load<Shader>("Shaders/TransparentHole");
+        Shader_Mat = new Material(Shader.Find("FluffyDuck/TransparentHole"));
+        //Shader_Mat.shader = Resources.Load<Shader>("Shaders/TransparentHole");
 
         Box.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
         Box.material = Shader_Mat;

@@ -373,18 +373,12 @@ namespace FluffyDuck.Util
         public static DateTime GetDateTime(long unix_time_stamp, int offset_hour = 0, int offset_minutes = 0)
         {
             // UNIX 타임스탬프를 DateTime으로 변환 (UTC 기준)
-            DateTime dateTimeUtc = DateTimeOffset.FromUnixTimeSeconds(unix_time_stamp).DateTime;
-            if (offset_hour == 0 && offset_minutes == 0)
-            {
-                return dateTimeUtc;
-            }
+            DateTime dateTimeUtc = DateTimeOffset.FromUnixTimeSeconds(unix_time_stamp).UtcDateTime;
 
-            // 로컬 타임존 가져오기
-            TimeSpan localOffset = new TimeSpan(offset_hour, offset_minutes, 0);
-            TimeZoneInfo localTimeZone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(zone => zone.BaseUtcOffset == localOffset);
+            // 오프셋 적용
+            DateTime dateTimeWithOffset = dateTimeUtc.AddHours(offset_hour).AddMinutes(offset_minutes);
 
-            // UTC DateTime을 로컬 시간대로 변환
-            return TimeZoneInfo.ConvertTimeFromUtc(dateTimeUtc, localTimeZone);
+            return dateTimeWithOffset;
         }
 
         /// <summary>

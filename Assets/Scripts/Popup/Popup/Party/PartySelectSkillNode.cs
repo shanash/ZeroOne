@@ -1,8 +1,10 @@
 using Cysharp.Text;
+using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,6 +31,9 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
     Coroutine CheckForLongPress = null;
+
+    CancellationTokenSource Token_CheckForLongPress = null;
+    bool Is_Called_Long_Press = false;
 
     UserHeroData User_Data;
     UserHeroSkillData Skill_Data;
@@ -117,8 +122,10 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         if (OnStartLongPress != null)
         {
             Box.localScale = Press_Scale;
-            StopCoroutine(ref CheckForLongPress);
-            CheckForLongPress = StartCoroutine(CoCheckForLongPress());
+
+            Token_CheckForLongPress?.Cancel();
+            Token_CheckForLongPress = new CancellationTokenSource();
+            TaskCheckForLongPress(Token_CheckForLongPress.Token).Forget();
         }
     }
 
@@ -128,41 +135,26 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         {
             Box.localScale = Vector2.one;
 
-            bool is_stopped = StopCoroutine(ref CheckForLongPress);
+            Token_CheckForLongPress?.Cancel();
+            Token_CheckForLongPress = new CancellationTokenSource();
 
             // 제대로 OnStartLongPress가 실행되었어야지
             // (CheckForLongPress == null) (is_stopped == false)
             // OnFinishLongPress을 호출
-            if (!is_stopped)
+            if (Is_Called_Long_Press)
             {
                 OnFinishLongPress?.Invoke();
             }
         }
     }
 
-    IEnumerator CoCheckForLongPress()
+    async UniTaskVoid TaskCheckForLongPress(CancellationToken token)
     {
-        float elapsed_time = 0;
-        while (Tooltip.PRESS_TIME_FOR_SHOW > elapsed_time)
-        {
-            yield return null;
-            elapsed_time += Time.deltaTime;
-        }
-
         var rt = this.GetComponent<RectTransform>();
-        OnStartLongPress?.Invoke(GameObjectUtils.GetScreenRect(rt), Skill_Data);
-        CheckForLongPress = null;
-    }
-
-    bool StopCoroutine(ref Coroutine coroutine)
-    {
-        if (coroutine != null)
-        {
-            StopCoroutine(coroutine);
-            coroutine = null;
-            return true;
-        }
-
-        return false;
+        await UniTask.Yield();
+        var rect = GameObjectUtils.GetScreenRect(rt);
+        await UniTask.WaitForSeconds(Tooltip.PRESS_TIME_FOR_SHOW);
+        OnStartLongPress?.Invoke(rect, Skill_Data);
+        Is_Called_Long_Press = true;
     }
 }

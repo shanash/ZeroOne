@@ -322,6 +322,7 @@ public class EssenceController : SceneControllerBase
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.orientation = ScreenOrientation.AutoRotation;
 
+        TouchCanvas.Instance.SetTouchEffectPrefabPath(TouchCanvas.Effect_Blue_Path);
         TouchCanvas.Instance.EnableTouchEffect(true);
 
         if (data == null)
