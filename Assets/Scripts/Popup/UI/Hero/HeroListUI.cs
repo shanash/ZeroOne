@@ -247,4 +247,9 @@ public class HeroListUI : PopupBase
 
         UpdatePopup();
     }
+
+    public override void OnEnter()
+    {
+        Character_LIst_View.UpdateAllData();
+    }
 }

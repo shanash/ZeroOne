@@ -88,7 +88,9 @@ public class UserStoryStageData : UserDataBase
         }
         
     }
-
+    /// <summary>
+    /// 도전 횟수 증가
+    /// </summary>
     public void AddChallenageCount()
     {
         if (!IsOpenSchedule())
@@ -101,7 +103,10 @@ public class UserStoryStageData : UserDataBase
         
         Is_Update_Data = true;
     }
-
+    /// <summary>
+    /// 승리 횟수 증가<br/>
+    /// 하드 모드 이후부터는 횟수 제한 카운트 추가
+    /// </summary>
     public void AddWinCount()
     {
         int cnt = GetWinCount();

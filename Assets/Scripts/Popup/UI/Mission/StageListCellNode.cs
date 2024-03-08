@@ -20,6 +20,12 @@ public class StageListCellNode : InfiniteScrollItem
     [SerializeField, Tooltip("Stage Name")]
     TMP_Text Stage_Name;
 
+    [SerializeField, Tooltip("Entrance Remain Count")]
+    TMP_Text Daily_Entrance_Remain_Count;
+
+    [SerializeField, Tooltip("Reward Icon")]
+    RewardItemCard Item_Card;
+
     [SerializeField, Tooltip("Entrance Btn")]
     UIButtonBase Entrance_Btn;
 

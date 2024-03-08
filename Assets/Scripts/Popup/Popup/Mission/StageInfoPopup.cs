@@ -44,6 +44,18 @@ public class StageInfoPopup : PopupBase
     [SerializeField, Tooltip("Used Stamina")]   //  2B8FFF
     TMP_Text Used_Stamina;
 
+    [SerializeField, Tooltip("일반 스테이지 진입 버튼 정보 박스")]
+    RectTransform Normal_Stage_Btn_Box;
+    [SerializeField, Tooltip("일반 스테이지 진입 버튼 텍스트")]
+    TMP_Text Normal_Stage_Btn_Text;
+
+    [SerializeField, Tooltip("하드 스테이지 진입 버튼 정보 박스")]
+    RectTransform Hard_Stage_Btn_Box;
+    [SerializeField, Tooltip("하드 스테이지 남은 횟수 타이틀")]
+    TMP_Text Hard_Stage_Remain_Daily_Count_Title;
+    [SerializeField, Tooltip("하드 스테이지 남은 횟수")]
+    TMP_Text Hard_Stage_Remain_Daily_Count;
+
     World_Data World;
     Zone_Data Zone;
     Stage_Data Stage;
