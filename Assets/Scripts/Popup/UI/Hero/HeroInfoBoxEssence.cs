@@ -3,7 +3,6 @@ using FluffyDuck.Util;
 using Gpm.Ui;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -145,6 +144,18 @@ public class HeroInfoBoxEssence : MonoBehaviour
                 OnToggleChangedRelationship);
             Toggle_Datas.Add(toggle_data);
             TransferReaction_Buttons_View.InsertData(toggle_data);
+        }
+
+        var type_obj = BlackBoard.I.GetBlackBoardData(BLACK_BOARD_KEY.SELECTED_LOVE_LEVEL);
+        if (type_obj != null)
+        {
+            var type_index = (int)type_obj;
+            Toggle_Datas[type_index].Selected = true;
+            BlackBoard.I.RemoveBlackBoardData(BLACK_BOARD_KEY.SELECTED_LOVE_LEVEL);
+        }
+        else
+        {
+            Toggle_Datas[1].Selected = true;
         }
 
         // 스팟 UI 삭제 및 생성
@@ -294,6 +305,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
             Refresh();
             return;
         }
+        BlackBoard.I.SetBlackBoard(BLACK_BOARD_KEY.SELECTED_LOVE_LEVEL, Selected_Relationship_Index);
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index, Remain_Count_Of_Chance_Sending_Essence);
     }

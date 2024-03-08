@@ -13,6 +13,7 @@ namespace FluffyDuck.Util
         DUNGEON_ID,
         EDITOR_STAGE_ID,
 
+        SELECTED_LOVE_LEVEL,
 
         OPEN_STORY_STAGE_DUNGEON_ID,    //  스토리 스테이지 던전 오픈
     }
