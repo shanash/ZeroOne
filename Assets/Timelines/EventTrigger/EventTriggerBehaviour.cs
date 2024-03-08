@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using System;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -9,6 +10,18 @@ public struct EventTriggerValue
     public double DoubleValue;
     public float FloatValue;
     public string StrValue;
+
+    public override string ToString()
+    {
+        var sb = ZString.CreateStringBuilder();
+
+        sb.AppendLine($"{nameof(IntValue)} => {IntValue}");
+        sb.AppendLine($"{nameof(DoubleValue)} => {DoubleValue}");
+        sb.AppendLine($"{nameof(FloatValue)} => {FloatValue}");
+        sb.AppendLine($"{nameof(StrValue)} => {StrValue}");
+        
+        return sb.ToString();
+    }
 }
 
 [Serializable]

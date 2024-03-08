@@ -21,7 +21,8 @@ using UnityEngine.Timeline;
 [RequireComponent(typeof(UnitRenderTexture))]
 [RequireComponent(typeof(RendererSortingZ))]
 [RequireComponent(typeof(SortingGroup))]
-public partial class HeroBase_V2 : UnitBase_V2
+[RequireComponent (typeof(EventTriggerObject))]
+public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 {
     [SerializeField, Tooltip("Skeleton")]
     protected SkeletonAnimation Skeleton;
@@ -414,6 +415,13 @@ public partial class HeroBase_V2 : UnitBase_V2
                 if (track.name.Equals("ShakeCameraTrack"))
                 {
                     Ultimate_Skill_Playable_Director.SetGenericBinding(track, virtual_cam);
+                }
+            }
+            else if (track is EventTriggerTrack)
+            {
+                if (track.name.Equals("EventTriggerTrack"))
+                {
+                    Ultimate_Skill_Playable_Director.SetGenericBinding(track, this);
                 }
             }
         }
@@ -1745,4 +1753,11 @@ public partial class HeroBase_V2 : UnitBase_V2
         Debug.Log(ToString());
 
     }
+
+    public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
+    {
+        Debug.Log($"{trigger_id} => {evt_val.ToString()}");
+    }
+
+
 }

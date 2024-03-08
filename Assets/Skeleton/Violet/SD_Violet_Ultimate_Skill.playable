@@ -71,22 +71,6 @@ MonoBehaviour:
     _Roughness: 30
     _Vertical: 1
     _Horizontal: 1
---- !u!114 &-6896184598889665385
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: TargetGroupCamera
-  VirtualCamera:
-    exposedName: 4c5aa1d5adc5cc34bae16f9b25cd5d0c
-    defaultValue: {fileID: 0}
 --- !u!114 &-6428458023323257491
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -570,22 +554,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &-3814382576135389572
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: StageCamera
-  VirtualCamera:
-    exposedName: 6ef568b3b5484544f976e171e3e85858
-    defaultValue: {fileID: 0}
 --- !u!114 &-3607253845885141966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -604,6 +572,22 @@ MonoBehaviour:
     _Roughness: 30
     _Vertical: 1
     _Horizontal: 1
+--- !u!114 &-2747626307426161458
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: 4e89da639c26f514cbecef0161d8c884
+    defaultValue: {fileID: 0}
 --- !u!114 &-2409440103609623810
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -773,7 +757,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0.6666666666666679
+    m_BlendOutDuration: 0.6333333333333346
     m_MixInCurve:
       serializedVersion: 2
       m_Curve: []
@@ -797,15 +781,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: TargetGroupCamera
   - m_Version: 1
-    m_Start: 11
+    m_Start: 8.7
     m_ClipIn: 0
-    m_Asset: {fileID: -3814382576135389572}
-    m_Duration: 1
+    m_Asset: {fileID: -2747626307426161458}
+    m_Duration: 3.4000000000000004
     m_TimeScale: 1
     m_ParentTrack: {fileID: -2409440103609623810}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.5333333333333332
+    m_BlendInDuration: 0.6333333333333346
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -847,108 +831,6 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: StageCamera
-  - m_Version: 1
-    m_Start: 8.666666666666666
-    m_ClipIn: 0
-    m_Asset: {fileID: 6424352066810113101}
-    m_Duration: 1.7666666666666675
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -2409440103609623810}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0.6666666666666679
-    m_BlendOutDuration: 0.3000000000000007
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: CharacterCamera
-  - m_Version: 1
-    m_Start: 10.133333333333333
-    m_ClipIn: 0
-    m_Asset: {fileID: -6896184598889665385}
-    m_Duration: 1.4000000000000004
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -2409440103609623810}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0.3000000000000007
-    m_BlendOutDuration: 0.5333333333333332
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: TargetGroupCamera
   m_Markers:
     m_Objects: []
 --- !u!114 &-1712568953864552980
@@ -2071,7 +1953,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -6428458023323257491}
-    m_Duration: 10.000000953674316
+    m_Duration: 12.000000953674316
     m_TimeScale: 1
     m_ParentTrack: {fileID: 5681806134722401686}
     m_EaseInDuration: 0
@@ -2902,22 +2784,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &6424352066810113101
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: CharacterCamera
-  VirtualCamera:
-    exposedName: b7a67efce6e0f1c49b056d9a5648238f
-    defaultValue: {fileID: 0}
 --- !u!114 &7126150406271481491
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2933,7 +2799,7 @@ MonoBehaviour:
   m_Version: 3
   m_AnimClip: {fileID: 0}
   m_Locked: 0
-  m_Muted: 0
+  m_Muted: 1
   m_CustomPlayableFullTypename: 
   m_Curves: {fileID: 0}
   m_Parent: {fileID: 11400000}
@@ -3052,7 +2918,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -1712568953864552980}
-    m_Duration: 10.000000953674316
+    m_Duration: 12.000000953674316
     m_TimeScale: 1
     m_ParentTrack: {fileID: 8018570053661303146}
     m_EaseInDuration: 0

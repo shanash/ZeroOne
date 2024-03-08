@@ -358,8 +358,7 @@ public class UserChargeItemData : UserDataBase
                     return RESPONSE_TYPE.NOT_WORK;
                 }
 
-                var max_data = MasterDataManager.Instance.Get_MaxBoundInfoData(Charge_Item_Type);
-                Count.Set((int)max_data.base_max);
+                Count.Set(GetMaxBound());
                 Last_Used_Date = DateTime.MinValue;
                 Last_Used_Dt = string.Empty;
                 Is_Update_Data = true;
