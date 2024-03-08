@@ -26,6 +26,9 @@ public class EssenceController : SceneControllerBase
     [SerializeField, Tooltip("게이지 바")]
     Slider Essence_Charge = null;
 
+    [SerializeField, Tooltip("하단 팁 내용")]
+    GameObject Tip_BG = null;
+
     [SerializeField, Tooltip("게이지 플러스 텍스트")]
     TMP_Text Essence_Charge_Plus_Text = null;
 
@@ -234,14 +237,16 @@ public class EssenceController : SceneControllerBase
         if (Remain_Count-1 > 0)
         {
             _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, (3f - Essence_Force_Flow[Essence_Force_Flow_Index].Count) / 3, 1.0f);
-            Remain_Count--;
-            MoveToTargetAlpha(Token_MoveToTargetAlpha.Token, HideableUI, 1).Forget();
+            
         }
         else
         {
-            Essence_Charge.gameObject.SetActive(false);
+            Essence_Charge.transform.parent.gameObject.SetActive(false);
+            Tip_BG.SetActive(false);
         }
 
+        Remain_Count--;
+        MoveToTargetAlpha(Token_MoveToTargetAlpha.Token, HideableUI, 1).Forget();
         _ = BlockInputWhenEndingClimaxEffect();
 
         Token_MoveToTargetAlpha?.Cancel();
@@ -258,18 +263,26 @@ public class EssenceController : SceneControllerBase
 
         var charge_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
         
+        /*
         if (Remain_Count == 0)
         {
-            ChangeScene(SceneName.home, Battle_Pc_Data);
+            // 오늘 이 캐릭터에게 전달할수 있는 찬스 전부 소진
+            GestureManager.Instance.Enable = false;
+            var select_popup = (SelectPopup)PopupManager.I.AddFromResources("Prefabs/Popup/Modal/SelectPopup");
+            select_popup.SetVerticalScreen();
+            select_popup.ShowPopup(GameDefine.GetLocalizeString("system_information"), GameDefine.GetLocalizeString("system_notice_complete_sending_essence"), GameDefine.GetLocalizeString("system_answer_ok"), (Action<int>)OnClickNoticePopup);
         }
         else if (charge_item.GetCount() == 0)
         {
+            // 남은 근원전달 재화가 0
             GestureManager.Instance.Enable = false;
             var select_popup = (SelectPopup)PopupManager.I.AddFromResources("Prefabs/Popup/Modal/SelectPopup");
             select_popup.SetVerticalScreen();
             select_popup.ShowPopup(GameDefine.GetLocalizeString("system_information"), GameDefine.GetLocalizeString("system_notice_quit_essence_not_enough_point"), GameDefine.GetLocalizeString("system_answer_ok"), (Action<int>)OnClickNoticePopup);
         }
-        else
+        */
+
+        if (Remain_Count > 0 && charge_item.GetCount() > 0)
         {
             _ = _UpdateSlider(Essence_Charge, Essence_Charge_Plus_Text, 0);
         }

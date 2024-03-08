@@ -1,6 +1,5 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -70,8 +69,6 @@ public class StarGradeLevelUpPopup : PopupBase
     {
         Status_List_View.verticalNormalizedPosition = 1f;
     }
-
-
 
     protected override void FixedUpdatePopup()
     {

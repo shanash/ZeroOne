@@ -148,13 +148,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52920644}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1162757094}
-  m_Father: {fileID: 98548302}
+  m_Father: {fileID: 1962070206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -408,7 +408,6 @@ RectTransform:
   - {fileID: 940465889309661559}
   - {fileID: 3793975399718312536}
   - {fileID: 1032925504}
-  - {fileID: 52920645}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1744,6 +1743,7 @@ GameObject:
   - component: {fileID: 1162757094}
   - component: {fileID: 1162757096}
   - component: {fileID: 1162757095}
+  - component: {fileID: 1162757097}
   m_Layer: 5
   m_Name: Text_Tip
   m_TagString: Untagged
@@ -1867,6 +1867,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1162757093}
   m_CullTransparentMesh: 1
+--- !u!114 &1162757097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162757093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a4878113c34b74d91dab6edad45226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key_Of_StringTable: system_information_essense_guide
 --- !u!1 &1202215144
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2573,7 @@ MonoBehaviour:
   CanvasGroup: {fileID: 1577215469}
   Head_UI: {fileID: 2104021776}
   Head_Image: {fileID: 1518872698}
-  Head_Texture_Size: {x: 190, y: 190}
+  Head_Texture_Size: {x: 460, y: 460}
   Serifu: {fileID: 1346234689}
   wait_seconds: 2
 --- !u!225 &1577215469
@@ -3098,6 +3111,7 @@ RectTransform:
   - {fileID: 8236188195160786735}
   - {fileID: 488253061}
   - {fileID: 3612476241046016161}
+  - {fileID: 52920645}
   m_Father: {fileID: 98548302}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3316,6 +3330,7 @@ MonoBehaviour:
   Climax_Effect: {fileID: 1435915809}
   Serifu_Box: {fileID: 1577215468}
   Essence_Charge: {fileID: 5784312605751570372}
+  Tip_BG: {fileID: 52920644}
   Essence_Charge_Plus_Text: {fileID: 3125124188558207398}
   Essence_Chance_Count: {fileID: 669120619}
   Square: {fileID: 1951087392}
