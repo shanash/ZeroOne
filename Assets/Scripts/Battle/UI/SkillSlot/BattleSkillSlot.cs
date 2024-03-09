@@ -54,12 +54,8 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
 
-    Vector2 Tooltip_Upper_Pos = new Vector2(0, 280f);
-
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
-    Coroutine CheckForLongPress = null;
 
     public void SetHeroBase(HeroBase_V2 hero)
     {
@@ -83,7 +79,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     /// Click / Long Touch 이벤트 사용
     /// </summary>
     /// <param name="result"></param>
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result)
     {
         if (result == TOUCH_RESULT_TYPE.CLICK)
         {
@@ -240,26 +236,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     }
 
     #endregion
-
-    private void OnEnable()
-    {
-        if (Card != null)
-        {
-            Card.AddTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-        //if (Hero != null)
-        //{
-        //    Hero.Slot_Events -= SkillSlotEventCallback;
-        //}
-    }
 
     public override void Spawned()
     {

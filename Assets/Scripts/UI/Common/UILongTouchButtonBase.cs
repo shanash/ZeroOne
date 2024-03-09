@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -40,16 +41,6 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
     protected UnityEventBase _Touch_Callback => Touch_Callback;
 
-    public void AddTouchCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Touch_Callback.AddListener(cb);
-    }
-
-    public void RemovTouchCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Touch_Callback.RemoveListener(cb);
-    }
-
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerDown(eventData);
@@ -66,7 +57,6 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         }
 
         Long_Touch_Coroutine = StartCoroutine(StartLongTouch());
-
     }
 
     public override void OnPointerUp(PointerEventData eventData)
@@ -81,12 +71,13 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
-            {
-                Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
-                
-            }
-            //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.RELEASE);
+            object obj = _Touch_Callback.GetPersistentTarget(0);
+            string func_name = _Touch_Callback.GetPersistentMethodName(0);
+            Type t = obj.GetType();
+
+            MethodInfo m = t.GetMethod(func_name);
+            var c_obj = Convert.ChangeType(obj, t);
+            m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.RELEASE });
         }
 
         if (Long_Touch_Coroutine != null)
@@ -107,13 +98,13 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
-        {
-            Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
+        object obj = _Touch_Callback.GetPersistentTarget(0);
+        string func_name = _Touch_Callback.GetPersistentMethodName(0);
+        Type t = obj.GetType();
 
-        }
-
-        //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.CLICK);
+        MethodInfo m = t.GetMethod(func_name);
+        var c_obj = Convert.ChangeType(obj, t);
+        m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.CLICK });
 
         if (Long_Touch_Coroutine != null)
         {
@@ -132,12 +123,14 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 
-        for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
-        {
-            Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
+        object obj = _Touch_Callback.GetPersistentTarget(0);
+        string func_name = _Touch_Callback.GetPersistentMethodName(0);
+        Type t = obj.GetType();
 
-        }
-        //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.LONG_PRESS);
+        MethodInfo m = t.GetMethod(func_name);
+        var c_obj = Convert.ChangeType(obj, t);
+        m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.LONG_PRESS });
+
     }
 
     protected override void OnDestroy()

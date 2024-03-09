@@ -83,23 +83,7 @@ public class PartySlotNode : MonoBehaviour
         Click_Callback = cb;
     }
 
-    private void OnEnable()
-    {
-        if (Card != null)
-        {
-            Card.AddTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result)
     {
         if (result == TOUCH_RESULT_TYPE.CLICK)
         {
@@ -111,8 +95,4 @@ public class PartySlotNode : MonoBehaviour
             Click_Callback?.Invoke(this);
         }
     }
-
-
-
-
 }
