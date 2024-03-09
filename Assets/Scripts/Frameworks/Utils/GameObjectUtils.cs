@@ -60,18 +60,10 @@ namespace FluffyDuck.Util
 
             if (!fixed_resolution.Equals(default))
             {
-                float multiple_width = fixed_resolution.x / Screen.width;
-                float modify_height = Screen.height / multiple_width;
-
-                rectPositionOnScreen = new Vector2(
-                    rectPositionOnScreen.x / Screen.width * fixed_resolution.x,
-                    (rectPositionOnScreen.y - (Screen.height - modify_height) / 2) / Screen.height * fixed_resolution.y
-                    );
-
-                rectSizeOnScreen = new Vector2(
-                    rectSizeOnScreen.x / Screen.width * fixed_resolution.x,
-                    rectSizeOnScreen.y * multiple_width
-                    );
+                float scale = Screen.width / fixed_resolution.x;
+                float modified_screen_height = fixed_resolution.y * scale;
+                float gap = (Screen.height - modified_screen_height) / 2.0f;
+                rectPositionOnScreen = new Vector2(rectPositionOnScreen.x, rectPositionOnScreen.y - gap);
             }
 
             return new Rect(rectPositionOnScreen.x, rectPositionOnScreen.y, rectSizeOnScreen.x, rectSizeOnScreen.y);

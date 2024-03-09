@@ -7,6 +7,8 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 {
     public const float PRESS_TIME_FOR_SHOW = 0.2f;
     const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20;
+    static Texture2D Texture = null;
+    static Vector2 Texture_Size = Vector2.zero;
 
     [SerializeField]
     Image Box = null;
@@ -21,8 +23,6 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     TMP_Text Desc = null;
 
     Material Shader_Mat = null;
-    Texture2D Texture = null;
-
 
     protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
@@ -30,48 +30,47 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
+        Vector2 texture_size = new Vector2(Screen.width, box_height / box_width * Screen.width);
 
-        // 해상도에 따른 hole 보정 값
-        if (is_screen_modify && box_height != Screen.height)
+        if (Texture == null || !Texture_Size.Equals(texture_size))
         {
-            float multiple = box_height / Screen.height;
-            hole = new Rect(
-                hole.x * multiple,
-                hole.y * multiple,
-                hole.width * multiple,
-                hole.height * multiple);
+            Texture_Size = texture_size;
+            Texture = CreateSolidTexture(Texture_Size);
         }
 
-        Texture = CreateSolidTexture((int)box_width, (int)box_height);
+        // 해상도에 따른 hole 보정 값
+        Vector4 texture_hole = new Vector4(hole.x / Texture_Size.x, hole.y / Texture_Size.y, hole.width / Texture_Size.x, hole.height/ Texture_Size.y);
+        if (is_screen_modify && Texture_Size.x != Screen.height)
+        {
+            float multiple = Texture_Size.x / Screen.height;
+            texture_hole *= multiple;
+        }
 
         Shader_Mat = new Material(Shader.Find("FluffyDuck/TransparentHole"));
-        //Shader_Mat.shader = Resources.Load<Shader>("Shaders/TransparentHole");
-
         Box.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
         Box.material = Shader_Mat;
-
-        Box.material.SetVector("_Rect", new Vector4(hole.x / box_width, hole.y / box_height, hole.width / box_width, hole.height / box_height));
-        Box.material.SetColor("_Color", Box.color);
+        Box.material.SetVector("_Rect", texture_hole);
 
         Title.text = title;
         Desc.text = desc;
 
+        float multi = box_width / Texture_Size.x;
         // 아이콘이 위에 위치
-        if (hole.center.y > box_height / 2)
+        if (hole.center.y > Texture_Size.y / 2)
         {
             Container.pivot = new Vector2(0, 1);
-            Container.anchoredPosition = new Vector2(hole.center.x, hole.y - GAP_BETWEEN_ICON_AND_TOOLTIP);
+            Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y - GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
         }
         else // 아이콘이 아래에 위치
         {
             Container.pivot = Vector2.zero;
-            Container.anchoredPosition = new Vector2(hole.center.x, hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP);
+            Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
         }
     }
 
-    Texture2D CreateSolidTexture(int width, int height)
+    Texture2D CreateSolidTexture(Vector2 size)
     {
-        Texture2D result = new Texture2D(width, height);
+        Texture2D result = new Texture2D((int)size.x, (int)size.y);
 
         for (int y = 0; y < result.height; y++)
         {
