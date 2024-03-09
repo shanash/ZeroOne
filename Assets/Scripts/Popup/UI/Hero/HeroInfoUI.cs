@@ -192,21 +192,20 @@ public class HeroInfoUI : PopupBase
         pd.SetActive(value);
     }
 
-    public void TouchEventCallback(TOUCH_RESULT_TYPE result, Rect hole, object data)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<Rect> hole, object data)
     {
-        if (data is not UserHeroSkillData)
-        {
-            Debug.Assert(false, "툴팁 데이터가 정상적이지 않습니다");
-            return;
-        }
-
         switch (result)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (data is not UserHeroSkillData)
+                {
+                    Debug.Assert(false, "툴팁 데이터가 정상적이지 않습니다");
+                    return;
+                }
                 UserHeroSkillData skill_data = data as UserHeroSkillData;
                 Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
                 var tooltip = Tooltip.GetComponent<TooltipSkill>();
-                tooltip.Initialize(hole, skill_data, false);
+                tooltip.Initialize(hole(), skill_data, false);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
                 if (Tooltip != null)

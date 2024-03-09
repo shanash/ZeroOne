@@ -54,11 +54,6 @@ namespace FluffyDuck.Util
                 corners[i] = RectTransformUtility.WorldToScreenPoint(camera, corners[i]);
             }
 
-            Debug.Log($"conner[0] : {corners[0]}");
-            Debug.Log($"conner[1] : {corners[1]}");
-            Debug.Log($"conner[2] : {corners[2]}");
-            Debug.Log($"conner[3] : {corners[3]}");
-
             // Corners를 사용해 스크린에서의 Rect 정보 계산
             Vector2 rectPositionOnScreen = corners[0]; // 하단 왼쪽 코너
             Vector2 rectSizeOnScreen = corners[2] - corners[0]; // 오른쪽 상단 코너에서 하단 왼쪽 코너를 뺀 값
