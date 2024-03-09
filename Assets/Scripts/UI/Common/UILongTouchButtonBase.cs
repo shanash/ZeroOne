@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,7 +16,7 @@ public enum TOUCH_RESULT_TYPE
 }
 
 
-public class UILongTouchButtonBase : Selectable, IPointerClickHandler
+public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
 {
     [SerializeField, Tooltip("Scaling RectTransform")]
     protected RectTransform Scale_Rect;
@@ -26,9 +27,6 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     [SerializeField, Tooltip("Use Long Touch")]
     protected bool Use_Long_Touch;
 
-    [SerializeField, Tooltip("Touch Callback")]
-    protected UnityEvent<TOUCH_RESULT_TYPE> Touch_Callback;
-
     /// <summary>
     /// 일정시간 이상 누르고 있으면 롱터치로 인식
     /// </summary>
@@ -36,10 +34,10 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     protected float Long_Press_Duration = 0.7f;
 
     bool Is_Long_Press;
-
     Coroutine Long_Touch_Coroutine;
 
-    protected UnityEventBase _Touch_Callback => Touch_Callback;
+    protected abstract UnityEventBase Touch_Callback_Base { get; }
+    protected abstract Dictionary<TOUCH_RESULT_TYPE, object[]> Parameters_OnPointer { get;  }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -71,8 +69,8 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            object obj = _Touch_Callback.GetPersistentTarget(0);
-            string func_name = _Touch_Callback.GetPersistentMethodName(0);
+            object obj = Touch_Callback_Base.GetPersistentTarget(0);
+            string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
             Type t = obj.GetType();
 
             MethodInfo m = t.GetMethod(func_name);
@@ -98,8 +96,8 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        object obj = _Touch_Callback.GetPersistentTarget(0);
-        string func_name = _Touch_Callback.GetPersistentMethodName(0);
+        object obj = Touch_Callback_Base.GetPersistentTarget(0);
+        string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
         Type t = obj.GetType();
 
         MethodInfo m = t.GetMethod(func_name);
@@ -112,6 +110,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
             Long_Touch_Coroutine = null;
         }
     }
+
     /// <summary>
     /// 롱터치 이벤트 감지
     /// </summary>
@@ -123,8 +122,8 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 
-        object obj = _Touch_Callback.GetPersistentTarget(0);
-        string func_name = _Touch_Callback.GetPersistentMethodName(0);
+        object obj = Touch_Callback_Base.GetPersistentTarget(0);
+        string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
         Type t = obj.GetType();
 
         MethodInfo m = t.GetMethod(func_name);
@@ -135,6 +134,6 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
     protected override void OnDestroy()
     {
-        Touch_Callback.RemoveAllListeners();
+        Touch_Callback_Base.RemoveAllListeners();
     }
 }
