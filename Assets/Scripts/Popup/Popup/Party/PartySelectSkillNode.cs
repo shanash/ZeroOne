@@ -128,7 +128,22 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
             TaskCheckForLongPress(Token_CheckForLongPress.Token).Forget();
         }
     }
-
+    async UniTaskVoid TaskCheckForLongPress(CancellationToken token)
+    {
+        var rt = this.GetComponent<RectTransform>();
+        var rect = GameObjectUtils.GetScreenRect(rt);
+        try
+        {
+            // CancellationToken을 UniTask.WaitForSeconds에 전달
+            await UniTask.WaitForSeconds(Tooltip.PRESS_TIME_FOR_SHOW, cancellationToken: token, delayTiming: PlayerLoopTiming.TimeUpdate);
+            OnStartLongPress?.Invoke(rect, Skill_Data);
+            Is_Called_Long_Press = true;
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("Canceled Long Press");
+        }
+    }
     public void OnPointerUp(PointerEventData eventData)
     {
         if (OnFinishLongPress != null)
@@ -146,15 +161,5 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
                 OnFinishLongPress?.Invoke();
             }
         }
-    }
-
-    async UniTaskVoid TaskCheckForLongPress(CancellationToken token)
-    {
-        var rt = this.GetComponent<RectTransform>();
-        await UniTask.Yield();
-        var rect = GameObjectUtils.GetScreenRect(rt);
-        await UniTask.WaitForSeconds(Tooltip.PRESS_TIME_FOR_SHOW);
-        OnStartLongPress?.Invoke(rect, Skill_Data);
-        Is_Called_Long_Press = true;
     }
 }
