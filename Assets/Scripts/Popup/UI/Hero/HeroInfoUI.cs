@@ -62,12 +62,6 @@ public class HeroInfoUI : PopupBase
     Producer pd = null;
     GameObject Tooltip = null;
 
-    private void Start()
-    {
-        Hero_Info_Box.BoxBasic.OnShowTooltip += OnShowTooltip;
-        Hero_Info_Box.BoxBasic.OnHideTooltip += OnHideTooltip;
-    }
-
     void ResetUI()
     {
         User_Hero_Datas = null;
@@ -198,21 +192,30 @@ public class HeroInfoUI : PopupBase
         pd.SetActive(value);
     }
 
-    void OnShowTooltip(Rect hole, UserHeroSkillData data)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, Rect hole, object data)
     {
-        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
-        var tooltip = Tooltip.GetComponent<TooltipSkill>();
-        tooltip.Initialize(hole, data, false);
-    }
-
-    void OnHideTooltip()
-    {
-        if (Tooltip != null)
+        if (data is not UserHeroSkillData)
         {
-            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+            Debug.Assert(false, "툴팁 데이터가 정상적이지 않습니다");
+            return;
+        }
+
+        switch (result)
+        {
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                UserHeroSkillData skill_data = data as UserHeroSkillData;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<TooltipSkill>();
+                tooltip.Initialize(hole, skill_data, false);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                }
+                break;
         }
     }
-
 
     public void OnClickProfileButton()
     {

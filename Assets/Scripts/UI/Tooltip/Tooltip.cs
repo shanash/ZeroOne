@@ -28,10 +28,17 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     {
         if (Box == null) return;
 
+        Debug.Log($"hole : {hole}");
+
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
+
+
+        Debug.Log($"box_width : {box_width} : {box_height}");
+
         Vector2 texture_size = new Vector2(Screen.width, box_height / box_width * Screen.width);
 
+        Debug.Log($"texture_size : {texture_size}");
         if (Texture == null || !Texture_Size.Equals(texture_size))
         {
             Texture_Size = texture_size;

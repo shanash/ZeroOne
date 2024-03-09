@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UITooltipButton : UILongTouchButtonBase
 {
     [SerializeField, Tooltip("Touch Tooltip Callback")]
-    UnityEvent<TOUCH_RESULT_TYPE, Rect> Touch_Tooltip_Callback = null;
+    UnityEvent<TOUCH_RESULT_TYPE, Rect, object> Touch_Tooltip_Callback = null;
 
     /// <summary>
     /// 전투씬은 해상도를 별도로(2340 x 1080) 사용하고 있어서 특수한 계산을 더 해줘야 한
@@ -24,11 +24,10 @@ public class UITooltipButton : UILongTouchButtonBase
     protected override UnityEventBase Touch_Callback_Base => Touch_Tooltip_Callback;
     protected override Dictionary<TOUCH_RESULT_TYPE, object[]> Parameters_OnPointer => Parameters;
 
-    protected override void Start()
+    public void SetTooltipData(object data)
     {
-        base.Start();
-        Parameters.Add(TOUCH_RESULT_TYPE.CLICK, new object[] { TOUCH_RESULT_TYPE.CLICK, ScreenRect });
-        Parameters.Add(TOUCH_RESULT_TYPE.LONG_PRESS, new object[] { TOUCH_RESULT_TYPE.LONG_PRESS, ScreenRect });
-        Parameters.Add(TOUCH_RESULT_TYPE.RELEASE, new object[] { TOUCH_RESULT_TYPE.RELEASE, ScreenRect });
+        Parameters.Clear();
+        Parameters.Add(TOUCH_RESULT_TYPE.LONG_PRESS, new object[] { TOUCH_RESULT_TYPE.LONG_PRESS, ScreenRect, data });
+        Parameters.Add(TOUCH_RESULT_TYPE.RELEASE, new object[] { TOUCH_RESULT_TYPE.RELEASE, ScreenRect, data });
     }
 }

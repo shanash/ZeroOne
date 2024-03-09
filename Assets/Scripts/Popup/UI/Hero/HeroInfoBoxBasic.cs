@@ -43,28 +43,6 @@ public class HeroInfoBoxBasic : MonoBehaviour
 
     BattlePcData Unit_Data = null;
 
-    public Action<Rect, UserHeroSkillData> OnShowTooltip;
-    public Action OnHideTooltip;
-
-    void Start()
-    {
-        foreach (var skill in Skills)
-        {
-            skill.OnStartLongPress += OnShowTooltip;
-            skill.OnFinishLongPress += OnHideTooltip;
-        }
-    }
-
-    void OnDestroy()
-    {
-        foreach (var skill in Skills)
-        {
-            skill.OnStartLongPress -= OnShowTooltip;
-            skill.OnFinishLongPress -= OnHideTooltip;
-        }
-    }
-
-
     public void SetHeroData(BattlePcData data)
     {
         Unit_Data = data;

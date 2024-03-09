@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class PartySelectSkillNode : MonoBehaviour
 {
     [SerializeField, Tooltip("Box")]
     RectTransform Box;
@@ -27,13 +27,8 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
     [SerializeField, Tooltip("Skill Level")]
     TMP_Text Skill_Level;
 
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
-    public Action<Rect, UserHeroSkillData> OnStartLongPress;
-    public Action OnFinishLongPress;
-    Coroutine CheckForLongPress = null;
-
-    CancellationTokenSource Token_CheckForLongPress = null;
-    bool Is_Called_Long_Press = false;
+    [SerializeField, Tooltip("Tooltip Button")]
+    UITooltipButton Button;
 
     UserHeroData User_Data;
     UserHeroSkillData Skill_Data;
@@ -49,6 +44,7 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         Skill_Type = Skill_Data.GetSkillType();
         UpdateSkillCard();
         UpdateUI();
+        Button.SetTooltipData(Skill_Data);
     }
 
     public void SetPlayerCharacterID(int pc_id, int pc_num)
@@ -115,51 +111,5 @@ public class PartySelectSkillNode : MonoBehaviour, IPointerDownHandler, IPointer
         });
         //  level
         Skill_Level.text = ZString.Format("Lv.{0}", Skill_Data.GetLevel());
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (OnStartLongPress != null)
-        {
-            Box.localScale = Press_Scale;
-
-            Token_CheckForLongPress?.Cancel();
-            Token_CheckForLongPress = new CancellationTokenSource();
-            TaskCheckForLongPress(Token_CheckForLongPress.Token).Forget();
-        }
-    }
-    async UniTaskVoid TaskCheckForLongPress(CancellationToken token)
-    {
-        var rt = this.GetComponent<RectTransform>();
-        var rect = GameObjectUtils.GetScreenRect(rt);
-        try
-        {
-            // CancellationToken을 UniTask.WaitForSeconds에 전달
-            await UniTask.WaitForSeconds(Tooltip.PRESS_TIME_FOR_SHOW, cancellationToken: token, delayTiming: PlayerLoopTiming.TimeUpdate);
-            OnStartLongPress?.Invoke(rect, Skill_Data);
-            Is_Called_Long_Press = true;
-        }
-        catch (OperationCanceledException)
-        {
-            Debug.Log("Canceled Long Press");
-        }
-    }
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (OnFinishLongPress != null)
-        {
-            Box.localScale = Vector2.one;
-
-            Token_CheckForLongPress?.Cancel();
-            Token_CheckForLongPress = new CancellationTokenSource();
-
-            // 제대로 OnStartLongPress가 실행되었어야지
-            // (CheckForLongPress == null) (is_stopped == false)
-            // OnFinishLongPress을 호출
-            if (Is_Called_Long_Press)
-            {
-                OnFinishLongPress?.Invoke();
-            }
-        }
     }
 }

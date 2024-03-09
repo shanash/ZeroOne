@@ -67,7 +67,7 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Vector2.one;
         }
 
-        if (Is_Long_Press)
+        if (Is_Long_Press && Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.RELEASE))
         {
             object obj = Touch_Callback_Base.GetPersistentTarget(0);
             string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
@@ -75,7 +75,7 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
             MethodInfo m = t.GetMethod(func_name);
             var c_obj = Convert.ChangeType(obj, t);
-            m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.RELEASE });
+            m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.RELEASE]);
         }
 
         if (Long_Touch_Coroutine != null)
@@ -96,13 +96,16 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        object obj = Touch_Callback_Base.GetPersistentTarget(0);
-        string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
-        Type t = obj.GetType();
+        if (Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.CLICK))
+        {
+            object obj = Touch_Callback_Base.GetPersistentTarget(0);
+            string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
+            Type t = obj.GetType();
 
-        MethodInfo m = t.GetMethod(func_name);
-        var c_obj = Convert.ChangeType(obj, t);
-        m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.CLICK });
+            MethodInfo m = t.GetMethod(func_name);
+            var c_obj = Convert.ChangeType(obj, t);
+            m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.CLICK]);
+        }
 
         if (Long_Touch_Coroutine != null)
         {
@@ -117,6 +120,11 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
     /// <returns></returns>
     IEnumerator StartLongTouch()
     {
+        if (!Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.LONG_PRESS))
+        {
+            yield break;
+        }
+
         Is_Long_Press = false;
         yield return new WaitForSeconds(Long_Press_Duration);
         Long_Touch_Coroutine = null;
@@ -128,7 +136,7 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
         MethodInfo m = t.GetMethod(func_name);
         var c_obj = Convert.ChangeType(obj, t);
-        m.Invoke(c_obj, new object[] { TOUCH_RESULT_TYPE.LONG_PRESS });
+        m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.LONG_PRESS]);
 
     }
 
