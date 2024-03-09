@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,6 +37,8 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     bool Is_Long_Press;
 
     Coroutine Long_Touch_Coroutine;
+
+    protected UnityEventBase _Touch_Callback => Touch_Callback;
 
     public void AddTouchCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
     {
@@ -78,7 +81,12 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.RELEASE);
+            for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
+            {
+                Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
+                
+            }
+            //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.RELEASE);
         }
 
         if (Long_Touch_Coroutine != null)
@@ -99,7 +107,13 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.CLICK);
+        for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
+        {
+            Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
+
+        }
+
+        //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.CLICK);
 
         if (Long_Touch_Coroutine != null)
         {
@@ -118,7 +132,12 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 
-        Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.LONG_PRESS);
+        for (int i = 0; i < Touch_Callback.GetPersistentEventCount(); i++)
+        {
+            Debug.Log($"Touch_Callback.GetPersistentMethodName(i) : {Touch_Callback.GetPersistentMethodName(i)}");
+
+        }
+        //Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.LONG_PRESS);
     }
 
     protected override void OnDestroy()
