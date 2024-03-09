@@ -101,7 +101,7 @@ public class BossStageListNode : UIBase
     public void OnClickStageEntrance()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/BossDungeon/BossStageRewardInfoPopup", FluffyDuck.UI.POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/BossDungeon/BossStageRewardInfoPopup", FluffyDuck.UI.POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.ShowPopup(Stage);
         });

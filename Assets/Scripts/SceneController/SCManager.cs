@@ -12,6 +12,7 @@ public enum SceneName
     load,
     home,
     essence,
+    dialogue_Intro,
     battle,
     skill_editor,
     skill_preview,

@@ -21,6 +21,8 @@ public class Raw_Stage_Data : System.IDisposable
 	public int entrance_limit_count {get; set;}
 	public int reward_type {get; set;}
 	public int reward_id {get; set;}
+	public string entrance_dialogue {get; set;}
+	public string outrance_dialogue {get; set;}
 
 	private bool disposed = false;
 
@@ -43,6 +45,8 @@ public class Raw_Stage_Data : System.IDisposable
 		entrance_limit_count = 0;
 		reward_type = 0;
 		reward_id = 0;
+		entrance_dialogue = string.Empty;
+		outrance_dialogue = string.Empty;
 	}
 
 	public void Dispose()

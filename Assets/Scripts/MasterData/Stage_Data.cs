@@ -109,6 +109,18 @@ public class Stage_Data : System.IDisposable
 	public int reward_id => _reward_id;
 	int _reward_id;
 
+	///	<summary>
+	///	스테이지 진입 전 재생할 다이얼로그
+	///	</summary>
+	public string entrance_dialogue => _entrance_dialogue;
+	string _entrance_dialogue;
+
+	///	<summary>
+	///	스테이지 클리어 후 재생할 다이얼로그
+	///	</summary>
+	public string outrance_dialogue => _outrance_dialogue;
+	string _outrance_dialogue;
+
 	private bool disposed = false;
 
 	public Stage_Data(Raw_Stage_Data raw_data)
@@ -130,6 +142,8 @@ public class Stage_Data : System.IDisposable
 		_entrance_limit_count = raw_data.entrance_limit_count;
 		_reward_type = raw_data.reward_type;
 		_reward_id = raw_data.reward_id;
+		_entrance_dialogue = raw_data.entrance_dialogue;
+		_outrance_dialogue = raw_data.outrance_dialogue;
 	}
 
 	public void Dispose()
@@ -168,6 +182,8 @@ public class Stage_Data : System.IDisposable
 		sb.AppendFormat("[entrance_limit_count] = <color=yellow>{0}</color>", entrance_limit_count).AppendLine();
 		sb.AppendFormat("[reward_type] = <color=yellow>{0}</color>", reward_type).AppendLine();
 		sb.AppendFormat("[reward_id] = <color=yellow>{0}</color>", reward_id).AppendLine();
+		sb.AppendFormat("[entrance_dialogue] = <color=yellow>{0}</color>", entrance_dialogue).AppendLine();
+		sb.AppendFormat("[outrance_dialogue] = <color=yellow>{0}</color>", outrance_dialogue).AppendLine();
 		return sb.ToString();
 	}
 }
