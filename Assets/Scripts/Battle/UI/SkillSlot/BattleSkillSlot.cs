@@ -57,6 +57,8 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
 
+    public UITooltipButton TooltipButton => Card.GetComponent<UITooltipButton>();
+
     public void SetHeroBase(HeroBase_V2 hero)
     {
         Hero = hero;

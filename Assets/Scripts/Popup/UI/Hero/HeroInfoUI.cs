@@ -192,7 +192,7 @@ public class HeroInfoUI : PopupBase
         pd.SetActive(value);
     }
 
-    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<Rect> hole, object data)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
     {
         switch (result)
         {
@@ -205,7 +205,7 @@ public class HeroInfoUI : PopupBase
                 UserHeroSkillData skill_data = data as UserHeroSkillData;
                 Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
                 var tooltip = Tooltip.GetComponent<TooltipSkill>();
-                tooltip.Initialize(hole(), skill_data, false);
+                tooltip.Initialize(hole(false), skill_data, false);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
                 if (Tooltip != null)

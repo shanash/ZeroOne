@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class UILongTouchButton : UILongTouchButtonBase
 {
     [SerializeField, Tooltip("Touch Callback")]
-    protected UnityEvent<TOUCH_RESULT_TYPE> Touch_Callback;
+    UnityEvent<TOUCH_RESULT_TYPE> Touch_Callback;
 
     Dictionary<TOUCH_RESULT_TYPE, object[]> Parameters = new Dictionary<TOUCH_RESULT_TYPE, object[]>()
     {

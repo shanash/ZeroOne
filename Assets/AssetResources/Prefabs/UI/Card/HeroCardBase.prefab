@@ -1063,7 +1063,6 @@ MonoBehaviour:
   - {fileID: 5295640817217133928}
   Party_Select_Frame: {fileID: 3366600287754664893}
   Name_Text: {fileID: 7179337026259687556}
-  Long_Touch_Btn: {fileID: 3762114925697970655}
 --- !u!114 &3762114925697970655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,7 +1072,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3711586997816407933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 451752de7e2bd1f409ca1f91157ee182, type: 3}
+  m_Script: {fileID: 11500000, guid: 7785167af6a0146a5ab48e5efc8fc79b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -1108,7 +1107,8 @@ MonoBehaviour:
   Scale_Rect: {fileID: 2380875901222714538}
   Press_Scale: {x: 0.96, y: 0.96}
   Use_Long_Touch: 0
-  Touch_Callback:
+  Long_Press_Duration: 0.7
+  Touch_Tooltip_Callback:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4398642543412750097

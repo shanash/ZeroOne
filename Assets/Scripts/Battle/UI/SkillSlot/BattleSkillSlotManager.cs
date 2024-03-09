@@ -26,11 +26,11 @@ public class BattleSkillSlotManager : MonoBehaviour
             var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot", this.transform);
             var slot = obj.GetComponent<BattleSkillSlot>();
             slot.SetHeroBase(hero);
-            slot.OnStartLongPress += OnShowTooltip;
-            slot.OnFinishLongPress += OnHideTooltip;
+            slot.TooltipButton.Touch_Tooltip_Callback.AddListener((type, func, data) => {
+                TouchEventCallback(type, func, data);
+            });
 
             Used_Battle_Skill_Slots.Add(slot);
-
         }
     }
 
@@ -46,6 +46,26 @@ public class BattleSkillSlotManager : MonoBehaviour
             pool.UnusedGameObject(Used_Battle_Skill_Slots[i].gameObject);
         }
         Used_Battle_Skill_Slots.Clear();
+    }
+
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
+    {
+        Debug.Log("TouchEventCallback");
+        switch (result)
+        {
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                UserHeroSkillData skill_data = data as UserHeroSkillData;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<TooltipSkill>();
+                tooltip.Initialize(hole(true), skill_data, false);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                }
+                break;
+        }
     }
 
     void OnShowTooltip(Rect hole, UserHeroSkillData skill_data)
