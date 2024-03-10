@@ -197,7 +197,7 @@ public class HeroInfoUI : PopupBase
         switch (result)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:
-                if (data == null)
+                if (data == null || data is not UserHeroSkillData)
                 {
                     Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
                     return;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
+public class NpcCardBase : UIBase
 {
     [SerializeField, Tooltip("BG Box")]
     protected Image BG_Box;
@@ -23,11 +23,11 @@ public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
     protected bool Is_Boss;
 
     Vector2 Init_Scale = new Vector2(0.66f, 0.66f);
-    Vector2 Press_Scale = new Vector2(0.60f, 0.60f);
+
+    public UITooltipButton TooltipButton => GetComponent<UITooltipButton>();
 
     public Action<Rect, Npc_Data> OnStartLongPress;
     public Action OnFinishLongPress;
-    Coroutine CheckForLongPress = null;
 
     public void SetNpcID(int npc_id)
     {
@@ -38,6 +38,7 @@ public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
     {
         Data = data;
         UpdateNpcIcon();
+        TooltipButton.Tooltip_Data = Data;
     }
 
     public void SetBoss(bool boss)
@@ -69,61 +70,8 @@ public class NpcCardBase : UIBase, IPointerDownHandler, IPointerUpHandler
     }
     public override void Despawned()
     {
+        TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
         base.Despawned();
         SetBoss(false);
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (OnStartLongPress != null)
-        {
-            this.transform.localScale = Press_Scale;
-            StopCoroutine(ref CheckForLongPress);
-            CheckForLongPress = StartCoroutine(CoCheckForLongPress());
-        }
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (OnFinishLongPress != null)
-        {
-            this.transform.localScale = Init_Scale;
-
-            bool is_stopped = StopCoroutine(ref CheckForLongPress);
-
-            // 제대로 OnStartLongPress가 실행되었어야지
-            // (CheckForLongPress == null) (is_stopped == false)
-            // OnFinishLongPress을 호출
-            if (!is_stopped)
-            {
-                OnFinishLongPress?.Invoke();
-            }
-        }
-    }
-
-    IEnumerator CoCheckForLongPress()
-    {
-        float elapsed_time = 0;
-        while(Tooltip.PRESS_TIME_FOR_SHOW > elapsed_time)
-        {
-            yield return null;
-            elapsed_time += Time.deltaTime;
-        }
-
-        var rt = this.GetComponent<RectTransform>();
-        OnStartLongPress?.Invoke(GameObjectUtils.GetScreenRect(rt), Data);
-        CheckForLongPress = null;
-    }
-
-    bool StopCoroutine(ref Coroutine coroutine)
-    {
-        if (coroutine != null)
-        {
-            StopCoroutine(coroutine);
-            coroutine = null;
-            return true;
-        }
-
-        return false;
     }
 }

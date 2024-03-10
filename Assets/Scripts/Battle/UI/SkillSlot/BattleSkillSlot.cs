@@ -112,7 +112,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
             case TOUCH_RESULT_TYPE.LONG_PRESS:
                 if (data == null)
                 {
-                    Debug.LogWarning("표시 가능한 궁극기 정보가 없습니다!");
+                    Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
                     return;
                 }
                 UserHeroSkillData skill_data = data as UserHeroSkillData;

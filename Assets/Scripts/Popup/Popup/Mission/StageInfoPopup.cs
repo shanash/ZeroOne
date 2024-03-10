@@ -171,10 +171,8 @@ public class StageInfoPopup : PopupBase
             var obj = pool.GetGameObject(npc_prefab, Npc_List_View.content);
             var npc_card = obj.GetComponent<NpcCardBase>();
             npc_card.SetNpcID(npc.GetUnitID());
+            npc_card.TooltipButton.Touch_Tooltip_Callback.AddListener(TouchEventCallback);
             Used_Npc_List.Add(npc_card);
-
-            npc_card.OnStartLongPress += OnShowTooltip;
-            npc_card.OnFinishLongPress += OnHideTooltip;
         }
 
         //  리워드
@@ -302,16 +300,25 @@ public class StageInfoPopup : PopupBase
         }
     }
 
-    void OnShowTooltip(Rect hole, Npc_Data npc_data)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
     {
-        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/MonsterInfoTooltip", transform.parent);
-        var tooltip = Tooltip.GetComponent<TooltipMonster>();
-        tooltip.Initialize(hole, npc_data);
-    }
-
-    void OnHideTooltip()
-    {
-        GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+        switch (result)
+        {
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (data == null || data is not Npc_Data)
+                {
+                    Debug.LogWarning("표시 가능한 적정보가 없습니다!");
+                    return;
+                }
+                Npc_Data npc_data = data as Npc_Data;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/MonsterInfoTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<TooltipMonster>();
+                tooltip.Initialize(hole(false), npc_data);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                break;
+        }
     }
 
     public void OnClickCancel()

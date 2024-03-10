@@ -28,10 +28,15 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
     {
         if (Box == null) return;
 
+        Debug.Log($"hole : {hole}");
+
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
 
+        Debug.Log($"box_width : {box_width} : {box_height}");
+
         Vector2 texture_size = new Vector2(Screen.width, box_height / box_width * Screen.width);
+        Debug.Log($"texture_size : {texture_size}");
 
         if (Texture == null || !Texture_Size.Equals(texture_size))
         {
@@ -41,9 +46,9 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 
         // 해상도에 따른 hole 보정 값
         Vector4 texture_hole = new Vector4(hole.x / Texture_Size.x, hole.y / Texture_Size.y, hole.width / Texture_Size.x, hole.height/ Texture_Size.y);
-        if (is_screen_modify && Texture_Size.x != Screen.height)
+        if (is_screen_modify && Texture_Size.x != Screen.width)
         {
-            float multiple = Texture_Size.x / Screen.height;
+            float multiple = Texture_Size.x / Screen.width;
             texture_hole *= multiple;
         }
 
