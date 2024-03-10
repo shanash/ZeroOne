@@ -26,9 +26,6 @@ public class BattleSkillSlotManager : MonoBehaviour
             var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot", this.transform);
             var slot = obj.GetComponent<BattleSkillSlot>();
             slot.SetHeroBase(hero);
-            slot.TooltipButton.Touch_Tooltip_Callback.AddListener((type, func, data) => {
-                TouchEventCallback(type, func, data);
-            });
 
             Used_Battle_Skill_Slots.Add(slot);
         }
@@ -50,7 +47,6 @@ public class BattleSkillSlotManager : MonoBehaviour
 
     public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
     {
-        Debug.Log("TouchEventCallback");
         switch (result)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:

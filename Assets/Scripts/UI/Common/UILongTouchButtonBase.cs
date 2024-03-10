@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -14,7 +11,6 @@ public enum TOUCH_RESULT_TYPE
     LONG_PRESS,         //  롱 터치
     RELEASE,            //  릴리즈
 }
-
 
 public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
 {
@@ -33,11 +29,12 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
     [SerializeField, Tooltip("Long Press Dutaion")]
     protected float Long_Press_Duration = 0.7f;
 
-    bool Is_Long_Press;
-    Coroutine Long_Touch_Coroutine;
+    bool Is_Long_Press = true;
+    Coroutine Long_Touch_Coroutine = null;
 
     protected abstract UnityEventBase Touch_Callback_Base { get; }
-    protected abstract Dictionary<TOUCH_RESULT_TYPE, object[]> Parameters_OnPointer { get;  }
+
+    protected abstract void OnTouchEvent(TOUCH_RESULT_TYPE type);
 
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -67,15 +64,9 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Vector2.one;
         }
 
-        if (Is_Long_Press && Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.RELEASE))
+        if (Is_Long_Press)
         {
-            object obj = Touch_Callback_Base.GetPersistentTarget(0);
-            string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
-            Type t = obj.GetType();
-
-            MethodInfo m = t.GetMethod(func_name);
-            var c_obj = Convert.ChangeType(obj, t);
-            m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.RELEASE]);
+            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
         }
 
         if (Long_Touch_Coroutine != null)
@@ -96,16 +87,7 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        if (Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.CLICK))
-        {
-            object obj = Touch_Callback_Base.GetPersistentTarget(0);
-            string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
-            Type t = obj.GetType();
-
-            MethodInfo m = t.GetMethod(func_name);
-            var c_obj = Convert.ChangeType(obj, t);
-            m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.CLICK]);
-        }
+        OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
 
         if (Long_Touch_Coroutine != null)
         {
@@ -120,24 +102,12 @@ public abstract class UILongTouchButtonBase : Selectable, IPointerClickHandler
     /// <returns></returns>
     IEnumerator StartLongTouch()
     {
-        if (!Parameters_OnPointer.ContainsKey(TOUCH_RESULT_TYPE.LONG_PRESS))
-        {
-            yield break;
-        }
-
         Is_Long_Press = false;
         yield return new WaitForSeconds(Long_Press_Duration);
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 
-        object obj = Touch_Callback_Base.GetPersistentTarget(0);
-        string func_name = Touch_Callback_Base.GetPersistentMethodName(0);
-        Type t = obj.GetType();
-
-        MethodInfo m = t.GetMethod(func_name);
-        var c_obj = Convert.ChangeType(obj, t);
-        m.Invoke(c_obj, Parameters_OnPointer[TOUCH_RESULT_TYPE.LONG_PRESS]);
-
+        OnTouchEvent(TOUCH_RESULT_TYPE.LONG_PRESS);
     }
 
     protected override void OnDestroy()

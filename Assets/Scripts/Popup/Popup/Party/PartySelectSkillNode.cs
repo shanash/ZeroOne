@@ -44,7 +44,7 @@ public class PartySelectSkillNode : MonoBehaviour
         Skill_Type = Skill_Data.GetSkillType();
         UpdateSkillCard();
         UpdateUI();
-        Button.SetTooltipData(Skill_Data);
+        Button.Tooltip_Data = Skill_Data;
     }
 
     public void SetPlayerCharacterID(int pc_id, int pc_num)
