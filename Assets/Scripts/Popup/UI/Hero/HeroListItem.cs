@@ -41,32 +41,13 @@ public class HeroListItem : MonoBehaviour
         Click_Hero_Callback = callback;
     }
 
-    private void OnEnable()
+    public void TouchEventCallback(UIButtonBase button)
     {
-        if (Card != null)
+        if (BattlePcData == null)
         {
-            Card.AddTouchEventCallback(TouchEventCallback);
+            return;
         }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
-    {
-        if (result == TOUCH_RESULT_TYPE.CLICK)
-        {
-            if (BattlePcData == null)
-            {
-                return;
-            }
-            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-            Click_Hero_Callback?.Invoke(this);
-        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        Click_Hero_Callback?.Invoke(this);
     }
 }

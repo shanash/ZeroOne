@@ -1,16 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class ItemDataBase_V2 : IDisposable
+public abstract class ItemDataBase_V2 : IDisposable
 {
+    protected bool disposed = false;
+
     public ITEM_TYPE_V2 Item_Type { get; protected set; } = ITEM_TYPE_V2.NONE;
 
     public int Item_ID { get; protected set; } = 0;
     public int Item_Count { get; protected set; } = 0;
 
-    protected bool disposed = false;
+    public abstract string ItemName { get; }
 
     public ItemDataBase_V2()
     {

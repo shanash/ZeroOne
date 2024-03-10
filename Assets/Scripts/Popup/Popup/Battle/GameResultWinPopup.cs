@@ -109,6 +109,8 @@ public class GameResultWinPopup : PopupBase
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
 
+    GameObject Tooltip = null;
+
     protected override bool Initialize(object[] data)
     {
         if (data.Length != 2)
@@ -612,7 +614,7 @@ public class GameResultWinPopup : PopupBase
                 {
                     var obj = pool.GetGameObject(prefab, Reward_List_View.content);
                     var item = obj.GetComponent<BattleRewardItemCard>();
-                    item.SetRewardSetData(reward_data);
+                    item.InitializeData(reward_data, RewardItemCallback);
                     Used_Reward_Item_List.Add(item);
 
                     //  보상 지급
@@ -642,7 +644,7 @@ public class GameResultWinPopup : PopupBase
             {
                 var obj = pool.GetGameObject(prefab, Reward_List_View.content);
                 var item = obj.GetComponent<BattleRewardItemCard>();
-                item.SetRewardSetData(reward_data);
+                item.InitializeData(reward_data, RewardItemCallback);
                 Used_Reward_Item_List.Add(item);
 
                 //  보상 지급
@@ -650,6 +652,27 @@ public class GameResultWinPopup : PopupBase
                 item.SetCount(reward_cnt);
                 break;
             }
+        }
+    }
+
+    public void RewardItemCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object reward_data_obj)
+    {
+        switch (result)
+        {
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (reward_data_obj == null || reward_data_obj is not RewardDataBase)
+                {
+                    Debug.LogWarning("표시 가능한 보상정보가 없습니다!");
+                    return;
+                }
+                RewardDataBase reward_data = reward_data_obj as RewardDataBase;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/CommonTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<CommonTooltip>();
+                tooltip.Initialize(hole(false), reward_data);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                break;
         }
     }
 

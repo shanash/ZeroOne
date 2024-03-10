@@ -6,6 +6,9 @@ public class Reward_GoodsData : RewardDataBase
 {
     protected GoodsDataBase Data;
 
+    public override string RewardName => (Data != null) ?
+        GameDefine.GetLocalizeString(Data.GetGoodsData().name_id)
+        : string.Empty;
 
     protected override void InitData()
     {

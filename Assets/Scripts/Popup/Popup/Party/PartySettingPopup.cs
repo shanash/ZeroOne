@@ -1,10 +1,10 @@
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Gpm.Ui;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PartySettingPopup : PopupBase
@@ -90,7 +90,7 @@ public class PartySettingPopup : PopupBase
     void InitAssets()
     {
         List<string> asset_list = new List<string>();
-        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -343,16 +343,21 @@ public class PartySettingPopup : PopupBase
     /// 영웅 리스트에서 영웅 선택시 콜백
     /// </summary>
     /// <param name="ud"></param>
-    void SelectCharacterCallback(PartyCharacterListItem hero)
+    void SelectCharacterCallback(TOUCH_RESULT_TYPE type, Func<bool, Rect> hole, object hero_obj)
     {
-        if (hero == null)
+        if (type != TOUCH_RESULT_TYPE.CLICK || hero_obj == null || hero_obj is not PartyCharacterListItem)
         {
             return;
         }
+
+        var hero = hero_obj as PartyCharacterListItem;
+
         if (hero.GetUserHeroData() == null)
         {
             return;
         }
+
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
         var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var user_deck = user_deck_mng.FindSelectedDeck(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
@@ -388,8 +393,14 @@ public class PartySettingPopup : PopupBase
         user_deck_mng.Save();
     }
 
-    void PartySlotCardChoiceCallback(PartySlotNode slot)
+    void PartySlotCardChoiceCallback(TOUCH_RESULT_TYPE type, Func<bool, Rect> hole, object slot_obj)//PartySlotNode slot)
     {
+        if (type != TOUCH_RESULT_TYPE.CLICK || slot_obj == null || slot_obj is not PartySlotNode)
+        {
+            return;
+        }
+
+        var slot = slot_obj as PartySlotNode;
         if (slot.GetUserHeroDeckMountData() == null)
         {
             return;
@@ -518,25 +529,36 @@ public class PartySettingPopup : PopupBase
         }
     }
 
-    void OnShowTooltip(Rect hole, UserHeroSkillData skill_data)
+    public void OnShowSkillTooltip(TOUCH_RESULT_TYPE type, Func<bool,Rect> hole, object skill_data_obj)
     {
-        if (Tooltip != null)
+        if (skill_data_obj == null || skill_data_obj is not UserHeroSkillData)
         {
-            OnHideTooltip();
+            Debug.LogWarning("스킬 정보가 없습니다");
             return;
         }
 
-        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
-        var tooltip = Tooltip.GetComponent<TooltipSkill>();
-        tooltip.Initialize(hole, skill_data);
-    }
+        UserHeroSkillData skill_data = skill_data_obj as UserHeroSkillData;
 
-    void OnHideTooltip()
-    {
-        if (Tooltip != null)
+        switch (type)
         {
-            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-            Tooltip = null;
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
+
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<SkillTooltip>();
+                tooltip.Initialize(hole(false), skill_data);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
+                break;
         }
     }
     #endregion
@@ -545,13 +567,9 @@ public class PartySettingPopup : PopupBase
     {
         base.Spawned();
         Selected_Info_Box.ShowInfoBox(false);
-        Selected_Info_Box.OnShowTooltip += OnShowTooltip;
-        Selected_Info_Box.OnHideTooltip += OnHideTooltip;
     }
     public override void Despawned()
     {
-        Selected_Info_Box.OnShowTooltip -= OnShowTooltip;
-        Selected_Info_Box.OnHideTooltip -= OnHideTooltip;
         base.Despawned();
     }
 }

@@ -62,12 +62,6 @@ public class HeroInfoUI : PopupBase
     Producer pd = null;
     GameObject Tooltip = null;
 
-    private void Start()
-    {
-        Hero_Info_Box.BoxBasic.OnShowTooltip += OnShowTooltip;
-        Hero_Info_Box.BoxBasic.OnHideTooltip += OnHideTooltip;
-    }
-
     void ResetUI()
     {
         User_Hero_Datas = null;
@@ -102,7 +96,7 @@ public class HeroInfoUI : PopupBase
     void InitAssets()
     {
         List<string> asset_list = new List<string>();
-        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -198,21 +192,29 @@ public class HeroInfoUI : PopupBase
         pd.SetActive(value);
     }
 
-    void OnShowTooltip(Rect hole, UserHeroSkillData data)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
     {
-        Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip", transform.parent);
-        var tooltip = Tooltip.GetComponent<TooltipSkill>();
-        tooltip.Initialize(hole, data, false);
-    }
-
-    void OnHideTooltip()
-    {
-        if (Tooltip != null)
+        switch (result)
         {
-            GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (data == null || data is not UserHeroSkillData)
+                {
+                    Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
+                    return;
+                }
+                UserHeroSkillData skill_data = data as UserHeroSkillData;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<SkillTooltip>();
+                tooltip.Initialize(hole(false), skill_data, false);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                }
+                break;
         }
     }
-
 
     public void OnClickProfileButton()
     {

@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Box: {fileID: 1262628763297281805}
   Card: {fileID: 1847375839762720442}
+  Button: {fileID: 6538998129543222811}
 --- !u!1 &7514741082945715754
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +228,34 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8496911584258536068}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TouchEventCallback
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PartyCharacterListItem, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+      propertyPath: Touch_Callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5014886762116967581, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
       propertyPath: m_Layer
       value: 20
@@ -328,3 +357,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2829467425310512309, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
   m_PrefabInstance: {fileID: 7965328085173282756}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6538998129543222811 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3762114925697970655, guid: b7ef3dc42ad039d4ca993850208f7e49, type: 3}
+  m_PrefabInstance: {fileID: 7965328085173282756}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7785167af6a0146a5ab48e5efc8fc79b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

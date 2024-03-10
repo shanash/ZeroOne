@@ -18,7 +18,7 @@ public class PartyCharacterListCell : InfiniteScrollItem
         for (int i = 0; i < cnt; i++)
         {
             var slot = Card_Item_List[i];
-            slot.SetClickHeroCallback(data.Click_Hero_Callback);
+            slot.Click_Hero_Callback.AddListener(data.Click_Hero_Callback);
             if (i < hero_list.Count)
             {
                 slot.SetUserHeroData(hero_list[i], data.Game_Type);

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PartyListManager : MonoBehaviour
 {
@@ -37,12 +39,12 @@ public class PartyListManager : MonoBehaviour
         }
     }
 
-    public void SetSlotCardChoiceCallback(System.Action<PartySlotNode> cb)
+    public void SetSlotCardChoiceCallback(UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> cb)
     {
         int cnt = Party_Slots.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Party_Slots[i].SetSlotCardChoiceCallback(cb);
+            Party_Slots[i].Click_Callback.AddListener(cb);
         }
     }
 

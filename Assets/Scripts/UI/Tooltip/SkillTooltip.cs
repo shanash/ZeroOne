@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class TooltipSkill : Tooltip
+public class SkillTooltip : TooltipBase
 {
     [SerializeField]
     TMP_Text Type = null;

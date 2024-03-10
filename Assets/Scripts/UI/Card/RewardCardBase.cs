@@ -1,5 +1,7 @@
 using FluffyDuck.Util;
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class RewardCardBase : UIBase
@@ -15,7 +17,7 @@ public class RewardCardBase : UIBase
 
     protected RewardDataBase Data;
     
-    public void SetRewardSetData(Reward_Set_Data d)
+    public virtual void InitializeData(Reward_Set_Data d, UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> callback_tooltip)
     {
         Data = CreateRewardData(d);
         UpdateRewardItemIcon();

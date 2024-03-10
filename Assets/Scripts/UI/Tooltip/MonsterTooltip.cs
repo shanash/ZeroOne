@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TooltipMonster : Tooltip
+public class MonsterTooltip : TooltipBase
 {
     [SerializeField]
     NpcCardBase Npc_Card = null;

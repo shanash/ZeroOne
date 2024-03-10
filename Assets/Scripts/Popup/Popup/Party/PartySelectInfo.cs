@@ -53,8 +53,6 @@ public class PartySelectInfo : MonoBehaviour
         {
             var skill_slot = Skill_List[i];
             skill_slot.SetPlayerCharacterID(pc_id, pc_num);
-            skill_slot.OnStartLongPress = OnShowTooltip;
-            skill_slot.OnFinishLongPress = OnHideTooltip;
         }
     }
 

@@ -6,6 +6,9 @@ public class ItemData_EquipmentData_V2 : ItemDataBase_V2
 {
     protected Equipment_Data Data;
 
+    public override string ItemName => (Data != null) ?
+    GameDefine.GetLocalizeString(Data.name_id) : string.Empty;
+
     public override void SetItem(ITEM_TYPE_V2 gtype, int item_id)
     {
         base.SetItem(gtype, item_id);
