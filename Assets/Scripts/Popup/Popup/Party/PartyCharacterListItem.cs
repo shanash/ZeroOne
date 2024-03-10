@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PartyCharacterListItem : MonoBehaviour
 {
@@ -8,7 +10,10 @@ public class PartyCharacterListItem : MonoBehaviour
     [SerializeField, Tooltip("Hero Card")]
     HeroCardBase Card;
 
-    System.Action<PartyCharacterListItem> Click_Hero_Callback;
+    [SerializeField, Tooltip("Button")]
+    UIInteractiveButton Button;
+
+    public UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Hero_Callback => Button.Touch_Tooltip_Callback;
 
     UserHeroData User_Data;
 
@@ -19,6 +24,11 @@ public class PartyCharacterListItem : MonoBehaviour
         User_Data = ud;
         Game_Type = gtype;
         UpdateCellItem();
+
+        if (Button != null)
+        {
+            Button.Tooltip_Data = this;
+        }
     }
 
     public UserHeroData GetUserHeroData()
@@ -53,39 +63,4 @@ public class PartyCharacterListItem : MonoBehaviour
         Card.SetRoleType(User_Data.GetPlayerCharacterData().role_type);
 
     }
-
-    public void SetClickHeroCallback(System.Action<PartyCharacterListItem> callback)
-    {
-        Click_Hero_Callback = callback;
-    }
-
-    private void OnEnable()
-    {
-        if (Card != null)
-        {
-            Card.AddTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
-    {
-        if (result == TOUCH_RESULT_TYPE.CLICK)
-        {
-            if (User_Data == null)
-            {
-                return;
-            }
-            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-            Click_Hero_Callback?.Invoke(this);
-        }
-    }
-
 }

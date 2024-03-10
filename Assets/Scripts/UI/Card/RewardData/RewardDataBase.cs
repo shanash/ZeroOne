@@ -1,10 +1,14 @@
 using System;
 
-public class RewardDataBase : IDisposable
+public abstract class RewardDataBase : IDisposable
 {
     protected Reward_Set_Data Reward;
 
     protected bool disposed = false;
+
+    public abstract string RewardName { get;  }
+    public string Desc => "보상에 대한 설명이 필요합니다.";
+    public int Count => Reward.var2;
 
     public RewardDataBase()
     {
@@ -53,5 +57,4 @@ public class RewardDataBase : IDisposable
     public REWARD_TYPE GetRewardType() { return Reward.reward_type; }
 
     public virtual string GetRewardItemIconPath() {  return null; }
-
 }

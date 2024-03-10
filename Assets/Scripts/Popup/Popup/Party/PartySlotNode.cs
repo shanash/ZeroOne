@@ -1,6 +1,8 @@
 using Cysharp.Text;
 using FluffyDuck.Util;
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PartySlotNode : MonoBehaviour
@@ -17,12 +19,15 @@ public class PartySlotNode : MonoBehaviour
     [SerializeField, Tooltip("Team Synergy Attribute Icon")]
     Image Team_Synergy_Icon;
 
+    [SerializeField, Tooltip("Tooltip Button")]
+    UIInteractiveButton Button;
+
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
     UserHeroDeckMountData User_Deck;
     UserHeroData User_Hero;
 
-    System.Action<PartySlotNode> Click_Callback;
+    public UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Callback => Button.Touch_Tooltip_Callback;
 
     public void SetUserHeroDeckMountData(UserHeroDeckMountData ud, GAME_TYPE gtype)
     {
@@ -33,6 +38,10 @@ public class PartySlotNode : MonoBehaviour
             User_Hero = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(User_Deck.Player_Character_ID, User_Deck.Player_Character_Num);
         }
         UpdatePartySlot();
+        if (Button != null)
+        {
+            Button.Tooltip_Data = this;
+        }
     }
 
     public UserHeroDeckMountData GetUserHeroDeckMountData()
@@ -77,42 +86,4 @@ public class PartySlotNode : MonoBehaviour
             });
         }
     }
-
-    public void SetSlotCardChoiceCallback(System.Action<PartySlotNode> cb)
-    {
-        Click_Callback = cb;
-    }
-
-    private void OnEnable()
-    {
-        if (Card != null)
-        {
-            Card.AddTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
-    {
-        if (result == TOUCH_RESULT_TYPE.CLICK)
-        {
-            if (User_Deck == null)
-            {
-                return;
-            }
-            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-            Click_Callback?.Invoke(this);
-        }
-    }
-
-
-
-
 }

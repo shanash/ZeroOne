@@ -50,16 +50,17 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     [SerializeField, Tooltip("Shaker")]
     Shake2D Shake;
 
+    [SerializeField, Tooltip("Button")]
+    UIInteractiveButton _TooltipButton;
+
     HeroBase_V2 Hero;
-
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
+    GameObject Tooltip_Obj = null;
 
-    Vector2 Tooltip_Upper_Pos = new Vector2(0, 280f);
-
-    Vector2 Press_Scale = new Vector2(0.96f, 0.96f);
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
-    Coroutine CheckForLongPress = null;
+
+    public UIInteractiveButton TooltipButton => _TooltipButton;
 
     public void SetHeroBase(HeroBase_V2 hero)
     {
@@ -67,6 +68,18 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         Hero.Slot_Events += SkillSlotEventCallback;
 
         UpdateSkillSlot();
+
+        var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
+        if (skill_group == null)
+        {
+            Debug.LogWarning($"skill_group is null");
+            return;
+        }
+
+        if (TooltipButton != null)
+        {
+            TooltipButton.Tooltip_Data = (skill_group as BattlePcSkillGroup).GetUserHeroSkillData();
+        }
     }
 
     void UpdateSkillSlot()
@@ -83,41 +96,43 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     /// Click / Long Touch 이벤트 사용
     /// </summary>
     /// <param name="result"></param>
-    void TouchEventCallback(TOUCH_RESULT_TYPE result)
+    public void TouchEventCallback(TOUCH_RESULT_TYPE result, Func<bool, Rect> hole, object data)
     {
-        if (result == TOUCH_RESULT_TYPE.CLICK)
+        switch (result)
         {
-            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-            if (!Hero.IsAlive())
-            {
-                return;
-            }
-            var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
-            if (skill_group == null)
-            {
-                return;
-            }
-            if (skill_group.IsPrepareCooltime())
-            {
-                Hero?.UltimateSkillExec();
-            }
-        }
-        else if (result == TOUCH_RESULT_TYPE.LONG_PRESS)
-        {
-            var rt = this.GetComponent<RectTransform>();
-            var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
-            if (skill_group == null)
-            {
-                Debug.LogWarning($"skill_group is null");
-                return;
-            }
-            var rect = GameObjectUtils.GetScreenRect(rt, new Vector2(GameDefine.RESOLUTION_SCREEN_WIDTH, GameDefine.RESOLUTION_SCREEN_HEIGHT));
-            var skill_data = (skill_group as BattlePcSkillGroup).GetUserHeroSkillData();
-            OnStartLongPress?.Invoke(rect, skill_data);
-        }
-        else if (result == TOUCH_RESULT_TYPE.RELEASE)
-        {
-            OnFinishLongPress?.Invoke();
+            case TOUCH_RESULT_TYPE.CLICK:
+                AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+                if (!Hero.IsAlive())
+                {
+                    return;
+                }
+                var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
+                if (skill_group == null)
+                {
+                    return;
+                }
+                if (skill_group.IsPrepareCooltime())
+                {
+                    Hero?.UltimateSkillExec();
+                }
+                break;
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (data == null)
+                {
+                    Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
+                    return;
+                }
+                UserHeroSkillData skill_data = data as UserHeroSkillData;
+                Tooltip_Obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent.parent.parent.parent);
+                var tooltip = Tooltip_Obj.GetComponent<SkillTooltip>();
+                tooltip.Initialize(hole(true), skill_data, false);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                if (Tooltip_Obj != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip_Obj);
+                }
+                break;
         }
     }
 
@@ -241,26 +256,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     #endregion
 
-    private void OnEnable()
-    {
-        if (Card != null)
-        {
-            Card.AddTouchEventCallback(TouchEventCallback);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (Card != null)
-        {
-            Card.RemoveTouchEventCallback(TouchEventCallback);
-        }
-        //if (Hero != null)
-        //{
-        //    Hero.Slot_Events -= SkillSlotEventCallback;
-        //}
-    }
-
     public override void Spawned()
     {
         base.Spawned();
@@ -269,10 +264,14 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
         Cooltime_Gauge.gameObject.SetActive(false);
 
         CustomUpdateManager.Instance.RegistCustomUpdateComponent(this);
+
+        TooltipButton.Touch_Tooltip_Callback.AddListener(TouchEventCallback);
     }
 
     public override void Despawned()
     {
+        TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
+
         base.Despawned();
         CustomUpdateManager.Instance.DeregistCustomUpdateComponent(this);
     }

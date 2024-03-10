@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using FluffyDuck.Util;
 
-public class Tooltip : MonoBehaviour, IPoolableComponent
+public class TooltipBase : MonoBehaviour, IPoolableComponent
 {
     public const float PRESS_TIME_FOR_SHOW = 0.2f;
     const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20;
@@ -30,6 +30,7 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
+
         Vector2 texture_size = new Vector2(Screen.width, box_height / box_width * Screen.width);
 
         if (Texture == null || !Texture_Size.Equals(texture_size))
@@ -40,9 +41,9 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
 
         // 해상도에 따른 hole 보정 값
         Vector4 texture_hole = new Vector4(hole.x / Texture_Size.x, hole.y / Texture_Size.y, hole.width / Texture_Size.x, hole.height/ Texture_Size.y);
-        if (is_screen_modify && Texture_Size.x != Screen.height)
+        if (is_screen_modify && Texture_Size.x != Screen.width)
         {
-            float multiple = Texture_Size.x / Screen.height;
+            float multiple = Texture_Size.x / Screen.width;
             texture_hole *= multiple;
         }
 
@@ -68,6 +69,11 @@ public class Tooltip : MonoBehaviour, IPoolableComponent
         }
     }
 
+    /// <summary>
+    /// 생성할때 자원을 너무 많이 먹어서 꼭 필요할때만 생성해야합니다아
+    /// </summary>
+    /// <param name="size"></param>
+    /// <returns></returns>
     Texture2D CreateSolidTexture(Vector2 size)
     {
         Texture2D result = new Texture2D((int)size.x, (int)size.y);

@@ -1,11 +1,14 @@
 using Gpm.Ui;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class PartyCharacterListData : InfiniteScrollData
 {
     List<UserHeroData> User_Hero_Data_List = new List<UserHeroData>();
 
-    public System.Action<PartyCharacterListItem> Click_Hero_Callback;
+    public UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Hero_Callback;
 
     public GAME_TYPE Game_Type { get; protected set; } = GAME_TYPE.NONE;
 

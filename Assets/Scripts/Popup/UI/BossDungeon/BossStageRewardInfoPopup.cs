@@ -1,4 +1,4 @@
-using Cysharp.Text;
+﻿using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
@@ -28,6 +28,7 @@ public class BossStageRewardInfoPopup : PopupBase
     List<RewardItemCard> Used_Reward_Item_Card_List = new List<RewardItemCard>();
 
     Boss_Stage_Data Stage;
+    GameObject Tooltip = null;
 
     protected override bool Initialize(object[] data)
     {
@@ -89,7 +90,7 @@ public class BossStageRewardInfoPopup : PopupBase
             }
             var obj = pool.GetGameObject(reward_prefab, First_Reward_List_View.content);
             var item = obj.GetComponent<RewardItemCard>();
-            item.SetRewardSetData(reward_data);
+            item.InitializeData(reward_data, RewardItemCallback);
             item.SetScale(Vector2.one);
             Used_Reward_Item_Card_List.Add(item);
         }
@@ -106,7 +107,7 @@ public class BossStageRewardInfoPopup : PopupBase
             }
             var obj = pool.GetGameObject(reward_prefab, Repeat_Reward_List_View.content);
             var item = obj.GetComponent<RewardItemCard>();
-            item.SetRewardSetData(reward_data);
+            item.InitializeData(reward_data, RewardItemCallback);
             item.SetScale(Vector2.one);
             Used_Reward_Item_Card_List.Add(item);
         }
@@ -149,5 +150,24 @@ public class BossStageRewardInfoPopup : PopupBase
         });
     }
 
-  
+    public void RewardItemCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object reward_data_obj)
+    {
+        switch (result)
+        {
+            case TOUCH_RESULT_TYPE.LONG_PRESS:
+                if (reward_data_obj == null || reward_data_obj is not RewardDataBase)
+                {
+                    Debug.LogWarning("표시 가능한 보상정보가 없습니다!");
+                    return;
+                }
+                RewardDataBase reward_data = reward_data_obj as RewardDataBase;
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/CommonTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<CommonTooltip>();
+                tooltip.Initialize(hole(false), reward_data);
+                break;
+            case TOUCH_RESULT_TYPE.RELEASE:
+                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                break;
+        }
+    }
 }

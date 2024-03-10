@@ -12,8 +12,7 @@ public enum TOUCH_RESULT_TYPE
     RELEASE,            //  릴리즈
 }
 
-
-public class UILongTouchButtonBase : Selectable, IPointerClickHandler
+public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
 {
     [SerializeField, Tooltip("Scaling RectTransform")]
     protected RectTransform Scale_Rect;
@@ -24,28 +23,18 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
     [SerializeField, Tooltip("Use Long Touch")]
     protected bool Use_Long_Touch;
 
-    [SerializeField, Tooltip("Touch Callback")]
-    protected UnityEvent<TOUCH_RESULT_TYPE> Touch_Callback;
-
     /// <summary>
     /// 일정시간 이상 누르고 있으면 롱터치로 인식
     /// </summary>
     [SerializeField, Tooltip("Long Press Dutaion")]
-    protected float Long_Press_Duration = 0.7f;
+    protected float Long_Press_Duration = 0.2f;
 
-    bool Is_Long_Press;
+    bool Is_Long_Press = true;
+    Coroutine Long_Touch_Coroutine = null;
 
-    Coroutine Long_Touch_Coroutine;
+    protected abstract UnityEventBase Touch_Callback_Base { get; }
 
-    public void AddTouchCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Touch_Callback.AddListener(cb);
-    }
-
-    public void RemovTouchCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Touch_Callback.RemoveListener(cb);
-    }
+    protected abstract void OnTouchEvent(TOUCH_RESULT_TYPE type);
 
     public override void OnPointerDown(PointerEventData eventData)
     {
@@ -63,7 +52,6 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         }
 
         Long_Touch_Coroutine = StartCoroutine(StartLongTouch());
-
     }
 
     public override void OnPointerUp(PointerEventData eventData)
@@ -78,7 +66,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.RELEASE);
+            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
         }
 
         if (Long_Touch_Coroutine != null)
@@ -99,7 +87,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         if (!interactable) { return; }
         if (Is_Long_Press) { return; }
 
-        Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.CLICK);
+        OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
 
         if (Long_Touch_Coroutine != null)
         {
@@ -107,6 +95,7 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
             Long_Touch_Coroutine = null;
         }
     }
+
     /// <summary>
     /// 롱터치 이벤트 감지
     /// </summary>
@@ -118,11 +107,11 @@ public class UILongTouchButtonBase : Selectable, IPointerClickHandler
         Long_Touch_Coroutine = null;
         Is_Long_Press = true;
 
-        Touch_Callback?.Invoke(TOUCH_RESULT_TYPE.LONG_PRESS);
+        OnTouchEvent(TOUCH_RESULT_TYPE.LONG_PRESS);
     }
 
     protected override void OnDestroy()
     {
-        Touch_Callback.RemoveAllListeners();
+        Touch_Callback_Base.RemoveAllListeners();
     }
 }

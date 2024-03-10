@@ -58,9 +58,6 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Name")]
     protected TMP_Text Name_Text;
 
-    [SerializeField, Tooltip("Touch Btn")]
-    protected UILongTouchButtonBase Long_Touch_Btn;
-
     protected Player_Character_Data Data;
     protected Player_Character_Battle_Data Battle_Data;
 
@@ -240,14 +237,5 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     public void OnPointerClick(PointerEventData eventData)
     {
         Click?.Invoke(eventData);
-    }
-
-    public void AddTouchEventCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Long_Touch_Btn.AddTouchCallback(cb);
-    }
-    public void RemoveTouchEventCallback(UnityAction<TOUCH_RESULT_TYPE> cb)
-    {
-        Long_Touch_Btn.RemovTouchCallback(cb);
     }
 }

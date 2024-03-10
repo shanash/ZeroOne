@@ -88,7 +88,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         list.Add("Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode");
         list.Add("Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode");
-        list.Add("Assets/AssetResources/Prefabs/UI/SkillInfoTooltip");
+        list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
         list.Add("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Death_Member_Flag_Node");
