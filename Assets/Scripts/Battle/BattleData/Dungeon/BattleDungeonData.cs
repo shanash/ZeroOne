@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-
-
 /// <summary>
 /// 모든 던전 데이터의 최상위 데이터
 /// 스토리, 이벤트 던전, 레이드 던전 등 다양한 던전의 최상위 클래스

@@ -300,7 +300,7 @@ public class GameDefine : MonoBehaviour
         else
         {
             find_string = str_id;
-            Debug.Assert(false);
+            Debug.Assert(false, $"{str_id}키를 GetLocalizeString에서 찾을 수 없습니다");
         }
 
         return find_string;

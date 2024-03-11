@@ -28,7 +28,6 @@ public class PartyCharacterListCell : InfiniteScrollItem
             {
                 slot.SetUserHeroData(null, data.Game_Type);
             }
-
         }
     }
 }

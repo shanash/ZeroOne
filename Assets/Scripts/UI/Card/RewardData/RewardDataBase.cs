@@ -6,8 +6,8 @@ public abstract class RewardDataBase : IDisposable
 
     protected bool disposed = false;
 
-    public abstract string RewardName { get;  }
-    public string Desc => "보상에 대한 설명이 필요합니다.";
+    public abstract string RewardItemName { get;  }
+    public abstract string RewardItemDesc { get; }
     public int Count => Reward.var2;
 
     public RewardDataBase()

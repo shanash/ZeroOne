@@ -72,6 +72,8 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Defense_Number_Text.text = Unit_Data.GetPhysicsDefensePoint().ToString("N0");
         Life_Number_Text.text = Unit_Data.GetMaxLifePoint().ToString("N0");
 
+        Debug.Log($"Unit_Data.User_Data.GetPlayerCharacterID() : {Unit_Data.User_Data.GetPlayerCharacterID()}");
+        Debug.Log($"Unit_Data.User_Data.Player_Character_Num : {Unit_Data.User_Data.Player_Character_Num}");
         var skill_group_list = GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num);
 
         foreach (var icon in Skill_Icons)
@@ -85,6 +87,13 @@ public class HeroInfoBoxBasic : MonoBehaviour
             // 콜백 참조 때문에 별도로 변수를 선언해야 합니다
             int sprite_index = i;
 
+            Debug.Log($"skill_group : {skill_group.GetSkillType()} {i}");
+            if (Skills.Count <= i)
+            {
+                Debug.Log($"break");
+                break;
+            }
+            
             Skills[i].Initialize(skill_group);
             i++;
         }

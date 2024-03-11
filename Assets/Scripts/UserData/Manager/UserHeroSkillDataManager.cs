@@ -88,6 +88,10 @@ public class UserHeroSkillDataManager : ManagerBase
         // 못찾았으면 새로 만들어줍니다
         if (result == null)
         {
+            if (skill_group_id == 100402 || skill_group_id == 100403 || skill_group_id == 100404)
+            {
+                Debug.Log($"Add {skill_group_id}");
+            }
             result = new UserHeroSkillData(null, skill_group_id);
             User_Hero_Skill_Data_List.Add(result);
             Is_Update_Data = true;

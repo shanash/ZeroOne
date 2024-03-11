@@ -1,4 +1,6 @@
 using Cysharp.Text;
+using FluffyDuck.Util;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -242,11 +244,8 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
                     for (int c = 0; c < cnt; c++)
                     {
                         var match = matches[c];
-                        if (c < skill_effect_list.Count)
-                        {
-                            string replace_str = ConvertSkillValue(match.Value, skill_effect_list[c]);
-                            desc = desc.Replace(match.Value, replace_str);
-                        }
+                        string replace_str = ConvertSkillValue(match.Value, skill_effect_list[i]);
+                        desc = desc.Replace(match.Value, replace_str);
                     }
                 }
                 sb.AppendLine(desc);
@@ -272,38 +271,81 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     /// <returns></returns>
     string ConvertSkillValue(string pattern, object skill)
     {
-        string convert = $"<color=#00ff00>Test => {pattern}</color>";
+        string convert = $"Test => {pattern}".WithColorTag("00ff00");
+        BattleOnetimeSkillData onetime_skill = null;
+        BattleDurationSkillData duration_skill = null;
+        int type_value = 0;
+
         if (skill is BattleOnetimeSkillData)
         {
-            //  onetime
+            onetime_skill = skill as BattleOnetimeSkillData;
         }
         else if (skill is BattleDurationSkillData)
         {
-            //  duration
+            duration_skill = skill as BattleDurationSkillData;
         }
 
-        switch (pattern)
+        try
         {
-            case "[0]":
-                break;
-            case "[1]":
-                break;
-            case "[2]":
-                break;
-            case "[3]":
-                break;
-            case "[4]":
-                break;
-            case "[5]":
-                break;
-            case "[6]":
-                break;
-            case "[7]":
-                break;
-            default:
-                Debug.Assert(false);
-                break;
+            switch (pattern)
+            {
+                case "[0]":
+                    type_value = (int)onetime_skill.GetStatMultipleType();
+                    // 100단위는 절대값
+                    // 200단위는 배율이라서 단순하게 계산합니다
+                    switch (type_value/100)
+                    {
+                        case 1:
+                            convert = onetime_skill.GetValue().ToString("N0");
+                            break;
+                        case 2:
+                            convert = onetime_skill.GetMultiple().ToPercentage();
+                            break;
+                    }
+                    break;
+                case "[1]":
+                    convert = onetime_skill.GetMultiple().ToPercentage();
+                    break;
+                case "[2]":
+                    convert = duration_skill.GetMultiple().ToPercentage();
+                    break;
+                case "[3]":
+                    convert = duration_skill.Duration.ToString("N1");
+                    break;
+                case "[4]":
+                    convert = duration_skill.Duration.ToString("N1");
+                    break;
+                case "[5]":
+                    convert = duration_skill.Duration.ToString("N1");
+                    break;
+                case "[6]":
+                    type_value = (int)duration_skill.GetStatMultipleType();
+                    // 100단위는 절대값
+                    // 200단위는 배율이라서 단순하게 계산합니다
+                    switch (type_value / 100)
+                    {
+                        case 1:
+                            convert = duration_skill.GetValue().ToString("N0");
+                            break;
+                        case 2:
+                            convert = duration_skill.GetMultiple().ToPercentage();
+                            break;
+                    }
+                    break;
+                case "[7]":
+                    convert = duration_skill.GetValue().ToString("N0");
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
         }
+        catch(Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+            convert = $"Failed => {pattern}".WithColorTag("ff0000");
+        }
+
         return convert;
     }
 

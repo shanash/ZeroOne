@@ -15,12 +15,22 @@ public class RewardCardBase : UIBase
     [SerializeField, Tooltip("Piece Icon")]
     protected Image Piece_Icon;
 
-    protected RewardDataBase Data;
-    
+    [SerializeField, Tooltip("Button")]
+    protected UIInteractiveButton _Button;
+
+    protected RewardDataBase Data = null;
+
+    public UIInteractiveButton Button => _Button;
+
     public virtual void InitializeData(Reward_Set_Data d, UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> callback_tooltip)
     {
         Data = CreateRewardData(d);
         UpdateRewardItemIcon();
+        if (Button != null)
+        {
+            Button.Tooltip_Data = Data;
+            Button.Touch_Tooltip_Callback.AddListener(callback_tooltip);
+        }
     }
 
     protected void UpdateRewardItemIcon()

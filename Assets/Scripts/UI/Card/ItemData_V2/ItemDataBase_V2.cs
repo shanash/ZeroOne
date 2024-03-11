@@ -10,6 +10,7 @@ public abstract class ItemDataBase_V2 : IDisposable
     public int Item_Count { get; protected set; } = 0;
 
     public abstract string ItemName { get; }
+    public abstract string ItemDesc { get; }
 
     public ItemDataBase_V2()
     {

@@ -5,8 +5,11 @@ public class Reward_ItemData : RewardDataBase
 {
     protected ItemDataBase_V2 Data;
 
-    public override string RewardName => (Data != null) ?
-    Data.ItemName : string.Empty;
+    public override string RewardItemName => (Data != null) ?
+        Data.ItemName : string.Empty;
+
+    public override string RewardItemDesc => (Data != null) ?
+        Data.ItemDesc : string.Empty;
 
     protected override void InitData()
     {

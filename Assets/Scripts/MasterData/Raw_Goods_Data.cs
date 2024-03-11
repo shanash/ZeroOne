@@ -6,6 +6,7 @@ public class Raw_Goods_Data : System.IDisposable
 {
 	public GOODS_TYPE goods_type {get; set;}
 	public string name_id {get; set;}
+	public string desc_id {get; set;}
 	public double max_bound {get; set;}
 	public string icon_path {get; set;}
 
@@ -15,6 +16,7 @@ public class Raw_Goods_Data : System.IDisposable
 	{
 		goods_type = GOODS_TYPE.NONE;
 		name_id = string.Empty;
+		desc_id = string.Empty;
 		icon_path = string.Empty;
 	}
 
