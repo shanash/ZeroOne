@@ -178,7 +178,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <summary>
     /// 공격용 타겟 리스트
     /// </summary>
-    protected List<HeroBase_V2> Attack_Targets = new List<HeroBase_V2>();
+    protected List<HeroBase_V2> Find_Targets = new List<HeroBase_V2>();
     /// <summary>
     /// 접근용 타겟 리스트
     /// </summary>
@@ -331,6 +331,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         var ta = (TimelineAsset)Ultimate_Skill_Playable_Director.playableAsset;
         var tracks = ta.GetOutputTracks();
 
+        //  skill
+        var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+        var target_skill = skill_grp.GetSpecialSkillTargetSkill();
+
         foreach (var track in tracks)
         {
             if (track is AnimationTrack)
@@ -387,9 +391,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             else if (shot.DisplayName.Equals("TargetGroupCamera"))
                             {
                                 //  TargetGroupCamera - 타겟(단일, 다수)그룹의 중점 포커싱.
-                                for (int i = 0; i < Attack_Targets.Count; i++)
+                                for (int i = 0; i < target_skill.GetFindTargets().Count; i++)
                                 {
-                                    target_group.AddMember(Attack_Targets[i].transform, 1, 1);
+                                    target_group.AddMember(target_skill.GetFindTargets()[i].transform, 1, 1);
                                 }
                                 target_group_cam.Follow = target_group.transform;
                                 Ultimate_Skill_Playable_Director.SetReferenceValue(shot.VirtualCamera.exposedName, target_group_cam);
@@ -398,11 +402,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             {
                                 //  ActiveGroupCamera - 시전자 + 타겟(단일, 다수)그룹의 중점 포커싱.
                                 active_group.AddMember(this.transform, 2, 1);
-                                for (int i = 0; i < Attack_Targets.Count; i++)
+                                for (int i = 0; i < target_skill.GetFindTargets().Count; i++)
                                 {
-                                    if (!Attack_Targets.Contains(this))
+                                    if (!target_skill.GetFindTargets().Contains(this))
                                     {
-                                        active_group.AddMember(Attack_Targets[i].transform, 1, 1);
+                                        active_group.AddMember(target_skill.GetFindTargets()[i].transform, 1, 1);
                                     }
                                 }
                                 active_group_cam.Follow = active_group.transform;
@@ -527,8 +531,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
     }
 
-
-
     /// <summary>
     /// 스파인 애니메이션 시작시 호출되는 리스너
     /// </summary>
@@ -541,18 +543,18 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         UNIT_STATES state = GetCurrentState();
         if (state == UNIT_STATES.ATTACK_1)
         {
-            var skill = GetSkillManager().GetCurrentSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            var skill_grp = GetSkillManager().GetCurrentSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                SpawnSkillCastEffect(skill);
+                SpawnSkillCastEffect(skill_grp);
             }
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            var skill = GetSkillManager().GetSpecialSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                SpawnSkillCastEffect(skill);
+                SpawnSkillCastEffect(skill_grp);
             }
         }
 
@@ -638,15 +640,21 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         if (state == UNIT_STATES.ATTACK_1)
         {
-            var skill = GetSkillManager().GetCurrentSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            var skill_grp = GetSkillManager().GetCurrentSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                var exec_list = skill.GetExecuableSkillDatas(evt_name);
+                var exec_list = skill_grp.GetExecuableSkillDatas(evt_name);
                 if (exec_list.Count > 0)
                 {
                     int cnt = exec_list.Count;
                     for (int i = 0; i < cnt; i++)
                     {
+                        var skill = exec_list[i];
+                        if (skill.IsEmptyFindTarget())
+                        {
+                            FindTargetsSkillAddTargets(skill);
+                        }
+                        
                         SpawnSkillEffect_V3(exec_list[i]);
                     }
                 }
@@ -654,26 +662,21 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else if (state == UNIT_STATES.SKILL_1)
         {
-            var skill = GetSkillManager().GetSpecialSkillGroup();
-            if (animation_name.Equals(skill.GetSkillActionName()))
+            var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                var exec_list = skill.GetExecuableSkillDatas(evt_name);
+                var exec_list = skill_grp.GetExecuableSkillDatas(evt_name);
                 if (exec_list.Count > 0)
                 {
                     int cnt = exec_list.Count;
                     for (int i = 0; i < cnt; i++)
                     {
-                        var s = exec_list[i];
-                        //if (evt_name.IndexOf("apply_") != -1)
-                        //{
-
-                        //}
-                        //var targets = FindTargetsReturnLocal(s);
-                        //if (targets != null)
-                        //{
-
-                        //}
-                        SpawnSkillEffect_V3(s);
+                        var skill = exec_list[i];
+                        if (skill.IsEmptyFindTarget())
+                        {
+                            FindTargetsSkillAddTargets(skill);
+                        }
+                        SpawnSkillEffect_V3(skill);
                     }
                 }
             }
@@ -824,25 +827,18 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         float distance = GetApproachDistance();
         Team_Mng.FindTargetInRangeAtApproach(this, TARGET_TYPE.ENEMY_TEAM, distance, ref Approach_Targets);
     }
-    /// <summary>
-    /// 각 스킬에 지정되어 있는 타겟 찾기
-    /// </summary>
-    /// <param name="skill"></param>
-    protected virtual void FindTargets(BattleSkillData skill)
-    {
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Attack_Targets);
-    }
+
     /// <summary>
     /// 각 스킬에 지정되어 있는 타겟을 찾기<br/>
     /// 로컬 데이터로 찾아서, 전체 타겟에 영향을 주지 않기 위해
     /// </summary>
     /// <param name="skill"></param>
     /// <returns></returns>
-    protected virtual List<HeroBase_V2> FindTargetsReturnLocal(BattleSkillData skill)
+    protected virtual void FindTargetsSkillAddTargets(BattleSkillData skill)
     {
-        List<HeroBase_V2> list = new List<HeroBase_V2>();
-        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref list);
-        return list;
+        Find_Targets.Clear();
+        Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Find_Targets);
+        skill.AddFomdTargets(Find_Targets);
     }
 
 
@@ -991,10 +987,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         var ec = effect.GetEffectComponent();
         Vector3 target_pos = Vector3.zero;
+        
         //  적들의 중앙 위치 찾기
         if (ec.Projectile_Reach_Pos_Type == TARGET_REACH_POS_TYPE.TARGET_CENTER)
         {
-            target_pos = ec.GetTargetsCenterPosition(Attack_Targets);
+            target_pos = ec.GetTargetsCenterPosition(send_data.Targets);
         }
         else
         {
@@ -1028,12 +1025,17 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected virtual void SpawnSkillEffect_V3(BattleSkillData skill)
     {
         var factory = Battle_Mng.GetEffectFactory();
-        FindTargets(skill);
-        int target_cnt = Attack_Targets.Count;
-        if (target_cnt == 0)
+        if (skill.IsEmptyFindTarget())
         {
             return;
         }
+        //FindTargets(skill);
+        //int target_cnt = Attack_Targets.Count;
+        //if (target_cnt == 0)
+        //{
+        //    return;
+        //}
+        int target_cnt = skill.GetFindTargets().Count;
         int effect_weight_index = skill.GetEffectWeightIndex();
 
         string skill_trigger_effect_prefab = skill.GetTriggerEffectPrefabPath();
@@ -1043,7 +1045,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
             for (int i = 0; i < target_cnt; i++)
             {
-                var target = Attack_Targets[i];
+                //var target = Attack_Targets[i];
+                var target = skill.GetFindTargets()[i];
                 BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                 send_data.Caster = this;
                 send_data.AddTarget(target);
@@ -1067,8 +1070,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     }
                     send_data.Onetime = onetime;
 
-                    SpawnOnetimeEffect(effect_path, send_data, target, Attack_Targets);
-
+                    SpawnOnetimeEffect(effect_path, send_data, target, skill.GetFindTargets());
                 }
 
                 //  duration skill
@@ -1083,7 +1085,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                         continue;
                     }
                     send_data.Duration = duration;
-                    SpawnDurationEffect(effect_path, send_data, target, Attack_Targets);
+                    SpawnDurationEffect(effect_path, send_data, target, skill.GetFindTargets());
                 }
             }
         }
@@ -1094,7 +1096,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             {
                 BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                 send_data.Caster = this;
-                send_data.AddTargets(Attack_Targets);
+                send_data.AddTargets(skill.GetFindTargets());
                 send_data.Skill = skill;
                 send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
                 send_data.Magic_Attack_Point = GetMagicAttackPoint();
@@ -1111,7 +1113,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     }
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써, 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    SpawnOnetimeEffect(skill_trigger_effect_prefab, send_data, Attack_Targets.First(),  Attack_Targets);
+                    SpawnOnetimeEffect(skill_trigger_effect_prefab, send_data, skill.GetFindTargets().First(),  skill.GetFindTargets());
                 }
                 else
                 {
@@ -1119,7 +1121,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
                     for (int i = 0; i < target_cnt; i++)
                     {
-                        var target = Attack_Targets[i];
+                        //var target = Attack_Targets[i];
+                        var target = skill.GetFindTargets()[i];
 
                         //  onetime skill
                         var onetime_list = skill.GetOnetimeSkillDataList();
@@ -1136,7 +1139,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             }
                             send_data.Onetime = onetime;
 
-                            SpawnOnetimeEffect(effect_path, send_data, target, Attack_Targets);
+                            SpawnOnetimeEffect(effect_path, send_data, target, skill.GetFindTargets());
                         }
 
                         //  duration skill
@@ -1154,7 +1157,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             }
                             send_data.Duration = duration;
 
-                            SpawnDurationEffect(effect_path, send_data, target, Attack_Targets);
+                            SpawnDurationEffect(effect_path, send_data, target, skill.GetFindTargets());
 
                         }
                     }
@@ -1165,7 +1168,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             {
                 for (int i = 0; i < target_cnt; i++)
                 {
-                    var target = Attack_Targets[i];
+                    var target = skill.GetFindTargets()[i];
 
                     BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
                     dmg.Caster = this;
@@ -1176,7 +1179,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     dmg.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    SpawnOnetimeEffect(skill_trigger_effect_prefab, dmg, target, Attack_Targets);
+                    SpawnOnetimeEffect(skill_trigger_effect_prefab, dmg, target, skill.GetFindTargets());
                     
                 }
             }
@@ -1395,8 +1398,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
 
-        //Render_Texture.SetHitColorV2(Color.white, 0.05f);
-        //UltimateSkillHittedKnockback();
+        //  색 반짝 / 넉백 
         AttackHittedKnockback();
 
         if (Game_Type != GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE && Game_Type != GAME_TYPE.EDITOR_SKILL_EDIT_MODE)
@@ -1409,16 +1411,20 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life = 0;
             AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
             UpdateLifeBar();
-            ChangeState(UNIT_STATES.DEATH);
+            //  궁극기 피격시 죽어도 당장 죽이지는 않는다.(궁극기 종료 후 사라지도록)
+            if (GetCurrentState() != UNIT_STATES.ULTIMATE_PAUSE)
+            {
+                ChangeState(UNIT_STATES.DEATH);
+            }
             return;
         }
 
         AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
         UpdateLifeBar();
 
-        //Slot_Events?.Invoke(SKILL_SLOT_EVENT_TYPE.HITTED);
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.HITTED);
     }
+
     /// <summary>
     /// 체력 회복
     /// </summary>
@@ -1710,10 +1716,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         var target_skill = skill.GetSpecialSkillTargetSkill();
         if (target_skill != null)
         {
-            FindTargets(target_skill);
+            FindTargetsSkillAddTargets(target_skill);
         }
         //  타겟이 잡혀있지 않다면, 일단 스킬 사용 안되도록
-        if (Attack_Targets.Count == 0)
+        if (target_skill.IsEmptyFindTarget())
         {
             return;
         }
@@ -1726,7 +1732,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
         List<HeroBase_V2> targets = new List<HeroBase_V2>();
         targets.Add(this);
-        targets.AddRange(Attack_Targets.FindAll(x => !object.ReferenceEquals(x, this)));
+        targets.AddRange(target_skill.GetFindTargets().FindAll(x => !object.ReferenceEquals(x, this)));
         Battle_Mng.HideAllUnitWithoutTargets(targets);
 
         Skeleton.AnimationState.ClearTracks();
@@ -1849,7 +1855,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <b>StrValue</b>
     /// 이벤트 이름이 필요한 경우
     /// </summary>
-    /// <param name="trigger_id"></param>
+    /// <param name="trigger_id">chr_hide, chr_show, cast</param>
     /// <param name="evt_val"></param>
     public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
     {

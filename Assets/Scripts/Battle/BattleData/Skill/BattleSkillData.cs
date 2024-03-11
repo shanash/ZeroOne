@@ -11,7 +11,7 @@ public enum UNIT_SKILL_TYPE
 public abstract class BattleSkillData : BattleDataBase
 {
     protected HeroBase_V2 Caster;
-    protected List<HeroBase_V2> Targets = new List<HeroBase_V2>();
+    protected List<HeroBase_V2> Find_Targets = new List<HeroBase_V2>();
     /// <summary>
     /// 효과 비중 수
     /// </summary>
@@ -195,11 +195,49 @@ public abstract class BattleSkillData : BattleDataBase
     {
         Effect_Weight_Index = weight_index;
     }
+    /// <summary>
+    /// 타겟 추가
+    /// </summary>
+    /// <param name="t"></param>
+    public void AddFindTarget(HeroBase_V2 t)
+    {
+        if (!Find_Targets.Contains(t))
+        {
+            Find_Targets.Add(t);
+        }
+    }
+    /// <summary>
+    /// 타겟 리스트 추가
+    /// </summary>
+    /// <param name="targets"></param>
+    public void AddFomdTargets(List<HeroBase_V2> targets)
+    {
+        for (int i = 0; i < targets.Count; i++)
+        {
+            AddFindTarget(targets[i]);
+        }
+    }
+
+    public List<HeroBase_V2> GetFindTargets()
+    {
+        return Find_Targets;
+    }
+    /// <summary>
+    /// 타겟이 비어 있는지 여부 판단
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEmptyFindTarget()
+    {
+        return Find_Targets.Count == 0;
+    }
 
     /// <summary>
     /// 스킬 사용 후 데이터 리셋
     /// </summary>
-    public virtual void ResetSkill() { }
+    public virtual void ResetSkill() 
+    {
+        Find_Targets.Clear();
+    }
     /// <summary>
     /// 스킬 설명
     /// </summary>

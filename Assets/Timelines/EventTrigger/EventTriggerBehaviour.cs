@@ -3,7 +3,7 @@ using System;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-
+[Serializable]
 public struct EventTriggerValue
 {
     public int IntValue;

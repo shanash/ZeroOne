@@ -190,6 +190,7 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
 
     public override void ResetSkill()
     {
+        base.ResetSkill();
         Effect_Weight_Index = 0;
     }
 

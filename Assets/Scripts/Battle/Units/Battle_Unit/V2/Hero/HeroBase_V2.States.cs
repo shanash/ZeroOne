@@ -153,7 +153,17 @@ public partial class HeroBase_V2 : UnitBase_V2
         CalcDurationSkillTime();
         GetSkillManager().CalcSpecialSkillCooltime(Time.deltaTime * Battle_Speed_Multiple);
     }
-
+    public override void UnitStateAttack01Begin()
+    {
+        string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillActionName();
+        var name_list = skill_action_name.Split('_');
+        int track = 0;
+        if (name_list.Length > 0)
+        {
+            track = int.Parse(name_list[0]);
+        }
+        PlayAnimation(track, skill_action_name, false);
+    }
     public override void UnitStateAttack01()
     {
         if (!IsAlive())
@@ -254,17 +264,7 @@ public partial class HeroBase_V2 : UnitBase_V2
         GetSkillManager().CalcSpecialSkillCooltime(dt);
     }
 
-    public override void UnitStateAttack01Begin()
-    {
-        string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillActionName();
-        var name_list = skill_action_name.Split('_');
-        int track = 0;
-        if (name_list.Length > 0)
-        {
-            track = int.Parse(name_list[0]);
-        }
-        PlayAnimation(track, skill_action_name, false);
-    }
+   
 
     public override void UnitStateDeathBegin()
     {

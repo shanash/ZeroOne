@@ -194,6 +194,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         ChangeState(GAME_STATES.PLAYING);
     }
 
+    /// <summary>
+    /// 일부 타겟을 제외한 나머지 유닛 감추기
+    /// </summary>
+    /// <param name="targets"></param>
     public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {
         int cnt = Used_Team_List.Count;
@@ -202,6 +206,11 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].HideAllUnitWithoutTargets(targets);
         }
     }
+
+    /// <summary>
+    /// 일부 타겟을 제외한 나머지 유닛 보이기
+    /// </summary>
+    /// <param name="targets"></param>
     public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
     {
         int cnt = Used_Team_List.Count;
@@ -210,7 +219,9 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].ShowAllUnitWithoutTargets(targets);
         }
     }
-
+    /// <summary>
+    /// 모든 유닛 보이기
+    /// </summary>
     public void ShowAllUnits()
     {
         int cnt = Used_Team_List.Count;
@@ -219,7 +230,21 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].ShowAllUnits();
         }
     }
-    
+    /// <summary>
+    /// 모든 유닛 감추기
+    /// </summary>
+    public void HideAllUnits()
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].HideAllUnits();
+        }
+    }
+    /// <summary>
+    /// 시전자를 제외한 나머지 모든 유닛 일시 정지
+    /// </summary>
+    /// <param name="hero"></param>
     public void AllPauseUnitWithoutHero(HeroBase_V2 hero)
     {
         int cnt = Used_Team_List.Count;
@@ -228,7 +253,10 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].AllPauseTeamMembersWithoutHero(hero);
         }
     }
-
+    /// <summary>
+    /// 시전자를 제외한 나머지 모든 유닛 일시 정지 해제
+    /// </summary>
+    /// <param name="hero"></param>
     public void AllResumeUnitWithoutHero(HeroBase_V2 hero)
     {
         int cnt = Used_Team_List.Count;

@@ -50,7 +50,8 @@ public class Monster_900001 : MonsterBase_V2
         var target_skill = ultimate_skill.GetSpecialSkillTargetSkill();
         if (target_skill != null)
         {
-            FindTargets(target_skill);
+            //FindTargets(target_skill);
+            FindTargetsSkillAddTargets(target_skill);
         }
 
         ChangeState(UNIT_STATES.SKILL_READY_1);

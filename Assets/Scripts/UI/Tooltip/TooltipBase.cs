@@ -56,16 +56,52 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         Desc.text = desc;
 
         float multi = box_width / Texture_Size.x;
+
+        float pivot_x = 0;
+        /*
+        if (hole.center.x < Texture_Size.x / 2) pivot_x = 0;// 아이콘이 좌측에 위치
+        else pivot_x = 1; // 아이콘이 우측에 위치
+        */
         // 아이콘이 위에 위치
         if (hole.center.y > Texture_Size.y / 2)
         {
-            Container.pivot = new Vector2(0, 1);
+            Container.pivot = new Vector2(pivot_x, 1);
             Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y - GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
         }
         else // 아이콘이 아래에 위치
         {
-            Container.pivot = Vector2.zero;
+            Container.pivot = new Vector2(pivot_x, 0);
             Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
+        }
+
+        AdjustPositionWithinScreen(Box.rectTransform, Container);
+    }
+
+    void AdjustPositionWithinScreen(RectTransform full_screen, RectTransform tooltip)
+    {
+        Vector3[] screenCorners = new Vector3[4];
+        Vector3[] componentCorners = new Vector3[4];
+
+        full_screen.GetWorldCorners(screenCorners);
+        tooltip.GetWorldCorners(componentCorners);
+
+        float screenLeft = screenCorners[0].x;
+        float screenRight = screenCorners[2].x;
+
+        float componentLeft = componentCorners[0].x;
+        float componentRight = componentCorners[2].x;
+
+        // 컴포넌트가 화면 오른쪽으로 벗어나는 경우
+        if (componentRight > screenRight)
+        {
+            float offset = componentRight - screenRight;
+            tooltip.position -= new Vector3(offset, 0, 0);
+        }
+        // 컴포넌트가 화면 왼쪽으로 벗어나는 경우
+        else if (componentLeft < screenLeft)
+        {
+            float offset = screenLeft - componentLeft;
+            tooltip.position += new Vector3(offset, 0, 0);
         }
     }
 
