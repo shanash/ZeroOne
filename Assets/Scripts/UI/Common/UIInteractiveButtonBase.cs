@@ -54,30 +54,6 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
         Long_Touch_Coroutine = StartCoroutine(StartLongTouch());
     }
 
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        base.OnPointerUp(eventData);
-
-        if (!interactable) { return; }
-        if (Scale_Rect != null)
-        {
-            Scale_Rect.localScale = Vector2.one;
-        }
-
-        if (Is_Long_Press)
-        {
-            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
-        }
-
-        if (Long_Touch_Coroutine != null)
-        {
-            StopCoroutine(Long_Touch_Coroutine);
-            Long_Touch_Coroutine = null;
-            Is_Long_Press = false;
-        }
-
-    }
-
     /// <summary>
     /// 단순 클릭
     /// </summary>
@@ -85,14 +61,44 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!interactable) { return; }
-        if (Is_Long_Press) { return; }
 
-        OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
+        if (Scale_Rect != null)
+        {
+            Scale_Rect.localScale = Vector2.one;
+        }
 
         if (Long_Touch_Coroutine != null)
         {
             StopCoroutine(Long_Touch_Coroutine);
             Long_Touch_Coroutine = null;
+            OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
+        }
+        else
+        {
+            if (Is_Long_Press)
+            {
+                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+            }
+        }
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        base.OnPointerExit(eventData);
+
+        if (!interactable) { return; }
+
+        if (Scale_Rect != null)
+        {
+            Scale_Rect.localScale = Vector2.one;
+        }
+
+        if (Long_Touch_Coroutine == null)
+        {
+            if (Is_Long_Press)
+            {
+                //OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+            }
         }
     }
 

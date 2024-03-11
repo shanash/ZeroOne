@@ -211,6 +211,7 @@ public class HeroInfoUI : PopupBase
                 if (Tooltip != null)
                 {
                     GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
                 }
                 break;
         }

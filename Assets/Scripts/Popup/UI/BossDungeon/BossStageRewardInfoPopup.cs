@@ -166,7 +166,11 @@ public class BossStageRewardInfoPopup : PopupBase
                 tooltip.Initialize(hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
                 break;
         }
     }

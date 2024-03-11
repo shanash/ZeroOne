@@ -2,11 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using FluffyDuck.Util;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 public class TooltipBase : MonoBehaviour, IPoolableComponent
 {
     public const float PRESS_TIME_FOR_SHOW = 0.2f;
     const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20;
+    const int DIM_ENABLE_MILLISECONDS = 2000;
+
     static Texture2D Texture = null;
     static Vector2 Texture_Size = Vector2.zero;
 
@@ -17,16 +21,22 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
     RectTransform Container = null;
 
     [SerializeField]
+    GameObject Dim = null;
+
+    [SerializeField]
     TMP_Text Title = null;
 
     [SerializeField]
     TMP_Text Desc = null;
 
     Material Shader_Mat = null;
+    CancellationTokenSource Cancel_Token = new CancellationTokenSource(); // Dim 활성화 작업 취소 토큰
 
     protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
         if (Box == null) return;
+
+        EnableDelayed(Dim, DIM_ENABLE_MILLISECONDS, Cancel_Token.Token).Forget();
 
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
@@ -57,27 +67,15 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
         float multi = box_width / Texture_Size.x;
 
-        float pivot_x = 0;
-        /*
-        if (hole.center.x < Texture_Size.x / 2) pivot_x = 0;// 아이콘이 좌측에 위치
-        else pivot_x = 1; // 아이콘이 우측에 위치
-        */
-        // 아이콘이 위에 위치
-        if (hole.center.y > Texture_Size.y / 2)
-        {
-            Container.pivot = new Vector2(pivot_x, 1);
-            Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y - GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
-        }
-        else // 아이콘이 아래에 위치
-        {
-            Container.pivot = new Vector2(pivot_x, 0);
-            Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
-        }
+        Container.pivot = new Vector2(0, 0);
+        Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
 
-        AdjustPositionWithinScreen(Box.rectTransform, Container);
+        Canvas.ForceUpdateCanvases();
+
+        AdjustPositionWithinScreen(Box.rectTransform, Container, hole, multi);
     }
 
-    void AdjustPositionWithinScreen(RectTransform full_screen, RectTransform tooltip)
+    void AdjustPositionWithinScreen(RectTransform full_screen, RectTransform tooltip, Rect hole, float multi)
     {
         Vector3[] screenCorners = new Vector3[4];
         Vector3[] componentCorners = new Vector3[4];
@@ -87,9 +85,11 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
         float screenLeft = screenCorners[0].x;
         float screenRight = screenCorners[2].x;
+        float screenUp = screenCorners[2].y;
 
         float componentLeft = componentCorners[0].x;
         float componentRight = componentCorners[2].x;
+        float componentUp = componentCorners[2].y;
 
         // 컴포넌트가 화면 오른쪽으로 벗어나는 경우
         if (componentRight > screenRight)
@@ -102,6 +102,13 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         {
             float offset = screenLeft - componentLeft;
             tooltip.position += new Vector3(offset, 0, 0);
+        }
+
+        // 컴포넌트가 화면 위쪽으로 벗어나는 경우
+        if (componentUp > screenUp)
+        {
+            tooltip.pivot = new Vector2(0, 1);
+            tooltip.anchoredPosition += new Vector2(0, -(GAP_BETWEEN_ICON_AND_TOOLTIP * 2 + hole.height) * multi);
         }
     }
 
@@ -126,13 +133,31 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         return result;
     }
 
+    async UniTaskVoid EnableDelayed(GameObject go, int delay, CancellationToken cancel_token)
+    {
+        await UniTask.Delay(delay, cancellationToken: cancel_token);
+        if (cancel_token.IsCancellationRequested)
+        {
+            return;
+        }
+        go.SetActive(true);
+    }
+
+    public void OnClickDim()
+    {
+        GameObjectPoolManager.Instance.UnusedGameObject(this.gameObject);
+    }
+
     public void Spawned()
     {
+        Debug.Log("Spawned");
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
     }
 
     public void Despawned()
     {
+        Debug.Log("Despawned");
+        Cancel_Token.Cancel();
     }
 }

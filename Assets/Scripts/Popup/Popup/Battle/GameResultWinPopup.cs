@@ -672,7 +672,11 @@ public class GameResultWinPopup : PopupBase
                 tooltip.Initialize(hole(true), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
                 break;
         }
     }

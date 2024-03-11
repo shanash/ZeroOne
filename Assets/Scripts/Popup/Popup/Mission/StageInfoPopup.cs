@@ -172,6 +172,7 @@ public class StageInfoPopup : PopupBase
             var obj = pool.GetGameObject(npc_prefab, Npc_List_View.content);
             var npc_card = obj.GetComponent<NpcCardBase>();
             npc_card.SetNpcID(npc.GetUnitID());
+            npc_card.TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
             npc_card.TooltipButton.Touch_Tooltip_Callback.AddListener(TouchEventCallback);
             Used_Npc_List.Add(npc_card);
         }
@@ -317,7 +318,11 @@ public class StageInfoPopup : PopupBase
                 tooltip.Initialize(hole(false), npc_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
                 break;
         }
     }
@@ -338,7 +343,11 @@ public class StageInfoPopup : PopupBase
                 tooltip.Initialize(hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
                 break;
         }
     }

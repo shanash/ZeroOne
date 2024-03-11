@@ -55,7 +55,7 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     HeroBase_V2 Hero;
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
-    GameObject Tooltip_Obj = null;
+    GameObject Tooltip = null;
 
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
@@ -100,22 +100,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     {
         switch (result)
         {
-            case TOUCH_RESULT_TYPE.CLICK:
-                AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-                if (!Hero.IsAlive())
-                {
-                    return;
-                }
-                var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
-                if (skill_group == null)
-                {
-                    return;
-                }
-                if (skill_group.IsPrepareCooltime())
-                {
-                    Hero?.UltimateSkillExec();
-                }
-                break;
             case TOUCH_RESULT_TYPE.LONG_PRESS:
                 if (data == null)
                 {
@@ -123,14 +107,15 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                     return;
                 }
                 UserHeroSkillData skill_data = data as UserHeroSkillData;
-                Tooltip_Obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent.parent.parent.parent);
-                var tooltip = Tooltip_Obj.GetComponent<SkillTooltip>();
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent.parent.parent.parent);
+                var tooltip = Tooltip.GetComponent<SkillTooltip>();
                 tooltip.Initialize(hole(true), skill_data, false);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip_Obj != null)
+                if (Tooltip != null)
                 {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip_Obj);
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
                 }
                 break;
         }
@@ -265,13 +250,12 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
         CustomUpdateManager.Instance.RegistCustomUpdateComponent(this);
 
+        TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
         TooltipButton.Touch_Tooltip_Callback.AddListener(TouchEventCallback);
     }
 
     public override void Despawned()
     {
-        TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
-
         base.Despawned();
         CustomUpdateManager.Instance.DeregistCustomUpdateComponent(this);
     }

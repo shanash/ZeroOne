@@ -59,6 +59,7 @@ public class BattleSkillSlotManager : MonoBehaviour
                 if (Tooltip != null)
                 {
                     GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
                 }
                 break;
         }

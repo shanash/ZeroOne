@@ -44,6 +44,7 @@ public class PartyListManager : MonoBehaviour
         int cnt = Party_Slots.Count;
         for (int i = 0; i < cnt; i++)
         {
+            Party_Slots[i].Click_Callback.RemoveAllListeners();
             Party_Slots[i].Click_Callback.AddListener(cb);
         }
     }

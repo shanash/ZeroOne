@@ -74,7 +74,6 @@ public class NpcCardBase : UIBase
     }
     public override void Despawned()
     {
-        TooltipButton.Touch_Tooltip_Callback.RemoveAllListeners();
         base.Despawned();
         SetBoss(false);
     }

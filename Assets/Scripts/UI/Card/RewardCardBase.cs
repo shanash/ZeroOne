@@ -29,6 +29,7 @@ public class RewardCardBase : UIBase
         if (Button != null)
         {
             Button.Tooltip_Data = Data;
+            Button.Touch_Tooltip_Callback.RemoveAllListeners();
             Button.Touch_Tooltip_Callback.AddListener(callback_tooltip);
         }
     }
