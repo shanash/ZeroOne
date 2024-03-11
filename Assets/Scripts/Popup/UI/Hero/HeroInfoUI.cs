@@ -122,15 +122,20 @@ public class HeroInfoUI : PopupBase
 
         User_Hero_Battle_Data = User_Hero_Datas[Current_Hero_Data_Index];
 
+        ReleaseProducer();
+
+        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
+
+        Hero_Info_Box.SetData(User_Hero_Battle_Data, this, select_tab_index);
+    }
+
+    void ReleaseProducer()
+    {
         if (pd != null)
         {
             pd.Release();
             pd = null;
         }
-
-        pd = Factory.Instantiate<Producer>(User_Hero_Battle_Data.Data.lobby_basic_id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
-
-        Hero_Info_Box.SetData(User_Hero_Battle_Data, this, select_tab_index);
     }
 
     void SetRenderTextureAndCamera()
@@ -227,10 +232,9 @@ public class HeroInfoUI : PopupBase
         });
     }
 
-    public void OnClickBack()
+    public override void OnExit()
     {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.RemoveLastPopupType(POPUP_TYPE.FULLPAGE_TYPE);
+        ReleaseProducer();
     }
 
     public void OnClickLeft()
