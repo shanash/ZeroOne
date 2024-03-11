@@ -1824,16 +1824,37 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         Hitted_Corouine = null;
         this.transform.position = Before_Hitted_Position;
     }
-    
+
     /// <summary>
     /// 이벤트 사용 필요.<br/>
-    /// 궁극기의 효과를 풍부하게 만들어 줄 수 있음
+    /// 궁극기의 효과를 풍부하게 만들어 줄 수 있음<br/><br/>
+    /// <b>Trigger_ID</b> = <i>char_hide</i><br/>
+    /// <b>IntValue</b><br/>
+    /// 0 = 시전자와 타겟을 제외한 모든 캐릭터 숨기기<br/>
+    /// 1 = 시전자를 제외한 모든 캐릭터 숨기기<br/>
+    /// 2 = 타겟을 제외한 모든 캐릭터 숨기기<br/>
+    /// 3 = 모든 캐릭터 숨기기<br/>
+    /// <b>FloatValue</b>
+    /// 알파값이 적용되는 시간(초 단위로 그래프는 리니어)<br/>
+    /// <b>StrValue</b>
+    /// 이벤트 이름이 필요한 경우<br/><br/>
+    /// <b>Trigger_ID</b> = <i>chr_show</i><br/>
+    /// <b>IntValue</b><br/>
+    /// 0 = 시전자와 타겟만 보이기<br/>
+    /// 1 = 시전자만 보이기<br/>
+    /// 2 = 타겟만 보이기<br/>
+    /// 3 = 모든 캐릭터 보이기<br/>
+    /// <b>FloatValue</b>
+    /// 알파값이 적용되는 시간(초 단위로 그래프는 리니어)<br/>
+    /// <b>StrValue</b>
+    /// 이벤트 이름이 필요한 경우
     /// </summary>
     /// <param name="trigger_id"></param>
     /// <param name="evt_val"></param>
     public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
     {
         Debug.Log($"{trigger_id} => {evt_val.ToString()}");
+        
     }
 
     #region ToString
