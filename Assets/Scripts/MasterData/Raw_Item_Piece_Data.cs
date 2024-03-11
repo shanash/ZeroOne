@@ -6,6 +6,7 @@ public class Raw_Item_Piece_Data : System.IDisposable
 {
 	public int item_piece_id {get; set;}
 	public string name_id {get; set;}
+	public string desc_id {get; set;}
 	public int target_id {get; set;}
 	public int max_num {get; set;}
 	public int make_count {get; set;}
@@ -19,6 +20,7 @@ public class Raw_Item_Piece_Data : System.IDisposable
 	{
 		item_piece_id = 0;
 		name_id = string.Empty;
+		desc_id = string.Empty;
 		target_id = 0;
 		max_num = 0;
 		make_count = 0;

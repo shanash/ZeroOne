@@ -20,6 +20,12 @@ public class Item_Piece_Data : System.IDisposable
 	string _name_id;
 
 	///	<summary>
+	///	설명 string ID
+	///	</summary>
+	public string desc_id => _desc_id;
+	string _desc_id;
+
+	///	<summary>
 	///	조각낼 대상 아이디
 	///	</summary>
 	public int target_id => _target_id;
@@ -64,6 +70,7 @@ public class Item_Piece_Data : System.IDisposable
 	{
 		_item_piece_id = raw_data.item_piece_id;
 		_name_id = raw_data.name_id;
+		_desc_id = raw_data.desc_id;
 		_target_id = raw_data.target_id;
 		_max_num = raw_data.max_num;
 		_make_count = raw_data.make_count;
@@ -93,6 +100,7 @@ public class Item_Piece_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[item_piece_id] = <color=yellow>{0}</color>", item_piece_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
+		sb.AppendFormat("[desc_id] = <color=yellow>{0}</color>", desc_id).AppendLine();
 		sb.AppendFormat("[target_id] = <color=yellow>{0}</color>", target_id).AppendLine();
 		sb.AppendFormat("[max_num] = <color=yellow>{0}</color>", max_num).AppendLine();
 		sb.AppendFormat("[make_count] = <color=yellow>{0}</color>", make_count).AppendLine();

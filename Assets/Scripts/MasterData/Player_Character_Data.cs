@@ -20,6 +20,12 @@ public class Player_Character_Data : System.IDisposable
 	string _name_id;
 
 	///	<summary>
+	///	툴 팁용 캐릭터 설명 ID
+	///	</summary>
+	public string desc_id => _desc_id;
+	string _desc_id;
+
+	///	<summary>
 	///	태생 성급
 	///	</summary>
 	public int default_star => _default_star;
@@ -139,6 +145,7 @@ public class Player_Character_Data : System.IDisposable
 	{
 		_player_character_id = raw_data.player_character_id;
 		_name_id = raw_data.name_id;
+		_desc_id = raw_data.desc_id;
 		_default_star = raw_data.default_star;
 		_role_type = raw_data.role_type;
 		_tribe_type = raw_data.tribe_type;
@@ -183,6 +190,7 @@ public class Player_Character_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[player_character_id] = <color=yellow>{0}</color>", player_character_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
+		sb.AppendFormat("[desc_id] = <color=yellow>{0}</color>", desc_id).AppendLine();
 		sb.AppendFormat("[default_star] = <color=yellow>{0}</color>", default_star).AppendLine();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
 		sb.AppendFormat("[tribe_type] = <color=yellow>{0}</color>", tribe_type).AppendLine();

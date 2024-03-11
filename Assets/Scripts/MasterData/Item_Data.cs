@@ -20,6 +20,12 @@ public class Item_Data : System.IDisposable
 	string _name_id;
 
 	///	<summary>
+	///	설명 string ID
+	///	</summary>
+	public string desc_id => _desc_id;
+	string _desc_id;
+
+	///	<summary>
 	///	아이템 타입
 	///	</summary>
 	public ITEM_TYPE_V2 item_type => _item_type;
@@ -70,6 +76,7 @@ public class Item_Data : System.IDisposable
 	{
 		_item_id = raw_data.item_id;
 		_name_id = raw_data.name_id;
+		_desc_id = raw_data.desc_id;
 		_item_type = raw_data.item_type;
 		_max_num = raw_data.max_num;
 		_int_var1 = raw_data.int_var1;
@@ -100,6 +107,7 @@ public class Item_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[item_id] = <color=yellow>{0}</color>", item_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
+		sb.AppendFormat("[desc_id] = <color=yellow>{0}</color>", desc_id).AppendLine();
 		sb.AppendFormat("[item_type] = <color=yellow>{0}</color>", item_type).AppendLine();
 		sb.AppendFormat("[max_num] = <color=yellow>{0}</color>", max_num).AppendLine();
 		sb.AppendFormat("[int_var1] = <color=yellow>{0}</color>", int_var1).AppendLine();

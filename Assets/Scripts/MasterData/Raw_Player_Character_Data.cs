@@ -6,6 +6,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 {
 	public int player_character_id {get; set;}
 	public string name_id {get; set;}
+	public string desc_id {get; set;}
 	public int default_star {get; set;}
 	public ROLE_TYPE role_type {get; set;}
 	public TRIBE_TYPE tribe_type {get; set;}
@@ -32,6 +33,7 @@ public class Raw_Player_Character_Data : System.IDisposable
 	{
 		player_character_id = 0;
 		name_id = string.Empty;
+		desc_id = string.Empty;
 		default_star = 0;
 		role_type = ROLE_TYPE.NONE;
 		tribe_type = TRIBE_TYPE.NONE;

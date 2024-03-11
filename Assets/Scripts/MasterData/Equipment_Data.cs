@@ -20,6 +20,12 @@ public class Equipment_Data : System.IDisposable
 	string _name_id;
 
 	///	<summary>
+	///	설명 string ID
+	///	</summary>
+	public string desc_id => _desc_id;
+	string _desc_id;
+
+	///	<summary>
 	///	장비 타입
 	///	</summary>
 	public EQUIPMENT_TYPE equipment_type => _equipment_type;
@@ -125,6 +131,7 @@ public class Equipment_Data : System.IDisposable
 	{
 		_item_id = raw_data.item_id;
 		_name_id = raw_data.name_id;
+		_desc_id = raw_data.desc_id;
 		_equipment_type = raw_data.equipment_type;
 		_max_num = raw_data.max_num;
 		_def = raw_data.def;
@@ -164,6 +171,7 @@ public class Equipment_Data : System.IDisposable
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[item_id] = <color=yellow>{0}</color>", item_id).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
+		sb.AppendFormat("[desc_id] = <color=yellow>{0}</color>", desc_id).AppendLine();
 		sb.AppendFormat("[equipment_type] = <color=yellow>{0}</color>", equipment_type).AppendLine();
 		sb.AppendFormat("[max_num] = <color=yellow>{0}</color>", max_num).AppendLine();
 		sb.AppendFormat("[def] = <color=yellow>{0}</color>", def).AppendLine();

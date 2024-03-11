@@ -6,6 +6,7 @@ public class Raw_Equipment_Data : System.IDisposable
 {
 	public int item_id {get; set;}
 	public string name_id {get; set;}
+	public string desc_id {get; set;}
 	public EQUIPMENT_TYPE equipment_type {get; set;}
 	public int max_num {get; set;}
 	public int def {get; set;}
@@ -29,6 +30,7 @@ public class Raw_Equipment_Data : System.IDisposable
 	{
 		item_id = 0;
 		name_id = string.Empty;
+		desc_id = string.Empty;
 		equipment_type = EQUIPMENT_TYPE.NONE;
 		max_num = 0;
 		def = 0;

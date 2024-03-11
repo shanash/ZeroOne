@@ -6,6 +6,7 @@ public class Raw_Item_Data : System.IDisposable
 {
 	public int item_id {get; set;}
 	public string name_id {get; set;}
+	public string desc_id {get; set;}
 	public ITEM_TYPE_V2 item_type {get; set;}
 	public int max_num {get; set;}
 	public int int_var1 {get; set;}
@@ -20,6 +21,7 @@ public class Raw_Item_Data : System.IDisposable
 	{
 		item_id = 0;
 		name_id = string.Empty;
+		desc_id = string.Empty;
 		item_type = ITEM_TYPE_V2.NONE;
 		max_num = 0;
 		int_var1 = 0;
