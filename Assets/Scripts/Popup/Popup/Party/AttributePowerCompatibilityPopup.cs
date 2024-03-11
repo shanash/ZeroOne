@@ -77,4 +77,14 @@ public class AttributePowerCompatibilityPopup : PopupBase
         Mana_Name.text = GameDefine.GetLocalizeString (mana_attr.name_id);
         Advantage_Mana.text = ZString.Format("{0}%", Math.Truncate(mana_attr_super.final_damage_per * 100));
     }
+
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
+    }
 }

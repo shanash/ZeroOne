@@ -49,6 +49,7 @@ public class SceneLoadingPopup : PopupBase
     protected override bool Initialize(object[] data)
     {
         Running_Hero.PlayAnimation(HERO_PLAY_ANIMATION_TYPE.RUN_01);
+        SetEnableEscKeyExit(false);
         return true;
     }
 

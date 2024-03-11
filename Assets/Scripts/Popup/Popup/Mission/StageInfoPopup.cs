@@ -1,4 +1,4 @@
-﻿using Cysharp.Text;
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System.Collections.Generic;
@@ -342,7 +342,15 @@ public class StageInfoPopup : PopupBase
                 break;
         }
     }
-
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
+    }
     public void OnClickCancel()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");

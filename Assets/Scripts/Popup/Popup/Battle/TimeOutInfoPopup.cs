@@ -19,6 +19,7 @@ public class TimeOutInfoPopup : PopupBase
             return false;
         }
         Delay_Time = (float)data[0];
+        SetEnableEscKeyExit(false);
         return true;
     }
 

@@ -9,6 +9,10 @@ public class BattlePausePopup : PopupBase
     /// </summary>
     public void OnClickContinue()
     {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
         HidePopup();
     }
 

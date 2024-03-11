@@ -483,7 +483,7 @@ public partial class TeamManager_V2 : IDisposable
             var member = member_list[i];
             if (!targets.Contains(member))
             {
-                member.SetAlphaAnimation(0f, 0.15f, true);
+                member.SetAlphaAnimation(0f, 0.09f, true);
             }
         }
     }
@@ -502,7 +502,7 @@ public partial class TeamManager_V2 : IDisposable
             var member = member_list[i];
             if (!targets.Contains(member))
             {
-                member.SetAlphaAnimation(1f, 0.15f, false);
+                member.SetAlphaAnimation(1f, 0.09f, false);
             }
         }
     }
@@ -515,7 +515,7 @@ public partial class TeamManager_V2 : IDisposable
         int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            member_list[i].SetAlphaAnimation(1f, 0.15f, false);
+            member_list[i].SetAlphaAnimation(1f, 0.09f, false);
         }
     }
     /// <summary>
@@ -527,7 +527,7 @@ public partial class TeamManager_V2 : IDisposable
         int cnt = member_list.Count;
         for (int i = 0; i < cnt; i++)
         {
-            member_list[i].SetAlphaAnimation(0f, 0.15f, true);
+            member_list[i].SetAlphaAnimation(0f, 0.09f, true);
         }
     }
 

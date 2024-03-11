@@ -20,7 +20,7 @@ public class WaveInfoPopup : PopupBase
         }
         Data = (Wave_Data)data[0];
         Delay_Time = (float)data[1];
-
+        SetEnableEscKeyExit(false);
         return true;
     }
 

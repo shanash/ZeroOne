@@ -227,15 +227,18 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// </summary>
     protected Vector3 Team_Field_Position = Vector3.zero;
 
+    /// <summary>
+    /// 피격 효과 코루틴
+    /// </summary>
+    protected Coroutine Hitted_Corouine;
+
+    protected Vector3 Before_Hitted_Position = Vector3.zero;
+
 
     public virtual void SetBattleUnitData(BattleUnitData unit_dt)
     {
         Unit_Data = unit_dt;
         Unit_Data.SetHeroBase(this);
-        //Skill_Mng = new BattleSkillManager();
-        //Skill_Mng.SetPlayerCharacterSkillGroups(Unit_Data.GetSkillPattern());
-        //Skill_Mng.SetPlayerCharacterSpecialSkillGroup(Unit_Data.GetSpecialSkillID());
-
     }
 
     public void SetTeamFieldPosition(Vector3 pos)
@@ -252,7 +255,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     public void SetBattleSpeed(float speed)
     {
         Battle_Speed_Multiple = speed;
-        //Unit_Data.SetBattleSpeed(speed);
         var tracks = FindAllTrakcs();
         if (tracks != null && tracks.Length > 0)
         {
@@ -786,27 +788,27 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             case HERO_PLAY_ANIMATION_TYPE.PREPARE_01:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_01:
-                PlayAnimation(1, "1_idle", true);
+                PlayAnimation(0, "00_idle", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.IDLE_02:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.RUN_01:
-                PlayAnimation(1, "1_run", true);
+                PlayAnimation(0, "00_run", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
+                PlayAnimation(0, "00_damage", false);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_02:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_03:
                 break;
             case HERO_PLAY_ANIMATION_TYPE.STUN:
-                PlayAnimation(1, "1_stun", true);
+                PlayAnimation(0, "00_stun", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DEATH_01:
-                PlayAnimation(1, "1_death", false);
+                PlayAnimation(0, "00_death", false);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.WIN_01:
-                PlayAnimation(1, "1_win", true);
                 break;
         }
     }
@@ -1393,7 +1395,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         dmg.Caster.SendLastDamage(dmg);
 
-        Render_Texture.SetHitColorV2(Color.white, 0.05f);
+        //Render_Texture.SetHitColorV2(Color.white, 0.05f);
+        //UltimateSkillHittedKnockback();
+        AttackHittedKnockback();
+
         if (Game_Type != GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE && Game_Type != GAME_TYPE.EDITOR_SKILL_EDIT_MODE)
         {
             Life -= last_damage;
@@ -1734,11 +1739,117 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         ChangeState(UNIT_STATES.SKILL_READY_1);
     }
 
+    /// <summary>
+    /// 피격시 뒤로 살짝 밀렸다가 다시 돌아오도록<br/>
+    /// 궁극기 피격시와 일반 스킬 피격시로 나눈다.<br/>
+    /// 기본적으로 흰색 반짝이는 기능은 추가
+    /// </summary>
+    protected void AttackHittedKnockback()
+    {
+        //  피격 색 반짝 기능 기본
+        Render_Texture.SetHitColorV2(Color.white, 0.05f);
 
+        //  피격시 현재 상태에 따라 피격 동작 추가할 것인지 여부 판단
+        var state = GetCurrentState();
+        if (state == UNIT_STATES.ULTIMATE_PAUSE)
+        {
+            var prev_state = GetPreviousState();
+            if (prev_state != UNIT_STATES.ATTACK_1 && prev_state != UNIT_STATES.SKILL_1)
+            {
+                //  아마 안움직여 질수도(timescale이 0인 상태라)
+                PlayAnimation(HERO_PLAY_ANIMATION_TYPE.DAMAGE_01);
+            }
+            //  궁극기 피격 동작이기 때문에 제일 크게 밀림
+            StartHittedAnim(.35f);
+        }
+        else if (state == UNIT_STATES.ATTACK_1 || state == UNIT_STATES.SKILL_1)
+        {
+            //  피격 동작이 없기 때문에 조금 더 크게 밀림
+            StartHittedAnim(.25f);
+        }
+        else if (state == UNIT_STATES.MOVE || state == UNIT_STATES.MOVE_IN)
+        {
+            //  nothing (이동시에는 피격에 의한 넉백은 없도록 하자)
+        }
+        else
+        {
+            //  피격 동작이 있기 때문에 작게 움직여도 괜찮아 보임.
+            PlayAnimation(HERO_PLAY_ANIMATION_TYPE.DAMAGE_01);
+            StartHittedAnim(.2f);
+        }
+        
+    }
+    /// <summary>
+    /// 히트 동작 요청
+    /// </summary>
+    protected void StartHittedAnim(float knockback_dist)
+    {
+        if (Hitted_Corouine != null)
+        {
+            StopCoroutine(Hitted_Corouine);
+            this.transform.position = Before_Hitted_Position;
+        }
+        Hitted_Corouine = StartCoroutine(StartHittedKnockback(knockback_dist));
+    }
+    
+    /// <summary>
+    /// 뒤로 밀리는 동작 
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator StartHittedKnockback(float knockback_dist)
+    {
+        Before_Hitted_Position = this.transform.position;
+        float duration = 0.15f / Battle_Speed_Multiple;
+        float delta = 0f;
+
+        var pos = this.transform.position;
+        if (Team_Type == TEAM_TYPE.LEFT)
+        {
+            pos.x -= knockback_dist;
+        }
+        else
+        {
+            pos.x += knockback_dist;
+        }
+
+        while (delta < duration)
+        {
+            delta += Time.deltaTime;
+
+            this.transform.position = Vector3.Lerp(this.transform.position, pos, delta / duration);
+
+            yield return null;
+        }
+
+        Hitted_Corouine = null;
+        this.transform.position = Before_Hitted_Position;
+    }
+    
+    /// <summary>
+    /// 이벤트 사용 필요.<br/>
+    /// 궁극기의 효과를 풍부하게 만들어 줄 수 있음
+    /// </summary>
+    /// <param name="trigger_id"></param>
+    /// <param name="evt_val"></param>
+    public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
+    {
+        Debug.Log($"{trigger_id} => {evt_val.ToString()}");
+    }
+
+    #region ToString
     public override string ToString()
     {
         var state = GetCurrentState();
         var sb = ZString.CreateStringBuilder();
+        var history = GetStatesHistory();
+        if (history != null && history.Count > 0)
+        {
+            sb.AppendLine("States History");
+            for (int i = 0; i < history.Count; i++)
+            {
+                sb.AppendLine($"{history[i]}");
+            }
+        }
         sb.AppendLine($"{nameof(Team_Type)} : <color=#ffffff>[{Team_Type}]</color>");
         sb.AppendLine($"{nameof(state)} => {state}");
         sb.AppendLine($"{nameof(Life)} => {Life}");
@@ -1753,11 +1864,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         Debug.Log(ToString());
 
     }
-
-    public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
-    {
-        Debug.Log($"{trigger_id} => {evt_val.ToString()}");
-    }
-
+    #endregion
 
 }

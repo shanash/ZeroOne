@@ -87,6 +87,16 @@ public class ProfilePopup : PopupBase
         HidePopup();
     }
 
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
+    }
+
     public override void Spawned()
     {
         base.Spawned();

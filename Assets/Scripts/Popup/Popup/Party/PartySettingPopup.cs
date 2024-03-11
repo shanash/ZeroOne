@@ -561,6 +561,16 @@ public class PartySettingPopup : PopupBase
                 break;
         }
     }
+
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
+    }
     #endregion
 
     public override void Spawned()

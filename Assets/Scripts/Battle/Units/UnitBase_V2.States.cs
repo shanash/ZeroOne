@@ -1,4 +1,5 @@
 using FluffyDuck.Util;
+using System.Collections.Generic;
 using UnityEngine;
 
 public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
@@ -59,6 +60,15 @@ public partial class UnitBase_V2 : MonoBehaviour, IUpdateComponent
             return FSM.PreviousTransitionID;
         }
         return UNIT_STATES.NONE;
+    }
+
+    public List<UNIT_STATES> GetStatesHistory()
+    {
+        if (FSM != null)
+        {
+            return FSM.GetStatesHistory();
+        }
+        return null;
     }
 
     public bool IsReservedState(UNIT_STATES trans)

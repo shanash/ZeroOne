@@ -14,7 +14,7 @@ public class LevelUpAniPopup : PopupBase
     {
         Anim_Event?.SetAnimationEventCallback(AnimationCompleteCallback);
         Anim.Play("LevelUpAni");
-
+        SetEnableEscKeyExit(false);
         return true;
     }
 

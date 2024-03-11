@@ -1,4 +1,4 @@
-﻿using Cysharp.Text;
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
@@ -169,5 +169,15 @@ public class BossStageRewardInfoPopup : PopupBase
                 GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
                 break;
         }
+    }
+
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
     }
 }

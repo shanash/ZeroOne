@@ -8,9 +8,13 @@ using UnityEngine.Events;
 
 public class UIInteractiveButton : UIInteractiveButtonBase
 {
+    [SerializeField, Tooltip("Touch Callback")]
+    UnityEvent<TOUCH_RESULT_TYPE, object> _Touch_Callback = new UnityEvent<TOUCH_RESULT_TYPE, object>();
+
     [SerializeField, Tooltip("Touch Tooltip Callback")]
     UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> _Touch_Tooltip_Callback = new UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object>();
 
+    public UnityEvent<TOUCH_RESULT_TYPE, object> Touch_Callback => _Touch_Callback;
     public UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Touch_Tooltip_Callback => _Touch_Tooltip_Callback;
     public object Tooltip_Data { private get; set; }
 
@@ -23,6 +27,7 @@ public class UIInteractiveButton : UIInteractiveButtonBase
 
     protected override void OnTouchEvent(TOUCH_RESULT_TYPE type)
     {
+        Touch_Callback?.Invoke(type, Tooltip_Data);
         Touch_Tooltip_Callback?.Invoke(type, Func_Rect, Tooltip_Data);
     }
 }

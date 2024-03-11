@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using FluffyDuck.Util;
 using Cysharp.Text;
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class SkillLevelPopup : PopupBase
 {
@@ -140,6 +141,8 @@ public class SkillLevelPopup : PopupBase
             }
         }
     }
+
+
     /// <summary>
     /// 경험치 아이템 추가 및 제거시 호출 함수
     /// </summary>
@@ -673,7 +676,15 @@ public class SkillLevelPopup : PopupBase
             UpdatePopup();
         }
     }
-
+    public void OnClickDim()
+    {
+        if (Ease_Base != null && Ease_Base.IsPlaying())
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        HidePopup();
+    }
     public void OnClickLevelUp()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
