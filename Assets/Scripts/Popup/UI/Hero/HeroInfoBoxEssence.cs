@@ -151,11 +151,13 @@ public class HeroInfoBoxEssence : MonoBehaviour
         {
             var type_index = (int)type_obj;
             Toggle_Datas[type_index].Selected = true;
+            Selected_Relationship_Index = type_index;
             BlackBoard.I.RemoveBlackBoardData(BLACK_BOARD_KEY.SELECTED_LOVE_LEVEL);
         }
         else
         {
             Toggle_Datas[1].Selected = true;
+            Selected_Relationship_Index = 1;
         }
 
         // 스팟 UI 삭제 및 생성
@@ -305,6 +307,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
             Refresh();
             return;
         }
+        Debug.Log($"Selected_Relationship_Index : {Selected_Relationship_Index}");
         BlackBoard.I.SetBlackBoard(BLACK_BOARD_KEY.SELECTED_LOVE_LEVEL, Selected_Relationship_Index);
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         SCManager.I.ChangeScene(SceneName.essence, Unit_Data, Selected_Relationship_Index, Remain_Count_Of_Chance_Sending_Essence);
