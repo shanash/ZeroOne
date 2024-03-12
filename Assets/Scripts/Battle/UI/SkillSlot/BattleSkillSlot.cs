@@ -100,6 +100,22 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
     {
         switch (result)
         {
+            case TOUCH_RESULT_TYPE.CLICK:
+                AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+                if (!Hero.IsAlive())
+                {
+                    return;
+                }
+                var skill_group = Hero.GetSkillManager().GetSpecialSkillGroup();
+                if (skill_group == null)
+                {
+                    return;
+                }
+                if (skill_group.IsPrepareCooltime())
+                {
+                    Hero?.UltimateSkillExec();
+                }
+                break;
             case TOUCH_RESULT_TYPE.LONG_PRESS:
                 if (data == null)
                 {

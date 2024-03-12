@@ -22,6 +22,10 @@ public class EventTriggerObject : MonoBehaviour
     /// <param name="val"></param>
     public void SendEventTrigger(string trigger_id, EventTriggerValue val)
     {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
         var evt_trigger = GetComponent<IEventTrigger>();
         evt_trigger?.TriggerEventListener(trigger_id, val);
     }

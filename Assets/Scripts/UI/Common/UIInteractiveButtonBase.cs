@@ -97,7 +97,7 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
         {
             if (Is_Long_Press)
             {
-                //OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
             }
         }
     }

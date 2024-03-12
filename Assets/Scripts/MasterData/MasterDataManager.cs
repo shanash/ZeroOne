@@ -628,7 +628,7 @@ public class MasterDataManager : BaseMasterDataManager
     {
         Check_Dungeon_Data();
         var dungeon_list = _Dungeon_Data.Values.ToList().FindAll(x => x.game_type == gtype);
-        var now = DateTime.Now.ToLocalTime();
+        var now = DateTime.UtcNow.ToLocalTime();
         Dungeon_Data dungeon = null;
         for (int i = 0; i < dungeon_list.Count; i++)
         {
@@ -957,6 +957,11 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Character_Lang_Data();
         if (!_Character_Lang_Data.ContainsKey(str_id)) return null;
         return _Character_Lang_Data[str_id];
+    }
+    public List<Character_Lang_Data> Get_CharacterLangList()
+    {
+        Check_Character_Lang_Data();
+        return _Character_Lang_Data.Values.ToList();
     }
     public Skill_Lang_Data Get_SkillLangData(string str_id)
     {

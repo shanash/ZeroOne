@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace ProtocolShared.Proto
 {
+    public class PlayerSimpleInfo
+    {
+        public Guid PlayerGuid { get; set; } = Guid.Empty;
+        public string PlayerName { get; set; } = string.Empty;
+        public short Level { get; set; } = 1;
+    }
     public class CreatePlayerRequest
     {
         [Required]
@@ -28,7 +34,7 @@ namespace ProtocolShared.Proto
         public REWARD_TYPE RewardType { get; set; } = REWARD_TYPE.NONE;
         public int ChargeCount { get; set; } = 0;   
         public int AfterCount { get; set; } = 0;
-        public DateTime LastChargeTime { get; set; } = DateTime.Now;
+        public DateTime LastChargeTime { get; set; } = DateTime.UtcNow;
     }
     public class ChargeCheckRequest
     {

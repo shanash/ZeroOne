@@ -180,24 +180,24 @@ public partial class TeamManager_V2 : IDisposable
         //  front
         List<Vector3> front_pos_list = new List<Vector3>();
         front_pos_list.Add(new Vector3(0, 0, 0));
-        front_pos_list.Add(new Vector3(0, 0, -2f));
-        front_pos_list.Add(new Vector3(0, 0, 2f));
-        front_pos_list.Add(new Vector3(0, 0, -1f));
-        front_pos_list.Add(new Vector3(0, 0, 1f));
+        front_pos_list.Add(new Vector3(0, 0, -3f));
+        front_pos_list.Add(new Vector3(0, 0, 3f));
+        front_pos_list.Add(new Vector3(0, 0, -1.5f));
+        front_pos_list.Add(new Vector3(0, 0, 1.5f));
         //  middle        
         List<Vector3> middle_pos_list = new List<Vector3>();
         middle_pos_list.Add(new Vector3(-2.5f, 0, 0));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, -2f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 2f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, -1f));
-        middle_pos_list.Add(new Vector3(-2.5f, 0, 1f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, -3f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 3f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, -1.5f));
+        middle_pos_list.Add(new Vector3(-2.5f, 0, 1.5f));
         //  back
         List<Vector3> back_pos_list = new List<Vector3>();
         back_pos_list.Add(new Vector3(-5, 0, 0));
-        back_pos_list.Add(new Vector3(-5, 0, -2f));
-        back_pos_list.Add(new Vector3(-5, 0, 2f));
-        back_pos_list.Add(new Vector3(-5, 0, -1f));
-        back_pos_list.Add(new Vector3(-5, 0, 1f));
+        back_pos_list.Add(new Vector3(-5, 0, -3f));
+        back_pos_list.Add(new Vector3(-5, 0, 3f));
+        back_pos_list.Add(new Vector3(-5, 0, -1.5f));
+        back_pos_list.Add(new Vector3(-5, 0, 1.5f));
 
         int idx = 0;
        

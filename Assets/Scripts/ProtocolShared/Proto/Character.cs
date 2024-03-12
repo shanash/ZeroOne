@@ -17,7 +17,7 @@ namespace ProtocolShared.Proto
     public class CharacterInfo
     {
         public Guid CharacterGuid { get; set; }
-        public int CharacterDesignId { get; set; }
+        public int DesignCharacterId { get; set; }
         public short Level { get; set; } = 1;
         public int Experience { get; set; } = 0;
         // 성(별)
@@ -25,13 +25,13 @@ namespace ProtocolShared.Proto
         public int Piece { get; set; } = 0;
         // 스킬
         public byte UltimateSkillLevel { get; set; } = 1;
-        public uint UltimateSkillExp { get; set; } = 0;
+        public int UltimateSkillExp { get; set; } = 0;
         public byte ActiveSkillLevel_1 { get; set; } = 1;
-        public uint ActiveSkillExp_1 { get; set; } = 0;
+        public int ActiveSkillExp_1 { get; set; } = 0;
         public byte ActiveSkillLevel_2 { get; set; } = 1;
-        public uint ActiveSkillExp_2 { get; set; } = 0;
-        public byte PassiveSkillLevel { get; set; } = 1;
-        public uint PassiveSkillExp { get; set; } = 0;
+        public int ActiveSkillExp_2 { get; set; } = 0;
+        //public byte PassiveSkillLevel { get; set; } = 1;
+        //public int PassiveSkillExp { get; set; } = 0;
         // 호감도
         public byte LoveLevel { get; set; } = 1;
         public uint LoveExp { get; set; } = 0;

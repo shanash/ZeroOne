@@ -650,24 +650,24 @@ MonoBehaviour:
   - Camera_Type: 1
     Camera: {fileID: 2144958734}
     Target_Group: {fileID: 0}
-    Init_Transform_Position: {x: 0, y: 10, z: -22}
-    Init_Transform_Rotation: {x: 22.5, y: 0, z: 0}
+    Init_Transform_Position: {x: 0, y: 16, z: -24}
+    Init_Transform_Rotation: {x: 32, y: 0, z: 0}
     Init_Follow_Offset: {x: 0, y: 0, z: -10}
-    Init_FOV: 25
+    Init_FOV: 20
   - Camera_Type: 2
     Camera: {fileID: 970180365}
     Target_Group: {fileID: 0}
-    Init_Transform_Position: {x: 0, y: 10, z: -22}
-    Init_Transform_Rotation: {x: 22.5, y: 0, z: 0}
+    Init_Transform_Position: {x: 0, y: 16, z: -24}
+    Init_Transform_Rotation: {x: 32, y: 0, z: 0}
     Init_Follow_Offset: {x: 0, y: 0, z: -10}
-    Init_FOV: 25
+    Init_FOV: 20
   - Camera_Type: 3
     Camera: {fileID: 2080687448}
     Target_Group: {fileID: 0}
-    Init_Transform_Position: {x: 0, y: 50, z: -22}
-    Init_Transform_Rotation: {x: 22.5, y: 0, z: 0}
+    Init_Transform_Position: {x: 0, y: 16, z: -24}
+    Init_Transform_Rotation: {x: 32, y: 0, z: 0}
     Init_Follow_Offset: {x: 0, y: 0, z: 0}
-    Init_FOV: 25
+    Init_FOV: 20
   - Camera_Type: 4
     Camera: {fileID: 992849983}
     Target_Group: {fileID: 0}
@@ -830,7 +830,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 500
-  field of view: 25
+  field of view: 20
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -856,8 +856,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.98078537}
-  m_LocalPosition: {x: 0, y: 10, z: -22}
+  m_LocalRotation: {x: 0.27563733, y: 0, z: 0, w: 0.96126175}
+  m_LocalPosition: {x: 0, y: 16, z: -24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1562,14 +1562,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970180362}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.98078537}
-  m_LocalPosition: {x: 0, y: 10, z: -22}
+  m_LocalRotation: {x: 0.27563733, y: 0, z: 0, w: 0.96126175}
+  m_LocalPosition: {x: 0, y: 16, z: -24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 38078084}
   m_Father: {fileID: 296271136}
-  m_LocalEulerAnglesHint: {x: 22.5, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 32, y: 0, z: 0}
 --- !u!95 &970180364
 Animator:
   serializedVersion: 5
@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 25
+    FieldOfView: 20
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 500
@@ -2829,14 +2829,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080687445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.9807853}
-  m_LocalPosition: {x: -3, y: 12, z: -7}
+  m_LocalRotation: {x: 0.27563733, y: 0, z: 0, w: 0.96126175}
+  m_LocalPosition: {x: 0, y: 16, z: -24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1008221349}
   m_Father: {fileID: 296271136}
-  m_LocalEulerAnglesHint: {x: 22.5, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 32, y: 0, z: 0}
 --- !u!95 &2080687447
 Animator:
   serializedVersion: 5
@@ -2879,7 +2879,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 25
+    FieldOfView: 20
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 500
@@ -2923,14 +2923,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144958732}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19509031, y: 0, z: 0, w: 0.98078537}
-  m_LocalPosition: {x: 0, y: 10, z: -22}
+  m_LocalRotation: {x: 0.27563733, y: 0, z: 0, w: 0.96126175}
+  m_LocalPosition: {x: 0, y: 16, z: -24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 581992487}
   m_Father: {fileID: 296271136}
-  m_LocalEulerAnglesHint: {x: 22.5, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 32, y: 0, z: 0}
 --- !u!114 &2144958734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2952,7 +2952,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 25
+    FieldOfView: 20
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 500
