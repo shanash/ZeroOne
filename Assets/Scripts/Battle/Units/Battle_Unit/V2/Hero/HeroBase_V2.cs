@@ -235,6 +235,16 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected Vector3 Before_Hitted_Position = Vector3.zero;
 
 
+    protected enum TRIGGER_EVENT_IDS
+    {
+        chr_hide,
+        chr_show,
+        change_chr_cam,         //  캐릭터 캠 - Follow 변경
+        change_active_cam,      //  액티브 그룹 캠 - Follow Group Targets 변경
+        change_target_cam,      //  타겟 그룹 캡 - Follow Group Targets 변경
+    }
+
+
     public virtual void SetBattleUnitData(BattleUnitData unit_dt)
     {
         Unit_Data = unit_dt;
@@ -546,6 +556,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             var skill_grp = GetSkillManager().GetCurrentSkillGroup();
             if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
+                for (int i = 0; i < skill_grp.GetBattleSkillDataList().Count; i++)
+                {
+                    var skill = skill_grp.GetBattleSkillDataList()[i];
+                    FindTargetsSkillAddTargets(skill);
+                }
                 SpawnSkillCastEffect(skill_grp);
             }
         }
@@ -554,6 +569,12 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             var skill_grp = GetSkillManager().GetSpecialSkillGroup();
             if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
+                for (int i = 0; i < skill_grp.GetBattleSkillDataList().Count; i++)
+                {
+                    var skill = skill_grp.GetBattleSkillDataList()[i];
+                    FindTargetsSkillAddTargets(skill);
+                }
+
                 SpawnSkillCastEffect(skill_grp);
             }
         }
@@ -643,7 +664,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             var skill_grp = GetSkillManager().GetCurrentSkillGroup();
             if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                var exec_list = skill_grp.GetExecuableSkillDatas(evt_name);
+                var exec_list = skill_grp.GetExecutableCloneSkillDatas(evt_name);
                 if (exec_list.Count > 0)
                 {
                     int cnt = exec_list.Count;
@@ -665,7 +686,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             var skill_grp = GetSkillManager().GetSpecialSkillGroup();
             if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
-                var exec_list = skill_grp.GetExecuableSkillDatas(evt_name);
+                var exec_list = skill_grp.GetExecutableCloneSkillDatas(evt_name);
                 if (exec_list.Count > 0)
                 {
                     int cnt = exec_list.Count;
@@ -838,7 +859,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     {
         Find_Targets.Clear();
         Team_Mng.FindTargetInRange(this, skill.GetTargetType(), skill.GetTargetRuleType(), 0, skill.GetTargetOrder(), skill.GetTargetCount(), skill.GetTargetRange(), ref Find_Targets);
-        skill.AddFomdTargets(Find_Targets);
+        skill.AddFindTargets(Find_Targets);
     }
 
 
@@ -1703,21 +1724,28 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         //  여러가지 상황상 궁극기를 사용할 수 없는 상황을 체크
         //  체크 완료 후 궁극기를 사용할 수 있는 경우에만 궁극기 사용
-        var skill = GetSkillManager().GetSpecialSkillGroup();
-        if (skill == null)
+        var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+        if (skill_grp == null)
         {
             return;
         }
         //  궁극기가 쿨타임이 남아있을 경우 안됨
-        if (!skill.IsPrepareCooltime())
+        if (!skill_grp.IsPrepareCooltime())
         {
             return;
         }
-        var target_skill = skill.GetSpecialSkillTargetSkill();
-        if (target_skill != null)
+
+        for (int i = 0; i < skill_grp.GetBattleSkillDataList().Count; i++)
         {
-            FindTargetsSkillAddTargets(target_skill);
+            var skill = skill_grp.GetBattleSkillDataList()[i];
+            FindTargetsSkillAddTargets(skill);
         }
+
+        var target_skill = skill_grp.GetSpecialSkillTargetSkill();
+        //if (target_skill != null)
+        //{
+        //    FindTargetsSkillAddTargets(target_skill);
+        //}
         //  타겟이 잡혀있지 않다면, 일단 스킬 사용 안되도록
         if (target_skill.IsEmptyFindTarget())
         {

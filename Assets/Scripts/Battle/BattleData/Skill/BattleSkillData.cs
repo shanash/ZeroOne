@@ -101,15 +101,23 @@ public abstract class BattleSkillData : BattleDataBase
     }
 
     #region Getter
+
+
     /// <summary>
-    /// 이벤트 이름
+    /// 이벤트 이름으로 스킬 찾기(복사함)
     /// </summary>
     /// <param name="evt_name"></param>
     /// <returns></returns>
-    public virtual BattleSkillData GetExecuableSkillData(string evt_name)
+    public virtual BattleSkillData GetExecutableCloneSkillData(string evt_name)
     {
         return null;
     }
+    /// <summary>
+    /// 이벤트 이름으로 스킬 찾기(복사 안함)
+    /// </summary>
+    /// <param name="evt_name"></param>
+    /// <returns></returns>
+    public virtual BattleSkillData GetExecutableSkillData(string evt_name) { return null; }
 
     public int GetEffectWeightIndex() { return Effect_Weight_Index; }
 
@@ -210,7 +218,7 @@ public abstract class BattleSkillData : BattleDataBase
     /// 타겟 리스트 추가
     /// </summary>
     /// <param name="targets"></param>
-    public void AddFomdTargets(List<HeroBase_V2> targets)
+    public void AddFindTargets(List<HeroBase_V2> targets)
     {
         for (int i = 0; i < targets.Count; i++)
         {

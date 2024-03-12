@@ -92,7 +92,7 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
 
 
     #region Getter
-    public override BattleSkillData GetExecuableSkillData(string evt_name)
+    public override BattleSkillData GetExecutableCloneSkillData(string evt_name)
     {
         if (Data.event_name.Equals(evt_name))
         {
@@ -103,6 +103,15 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
                 Effect_Weight_Index++;
                 return clone;
             }
+        }
+        return null;
+    }
+
+    public override BattleSkillData GetExecutableSkillData(string evt_name)
+    {
+        if (Data.event_name.Equals(evt_name))
+        {
+            return this;
         }
         return null;
     }

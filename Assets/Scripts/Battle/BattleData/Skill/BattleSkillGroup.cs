@@ -162,26 +162,42 @@ public abstract class BattleSkillGroup : BattleDataBase
     }
 
     /// <summary>
-    /// 스킬 사용가능한 데이터 반환
-    /// 스킬 효과를 불러올 때 사용가능한 스킬 정보를 가져온다.
+    /// 스킬 사용가능한 데이터 복사 반환<br/>
+    /// 스킬 효과를 불러올 때 사용가능한 스킬 정보를 가져온다.<br/>
     /// 스킬 효과의 비중 횟수에 따라 다름
     /// </summary>
     /// <param name="evt_name"></param>
     /// <returns></returns>
-    public List<BattleSkillData> GetExecuableSkillDatas(string evt_name)
+    public List<BattleSkillData> GetExecutableCloneSkillDatas(string evt_name)
     {
-        List<BattleSkillData> execuable_list = new List<BattleSkillData>();
+        List<BattleSkillData> executable_list = new List<BattleSkillData>();
         int cnt = Battle_Skill_Data_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            var skill = Battle_Skill_Data_List[i].GetExecuableSkillData(evt_name);
+            var skill = Battle_Skill_Data_List[i].GetExecutableCloneSkillData(evt_name);
             if (skill != null)
             {
-                execuable_list.Add(skill);
+                executable_list.Add(skill);
             }
         }
-        return execuable_list;
+        return executable_list;
     }
+
+    public List<BattleSkillData> GetExecutableSkillDatas(string evt_name)
+    {
+        List<BattleSkillData> executable_list = new List<BattleSkillData>();
+        int cnt = Battle_Skill_Data_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var skill = Battle_Skill_Data_List[i].GetExecutableSkillData(evt_name);
+            if (skill != null)
+            {
+                executable_list.Add(skill);
+            }
+        }
+        return executable_list;
+    }
+
 
     /// <summary>
     /// 스킬 사용 후 초기화

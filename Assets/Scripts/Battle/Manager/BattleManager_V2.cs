@@ -197,28 +197,41 @@ public partial class BattleManager_V2 : SceneControllerBase
     /// <summary>
     /// 일부 타겟을 제외한 나머지 유닛 감추기
     /// </summary>
-    /// <param name="targets"></param>
-    public void HideAllUnitWithoutTargets(List<HeroBase_V2> targets)
+    /// <param name="exclude_targets"></param>
+    public void HideAllUnitWithoutTargets(List<HeroBase_V2> exclude_targets)
     {
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Used_Team_List[i].HideAllUnitWithoutTargets(targets);
+            Used_Team_List[i].HideAllUnitWithoutTargets(exclude_targets);
         }
     }
 
     /// <summary>
     /// 일부 타겟을 제외한 나머지 유닛 보이기
     /// </summary>
-    /// <param name="targets"></param>
-    public void ShowAllUnitWithoutTargets(List<HeroBase_V2> targets)
+    /// <param name="exclude_targets"></param>
+    public void ShowAllUnitWithoutTargets(List<HeroBase_V2> exclude_targets)
     {
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Used_Team_List[i].ShowAllUnitWithoutTargets(targets);
+            Used_Team_List[i].ShowAllUnitWithoutTargets(exclude_targets);
         }
     }
+    /// <summary>
+    /// 지정 유닛만 보이도록
+    /// </summary>
+    /// <param name="include_target"></param>
+    public void ShowUnitTargets(List<HeroBase_V2> include_target)
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].ShowUnitTargets(include_target);
+        }
+    }
+    
     /// <summary>
     /// 모든 유닛 보이기
     /// </summary>

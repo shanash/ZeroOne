@@ -507,6 +507,23 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
     /// <summary>
+    /// 지정 유닛만 보이기
+    /// </summary>
+    /// <param name="targets"></param>
+    public void ShowUnitTargets(List<HeroBase_V2> targets)
+    {
+        var member_list = GetMembers();
+        int cnt = member_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = member_list[i];
+            if (targets.Contains(member))
+            {
+                member.SetAlphaAnimation(1f, 0.09f, false);
+            }
+        }
+    }
+    /// <summary>
     /// 모든 유닛 보여줌
     /// </summary>
     public void ShowAllUnits()
