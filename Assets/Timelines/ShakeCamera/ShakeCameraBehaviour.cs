@@ -12,9 +12,6 @@ public class ShakeCameraBehaviour : PlayableBehaviour
     const float MinTickRange = -10f;
     const float MaxTickRange = 10f;
 
-    [SerializeField, Range(0, 100), Tooltip("카메라가 흔들리는 최대치")]
-    float _Magnitude = 0.0f;
-
     [SerializeField, Tooltip("카메라가 흔들리는 최대치")]
     Vector2 _Magnitude_Vec = Vector2.one;
 

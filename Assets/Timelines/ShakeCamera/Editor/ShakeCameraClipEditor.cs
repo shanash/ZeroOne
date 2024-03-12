@@ -14,7 +14,6 @@ public class ShakeCameraClipEditor : Editor
     static readonly string[] s_ShakePattern = { "All Directions", "Vertical", "Horizontal" };
 
     // ShakeCameraClip에 SerializeField로 선언되어 있는 값을 갖고 있기 위한 Fields
-    SerializedProperty _Magnitude = null;
     SerializedProperty _Roughness = null;
     SerializedProperty _Vertical = null;
     SerializedProperty _Horizontal = null;
@@ -28,7 +27,6 @@ public class ShakeCameraClipEditor : Editor
     {
         // 사용할 값들을 저장합니다.
         SerializedProperty _Template = serializedObject.FindProperty(nameof(_Template));
-        _Magnitude = _Template.FindPropertyRelative(nameof(_Magnitude));
         _Roughness = _Template.FindPropertyRelative(nameof(_Roughness));
         _Vertical = _Template.FindPropertyRelative(nameof(_Vertical));
         _Horizontal = _Template.FindPropertyRelative(nameof(_Horizontal));
@@ -52,7 +50,6 @@ public class ShakeCameraClipEditor : Editor
         // serializedObject에 있는 실제 값을 가져옵니다.
         serializedObject.Update();
 
-        EditorGUILayout.Slider(_Magnitude, 0, 100);
         EditorGUILayout.PropertyField(_Magnitude_Vec);
         EditorGUILayout.Slider(_Roughness, 0, 100);
 
