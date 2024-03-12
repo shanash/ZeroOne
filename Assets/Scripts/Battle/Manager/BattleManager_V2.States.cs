@@ -433,6 +433,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateGameOverWinBegin()
     {
+        ReleaseSkillTooltip();
         GetEffectFactory().ClearAllEffects();
         var win_team = FindTeamManager(TEAM_TYPE.LEFT);
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);
@@ -461,6 +462,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateGameOverLoseBegin()
     {
+        ReleaseSkillTooltip();
         GetEffectFactory().ClearAllEffects();
         var win_team = FindTeamManager(TEAM_TYPE.RIGHT);
         win_team.ChangeStateTeamMembers(UNIT_STATES.WIN);

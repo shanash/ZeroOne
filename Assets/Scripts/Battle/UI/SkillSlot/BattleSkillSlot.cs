@@ -117,12 +117,22 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                 }
                 break;
             case TOUCH_RESULT_TYPE.LONG_PRESS:
-                if (data == null)
+                if (Tooltip != null)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
+                    Tooltip = null;
+                }
+
+                UserHeroSkillData skill_data = null;
+                if (data == null || data is not UserHeroSkillData)
                 {
                     Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
-                    return;
                 }
-                UserHeroSkillData skill_data = data as UserHeroSkillData;
+                else
+                {
+                    skill_data = data as UserHeroSkillData;
+                }
+
                 Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent.parent.parent.parent);
                 var tooltip = Tooltip.GetComponent<SkillTooltip>();
                 tooltip.Initialize(hole(true), skill_data, false);

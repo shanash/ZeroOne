@@ -39,7 +39,7 @@ public class NpcCardBase : UIBase
     {
         Data = data;
         UpdateNpcIcon();
-        if (TooltipButton != null)
+        if (TooltipButton != null && Data != null)
         {
             TooltipButton.Tooltip_Data = Data;
         }
@@ -53,6 +53,12 @@ public class NpcCardBase : UIBase
 
     protected void UpdateNpcIcon()
     {
+        if (Data == null)
+        {
+            Npc_Icon.sprite = null;
+            return;
+        }
+
         CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) =>
         {
             Npc_Icon.sprite = spr;

@@ -18,11 +18,11 @@ public class SkillTooltip : TooltipBase
 
     public void Initialize(Rect hole, UserHeroSkillData skill_data, bool is_screen_modify = true)
     {
-        string name = string.Empty;
-        string desc = string.Empty;
-        string type = string.Empty;
-        string level = string.Empty;
-        string cooltime = string.Empty;
+        string name = "EMPTY";
+        string desc = "EMPTY";
+        string type = "EMPTY";
+        string level = "EMPTY";
+        string cooltime = "EMPTY";
 
         if (skill_data != null)
         {
@@ -32,11 +32,9 @@ public class SkillTooltip : TooltipBase
 
             level = string.Format(GameDefine.GetLocalizeString("system_level_format"), skill_data.GetLevel());
             cooltime = string.Format(GameDefine.GetLocalizeString("system_cooltime_format"), skill_data.GetSkillGroupData().skill_use_delay);
-
-            // 툴팁 안의 아이콘 세팅
-            Skill_Card.Initialize(skill_data);
         }
 
+        Skill_Card.Initialize(skill_data);
         Initialize(hole, name, desc, is_screen_modify);
 
         Type.text = type;

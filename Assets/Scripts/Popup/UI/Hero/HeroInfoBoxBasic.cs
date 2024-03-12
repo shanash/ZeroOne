@@ -35,9 +35,6 @@ public class HeroInfoBoxBasic : MonoBehaviour
     [SerializeField, Tooltip("Health Text")]
     protected TMP_Text Life_Number_Text;
 
-    [SerializeField, Tooltip("Skill Icons")]
-    protected List<Image> Skill_Icons;
-
     [SerializeField, Tooltip("Skill Nodes")]
     protected List<PartySelectSkillNode> Skills;
 
@@ -74,25 +71,16 @@ public class HeroInfoBoxBasic : MonoBehaviour
 
         var skill_group_list = GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num);
 
-        foreach (var icon in Skill_Icons)
+        for (int i = 0; i < Skills.Count; i++)
         {
-            icon.sprite = null;
-        }
-
-        int i = 0;
-        foreach (var skill_group in skill_group_list)
-        {
-            // 콜백 참조 때문에 별도로 변수를 선언해야 합니다
-            int sprite_index = i;
-
-            if (Skills.Count <= i)
+            try
             {
-                Debug.Log($"break");
-                break;
+                Skills[i].Initialize((skill_group_list.Count > i) ? skill_group_list[i] : null);
             }
-            
-            Skills[i].Initialize(skill_group);
-            i++;
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
     }
 

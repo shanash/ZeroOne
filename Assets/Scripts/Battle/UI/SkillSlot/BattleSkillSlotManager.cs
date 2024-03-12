@@ -44,24 +44,4 @@ public class BattleSkillSlotManager : MonoBehaviour
         }
         Used_Battle_Skill_Slots.Clear();
     }
-
-    public void TouchEventCallback(TOUCH_RESULT_TYPE result, System.Func<bool, Rect> hole, object data)
-    {
-        switch (result)
-        {
-            case TOUCH_RESULT_TYPE.LONG_PRESS:
-                UserHeroSkillData skill_data = data as UserHeroSkillData;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<SkillTooltip>();
-                tooltip.Initialize(hole(true), skill_data, false);
-                break;
-            case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
-                break;
-        }
-    }
 }

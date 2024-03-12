@@ -7,7 +7,11 @@ public class MonsterTooltip : TooltipBase
 
     public void Initialize(Rect hole, Npc_Data npc_data)
     {
-        Initialize(hole, GameDefine.GetLocalizeString(npc_data.name_id), GameDefine.GetLocalizeString(npc_data.desc_id));
+        Initialize(
+            hole,
+            (npc_data != null) ? GameDefine.GetLocalizeString(npc_data.name_id) : "EMPTY",
+            (npc_data != null) ? GameDefine.GetLocalizeString(npc_data.desc_id) : "EMPTY");
+
         Npc_Card.SetNpcData(npc_data);
     }
 }

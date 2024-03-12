@@ -52,7 +52,7 @@ public class PartySelectInfo : MonoBehaviour
         for (int i = 0; i < cnt; i++)
         {
             var skill_slot = Skill_List[i];
-            skill_slot.SetPlayerCharacterID(pc_id, pc_num);
+            skill_slot.Initialize(pc_id, pc_num);
         }
     }
 

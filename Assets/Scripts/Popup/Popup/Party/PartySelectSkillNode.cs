@@ -41,7 +41,10 @@ public class PartySelectSkillNode : MonoBehaviour
     public void Initialize(UserHeroSkillData data)
     {
         Skill_Data = data;
-        Skill_Type = Skill_Data.GetSkillType();
+        if (Skill_Type == SKILL_TYPE.NONE)
+        {
+            Skill_Type = (Skill_Data != null) ? Skill_Data.GetSkillType() : SKILL_TYPE.NONE;
+        }
         UpdateSkillCard();
         UpdateUI();
         if (Button != null)
@@ -50,13 +53,19 @@ public class PartySelectSkillNode : MonoBehaviour
         }
     }
 
-    public void SetPlayerCharacterID(int pc_id, int pc_num)
+    public void Initialize(int pc_id, int pc_num, SKILL_TYPE type = SKILL_TYPE.NONE)
     {
         var gd = GameData.Instance;
         User_Data = gd.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
 
         var skill_list = User_Data.GetPlayerCharacterBattleData().skill_pattern;
         int skill_group_id = 0;
+
+        if (type != SKILL_TYPE.NONE)
+        {
+            Skill_Type = type;
+        }
+
         if (Skill_Type == SKILL_TYPE.SKILL_01)
         {
             skill_group_id = skill_list[1];
@@ -74,15 +83,11 @@ public class PartySelectSkillNode : MonoBehaviour
             Debug.Assert(false);
         }
 
-        if (skill_group_id != 0)
-        {
-            Skill_Data = gd.GetUserHeroSkillDataManager().FindUserHeroSkillData(pc_id, pc_num, skill_group_id);
-            UpdateSkillCard();
-            if (Button != null)
-            {
-                Button.Tooltip_Data = Skill_Data;
-            }
-        }
+        UserHeroSkillData data = (skill_group_id != 0) ?
+            gd.GetUserHeroSkillDataManager().FindUserHeroSkillData(pc_id, pc_num, skill_group_id) :
+            null;
+
+        Initialize(data);
     }
 
     void UpdateUI()
@@ -105,6 +110,9 @@ public class PartySelectSkillNode : MonoBehaviour
                 case SKILL_TYPE.SPECIAL_SKILL:
                     Skill_Type_Text.text = "궁극기";
                     break;
+                case SKILL_TYPE.NONE:
+                    Skill_Type_Text.text = "EMPTY";
+                    break;
             }
         }
     }
@@ -112,11 +120,19 @@ public class PartySelectSkillNode : MonoBehaviour
     void UpdateSkillCard()
     {
         //  icon
-        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Skill_Data.GetSkillGroupData().icon, (spr) =>
+        if (Skill_Data != null)
         {
-            Skill_Icon.sprite = spr;
-        });
+            CommonUtils.GetResourceFromAddressableAsset<Sprite>(Skill_Data.GetSkillGroupData().icon, (spr) =>
+            {
+                Skill_Icon.sprite = spr;
+            });
+        }
+        else
+        {
+            Skill_Icon.sprite = null;
+        }
+
         //  level
-        Skill_Level.text = ZString.Format("Lv.{0}", Skill_Data.GetLevel());
+        Skill_Level.text = (Skill_Data != null) ? string.Format(GameDefine.GetLocalizeString("system_level_format"), Skill_Data.GetLevel()) : "EMPTY";
     }
 }

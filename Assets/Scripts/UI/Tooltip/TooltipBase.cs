@@ -143,17 +143,28 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
     public void OnClickDim()
     {
+        Release();
+    }
+
+    public void Release()
+    {
         GameObjectPoolManager.Instance.UnusedGameObject(this.gameObject);
     }
 
-    public void Spawned()
+    public virtual void Spawned()
     {
         Dim.SetActive(false);
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
+
+        if (Cancel_Token_Src != null)
+        {
+            Cancel_Token_Src.Cancel();
+            Cancel_Token_Src = null;
+        }
     }
 
-    public void Despawned()
+    public virtual void Despawned()
     {
         if (Cancel_Token_Src != null)
         {
