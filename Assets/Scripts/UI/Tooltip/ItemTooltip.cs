@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class CommonTooltip : TooltipBase
+public class ItemTooltip : TooltipBase
 {
     [SerializeField]
     TMP_Text NumberText = null;

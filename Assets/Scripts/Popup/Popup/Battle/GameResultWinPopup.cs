@@ -133,7 +133,7 @@ public class GameResultWinPopup : PopupBase
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultPlayerCharacterInfo");
         asset_list.Add("Assets/AssetResources/Prefabs/Popup/Popup/Common/LevelUpAniPopup");
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/BattleRewardItemCard");
-        asset_list.Add("Assets/AssetResources/Prefabs/UI/CommonTooltip");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip");
 
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(Dungeon.Game_Type);
@@ -667,8 +667,8 @@ public class GameResultWinPopup : PopupBase
                     return;
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/CommonTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<CommonTooltip>();
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/ItemTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<ItemTooltip>();
                 tooltip.Initialize(hole(true), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:

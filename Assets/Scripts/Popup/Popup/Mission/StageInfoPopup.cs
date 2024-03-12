@@ -91,7 +91,7 @@ public class StageInfoPopup : PopupBase
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/NpcCard");
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/RewardItemCard");
         asset_list.Add("Assets/AssetResources/Prefabs/UI/MonsterTooltip");
-        asset_list.Add("Assets/AssetResources/Prefabs/UI/CommonTooltip");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip");
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -338,8 +338,8 @@ public class StageInfoPopup : PopupBase
                     return;
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/CommonTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<CommonTooltip>();
+                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/ItemTooltip", transform.parent);
+                var tooltip = Tooltip.GetComponent<ItemTooltip>();
                 tooltip.Initialize(hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
