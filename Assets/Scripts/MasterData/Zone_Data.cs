@@ -32,6 +32,12 @@ public class Zone_Data : System.IDisposable
 	int _zone_group_id;
 
 	///	<summary>
+	///	존 구분 ID
+	///	</summary>
+	public int zone_code_id => _zone_code_id;
+	int _zone_code_id;
+
+	///	<summary>
 	///	스테이지 그룹 ID
 	///	</summary>
 	public int stage_group_id => _stage_group_id;
@@ -81,6 +87,7 @@ public class Zone_Data : System.IDisposable
 		_zone_name_id = raw_data.zone_name_id;
 		_zone_name = raw_data.zone_name;
 		_zone_group_id = raw_data.zone_group_id;
+		_zone_code_id = raw_data.zone_code_id;
 		_stage_group_id = raw_data.stage_group_id;
 		_zone_ordering = raw_data.zone_ordering;
 		_zone_difficulty = raw_data.zone_difficulty;
@@ -113,6 +120,7 @@ public class Zone_Data : System.IDisposable
 		sb.AppendFormat("[zone_name_id] = <color=yellow>{0}</color>", zone_name_id).AppendLine();
 		sb.AppendFormat("[zone_name] = <color=yellow>{0}</color>", zone_name).AppendLine();
 		sb.AppendFormat("[zone_group_id] = <color=yellow>{0}</color>", zone_group_id).AppendLine();
+		sb.AppendFormat("[zone_code_id] = <color=yellow>{0}</color>", zone_code_id).AppendLine();
 		sb.AppendFormat("[stage_group_id] = <color=yellow>{0}</color>", stage_group_id).AppendLine();
 		sb.AppendFormat("[zone_ordering] = <color=yellow>{0}</color>", zone_ordering).AppendLine();
 		sb.AppendFormat("[zone_difficulty] = <color=yellow>{0}</color>", zone_difficulty).AppendLine();

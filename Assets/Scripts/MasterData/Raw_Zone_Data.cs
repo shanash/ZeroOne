@@ -8,6 +8,7 @@ public class Raw_Zone_Data : System.IDisposable
 	public string zone_name_id {get; set;}
 	public string zone_name {get; set;}
 	public int zone_group_id {get; set;}
+	public int zone_code_id {get; set;}
 	public int stage_group_id {get; set;}
 	public int zone_ordering {get; set;}
 	public STAGE_DIFFICULTY_TYPE zone_difficulty {get; set;}
@@ -24,6 +25,7 @@ public class Raw_Zone_Data : System.IDisposable
 		zone_name_id = string.Empty;
 		zone_name = string.Empty;
 		zone_group_id = 0;
+		zone_code_id = 0;
 		stage_group_id = 0;
 		zone_ordering = 0;
 		zone_difficulty = STAGE_DIFFICULTY_TYPE.NONE;

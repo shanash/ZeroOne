@@ -540,6 +540,14 @@ public class MasterDataManager : BaseMasterDataManager
         return _Zone_Data.Values.ToList().Find(x => x.stage_group_id == stage_group_id);
     }
 
+    public List<Zone_Data> Get_ZoneDataListByZoneCode(int zone_code)
+    {
+        Check_Zone_Data();
+        var list = _Zone_Data.Values.ToList().FindAll(x => x.zone_code_id == zone_code);
+        list.Sort((a, b) => a.zone_id.CompareTo(b.zone_id));
+        return list;
+    }
+
     public IReadOnlyList<Zone_Data> Get_ZoneDataList(int zone_group_id, STAGE_DIFFICULTY_TYPE diff_type)
     {
         Check_Zone_Data();
