@@ -150,14 +150,12 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
     public void Spawned()
     {
-        Debug.Log("Spawned");
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
     }
 
     public void Despawned()
     {
-        Debug.Log("Despawned");
         Cancel_Token.Cancel();
     }
 }
