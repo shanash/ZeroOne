@@ -285,10 +285,10 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     /// <returns></returns>
     string ConvertSkillValue(string pattern, object skill)
     {
-        string convert = $"Test => {pattern}".WithColorTag("00ff00");
+        string convert = $"Test => {pattern}";
         BattleOnetimeSkillData onetime_skill = null;
         BattleDurationSkillData duration_skill = null;
-        int type_value = 0;
+        int type_value;
 
         if (skill is BattleOnetimeSkillData)
         {
@@ -356,8 +356,8 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
         }
         catch(Exception e)
         {
-            UnityEngine.Debug.LogException(e);
-            convert = $"Failed => {pattern}".WithColorTag("ff0000");
+            UnityEngine.Debug.LogWarning(e);
+            convert = $"Failed => {pattern}";
         }
 
         return convert;

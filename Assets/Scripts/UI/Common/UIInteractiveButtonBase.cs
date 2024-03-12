@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -30,7 +32,7 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
     protected float Long_Press_Duration = 0.2f;
 
     bool Is_Long_Press = true;
-    Coroutine Long_Touch_Coroutine = null;
+    CancellationTokenSource Cancel_Token = null; // 취소 토큰
 
     protected abstract UnityEventBase Touch_Callback_Base { get; }
 
@@ -45,13 +47,14 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Press_Scale;
         }
 
-        if (Long_Touch_Coroutine != null)
+        if (Cancel_Token != null)
         {
-            StopCoroutine(Long_Touch_Coroutine);
-            Long_Touch_Coroutine = null;
+            Cancel_Token.Cancel();
+            Cancel_Token = null;
         }
 
-        Long_Touch_Coroutine = StartCoroutine(StartLongTouch());
+        Cancel_Token = new CancellationTokenSource();
+        StartLongTouch().Forget();
     }
 
     /// <summary>
@@ -67,18 +70,15 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Vector2.one;
         }
 
-        if (Long_Touch_Coroutine != null)
+        if (Is_Long_Press)
         {
-            StopCoroutine(Long_Touch_Coroutine);
-            Long_Touch_Coroutine = null;
-            OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
+            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
         }
         else
         {
-            if (Is_Long_Press)
-            {
-                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
-            }
+            Cancel_Token.Cancel();
+            Cancel_Token = null;
+            OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
         }
     }
 
@@ -93,12 +93,9 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Vector2.one;
         }
 
-        if (Long_Touch_Coroutine == null)
+        if (Is_Long_Press)
         {
-            if (Is_Long_Press)
-            {
-                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
-            }
+            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
         }
     }
 
@@ -106,14 +103,14 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
     /// 롱터치 이벤트 감지
     /// </summary>
     /// <returns></returns>
-    IEnumerator StartLongTouch()
+    async UniTaskVoid StartLongTouch()
     {
         Is_Long_Press = false;
-        yield return new WaitForSeconds(Long_Press_Duration);
-        Long_Touch_Coroutine = null;
+        await UniTask.Delay((int)(Long_Press_Duration * 1000), cancellationToken: Cancel_Token.Token);
         Is_Long_Press = true;
 
         OnTouchEvent(TOUCH_RESULT_TYPE.LONG_PRESS);
+        Cancel_Token = null;
     }
 
     protected override void OnDestroy()

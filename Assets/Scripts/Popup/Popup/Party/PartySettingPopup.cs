@@ -529,16 +529,8 @@ public class PartySettingPopup : PopupBase
         }
     }
 
-    public void OnShowSkillTooltip(TOUCH_RESULT_TYPE type, Func<bool,Rect> hole, object skill_data_obj)
+    public void OnShowSkillTooltip(TOUCH_RESULT_TYPE type, Func<bool,Rect> hole, object data)
     {
-        if (skill_data_obj == null || skill_data_obj is not UserHeroSkillData)
-        {
-            Debug.LogWarning("스킬 정보가 없습니다");
-            return;
-        }
-
-        UserHeroSkillData skill_data = skill_data_obj as UserHeroSkillData;
-
         switch (type)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:
@@ -546,6 +538,17 @@ public class PartySettingPopup : PopupBase
                 {
                     GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
                     Tooltip = null;
+                }
+
+                UserHeroSkillData skill_data = null;
+
+                if (data == null || data is not UserHeroSkillData)
+                {
+                    Debug.LogWarning("표시 가능한 스킬 정보가 없습니다!");
+                }
+                else
+                {
+                    skill_data = data as UserHeroSkillData;
                 }
 
                 Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent);

@@ -7,8 +7,7 @@ using System.Threading;
 
 public class TooltipBase : MonoBehaviour, IPoolableComponent
 {
-    public const float PRESS_TIME_FOR_SHOW = 0.2f;
-    const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20;
+    const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20; // 아이콘과 툴팁 사이의 거리
     const int DIM_ENABLE_MILLISECONDS = 2000;
 
     static Texture2D Texture = null;
@@ -30,13 +29,14 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
     TMP_Text Desc = null;
 
     Material Shader_Mat = null;
-    CancellationTokenSource Cancel_Token = new CancellationTokenSource(); // Dim 활성화 작업 취소 토큰
+    CancellationTokenSource Cancel_Token_Src = null; // Dim 활성화 작업 취소 토큰
 
     protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
         if (Box == null) return;
 
-        EnableDelayed(Dim, DIM_ENABLE_MILLISECONDS, Cancel_Token.Token).Forget();
+        Cancel_Token_Src = new CancellationTokenSource();
+        EnableDelayed(Dim, DIM_ENABLE_MILLISECONDS).Forget();
 
         float box_width = Box.rectTransform.rect.size.x;
         float box_height = Box.rectTransform.rect.size.y;
@@ -133,14 +133,12 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         return result;
     }
 
-    async UniTaskVoid EnableDelayed(GameObject go, int delay, CancellationToken cancel_token)
+    async UniTaskVoid EnableDelayed(GameObject go, int delay)
     {
-        await UniTask.Delay(delay, cancellationToken: cancel_token);
-        if (cancel_token.IsCancellationRequested)
-        {
-            return;
-        }
+        await UniTask.Delay(delay, cancellationToken: Cancel_Token_Src.Token);
+
         go.SetActive(true);
+        Cancel_Token_Src = null;
     }
 
     public void OnClickDim()
@@ -150,14 +148,17 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
     public void Spawned()
     {
-        Debug.Log($"Spawned : {GetHashCode()}");
+        Dim.SetActive(false);
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
     }
 
     public void Despawned()
     {
-        Debug.Log($"Despawned : {GetHashCode()}");
-        Cancel_Token.Cancel();
+        if (Cancel_Token_Src != null)
+        {
+            Cancel_Token_Src.Cancel();
+            Cancel_Token_Src = null;
+        }
     }
 }
