@@ -29471,6 +29471,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1548239602817493958}
   - component: {fileID: 4189116752542977963}
+  - component: {fileID: 6209768864083978869}
+  - component: {fileID: 3213165782385540127}
+  - component: {fileID: 9056503013474137667}
   m_Layer: 0
   m_Name: SkillEffect_Eileen_Ultimate_Cast_Ground
   m_TagString: Untagged
@@ -29527,6 +29530,44 @@ MonoBehaviour:
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
+--- !u!114 &6209768864083978869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912727045688978378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 49
+--- !u!210 &3213165782385540127
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912727045688978378}
+  m_Enabled: 1
+  m_SortingLayerID: 726113089
+  m_SortingLayer: 4
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &9056503013474137667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912727045688978378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9afc975f1e0f3143bb35a13d6935615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 706477014254694630}
 --- !u!1 &7033669099056173512
 GameObject:
   m_ObjectHideFlags: 0

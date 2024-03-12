@@ -24598,6 +24598,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5614541237735197649}
   - component: {fileID: 4558405240637352801}
+  - component: {fileID: 787479000360188503}
+  - component: {fileID: -7790880416327754032}
+  - component: {fileID: -1953547902536442488}
   m_Layer: 0
   m_Name: SkillEffect_Eileen_Ultimate_Defence_Up
   m_TagString: Untagged
@@ -24654,6 +24657,44 @@ MonoBehaviour:
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
+--- !u!114 &787479000360188503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434725895095473542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZOrder: 51
+--- !u!210 &-7790880416327754032
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434725895095473542}
+  m_Enabled: 1
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &-1953547902536442488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7434725895095473542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d43d0d258105941849ef1a85810860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Particle_Effect: {fileID: 1875612185551142257}
 --- !u!1 &8939222049791834875
 GameObject:
   m_ObjectHideFlags: 0

@@ -104,7 +104,7 @@
     "skill_use_delay": 16.0,
     "skill_type": 4,
     "script": "원거리 전방 1명 공격 (3히트)",
-    "target_skill_id": 100105,
+    "target_skill_id": 100107,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
     "action_name": "00_ultimate",
     "cast_effect_path": [
@@ -234,7 +234,10 @@
     "script": "원거리 전방 1명 공격(즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "00_common"
+    "action_name": "00_common",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Attack_01_Cast"
+    ]
   },
   {
     "pc_skill_group_id": 100402,
@@ -245,7 +248,10 @@
     "script": "체력이 가장 낮은 아군 체력 회복",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "00_skill_01"
+    "action_name": "00_skill_01",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Skill1_01_Cast"
+    ]
   },
   {
     "pc_skill_group_id": 100403,
@@ -256,7 +262,10 @@
     "script": "원거리 전방 1명 공격(즉발형 1히트)",
     "target_skill_id": 0,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "00_skill_02"
+    "action_name": "00_skill_02",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Skill1_02_Cast"
+    ]
   },
   {
     "pc_skill_group_id": 100404,
@@ -267,7 +276,11 @@
     "script": "자신 체력 회복하고 범위 버프(물리 방어력 증가)",
     "target_skill_id": 100404,
     "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
-    "action_name": "00_ultimate"
+    "action_name": "00_ultimate",
+    "cast_effect_path": [
+      "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Eileen_Ultimate_Cast_Ground",
+      "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Eileen_Ultimate_Cast_Front"
+    ]
   },
   {
     "pc_skill_group_id": 100501,

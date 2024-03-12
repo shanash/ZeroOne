@@ -807,7 +807,7 @@
       0
     ],
     "event_name": "shoot",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Attack_01_Bullet"
   },
   {
     "pc_skill_id": 100402,
@@ -828,7 +828,7 @@
       100
     ],
     "onetime_effect_ids": [
-      0
+      10040100
     ],
     "duration_effect_ids": [
       10040211
@@ -839,8 +839,8 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "debuff",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/SkillEffect_BuffLight"
+    "event_name": "shoot",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Skill1_01_Bullet"
   },
   {
     "pc_skill_id": 100403,
@@ -872,8 +872,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "heal",
-    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Left/SkillEffect_Normal_Fireball"
+    "event_name": "apply_1"
   },
   {
     "pc_skill_id": 100404,
@@ -905,7 +904,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "buff"
+    "event_name": "apply_1"
   },
   {
     "pc_skill_id": 100405,
@@ -937,7 +936,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "buff"
+    "event_name": "apply_2"
   },
   {
     "pc_skill_id": 100406,
@@ -955,7 +954,13 @@
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      14,
+      14,
+      14,
+      14,
+      14,
+      15,
+      15
     ],
     "onetime_effect_ids": [
       10040401
@@ -969,7 +974,37 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "heal"
+    "event_name": "apply_3"
+  },
+  {
+    "pc_skill_id": 100407,
+    "pc_skill_group_id": 100404,
+    "target_type": 0,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "empty_effect",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Eileen_Ultimate_Hit"
   },
   {
     "pc_skill_id": 100501,
