@@ -41,6 +41,12 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("Tab Toggle Group")]
     ToggleGroup Diff_Tab_Group;
 
+    [SerializeField, Tooltip("Tab Ctrl")]
+    TabController Tab_Ctrl;
+
+    [SerializeField, Tooltip("Tab Scroll View List")]
+    List<StageListView> Stage_List_Views;
+
     int Zone_ID;
     Zone_Data Zone;
 
@@ -56,7 +62,6 @@ public class SelectStageUI : PopupBase
         World_ID = (int)data[0];
         Zone_ID = (int)data[1];
         InitWorldZoneData();
-        
 
         FixedUpdatePopup();
         UpdatePopup();
@@ -98,7 +103,6 @@ public class SelectStageUI : PopupBase
 
         var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
         var last_stage = stage_mng.GetLastOpenStage();
-
 
         var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
 
@@ -179,6 +183,16 @@ public class SelectStageUI : PopupBase
             Debug.Log($"{tab.name} => {diff}");
         }
         
+    }
+
+    public void OnSelectTab(Gpm.Ui.Tab tab)
+    {
+
+    }
+
+    public void OnBlockTab(Gpm.Ui.Tab tab)
+    {
+
     }
 
 }
