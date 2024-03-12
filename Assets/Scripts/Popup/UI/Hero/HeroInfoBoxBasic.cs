@@ -69,13 +69,24 @@ public class HeroInfoBoxBasic : MonoBehaviour
         Defense_Number_Text.text = Unit_Data.GetPhysicsDefensePoint().ToString("N0");
         Life_Number_Text.text = Unit_Data.GetMaxLifePoint().ToString("N0");
 
-        var skill_group_list = GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num);
-
         for (int i = 0; i < Skills.Count; i++)
         {
+            SKILL_TYPE type = SKILL_TYPE.NONE;
+            switch (i)
+            {
+                case 0:
+                    type = SKILL_TYPE.SKILL_01;
+                    break;
+                case 1:
+                    type = SKILL_TYPE.SKILL_02;
+                    break;
+                case 2:
+                    type = SKILL_TYPE.SPECIAL_SKILL;
+                    break;
+            }
             try
             {
-                Skills[i].Initialize((skill_group_list.Count > i) ? skill_group_list[i] : null);
+                Skills[i].Initialize(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num, type);
             }
             catch (Exception ex)
             {
