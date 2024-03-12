@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,25 +11,9 @@ public class ItemData_ItemData_V2 : ItemDataBase_V2
 {
     protected Item_Data Data;
 
-    public override string ItemName
-    {
-        get
-        {
-            if (Item_Type == ITEM_TYPE_V2.PIECE_ITEM)
-            {
-                var item_p_data = MasterDataManager.Instance.Get_ItemPieceData(Item_ID);
-                return GameDefine.GetLocalizeString(item_p_data.desc_id);
-            }
-            else
-            {
-                if (Data != null) return "EMPTY";
-                return GameDefine.GetLocalizeString(Data.name_id);
-            }
-        }
-    }
+    public override string ItemName => (Data != null) ? GameDefine.GetLocalizeString(Data.name_id) : base.ItemName;
 
-    public override string ItemDesc => (Data != null) ?
-        GameDefine.GetLocalizeString(Data.desc_id) : string.Empty;
+    public override string ItemDesc => (Data != null) ? GameDefine.GetLocalizeString(Data.desc_id) : base.ItemDesc;
 
     public override void SetItem(ITEM_TYPE_V2 gtype, int item_id)
     {

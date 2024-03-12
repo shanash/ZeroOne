@@ -8,11 +8,11 @@ public class Reward_GoodsData : RewardDataBase
 
     public override string RewardItemName => (Data != null) ?
         GameDefine.GetLocalizeString(Data.GetGoodsData().name_id)
-        : string.Empty;
+        : "EMPTY";
 
     public override string RewardItemDesc => (Data != null) ?
     GameDefine.GetLocalizeString(Data.GetGoodsData().desc_id)
-    : string.Empty;
+    : "EMPTY";
 
     protected override void InitData()
     {

@@ -10,7 +10,7 @@ public class ItemTooltip : TooltipBase
     {
         Initialize(hole, reward_data.RewardItemName, reward_data.RewardItemDesc, is_screen_modify);
 
-        int quantity = 0;
+        double quantity = 0;
 
         var obj_data = reward_data.GetRewardItemData();
         switch (obj_data)
@@ -19,18 +19,14 @@ public class ItemTooltip : TooltipBase
                 var u_item_data = GameData.I.GetUserItemDataManager().FindUserItem(item_data.Item_Type, item_data.Item_ID);
                 if (u_item_data != null)
                 {
-                    quantity = (int)u_item_data.GetCount();
+                    quantity = u_item_data.GetCount();
                 }
                 break;
             case GoodsDataBase goods_data:
-                var u_goods_data = GameData.I.GetUserGoodsDataManager().FindUserGoods(goods_data.Goods_Type);
-                if (u_goods_data != null)
-                {
-                    quantity = (int)u_goods_data.GetCount();
-                }
+                quantity = (int)GameData.I.GetUserGoodsDataManager().GetGoodsCount(goods_data.Goods_Type);
                 break;
         }
         
-        NumberText.text = string.Format(GameDefine.GetLocalizeString("system_itemgoods_quantity"), quantity);
+        NumberText.text = string.Format(GameDefine.GetLocalizeString("system_itemgoods_quantity"), quantity.ToString("N0"));
     }
 }
