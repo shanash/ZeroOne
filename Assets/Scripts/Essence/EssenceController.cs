@@ -104,7 +104,7 @@ public class EssenceController : SceneControllerBase
         if (load_cnt == total_cnt)
         {
             SCManager.I.SetCurrent(this, "OnReceiveData");
-            PopupManager.I.Container.SetEtcCanvasScaler(0);
+            ((PopupContainer)PopupManager.I.Container).SetEtcCanvasScaler(0);
             TouchCanvas.Instance.EnableTouchEffect(false);
             return;
         }

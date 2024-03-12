@@ -22,7 +22,7 @@ namespace FluffyDuck.UI
         /// </summary>
         Action Root_On_Exit;
 
-        public abstract PopupContainer Container { get; }
+        public abstract PopupContainerBase Container { get; }
 
         /// <summary>
         /// Scene이 변할때마다 재생성됩니다
@@ -136,50 +136,20 @@ namespace FluffyDuck.UI
         /// <param name="cb"></param>
         public void Add(string path, POPUP_TYPE type, System.Action<PopupBase> cb)
         {
-            RectTransform container = Container.FullPage_Container;
-            switch (type)
+            RectTransform container = Container.Get[POPUP_TYPE.FULLPAGE_TYPE];
+            if (Container.Get.ContainsKey(type))
             {
-                case POPUP_TYPE.FULLPAGE_TYPE:
-                    container = Container.FullPage_Container;
-                    break;
-                case POPUP_TYPE.DIALOG_TYPE:
-                    container = Container.Dialog_Container;
-                    break;
-                case POPUP_TYPE.MODAL_TYPE:
-                    container = Container.Modal_Container; ;
-                    break;
-                case POPUP_TYPE.NOTI_TYPE:
-                    container = Container.Noti_Container;
-                    break;
-                default:
-                    container = Container.FullPage_Container;
-                    Debug.Assert(false);
-                    break;
+                container = Container.Get[type];
             }
 
             AddPopup(path, container, (popup) =>
             {
                 if (popup != null)
                 {
-                    RectTransform rt_type = Container.FullPage_Container;
-                    switch (popup.GetPopupType())
+                    RectTransform rt_type = Container.Get[POPUP_TYPE.FULLPAGE_TYPE];
+                    if (Container.Get.ContainsKey(popup.GetPopupType()))
                     {
-                        case POPUP_TYPE.FULLPAGE_TYPE:
-                            rt_type = Container.FullPage_Container;
-                            break;
-                        case POPUP_TYPE.DIALOG_TYPE:
-                            rt_type = Container.Dialog_Container;
-                            break;
-                        case POPUP_TYPE.MODAL_TYPE:
-                            rt_type = Container.Modal_Container; ;
-                            break;
-                        case POPUP_TYPE.NOTI_TYPE:
-                            rt_type = Container.Noti_Container;
-                            break;
-                        default:
-                            rt_type = Container.FullPage_Container;
-                            Debug.Assert(false);
-                            break;
+                        rt_type = Container.Get[popup.GetPopupType()];
                     }
 
                     if (rt_type != container)
@@ -216,29 +186,14 @@ namespace FluffyDuck.UI
         {
             PopupBase popup = null;
 
-            RectTransform container = Container.FullPage_Container;
+            RectTransform container = Container.Get[POPUP_TYPE.FULLPAGE_TYPE];
 
             popup = AddPopup(path, container);
 
             //  팝업 오브젝트가 담길 컨테이너. 각 팝업 타입에 따라 각기 다른 컨테이너에 담긴다.
-            switch (popup.GetPopupType())
+            if (Container.Get.ContainsKey(popup.GetPopupType()))
             {
-                case POPUP_TYPE.FULLPAGE_TYPE:
-                    container = Container.FullPage_Container;
-                    break;
-                case POPUP_TYPE.DIALOG_TYPE:
-                    container = Container.Dialog_Container;
-                    break;
-                case POPUP_TYPE.MODAL_TYPE:
-                    container = Container.Modal_Container;
-                    break;
-                case POPUP_TYPE.NOTI_TYPE:
-                    container = Container.Noti_Container;
-                    break;
-                default:
-                    container = Container.FullPage_Container;
-                    Debug.Assert(false);
-                    break;
+                container = Container.Get[popup.GetPopupType()];
             }
 
             if (popup != null)

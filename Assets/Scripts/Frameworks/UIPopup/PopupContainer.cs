@@ -1,8 +1,9 @@
-using FluffyDuck.Util;
+using FluffyDuck.UI;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupContainer : MonoBehaviour, IPoolableComponent
+public class PopupContainer : PopupContainerBase
 {
     [SerializeField, Tooltip("UI용 Page 팝업 캔버스")]
     Canvas _FullPage_Canvas;
@@ -22,14 +23,26 @@ public class PopupContainer : MonoBehaviour, IPoolableComponent
     Canvas _Full_Page_Canvas;
     [SerializeField, Tooltip("팝업용 Page Canvas")]
     Canvas _Etc_Page_Canvas;
-    
 
     public RectTransform FullPage_Container => _FullPage_Container;
     public RectTransform Dialog_Container => _Dialog_Container;
     public RectTransform Modal_Container => _Modal_Container;
     public RectTransform Noti_Container => _Noti_Container;
 
-    public void SetUICamera()
+    public override Dictionary<POPUP_TYPE, RectTransform> Get => _Containers;
+
+    Dictionary<POPUP_TYPE, RectTransform> _Containers = null;
+
+    void Awake()
+    {
+        _Containers = new Dictionary<POPUP_TYPE, RectTransform>();
+        _Containers.Add(POPUP_TYPE.FULLPAGE_TYPE, _FullPage_Container);
+        _Containers.Add(POPUP_TYPE.DIALOG_TYPE, _Dialog_Container);
+        _Containers.Add(POPUP_TYPE.MODAL_TYPE, _Modal_Container);
+        _Containers.Add(POPUP_TYPE.NOTI_TYPE, _Noti_Container);
+    }
+
+    public override void SetUICamera()
     {
         var ui_cam_obj = GameObject.FindGameObjectWithTag("Battle_UI_Camera");
         if (ui_cam_obj != null)
@@ -51,11 +64,11 @@ public class PopupContainer : MonoBehaviour, IPoolableComponent
         _Etcs_Canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = match;
     }
 
-    public void Despawned()
+    public override void Despawned()
     {
     }
 
-    public void Spawned()
+    public override void Spawned()
     {
         /*
         _FullPage_Canvas.worldCamera = Camera.main;

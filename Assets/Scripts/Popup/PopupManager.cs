@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PopupManager : PopupManagerBase<PopupManager>
 {
-    PopupContainer _Container;
+    PopupContainer _Container = null;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void CallInstance()
@@ -13,7 +13,7 @@ public class PopupManager : PopupManagerBase<PopupManager>
         _ = Instance;
     }
 
-    public override PopupContainer Container
+    public override PopupContainerBase Container
     {
         get
         {
