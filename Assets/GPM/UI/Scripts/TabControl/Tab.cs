@@ -1,4 +1,4 @@
-﻿namespace Gpm.Ui
+namespace Gpm.Ui
 {
     using Internal;
     using UnityEngine;

@@ -85,6 +85,19 @@ public class UserStoryStageDataManager : ManagerBase
         Current_World = MasterDataManager.Instance.Get_WorldData(Current_World_ID);
         Is_Update_Data = true;
     }
+
+    /// <summary>
+    /// 해당 존이 오픈되었는지 여부 반환
+    /// </summary>
+    /// <param name="zone_id"></param>
+    /// <returns></returns>
+    public bool IsOpenZone(int zone_id)
+    {
+        var zone = MasterDataManager.Instance.Get_ZoneData(zone_id);
+        if (zone == null) return false;
+
+        return User_Story_Stage_Data.Exists(x => x.GetStageGroupID() == zone.stage_group_id);
+    }
     /// <summary>
     /// 이전 존이 존재하는지 여부 반환
     /// </summary>
@@ -256,8 +269,34 @@ public class UserStoryStageDataManager : ManagerBase
         stage.AddWinCount();
 
         OpenNextStage(stage_id);
+        OpenNextZone(stage_id);
 
         return RESPONSE_TYPE.SUCCESS;
+    }
+
+    /// <summary>
+    /// 다음 존 오픈<br/>
+    /// 존의 오픈 가능 여부를 판단해서 해당 존의 첫번째 스테이지를 오픈시켜준다.
+    /// </summary>
+    /// <param name="stage_id"></param>
+    void OpenNextZone(int stage_id)
+    {
+        var m = MasterDataManager.Instance;
+        var next_zone = m.Get_ZoneDataByOpenStageID(stage_id);
+        if (next_zone == null)
+        {
+            return;
+        }
+        var next_zone_stage_list = m.Get_StageDataListByStageGroupID(next_zone.stage_group_id);
+        if (next_zone_stage_list.Count > 0)
+        {
+            var next_stage = next_zone_stage_list.FirstOrDefault();
+            if (next_stage == null)
+            {
+                //  여긴 그냥 존의 시작 스테이지만 오픈해준다.
+                AddUserStoryStageData(next_stage.stage_id);
+            }
+        }
     }
 
     /// <summary>

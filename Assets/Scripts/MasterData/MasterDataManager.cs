@@ -520,6 +520,12 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Zone_Data();
         return _Zone_Data[zone_id];
     }
+
+    public Zone_Data Get_ZoneDataByOpenStageID(int stage_id)
+    {
+        Check_Zone_Data();
+        return _Zone_Data.Values.ToList().Find(x => x.open_stage_id == stage_id);
+    }
     /// <summary>
     /// 지정 난이도의 존 리스트 반환
     /// </summary>

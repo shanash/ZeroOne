@@ -29,7 +29,6 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("존 별점 게이지")]
     Slider Zone_Star_Gauge;
 
-
     [SerializeField, Tooltip("스테이지 리스트 뷰")]
     InfiniteScroll Stage_List_View;
 
@@ -43,6 +42,9 @@ public class SelectStageUI : PopupBase
 
     [SerializeField, Tooltip("Tab Ctrl")]
     TabController Tab_Ctrl;
+
+    [SerializeField, Tooltip("Tab Btns")]
+    List<Tab> Tab_Btns_List;
 
     [SerializeField, Tooltip("Tab Scroll View List")]
     List<StageListView> Stage_List_Views;
@@ -101,7 +103,29 @@ public class SelectStageUI : PopupBase
         var m = MasterDataManager.Instance;
         Stage_List_View.Clear();
 
+        var zone_list = m.Get_ZoneDataListByZoneCode(Zone.zone_code_id);
         var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+
+        for (int i = 0; i < Tab_Btns_List.Count; i++)
+        {
+            var tab = Tab_Btns_List[i];
+            STAGE_DIFFICULTY_TYPE dtype = (STAGE_DIFFICULTY_TYPE)(i + 1);
+            var zone = zone_list.Find(x => x.zone_difficulty == dtype);
+            bool is_exist = zone != null;
+            bool is_open_zone = false;
+            if (is_exist)
+            {
+                is_open_zone = stage_mng.IsOpenZone(zone.zone_id);
+            }
+            tab.SetBlockTab(!(is_exist && is_open_zone));
+            var toggle = tab.GetComponent<Toggle>();
+            if (toggle != null)
+            {
+                toggle.interactable = is_exist && is_open_zone;
+            }
+        }
+
+        
         var last_stage = stage_mng.GetLastOpenStage();
 
         var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
@@ -187,12 +211,13 @@ public class SelectStageUI : PopupBase
 
     public void OnSelectTab(Gpm.Ui.Tab tab)
     {
-
+        Debug.Log("OnSelectTab");
+        
     }
 
     public void OnBlockTab(Gpm.Ui.Tab tab)
     {
-
+        Debug.Log("OnBlockTab");
     }
 
 }
