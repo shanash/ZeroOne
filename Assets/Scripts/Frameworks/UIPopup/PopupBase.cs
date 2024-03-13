@@ -11,6 +11,7 @@ namespace FluffyDuck.UI
         DIALOG_TYPE,
         MODAL_TYPE,
         NOTI_TYPE,
+        TOOLTIP_TYPE,
     }
 
 

@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class PopupContainer : PopupContainerBase
 {
+    public enum Canvas_Name
+    {
+        FULLPAGE,
+        ETCS,
+    }
+
     [SerializeField, Tooltip("UI용 Page 팝업 캔버스")]
     Canvas _FullPage_Canvas;
     [SerializeField, Tooltip("기타등등 팝업 캔버스")]
@@ -29,17 +35,15 @@ public class PopupContainer : PopupContainerBase
     public RectTransform Modal_Container => _Modal_Container;
     public RectTransform Noti_Container => _Noti_Container;
 
-    public override Dictionary<POPUP_TYPE, RectTransform> Get => _Containers;
-
-    Dictionary<POPUP_TYPE, RectTransform> _Containers = null;
-
-    void Awake()
+    protected override void InitializeContainer(ref Dictionary<POPUP_TYPE, RectTransform> container)
     {
-        _Containers = new Dictionary<POPUP_TYPE, RectTransform>();
-        _Containers.Add(POPUP_TYPE.FULLPAGE_TYPE, _FullPage_Container);
-        _Containers.Add(POPUP_TYPE.DIALOG_TYPE, _Dialog_Container);
-        _Containers.Add(POPUP_TYPE.MODAL_TYPE, _Modal_Container);
-        _Containers.Add(POPUP_TYPE.NOTI_TYPE, _Noti_Container);
+        container = new Dictionary<POPUP_TYPE, RectTransform>()
+        {
+            [POPUP_TYPE.FULLPAGE_TYPE] = _FullPage_Container,
+            [POPUP_TYPE.DIALOG_TYPE] = _Dialog_Container,
+            [POPUP_TYPE.MODAL_TYPE] = _Modal_Container,
+            [POPUP_TYPE.NOTI_TYPE] = _Noti_Container,
+        };
     }
 
     public override void SetUICamera()
