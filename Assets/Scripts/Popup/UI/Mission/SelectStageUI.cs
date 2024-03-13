@@ -2,6 +2,7 @@ using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Gpm.Ui;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -29,9 +30,6 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("존 별점 게이지")]
     Slider Zone_Star_Gauge;
 
-    [SerializeField, Tooltip("스테이지 리스트 뷰")]
-    InfiniteScroll Stage_List_View;
-
     [SerializeField, Tooltip("존 이동 버튼(이전 존)")]
     UIButtonBase Left_Arrow_Btn;
     [SerializeField, Tooltip("존 이동 버튼(다음 존)")]
@@ -46,9 +44,6 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("Tab Btns")]
     List<Tab> Tab_Btns_List;
 
-    [SerializeField, Tooltip("Tab Scroll View List")]
-    List<StageListView> Stage_List_Views;
-
     int Zone_ID;
     Zone_Data Zone;
 
@@ -57,18 +52,33 @@ public class SelectStageUI : PopupBase
 
     protected override bool Initialize(params object[] data)
     {
-        if (data.Length != 2)
-        {
-            return false;
-        }
-        World_ID = (int)data[0];
-        Zone_ID = (int)data[1];
+        var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+        World_ID = stage_mng.GetCurrentWorldID();
+        Zone_ID = stage_mng.GetCurrentZoneID();
         InitWorldZoneData();
 
+        InitAssets();
         FixedUpdatePopup();
-        UpdatePopup();
 
         return true;
+    }
+
+    void InitAssets()
+    {
+        List<string> asset_list = new List<string>();
+        asset_list.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/NormalStageListCell");
+        asset_list.Add("Assets/AssetResources/Prefabs/Popup/UI/Mission/HardStageListCell");
+
+        GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
+    }
+
+    void PreloadCallback(int load_cnt, int total_cnt)
+    {
+        if (load_cnt == total_cnt)
+        {
+            UpdateTabs();
+            UpdatePopup();
+        }
     }
 
     void InitWorldZoneData()
@@ -98,14 +108,13 @@ public class SelectStageUI : PopupBase
         }
     }
 
-    public override void UpdatePopup()
+    void UpdateTabs()
     {
         var m = MasterDataManager.Instance;
-        Stage_List_View.Clear();
 
         var zone_list = m.Get_ZoneDataListByZoneCode(Zone.zone_code_id);
         var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
-
+        //  tab check
         for (int i = 0; i < Tab_Btns_List.Count; i++)
         {
             var tab = Tab_Btns_List[i];
@@ -123,25 +132,22 @@ public class SelectStageUI : PopupBase
             {
                 toggle.interactable = is_exist && is_open_zone;
             }
+
+            if (zone != null && stage_mng.GetCurrentZoneID() == zone.zone_id)
+            {
+                Tab_Ctrl.Select(tab);
+                toggle.isOn = true;
+            }
         }
+    }
 
-        
-        var last_stage = stage_mng.GetLastOpenStage();
+    public override void UpdatePopup()
+    {
+        var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
 
-        var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
-
-        int last_index = stage_list.ToList().FindIndex(x => x.stage_id == last_stage.Stage_ID);
-
-        int cnt = stage_list.Count;
-        for (int i = 0; i < cnt; i++)
-        {
-            var stage = stage_list[i];
-            var new_stage = new StageListData();
-            new_stage.SetStageID(World.world_id, Zone.zone_id, stage.stage_id);
-            Stage_List_View.InsertData(new_stage);
-        }
-
-        Stage_List_View.MoveTo(last_index, InfiniteScroll.MoveToType.MOVE_TO_TOP);
+        //var last_stage = stage_mng.GetLastOpenStage();
+        //var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
+        //int last_index = stage_list.ToList().FindIndex(x => x.stage_id == last_stage.Stage_ID);
 
         //  zone number
         Zone_Number.text = ZString.Format("ZONE {0}", Zone.zone_ordering);
@@ -152,7 +158,6 @@ public class SelectStageUI : PopupBase
         //  zone desc
         Zone_Desc.text = Zone.zone_tooltip;
 
-        //  Zone_Star_Proceed_Text
         
         int gain_star = stage_mng.GetGainStarPoints(Zone.stage_group_id);
         int total_star = stage_mng.GetTotalStarCount(Zone.stage_group_id);
@@ -182,6 +187,7 @@ public class SelectStageUI : PopupBase
             World_ID = stage_mng.GetCurrentWorldID();
             Zone_ID = stage_mng.GetCurrentZoneID();
             InitWorldZoneData();
+            UpdateTabs();
             UpdatePopup();
         }
     }
@@ -194,30 +200,34 @@ public class SelectStageUI : PopupBase
             World_ID = stage_mng.GetCurrentWorldID();
             Zone_ID = stage_mng.GetCurrentZoneID();
             InitWorldZoneData();
+            UpdateTabs();
             UpdatePopup();
         }
     }
 
-    public void OnClickTab(int diff)
-    {
-        var tab = Diff_Tab_Group.ActiveToggles().FirstOrDefault();
-
-        if (tab != null && tab.isOn)
-        {
-            Debug.Log($"{tab.name} => {diff}");
-        }
-        
-    }
-
     public void OnSelectTab(Gpm.Ui.Tab tab)
     {
-        Debug.Log("OnSelectTab");
-        
-    }
+        var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+        if (Zone == null)
+        {
+            World_ID = stage_mng.GetCurrentWorldID();
+            Zone_ID = stage_mng.GetCurrentZoneID();
 
-    public void OnBlockTab(Gpm.Ui.Tab tab)
-    {
-        Debug.Log("OnBlockTab");
+            InitWorldZoneData();
+        }
+
+        var zone_list = MasterDataManager.Instance.Get_ZoneDataListByZoneCode(Zone.zone_code_id);
+        int idx = Tab_Ctrl.GetTabIndex(tab);
+        
+        var select_zone = zone_list[idx];
+        stage_mng.SetCurrentZoneID(select_zone.zone_id);
+        Zone_ID = select_zone.zone_id;
+        InitWorldZoneData();
+
+        //  view update
+        var view = tab.GetLinkedPage().GetComponent<StageListView>();
+        view.SetWorldAndZoneID(World_ID, select_zone.zone_id);
+        UpdatePopup();
     }
 
 }

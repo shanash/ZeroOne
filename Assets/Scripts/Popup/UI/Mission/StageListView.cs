@@ -23,6 +23,11 @@ public class StageListView : MonoBehaviour
     {
         World_ID = world_id;
         Zone_ID = zone_id;
+        if (Zone_ID == 0)
+        {
+            ClearListCells();
+            return;
+        }
         var m = MasterDataManager.Instance;
         World = m.Get_WorldData(World_ID);
         Zone = m.Get_ZoneData(Zone_ID);
@@ -32,11 +37,36 @@ public class StageListView : MonoBehaviour
     void RefreshScrollView()
     {
         ClearListCells();
-        var mng = GameData.Instance.GetUserStoryStageDataManager();
+        var m = MasterDataManager.Instance;
+        var stage_list_data = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
+        var pool = GameObjectPoolManager.Instance;
+        string prefab_name = string.Empty;
+        switch (Difficulty_Type)
+        {
+            case STAGE_DIFFICULTY_TYPE.NORMAL:
+                prefab_name = "Assets/AssetResources/Prefabs/Popup/UI/Mission/NormalStageListCell";
+                break;
+            case STAGE_DIFFICULTY_TYPE.HARD:
+                prefab_name = "Assets/AssetResources/Prefabs/Popup/UI/Mission/HardStageListCell";
+                break;
+            case STAGE_DIFFICULTY_TYPE.VERY_HARD:
+                prefab_name = "Assets/AssetResources/Prefabs/Popup/UI/Mission/HardStageListCell";
+                break;
+            default:
+                prefab_name = "Assets/AssetResources/Prefabs/Popup/UI/Mission/NormalStageListCell";
+                break;
+        }
 
+        for (int i = 0; i < stage_list_data.Count; i++)
+        {
+            var obj = pool.GetGameObject(prefab_name, Scroll_View.content);
+            var cell = obj.GetComponent<StageListCell>();
+            cell.SetStageData(stage_list_data[i]);
+            Used_Stage_List_Cell.Add(cell);
+        }
     }
 
-    void ClearListCells()
+    public void ClearListCells()
     {
         var pool = GameObjectPoolManager.Instance;
         int cnt = Used_Stage_List_Cell.Count;

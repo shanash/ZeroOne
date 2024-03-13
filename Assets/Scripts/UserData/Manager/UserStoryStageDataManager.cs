@@ -193,7 +193,7 @@ public class UserStoryStageDataManager : ManagerBase
     public int GetGainStarPoints(int stage_group_id)
     {
         var list = FindUserStoryStageDataList(stage_group_id);
-        int sum = User_Story_Stage_Data.Sum(x => x.GetStarPoint());
+        int sum = list.Sum(x => x.GetStarPoint());
         return sum;
     }
 

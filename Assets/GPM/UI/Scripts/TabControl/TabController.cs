@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -207,6 +207,10 @@ namespace Gpm.Ui
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (Application.isPlaying)
+            {
+                return;
+            }
             initialized = false;
             Initialize();
         }

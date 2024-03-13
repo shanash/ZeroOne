@@ -108,6 +108,9 @@ public class RewardCardBase : UIBase
             case REWARD_TYPE.PIECE_CHARACTER:
                 reward = new Reward_ItemData();
                 break;
+            case REWARD_TYPE.PIECE_ITEM:
+                reward = new Reward_ItemData();
+                break;
             case REWARD_TYPE.ITEM:
                 {
                     var item_data = MasterDataManager.Instance.Get_ItemData(data.var1);

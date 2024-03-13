@@ -290,7 +290,7 @@ namespace FluffyDuck.Util
             total_cnt = all_tasks.Count;
             callback?.Invoke(total_cnt - all_tasks.Count, total_cnt);
 
-            while (all_tasks.Count > 0)
+            while (all_tasks != null && all_tasks.Count > 0)
             {
                 var finish_task = await Task.WhenAny(all_tasks);
                 if (all_tasks.Contains(finish_task))

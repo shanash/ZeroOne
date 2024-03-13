@@ -100,8 +100,8 @@ public class Stage_Data : System.IDisposable
 	///	<summary>
 	///	대표 보상 타입
 	///	</summary>
-	public int reward_type => _reward_type;
-	int _reward_type;
+	public REWARD_TYPE reward_type => _reward_type;
+	REWARD_TYPE _reward_type;
 
 	///	<summary>
 	///	대표 보상 ID

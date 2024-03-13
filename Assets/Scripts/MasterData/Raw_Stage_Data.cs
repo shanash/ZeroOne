@@ -19,7 +19,7 @@ public class Raw_Stage_Data : System.IDisposable
 	public int star_reward_group_id {get; set;}
 	public int schedule_id {get; set;}
 	public int entrance_limit_count {get; set;}
-	public int reward_type {get; set;}
+	public REWARD_TYPE reward_type {get; set;}
 	public int reward_id {get; set;}
 	public string entrance_dialogue {get; set;}
 	public string outrance_dialogue {get; set;}
@@ -43,7 +43,7 @@ public class Raw_Stage_Data : System.IDisposable
 		star_reward_group_id = 0;
 		schedule_id = 0;
 		entrance_limit_count = 0;
-		reward_type = 0;
+		reward_type = REWARD_TYPE.NONE;
 		reward_id = 0;
 		entrance_dialogue = string.Empty;
 		outrance_dialogue = string.Empty;
