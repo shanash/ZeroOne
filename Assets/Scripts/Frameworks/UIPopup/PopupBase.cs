@@ -11,10 +11,7 @@ namespace FluffyDuck.UI
         DIALOG_TYPE,
         MODAL_TYPE,
         NOTI_TYPE,
-        TOOLTIP_TYPE,
     }
-
-
 
     public class Popup_Button_Data
     {
@@ -119,7 +116,6 @@ namespace FluffyDuck.UI
             Box_Rect?.gameObject.SetActive(true);
             Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);
         }
-
 
         /// <summary>
         /// 애니메이션이 있을 경우, 팝업 등장 완료 후 호출되는 함수

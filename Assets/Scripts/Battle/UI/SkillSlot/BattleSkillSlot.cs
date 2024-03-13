@@ -55,7 +55,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
 
     HeroBase_V2 Hero;
     List<BattleDurationSkillIconNode> Used_Duration_Skill_Icons = new List<BattleDurationSkillIconNode>();
-    GameObject Tooltip = null;
 
     public Action<Rect, UserHeroSkillData> OnStartLongPress;
     public Action OnFinishLongPress;
@@ -117,12 +116,6 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                 }
                 break;
             case TOUCH_RESULT_TYPE.LONG_PRESS:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
-
                 UserHeroSkillData skill_data = null;
                 if (data == null || data is not UserHeroSkillData)
                 {
@@ -133,16 +126,10 @@ public class BattleSkillSlot : UIBase, IUpdateComponent
                     skill_data = data as UserHeroSkillData;
                 }
 
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent.parent.parent.parent);
-                var tooltip = Tooltip.GetComponent<SkillTooltip>();
-                tooltip.Initialize(hole(true), skill_data, false);
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip", hole(false), skill_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                TooltipManager.I.CloseAll();
                 break;
         }
     }

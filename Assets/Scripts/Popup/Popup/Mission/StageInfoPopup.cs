@@ -64,9 +64,6 @@ public class StageInfoPopup : PopupBase
     List<NpcCardBase> Used_Npc_List = new List<NpcCardBase>();
     List<RewardItemCard> Used_Reward_Item_List = new List<RewardItemCard>();
 
-    // 현재 표시되고 있는 몬스터 툴팁
-    GameObject Tooltip = null;
-
     bool Is_Animation_End;
     bool Is_Load_Complete;
 
@@ -313,16 +310,10 @@ public class StageInfoPopup : PopupBase
                     return;
                 }
                 Npc_Data npc_data = data as Npc_Data;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/MonsterTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<MonsterTooltip>();
-                tooltip.Initialize(hole(false), npc_data);
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/MonsterTooltip", hole(false), npc_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                TooltipManager.I.CloseAll();
                 break;
         }
     }
@@ -338,16 +329,10 @@ public class StageInfoPopup : PopupBase
                     return;
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/ItemTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<ItemTooltip>();
-                tooltip.Initialize(hole(false), reward_data);
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip", hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                TooltipManager.I.CloseAll();
                 break;
         }
     }

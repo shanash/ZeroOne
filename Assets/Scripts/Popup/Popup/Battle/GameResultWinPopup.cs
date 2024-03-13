@@ -109,7 +109,7 @@ public class GameResultWinPopup : PopupBase
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
 
-    GameObject Tooltip = null;
+    PopupBase Tooltip = null;
 
     protected override bool Initialize(object[] data)
     {
@@ -667,16 +667,11 @@ public class GameResultWinPopup : PopupBase
                     return;
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/ItemTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<ItemTooltip>();
-                tooltip.Initialize(hole(true), reward_data);
+
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip", hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                TooltipManager.I.CloseAll();
                 break;
         }
     }

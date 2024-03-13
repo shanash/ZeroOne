@@ -68,8 +68,8 @@ public class SceneLoad : SceneControllerBase
 
         PopupManager.Instance.Add(prefab, POPUP_TYPE.MODAL_TYPE, (popup) =>
         {
+            popup.ShowPopup();
             Loading_Popup = (SceneLoadingPopup)popup;
-            Loading_Popup.ShowPopup();
         });
 
         SetText("다운로더 초기화중입니다.");

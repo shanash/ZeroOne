@@ -4,8 +4,9 @@ using TMPro;
 using FluffyDuck.Util;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using FluffyDuck.UI;
 
-public class TooltipBase : MonoBehaviour, IPoolableComponent
+public class TooltipBase : PopupBase, IPoolableComponent
 {
     const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20; // 아이콘과 툴팁 사이의 거리
     const int DIM_ENABLE_MILLISECONDS = 2000;
@@ -13,8 +14,8 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
     static Texture2D Texture = null;
     static Vector2 Texture_Size = Vector2.zero;
 
-    [SerializeField]
-    Image Box = null;
+    [SerializeField, Tooltip("팝업박스 이미지")]
+    Image Box_Image = null;
 
     [SerializeField]
     RectTransform Container = null;
@@ -33,13 +34,13 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
     protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
-        if (Box == null) return;
+        if (Box_Image == null) return;
 
         Cancel_Token_Src = new CancellationTokenSource();
         EnableDelayed(Dim, DIM_ENABLE_MILLISECONDS).Forget();
 
-        float box_width = Box.rectTransform.rect.size.x;
-        float box_height = Box.rectTransform.rect.size.y;
+        float box_width = Box_Rect.rect.size.x;
+        float box_height = Box_Rect.rect.size.y;
 
         Vector2 texture_size = new Vector2(Screen.width, box_height / box_width * Screen.width);
 
@@ -58,9 +59,9 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         }
 
         Shader_Mat = new Material(Shader.Find("FluffyDuck/TransparentHole"));
-        Box.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
-        Box.material = Shader_Mat;
-        Box.material.SetVector("_Rect", texture_hole);
+        Box_Image.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
+        Box_Image.material = Shader_Mat;
+        Box_Image.material.SetVector("_Rect", texture_hole);
 
         Title.text = title;
         Desc.text = desc;
@@ -72,7 +73,7 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
 
         Canvas.ForceUpdateCanvases();
 
-        AdjustPositionWithinScreen(Box.rectTransform, Container, hole, multi);
+        AdjustPositionWithinScreen(Box_Rect, Container, hole, multi);
     }
 
     void AdjustPositionWithinScreen(RectTransform full_screen, RectTransform tooltip, Rect hole, float multi)
@@ -151,8 +152,10 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         GameObjectPoolManager.Instance.UnusedGameObject(this.gameObject);
     }
 
-    public virtual void Spawned()
+    public override void Spawned()
     {
+        base.Spawned();
+
         Dim.SetActive(false);
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
@@ -164,8 +167,10 @@ public class TooltipBase : MonoBehaviour, IPoolableComponent
         }
     }
 
-    public virtual void Despawned()
+    public override void Despawned()
     {
+        base.Despawned();
+
         if (Cancel_Token_Src != null)
         {
             Cancel_Token_Src.Cancel();

@@ -28,7 +28,6 @@ public class BossStageRewardInfoPopup : PopupBase
     List<RewardItemCard> Used_Reward_Item_Card_List = new List<RewardItemCard>();
 
     Boss_Stage_Data Stage;
-    GameObject Tooltip = null;
 
     protected override bool Initialize(object[] data)
     {
@@ -46,6 +45,7 @@ public class BossStageRewardInfoPopup : PopupBase
     {
         List<string> asset_list = new List<string>();
         asset_list.Add("Assets/AssetResources/Prefabs/UI/Card/RewardItemCard");
+        asset_list.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip");
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }
@@ -161,16 +161,10 @@ public class BossStageRewardInfoPopup : PopupBase
                     return;
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/ItemTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<ItemTooltip>();
-                tooltip.Initialize(hole(false), reward_data);
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip", hole(false), reward_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                TooltipManager.I.CloseAll();
                 break;
         }
     }

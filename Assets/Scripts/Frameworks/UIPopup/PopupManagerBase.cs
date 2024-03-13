@@ -113,20 +113,6 @@ namespace FluffyDuck.UI
         }
 
         /// <summary>
-        /// [부모를 다시 붙이는 문제때문에 타입을 명시하는 메소드로 변경]
-        /// 비동기 팝업 추가
-        /// 팝업의 타입에 따라 각기 다른 컨테이너에 담는다.
-        /// 팝업을 생성한후 콜백에 전달
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="cb"></param>
-        [Obsolete]
-        public void Add(string path, System.Action<PopupBase> cb)
-        {
-            Add(path, POPUP_TYPE.FULLPAGE_TYPE, cb);
-        }
-
-        /// <summary>
         /// 비동기 팝업 추가
         /// 팝업의 타입에 따라 각기 다른 컨테이너에 담는다.
         /// 팝업을 생성한후 콜백에 전달
@@ -136,7 +122,7 @@ namespace FluffyDuck.UI
         /// <param name="cb"></param>
         public void Add(string path, POPUP_TYPE type, System.Action<PopupBase> cb)
         {
-            RectTransform container = Container.Get[POPUP_TYPE.FULLPAGE_TYPE];
+            RectTransform container = null;
             if (Container.Get.ContainsKey(type))
             {
                 container = Container.Get[type];

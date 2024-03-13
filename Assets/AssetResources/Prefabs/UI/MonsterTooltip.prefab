@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4559060216840949444}
   - component: {fileID: 9107742893965579568}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: MonsterTooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe36f19062ddcff43814b74dead5302a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Box: {fileID: 4820723086894883001}
+  Box_Rect: {fileID: 6861904244579236248}
+  Popup_Type: 1
+  Ease_Base: {fileID: 0}
+  Box_Image: {fileID: 4820723086894883001}
   Container: {fileID: 5449523570458253356}
   Dim: {fileID: 8986091561725692628}
   Title: {fileID: 4602859603777077741}
@@ -67,7 +70,7 @@ GameObject:
   - component: {fileID: 1699511689565913042}
   - component: {fileID: 615979940517172869}
   - component: {fileID: 4602859603777077741}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: SkillNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +207,7 @@ GameObject:
   - component: {fileID: 7197086941536536702}
   - component: {fileID: 5001418159150142830}
   - component: {fileID: 412866371783687124}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +345,7 @@ GameObject:
   - component: {fileID: 1581246185138113838}
   - component: {fileID: 2559083106335656471}
   - component: {fileID: 6270934163381228182}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: InfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,7 +485,7 @@ GameObject:
   - component: {fileID: 6378840131795351288}
   - component: {fileID: 1059786304235465311}
   - component: {fileID: 3468392332658608569}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: MonsterIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +560,7 @@ GameObject:
   - component: {fileID: 6861904244579236248}
   - component: {fileID: 1236602858462762748}
   - component: {fileID: 4820723086894883001}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -634,7 +637,7 @@ GameObject:
   - component: {fileID: 4914063078888082044}
   - component: {fileID: 8835585417538747144}
   - component: {fileID: 428523487815380607}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: DefaultTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -730,7 +733,7 @@ GameObject:
   - component: {fileID: 493697746611569123}
   - component: {fileID: 829836793337023775}
   - component: {fileID: 8164022787328169515}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -807,7 +810,7 @@ GameObject:
   - component: {fileID: 39737067008396105}
   - component: {fileID: 8136936861855201654}
   - component: {fileID: 263689935846783590}
-  m_Layer: 5
+  m_Layer: 28
   m_Name: Dim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1023,9 +1026,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1628845716404991276, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
+      propertyPath: m_Layer
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1703501668333472347, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
+      propertyPath: m_Layer
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537063990628188969, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
+      propertyPath: m_Layer
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685273336821067319, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
+      propertyPath: m_Layer
+      value: 28
+      objectReference: {fileID: 0}
     - target: {fileID: 7941140061802145411, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
       propertyPath: m_Name
       value: NpcCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7941140061802145411, guid: 67e06f129b4dea547b50d73e48dc66ab, type: 3}
+      propertyPath: m_Layer
+      value: 28
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

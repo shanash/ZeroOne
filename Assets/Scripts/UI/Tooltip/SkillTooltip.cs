@@ -1,6 +1,5 @@
-using UnityEngine;
 using TMPro;
-using DocumentFormat.OpenXml;
+using UnityEngine;
 
 public class SkillTooltip : TooltipBase
 {
@@ -15,6 +14,25 @@ public class SkillTooltip : TooltipBase
 
     [SerializeField]
     PartySelectSkillNode Skill_Card = null;
+
+    protected override bool Initialize(object[] data)
+    {
+        if (data.Length != 2 || data[0] is not Rect)
+        {
+            return false;
+        }
+
+        UserHeroSkillData skill = null;
+
+        if (data[1] != null && data[1] is UserHeroSkillData)
+        {
+            skill = data[1] as UserHeroSkillData;
+        }
+
+        Initialize((Rect)data[0], skill);
+
+        return true;
+    }
 
     public void Initialize(Rect hole, UserHeroSkillData skill_data, bool is_screen_modify = true)
     {

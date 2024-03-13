@@ -60,7 +60,6 @@ public class HeroInfoUI : PopupBase
 
     RenderTexture Chara_Texture = null;
     Producer pd = null;
-    GameObject Tooltip = null;
 
     void ResetUI()
     {
@@ -197,12 +196,7 @@ public class HeroInfoUI : PopupBase
         switch (result)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
-
+                Debug.Log("Press");
                 UserHeroSkillData skill_data = null;
                 if (data == null || data is not UserHeroSkillData)
                 {
@@ -213,16 +207,11 @@ public class HeroInfoUI : PopupBase
                     skill_data = data as UserHeroSkillData;
                 }
 
-                Tooltip = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/UI/SkillTooltip", transform.parent);
-                var tooltip = Tooltip.GetComponent<SkillTooltip>();
-                tooltip.Initialize(hole(false), skill_data, false);
+                TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip", hole(false), skill_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                if (Tooltip != null)
-                {
-                    GameObjectPoolManager.Instance.UnusedGameObject(Tooltip);
-                    Tooltip = null;
-                }
+                Debug.Log("Release");
+                TooltipManager.I.CloseAll();
                 break;
         }
     }

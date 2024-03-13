@@ -6,6 +6,25 @@ public class ItemTooltip : TooltipBase
     [SerializeField]
     TMP_Text NumberText = null;
 
+    protected override bool Initialize(object[] data)
+    {
+        if (data.Length != 2 || data[0] is not Rect)
+        {
+            return false;
+        }
+
+        RewardDataBase reward = null;
+
+        if (data[1] != null && data[1] is RewardDataBase)
+        {
+            reward = data[1] as RewardDataBase;
+        }
+
+        Initialize((Rect)data[0], reward);
+
+        return true;
+    }
+
     public void Initialize(Rect hole, RewardDataBase reward_data, bool is_screen_modify = true)
     {
         Initialize(

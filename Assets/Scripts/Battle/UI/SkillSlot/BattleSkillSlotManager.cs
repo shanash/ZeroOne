@@ -7,8 +7,6 @@ public class BattleSkillSlotManager : MonoBehaviour
 {
     List<BattleSkillSlot> Used_Battle_Skill_Slots = new List<BattleSkillSlot>();
 
-    GameObject Tooltip = null;
-
     /// <summary>
     /// 슬롯 생성<br/>
     /// 스파인과 연동해서 실시간으로 체크해가며 슬롯을 업데이트 해줘야 하기 때문에<br/>
