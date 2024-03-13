@@ -293,17 +293,6 @@ public partial class BattleManager_V2 : SceneControllerBase
         //}
     }
 
-    public void ReleaseSkillTooltip()
-    {
-        var tr_tooltip = UI_Mng.transform.parent.Find("SkillTooltip");
-        if (tr_tooltip != null)
-        {
-            SkillTooltip tooltip = tr_tooltip.GetComponent<SkillTooltip>();
-            tooltip.Release();
-        }
-    }
-
-
     /// <summary>
     /// 각 팀에 공통적인 상태를 변경시키기 위한 함수
     /// </summary>
