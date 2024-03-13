@@ -9,7 +9,6 @@ using FluffyDuck.UI;
 public class TooltipBase : PopupBase, IPoolableComponent
 {
     const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20; // 아이콘과 툴팁 사이의 거리
-    const int DIM_ENABLE_MILLISECONDS = 2000;
 
     static Texture2D Texture = null;
     static Vector2 Texture_Size = Vector2.zero;
@@ -21,23 +20,16 @@ public class TooltipBase : PopupBase, IPoolableComponent
     RectTransform Container = null;
 
     [SerializeField]
-    GameObject Dim = null;
-
-    [SerializeField]
     TMP_Text Title = null;
 
     [SerializeField]
     TMP_Text Desc = null;
 
     Material Shader_Mat = null;
-    CancellationTokenSource Cancel_Token_Src = null; // Dim 활성화 작업 취소 토큰
 
     protected virtual void Initialize(Rect hole, string title, string desc, bool is_screen_modify = true)
     {
         if (Box_Image == null) return;
-
-        Cancel_Token_Src = new CancellationTokenSource();
-        EnableDelayed(Dim, DIM_ENABLE_MILLISECONDS).Forget();
 
         float box_width = Box_Rect.rect.size.x;
         float box_height = Box_Rect.rect.size.y;
@@ -134,14 +126,6 @@ public class TooltipBase : PopupBase, IPoolableComponent
         return result;
     }
 
-    async UniTaskVoid EnableDelayed(GameObject go, int delay)
-    {
-        await UniTask.Delay(delay, cancellationToken: Cancel_Token_Src.Token);
-
-        go.SetActive(true);
-        Cancel_Token_Src = null;
-    }
-
     public void OnClickDim()
     {
         Release();
@@ -155,26 +139,7 @@ public class TooltipBase : PopupBase, IPoolableComponent
     public override void Spawned()
     {
         base.Spawned();
-
-        Dim.SetActive(false);
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
-
-        if (Cancel_Token_Src != null)
-        {
-            Cancel_Token_Src.Cancel();
-            Cancel_Token_Src = null;
-        }
-    }
-
-    public override void Despawned()
-    {
-        base.Despawned();
-
-        if (Cancel_Token_Src != null)
-        {
-            Cancel_Token_Src.Cancel();
-            Cancel_Token_Src = null;
-        }
     }
 }

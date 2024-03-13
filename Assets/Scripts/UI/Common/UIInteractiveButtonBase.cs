@@ -31,7 +31,7 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
     [SerializeField, Tooltip("Long Press Dutaion")]
     protected float Long_Press_Duration = 0.2f;
 
-    bool Is_Long_Press = true;
+    bool Is_Long_Press = false;
     CancellationTokenSource Cancel_Token = null; // 취소 토큰
 
     protected abstract UnityEventBase Touch_Callback_Base { get; }
@@ -47,14 +47,13 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
             Scale_Rect.localScale = Press_Scale;
         }
 
-        if (Cancel_Token != null)
+        if (Use_Long_Touch)
         {
-            Cancel_Token.Cancel();
-            Cancel_Token = null;
-        }
+            CancelToken();
 
-        Cancel_Token = new CancellationTokenSource();
-        StartLongTouch().Forget();
+            Cancel_Token = new CancellationTokenSource();
+            StartLongTouch().Forget();
+        }
     }
 
     /// <summary>
@@ -72,12 +71,16 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+            if (Use_Long_Touch)
+            {
+                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+                Is_Long_Press = false;
+                Cancel_Token = null;
+            }
         }
         else
         {
-            Cancel_Token.Cancel();
-            Cancel_Token = null;
+            CancelToken();
             OnTouchEvent(TOUCH_RESULT_TYPE.CLICK);
         }
     }
@@ -95,7 +98,12 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
 
         if (Is_Long_Press)
         {
-            OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+            if (Use_Long_Touch)
+            {
+                OnTouchEvent(TOUCH_RESULT_TYPE.RELEASE);
+                Is_Long_Press = false;
+                Cancel_Token = null;
+            }
         }
     }
 
@@ -111,6 +119,15 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
 
         OnTouchEvent(TOUCH_RESULT_TYPE.LONG_PRESS);
         Cancel_Token = null;
+    }
+
+    void CancelToken()
+    {
+        if (Cancel_Token != null)
+        {
+            Cancel_Token.Cancel();
+            Cancel_Token = null;
+        }
     }
 
     protected override void OnDestroy()

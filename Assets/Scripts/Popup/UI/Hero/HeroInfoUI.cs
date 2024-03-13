@@ -196,7 +196,6 @@ public class HeroInfoUI : PopupBase
         switch (result)
         {
             case TOUCH_RESULT_TYPE.LONG_PRESS:
-                Debug.Log("Press");
                 UserHeroSkillData skill_data = null;
                 if (data == null || data is not UserHeroSkillData)
                 {
@@ -210,7 +209,6 @@ public class HeroInfoUI : PopupBase
                 TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip", hole(false), skill_data);
                 break;
             case TOUCH_RESULT_TYPE.RELEASE:
-                Debug.Log("Release");
                 TooltipManager.I.CloseAll();
                 break;
         }
