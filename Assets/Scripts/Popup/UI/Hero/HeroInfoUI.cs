@@ -135,11 +135,7 @@ public class HeroInfoUI : PopupBase
     {
         Chara_Texture = new RenderTexture(GameDefine.RESOLUTION_SCREEN_WIDTH, (int)(Screen.height * ((float)GameDefine.RESOLUTION_SCREEN_WIDTH / (float)Screen.width)), 16);
         var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
-        over_cam.fieldOfView = Camera.main.fieldOfView;
         over_cam.targetTexture = Chara_Texture;
-
-        //TODO: 일단 임시로 카메라로 위치를 세팅
-        over_cam.transform.localPosition = new Vector3(4, 0, 0);
 
         Hero_Stand.enabled = true;
         Hero_Stand.texture = Chara_Texture;
@@ -232,11 +228,6 @@ public class HeroInfoUI : PopupBase
         });
     }
 
-    public override void OnExit()
-    {
-        ReleaseProducer();
-    }
-
     public void OnClickLeft()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
@@ -278,10 +269,8 @@ public class HeroInfoUI : PopupBase
     public override void Despawned()
     {
         base.Despawned();
-        UpdateEventDispatcher.Instance.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
+        ReleaseProducer();
 
-        //TODO: 일단 임시로 카메라로 위치를 세팅
-        var over_cam = Camera.main.transform.Find("RenderTexture Camera").GetComponent<Camera>();
-        over_cam.transform.localPosition = new Vector3(0, 0, 0);
+        UpdateEventDispatcher.Instance.RemoveEventCallback(UPDATE_EVENT_TYPE.UPDATE_HERO_DETAIL_INFO);
     }
 }
