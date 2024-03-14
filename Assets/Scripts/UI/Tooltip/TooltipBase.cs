@@ -115,20 +115,20 @@ public class TooltipBase : PopupBase, IPoolableComponent
         float componentUp = componentCorners[2].y;
 
         // 컴포넌트가 화면 오른쪽으로 벗어나는 경우
-        if (componentRight > screenRight)
+        if (componentRight > screenRight - GameDefine.SCREEN_EDGE_GAP)
         {
-            float offset = componentRight - screenRight;
+            float offset = componentRight - (screenRight - GameDefine.SCREEN_EDGE_GAP);
             tooltip.position -= new Vector3(offset, 0, 0);
         }
         // 컴포넌트가 화면 왼쪽으로 벗어나는 경우
-        else if (componentLeft < screenLeft)
+        else if (componentLeft < screenLeft + GameDefine.SCREEN_EDGE_GAP)
         {
-            float offset = screenLeft - componentLeft;
+            float offset = (screenLeft + GameDefine.SCREEN_EDGE_GAP) - componentLeft;
             tooltip.position += new Vector3(offset, 0, 0);
         }
 
         // 컴포넌트가 화면 위쪽으로 벗어나는 경우
-        if (componentUp > screenUp)
+        if (componentUp > screenUp - GameDefine.SCREEN_EDGE_GAP)
         {
             tooltip.pivot = new Vector2(0, 1);
             tooltip.anchoredPosition += new Vector2(0, -(Gap_Between_Icon_And_Tooltp * 2 + hole.height) * multi);

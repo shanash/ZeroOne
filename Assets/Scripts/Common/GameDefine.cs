@@ -129,6 +129,16 @@ public class GameDefine : MonoBehaviour
     public static readonly int MAX_LOBBY_CHARACTER_COUNT = 10;
 
     /// <summary>
+    /// 화면 가장자리에서 떨어져야 하는 거리
+    /// </summary>
+    public static readonly float SCREEN_EDGE_GAP = 20f;
+
+    /// <summary>
+    /// 하루에 캐릭터별 전달 가능한 근원 수치
+    /// </summary>
+    public static readonly int SENDING_ESSENCE_CHANCE_COUNT_OF_DATE = 2;
+
+    /// <summary>
     /// 전투 배속 정보
     /// </summary>
     public static readonly Dictionary<BATTLE_SPEED_TYPE, float> GAME_SPEEDS = new Dictionary<BATTLE_SPEED_TYPE, float>
@@ -137,12 +147,6 @@ public class GameDefine : MonoBehaviour
         { BATTLE_SPEED_TYPE.FAST_SPEED_X2, 2f },
         { BATTLE_SPEED_TYPE.FAST_SPEED_X3, 3f },
     };
-
-    /// <summary>
-    /// 하루에 캐릭터별 전달 가능한 근원 수치
-    /// </summary>
-    public static readonly int SENDING_ESSENCE_CHANCE_COUNT_OF_DATE = 2;
-
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()
