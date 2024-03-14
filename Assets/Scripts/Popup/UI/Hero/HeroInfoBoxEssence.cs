@@ -253,9 +253,9 @@ public class HeroInfoBoxEssence : MonoBehaviour
     public void OnClickReactionInfoButton()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/EssenceInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup();
         });
     }
 
