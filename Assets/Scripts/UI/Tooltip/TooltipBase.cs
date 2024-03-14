@@ -27,13 +27,13 @@ public class TooltipBase : PopupBase, IPoolableComponent
     TMP_Text Desc = null;
 
     [SerializeField, Tooltip("Rect 보정치")]
-    float Modified_Rect = 0;
+    float Modified_Rect = 0f;
 
     [SerializeField, Tooltip("라운딩 반지름 길이, 마이너스면 안쪽으로 들어간다")]
-    float Radius = -10.0f;
+    float Radius = -10f;
 
     [SerializeField, Tooltip("아이콘과 툴팁 사이의 거리")]
-    float Gap_Between_Icon_And_Tooltp = 20;
+    float Gap_Between_Icon_And_Tooltp = 20f;
 
     Material Shader_Mat = null;
 
