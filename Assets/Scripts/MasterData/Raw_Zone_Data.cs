@@ -16,6 +16,7 @@ public class Raw_Zone_Data : System.IDisposable
 	public string zone_tooltip_id {get; set;}
 	public string zone_tooltip {get; set;}
 	public int open_stage_id {get; set;}
+	public bool lock_setting {get; set;}
 
 	private bool disposed = false;
 
@@ -33,6 +34,7 @@ public class Raw_Zone_Data : System.IDisposable
 		zone_tooltip_id = string.Empty;
 		zone_tooltip = string.Empty;
 		open_stage_id = 0;
+		lock_setting = false;
 	}
 
 	public void Dispose()

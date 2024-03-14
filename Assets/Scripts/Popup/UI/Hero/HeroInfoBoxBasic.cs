@@ -49,10 +49,10 @@ public class HeroInfoBoxBasic : MonoBehaviour
 
     public void FixedUpdatePopup()
     {
-        Combat_Subject.text = ConstString.Hero.COMBAT_POWER;
-        Attack_Subject.text = ConstString.Hero.ATTACK_DAMAGE;
-        Defense_Subject.text = ConstString.Hero.ATTACK_DEFENSE;
-        Life_Subject.text = ConstString.Hero.LIFE_POINT;
+        Combat_Subject.text = GameDefine.GetLocalizeString("system_stat_battlepower");
+        Attack_Subject.text = GameDefine.GetLocalizeString("system_stat_physics_attack");
+        Defense_Subject.text = GameDefine.GetLocalizeString("system_stat_physics_defence");
+        Life_Subject.text = GameDefine.GetLocalizeString("system_stat_life");
 
         Refresh();
     }

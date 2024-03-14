@@ -19,8 +19,17 @@ public class GPMCommand : MonoBehaviour
         //  commands
         func.AddCommand(this, "PlayerLevelUp", "플레이어 레벨업");
         func.AddCommand(this, "AllCharacterLevelUp", "모든 캐릭터 레벨업");
-        func.AddCommand(this, "RechargeEssenceCount", "근원 포인트 충전");
+
+        func.AddCommand(this, "FullChargeEssence", "근원 포인트 충전");
+        func.AddCommand(this, "RechargeHeroEssenceSendCount", "근원 전달 횟수 초기화");
+
         func.AddCommand(this, "FullChargeStamina", "스테미나 충전");
+
+        func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x10</color>", new object[] { 10 });
+        func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x50</color>", new object[] { 50 });
+
+        func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x10</color>", new object[] { 10 });
+        func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x50</color>", new object[] { 50 });
     }
     /// <summary>
     /// 플레이어 레벨업<br/>
@@ -36,9 +45,10 @@ public class GPMCommand : MonoBehaviour
         player_info_mng.Save();
 
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_PLAYER_INFO);
-        Debug.Log("PlayerLevelUp");
 
         PopupManager.Instance.CloseAll();
+
+        CommonUtils.ShowToast($"플레이어 레벨 {player_info.GetLevel()} 달성", TOAST_BOX_LENGTH.SHORT);
     }
 
     /// <summary>
@@ -58,21 +68,30 @@ public class GPMCommand : MonoBehaviour
             hero.AddExp(need_exp);
         }
         hero_mng.Save();
-        Debug.Log("AllCharacterLevelUp");
 
         PopupManager.Instance.CloseAll();
-    }
 
-    void RechargeEssenceCount()
+        CommonUtils.ShowToast("모든 캐릭터 레벨 +1 상승", TOAST_BOX_LENGTH.SHORT);
+    }
+   
+    /// <summary>
+    /// 근원 포인트 충전
+    /// </summary>
+    void FullChargeEssence()
     {
         var gd = GameData.Instance;
-        gd.RechargeEssencePoint();
-
+        var charge_mng = gd.GetUserChargeItemDataManager();
+        var stamina = charge_mng.FindUserChargeItemData(REWARD_TYPE.SEND_ESSENCE);
+        stamina.FullChargeItem();
+        charge_mng.Save();
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
-        Debug.Log("Completed Recharging Essence Count");
-        PopupManager.Instance.CloseAll();
+
+        CommonUtils.ShowToast("근원 포인트 충전 완료", TOAST_BOX_LENGTH.SHORT);
     }
 
+    /// <summary>
+    /// 스테미너 풀 충전
+    /// </summary>
     void FullChargeStamina()
     {
         var gd = GameData.Instance;
@@ -81,8 +100,26 @@ public class GPMCommand : MonoBehaviour
         stamina.FullChargeItem();
         charge_mng.Save();
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA);
+        CommonUtils.ShowToast("스테미너 충전 완료", TOAST_BOX_LENGTH.SHORT);
     }
-
+    /// <summary>
+    /// 공격력 10배 증가
+    /// </summary>
+    void CheatAttackInc(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, multiple);
+        CommonUtils.ShowToast($"전투 공격력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
+    /// <summary>
+    /// 방어력 10배 증가
+    /// </summary>
+    void CheatDefenseInc(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, multiple);
+        CommonUtils.ShowToast($"전투 방어력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
     /// <summary>
     /// 각종 치트 키 사용 콜백<br/>
     /// 키로서 사용할 필요가 있는 경우
@@ -97,7 +134,6 @@ public class GPMCommand : MonoBehaviour
 
         string key = cheat_key.ToLower();
 
-        //var gd = GameData.Instance;
         string[] keys = key.Split(" ");
         if (keys[0].Equals("gold"))
         {

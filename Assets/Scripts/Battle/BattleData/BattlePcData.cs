@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using System;
 using System.Diagnostics;
 
@@ -220,6 +221,13 @@ public class BattlePcData : BattleUnitData
             // 근원전달 포인트 추가
             point += Essence_Add_PhysicsAttackPoint;
 
+            //  치트 (공격력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
+
             return point;
         }
         return 0;
@@ -248,6 +256,12 @@ public class BattlePcData : BattleUnitData
             // 근원전달 포인트 추가
             point += Essence_Add_MagicAttackPoint;
 
+            //  치트 (공격력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
             return point;
         }
         return 0;
@@ -270,6 +284,13 @@ public class BattlePcData : BattleUnitData
             // 근원전달 포인트 추가
             point += Essence_Add_PhysicsDefensePoint;
 
+            //  치트 (방어력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
+
             return point;
         }
         return 0;
@@ -291,7 +312,12 @@ public class BattlePcData : BattleUnitData
 
             // 근원전달 포인트 추가
             point += Essence_Add_MagicDefensePoint;
-
+            //  치트 (방어력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
             return point;
         }
         return 0;

@@ -291,7 +291,7 @@ public class UserStoryStageDataManager : ManagerBase
         if (next_zone_stage_list.Count > 0)
         {
             var next_stage = next_zone_stage_list.FirstOrDefault();
-            if (next_stage == null)
+            if (next_stage != null)
             {
                 //  여긴 그냥 존의 시작 스테이지만 오픈해준다.
                 AddUserStoryStageData(next_stage.stage_id);
@@ -303,7 +303,8 @@ public class UserStoryStageDataManager : ManagerBase
     /// 다음 스테이지 오픈
     /// </summary>
     /// <param name="stage_id"></param>
-    void OpenNextStage(int stage_id)
+    /// <param name="zone_update">실제 스테이지 갱신시에만 존 ID 업데이트 해주자</param>
+    void OpenNextStage(int stage_id, bool zone_update = true)
     {
         var m = MasterDataManager.Instance;
         var next_stage = m.Get_NextStageData(stage_id);
@@ -312,10 +313,14 @@ public class UserStoryStageDataManager : ManagerBase
             return;
         }
         AddUserStoryStageData(next_stage.stage_id);
-        var zone = m.Get_ZoneDataByStageGroupID(next_stage.stage_group_id);
-        SetCurrentZoneID(zone.zone_id);
-        var world = m.Get_WorldDataByZoneGroupID(zone.zone_group_id);
-        SetCurrentWorldID(world.world_id);
+        if (zone_update)
+        {
+            var zone = m.Get_ZoneDataByStageGroupID(next_stage.stage_group_id);
+            SetCurrentZoneID(zone.zone_id);
+            var world = m.Get_WorldDataByZoneGroupID(zone.zone_group_id);
+            SetCurrentWorldID(world.world_id);
+        }
+        
     }
 
     /// <summary>
@@ -326,6 +331,25 @@ public class UserStoryStageDataManager : ManagerBase
     {
         User_Story_Stage_Data.Sort((a, b) => a.Stage_ID.CompareTo(b.Stage_ID));
         return User_Story_Stage_Data.Last();
+    }
+
+
+    /// <summary>
+    /// 초기화시 신규 스테이지 또는 신규 존오픈 여부 체크하기 위해
+    /// </summary>
+    void CheckNextStageAndNextZoneOpen()
+    {
+        int cnt = User_Story_Stage_Data.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var stage = User_Story_Stage_Data[i];
+            if (!stage.IsStageCleared())
+            {
+                continue;
+            }
+            OpenNextStage(stage.Stage_ID, false);
+            OpenNextZone(stage.Stage_ID);
+        }
     }
 
 
@@ -403,7 +427,7 @@ public class UserStoryStageDataManager : ManagerBase
                 }
             }
         }
-
+        CheckNextStageAndNextZoneOpen();
         InitUpdateData();
 
         return true;

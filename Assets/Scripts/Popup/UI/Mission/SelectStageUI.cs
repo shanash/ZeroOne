@@ -44,6 +44,9 @@ public class SelectStageUI : PopupBase
     [SerializeField, Tooltip("Tab Btns")]
     List<Tab> Tab_Btns_List;
 
+    [SerializeField, Tooltip("Tab Lock Icons")]
+    List<Image> Tab_Btn_Lock_Icons;
+
     int Zone_ID;
     Zone_Data Zone;
 
@@ -118,6 +121,7 @@ public class SelectStageUI : PopupBase
         for (int i = 0; i < Tab_Btns_List.Count; i++)
         {
             var tab = Tab_Btns_List[i];
+            var lock_icon = Tab_Btn_Lock_Icons[i];
             STAGE_DIFFICULTY_TYPE dtype = (STAGE_DIFFICULTY_TYPE)(i + 1);
             var zone = zone_list.Find(x => x.zone_difficulty == dtype);
             bool is_exist = zone != null;
@@ -127,6 +131,7 @@ public class SelectStageUI : PopupBase
                 is_open_zone = stage_mng.IsOpenZone(zone.zone_id);
             }
             tab.SetBlockTab(!(is_exist && is_open_zone));
+            lock_icon.gameObject.SetActive(!(is_exist && is_open_zone));
             var toggle = tab.GetComponent<Toggle>();
             if (toggle != null)
             {

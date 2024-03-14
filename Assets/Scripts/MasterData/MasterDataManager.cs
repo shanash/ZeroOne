@@ -582,9 +582,13 @@ public class MasterDataManager : BaseMasterDataManager
     public Stage_Data Get_NextStageData(int stage_id)
     {
         Check_Stage_Data();
-        var stage_list = _Stage_Data.Values.OrderBy(x => x.stage_id).ToList();
-        stage_list.Sort((a, b) => a.stage_id.CompareTo(b.stage_id));
-        return stage_list.Find(x => x.stage_id > stage_id);
+
+        var stage_data = Get_StageData(stage_id);
+        var stage_groups = Get_StageDataListByStageGroupID(stage_data.stage_group_id).ToList();
+        return stage_groups.Find(x => x.stage_id > stage_id);
+        //var stage_list = _Stage_Data.Values.OrderBy(x => x.stage_id).ToList();
+        //stage_list.Sort((a, b) => a.stage_id.CompareTo(b.stage_id));
+        //return stage_list.Find(x => x.stage_id > stage_id);
     }
 
     public IReadOnlyList<Stage_Data> Get_StageDataListByStageGroupID(int stage_group_id)

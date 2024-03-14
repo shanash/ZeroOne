@@ -16,6 +16,11 @@ namespace FluffyDuck.Util
         SELECTED_LOVE_LEVEL,
 
         OPEN_STORY_STAGE_DUNGEON_ID,    //  스토리 스테이지 던전 오픈
+
+
+        //  test
+        PLAYER_ATTACK_INC_MULTIPLE          = 100001,       //  플레이어 캐릭터 공격력 증가
+        PLAYER_DEFENSE_INC_MULTIPLE,                       //  플레이어 캐릭터 방어력 증가
     }
 }
 

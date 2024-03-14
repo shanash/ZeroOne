@@ -79,6 +79,12 @@ public class Zone_Data : System.IDisposable
 	public int open_stage_id => _open_stage_id;
 	int _open_stage_id;
 
+	///	<summary>
+	///	강제 락 설정
+	///	</summary>
+	public bool lock_setting => _lock_setting;
+	bool _lock_setting;
+
 	private bool disposed = false;
 
 	public Zone_Data(Raw_Zone_Data raw_data)
@@ -95,6 +101,7 @@ public class Zone_Data : System.IDisposable
 		_zone_tooltip_id = raw_data.zone_tooltip_id;
 		_zone_tooltip = raw_data.zone_tooltip;
 		_open_stage_id = raw_data.open_stage_id;
+		_lock_setting = raw_data.lock_setting;
 	}
 
 	public void Dispose()
@@ -128,6 +135,7 @@ public class Zone_Data : System.IDisposable
 		sb.AppendFormat("[zone_tooltip_id] = <color=yellow>{0}</color>", zone_tooltip_id).AppendLine();
 		sb.AppendFormat("[zone_tooltip] = <color=yellow>{0}</color>", zone_tooltip).AppendLine();
 		sb.AppendFormat("[open_stage_id] = <color=yellow>{0}</color>", open_stage_id).AppendLine();
+		sb.AppendFormat("[lock_setting] = <color=yellow>{0}</color>", lock_setting).AppendLine();
 		return sb.ToString();
 	}
 }
