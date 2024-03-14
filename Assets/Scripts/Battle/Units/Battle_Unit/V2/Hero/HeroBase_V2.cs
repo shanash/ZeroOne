@@ -1223,7 +1223,12 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             int len = all_tracks.Length;
             for (int i = 0; i < len; i++)
             {
-                all_tracks[i].TimeScale = 0f;
+                var track = all_tracks[i];
+                if (track == null)
+                {
+                    continue;
+                }
+                track.TimeScale = 0f;
             }
         }
         //Skeleton.timeScale = 0f;

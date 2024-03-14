@@ -147,6 +147,10 @@ public partial class TeamManager_V2 : IDisposable
 
             var unit_data = new BattlePcData();
             unit_data.SetUnitID(user_data.GetPlayerCharacterID(), user_data.Player_Character_Num);
+            if (Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
+            {
+                unit_data.SetAddApproachDistance(4f);
+            }
             unit_data.AddTeamAttributeSynergy(deck.GetTeamSynergyList());
 
             var obj = pool.GetGameObject(user_data.GetPlayerCharacterData().prefab_path, Unit_Container);
@@ -238,6 +242,70 @@ public partial class TeamManager_V2 : IDisposable
     }
 
 
+    /// <summary>
+    /// 보스팀은 처음부터 스테이지에 등장해서 시작한다.
+    /// </summary>
+    void BossRightTeamPosition()
+    {
+        //  front
+        List<Vector3> front_pos_list = new List<Vector3>();
+        front_pos_list.Add(new Vector3(1, 0, -1));
+        front_pos_list.Add(new Vector3(1, 0, -3f));
+        front_pos_list.Add(new Vector3(1, 0, 1f));
+        front_pos_list.Add(new Vector3(1, 0, -2f));
+        front_pos_list.Add(new Vector3(1, 0, 0f));
+
+        //  middle
+        List<Vector3> middle_pos_list = new List<Vector3>();
+        middle_pos_list.Add(new Vector3(3.5f, 0, -1));
+        middle_pos_list.Add(new Vector3(3.5f, 0, -3f));
+        middle_pos_list.Add(new Vector3(3.5f, 0, 1f));
+        middle_pos_list.Add(new Vector3(3.5f, 0, -2f));
+        middle_pos_list.Add(new Vector3(3.5f, 0, 0f));
+
+        //  back
+        List<Vector3> back_pos_list = new List<Vector3>();
+        back_pos_list.Add(new Vector3(6, 0, -1));
+        back_pos_list.Add(new Vector3(6, 0, -3f));
+        back_pos_list.Add(new Vector3(6, 0, 1f));
+        back_pos_list.Add(new Vector3(6, 0, -2f));
+        back_pos_list.Add(new Vector3(6, 0, 0f));
+
+        int idx = 0;
+        for (POSITION_TYPE p = POSITION_TYPE.FRONT; p <= POSITION_TYPE.BACK; p++)
+        {
+            List<Vector3> pos_list = null;
+            switch (p)
+            {
+                case POSITION_TYPE.FRONT:
+                    pos_list = front_pos_list;
+                    break;
+                case POSITION_TYPE.MIDDLE:
+                    pos_list = middle_pos_list;
+                    break;
+                case POSITION_TYPE.BACK:
+                    pos_list = back_pos_list;
+                    break;
+            }
+            if (pos_list == null)
+            {
+                continue;
+            }
+
+            var members = Used_Members.FindAll(x => x.GetPositionType() == p);
+            for (int i = 0; i < members.Count; i++)
+            {
+                var mem = members[i];
+                if (idx < pos_list.Count)
+                {
+                    Vector3 pos = pos_list[idx];
+                    mem.SetTeamFieldPosition(pos);
+                }
+                idx++;
+            }
+        }
+
+    }
     
     /// <summary>
     /// Right 팀 최초 포지션 설정
@@ -320,8 +388,8 @@ public partial class TeamManager_V2 : IDisposable
                 DungeonMonsterTeamSpawn();
                 break;
             case GAME_TYPE.BOSS_DUNGEON_MODE:
-                //BossStageModeMonsterTeamSpawn();
-                DungeonMonsterTeamSpawn();
+                //DungeonMonsterTeamSpawn();
+                BossDungeonMonsterTeamSpawn();
                 break;
             case GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE:
                 Editor_MonsterTeamSpawn();
@@ -329,10 +397,8 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-    /// <summary>
-    /// 스토리 모드 몬스터 스폰
-    /// </summary>
-    void DungeonMonsterTeamSpawn()
+    
+    void MonsterSpawn()
     {
         ClearMembers();
         var pool = GameObjectPoolManager.Instance;
@@ -367,7 +433,7 @@ public partial class TeamManager_V2 : IDisposable
             {
                 obj.transform.localScale = new Vector2(npc.GetUnitScale(), npc.GetUnitScale());
             }
-            
+
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();
             monster.SetTeamManager(this);
 
@@ -379,10 +445,27 @@ public partial class TeamManager_V2 : IDisposable
 
             AddMember(monster);
         }
+    }
 
+    /// <summary>
+    /// 보스 던전 모드 몬스터 스폰<br/>
+    /// 보스는 진입하지 않고, 고정 위치에서 시작하도록
+    /// </summary>
+    void BossDungeonMonsterTeamSpawn()
+    {
+        MonsterSpawn();
+
+        BossRightTeamPosition();
+    }
+
+    /// <summary>
+    /// 스토리 모드 몬스터 스폰
+    /// </summary>
+    void DungeonMonsterTeamSpawn()
+    {
+        MonsterSpawn();
 
         RightTeamPosition();
-
     }
 
 

@@ -51,8 +51,6 @@ public class StageInfoPopup : PopupBase
 
     [SerializeField, Tooltip("하드 스테이지 진입 버튼 정보 박스")]
     RectTransform Hard_Stage_Btn_Box;
-    [SerializeField, Tooltip("하드 스테이지 남은 횟수 타이틀")]
-    TMP_Text Hard_Stage_Remain_Daily_Count_Title;
     [SerializeField, Tooltip("하드 스테이지 남은 횟수")]
     TMP_Text Hard_Stage_Remain_Daily_Count;
 
@@ -258,6 +256,28 @@ public class StageInfoPopup : PopupBase
         //  stamina
         int need_stamina = Stage.use_stamina;
         var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
+
+        if (Zone.zone_difficulty == STAGE_DIFFICULTY_TYPE.NORMAL)
+        {
+            Normal_Stage_Btn_Box.gameObject.SetActive(true);
+            Hard_Stage_Btn_Box.gameObject.SetActive(false);
+        }
+        else
+        {
+            Normal_Stage_Btn_Box.gameObject.SetActive(false);
+            Hard_Stage_Btn_Box.gameObject.SetActive(true);
+
+            if (User_Data != null)
+            {
+                Hard_Stage_Remain_Daily_Count.text = ZString.Format("<color=#5C606A>남은 횟수</color> <color=#FF502B>{0}/{1}</color>", User_Data.GetDailyEntranceCount(), User_Data.GetMaxDailyEntranceCount());
+            }
+            else
+            {
+                Hard_Stage_Remain_Daily_Count.text = ZString.Format("<color=#5C606A>남은 횟수</color> <color=#FF502B>{0}/{1}</color>", Stage.entrance_limit_count, Stage.entrance_limit_count);
+                //5C606A FF502B
+            }
+
+        }
 
         Current_Stamina.text = stamina_item.GetCount().ToString("N0");
 

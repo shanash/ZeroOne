@@ -1,4 +1,4 @@
-﻿namespace Gpm.LogViewer.Internal
+namespace Gpm.LogViewer.Internal
 {
     using Gpm.Ui;
     using System.Text;
@@ -20,19 +20,26 @@
             CommandItemData data = (CommandItemData)scrollData;
             Function.CommandData commandData = data.commandData;
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("{0}.{1}", commandData.type.Name, commandData.methodName);
-            if (commandData.parameters != null)
+            if (string.IsNullOrEmpty(commandData.displayName))
             {
-                sb.Append("(");
-                for (int index = 0; index < commandData.parameters.Length; ++index)
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("{0}.{1}", commandData.type.Name, commandData.methodName);
+                if (commandData.parameters != null)
                 {
-                    sb.AppendFormat("{0},", commandData.parameters[index].GetType().Name);
+                    sb.Append("(");
+                    for (int index = 0; index < commandData.parameters.Length; ++index)
+                    {
+                        sb.AppendFormat("{0},", commandData.parameters[index].GetType().Name);
+                    }
+                    sb.Replace(",", ")", sb.Length - 1, 1);
                 }
-                sb.Replace(",", ")", sb.Length - 1, 1);
-            }
 
-            commandName.text = sb.ToString();
+                commandName.text = sb.ToString();
+            }
+            else
+            {
+                commandName.text = commandData.displayName;
+            }
         }
 
         public void InvokeCommand()

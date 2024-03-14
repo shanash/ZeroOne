@@ -16,11 +16,16 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     protected List<Attribute_Synergy_Data> Team_Synergy_Data_List = new List<Attribute_Synergy_Data>();
 
-    //protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+    /// <summary>
+    /// 보스전 등 기존 사거리 보다 조금 더 긴 사거리를 필요로 하는 경우에 추가될 거리를 지정할 수 있다.
+    /// </summary>
+    protected float Add_Approach_Distance;
+
 
     protected BattleUnitData(CHARACTER_TYPE ctype) : base()
     {
         Character_Type = ctype;
+        Add_Approach_Distance = 0f;
     }
 
     public abstract BattleUnitData SetUnitID(params int[] unit_ids);
@@ -123,6 +128,8 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public abstract object GetBattleData();
+
+    public void SetAddApproachDistance(float add_dist) { Add_Approach_Distance = add_dist; }
  
     /// <summary>
     /// 유닛의 사용자 데이터 반환

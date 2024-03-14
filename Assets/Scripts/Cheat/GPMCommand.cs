@@ -17,9 +17,10 @@ public class GPMCommand : MonoBehaviour
         func.AddCheatKeyCallback(CheatKeyCallback);
 
         //  commands
-        func.AddCommand(this, "PlayerLevelUp");
-        func.AddCommand(this, "AllCharacterLevelUp");
-        func.AddCommand(this, "RechargeEssenceCount");
+        func.AddCommand(this, "PlayerLevelUp", "플레이어 레벨업");
+        func.AddCommand(this, "AllCharacterLevelUp", "모든 캐릭터 레벨업");
+        func.AddCommand(this, "RechargeEssenceCount", "근원 포인트 충전");
+        func.AddCommand(this, "FullChargeStamina", "스테미나 충전");
     }
     /// <summary>
     /// 플레이어 레벨업<br/>
@@ -70,6 +71,16 @@ public class GPMCommand : MonoBehaviour
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_ESSESNCE);
         Debug.Log("Completed Recharging Essence Count");
         PopupManager.Instance.CloseAll();
+    }
+
+    void FullChargeStamina()
+    {
+        var gd = GameData.Instance;
+        var charge_mng = gd.GetUserChargeItemDataManager();
+        var stamina = charge_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
+        stamina.FullChargeItem();
+        charge_mng.Save();
+        UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA);
     }
 
     /// <summary>

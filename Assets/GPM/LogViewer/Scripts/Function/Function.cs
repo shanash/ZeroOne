@@ -1,4 +1,4 @@
-﻿namespace Gpm.LogViewer
+namespace Gpm.LogViewer
 {
     using Gpm.LogViewer.Internal;
     using System;
@@ -28,6 +28,7 @@
             public Type         type        = null;
             public MethodInfo   methodInfo  = null;
             public object[]     parameters  = null;
+            public string       displayName = string.Empty;
         }
 
         public static Function Instance
@@ -88,6 +89,21 @@
             command.methodInfo  = command.type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
 
             commands.Add(command);            
+        }
+
+        public void AddCommand(object instance, string methodName, string displayName, object[] parameters = null)
+        {
+            CommandData command = new CommandData
+            {
+                instance = instance,
+                methodName = methodName,
+                type = instance.GetType(),
+                displayName = displayName,
+                parameters = parameters
+            };
+            command.methodInfo = command.type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
+
+            commands.Add(command);
         }
 
         public List<CommandData> GetCommandDatas()
