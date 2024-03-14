@@ -163,9 +163,6 @@ public class BossStageRewardInfoPopup : PopupBase
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
                 TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip", hole(false), reward_data);
                 break;
-            case TOUCH_RESULT_TYPE.RELEASE:
-                TooltipManager.I.CloseAll();
-                break;
         }
     }
 

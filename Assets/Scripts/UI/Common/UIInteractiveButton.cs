@@ -19,9 +19,18 @@ public class UIInteractiveButton : UIInteractiveButtonBase
     protected override UnityEventBase Touch_Callback_Base => _Touch_Tooltip_Callback;
 
     /// 전투씬은 해상도를 별도로(2340 x 1080) 사용하고 있어서 특수한 계산을 더 해줘야 한다
-    Func<bool, Rect> Func_Rect => (is_battle_scene) => GameObjectUtils.GetScreenRect(GetComponent<RectTransform>(),
-    is_battle_scene ? new Vector2(GameDefine.RESOLUTION_SCREEN_WIDTH, GameDefine.RESOLUTION_SCREEN_HEIGHT)
-    : default);
+    Func<bool, Rect> Func_Rect => (is_battle_scene) =>
+    {
+        // 여러 줄의 로직을 추가
+        Vector2 resolution = is_battle_scene
+            ? new Vector2(GameDefine.RESOLUTION_SCREEN_WIDTH, GameDefine.RESOLUTION_SCREEN_HEIGHT)
+            : default;
+
+        Rect screenRect = GameObjectUtils.GetScreenRect(GetComponent<RectTransform>(), resolution);
+
+        // 계산된 값을 반환
+        return screenRect;
+    };
 
     protected override void OnTouchEvent(TOUCH_RESULT_TYPE type)
     {

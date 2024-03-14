@@ -332,9 +332,6 @@ public class StageInfoPopup : PopupBase
                 Npc_Data npc_data = data as Npc_Data;
                 TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/MonsterTooltip", hole(false), npc_data);
                 break;
-            case TOUCH_RESULT_TYPE.RELEASE:
-                TooltipManager.I.CloseAll();
-                break;
         }
     }
 
@@ -350,9 +347,6 @@ public class StageInfoPopup : PopupBase
                 }
                 RewardDataBase reward_data = reward_data_obj as RewardDataBase;
                 TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/ItemTooltip", hole(false), reward_data);
-                break;
-            case TOUCH_RESULT_TYPE.RELEASE:
-                TooltipManager.I.CloseAll();
                 break;
         }
     }

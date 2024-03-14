@@ -5,11 +5,12 @@ using FluffyDuck.Util;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using FluffyDuck.UI;
+using ZeroOne.Input;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class TooltipBase : PopupBase, IPoolableComponent
 {
-    const float GAP_BETWEEN_ICON_AND_TOOLTIP = 20; // 아이콘과 툴팁 사이의 거리
-
     static Texture2D Texture = null;
     static Vector2 Texture_Size = Vector2.zero;
 
@@ -24,6 +25,15 @@ public class TooltipBase : PopupBase, IPoolableComponent
 
     [SerializeField]
     TMP_Text Desc = null;
+
+    [SerializeField, Tooltip("Rect 보정치")]
+    float Modified_Rect = 0;
+
+    [SerializeField, Tooltip("라운딩 반지름 길이, 마이너스면 안쪽으로 들어간다")]
+    float Radius = -10.0f;
+
+    [SerializeField, Tooltip("아이콘과 툴팁 사이의 거리")]
+    float Gap_Between_Icon_And_Tooltp = 20;
 
     Material Shader_Mat = null;
 
@@ -42,26 +52,46 @@ public class TooltipBase : PopupBase, IPoolableComponent
             Texture = CreateSolidTexture(Texture_Size);
         }
 
-        // 해상도에 따른 hole 보정 값
-        Vector4 texture_hole = new Vector4(hole.x / Texture_Size.x, hole.y / Texture_Size.y, hole.width / Texture_Size.x, hole.height/ Texture_Size.y);
+        if (!Modified_Rect.Equals(0.0f))
+        {
+            hole = new Rect(hole.x - Modified_Rect / 2.0f, hole.y - Modified_Rect / 2.0f, hole.width + Modified_Rect, hole.height + Modified_Rect);
+        }
+
+        // 모서리 라운딩 계산
+        float sizeup_value = Radius;
+        float sizeup_half = sizeup_value / 2.0f;
+
+        Vector4 texture_hole = new Vector4((hole.x) / Texture_Size.x, (hole.y) / Texture_Size.y, (hole.width) / Texture_Size.x, (hole.height) / Texture_Size.y);
+        Vector4 texture_ext_hole = new Vector4((hole.x - sizeup_half) / Texture_Size.x, (hole.y - sizeup_half) / Texture_Size.y, (hole.width + sizeup_value) / Texture_Size.x, (hole.height + sizeup_value) / Texture_Size.y);
+
+        if (Radius < 0)
+        {
+            Vector4 temp = texture_ext_hole;
+            texture_ext_hole = texture_hole;
+            texture_hole = temp;
+        }
+
         if (is_screen_modify && Texture_Size.x != Screen.width)
         {
             float multiple = Texture_Size.x / Screen.width;
             texture_hole *= multiple;
+            texture_ext_hole *= multiple;
         }
 
         Shader_Mat = new Material(Shader.Find("FluffyDuck/TransparentHole"));
         Box_Image.sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
         Box_Image.material = Shader_Mat;
         Box_Image.material.SetVector("_Rect", texture_hole);
+        Box_Image.material.SetVector("_RangeRect", texture_ext_hole);
 
+        
         Title.text = title;
         Desc.text = desc;
 
         float multi = box_width / Texture_Size.x;
 
         Container.pivot = new Vector2(0, 0);
-        Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + GAP_BETWEEN_ICON_AND_TOOLTIP) * multi);
+        Container.anchoredPosition = new Vector2(hole.center.x * multi, (hole.y + hole.height + Gap_Between_Icon_And_Tooltp) * multi);
 
         Canvas.ForceUpdateCanvases();
 
@@ -101,7 +131,7 @@ public class TooltipBase : PopupBase, IPoolableComponent
         if (componentUp > screenUp)
         {
             tooltip.pivot = new Vector2(0, 1);
-            tooltip.anchoredPosition += new Vector2(0, -(GAP_BETWEEN_ICON_AND_TOOLTIP * 2 + hole.height) * multi);
+            tooltip.anchoredPosition += new Vector2(0, -(Gap_Between_Icon_And_Tooltp * 2 + hole.height) * multi);
         }
     }
 
@@ -136,10 +166,34 @@ public class TooltipBase : PopupBase, IPoolableComponent
         GameObjectPoolManager.Instance.UnusedGameObject(this.gameObject);
     }
 
+    public override void Despawned()
+    {
+        InputCanvas.OnDrag -= HandleDrag;
+        InputCanvas.OnInputUp -= HandleInputUp;
+
+        base.Despawned();
+    }
+
     public override void Spawned()
     {
         base.Spawned();
         var rt = GetComponent<RectTransform>();
         rt.localPosition = Vector3.zero;
+        InputCanvas.OnDrag += HandleDrag;
+        InputCanvas.OnInputUp += HandleInputUp;
+    }
+
+    void HandleDrag(InputActionPhase phase, Vector2 delta, Vector2 drag_origin, Vector2 position)
+    {
+        // 벡터 거리의 제곱..이니 해상도 기준 30
+        if (drag_origin.sqrMagnitude > 900)
+        {
+            TooltipManager.I.CloseAll();
+        }
+    }
+
+    void HandleInputUp(Vector2 position, ICollection<ICursorInteractable> components)
+    {
+        TooltipManager.I.CloseAll();
     }
 }

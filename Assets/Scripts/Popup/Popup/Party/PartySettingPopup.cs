@@ -545,9 +545,6 @@ public class PartySettingPopup : PopupBase
 
                 TooltipManager.I.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip", hole(false), skill_data);
                 break;
-            case TOUCH_RESULT_TYPE.RELEASE:
-                TooltipManager.I.CloseAll();
-                break;
         }
     }
 

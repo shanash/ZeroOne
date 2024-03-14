@@ -16,6 +16,8 @@ Shader "FluffyDuck/TransparentHole"
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 
         _Rect ("Transparent Rect (x, y, width, height)", Vector) = (0,0,1,1)
+        _RangeRect ("Range Rect (x, y, width, height)", Vector) = (0,0,1,1)
+        _CornerRadius ("Corner Radius", Float) = 0.1 // 라운딩된 모서리의 반지름
     }
 
     SubShader
@@ -82,6 +84,8 @@ Shader "FluffyDuck/TransparentHole"
             float4 _ClipRect;
             float4 _MainTex_ST;
             float4 _Rect;
+            float4 _RangeRect;
+            float _CornerRadius;
 
             v2f vert(appdata_t v)
             {
@@ -101,9 +105,34 @@ Shader "FluffyDuck/TransparentHole"
             {
                 // Convert the UVs to a 0-1 range based on the _Rect
                 float2 uv = (IN.texcoord - _Rect.xy) / _Rect.zw;
+                float2 range_uv = (IN.texcoord - _RangeRect.xy) / _RangeRect.zw;
+
                 // Check if the UVs fall outside the transparent rectangle
-                if (uv.x > 0 && uv.x < 1 && uv.y > 0 && uv.y < 1) {
+                if (range_uv.x > 0 && range_uv.x < 1 && uv.y > 0 && uv.y < 1) {
                     discard; // Make this pixel transparent
+                }
+                if (uv.x > 0 && uv.x < 1 && range_uv.y > 0 && range_uv.y < 1) {
+                    discard; // Make this pixel transparent
+                }
+
+                float2 radius = ((_RangeRect.zw - _Rect.zw) / _Rect.zw) / 2.0f;
+
+                if (range_uv.x > 0 && range_uv.x < 1 && range_uv.y > 0 && range_uv.y < 1)
+                {
+                    float2 r_xy = uv.xy;
+                    if (uv.x >= 1.0)
+                    {
+                        r_xy.x -= 1.0;
+                    }
+                    if (uv.y >= 1.0)
+                    {
+                        r_xy.y -= 1.0f;
+                    }
+
+                    if (r_xy.x * r_xy.x + r_xy.y * r_xy.y < radius.x * radius.x)
+                    {
+                        discard;
+                    }
                 }
 
                 half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;

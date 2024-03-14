@@ -117,6 +117,11 @@ public abstract class UIInteractiveButtonBase : Selectable, IPointerClickHandler
         await UniTask.Delay((int)(Long_Press_Duration * 1000), cancellationToken: Cancel_Token.Token);
         Is_Long_Press = true;
 
+        if (Scale_Rect != null)
+        {
+            Scale_Rect.localScale = Vector2.one;
+        }
+
         OnTouchEvent(TOUCH_RESULT_TYPE.LONG_PRESS);
         Cancel_Token = null;
     }
