@@ -8,9 +8,13 @@ using FluffyDuck.UI;
 using ZeroOne.Input;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using System.Text.RegularExpressions;
 
 public class TooltipBase : PopupBase, IPoolableComponent
 {
+    const int LIMIT_TITLE_COUNT = 40;
+    const int LIMIT_DESC_COUNT = 260;
+
     static Texture2D Texture = null;
     static Vector2 Texture_Size = Vector2.zero;
 
@@ -84,9 +88,8 @@ public class TooltipBase : PopupBase, IPoolableComponent
         Box_Image.material.SetVector("_Rect", texture_hole);
         Box_Image.material.SetVector("_RangeRect", texture_ext_hole);
 
-        
-        Title.text = title;
-        Desc.text = desc;
+        Title.text = CommonUtils.CutStringBasedOnCount(title, LIMIT_TITLE_COUNT);
+        Desc.text = CommonUtils.CutStringBasedOnCount(desc, LIMIT_DESC_COUNT);
 
         float multi = box_width / Texture_Size.x;
 

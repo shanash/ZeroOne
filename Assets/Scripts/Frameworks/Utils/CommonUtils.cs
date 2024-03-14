@@ -406,6 +406,78 @@ namespace FluffyDuck.Util
             return DateTime.Now >= firstSpecificTime;
         }
 
+        /// <summary>
+        /// 한글은 2, 영문은 1로 카운팅
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static int CountCharacters(string input)
+        {
+            int count = 0;
+            foreach (char c in input)
+            {
+                count += CountChar(c);
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// 제한 수치만큼 문자를 잘라서 받아옵니다
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="limit"></param>
+        /// <param name="debug"></param>
+        /// <returns></returns>
+        public static string CutStringBasedOnCount(string input, int limit)
+        {
+            int totalCount = 0;
+            int index = 0;
+            bool is_in_tag = false;
+            StringBuilder output = new StringBuilder();
+
+            while (limit > totalCount && input.Length > index)
+            {
+                char ch = input[index];
+                if (ch.Equals('<'))
+                {
+                    is_in_tag = true;
+                }
+
+                if (is_in_tag)
+                {
+                    if (ch.Equals('>'))
+                    {
+                        is_in_tag = false;
+                    }
+
+                    output.Append(ch);
+                    index++;
+                    continue;
+                }
+
+                int count = CountChar(ch);
+
+                if (totalCount + count > limit)
+                {
+                    break;
+                }
+
+                totalCount += count;
+                index++;
+                output.Append(ch);
+            }
+
+            return output.ToString();
+        }
+
+
+        /// <summary>
+        /// 한글은 2로 영문은 1로
+        /// </summary>
+        /// <param name="munja"></param>
+        /// <returns></returns>
+        static int CountChar(char munja) => (('\uAC00' <= munja && munja <= '\uD7A3') || ('\u3131' <= munja && munja <= '\u318E')) ? 2 : 1;
+
         public static class Math
         {
             /// <summary>
