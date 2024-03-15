@@ -79,7 +79,7 @@ public class BossStageEntryUI : PopupBase
         }
 
         //  입장 제한 횟수
-        int entrance_cnt = boss_mng.GetEntranceCount();
+        int entrance_cnt = boss_mng.GetCount();
         int max_entrance_cnt = boss_mng.GetMaxEntranceCount();
         Entrance_Count.text = ZString.Format("{0}/{1}", entrance_cnt, max_entrance_cnt);
     }

@@ -263,8 +263,8 @@ public class StageInfoPopup : PopupBase
         Current_Stamina.text = stamina_item.GetCount().ToString("N0");
 
         int used_stamina_count = stamina_item.GetCount() - need_stamina;
-
-        if (stamina_item.IsUsableChargeItemCount(need_stamina))
+        bool is_enable_stamina = stamina_item.IsUsableChargeItemCount(need_stamina);
+        if (is_enable_stamina)
         {
             Used_Stamina.text = ZString.Format("<color=#2B8FFF>{0:N0}</color>", used_stamina_count);
         }
@@ -284,7 +284,11 @@ public class StageInfoPopup : PopupBase
 
         if (User_Data.GetDifficultyType() != STAGE_DIFFICULTY_TYPE.NORMAL)
         {
-            Entrance_Btn.interactable = User_Data.IsEnableDailyEntrance();
+            Entrance_Btn.interactable = User_Data.IsEnableDailyEntrance() && is_enable_stamina;
+        }
+        else
+        {
+            Entrance_Btn.interactable = is_enable_stamina;
         }
     }
 

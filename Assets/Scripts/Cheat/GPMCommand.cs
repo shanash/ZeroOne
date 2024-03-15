@@ -25,6 +25,8 @@ public class GPMCommand : MonoBehaviour
 
         func.AddCommand(this, "FullChargeStamina", "스테미나 충전");
 
+        func.AddCommand(this, "FullChargeBossStageEntranceCount", "보스전 입장 횟수 충전");
+
         func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x10</color>", new object[] { 10 });
         func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x50</color>", new object[] { 50 });
 
@@ -102,6 +104,26 @@ public class GPMCommand : MonoBehaviour
         UpdateEventDispatcher.Instance.AddEvent(UPDATE_EVENT_TYPE.UPDATE_TOP_STATUS_BAR_STAMINA);
         CommonUtils.ShowToast("스테미너 충전 완료", TOAST_BOX_LENGTH.SHORT);
     }
+    /// <summary>
+    /// 보스전 입장 횟수 충전
+    /// </summary>
+    void FullChargeBossStageEntranceCount()
+    {
+        var gd = GameData.Instance;
+        var boss_mng = gd.GetUserBossStageDataManager();
+        var result = boss_mng.FullChargeEntranceCount();
+        if (result == RESPONSE_TYPE.SUCCESS)
+        {
+            CommonUtils.ShowToast("보스전 입장 횟수 충전 완료", TOAST_BOX_LENGTH.SHORT);
+            boss_mng.Save();
+        }
+        else
+        {
+            CommonUtils.ShowToast("보스전 입장 횟수 충전 오류", TOAST_BOX_LENGTH.SHORT);
+        }
+
+    }
+
     /// <summary>
     /// 공격력 10배 증가
     /// </summary>

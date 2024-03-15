@@ -25,6 +25,9 @@ public class BossStageRewardInfoPopup : PopupBase
     [SerializeField, Tooltip("Repeat Reward List View")]
     ScrollRect Repeat_Reward_List_View;
 
+    [SerializeField, Tooltip("Entrance Btn")]
+    UIButtonBase Entrance_Btn;
+
     List<RewardItemCard> Used_Reward_Item_Card_List = new List<RewardItemCard>();
 
     Boss_Stage_Data Stage;
@@ -111,6 +114,9 @@ public class BossStageRewardInfoPopup : PopupBase
             item.SetScale(Vector2.one);
             Used_Reward_Item_Card_List.Add(item);
         }
+
+        var boss_mng = GameData.Instance.GetUserBossStageDataManager();
+        Entrance_Btn.interactable = boss_mng.IsEnableEntranceBossDungeon();
     }
 
 

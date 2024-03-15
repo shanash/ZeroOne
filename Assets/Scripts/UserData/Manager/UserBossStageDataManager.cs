@@ -63,7 +63,6 @@ public class UserBossStageDataManager : ManagerBase
             return;
         }
 
-
         //  보스 던전은 보스 데이터를 조회한다.
         var boss_list = m.Get_BossDataList(Dungeon.dungeon_group_id);
         if (boss_list.Count == 0)
@@ -105,6 +104,8 @@ public class UserBossStageDataManager : ManagerBase
             return false;
         }
         Max_Bound_Data = m.Get_MaxBoundInfoData(REWARD_TYPE.BOSS_DUNGEON_TICKET);
+
+        Count.Set(GetMaxEntranceCount());
         return true;
     }
 
@@ -202,7 +203,7 @@ public class UserBossStageDataManager : ManagerBase
         }
         //  입장 횟수 차감
         int cnt = GetCount();
-        cnt += 1;
+        cnt -= 1;
         Count.Set(cnt);
 
         var now = DateTime.Now.ToLocalTime();
@@ -279,11 +280,6 @@ public class UserBossStageDataManager : ManagerBase
     public int GetCount()
     {
         return Count.Get();
-    }
-
-    public int GetEntranceCount()
-    {
-        return GetMaxEntranceCount() - GetCount();
     }
 
     public int GetMaxEntranceCount()
@@ -400,7 +396,7 @@ public class UserBossStageDataManager : ManagerBase
     /// <returns></returns>
     public bool IsEnableEntranceBossDungeon()
     {
-        return GetEntranceCount() > 0;
+        return GetCount() > 0;
     }
 
 
@@ -437,15 +433,32 @@ public class UserBossStageDataManager : ManagerBase
                 {
                     User_Boss_Dungeon_Data_List[i].ResetDailyData();
                 }
-                Count.Set(0);
-                Last_Used_Dt = string.Empty;
-                Last_Used_Datetime = DateTime.MinValue;
+                //Count.Set(GetMaxEntranceCount());
+                //Last_Used_Dt = string.Empty;
+                //Last_Used_Datetime = DateTime.MinValue;
+                code = FullChargeEntranceCount();
                 Is_Update_Data = true;
-                code = RESPONSE_TYPE.SUCCESS;
             }
         }
 
         return code;
+    }
+    /// <summary>
+    /// 입장 횟수 충전
+    /// </summary>
+    /// <returns></returns>
+    public RESPONSE_TYPE FullChargeEntranceCount()
+    {
+        if (GetCount() >= GetMaxEntranceCount())
+        {
+            return RESPONSE_TYPE.NOT_WORK;
+        }
+
+        Count.Set(GetMaxEntranceCount());
+        Last_Used_Datetime = DateTime.MinValue;
+        Last_Used_Dt = string.Empty;
+
+        return RESPONSE_TYPE.SUCCESS;
     }
 
     /// <summary>

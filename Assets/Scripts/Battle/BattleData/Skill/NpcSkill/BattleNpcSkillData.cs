@@ -100,6 +100,7 @@ public class BattleNpcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProd
             {
                 var clone = (BattleSkillData)Clone();
                 clone.SetEffectWeightIndex(Effect_Weight_Index);
+                clone.AddFindTargets(GetFindTargets());
                 Effect_Weight_Index++;
                 return clone;
             }

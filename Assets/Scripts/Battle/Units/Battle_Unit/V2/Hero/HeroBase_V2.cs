@@ -1051,12 +1051,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             return;
         }
-        //FindTargets(skill);
-        //int target_cnt = Attack_Targets.Count;
-        //if (target_cnt == 0)
-        //{
-        //    return;
-        //}
+
         int target_cnt = skill.GetFindTargets().Count;
         int effect_weight_index = skill.GetEffectWeightIndex();
 
@@ -1104,6 +1099,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     string effect_path = duration.GetEffectPrefab();
                     if (string.IsNullOrEmpty(effect_path))
                     {
+                        send_data.Duration = duration;
+                        duration.ExecSkill(send_data);
                         continue;
                     }
                     send_data.Duration = duration;

@@ -106,7 +106,7 @@ public class BossStageChoiceUI : PopupBase
     {
         //  일일 입장 제한
         var boss_mng = GameData.Instance.GetUserBossStageDataManager();
-        int entrance_cnt = boss_mng.GetEntranceCount();
+        int entrance_cnt = boss_mng.GetCount();
         int max_entrance_cnt = boss_mng.GetMaxEntranceCount();
         Entrance_Count.text = ZString.Format("{0} {1}/{2}", GameDefine.GetLocalizeString("system_limitcount_daily_enter"), entrance_cnt, max_entrance_cnt);
     }

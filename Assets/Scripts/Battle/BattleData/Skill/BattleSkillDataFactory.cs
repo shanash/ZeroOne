@@ -202,7 +202,7 @@ public class BattleSkillDataFactory
                     case DURATION_EFFECT_TYPE.ACCURACY_UP:
                         return typeof(BattleNpcDurationSkillData_AccuracyUp);
                     case DURATION_EFFECT_TYPE.ACCURACY_DOWN:
-                        return typeof(BattleNpcDurationSkillData_AccuracyUp);
+                        return typeof(BattleNpcDurationSkillData_AccuracyDown);
                     case DURATION_EFFECT_TYPE.EVASION_UP:
                         return typeof(BattleNpcDurationSkillData_EvasionUp);
                     case DURATION_EFFECT_TYPE.EVASION_DOWN:
