@@ -195,30 +195,6 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<REWARD_TYPE, Max_Bound_Info_Data>();
 	///	<summary>
-	///	 <b>key_1 int : memorial_id </b><br/>
-	///	</summary>
-	protected Dictionary<int, Me_Resource_Data> _Me_Resource_Data
-	{
-		get;
-		private set;
-	} = new Dictionary<int, Me_Resource_Data>();
-	///	<summary>
-	///	 <b>key_1 int : state_id </b><br/>
-	///	</summary>
-	protected Dictionary<int, Me_State_Data> _Me_State_Data
-	{
-		get;
-		private set;
-	} = new Dictionary<int, Me_State_Data>();
-	///	<summary>
-	///	 <b>key_1 int : interaction_id </b><br/>
-	///	</summary>
-	protected Dictionary<int, Me_Interaction_Data> _Me_Interaction_Data
-	{
-		get;
-		private set;
-	} = new Dictionary<int, Me_Interaction_Data>();
-	///	<summary>
 	///	 <b>key_1 int : chat_motion_id </b><br/>
 	///	</summary>
 	protected Dictionary<int, Me_Chat_Motion_Data> _Me_Chat_Motion_Data
@@ -521,9 +497,6 @@ public class BaseMasterDataManager
 		await LoadMaster_Player_Character_Skill_Level_Data();
 		await LoadMaster_Player_Character_Love_Level_Data();
 		await LoadMaster_Max_Bound_Info_Data();
-		await LoadMaster_Me_Resource_Data();
-		await LoadMaster_Me_State_Data();
-		await LoadMaster_Me_Interaction_Data();
 		await LoadMaster_Me_Chat_Motion_Data();
 		await LoadMaster_Me_Serifu_Data();
 		await LoadMaster_Npc_Skill_Group();
@@ -886,48 +859,6 @@ public class BaseMasterDataManager
 		foreach (var raw_data in raw_data_list)
 		{
 			_Max_Bound_Info_Data.Add(raw_data.reward_type, new Max_Bound_Info_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Me_Resource_Data()
-	{
-#if UNITY_5_3_OR_NEWER
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Resource_Data");
-#else
-		string json = await LoadJsonDataAsync("../Master/Me_Resource_Data.json");
-#endif
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Resource_Data>>(json);
-		foreach (var raw_data in raw_data_list)
-		{
-			_Me_Resource_Data.Add(raw_data.memorial_id, new Me_Resource_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Me_State_Data()
-	{
-#if UNITY_5_3_OR_NEWER
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_State_Data");
-#else
-		string json = await LoadJsonDataAsync("../Master/Me_State_Data.json");
-#endif
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_State_Data>>(json);
-		foreach (var raw_data in raw_data_list)
-		{
-			_Me_State_Data.Add(raw_data.state_id, new Me_State_Data(raw_data));
-		}
-	}
-
-	protected async Task LoadMaster_Me_Interaction_Data()
-	{
-#if UNITY_5_3_OR_NEWER
-		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Me_Interaction_Data");
-#else
-		string json = await LoadJsonDataAsync("../Master/Me_Interaction_Data.json");
-#endif
-		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Me_Interaction_Data>>(json);
-		foreach (var raw_data in raw_data_list)
-		{
-			_Me_Interaction_Data.Add(raw_data.interaction_id, new Me_Interaction_Data(raw_data));
 		}
 	}
 
@@ -1566,30 +1497,6 @@ public class BaseMasterDataManager
 		if(_Max_Bound_Info_Data == null)
 		{
 			await LoadMaster_Max_Bound_Info_Data();
-		}
-	}
-
-	protected async void Check_Me_Resource_Data()
-	{
-		if(_Me_Resource_Data == null)
-		{
-			await LoadMaster_Me_Resource_Data();
-		}
-	}
-
-	protected async void Check_Me_State_Data()
-	{
-		if(_Me_State_Data == null)
-		{
-			await LoadMaster_Me_State_Data();
-		}
-	}
-
-	protected async void Check_Me_Interaction_Data()
-	{
-		if(_Me_Interaction_Data == null)
-		{
-			await LoadMaster_Me_Interaction_Data();
 		}
 	}
 

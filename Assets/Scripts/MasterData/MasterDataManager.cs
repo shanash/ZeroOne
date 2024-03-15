@@ -722,58 +722,6 @@ public class MasterDataManager : BaseMasterDataManager
     #endregion
 
     #region Memorial
-    public Me_Resource_Data Get_MemorialData(int memorial_id)
-    {
-        return _Me_Resource_Data[memorial_id];
-    }
-
-    public Me_Resource_Data Get_MemorialData(int player_character_id, int order)
-    {
-        Check_Me_Resource_Data();
-        return _Me_Resource_Data.Values.ToList().Find(x => x.player_character_id == player_character_id && x.order == order);
-    }
-
-    public Me_Resource_Data Get_MemorialResourceData(int memorial_id, int player_character_id)
-    {
-        Check_Me_Resource_Data();
-        return _Me_Resource_Data.Values.ToList().Find(x => x.player_character_id == player_character_id && x.memorial_id == memorial_id);
-    }
-
-    public void Get_MemorialResourceDataList(ref List<Me_Resource_Data> list)
-    {
-        Check_Me_Resource_Data();
-        list.Clear();
-        list.AddRange(_Me_Resource_Data.Values.ToList());
-    }
-
-    public void Get_MemorialResourceDataListByPlayerID(int player_character_id, ref List<Me_Resource_Data> list)
-    {
-        Check_Me_Resource_Data();
-        list.Clear();
-        list.AddRange(_Me_Resource_Data.Values.ToList().FindAll(x => x.player_character_id == player_character_id));
-    }
-
-
-    public List<Me_Interaction_Data>[,] Get_MemorialInteraction(int player_character_id)
-    {
-        List<Me_Interaction_Data>[,] result = new List<Me_Interaction_Data>[Enum.GetValues(typeof(TOUCH_GESTURE_TYPE)).Length, Enum.GetValues(typeof(TOUCH_BODY_TYPE)).Length];
-        foreach (var data in _Me_Interaction_Data)
-        {
-            if (data.Value.player_character_id != player_character_id)
-                continue;
-
-            int body = (int)data.Value.player_character_id;
-            int gesture = (int)data.Value.player_character_id;
-
-            if (result[gesture, body] == null)
-            {
-                result[gesture, body] = new List<Me_Interaction_Data>();
-            }
-            result[gesture, body].Add(data.Value);
-        }
-
-        return result;
-    }
 
     public Dictionary<int, Me_Chat_Motion_Data> Get_MemorialChatMotion(int player_character_id)
     {
@@ -809,13 +757,6 @@ public class MasterDataManager : BaseMasterDataManager
         return _Me_Serifu_Data
             .Where(x => x.Value.player_character_id == player_character_id)
             .ToDictionary(x => x.Key, x => x.Value);
-    }
-
-    public Dictionary<int, (string Idle_Animation_Name, int[] Bored_Chatmotion_Ids, int Bored_Condition_Count)> Get_MemorialStateAnimation(int player_character_id)
-    {
-        return _Me_State_Data.Values.ToList()
-            .Where(x => x.player_character_id == player_character_id)
-            .ToDictionary(x => x.state_id, x => (x.idle_animation_name, x.bored_chatmotion_ids, x.bored_condition_count));
     }
     #endregion
 

@@ -100,16 +100,6 @@ public class GameData : Singleton<GameData>
 
         //  memorial data
         {
-            var mng = new UserMemorialDataManager(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
-            if (!mng.Load())
-            {
-                mng.InitDataManager();
-            }
-            User_Data_Manager_List.Add(mng);
-        }
-
-        //  memorial data
-        {
             var mng = new UserL2dDataManager(USER_DATA_MANAGER_TYPE.USER_L2D_DATA_MANAGER);
             if (!mng.Load())
             {
@@ -176,11 +166,6 @@ public class GameData : Singleton<GameData>
     public UserDeckDataManager GetUserHeroDeckMountDataManager()
     {
         return FindUserDataManager<UserDeckDataManager>(USER_DATA_MANAGER_TYPE.USER_DECK_DATA_MANAGER);
-    }
-
-    public UserMemorialDataManager GetUserMemorialDataManager()
-    {
-        return FindUserDataManager<UserMemorialDataManager>(USER_DATA_MANAGER_TYPE.USER_MEMORIAL_DATA_MANAGER);
     }
 
     public UserL2dDataManager GetUserL2DDataManager()
