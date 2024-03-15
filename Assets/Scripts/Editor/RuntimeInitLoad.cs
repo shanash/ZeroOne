@@ -44,6 +44,8 @@ public static class RuntimeInitLoad
         if (Enum.TryParse(str_scene_name, out SceneName scene_name))
         {
             var index = scenes_in_build_names.FindIndex(x => x == str_scene_name);
+            /*
+            // Skill Editor때문에 만든녀석들
             // Scenes In Build에 포함되어 있지 않은 애들은
             // - 무조건 index가 6로 오게 된다. 현재 0 ~ 5까지 쓰고 있어서
             if (index.Equals(6))
@@ -51,6 +53,7 @@ public static class RuntimeInitLoad
                 // 로딩 후 지금 열려있는 Scene으로 다시 오게 해 준다.
                 SCManager.I.Default_Scene = scene_name;
             }
+            */
 
             // SceneName에 정의되어 있는 애들은 아무튼 로딩을 거치게 해 줍니다.
             _ = SCManager.I.LoadSceneImmidiatlyAsync(SceneName.title.ToString());

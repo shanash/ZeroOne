@@ -14,8 +14,15 @@ public enum SceneName
     essence,
     dialogue_Intro,
     battle,
-    skill_editor,
-    skill_preview,
+    dialogue_StoryScene1_1,
+    dialogue_StoryScene1_2,
+    dialogue_StoryScene2_1,
+    dialogue_StoryScene2_2,
+    dialogue_StoryScene3,
+    dialogue_StoryScene4,
+    dialogue_StoryScene5,
+    dialogue_StoryScene6,
+    dialogue_StoryScene7
 }
 
 public class SCManager : Singleton<SCManager>
@@ -53,6 +60,13 @@ public class SCManager : Singleton<SCManager>
         Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
     }
 
+    public void ChangeScene(string scene_name, params object[] parameters)
+    {
+        if (Enum.TryParse(scene_name, out SceneName sname))
+        {
+            ChangeScene(sname, parameters);
+        }
+    }
 
     public void ChangeScene(SceneName scene_name = SceneName.None, params object[] parameters)
     {
@@ -63,14 +77,14 @@ public class SCManager : Singleton<SCManager>
             scene_name = Default_Scene;
 
             // TODO: 이 세팅을 여기에 둬야 할까요?.....
-            if (Default_Scene.Equals(SceneName.skill_preview))
-            {
-                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
-            }
-            else if (Default_Scene.Equals(SceneName.skill_editor))
-            {
-                BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
-            }
+            //if (Default_Scene.Equals(SceneName.skill_preview))
+            //{
+            //    BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_PREVIEW_MODE);
+            //}
+            //else if (Default_Scene.Equals(SceneName.skill_editor))
+            //{
+            //    BlackBoard.Instance.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, GAME_TYPE.EDITOR_SKILL_EDIT_MODE);
+            //}
         }
 
         if (scene_name.ToString().Equals(Current_SceneName))

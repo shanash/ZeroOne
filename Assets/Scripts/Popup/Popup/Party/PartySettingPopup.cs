@@ -508,7 +508,8 @@ public class PartySettingPopup : PopupBase
                 {
                     if (!string.IsNullOrEmpty(story_data.entrance_dialogue))
                     {
-                        SCManager.I.ChangeScene(SceneName.dialogue_Intro);
+                        //SCManager.I.ChangeScene(SceneName.dialogue_Intro);
+                        SCManager.I.ChangeScene(story_data.entrance_dialogue);
                     }
                     else
                     {

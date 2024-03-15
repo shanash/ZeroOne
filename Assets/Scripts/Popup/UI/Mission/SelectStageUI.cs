@@ -150,10 +150,6 @@ public class SelectStageUI : PopupBase
     {
         var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
 
-        //var last_stage = stage_mng.GetLastOpenStage();
-        //var stage_list = m.Get_StageDataListByStageGroupID(Zone.stage_group_id);
-        //int last_index = stage_list.ToList().FindIndex(x => x.stage_id == last_stage.Stage_ID);
-
         //  zone number
         Zone_Number.text = ZString.Format("ZONE {0}", Zone.zone_ordering);
 

@@ -248,16 +248,11 @@ public class StageInfoPopup : PopupBase
             Normal_Stage_Btn_Box.gameObject.SetActive(false);
             Hard_Stage_Btn_Box.gameObject.SetActive(true);
 
-            if (User_Data != null)
-            {
-                Hard_Stage_Remain_Daily_Count.text = ZString.Format("<color=#5C606A>남은 횟수</color> <color=#FF502B>{0}/{1}</color>", User_Data.GetDailyEntranceCount(), User_Data.GetMaxDailyEntranceCount());
-            }
-            else
-            {
-                Hard_Stage_Remain_Daily_Count.text = ZString.Format("<color=#5C606A>남은 횟수</color> <color=#FF502B>{0}/{1}</color>", Stage.entrance_limit_count, Stage.entrance_limit_count);
-                //5C606A FF502B
-            }
+            int entrance_count = (User_Data != null) ? User_Data.GetDailyEntranceCount() : Stage.entrance_limit_count;
+            int max_daily_entrance_count = (User_Data != null) ? User_Data.GetMaxDailyEntranceCount() : Stage.entrance_limit_count;
+            string entrance_color_code = (entrance_count > 0) ? "#2B8FFF" : "#FF502B";
 
+            Hard_Stage_Remain_Daily_Count.text = ZString.Format("<color=#5C606A>남은 횟수</color> <color={0}>{1}/{2}</color>", entrance_color_code, entrance_count, max_daily_entrance_count);
         }
 
         Current_Stamina.text = stamina_item.GetCount().ToString("N0");

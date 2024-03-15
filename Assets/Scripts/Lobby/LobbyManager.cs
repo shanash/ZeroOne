@@ -177,8 +177,13 @@ public class LobbyManager : SceneControllerBase
                     popup.ShowPopup(GAME_TYPE.NONE, 0);
                 });
                 break;
-            case "HouseBtn":
             case "MissionBtn":
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Dialogue/StoryDialogueUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                {
+                    popup.ShowPopup("StoryScene1-2");
+                });
+                break;
+            case "HouseBtn":
             case "ShopBtn":
             case "SearchBtn":
                 ShowNotYetNoti();
