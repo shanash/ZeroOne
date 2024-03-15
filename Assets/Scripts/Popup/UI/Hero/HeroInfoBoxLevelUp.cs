@@ -81,6 +81,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             return;
         }
 
+        Simulate_Result = null;
         Use_Exp_Items.Clear();
         UpdateExpItemButtons();
         UpdateHeroStatusInfoNodes(Unit_Data.GetLevel());

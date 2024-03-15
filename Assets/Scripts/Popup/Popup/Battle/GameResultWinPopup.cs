@@ -433,6 +433,7 @@ public class GameResultWinPopup : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
 
         var board = BlackBoard.Instance;
+        var m = MasterDataManager.Instance;
 
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.GAME_TYPE);
         board.RemoveBlackBoardData(BLACK_BOARD_KEY.DUNGEON_ID);
@@ -440,7 +441,19 @@ public class GameResultWinPopup : PopupBase
         if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
             var stage = (Stage_Data)Dungeon.GetDungeonData();
-            var next_stage = MasterDataManager.Instance.Get_NextStageData(stage.stage_id);
+            var next_stage = m.Get_NextStageData(stage.stage_id);
+            if (next_stage == null)
+            {
+                var next_zone = m.Get_ZoneDataByOpenStageID(stage.stage_id);
+                if (next_zone != null)
+                {
+                    var next_zone_stage_list = m.Get_StageDataListByStageGroupID(next_zone.stage_group_id);
+                    if (next_zone_stage_list.Count > 0)
+                    {
+                        next_stage = next_zone_stage_list.FirstOrDefault();
+                    }
+                }
+            }
             if (next_stage != null)
             {
                 board.SetBlackBoard(BLACK_BOARD_KEY.OPEN_STORY_STAGE_DUNGEON_ID, next_stage.stage_id);
@@ -572,8 +585,47 @@ public class GameResultWinPopup : PopupBase
             if (user_dungeon_data != null)
             {
                 var stage_mng = GameData.Instance.GetUserStoryStageDataManager();
+                Zone_Data next_zone_data = null;
+                bool is_exist_next_zone = false;
+
+                //  다음 존 신규 오픈 여부 판단하기 위해 체크
+                var next_stage = m.Get_NextStageData(user_dungeon_data.Stage_ID);
+                //  다음 스테이지가 없다는 것은 해당 존의 마지막 스테이지라는것
+                if (next_stage == null)
+                {
+                    //  next zone check
+                    next_zone_data = m.Get_ZoneDataByOpenStageID(user_dungeon_data.Stage_ID);
+                    if (next_zone_data != null)
+                    {
+                        if (stage_mng.IsOpenZone(next_zone_data.zone_id))
+                        {
+                            is_exist_next_zone = true;
+                        }
+                    }
+                }
+                
                 stage_mng.StoryStageWin(user_dungeon_data.Stage_ID);
                 stage_mng.SetStageStarPoint(user_dungeon_data.Stage_ID, star_point);
+
+                //  없었는데, 해당 스테이지 승리 처리 이후 신규 존이 생겼을 경우
+                if (!is_exist_next_zone && next_zone_data != null)
+                {
+                    if (stage_mng.IsOpenZone(next_zone_data.zone_id))
+                    {
+                        var stage_list = m.Get_StageDataListByStageGroupID(next_zone_data.stage_group_id);
+                        var first_stage = stage_list.FirstOrDefault();
+                        if (first_stage != null)
+                        {
+                            string msg = ZString.Format(GameDefine.GetLocalizeString("system_contents_open_message"), GameDefine.GetLocalizeString(first_stage.stage_name_id));
+                            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/AlertMessagePopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
+                            {
+                                popup.ShowPopup(msg);
+                            });
+                        }
+                    }
+                }
+
+                
             }
         }
         else if (Dungeon.Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
@@ -592,6 +644,8 @@ public class GameResultWinPopup : PopupBase
         }
         
         GameData.Instance.Save();
+
+
     }
     
 

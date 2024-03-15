@@ -196,7 +196,11 @@ public class BattleSkillManager : BattleDataBase
     public void AddDurationSkillEffect(BattleDurationSkillData duration_skill)
     {
         int rate = UnityEngine.Random.Range(0, 10000);
-        if (rate < duration_skill.GetRate())
+
+        // 강인함 적용
+        double last_rate = duration_skill.GetRate() - (duration_skill.GetRate() * (Hero.GetBattleUnitData().GetResistPoint() / 1000));
+
+        if (rate < last_rate)
         {
             lock (Duration_Lock)
             {

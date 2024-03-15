@@ -103,7 +103,7 @@ public class SelectStageUI : PopupBase
             {
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
                 {
-                    popup.ShowPopup(World, Zone, stage);
+                    popup.ShowPopup(stage);
                 });
             }
 

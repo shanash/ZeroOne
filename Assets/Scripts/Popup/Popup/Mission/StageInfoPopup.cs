@@ -44,6 +44,10 @@ public class StageInfoPopup : PopupBase
     [SerializeField, Tooltip("Used Stamina")]   //  2B8FFF
     TMP_Text Used_Stamina;
 
+
+    [SerializeField, Tooltip("Skip Btn")]
+    UIButtonBase Skip_Btn;
+
     [SerializeField, Tooltip("일반 스테이지 진입 버튼 정보 박스")]
     RectTransform Normal_Stage_Btn_Box;
     [SerializeField, Tooltip("일반 스테이지 진입 버튼 텍스트")]
@@ -67,13 +71,16 @@ public class StageInfoPopup : PopupBase
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 3)
+        if (data.Length != 1)
         {
             return false;
         }
-        World = (World_Data)data[0];
-        Zone = (Zone_Data)data[1];
-        Stage = (Stage_Data)data[2];
+        Stage = (Stage_Data)data[0];
+
+        var m = MasterDataManager.Instance;
+        Zone = m.Get_ZoneDataByStageGroupID(Stage.stage_group_id);
+        World = m.Get_WorldDataByZoneGroupID(Zone.zone_group_id);
+
         User_Data = GameData.Instance.GetUserStoryStageDataManager().FindUserStoryStageData(Stage.stage_id);
         InitAssets();
         UpdatePopup();
@@ -223,32 +230,6 @@ public class StageInfoPopup : PopupBase
             reward_item.InitializeData(reward_data, RewardItemCallback);
             Used_Reward_Item_List.Add(reward_item);
         }
-
-        ////  stamina
-        //int need_stamina = Stage.use_stamina;
-        //var stamina_item = GameData.Instance.GetUserChargeItemDataManager().FindUserChargeItemData(REWARD_TYPE.STAMINA);
-
-        //Current_Stamina.text = stamina_item.GetCount().ToString("N0");
-
-        //int used_stamina_count = stamina_item.GetCount() - need_stamina;
-
-        //if (stamina_item.IsUsableChargeItemCount(need_stamina))
-        //{
-        //    Used_Stamina.text = ZString.Format("<color=#2B8FFF>{0:N0}</color>", used_stamina_count);
-        //}
-        //else
-        //{
-        //    Used_Stamina.text = ZString.Format("<color=#ff0000>{0:N0}</color>", used_stamina_count);
-        //}
-
-        //if (User_Data != null)
-        //{
-        //    MarkStarPoint(User_Data.GetStarPoint());
-        //}
-        //else
-        //{
-        //    MarkStarPoint(0);
-        //}
     }
 
     public override void UpdatePopup()
@@ -299,6 +280,11 @@ public class StageInfoPopup : PopupBase
         else
         {
             MarkStarPoint(0);
+        }
+
+        if (User_Data.GetDifficultyType() != STAGE_DIFFICULTY_TYPE.NORMAL)
+        {
+            Entrance_Btn.interactable = User_Data.IsEnableDailyEntrance();
         }
     }
 
@@ -372,6 +358,15 @@ public class StageInfoPopup : PopupBase
         {
             CommonUtils.ShowToast("스테미너가 부족합니다.", TOAST_BOX_LENGTH.SHORT);
             return;
+        }
+
+        if (User_Data.GetDifficultyType() != STAGE_DIFFICULTY_TYPE.NORMAL)
+        {
+            if (!User_Data.IsEnableDailyEntrance())
+            {
+                CommonUtils.ShowToast("금일 입장 횟수를 모두 소진하였습니다.", TOAST_BOX_LENGTH.SHORT);
+                return;
+            }
         }
 
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");

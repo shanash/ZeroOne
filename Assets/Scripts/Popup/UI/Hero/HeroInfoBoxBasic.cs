@@ -106,8 +106,14 @@ public class HeroInfoBoxBasic : MonoBehaviour
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Hero/SkillLevelPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             //TODO:
+            popup.AddClosedCallbackDelegate(OnConfirmSkillLevelUp);
             popup.ShowPopup(GameData.Instance.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(Unit_Data.User_Data.GetPlayerCharacterID(), Unit_Data.User_Data.Player_Character_Num));
         });
+    }
+
+    void OnConfirmSkillLevelUp(params object[] data)
+    {
+        Refresh();
     }
 
     public void OnClickStatusDetailButon()

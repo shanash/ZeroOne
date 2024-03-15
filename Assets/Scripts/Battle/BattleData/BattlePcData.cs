@@ -218,6 +218,15 @@ public class BattlePcData : BattleUnitData
                 point += point * (dur_inc - dur_dec);
             }
 
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_ATTACK_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             // 근원전달 포인트 추가
             point += Essence_Add_PhysicsAttackPoint;
 
@@ -253,6 +262,15 @@ public class BattlePcData : BattleUnitData
                 point += point * (dur_inc - dur_dec);
             }
 
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_ATTACK_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_ATTACK_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             // 근원전달 포인트 추가
             point += Essence_Add_MagicAttackPoint;
 
@@ -280,6 +298,15 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_DEFEND_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
 
             // 근원전달 포인트 추가
             point += Essence_Add_PhysicsDefensePoint;
@@ -309,6 +336,15 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_DEFEND_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_DEFEND_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
 
             // 근원전달 포인트 추가
             point += Essence_Add_MagicDefensePoint;
@@ -347,6 +383,16 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.ATTACK_LIFE_RECOVERY_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             return point;
         }
         return 0;
@@ -361,9 +407,18 @@ public class BattlePcData : BattleUnitData
             //  지속성 효과 (명중 증가/감소)
             double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_UP);
             double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_DOWN);
+
             if (dur_inc - dur_dec != 0)
             {
                 point += point * (dur_inc - dur_dec);
+            }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.ACCURACY_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
             }
 
             return point;
@@ -384,6 +439,16 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.EVASION_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.EVASION_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             return point;
         }
         return 0;
@@ -413,6 +478,16 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_CHANCE_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             return point;
         }
         return 0;
@@ -431,6 +506,16 @@ public class BattlePcData : BattleUnitData
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.PHYSICS_CRITICAL_POWER_ADD_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             return point;
         }
         return 0;
@@ -450,6 +535,15 @@ public class BattlePcData : BattleUnitData
                 point += point * (dur_inc - dur_dec);
             }
 
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_CHANCE_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
+
             return point;
         }
         return 0;
@@ -463,11 +557,20 @@ public class BattlePcData : BattleUnitData
             double point = battle_data.magic_critical_power_add + (GetLevel() - 1) * Stat_Data.magic_critical_power_add;
             //  지속성 효과 (마법 치명타 확률 증가/감소)
             double dur_inc = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP);
-            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP);
+            double dur_dec = Skill_Mng.GetDurationMultiplesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_DOWN);
             if (dur_inc - dur_dec != 0)
             {
                 point += point * (dur_inc - dur_dec);
             }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.MAGIC_CRITICAL_POWER_ADD_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
+            }
+
 
             return point;
         }
@@ -481,6 +584,7 @@ public class BattlePcData : BattleUnitData
         {
             double point = battle_data.resist + (GetLevel() - 1) * Stat_Data.resist;
             //  지속성 효과에 강인함 증가/감소 효과가 없음 [todo] 
+
             return point;
         }
         return 0;
@@ -498,6 +602,14 @@ public class BattlePcData : BattleUnitData
             if (dur_inc - dur_dec != 0)
             {
                 point += point * (dur_inc - dur_dec);
+            }
+
+            //  절대값
+            double dur_value_inc = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.HEAL_UP);
+            double dur_value_dec = Skill_Mng.GetDurationValuesByDurEffectType(DURATION_EFFECT_TYPE.HEAL_DOWN);
+            if (dur_value_inc - dur_value_dec != 0)
+            {
+                point += (dur_value_inc - dur_value_dec);
             }
 
             return point;

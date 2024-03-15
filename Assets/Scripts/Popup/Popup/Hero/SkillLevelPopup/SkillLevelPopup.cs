@@ -741,6 +741,8 @@ public class SkillLevelPopup : PopupBase
         }
         Simulate_Coroutine = null;
         Level_Up_Coroutine = StartCoroutine(StartLevelUpExpGaugeAnim(result));
+
+        Closed_Delegate?.Invoke();
     }
 
 

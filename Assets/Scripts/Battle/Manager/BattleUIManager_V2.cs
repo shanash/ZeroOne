@@ -120,7 +120,12 @@ public class BattleUIManager_V2 : MonoBehaviour
     public void OnClickPause()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-        Battle_Mng?.ChangeState(GAME_STATES.PAUSE);
+        var state = Battle_Mng.GetCurrentState();
+        if (state >= GAME_STATES.PLAYING)
+        {
+            Battle_Mng?.ChangeState(GAME_STATES.PAUSE);
+        }
+        
     }
     public void OnClickAutoPlay()
     {

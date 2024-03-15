@@ -597,7 +597,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         if (state == UNIT_STATES.DEATH)
         {
-            if (animation_name.Equals("1_death") || animation_name.Equals("00_death"))
+            if (animation_name.Equals("00_death"))
             {
                 ChangeState(UNIT_STATES.END);
             }
@@ -1439,7 +1439,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
             UpdateLifeBar();
             //  궁극기 피격시 죽어도 당장 죽이지는 않는다.(궁극기 종료 후 사라지도록)
-            if (GetCurrentState() != UNIT_STATES.ULTIMATE_PAUSE)
+            if (GetCurrentState() != UNIT_STATES.ULTIMATE_PAUSE && GetCurrentState() != UNIT_STATES.SKILL_1)
             {
                 ChangeState(UNIT_STATES.DEATH);
             }

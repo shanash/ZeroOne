@@ -97,6 +97,12 @@ public class StageListCell : UIBase
             //  star point
             MarkStarPoint(User_Data.GetStarPoint());
 
+            //  entrance btn
+            if (User_Data.GetDifficultyType() != STAGE_DIFFICULTY_TYPE.NORMAL)
+            {
+                Entrance_Btn.interactable = User_Data.IsEnableDailyEntrance();
+            }
+
             //  lock cover
             Lock_Cover.gameObject.SetActive(false);
         }
@@ -221,7 +227,7 @@ public class StageListCell : UIBase
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Mission/StageInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(World, Zone, Stage);
+            popup.ShowPopup(Stage);
         });
     }
 

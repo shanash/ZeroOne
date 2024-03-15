@@ -40,7 +40,14 @@ public class HeroInfoBox : MonoBehaviour
 
         // 근원전달은 에일린만 활성화
         Tab_Controller.GetTab(3).SetBlockTab(User_Hero_Data.Data.player_character_id != 100006);
-        Tab_Controller.Select(select_tab_index);
+        if (Tab_Controller.GetTab(select_tab_index).IsBlock())
+        {
+            Tab_Controller.Select(0);
+        }
+        else
+        {
+            Tab_Controller.Select(select_tab_index);
+        }
 
         FixedUpdatePopup();
     }

@@ -258,7 +258,8 @@ public class GPMCommand : MonoBehaviour
                     stage_mng.StoryStageWin(stage_id);
                     stage_mng.SetStageStarPoint(stage_id, star_point);
                     stage_mng.Save();
-                    CommonUtils.ShowToast($"[{stage_id}] 스테이지가 클리어 되었습니다.", TOAST_BOX_LENGTH.SHORT);
+                    string stage_name = $"{GameDefine.GetLocalizeString(stage.GetZoneData().zone_name_id)} {GameDefine.GetLocalizeString(stage.GetStageData().stage_name_id)}";
+                    CommonUtils.ShowToast($"[{stage_name}] 스테이지가 클리어 되었습니다.", TOAST_BOX_LENGTH.SHORT);
                 }
                 else
                 {

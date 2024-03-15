@@ -235,7 +235,7 @@ public class HeroInfoUI : PopupBase
             index = User_Hero_Datas.Count -1;
         }
 
-        SetData(index);
+        SetData(index, InfoBox_Tab_Controller.GetSelectedIndex());
         UpdatePopup();
     }
 
@@ -248,7 +248,7 @@ public class HeroInfoUI : PopupBase
             index = 0;
         }
 
-        SetData(index);
+        SetData(index, InfoBox_Tab_Controller.GetSelectedIndex());
         UpdatePopup();
     }
 
