@@ -158,10 +158,10 @@ public class SelectStageUI : PopupBase
         Zone_Number.text = ZString.Format("ZONE {0}", Zone.zone_ordering);
 
         //  zone name
-        Zone_Name.text = Zone.zone_name;
+        Zone_Name.text = GameDefine.GetLocalizeString(Zone.zone_name_id);
 
         //  zone desc
-        Zone_Desc.text = Zone.zone_tooltip;
+        Zone_Desc.text = GameDefine.GetLocalizeString(Zone.zone_tooltip_id);
 
         
         int gain_star = stage_mng.GetGainStarPoints(Zone.stage_group_id);
