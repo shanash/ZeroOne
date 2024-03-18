@@ -80,8 +80,9 @@ public partial class HeroBase_V2 : UnitBase_V2
     {
         Vector2 center_pos = center.transform.localPosition;
         Vector2 this_pos = transform.localPosition;
-        //float distance = Vector2.Distance(center_pos, this_pos);
+        
         float distance = Mathf.Abs(center_pos.x - this_pos.x);
+        //Debug.Log($"Distance : {distance}");
         return distance;
     }
 

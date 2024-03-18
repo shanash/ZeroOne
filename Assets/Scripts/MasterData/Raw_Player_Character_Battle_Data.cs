@@ -8,6 +8,7 @@ public class Raw_Player_Character_Battle_Data : System.IDisposable
 	public int star_grade {get; set;}
 	public double approach {get; set;}
 	public POSITION_TYPE position_type {get; set;}
+	public int[] skill_pattern_start {get; set;}
 	public int[] skill_pattern {get; set;}
 	public int passive_skill_group_id {get; set;}
 	public int special_skill_group_id {get; set;}

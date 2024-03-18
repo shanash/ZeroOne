@@ -265,13 +265,21 @@ namespace FluffyDuck.UI
         /// 요청 팝업 닫기
         /// </summary>
         /// <param name="popup"></param>
-        public void RemovePopup(PopupBase popup)
+        public void RemovePopup(PopupBase popup, bool is_destroy = false)
         {
             if (Popup_List.Contains(popup))
             {
                 popup.OnExit();
-                GameObjectPoolManager.Instance.UnusedGameObject(popup.gameObject, false);
                 Popup_List.Remove(popup);
+                if (is_destroy)
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObjectDestroy(popup.gameObject);
+                }
+                else
+                {
+                    GameObjectPoolManager.Instance.UnusedGameObject(popup.gameObject, false);
+                }
+                
                 LastKeyEventEnableCheck();
             }
         }

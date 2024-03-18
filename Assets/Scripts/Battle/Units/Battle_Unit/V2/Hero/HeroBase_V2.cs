@@ -242,6 +242,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         change_chr_cam,         //  캐릭터 캠 - Follow 변경
         change_active_cam,      //  액티브 그룹 캠 - Follow Group Targets 변경
         change_target_cam,      //  타겟 그룹 캡 - Follow Group Targets 변경
+        change_color,           //  타겟의 색 변경
+        rollback_color,         //  타겟의 색 롤백
     }
 
 
@@ -950,7 +952,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            Transform target_trans = ec.GetTargetReachPosition(targets.First());
+            Transform target_trans = ec.GetTargetReachPosition(target);
             if (target != null)
             {
                 target_trans = ec.GetTargetReachPosition(target);
@@ -1138,49 +1140,37 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 {
                     //  일회성 / 지속성 효과만 적용
                     //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
-                    for (int i = 0; i < target_cnt; i++)
+
+                    //  onetime skill
+                    var onetime_list = skill.GetOnetimeSkillDataList();
+                    for (int o = 0; o < onetime_list.Count; o++)
                     {
-                        //var target = Attack_Targets[i];
-                        var target = skill.GetFindTargets()[i];
-
-                        //  onetime skill
-                        var onetime_list = skill.GetOnetimeSkillDataList();
-                        int one_cnt = onetime_list.Count;
-                        for (int o = 0; o < one_cnt; o++)
+                        var onetime = onetime_list[o];
+                        string effect_path = onetime.GetEffectPrefab();
+                        if (string.IsNullOrEmpty(effect_path))
                         {
-                            var onetime = onetime_list[o];
-                            string effect_path = onetime.GetEffectPrefab();
-                            if (string.IsNullOrEmpty(effect_path))
-                            {
-                                send_data.Onetime = onetime;
-                                onetime.ExecSkill(send_data);
-                                continue;
-                            }
                             send_data.Onetime = onetime;
-
-                            SpawnOnetimeEffect(effect_path, send_data, target, skill.GetFindTargets());
+                            onetime.ExecSkill(send_data);
+                            continue;
                         }
-
-                        //  duration skill
-                        var duration_list = skill.GetDurationSkillDataList();
-                        int dur_cnt = duration_list.Count;
-                        for (int d = 0; d < dur_cnt; d++)
-                        {
-                            var duration = duration_list[d];
-                            string effect_path = duration.GetEffectPrefab();
-                            if (string.IsNullOrEmpty(effect_path))
-                            {
-                                send_data.Duration = duration;
-                                duration.ExecSkill(send_data);
-                                continue;
-                            }
-                            send_data.Duration = duration;
-
-                            SpawnDurationEffect(effect_path, send_data, target, skill.GetFindTargets());
-
-                        }
+                        send_data.Onetime = onetime;
+                        SpawnOnetimeEffect(effect_path, send_data, send_data.GetFirstTarget(), send_data.Targets);
                     }
-
+                    //  duration skill
+                    var duration_list = skill.GetDurationSkillDataList();
+                    for (int d = 0; d < duration_list.Count; d++)
+                    {
+                        var duration = duration_list[d];
+                        string effect_path = duration.GetEffectPrefab();
+                        if (string.IsNullOrEmpty(effect_path))
+                        {
+                            send_data.Duration = duration;
+                            duration.ExecSkill(send_data);
+                            continue;
+                        }
+                        send_data.Duration = duration;
+                        SpawnDurationEffect(effect_path, send_data, send_data.GetFirstTarget(), send_data.Targets);
+                    }
                 }
             }
             else  // 각 타겟별 이펙트
@@ -1776,6 +1766,19 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         ChangeState(UNIT_STATES.SKILL_READY_1);
     }
 
+    public void SetChangeColor(string color, bool is_rollback)
+    {
+        if (is_rollback)
+        {
+            Render_Texture.SetRollbackColor();
+        }
+        else
+        {
+            Render_Texture.SetChangeColor(color);
+        }
+        
+    }
+
     /// <summary>
     /// 피격시 뒤로 살짝 밀렸다가 다시 돌아오도록<br/>
     /// 궁극기 피격시와 일반 스킬 피격시로 나눈다.<br/>
@@ -1894,6 +1897,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         
     }
 
+  
     /// <summary>
     /// 궁극기 시전 중 캐릭터 숨기기 이벤트 적용
     /// </summary>
@@ -1963,6 +1967,95 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 break;
         }
     }
+
+    protected void RollbackColorCharacter(EventTriggerValue evt_val)
+    {
+        var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+        List<BattleSkillData> skill_list = new List<BattleSkillData>();
+
+        if (string.IsNullOrEmpty(evt_val.StrValue.Trim()))
+        {
+            var target_skill = skill_grp.GetSpecialSkillTargetSkill();
+            if (target_skill != null)
+            {
+                skill_list.Add(target_skill);
+            }
+        }
+        else
+        {
+            skill_list.AddRange(skill_grp.GetExecutableSkillDatas(evt_val.StrValue.Trim()));
+        }
+        if (skill_list.Count == 0)
+        {
+            return;
+        }
+        //  포함 타겟 리스트
+        List<HeroBase_V2> include_targets = new List<HeroBase_V2>();
+        for (int i = 0; i < skill_list.Count; i++)
+        {
+            var skill = skill_list[i];
+            for (int t = 0; t < skill.GetFindTargets().Count; t++)
+            {
+                var target = skill.GetFindTargets()[t];
+                if (!include_targets.Contains(target))
+                {
+                    include_targets.Add(target);
+                }
+            }
+        }
+        Battle_Mng.ChangeColorTargets(include_targets, string.Empty, true);
+    }
+    
+    protected void ChangeColorCharacter(EventTriggerValue evt_val)
+    {
+        var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+        List<BattleSkillData> skill_list = new List<BattleSkillData>();
+        var evt_list = evt_val.StrValue.Split(",");
+        if (evt_list.Length != 2)
+        {
+            return;
+        }
+        //  0 : 스킬 이벤트
+        //  1 : 컬러값
+        //  float : duration
+        string event_key = evt_list[0];
+        string color = evt_list[1];
+
+        if (string.IsNullOrEmpty(event_key))
+        {
+            var target_skill = skill_grp.GetSpecialSkillTargetSkill();
+            if (target_skill != null)
+            {
+                skill_list.Add(target_skill);
+            }
+        }
+        else
+        {
+            skill_list.AddRange(skill_grp.GetExecutableSkillDatas(event_key));
+        }
+        if (skill_list.Count == 0)
+        {
+            return;
+        }
+        //  포함 타겟 리스트
+        List<HeroBase_V2> include_targets = new List<HeroBase_V2>();
+        for (int i = 0; i < skill_list.Count; i++)
+        {
+            var skill = skill_list[i];
+            for (int t = 0; t < skill.GetFindTargets().Count; t++)
+            {
+                var target = skill.GetFindTargets()[t];
+                if (!include_targets.Contains(target))
+                {
+                    include_targets.Add(target);
+                }
+            }
+        }
+
+        Battle_Mng.ChangeColorTargets(include_targets, color, false);
+
+    }
+
     /// <summary>
     /// 궁극기 시전 중 캐릭터 보이기 이벤트 적용
     /// </summary>
@@ -2037,6 +2130,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     {
         var state = GetCurrentState();
         var sb = ZString.CreateStringBuilder();
+        
+        sb.AppendLine($"{nameof(Team_Type)} : <color=#ffffff>[{Team_Type}]</color>");
+        sb.AppendLine($"position => [{this.transform.position.x} , {this.transform.position.z}]");
+        sb.AppendLine($"{nameof(state)} => {state}");
+        sb.AppendLine($"{nameof(Life)} => {Life}");
+        sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
+
         var history = GetStatesHistory();
         if (history != null && history.Count > 0)
         {
@@ -2046,10 +2146,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 sb.AppendLine($"{history[i]}");
             }
         }
-        sb.AppendLine($"{nameof(Team_Type)} : <color=#ffffff>[{Team_Type}]</color>");
-        sb.AppendLine($"{nameof(state)} => {state}");
-        sb.AppendLine($"{nameof(Life)} => {Life}");
-        sb.AppendLine($"{nameof(Max_Life)} => {Max_Life}");
 
         return sb.ToString();
     }

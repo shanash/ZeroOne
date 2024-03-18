@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using PixelCrushers.DialogueSystem;
 using System;
@@ -12,9 +11,6 @@ public class StoryDialogueUI : PopupBase
     [SerializeField, Tooltip("Dialogue System")]
     DialogueSystemTrigger Dialogue_Trigger;
 
-    [SerializeField]
-    GameObject Go_Ctrl;
-
     [SerializeField, Tooltip("Conversation Controller")]
     ConversationControl Con_Ctrl;
 
@@ -23,51 +19,57 @@ public class StoryDialogueUI : PopupBase
 
     public event EventHandler<SelectedResponseEventArgs> SelectedResponseHandler;
 
+    bool Use_Skip;
+
+    string Conversation_ID;
+
     protected override bool Initialize(object[] data)
     {
         if (data.Length != 1)
         {
             return false;
         }
-
+        Use_Skip = false;
         SetEnableEscKeyExit(false);
-        string conversation_id = (string)data[0];
-        if (string.IsNullOrEmpty(conversation_id))
+        Conversation_ID = (string)data[0];
+        if (string.IsNullOrEmpty(Conversation_ID))
         {
             return false;
         }
 
-        Debug.Log($"conversation_id : {conversation_id}");
-        /*
-        Dialogue_Trigger.conversation = conversation_id;
-        Dialogue_Trigger.OnUse();
-        */
-
-        WaitForEnableContainer(conversation_id).Forget();
-
         return true;
     }
 
-    async UniTaskVoid WaitForEnableContainer(string name)
+
+    protected override void ShowPopupEndCallback()
     {
-        await UniTask.WaitUntil(() => Go_Ctrl.activeInHierarchy);
-        System_Ctrl.Awake();
-        Dialogue_Trigger.conversation = name;
+        Dialogue_Trigger.conversation = Conversation_ID;
         Dialogue_Trigger.OnUse();
-        System_Ctrl.StartConversation(name);
-        System_Ctrl.Start();
     }
+
 
 
     public void OnClickSkip()
     {
+        if (Use_Skip)
+        {
+            return;
+        }
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+
         System_Ctrl.StopAllConversations();
+        Use_Skip = true;
     }
 
     public void SkipDialogueCallback()
     {
-        Dialogue_Trigger.conversation = string.Empty;
-        HidePopup();
+        Closed_Delegate?.Invoke();
+        HideAndDestroyPopup();
     }
 
+    public override void Spawned()
+    {
+        base.Spawned();
+        Use_Skip = false;
+    }
 }

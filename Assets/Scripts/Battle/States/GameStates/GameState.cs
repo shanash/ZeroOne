@@ -4,6 +4,8 @@ public enum GAME_STATES
     INIT,
     READY,
 
+    ENTER_STORY_DIALOGUE,       //  전투 시작전 스토리 다이얼로그
+
     WAVE_INFO,          //  다음 스테이지 진입시 잠시 대기 (다음 웨이브 번호 정보 정도를 보여줄 수 있는 시간)
     SPAWN,
 
@@ -13,6 +15,8 @@ public enum GAME_STATES
     ULTIMATE_SKILL,     //  궁극기 시전중
     NEXT_WAVE,          //  다음 스테이지
     WAVE_RUN,
+
+    FINISH_STORY_DIALOGUE,      //  전투 종료 후 스토리 다이얼로그 
 
     PAUSE,
     TIME_OUT,           //  제한 시간 초과

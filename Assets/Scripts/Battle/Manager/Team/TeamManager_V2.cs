@@ -589,6 +589,22 @@ public partial class TeamManager_V2 : IDisposable
             }
         }
     }
+
+    public void ChangeColorTarget(List<HeroBase_V2> targets, string color, bool is_rollback)
+    {
+        var member_list = GetMembers();
+        int cnt = member_list.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            var member = member_list[i];
+            if (targets.Contains(member))
+            {
+                member.SetChangeColor(color, is_rollback);
+            }
+        }
+    }
+
+
     /// <summary>
     /// 지정 유닛만 보이기
     /// </summary>

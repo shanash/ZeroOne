@@ -219,6 +219,15 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].ShowAllUnitWithoutTargets(exclude_targets);
         }
     }
+
+    public void ChangeColorTargets(List<HeroBase_V2> include_target, string color, bool is_rollback)
+    {
+        int cnt = Used_Team_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            Used_Team_List[i].ChangeColorTarget(include_target, color, is_rollback);
+        }
+    }
     /// <summary>
     /// 지정 유닛만 보이도록
     /// </summary>
@@ -332,5 +341,15 @@ public partial class BattleManager_V2 : SceneControllerBase
             }
         }
         UI_Mng.UpdateTimeLimit(Dungeon_Data.Dungeon_Limit_Time);
+    }
+
+    protected void EnterStoryDialogueCloseCallback(params object[] args)
+    {
+        ChangeState(GAME_STATES.SPAWN);
+    }
+
+    protected void FinishStoryDialoguCloseCallback(params object[] args)
+    {
+        ChangeState(GAME_STATES.GAME_OVER_WIN);
     }
 }

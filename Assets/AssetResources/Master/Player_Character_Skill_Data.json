@@ -194,38 +194,6 @@
   {
     "pc_skill_id": 100103,
     "pc_skill_desc_id": [
-      "skill_desc_laila_01_2"
-    ],
-    "pc_skill_group_id": 100102,
-    "target_type": 1,
-    "target_rule_type": 1,
-    "target_order": 0,
-    "target_count": 1,
-    "target_range": 0.0,
-    "effect_count_type": 2,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      500002
-    ],
-    "second_target_onetime_effect_ids": [
-      0
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "shoot"
-  },
-  {
-    "pc_skill_id": 100104,
-    "pc_skill_desc_id": [
       "skill_desc_laila_02_1"
     ],
     "pc_skill_group_id": 100103,
@@ -256,7 +224,7 @@
     "event_name": "effect"
   },
   {
-    "pc_skill_id": 100105,
+    "pc_skill_id": 100104,
     "pc_skill_desc_id": [
       "skill_desc_laila_02_2"
     ],
@@ -277,7 +245,7 @@
       0
     ],
     "duration_effect_ids": [
-      500005
+      10010311
     ],
     "second_target_onetime_effect_ids": [
       0
@@ -288,7 +256,7 @@
     "event_name": "effect"
   },
   {
-    "pc_skill_id": 100106,
+    "pc_skill_id": 100105,
     "pc_skill_desc_id": [
       "skill_desc_laila_02_3"
     ],
@@ -322,7 +290,7 @@
     "event_name": "shoot"
   },
   {
-    "pc_skill_id": 100107,
+    "pc_skill_id": 100106,
     "pc_skill_desc_id": [
       "skill_desc_laila_03_1"
     ],
@@ -354,7 +322,7 @@
     "event_name": "hit"
   },
   {
-    "pc_skill_id": 100108,
+    "pc_skill_id": 100107,
     "pc_skill_desc_id": [
       "skill_desc_laila_03_2"
     ],
@@ -375,7 +343,7 @@
       0
     ],
     "duration_effect_ids": [
-      500005
+      10010411
     ],
     "second_target_onetime_effect_ids": [
       0
@@ -386,7 +354,7 @@
     "event_name": "debuff"
   },
   {
-    "pc_skill_id": 100109,
+    "pc_skill_id": 100108,
     "pc_skill_desc_id": [
       "skill_desc_laila_03_3"
     ],
@@ -498,7 +466,7 @@
     "target_rule_type": 22,
     "target_order": 0,
     "target_count": 5,
-    "target_range": 4.0,
+    "target_range": 3.0,
     "effect_count_type": 0,
     "second_target_rule": 0,
     "max_second_target_count": 0,
@@ -1024,7 +992,8 @@
     "max_second_target_count": 0,
     "second_target_range": 0.0,
     "effect_weight": [
-      100
+      50,
+      50
     ],
     "onetime_effect_ids": [
       10050101
@@ -1107,6 +1076,74 @@
   {
     "pc_skill_id": 100504,
     "pc_skill_desc_id": [
+      "skill_desc_claire_03_1"
+    ],
+    "pc_skill_group_id": 100504,
+    "target_type": 1,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 0,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      14,
+      14,
+      14,
+      14,
+      14,
+      15,
+      15
+    ],
+    "onetime_effect_ids": [
+      10050401
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "hit"
+  },
+  {
+    "pc_skill_id": 100505,
+    "pc_skill_group_id": 100504,
+    "target_type": 1,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "empty_effect",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Claire_Ultimate_Hit"
+  },
+  {
+    "pc_skill_id": 100506,
+    "pc_skill_desc_id": [
       "skill_desc_claire_03_2"
     ],
     "pc_skill_group_id": 100504,
@@ -1126,7 +1163,7 @@
       0
     ],
     "duration_effect_ids": [
-      10050401
+      10050411
     ],
     "second_target_onetime_effect_ids": [
       0
@@ -1134,7 +1171,7 @@
     "second_target_duration_effect_ids": [
       0
     ],
-    "event_name": "buff"
+    "event_name": "apply_1"
   },
   {
     "pc_skill_id": 100601,
@@ -1231,38 +1268,6 @@
   {
     "pc_skill_id": 100604,
     "pc_skill_desc_id": [
-      "skill_desc_elizabath_01_2"
-    ],
-    "pc_skill_group_id": 100602,
-    "target_type": 1,
-    "target_rule_type": 6,
-    "target_order": 0,
-    "target_count": 1,
-    "target_range": 0.0,
-    "effect_count_type": 0,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      10060211
-    ],
-    "second_target_onetime_effect_ids": [
-      0
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "apply_1"
-  },
-  {
-    "pc_skill_id": 100605,
-    "pc_skill_desc_id": [
       "skill_desc_elizabath_02_1"
     ],
     "pc_skill_group_id": 100603,
@@ -1293,7 +1298,7 @@
     "event_name": "shoot"
   },
   {
-    "pc_skill_id": 100606,
+    "pc_skill_id": 100605,
     "pc_skill_desc_id": [
       "skill_desc_elizabath_02_2"
     ],
@@ -1325,7 +1330,7 @@
     "event_name": "apply_1"
   },
   {
-    "pc_skill_id": 100607,
+    "pc_skill_id": 100606,
     "pc_skill_desc_id": [
       "skill_desc_elizabath_03_1"
     ],
@@ -1363,7 +1368,7 @@
     "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Elizabeth_Ultimate_Hit"
   },
   {
-    "pc_skill_id": 100608,
+    "pc_skill_id": 100607,
     "pc_skill_desc_id": [
       "skill_desc_elizabath_03_2"
     ],
@@ -1395,39 +1400,7 @@
     "event_name": "apply_2"
   },
   {
-    "pc_skill_id": 100609,
-    "pc_skill_desc_id": [
-      "skill_desc_elizabath_03_3"
-    ],
-    "pc_skill_group_id": 100604,
-    "target_type": 1,
-    "target_rule_type": 2,
-    "target_order": 0,
-    "target_count": 5,
-    "target_range": 0.0,
-    "effect_count_type": 0,
-    "second_target_rule": 0,
-    "max_second_target_count": 0,
-    "second_target_range": 0.0,
-    "effect_weight": [
-      100
-    ],
-    "onetime_effect_ids": [
-      0
-    ],
-    "duration_effect_ids": [
-      10060412
-    ],
-    "second_target_onetime_effect_ids": [
-      0
-    ],
-    "second_target_duration_effect_ids": [
-      0
-    ],
-    "event_name": "apply_1"
-  },
-  {
-    "pc_skill_id": 100610,
+    "pc_skill_id": 100608,
     "pc_skill_group_id": 100604,
     "target_type": 1,
     "target_rule_type": 2,

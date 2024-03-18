@@ -26,7 +26,13 @@ public class Npc_Battle_Data : System.IDisposable
 	POSITION_TYPE _position_type;
 
 	///	<summary>
-	///	스킬 패턴
+	///	스킬 패턴(시작)
+	///	</summary>
+	public int[] skill_pattern_start => _skill_pattern_start;
+	int[] _skill_pattern_start;
+
+	///	<summary>
+	///	스킬 패턴(반복)
 	///	</summary>
 	public int[] skill_pattern => _skill_pattern;
 	int[] _skill_pattern;
@@ -152,6 +158,8 @@ public class Npc_Battle_Data : System.IDisposable
 		_npc_battle_id = raw_data.npc_battle_id;
 		_approach = raw_data.approach;
 		_position_type = raw_data.position_type;
+		if(raw_data.skill_pattern_start != null)
+			_skill_pattern_start = raw_data.skill_pattern_start.ToArray();
 		if(raw_data.skill_pattern != null)
 			_skill_pattern = raw_data.skill_pattern.ToArray();
 		_passive_skill_group_id = raw_data.passive_skill_group_id;
@@ -198,6 +206,16 @@ public class Npc_Battle_Data : System.IDisposable
 		sb.AppendFormat("[npc_battle_id] = <color=yellow>{0}</color>", npc_battle_id).AppendLine();
 		sb.AppendFormat("[approach] = <color=yellow>{0}</color>", approach).AppendLine();
 		sb.AppendFormat("[position_type] = <color=yellow>{0}</color>", position_type).AppendLine();
+		sb.AppendLine("[skill_pattern_start]");
+		if(skill_pattern_start != null)
+		{
+			cnt = skill_pattern_start.Length;
+			for(int i = 0; i< cnt; i++)
+			{
+				sb.Append("\t").AppendFormat("<color=yellow>{0}</color>", skill_pattern_start[i]).AppendLine();
+			}
+		}
+
 		sb.AppendLine("[skill_pattern]");
 		if(skill_pattern != null)
 		{

@@ -43,11 +43,31 @@ namespace FluffyDuck.EditorUtil
         //static string _Adb_Path = string.Empty;
         static bool IsBuildAndRun { get; set; }
 
-        static string BUILD_PATH
+        static string BUILD_FULLNAME
         {
             get
             {
-                return $"{EditorUserBuildSettings.activeBuildTarget}/{PlayerSettings.productName}_{PlayerSettings.bundleVersion}_{PlayerSettings.Android.bundleVersionCode}.{(EditorUserBuildSettings.buildAppBundle ? "aab" : "apk")}";
+                return $"{EditorUserBuildSettings.activeBuildTarget}/{BUILD_NAME}.{BUILD_EXT}";
+            }
+        }
+
+        static string BUILD_NAME
+        {
+            get
+            {
+                return $"{PlayerSettings.productName}_{PlayerSettings.bundleVersion}_{PlayerSettings.Android.bundleVersionCode}{(!string.IsNullOrEmpty(BUILD_ID) ? $"_{BUILD_ID}" : "")}{(!string.IsNullOrEmpty(SVN_REVISION) ? $"_{SVN_REVISION}" : "")}";
+            }
+        }
+
+        static string SVN_REVISION { get; set; } = string.Empty;
+
+        static string BUILD_ID { get; set; } = string.Empty;
+
+        static string BUILD_EXT
+        {
+            get
+            {
+                return $"{(EditorUserBuildSettings.buildAppBundle ? "aab" : "apk")}";
             }
         }
 
@@ -279,48 +299,72 @@ namespace FluffyDuck.EditorUtil
 
             if (IsAddressablesBuild)
             {
-                addressable_build_succeeded = BuildAddressables();
+                addressable_build_succeeded = BuildAddressables(IsCleanBuild);
             }
 
             if (IsPlayerBuild)
             {
-                if (string.IsNullOrEmpty(Keystore_Password) || string.IsNullOrEmpty(Key_Alias_Name) || string.IsNullOrEmpty(Key_Alias_Password))
-                {
-                    // 사용자가 최소한 하나의 체크박스를 선택하지 않았을 때의 경고
-                    ErrorDialog($"다음 값이 비어 있습니다.\n{(string.IsNullOrEmpty(Keystore_Password) ? "\nKeystore Password" : "")}{(string.IsNullOrEmpty(Key_Alias_Name) ? "\nKey Alias Name" : "")}{(string.IsNullOrEmpty(Key_Alias_Password) ? "\nKey Alias Password" : "")}");
-                    return;
-                }
-
                 if (!addressable_build_succeeded)
                 {
                     ErrorDialog("어드레서블 빌드가 실패해서 플레이어를 빌드할 수 없습니다");
                     return;
                 }
 
-                if (!Directory.Exists(EditorUserBuildSettings.activeBuildTarget.ToString()))
+                if (!BuildPlayer())
                 {
-                    Directory.CreateDirectory(EditorUserBuildSettings.activeBuildTarget.ToString());
-                }
-
-                try
-                {
-                    EditorUserBuildSettings.SetBuildLocation(BuildTarget.Android, BUILD_PATH);
-                    BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-                    buildPlayerOptions.locationPathName = BUILD_PATH;
-                    buildPlayerOptions.options |= IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None;
-
-                    // BuildPlayerOptions 구성
-                    buildPlayerOptions = GetBuildPlayerOptions(false, buildPlayerOptions);
-
-                    BuildPipeline.BuildPlayer(buildPlayerOptions);
-
-                    Debug.Log("Build completed: " + BUILD_PATH);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
+                    return;
                 }
             }
+        }
+
+        static BuildPlayerOptions CreateDefalutBuildPlayerOptions()
+        {
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+            buildPlayerOptions.locationPathName = BUILD_FULLNAME;
+            buildPlayerOptions.options |= IsBuildAndRun ? BuildOptions.AutoRunPlayer : BuildOptions.None;
+            
+            return buildPlayerOptions;
+        }
+
+        static bool BuildPlayer()
+        {
+            return BuildPlayer(CreateDefalutBuildPlayerOptions());
+        }
+
+        static bool BuildPlayer(BuildPlayerOptions options)
+        {
+            if (string.IsNullOrEmpty(Keystore_Password) || string.IsNullOrEmpty(Key_Alias_Name) || string.IsNullOrEmpty(Key_Alias_Password))
+            {
+                // 사용자가 최소한 하나의 체크박스를 선택하지 않았을 때의 경고
+                ErrorDialog($"다음 값이 비어 있습니다.\n{(string.IsNullOrEmpty(Keystore_Password) ? "\nKeystore Password" : "")}{(string.IsNullOrEmpty(Key_Alias_Name) ? "\nKey Alias Name" : "")}{(string.IsNullOrEmpty(Key_Alias_Password) ? "\nKey Alias Password" : "")}");
+                return false;
+            }
+
+            if (!Directory.Exists(EditorUserBuildSettings.activeBuildTarget.ToString()))
+            {
+                Directory.CreateDirectory(EditorUserBuildSettings.activeBuildTarget.ToString());
+            }
+
+            try
+            {
+                Debug.Log($"BUILD_FULLNAME : {BUILD_FULLNAME}");
+                EditorUserBuildSettings.SetBuildLocation(BuildTarget.Android, BUILD_FULLNAME);
+
+                // BuildPlayerOptions 구성
+                BuildPlayerOptions buildPlayerOptions = GetBuildPlayerOptions(false, options);
+
+                BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+                Debug.Log("Build completed: " + BUILD_FULLNAME);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
+            return false;
         }
 
         static BuildPlayerOptions GetBuildPlayerOptions(bool askForLocation = true, BuildPlayerOptions defaultOptions = new BuildPlayerOptions())
@@ -383,16 +427,16 @@ namespace FluffyDuck.EditorUtil
         /// 어드레서블로 에셋번들 파일들 빌드
         /// </summary>
         /// <returns>성공여부</returns>
-        static bool BuildAddressables()
+        static bool BuildAddressables(bool is_clean_build)
         {
-            if (IsCleanBuild)
+            if (is_clean_build)
             {
-                DeleteAddressableBuildFolder();
+                DeleteAddressableBuildFolder(IsRemotePath);
                 DeleteAddressableBuildInfo();
                 DeleteAddressableCache();
             }
 
-            RefreshRemoteBuildAndLoadPath();
+            SetRemoteBuildAndLoadPath(IsRemotePath);
 
             if (!ValidateSemVerBundleVersion())
             {
@@ -502,14 +546,19 @@ namespace FluffyDuck.EditorUtil
             return false;
         }
 
+        public static void DeleteAddressableBuildFolder()
+        {
+            DeleteAddressableBuildFolder(IsRemotePath);
+        }
+
         /// <summary>
         /// 빌드 결과물 폴더 자체를 삭제합니다
         /// </summary>
-        public static void DeleteAddressableBuildFolder()
+        public static void DeleteAddressableBuildFolder(bool is_remote_path)
         {
-            RefreshRemoteBuildAndLoadPath();
+            SetRemoteBuildAndLoadPath(is_remote_path);
 
-            var included_symbol_path = s_Settings.profileSettings.GetValueByName(s_Settings.activeProfileId, IsRemotePath ? AddressableAssetSettings.kRemoteBuildPath : AddressableAssetSettings.kLocalBuildPath);
+            var included_symbol_path = s_Settings.profileSettings.GetValueByName(s_Settings.activeProfileId, is_remote_path ? AddressableAssetSettings.kRemoteBuildPath : AddressableAssetSettings.kLocalBuildPath);
             var real_path = s_Settings.RemoteCatalogBuildPath.GetValue(s_Settings);
 
             string build_folder_path = ExtractStringBeforeFirstPattern(included_symbol_path, real_path);
@@ -632,9 +681,8 @@ namespace FluffyDuck.EditorUtil
             }
         }
 
-        static void RefreshRemoteBuildAndLoadPath()
+        static void SetRemoteBuildAndLoadPath(bool is_remote_path)
         {
-            bool is_remote_path = IsRemotePath;
             foreach (var group in s_Settings.groups)
             {
                 if (group.Name.Equals(BUILT_IN_DATA_GROUP_NAME))
@@ -1055,6 +1103,66 @@ namespace FluffyDuck.EditorUtil
                     missing_assets_pathes.Add(entry.address);
                 }
             }
+        }
+
+        public static int BuildAllConsole()
+        {
+            //SET IsRemotePath = false
+            //SET IsCleanBuild = true
+
+            if (0 != BuildAddressableConsole())
+            {
+                return 1;
+            }
+
+            if (0 != BuildPlayerConsole())
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        public static int BuildAddressableConsole()
+        {
+            Debug.Log("Start BuildAddressableConsole");
+
+            IsRemotePath = Environment.ExpandEnvironmentVariables("%IsRemotePath%").Equals("true");
+            IsCleanBuild = Environment.ExpandEnvironmentVariables("%IsCleanBuild%").Equals("true");
+
+            if (BuildAddressables(IsCleanBuild))
+            {
+                Debug.Log("Success BuildAddressableConsole");
+
+                return 0;
+            }
+
+            return 1;
+        }
+
+        public static int BuildPlayerConsole()
+        {
+            Debug.Log("Start BuildPlayerConsole");
+
+            Keystore_Password = Environment.ExpandEnvironmentVariables("%AndroidKeystorePassword%");
+            Key_Alias_Name = Environment.ExpandEnvironmentVariables("%AndroidKeyAliasName%");
+            Key_Alias_Password = Environment.ExpandEnvironmentVariables("%AndroidKeyAliasPassword%");
+            BUILD_ID = Environment.ExpandEnvironmentVariables("%BUILD_ID%");
+            SVN_REVISION = Environment.ExpandEnvironmentVariables("%SVN_REVISION%");
+
+            BuildPlayerOptions bpo = CreateDefalutBuildPlayerOptions();
+
+            bpo.options |= BuildOptions.Development;
+
+            if (!BuildPlayer(bpo))
+            {
+                Debug.Log("Failed BuildPlayerConsole");
+
+                return 1;
+            }
+            Debug.Log("Success BuildPlayerConsole");
+
+            return 0;
         }
 
         /*

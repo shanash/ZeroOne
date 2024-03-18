@@ -532,7 +532,7 @@ public partial class TeamManager_V2
         var temp_list = GetAliveMembers();
 
         // 기준을 중심으로 거리가 먼 우선순위 (내림차순) 
-        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(b.GetDistanceFromCenter(self)));
+        temp_list.Sort((a, b) => b.GetDistanceFromCenter(self).CompareTo(a.GetDistanceFromCenter(self)));
 
         GetTargetsFromTempList(temp_list, count, ref targets);
     }

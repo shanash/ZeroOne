@@ -89,13 +89,21 @@ public class Hero_100005 : HeroBase_V2
     public override void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
     {
         //  감추기
-        if (trigger_id.Trim().Equals(TRIGGER_EVENT_IDS.chr_hide.ToString()))
+        if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.chr_hide.ToString()))
         {
             HideCharacters(evt_val);
         }   //  보이기
-        else if (trigger_id.Trim().Equals(TRIGGER_EVENT_IDS.chr_show.ToString()))
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.chr_show.ToString()))
         {
             ShowCharacters(evt_val);
+        }
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.change_color.ToString()))
+        {
+            ChangeColorCharacter(evt_val);
+        }
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.rollback_color.ToString()))
+        {
+            RollbackColorCharacter(evt_val);
         }
     }
     #endregion

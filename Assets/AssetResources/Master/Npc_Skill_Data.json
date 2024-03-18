@@ -91,7 +91,7 @@
     "npc_skill_id": 200004,
     "npc_skill_group_id": 200004,
     "target_type": 1,
-    "target_rule_type": 6,
+    "target_rule_type": 7,
     "target_order": 0,
     "target_count": 1,
     "target_range": 0.0,
@@ -347,6 +347,36 @@
     ],
     "duration_effect_ids": [
       0
+    ],
+    "second_target_onetime_effect_ids": [
+      0
+    ],
+    "second_target_duration_effect_ids": [
+      0
+    ],
+    "event_name": "shoot",
+    "trigger_effect_path": "Assets/AssetResources/Prefabs/Effects/Skill/Right/SkillEffect_Normal_Fireball"
+  },
+  {
+    "npc_skill_id": 200013,
+    "npc_skill_group_id": 200012,
+    "target_type": 0,
+    "target_rule_type": 2,
+    "target_order": 0,
+    "target_count": 5,
+    "target_range": 0.0,
+    "effect_count_type": 2,
+    "second_target_rule": 0,
+    "max_second_target_count": 0,
+    "second_target_range": 0.0,
+    "effect_weight": [
+      100
+    ],
+    "onetime_effect_ids": [
+      0
+    ],
+    "duration_effect_ids": [
+      20001311
     ],
     "second_target_onetime_effect_ids": [
       0

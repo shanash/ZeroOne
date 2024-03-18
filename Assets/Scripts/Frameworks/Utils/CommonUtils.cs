@@ -195,6 +195,18 @@ namespace FluffyDuck.Util
             return string.Format("#{0:X2}{1:X2}{2:X2}", c.r.ToByte(), c.g.ToByte(), c.b.ToByte());
         }
 
+        public static Color ToRGBFromHex(string hex)
+        {
+            Color c = Color.white;
+            string r = hex.Substring(0, 2);
+            string g = hex.Substring(2, 2);
+            string b = hex.Substring(4, 2);
+            c.r = (float)int.Parse(r, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
+            c.g = (float)int.Parse(g, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
+            c.b = (float)int.Parse(b, System.Globalization.NumberStyles.AllowHexSpecifier) / 255.0f;
+            return c;
+        }
+
         /// <summary>
         /// 어플 강제 종료. 
         /// GPGS등 게임내에서 사용하고 있는 프로세스까지 모두 종료.

@@ -88,17 +88,39 @@ namespace FluffyDuck.UI
             }
         }
 
-        protected virtual void Hide()
+
+        /// <summary>
+        /// 팝업을 닫으면서 삭제
+        /// </summary>
+        /// <param name="cb"></param>
+        public virtual void HideAndDestroyPopup(System.Action cb = null)
+        {
+            Is_Enable_Key_Event = false;
+            Popup_Hide_End_Callback = cb;
+            if (Ease_Base != null)
+            {
+                Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_OUT, HidePopupAniEndDestroyCallback);
+            }
+            else
+            {
+                Hide(true);
+            }
+        }
+
+        protected virtual void Hide(bool is_destroy = false)
         {
             Closed_Delegate = null;
 
             Box_Rect?.gameObject.SetActive(false);
-            PopupManager.Instance.RemovePopup(this);
+
             //  팝업 감추기 종료시 호출 - 팝업 내에서 사용
             Popup_Hide_End_Callback?.Invoke();
 
             //  팝업 감추기 완료 시 호출 - 팝업을 호출한 클래스에
             Popup_Hide_Complete_Callback?.Invoke();
+
+            PopupManager.Instance.RemovePopup(this, is_destroy);
+            
         }
 
         /// <summary>
@@ -114,9 +136,17 @@ namespace FluffyDuck.UI
                 return;
             }
             Box_Rect?.gameObject.SetActive(true);
-            Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);
+            if (Ease_Base != null)
+            {
+                Ease_Base?.StartMove(UIEaseBase.MOVE_TYPE.MOVE_IN, ShowPopupAniEndCallback);
+            }
+            else 
+            {
+                ShowPopupEndCallback();
+            }
         }
 
+        protected virtual void ShowPopupEndCallback() { }
         /// <summary>
         /// 애니메이션이 있을 경우, 팝업 등장 완료 후 호출되는 함수
         /// </summary>
@@ -128,6 +158,10 @@ namespace FluffyDuck.UI
         protected virtual void HidePopupAniEndCallback()
         {
             Hide();
+        }
+        protected virtual void HidePopupAniEndDestroyCallback()
+        {
+            Hide(true);
         }
 
         /// <summary>

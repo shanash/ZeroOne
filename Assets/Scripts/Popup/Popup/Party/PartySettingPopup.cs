@@ -501,30 +501,30 @@ public class PartySettingPopup : PopupBase
             board.SetBlackBoard(BLACK_BOARD_KEY.DUNGEON_ID, Dungeon_ID);
             board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
 
-            if (Game_Type == GAME_TYPE.STORY_MODE)
-            {
-                var story_data = MasterDataManager.Instance.Get_StageData(Dungeon_ID);
-                if (story_data != null)
-                {
-                    if (!string.IsNullOrEmpty(story_data.entrance_dialogue))
-                    {
-                        //SCManager.I.ChangeScene(SceneName.dialogue_Intro);
-                        SCManager.I.ChangeScene(story_data.entrance_dialogue);
-                    }
-                    else
-                    {
-                        SCManager.I.ChangeScene(SceneName.battle);
-                    }
-                }
-                else
-                {
-                    SCManager.I.ChangeScene(SceneName.battle);
-                }
-            }
-            else
-            {
-                SCManager.I.ChangeScene(SceneName.battle);
-            }
+            //if (Game_Type == GAME_TYPE.STORY_MODE)
+            //{
+            //    var story_data = MasterDataManager.Instance.Get_StageData(Dungeon_ID);
+            //    if (story_data != null)
+            //    {
+            //        if (!string.IsNullOrEmpty(story_data.entrance_dialogue))
+            //        {
+            //            SCManager.I.ChangeScene(story_data.entrance_dialogue);
+            //        }
+            //        else
+            //        {
+            //            SCManager.I.ChangeScene(SceneName.battle);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        SCManager.I.ChangeScene(SceneName.battle);
+            //    }
+            //}
+            //else
+            //{
+            //    SCManager.I.ChangeScene(SceneName.battle);
+            //}
+            SCManager.I.ChangeScene(SceneName.battle);
         }
     }
 

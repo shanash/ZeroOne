@@ -143,6 +143,8 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         FSM.AddTransition(new GameStateInitV2());
         FSM.AddTransition(new GameStateReadyV2());
+        FSM.AddTransition(new GameStateEnterStoryDialogueV2());
+        FSM.AddTransition(new GameStateFinishStoryDialogueV2());
         FSM.AddTransition(new GameStateWaveInfoV2());
         FSM.AddTransition(new GameStateSpawnV2());
         FSM.AddTransition(new GameStateMoveInV2());
@@ -219,9 +221,38 @@ public partial class BattleManager_V2 : SceneControllerBase
     }
     public virtual void GameStateReady()
     {
-        ChangeState(GAME_STATES.SPAWN);
+        if (Game_Type == GAME_TYPE.STORY_MODE)
+        {
+            var story_data = (Stage_Data)Dungeon_Data.GetDungeonData();
+            if (!string.IsNullOrEmpty(story_data.entrance_dialogue))
+            {
+                PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Dialogue/StoryDialogueUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                {
+                    popup.AddClosedCallbackDelegate(EnterStoryDialogueCloseCallback);
+                    popup.ShowPopup(story_data.entrance_dialogue);
+                    
+                });
+                ChangeState(GAME_STATES.ENTER_STORY_DIALOGUE);
+            }
+            else
+            {
+                ChangeState(GAME_STATES.SPAWN);
+            }
+        }
+        else
+        {
+            ChangeState(GAME_STATES.SPAWN);
+        }
     }
     public virtual void GameStateReadyExit() { }
+
+    public virtual void GameStateEnterStoryDialogueBegin() { }
+    public virtual void GameStateEnterStoryDialogue() { }
+    public virtual void GameStateEnterStoryDialogueExit() { }
+
+    public virtual void GameStateFinishStoryDialogueBegin() { }
+    public virtual void GameStateFinishStoryDialogue() { }
+    public virtual void GameStateFinishStoryDialogueExit() { }
 
     public virtual void GameStateSpawnBegin()
     {
@@ -330,7 +361,30 @@ public partial class BattleManager_V2 : SceneControllerBase
                 }
                 else // 없으면 게임 종료(승리)
                 {
-                    ChangeState(GAME_STATES.GAME_OVER_WIN);
+                    //ChangeState(GAME_STATES.GAME_OVER_WIN);
+                    if (Game_Type == GAME_TYPE.STORY_MODE)
+                    {
+                        var story_data = (Stage_Data)Dungeon_Data.GetDungeonData();
+                        if (!string.IsNullOrEmpty(story_data.outrance_dialogue))
+                        {
+                            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Dialogue/StoryDialogueUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                            {
+                                popup.AddClosedCallbackDelegate(FinishStoryDialoguCloseCallback);
+                                popup.ShowPopup(story_data.outrance_dialogue);
+
+                            });
+                            ChangeState(GAME_STATES.FINISH_STORY_DIALOGUE);
+
+                        }
+                        else
+                        {
+                            ChangeState(GAME_STATES.GAME_OVER_WIN);
+                        }
+                    }
+                    else
+                    {
+                        ChangeState(GAME_STATES.GAME_OVER_WIN);
+                    }
                 }
 
             }
@@ -376,7 +430,29 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
         else
         {
-            ChangeState(GAME_STATES.GAME_OVER_WIN);
+            if (Game_Type == GAME_TYPE.STORY_MODE)
+            {
+                var story_data = (Stage_Data)Dungeon_Data.GetDungeonData();
+                if (!string.IsNullOrEmpty(story_data.outrance_dialogue))
+                {
+                    PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Dialogue/StoryDialogueUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>
+                    {
+                        popup.AddClosedCallbackDelegate(FinishStoryDialoguCloseCallback);
+                        popup.ShowPopup(story_data.outrance_dialogue);
+
+                    });
+                    ChangeState(GAME_STATES.FINISH_STORY_DIALOGUE);
+
+                }
+                else
+                {
+                    ChangeState(GAME_STATES.GAME_OVER_WIN);
+                }
+            }
+            else
+            {
+                ChangeState(GAME_STATES.GAME_OVER_WIN);
+            }
         }
 
     }

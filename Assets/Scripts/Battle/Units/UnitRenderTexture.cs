@@ -23,6 +23,8 @@ public class UnitRenderTexture : SkeletonRenderTexture
     Coroutine Alpha_Coroutine;
     Coroutine Hit_Coroutine;
 
+    bool Use_Ultimate_Change_Color;
+
 
     protected override void CreateQuadChild()
     {
@@ -49,33 +51,36 @@ public class UnitRenderTexture : SkeletonRenderTexture
         this.enabled = false;
     }
 
-    //public void SetHitColor(Color pcolor, Color bcolor, float duration)
-    //{
-    //    if (Hit_Coroutine != null)
-    //    {
-    //        StopCoroutine(Hit_Coroutine);
-    //    }
-    //    Hit_Coroutine = StartCoroutine(StartHitColor(pcolor, bcolor, duration));
-    //}
+   
 
-    //IEnumerator StartHitColor(Color pcolor, Color bcolor, float duration)
-    //{
-    //    this.enabled = true;
-    //    Property_Block.SetColor(Color_Property, pcolor);
-    //    Property_Block.SetColor(Black_Tint_Property, bcolor);
-    //    quadMeshRenderer.SetPropertyBlock(Property_Block);
-    //    yield return new WaitForSeconds(duration);
+    public void SetChangeColor(string color)
+    {
+        this.enabled = true;
+        Color c = CommonUtils.ToRGBFromHex(color);
+        Property_Block.SetColor(All_Change_Color_Property, c);
+        Property_Block.SetInt(Is_Change_Property, 1);
+        quadMeshRenderer.SetPropertyBlock(Property_Block);
+        Use_Ultimate_Change_Color = true;
+    }
+    public void SetRollbackColor()
+    {
+        this.enabled = true;
+        var clear_color = Color.clear;
+        clear_color.a = 1f;
+        Property_Block.SetColor(All_Change_Color_Property, Color.clear);
+        Property_Block.SetFloat(Is_Change_Property, 0);
+        quadMeshRenderer.SetPropertyBlock(Property_Block);
+        this.enabled = false;
+        Use_Ultimate_Change_Color = false;
+    }
 
-    //    Property_Block.SetColor(Color_Property, Color.white);
-    //    Property_Block.SetColor(Black_Tint_Property, Color.black);
-    //    quadMeshRenderer.SetPropertyBlock(Property_Block);
-    //    this.enabled = false;
-    //    Hit_Coroutine = null;
-    //}
 
     public void SetHitColorV2(Color col, float duration)
     {
-
+        if (Use_Ultimate_Change_Color)
+        {
+            return;
+        }
         if (Hit_Coroutine != null)
         {
             StopCoroutine(Hit_Coroutine);
@@ -101,6 +106,7 @@ public class UnitRenderTexture : SkeletonRenderTexture
         this.enabled = false;
 
         Hit_Coroutine = null;
+        Use_Ultimate_Change_Color = false;
     }
 
 

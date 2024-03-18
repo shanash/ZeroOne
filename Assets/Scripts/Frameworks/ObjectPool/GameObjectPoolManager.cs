@@ -387,7 +387,8 @@ namespace FluffyDuck.Util
             {
                 return;
             }
-            GameObject.DestroyImmediate(obj);
+            //GameObject.DestroyImmediate(obj);
+            GameObject.Destroy(obj, 0.01f);
 
             //PoolManager p = null;
             //string name = obj.name;
