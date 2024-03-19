@@ -271,14 +271,13 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
 
     /// <summary>
     /// 패턴 문자열에 따라 구분<br/>
-    /// [0]: onetime시트의 multiple_type을 참조하여 해당 효과 연산식에 맞춰서 multiple + value 를 적용 (데미지, 힐량 등)<br/>
-    /// [1]: onetime시트의 multiple 값을 백분률(*100)화 하여 출력(피해량 퍼센테이지 표현 등)<br/>
+    /// [0]: onetime시트의 multiple 값을 백분률(*100)화 하여 출력(피해량 퍼센테이지 표현 등)<br/>
+    /// [1]: onetime시트의 value 값을 그대로 출력<br/>
     /// [2]: duriation시트의 rate 값을 백분률(*100)화 하여 출력(상태이상 적중률)<br/>
     /// [3]: duriation시트의 time 값을 출력(상태 지속시간 초)<br/>
     /// [4]: duriation시트의 count 값을 출력(도트 데미지를 몇 회 준다, 등)<br/>
-    /// [5]: duriation시트의 multiple_type을 참조하여 해당 효과 연산식에 맞춰서* multiple + value 를 적용<br/>
-    /// [6]: duriation시트의 multiple 값을 백분률(*100)화 하여 출력<br/>
-    /// [7]: duriation시트의 value 값을 출력<br/>
+    /// [5]: duriation시트의 multiple 값을 백분률(*100)화 하여 출력<br/>
+    /// [6]: duriation시트의 value 값을 출력<br/>
     /// </summary>
     /// <param name="pattern"></param>
     /// <param name="skill">일회성 또는 지속성 효과 데이터</param>
@@ -286,17 +285,16 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     string ConvertSkillValue(string pattern, object skill)
     {
         string convert = $"Test => {pattern}";
-        BattleOnetimeSkillData onetime_skill = null;
-        BattleDurationSkillData duration_skill = null;
-        int type_value;
+        BattlePcOnetimeSkillData onetime_skill = null;
+        BattlePcDurationSkillData duration_skill = null;
 
         if (skill is BattleOnetimeSkillData)
         {
-            onetime_skill = skill as BattleOnetimeSkillData;
+            onetime_skill = skill as BattlePcOnetimeSkillData;
         }
         else if (skill is BattleDurationSkillData)
         {
-            duration_skill = skill as BattleDurationSkillData;
+            duration_skill = skill as BattlePcDurationSkillData;
         }
 
         try
@@ -304,49 +302,24 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
             switch (pattern)
             {
                 case "[0]":
-                    type_value = (int)onetime_skill.GetStatMultipleType();
-                    // 100단위는 절대값
-                    // 200단위는 배율이라서 단순하게 계산합니다
-                    switch (type_value/100)
-                    {
-                        case 1:
-                            convert = onetime_skill.GetValue().ToString("N0");
-                            break;
-                        case 2:
-                            convert = onetime_skill.GetMultiple().ToPercentage();
-                            break;
-                    }
-                    break;
-                case "[1]":
                     convert = onetime_skill.GetMultiple().ToPercentage();
                     break;
+                case "[1]":
+                    convert = onetime_skill.GetValue().ToString("N0");
+                    break;
                 case "[2]":
-                    convert = duration_skill.GetMultiple().ToPercentage();
+                    convert = duration_skill.GetRate().ToPercentage();
                     break;
                 case "[3]":
-                    convert = duration_skill.Duration.ToString("N1");
+                    convert = duration_skill.GetTime().ToString("N1");
                     break;
                 case "[4]":
-                    convert = duration_skill.Duration.ToString("N1");
+                    convert = duration_skill.Effect_Count.ToString("N0");
                     break;
                 case "[5]":
-                    convert = duration_skill.Duration.ToString("N1");
+                    convert = duration_skill.GetMultiple().ToPercentage();
                     break;
                 case "[6]":
-                    type_value = (int)duration_skill.GetStatMultipleType();
-                    // 100단위는 절대값
-                    // 200단위는 배율이라서 단순하게 계산합니다
-                    switch (type_value / 100)
-                    {
-                        case 1:
-                            convert = duration_skill.GetValue().ToString("N0");
-                            break;
-                        case 2:
-                            convert = duration_skill.GetMultiple().ToPercentage();
-                            break;
-                    }
-                    break;
-                case "[7]":
                     convert = duration_skill.GetValue().ToString("N0");
                     break;
                 default:

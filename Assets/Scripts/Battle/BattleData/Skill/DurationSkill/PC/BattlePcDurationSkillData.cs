@@ -111,6 +111,10 @@ public class BattlePcDurationSkillData : BattleDurationSkillData
     {
         return Data.rate + (GetSkillLevel() - 1) * Data.up_rate;
     }
+    public double GetTime()
+    {
+        return Data.time;
+    }
     public override double GetMultiple()
     {
         return Data.multiple + (GetSkillLevel() - 1) * Data.up_multiple;
