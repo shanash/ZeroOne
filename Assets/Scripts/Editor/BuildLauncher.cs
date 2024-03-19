@@ -1112,15 +1112,22 @@ namespace FluffyDuck.EditorUtil
             ReadArguments();
             //SET IsRemotePath = false
             //SET IsCleanBuild = true
-
-            if (0 != BuildAddressableConsole())
+            bool isAssetBuild = GetArguments("IsAssetBuild").Equals(true);
+            bool isPlayerBuild = GetArguments("IsPlayerBuild").Equals(true);
+            if (isAssetBuild)
             {
-                return 1;
+                if (0 != BuildAddressableConsole())
+                {
+                    return 1;
+                }
             }
 
-            if (0 != BuildPlayerConsole())
+            if (isPlayerBuild)
             {
-                return 1;
+                if (0 != BuildPlayerConsole())
+                {
+                    return 1;
+                }
             }
 
             return 0;
@@ -1130,8 +1137,8 @@ namespace FluffyDuck.EditorUtil
         {
             Debug.Log("Start BuildAddressableConsole");
 
-            IsRemotePath = Environment.ExpandEnvironmentVariables("%IsRemotePath%").Equals("true");
-            IsCleanBuild = Environment.ExpandEnvironmentVariables("%IsCleanBuild%").Equals("true");
+            IsRemotePath = GetArguments("IsRemotePath").Equals(true);
+            IsCleanBuild = GetArguments("IsCleanBuild").Equals(true);
 
             if (BuildAddressables(IsCleanBuild))
             {
@@ -1147,11 +1154,11 @@ namespace FluffyDuck.EditorUtil
         {
             Debug.Log("Start BuildPlayerConsole");
 
-            Keystore_Password = Environment.ExpandEnvironmentVariables("%AndroidKeystorePassword%");
-            Key_Alias_Name = Environment.ExpandEnvironmentVariables("%AndroidKeyAliasName%");
-            Key_Alias_Password = Environment.ExpandEnvironmentVariables("%AndroidKeyAliasPassword%");
-            BUILD_ID = Environment.ExpandEnvironmentVariables("%BUILD_ID%");
-            SVN_REVISION = Environment.ExpandEnvironmentVariables("%SVN_REVISION%");
+            Keystore_Password = GetArguments("AndroidKeystorePassword");//Environment.ExpandEnvironmentVariables("%AndroidKeystorePassword%");
+            Key_Alias_Name = GetArguments("AndroidKeyAliasName"); //Environment.ExpandEnvironmentVariables("%AndroidKeyAliasName%");
+            Key_Alias_Password = GetArguments("AndroidKeyAliasPassword"); //Environment.ExpandEnvironmentVariables("%AndroidKeyAliasPassword%");
+            BUILD_ID = GetArguments("BUILD_ID"); //Environment.ExpandEnvironmentVariables("%BUILD_ID%");
+            SVN_REVISION = GetArguments("SVN_REVISION"); //Environment.ExpandEnvironmentVariables("%SVN_REVISION%");
 
             BuildPlayerOptions bpo = CreateDefalutBuildPlayerOptions();
 
@@ -1180,6 +1187,33 @@ namespace FluffyDuck.EditorUtil
                     Debug.Log($"Received myParameter: {args[i]} : {args[i+1]}");
                 }
             }
+        }
+
+        public static string GetArguments(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return string.Empty;
+            }
+
+            string result;
+            string lowerKey = key;
+
+            if (char.IsUpper(key[0]))
+            {
+                lowerKey = char.ToLower(key[0]) + key.Substring(1);
+            }
+
+            if (ConsoleArguments.ContainsKey(lowerKey))
+            {
+                result = ConsoleArguments[lowerKey];
+            }
+            else
+            {
+                result = Environment.ExpandEnvironmentVariables($"%{key}%");
+            }
+
+            return result;
         }
 
         /*
