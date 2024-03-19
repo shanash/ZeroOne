@@ -25,44 +25,17 @@ public class BattlePcOnetimeSkillData_LifeRecovery : BattlePcOnetimeSkillData
 
             switch (GetStatMultipleType())
             {
-                case STAT_MULTIPLE_TYPE.ATTACK_VALUE:
-                    Debug.Assert(false);
-                    break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
                     Debug.Assert(false);
                     break;
-                case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    recovery_hp = GetValue();
-                    break;
                 case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
-                    recovery_hp = t.Max_Life * GetMultiple();
-                    break;
-                case STAT_MULTIPLE_TYPE.LIFE:
-                    recovery_hp = GetValue();
+                    recovery_hp = t.Max_Life * GetMultiple() + GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.LIFE_RATE:
-                    recovery_hp = t.Life * GetMultiple();
+                    recovery_hp = t.Life * GetMultiple() + GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.HEAL_RATE:
                     recovery_hp = (send_data.Caster.Magic_Attack * GetMultiple() * 0.6) + (send_data.Caster.Life_Recovery_Inc * GetMultiple() * 0.9) + GetValue();
-                    break;
-                case STAT_MULTIPLE_TYPE.HEAL_VALUE:
-                    recovery_hp = GetValue();
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_POWER_ADD:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.ACCURACY_VALUE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.EVASION_VALUE:
-                    Debug.Assert(false);
                     break;
                 case STAT_MULTIPLE_TYPE.DAMAGE:
                     Debug.Assert(false);

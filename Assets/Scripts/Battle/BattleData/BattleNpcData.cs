@@ -255,6 +255,10 @@ public class BattleNpcData : BattleUnitData
         return 0;
     }
 
+    public override int GetSumSkillsLevel()
+    {
+        return Skill_Mng.GetSkillLevelSum();
+    }
     public override float GetApproachDistance()
     {
         if (Battle_Data != null)

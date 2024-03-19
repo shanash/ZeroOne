@@ -34,6 +34,9 @@ public class PartySelectInfo : MonoBehaviour
     [SerializeField, Tooltip("Attribute Icon")]
     Image Attribute_Icon;
 
+    [SerializeField, Tooltip("Default Info Box")]
+    RectTransform Default_Info;
+
     //  todo [skill list]
     [SerializeField, Tooltip("Skill List")]
     List<PartySelectSkillNode> Skill_List;
@@ -63,7 +66,7 @@ public class PartySelectInfo : MonoBehaviour
             UpdateEmptyInfo();
             return;
         }
-        ShowInfoBox(true);
+        ShowDefaultInfoBox(false);
 
         var m = MasterDataManager.Instance;
         //  card
@@ -114,14 +117,18 @@ public class PartySelectInfo : MonoBehaviour
     }
     void UpdateEmptyInfo()
     {
-        ShowInfoBox(false);
+        ShowDefaultInfoBox(true);
     }
 
-    public void ShowInfoBox(bool show)
+    
+
+    public void ShowDefaultInfoBox(bool show)
     {
-        if (Box.gameObject.activeSelf != show)
+        if (Default_Info.gameObject.activeSelf != show)
         {
-            Box.gameObject.SetActive(show);
+            Default_Info.gameObject.SetActive(show);
         }
     }
+
+
 }

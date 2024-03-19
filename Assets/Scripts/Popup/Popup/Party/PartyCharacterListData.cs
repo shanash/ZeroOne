@@ -12,6 +12,8 @@ public class PartyCharacterListData : InfiniteScrollData
 
     public GAME_TYPE Game_Type { get; protected set; } = GAME_TYPE.NONE;
 
+    public CHARACTER_SORT Filter_Type { get; protected set; } = CHARACTER_SORT.NAME;
+
     public void SetUserHeroDataList(List<UserHeroData> list)
     {
         User_Hero_Data_List.Clear();
@@ -24,6 +26,11 @@ public class PartyCharacterListData : InfiniteScrollData
     public void SetGameType(GAME_TYPE gtype)
     {
         Game_Type = gtype;
+    }
+
+    public void SetFilterType(CHARACTER_SORT filter)
+    {
+        Filter_Type = filter;
     }
 
     public List<UserHeroData> GetUserHeroDataList()

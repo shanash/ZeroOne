@@ -1,6 +1,7 @@
 // TODO: 팩토리로 생성 가능할듯
 /**/
 using System.Collections.Generic;
+using System.Linq;
 
 public abstract class BattleUnitData : BattleDataBase
 {
@@ -147,12 +148,25 @@ public abstract class BattleUnitData : BattleDataBase
     /// 전투력 포인트
     /// </summary>
     /// <returns></returns>
-    public virtual double GetCombatPoint()
+    public virtual double GetCombatPoint(List<Attribute_Synergy_Data> synergy_list = null)
     {
+        double atk_synergy = 0;
+        if (synergy_list != null)
+        {
+            atk_synergy = synergy_list.Sum(x => x.multiple_type == STAT_MULTIPLE_TYPE.ATTACK_RATE ? x.add_damage_per : 0);
+        }
+        double total_attack_point = GetTotalAttackPoint();
+        if (atk_synergy != 0)
+        {
+            total_attack_point += total_attack_point * atk_synergy;
+        }
+
+        double total_defense_point = GetTotalDefensePoint();
+
         return GameCalc.GetCombatPoint(
             GetMaxLifePoint(),
-            GetPhysicsAttackPoint(),
-            GetPhysicsDefensePoint(),
+            total_attack_point,
+            total_defense_point,
             GetAutoRecoveryLife(),
             GetEvasionPoint(),
             GetAttackLifeRecovery(),

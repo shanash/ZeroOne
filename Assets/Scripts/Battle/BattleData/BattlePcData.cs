@@ -706,6 +706,8 @@ public class BattlePcData : BattleUnitData
         return NPC_TYPE.NONE;
     }
 
+    
+
     public BattlePcData GetNextStarGradeData()
     {
         var clone = (BattlePcData)this.Clone();

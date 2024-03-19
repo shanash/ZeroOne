@@ -500,6 +500,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2", GetHPPositionTransform());
             obj.transform.localPosition = Vector3.zero;
+            obj.transform.localScale = Vector3.one;
             Life_Bar_V2 = obj.GetComponent<LifeBarNode_V2>();
             if (Team_Type == TEAM_TYPE.RIGHT)
             {

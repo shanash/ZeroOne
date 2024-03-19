@@ -53,7 +53,7 @@ public partial class TeamManager_V2 : IDisposable
     }
     protected virtual void ResetTeamManager() 
     {
-        int cnt = Used_Members.Count;
+        //int cnt = Used_Members.Count;
         //var pool = GameObjectPoolManager.Instance;
         //if (pool == null)
         //{
@@ -397,7 +397,9 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
-    
+    /// <summary>
+    /// 던전 몬스터 스폰 
+    /// </summary>
     void MonsterSpawn()
     {
         ClearMembers();
@@ -427,11 +429,11 @@ public partial class TeamManager_V2 : IDisposable
             var local_scale = obj.transform.localScale;
             if (local_scale.x < 0)
             {
-                obj.transform.localScale = new Vector2(-npc.GetUnitScale(), npc.GetUnitScale());
+                obj.transform.localScale = new Vector3(-npc.GetUnitScale(), npc.GetUnitScale(), npc.GetUnitScale());
             }
             else
             {
-                obj.transform.localScale = new Vector2(npc.GetUnitScale(), npc.GetUnitScale());
+                obj.transform.localScale = new Vector3(npc.GetUnitScale(), npc.GetUnitScale(), npc.GetUnitScale());
             }
 
             MonsterBase_V2 monster = obj.GetComponent<MonsterBase_V2>();

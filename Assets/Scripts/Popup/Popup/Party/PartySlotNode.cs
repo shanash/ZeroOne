@@ -1,6 +1,7 @@
 using Cysharp.Text;
 using FluffyDuck.Util;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class PartySlotNode : MonoBehaviour
 
     UserHeroDeckMountData User_Deck;
     UserHeroData User_Hero;
+    BattlePcData Unit_Data;
 
     public UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Callback => Button.Touch_Tooltip_Callback;
 
@@ -36,6 +38,13 @@ public class PartySlotNode : MonoBehaviour
         if (User_Deck != null)
         {
             User_Hero = GameData.Instance.GetUserHeroDataManager().FindUserHeroData(User_Deck.Player_Character_ID, User_Deck.Player_Character_Num);
+            Unit_Data = new BattlePcData();
+            Unit_Data.SetUnitID(User_Hero.GetPlayerCharacterID(), User_Hero.Player_Character_Num);
+        }
+        else
+        {
+            Unit_Data?.Dispose();
+            Unit_Data = null;
         }
         UpdatePartySlot();
         if (Button != null)
@@ -47,6 +56,22 @@ public class PartySlotNode : MonoBehaviour
     public UserHeroDeckMountData GetUserHeroDeckMountData()
     {
         return User_Deck;
+    }
+
+    public double GetBattlePoint()
+    {
+        if (Unit_Data != null)
+        {
+            return Unit_Data.GetCombatPoint(GetTeamSynergyList());
+        }
+        return 0;
+    }
+
+    List<Attribute_Synergy_Data> GetTeamSynergyList()
+    {
+        var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
+        var deck = deck_mng.FindSelectedDeck(Game_Type);
+        return deck.GetTeamSynergyList();
     }
 
     public void UpdatePartySlot()
@@ -73,17 +98,17 @@ public class PartySlotNode : MonoBehaviour
             //  role type
             Card.SetRoleType(User_Hero.GetPlayerCharacterData().role_type);
             //  team synergy
-            var attr_data = m.Get_AttributeIconData(User_Hero.GetAttributeType());
-            string icon_path = attr_data.icon;
-            if (!deck.IsExistTeamSynergyAttribute(attr_data.attribute_type))
-            {
-                icon_path = ZString.Format("{0}_Grey", attr_data.icon);
-            }
+            //var attr_data = m.Get_AttributeIconData(User_Hero.GetAttributeType());
+            //string icon_path = attr_data.icon;
+            //if (!deck.IsExistTeamSynergyAttribute(attr_data.attribute_type))
+            //{
+            //    icon_path = ZString.Format("{0}_Grey", attr_data.icon);
+            //}
 
-            CommonUtils.GetResourceFromAddressableAsset<Sprite>(icon_path, (spr) =>
-            {
-                Team_Synergy_Icon.sprite = spr;
-            });
+            //CommonUtils.GetResourceFromAddressableAsset<Sprite>(icon_path, (spr) =>
+            //{
+            //    Team_Synergy_Icon.sprite = spr;
+            //});
         }
     }
 }

@@ -74,8 +74,8 @@ public class PartySettingPopup : PopupBase
         Game_Type = (GAME_TYPE)data[0];
         Dungeon_ID = (int)data[1];
 
-        Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
         Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+        Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type, Filter_Type);
         Sort_Order = (SORT_ORDER)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.SORT_ORDER_TYPE, SORT_ORDER.ASC);
 
         InitAssets();
@@ -141,7 +141,7 @@ public class PartySettingPopup : PopupBase
     {
         Character_LIst_View.Clear();
 
-        const int column_count = 5;
+        const int column_count = 6;
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
         List<UserHeroData> user_hero_list = new List<UserHeroData>();
@@ -305,7 +305,7 @@ public class PartySettingPopup : PopupBase
             var new_data = new PartyCharacterListData();
             new_data.Click_Hero_Callback = SelectCharacterCallback;
             new_data.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
-
+            new_data.SetFilterType(Filter_Type);
             if (start + column_count < hero_count)
             {
                 new_data.SetUserHeroDataList(user_hero_list.GetRange(start, column_count));
@@ -429,6 +429,8 @@ public class PartySettingPopup : PopupBase
             popup.SetHideCompleteCallback(() =>
             {
                 Filter_Type = (CHARACTER_SORT)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.CHARACTER_FILTER_TYPE, CHARACTER_SORT.NAME);
+                Party_Mng.SetGameType(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type, Filter_Type);
+                Party_Mng.UpdateUserPartySettings();
                 FixedUpdatePopup();
             });
             popup.ShowPopup();
@@ -500,30 +502,7 @@ public class PartySettingPopup : PopupBase
             var board = BlackBoard.Instance;
             board.SetBlackBoard(BLACK_BOARD_KEY.DUNGEON_ID, Dungeon_ID);
             board.SetBlackBoard(BLACK_BOARD_KEY.GAME_TYPE, Game_Type);
-
-            //if (Game_Type == GAME_TYPE.STORY_MODE)
-            //{
-            //    var story_data = MasterDataManager.Instance.Get_StageData(Dungeon_ID);
-            //    if (story_data != null)
-            //    {
-            //        if (!string.IsNullOrEmpty(story_data.entrance_dialogue))
-            //        {
-            //            SCManager.I.ChangeScene(story_data.entrance_dialogue);
-            //        }
-            //        else
-            //        {
-            //            SCManager.I.ChangeScene(SceneName.battle);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        SCManager.I.ChangeScene(SceneName.battle);
-            //    }
-            //}
-            //else
-            //{
-            //    SCManager.I.ChangeScene(SceneName.battle);
-            //}
+           
             SCManager.I.ChangeScene(SceneName.battle);
         }
     }
@@ -563,7 +542,7 @@ public class PartySettingPopup : PopupBase
     public override void Spawned()
     {
         base.Spawned();
-        Selected_Info_Box.ShowInfoBox(false);
+        Selected_Info_Box.ShowDefaultInfoBox(true);
     }
     public override void Despawned()
     {

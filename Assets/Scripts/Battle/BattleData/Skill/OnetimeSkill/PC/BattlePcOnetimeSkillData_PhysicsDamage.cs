@@ -23,32 +23,17 @@ public class BattlePcOnetimeSkillData_PhysicsDamage : BattlePcOnetimeSkillData
 
             switch (GetStatMultipleType())
             {
-                case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
-                    damage_point = GetValue();
-                    break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
-                    damage_point = send_data.Caster.Physics_Attack * GetMultiple();
+                    damage_point = send_data.Caster.Physics_Attack * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    damage_point = send_data.Caster.Physics_Defense * GetMultiple();
+                case STAT_MULTIPLE_TYPE.DEFENSE_RATE:
+                    damage_point = send_data.Caster.Physics_Defense * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    damage_point = send_data.Caster.Max_Life * GetMultiple();
+                case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
+                    damage_point = send_data.Caster.Max_Life * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.LIFE:
-                    damage_point = send_data.Caster.Life * GetMultiple();
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_POWER_ADD:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.ACCURACY_VALUE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.EVASION_VALUE:
-                    Debug.Assert(false);
+                case STAT_MULTIPLE_TYPE.LIFE_RATE:
+                    damage_point = send_data.Caster.Life * GetMultiple() + GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.DAMAGE:
                     Debug.Assert(false);

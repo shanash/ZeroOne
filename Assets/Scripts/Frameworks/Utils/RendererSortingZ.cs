@@ -31,9 +31,16 @@ namespace FluffyDuck.Util
 
         private void Start()
         {
-            Sort_Group = GetComponent<SortingGroup>();
+            CheckSortGroup();
             Is_Show = true;
             SetZorderIndex(ZOrder);
+        }
+        void CheckSortGroup()
+        {
+            if (Sort_Group == null)
+            {
+                Sort_Group = GetComponent<SortingGroup>();
+            }
         }
 
         public void SetZorderIndex(ZORDER_INDEX zindex)
@@ -63,6 +70,7 @@ namespace FluffyDuck.Util
         public void ShowGameObject(bool show)
         {
             Is_Show = show;
+            CheckSortGroup();
             if (!Is_Show)
             {
                 Sort_Group.sortingLayerName = HIDE_SORT_LAYER_NAME;

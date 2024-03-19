@@ -22,11 +22,11 @@ public class PartyCharacterListCell : InfiniteScrollItem
             slot.Click_Hero_Callback.AddListener(data.Click_Hero_Callback);
             if (i < hero_list.Count)
             {
-                slot.SetUserHeroData(hero_list[i], data.Game_Type);
+                slot.SetUserHeroData(hero_list[i], data.Game_Type, data.Filter_Type);
             }
             else
             {
-                slot.SetUserHeroData(null, data.Game_Type);
+                slot.SetUserHeroData(null, data.Game_Type, data.Filter_Type);
             }
         }
     }

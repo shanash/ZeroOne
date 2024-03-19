@@ -21,32 +21,17 @@ public class BattleNpcOnetimeSkillData_MagicDamage : BattleNpcOnetimeSkillData
 
             switch (GetStatMultipleType())
             {
-                case STAT_MULTIPLE_TYPE.ATTACK_VALUE:   //  절대값
-                    send_data.Magic_Attack_Point = GetValue();
-                    break;
                 case STAT_MULTIPLE_TYPE.ATTACK_RATE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Attack * GetMultiple();
+                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Attack * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.DEFENSE_VALUE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Defense * GetMultiple();
+                case STAT_MULTIPLE_TYPE.DEFENSE_RATE:
+                    send_data.Magic_Attack_Point = send_data.Caster.Magic_Defense * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.MAX_LIFE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Max_Life * GetMultiple();
+                case STAT_MULTIPLE_TYPE.MAX_LIFE_RATE:
+                    send_data.Magic_Attack_Point = send_data.Caster.Max_Life * GetMultiple() + GetValue();
                     break;
-                case STAT_MULTIPLE_TYPE.LIFE:
-                    send_data.Magic_Attack_Point = send_data.Caster.Life * GetMultiple();
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_CHANCE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.CRITICAL_POWER_ADD:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.ACCURACY_VALUE:
-                    Debug.Assert(false);
-                    break;
-                case STAT_MULTIPLE_TYPE.EVASION_VALUE:
-                    Debug.Assert(false);
+                case STAT_MULTIPLE_TYPE.LIFE_RATE:
+                    send_data.Magic_Attack_Point = send_data.Caster.Life * GetMultiple() + GetValue();
                     break;
                 case STAT_MULTIPLE_TYPE.DAMAGE:
                     Debug.Assert(false);
