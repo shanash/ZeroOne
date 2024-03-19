@@ -26,6 +26,9 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Filter Box")]
     protected RectTransform Filter_Box;
 
+    [SerializeField, Tooltip("Filter Image")]
+    protected Image Filter_Image;
+
     [SerializeField, Tooltip("Filter Text")]
     protected TMP_Text Filter_Text;
 
@@ -150,7 +153,15 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     public void SetFilter(BattlePcData data, CHARACTER_SORT filter_type)
     {
         // Filter
-        Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
+        if (Filter_Box != null)
+        {
+            Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
+        }
+
+        //  attribute color
+        var attr_data = MasterDataManager.Instance.Get_AttributeIconData(data.User_Data.GetAttributeType());
+        Filter_Image.color = CommonUtils.ToRGBFromHex(attr_data.color);
+
         string filter_text = "미구현";
         switch (filter_type)
         {
