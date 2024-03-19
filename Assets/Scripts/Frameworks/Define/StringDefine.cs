@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FluffyDuck.Util
@@ -13,6 +14,11 @@ namespace FluffyDuck.Util
         public static string WithColorTag(this string message, string color_code)
         {
             return $"<color={color_code}>{message}</color>";
+        }
+
+        public static string RemoveLineBreak(this string message)
+        {
+            return message.Trim('\r', '\n');
         }
 
         public static Color ToRGBFromHex(this string hex)

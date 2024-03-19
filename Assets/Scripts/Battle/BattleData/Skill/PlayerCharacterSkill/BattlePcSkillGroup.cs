@@ -1,4 +1,5 @@
 using Cysharp.Text;
+using FluffyDuck.Util;
 using System.Collections.Generic;
 
 public class BattlePcSkillGroup : BattleSkillGroup
@@ -83,7 +84,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
         var sb = ZString.CreateStringBuilder();
         for (int i = 0; i < Battle_Skill_Data_List.Count; i++)
         {
-            sb.Append(Battle_Skill_Data_List[i].GetSkillDesc().TrimEnd());
+            sb.Append(Battle_Skill_Data_List[i].GetSkillDesc().RemoveLineBreak());
         }
 
         return sb.ToString();

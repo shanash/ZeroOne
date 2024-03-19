@@ -273,7 +273,7 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
     /// 패턴 문자열에 따라 구분<br/>
     /// [0]: onetime시트의 multiple 값을 백분률(*100)화 하여 출력(피해량 퍼센테이지 표현 등)<br/>
     /// [1]: onetime시트의 value 값을 그대로 출력<br/>
-    /// [2]: duriation시트의 rate 값을 백분률(*100)화 하여 출력(상태이상 적중률)<br/>
+    /// [2]: duriation시트의 rate 값을 백분률화 하여 출력(상태이상 적중률)<br/>
     /// [3]: duriation시트의 time 값을 출력(상태 지속시간 초)<br/>
     /// [4]: duriation시트의 count 값을 출력(도트 데미지를 몇 회 준다, 등)<br/>
     /// [5]: duriation시트의 multiple 값을 백분률(*100)화 하여 출력<br/>
@@ -308,7 +308,7 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
                     convert = onetime_skill.GetValue().ToString("N0");
                     break;
                 case "[2]":
-                    convert = duration_skill.GetRate().ToPercentage();
+                    convert = duration_skill.GetRate().ToPercentage(0.01);
                     break;
                 case "[3]":
                     convert = duration_skill.GetTime().ToString("N1");
