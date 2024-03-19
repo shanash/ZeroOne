@@ -35,6 +35,8 @@ namespace FluffyDuck.EditorUtil
 
         static readonly string[] Dropdown_Options = new string[] { "Local", "Remote" };
 
+        static Dictionary<string, string> ConsoleArguments = new Dictionary<string, string>();
+
         //static readonly string ANDROID_SDK_EDITOR_PATH = "PlaybackEngines/AndroidPlayer/SDK";
         //static readonly string ANDROID_SDK_EDITOR_PATH_AT_WINDOWS = $"Data/{ANDROID_SDK_EDITOR_PATH}";
         //static readonly string ADB_PATH_AT_ANDROID_SDK = "platform-tools/adb";
@@ -1107,6 +1109,7 @@ namespace FluffyDuck.EditorUtil
 
         public static int BuildAllConsole()
         {
+            ReadArguments();
             //SET IsRemotePath = false
             //SET IsCleanBuild = true
 
@@ -1163,6 +1166,19 @@ namespace FluffyDuck.EditorUtil
             Debug.Log("Success BuildPlayerConsole");
 
             return 0;
+        }
+
+        public static void ReadArguments()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length-1; i++)
+            {
+                if (args[i][0].Equals('-'))
+                {
+                    ConsoleArguments.Add(args[i].Remove(0, 1), args[i + 1]);
+                    Debug.Log($"Received myParameter: {args[i]} : {args[i+1]}");
+                }
+            }
         }
 
         /*
