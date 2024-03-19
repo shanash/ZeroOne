@@ -4,6 +4,7 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
+using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -56,37 +57,14 @@ public class PartySelectSkillNode : MonoBehaviour
     public void Initialize(int pc_id, int pc_num, SKILL_TYPE type = SKILL_TYPE.NONE)
     {
         var gd = GameData.Instance;
-        User_Data = gd.GetUserHeroDataManager().FindUserHeroData(pc_id, pc_num);
-
-        var skill_list = User_Data.GetPlayerCharacterBattleData().skill_pattern;
-        int skill_group_id = 0;
+        var skill_list = gd.GetUserHeroSkillDataManager().GetUserHeroSkillDataList(pc_id, pc_num).ToList();
 
         if (type != SKILL_TYPE.NONE)
         {
             Skill_Type = type;
         }
 
-        if (Skill_Type == SKILL_TYPE.SKILL_01)
-        {
-            skill_group_id = skill_list[1];
-        }
-        else if (Skill_Type == SKILL_TYPE.SKILL_02)
-        {
-            skill_group_id = skill_list[2];
-        }
-        else if (Skill_Type == SKILL_TYPE.SPECIAL_SKILL)
-        {
-            skill_group_id = User_Data.GetPlayerCharacterBattleData().special_skill_group_id;
-        }
-        else
-        {
-            Debug.Assert(false);
-        }
-
-        UserHeroSkillData data = (skill_group_id != 0) ?
-            gd.GetUserHeroSkillDataManager().FindUserHeroSkillData(pc_id, pc_num, skill_group_id) :
-            null;
-
+        UserHeroSkillData data = skill_list.Find(x => x.GetSkillType() == Skill_Type);
         Initialize(data);
     }
 
