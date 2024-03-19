@@ -221,9 +221,10 @@ public class HeroListUI : PopupBase
 
     void UpdateFilterType()
     {
-        Filter_Name.text = ConstString.Hero.SORT_FILLTER[(int)Filter_Type];
+        Filter_Name.text = GameDefine.GetFilterString(Filter_Type);
         Filter_Sort_Direction_Image.eulerAngles = Is_Ascended_Sort ? Vector3.zero : new Vector3(0, 0, 180);
     }
+
     public void OnClickFilterPopup()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
