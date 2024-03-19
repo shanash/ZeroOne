@@ -83,7 +83,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
         var sb = ZString.CreateStringBuilder();
         for (int i = 0; i < Battle_Skill_Data_List.Count; i++)
         {
-            sb.Append(Battle_Skill_Data_List[i].GetSkillDesc());
+            sb.Append(Battle_Skill_Data_List[i].GetSkillDesc().TrimEnd());
         }
 
         return sb.ToString();
