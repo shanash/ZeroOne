@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using FluffyDuck.Util;
 using System.Collections.Generic;
 using TMPro;
@@ -80,7 +81,7 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         // role type
         SetRoleType(Data.role_type);
         // 
-        SetName(GameDefine.GetLocalizeString(Data.name_id));
+        SetName(data.GetUnitName());
 
         SetFilter(data, filter_type);
 
@@ -147,59 +148,77 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
         Name_Text.text = name;
     }
 
-    public void SetFilter(BattlePcData data, CHARACTER_SORT filter_type)
+    public void SetFilter(BattlePcData unit_data, CHARACTER_SORT filter_type)
     {
         // Filter
-        Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
-        string filter_text = "미구현";
+        if (Filter_Box != null)
+        {
+            Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
+        }
+
+        //  attribute color
+        if (Filter_Image != null)
+        {
+            var attr_data = MasterDataManager.Instance.Get_AttributeIconData(unit_data.GetAttributeType());
+            Filter_Image.color = CommonUtils.ToRGBFromHex(attr_data.color);
+        }
+
+        string filter = "EMPTY";
         switch (filter_type)
         {
+            case CHARACTER_SORT.NAME:
+                filter = unit_data.GetUnitName();
+                break;
             case CHARACTER_SORT.LEVEL_CHARACTER:
-                filter_text = $"Lv.{data.GetLevel()}";
+                filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.GetLevel());
                 break;
             case CHARACTER_SORT.STAR:
-                filter_text = new string('★', data.GetStarGrade());
+                filter = unit_data.GetStarGrade().ToString();
                 break;
-            case CHARACTER_SORT.NAME:
-                filter_text = GameDefine.GetLocalizeString(Data.name_id);
+            case CHARACTER_SORT.DESTINY:
+                filter = "0";
                 break;
-                /*
             case CHARACTER_SORT.SKILL_LEVEL:
-                filter_text = $"Lv.{data.GetSumSkillsLevel()}";
+                filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.GetNormalSkillLevelSum());
                 break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
-                filter_text = $"Lv.{data.Skill_Mng.GetSpecialSkillGroup().GetSkillLevel()}";
-                break;
-                */
-            case CHARACTER_SORT.ATTACK:
-                filter_text = (data.GetPhysicsAttackPoint() + data.GetMagicAttackPoint()).ToString("N0");
-                break;
-            case CHARACTER_SORT.DEFEND:
-                filter_text = (data.GetPhysicsDefensePoint() + data.GetMagicDefensePoint()).ToString("N0");
-                break;
-            case CHARACTER_SORT.RANGE:
-                switch (data.GetPositionType())
                 {
-                    case POSITION_TYPE.FRONT:
-                        filter_text = "전열 배치";
-                        break;
-                    case POSITION_TYPE.BACK:
-                        filter_text = "후열 배치";
-                        break;
-                    case POSITION_TYPE.MIDDLE:
-                        filter_text = "중열 배치";
-                        break;
+                    int level = 0;
+                    var special_skill = unit_data.Skill_Mng.GetSpecialSkillGroup();
+                    if (special_skill != null)
+                    {
+                        level = special_skill.GetSkillLevel();
+                    }
+                    filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), level);
                 }
                 break;
+            case CHARACTER_SORT.ATTACK:
+                filter = unit_data.GetTotalAttackPoint().ToString("N0");
+                break;
+            case CHARACTER_SORT.DEFEND:
+                filter = unit_data.GetTotalDefensePoint().ToString("N0");
+                break;
+            case CHARACTER_SORT.RANGE:
+                filter = unit_data.GetApproachDistance().ToString();
+                break;
             case CHARACTER_SORT.LIKEABILITY:
-                filter_text = ConstString.Hero.LOVE_LEVEL[data.User_Data.GetLoveLevel()];
+                filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.User_Data.GetLoveLevel());
+                break;
+            case CHARACTER_SORT.ATTRIBUTE:
+                {
+                    var attr_data = MasterDataManager.Instance.Get_AttributeIconData(unit_data.GetAttributeType());
+                    filter = GameDefine.GetLocalizeString(attr_data.name_id);
+                }
+                break;
+            case CHARACTER_SORT.BATTLEPOWER:
+                filter = unit_data.GetCombatPoint().ToString("N0");
                 break;
             default:
-                Filter_Text.text = "미구현";
+                Debug.Assert(false);
                 break;
         }
 
-        Filter_Text.text = filter_text;
+        Filter_Text.text = filter;
     }
 
     /// <summary>

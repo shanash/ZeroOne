@@ -242,9 +242,7 @@ public class HeroListUI : PopupBase
     public void OnClickSort()
     {
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
-
         Is_Ascended_Sort = !Is_Ascended_Sort;
-        Debug.Log($"Is_Ascended_Sort : {Is_Ascended_Sort}");
 
         UpdatePopup();
     }
