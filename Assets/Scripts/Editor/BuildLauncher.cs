@@ -1174,7 +1174,7 @@ namespace FluffyDuck.EditorUtil
             string[] args = Environment.GetCommandLineArgs();
             for (int i = 0; i < args.Length-1; i++)
             {
-                if (args[i][0].Equals('-'))
+                if (args[i][0].Equals('-') && !args[i+1][0].Equals('-'))
                 {
                     ConsoleArguments.Add(args[i].Remove(0, 1), args[i + 1]);
                     Debug.Log($"Received myParameter: {args[i]} : {args[i+1]}");
