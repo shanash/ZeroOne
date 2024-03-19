@@ -301,7 +301,23 @@ public abstract class BattleUnitData : BattleDataBase
     /// 데이터가 없어서 임시로 만들어놓은 UI 표시용 레벨합계 값입니다
     /// </summary>
     /// <returns></returns>
-    public virtual int GetSumSkillsLevel() { return 3; }
+    public virtual int GetSumSkillsLevel() { return Skill_Mng.GetSkillLevelSum(); }
+
+    /// <summary>
+    /// 일반 스킬의 레벨 합
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetNormalSkillLevelSum() { return Skill_Mng.GetNormalSkillLevelSum(); }
+
+    public virtual int GetSpecialSkillLevel()
+    {
+        var skill_group = Skill_Mng.GetSpecialSkillGroup();
+        if (skill_group != null)
+        {
+            return skill_group.GetSkillLevel();
+        }
+        return 0;
+    }
 
     /// <summary>
     /// 포지션 타입

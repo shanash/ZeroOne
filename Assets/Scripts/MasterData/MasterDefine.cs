@@ -240,6 +240,10 @@ public enum CHARACTER_SORT
 	RANGE = 8,
 	/// <summary>9 호감도</summary>
 	LIKEABILITY = 9,
+	/// <summary>10 속성</summary>
+	ATTRIBUTE = 10,
+	/// <summary>11 전투력</summary>
+	BATTLEPOWER = 11,
 }
 
 ///	<summary>

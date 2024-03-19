@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleSkillManager : BattleDataBase
@@ -520,6 +521,24 @@ public class BattleSkillManager : BattleDataBase
     public int GetSkillLevelSum()
     {
         int sum = Skill_Groups.Sum(x => x.GetSkillLevel());
+        return sum;
+    }
+
+    /// <summary>
+    /// 보유중인 일반 스킬 레벨의 총 합
+    /// </summary>
+    /// <returns></returns>
+    public int GetNormalSkillLevelSum()
+    {
+        int sum = 0;
+        for (int i = 0; i < Skill_Groups.Count; i++)
+        {
+            var skill = Skill_Groups[i];
+            if (skill.GetSkillType() == SKILL_TYPE.SKILL_01 || skill.GetSkillType() == SKILL_TYPE.SKILL_02)
+            {
+                sum += skill.GetSkillLevel();
+            }
+        }
         return sum;
     }
 }

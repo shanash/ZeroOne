@@ -1,14 +1,27 @@
 using Cysharp.Text;
+using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PartyListSynergeItem : MonoBehaviour
 {
     [SerializeField, Tooltip("On Object")]
     RectTransform On_Obj;
+
+    [SerializeField, Tooltip("Attribute BG")]
+    Image Attribute_BG;
+
+    [SerializeField, Tooltip("Attribute Frame")]
+    Image Attribute_Frame;
+
+    [SerializeField, Tooltip("Enable Animator")]
+    Animation Enable_Animation;
+
+    
 
     [SerializeField, Tooltip("Property Text")]
     TMP_Text Property_Text;
@@ -42,12 +55,24 @@ public class PartyListSynergeItem : MonoBehaviour
         {
             On_Obj.gameObject.SetActive(false);
             Property_Text.text = string.Empty;
+            Attribute_BG.color = CommonUtils.ToRGBFromHex("59A7FF");
             return;
         }
         //  synergy on/off
         var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var deck = deck_mng.FindSelectedDeck(Game_Type);
-        On_Obj.gameObject.SetActive(deck.IsExistTeamSynergyAttribute(User_Hero.GetAttributeType()));
+
+        bool is_synergy = deck.IsExistTeamSynergyAttribute(User_Hero.GetAttributeType());
+        On_Obj.gameObject.SetActive(is_synergy);
+        if (On_Obj.gameObject.activeSelf)
+        {
+            Enable_Animation.Play();
+        }
+
+        var attr_data = MasterDataManager.Instance.Get_AttributeIconData(User_Hero.GetAttributeType());
+        var color = CommonUtils.ToRGBFromHex(attr_data.color);
+        Attribute_BG.color = color;
+        Attribute_Frame.color = color;
 
         //  filter
         Property_Text.text = GetFilterString(Filter_Type);
@@ -74,7 +99,18 @@ public class PartyListSynergeItem : MonoBehaviour
                 filter = Unit_Data.GetSumSkillsLevel().ToString();
                 break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
-                filter = "0";
+                {
+                    var special_skill = Unit_Data.Skill_Mng.GetSpecialSkillGroup();
+                    if (special_skill != null)
+                    {
+                        filter = ZString.Format("Lv.{0}", special_skill.GetSkillLevel());
+                    }
+                    else
+                    {
+                        filter = "Lv.0";
+                    }
+                }
+                
                 break;
             case CHARACTER_SORT.ATTACK:
                 {
@@ -103,6 +139,23 @@ public class PartyListSynergeItem : MonoBehaviour
                 break;
             case CHARACTER_SORT.LIKEABILITY:
                 filter = ZString.Format("Lv.{0}", User_Hero.GetLoveLevel());
+                break;
+            case CHARACTER_SORT.ATTRIBUTE:
+                {
+                    var attr_data = MasterDataManager.Instance.Get_AttributeIconData(Unit_Data.GetAttributeType());
+                    filter = GameDefine.GetLocalizeString(attr_data.name_id);
+
+                }
+                break;
+            case CHARACTER_SORT.BATTLEPOWER:
+                {
+                    var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
+                    var deck = deck_mng.FindSelectedDeck(Game_Type);
+                    var team_synergy = deck.GetTeamSynergyList();
+                    double battle_point = Unit_Data.GetCombatPoint(team_synergy);
+                    filter = battle_point.ToString("N0");
+                }
+                
                 break;
             default:
                 Debug.Assert(false);

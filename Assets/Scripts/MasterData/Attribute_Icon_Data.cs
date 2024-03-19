@@ -25,6 +25,12 @@ public class Attribute_Icon_Data : System.IDisposable
 	public string icon => _icon;
 	string _icon;
 
+	///	<summary>
+	///	속성 컬러
+	///	</summary>
+	public string color => _color;
+	string _color;
+
 	private bool disposed = false;
 
 	public Attribute_Icon_Data(Raw_Attribute_Icon_Data raw_data)
@@ -32,6 +38,7 @@ public class Attribute_Icon_Data : System.IDisposable
 		_attribute_type = raw_data.attribute_type;
 		_name_id = raw_data.name_id;
 		_icon = raw_data.icon;
+		_color = raw_data.color;
 	}
 
 	public void Dispose()
@@ -56,6 +63,7 @@ public class Attribute_Icon_Data : System.IDisposable
 		sb.AppendFormat("[attribute_type] = <color=yellow>{0}</color>", attribute_type).AppendLine();
 		sb.AppendFormat("[name_id] = <color=yellow>{0}</color>", name_id).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
+		sb.AppendFormat("[color] = <color=yellow>{0}</color>", color).AppendLine();
 		return sb.ToString();
 	}
 }

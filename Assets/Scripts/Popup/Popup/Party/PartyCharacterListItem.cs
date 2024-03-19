@@ -1,8 +1,10 @@
 using Cysharp.Text;
+using FluffyDuck.Util;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class PartyCharacterListItem : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class PartyCharacterListItem : MonoBehaviour
 
     [SerializeField, Tooltip("Button")]
     UIInteractiveButton Button;
+
+    [SerializeField, Tooltip("Attribute BG")]
+    Image Attribute_BG;
 
     [SerializeField, Tooltip("Filter Text")]
     TMP_Text Filter_Text;
@@ -81,6 +86,10 @@ public class PartyCharacterListItem : MonoBehaviour
         //  role type
         Card.SetRoleType(User_Data.GetPlayerCharacterData().role_type);
 
+        //  attribute color
+        var attr_data = MasterDataManager.Instance.Get_AttributeIconData(User_Data.GetAttributeType());
+        Attribute_BG.color = CommonUtils.ToRGBFromHex(attr_data.color);
+
         //  filter text
         Filter_Text.text = GetFilterString(Filter_Type);
     }
@@ -103,10 +112,20 @@ public class PartyCharacterListItem : MonoBehaviour
                 filter = "0";
                 break;
             case CHARACTER_SORT.SKILL_LEVEL:
-                filter = Unit_Data.GetSumSkillsLevel().ToString();
+                filter = ZString.Format("Lv.{0}", Unit_Data.GetNormalSkillLevelSum());
                 break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
-                filter = "0";
+                {
+                    var special_skill = Unit_Data.Skill_Mng.GetSpecialSkillGroup();
+                    if (special_skill != null)
+                    {
+                        filter = ZString.Format("Lv.{0}", special_skill.GetSkillLevel());
+                    }
+                    else
+                    {
+                        filter = "Lv.0";
+                    }
+                }
                 break;
             case CHARACTER_SORT.ATTACK:
                 filter = Unit_Data.GetTotalAttackPoint().ToString("N0");
@@ -119,6 +138,15 @@ public class PartyCharacterListItem : MonoBehaviour
                 break;
             case CHARACTER_SORT.LIKEABILITY:
                 filter = ZString.Format("Lv.{0}", User_Data.GetLoveLevel());
+                break;
+            case CHARACTER_SORT.ATTRIBUTE:
+                {
+                    var attr_data = MasterDataManager.Instance.Get_AttributeIconData(Unit_Data.GetAttributeType());
+                    filter = GameDefine.GetLocalizeString(attr_data.name_id);
+                }
+                break;
+            case CHARACTER_SORT.BATTLEPOWER:
+                filter = Unit_Data.GetCombatPoint().ToString("N0");
                 break;
             default:
                 Debug.Assert(false);

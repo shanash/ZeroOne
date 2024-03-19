@@ -628,7 +628,9 @@ public class BattlePcData : BattleUnitData
         return 0;
     }
 
-    public override int GetSumSkillsLevel() => Skill_Mng.GetSkillLevelSum();
+    //public override int GetSumSkillsLevel() => Skill_Mng.GetSkillLevelSum();
+
+    //public override int GetNormalSkillLevelSum() => Skill_Mng.GetNormalSkillLevelSum();
 
     public override float GetApproachDistance()
     {
