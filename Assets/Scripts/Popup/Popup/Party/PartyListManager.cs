@@ -1,3 +1,4 @@
+using Coffee.UIExtensions;
 using Cysharp.Text;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,22 @@ public class PartyListManager : MonoBehaviour
     [SerializeField, Tooltip("전투력 추가")]
     TMP_Text Battle_Point_Inc;
 
+    [SerializeField, Tooltip("시너지 효과 파티클")]
+    UIParticle Synergy_Effect;
+
+    /// <summary>
+    /// 시너지 효과 합산
+    /// </summary>
+    double Sum_Synergy_Point;
+
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
     CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
 
+    private void Start()
+    {
+        Sum_Synergy_Point = 0;
+    }
     public void SetGameType(GAME_TYPE gtype, CHARACTER_SORT ftype)
     {
         Game_Type = gtype;
@@ -84,6 +97,20 @@ public class PartyListManager : MonoBehaviour
         {
             Battle_Point_Inc.text = string.Empty;
         }
+
+        if (sum_synergy > 0)
+        {
+            if (sum_synergy != Sum_Synergy_Point)
+            {
+                Sum_Synergy_Point = sum_synergy;
+                Synergy_Effect.Play();
+            }
+        }
+        else
+        {
+            Sum_Synergy_Point = sum_synergy;
+        }
+        
     }
 
     public void SetSlotCardChoiceCallback(UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> cb)

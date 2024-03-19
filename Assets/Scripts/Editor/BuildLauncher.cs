@@ -1170,6 +1170,7 @@ namespace FluffyDuck.EditorUtil
 
         public static void ReadArguments()
         {
+            Debug.Log($"Call ReadArguments");
             string[] args = Environment.GetCommandLineArgs();
             for (int i = 0; i < args.Length-1; i++)
             {
