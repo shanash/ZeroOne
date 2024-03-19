@@ -27,6 +27,9 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Filter Box")]
     protected RectTransform Filter_Box;
 
+    [SerializeField, Tooltip("Filter Image")]
+    protected Image Filter_Image;
+
     [SerializeField, Tooltip("Filter Text")]
     protected TMP_Text Filter_Text;
 
