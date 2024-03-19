@@ -616,7 +616,8 @@ public class GameResultWinPopup : PopupBase
                         var first_stage = stage_list.FirstOrDefault();
                         if (first_stage != null)
                         {
-                            string msg = ZString.Format(GameDefine.GetLocalizeString("system_contents_open_message"), GameDefine.GetLocalizeString(first_stage.stage_name_id));
+                            string stage_name = ZString.Format("{0} {1}", GameDefine.GetLocalizeString(next_zone_data.zone_name_id), GameDefine.GetLocalizeString(first_stage.stage_name_id));
+                            string msg = ZString.Format(GameDefine.GetLocalizeString("system_contents_open_message"), stage_name);
                             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Modal/AlertMessagePopup", POPUP_TYPE.MODAL_TYPE, (popup) =>
                             {
                                 popup.ShowPopup(msg);
