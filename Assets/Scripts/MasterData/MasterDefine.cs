@@ -281,24 +281,6 @@ public enum STAT_MULTIPLE_TYPE
 {
 	/// <summary>NONE</summary>
 	NONE = 0,
-	/// <summary>100 공격력 절대값 계산</summary>
-	ATTACK_VALUE = 100,
-	/// <summary>101 방어력 절대값 계산</summary>
-	DEFENSE_VALUE = 101,
-	/// <summary>102 최대 체력 절대 값</summary>
-	MAX_LIFE = 102,
-	/// <summary>103 현재 체력 절대 값</summary>
-	LIFE = 103,
-	/// <summary>104 크리티컬 확률 절대값</summary>
-	CRITICAL_CHANCE = 104,
-	/// <summary>105 크리티컬 파워 절대 값</summary>
-	CRITICAL_POWER_ADD = 105,
-	/// <summary>106 명중률 절대 값</summary>
-	ACCURACY_VALUE = 106,
-	/// <summary>107 회피율 절대 값</summary>
-	EVASION_VALUE = 107,
-	/// <summary>108 회복량 절대 값</summary>
-	HEAL_VALUE = 108,
 	/// <summary>201 공격력 배율 계산</summary>
 	ATTACK_RATE = 201,
 	/// <summary>202 방어력 배율 계산</summary>
