@@ -4,6 +4,7 @@ using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleUIManager_V2 : MonoBehaviour
@@ -50,6 +51,37 @@ public class BattleUIManager_V2 : MonoBehaviour
         UpdateFastSpeed();
     }
 
+    public LifeBarNode AddLifeBar(HeroBase_V2 hero)
+    {
+        var target = hero.GetHPPositionTransform();
+        string prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2";
+        if (hero.Team_Type == TEAM_TYPE.RIGHT)
+        {
+            prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2";
+        }
+        if (string.IsNullOrEmpty(prefab_name))
+        {
+            return null;
+        }
+        var pool = GameObjectPoolManager.Instance;
+        var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
+        var life = obj.GetComponent<LifeBarNode>();
+        life.SetHeroBaseV2(hero);
+        Used_Life_Bar_List.Add(life);
+
+        return life;
+    }
+
+    public void UnusedLifeBarNode(LifeBarNode node)
+    {
+        if (node == null)
+        {
+            return;
+        }
+        Used_Life_Bar_List.Remove(node);
+        GameObjectPoolManager.Instance.UnusedGameObject(node.gameObject);
+    }
+
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -65,7 +97,8 @@ public class BattleUIManager_V2 : MonoBehaviour
             }
             else
             {
-                Battle_Mng.ChangeState(GAME_STATES.PAUSE);
+                //Battle_Mng.ChangeState(GAME_STATES.PAUSE);
+                ChangePause();
             }
 
         }
@@ -116,16 +149,20 @@ public class BattleUIManager_V2 : MonoBehaviour
         Timer_Text.text = ZString.Format("{0:D2} : {1:D2}", time_span.Minutes, time_span.Seconds);
     }
 
-    #region OnClick Funcs
-    public void OnClickPause()
+    void ChangePause()
     {
-        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         var state = Battle_Mng.GetCurrentState();
         if (state >= GAME_STATES.PLAYING)
         {
             Battle_Mng?.ChangeState(GAME_STATES.PAUSE);
         }
-        
+    }
+
+    #region OnClick Funcs
+    public void OnClickPause()
+    {
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+        ChangePause();
     }
     public void OnClickAutoPlay()
     {

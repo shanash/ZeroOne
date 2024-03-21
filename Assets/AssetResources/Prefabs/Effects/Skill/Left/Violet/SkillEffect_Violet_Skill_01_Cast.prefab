@@ -56,7 +56,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1.5
+    scalar: 1.18
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -4978,7 +4978,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0.9
+    scalar: 0.68
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -5953,7 +5953,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 3
-      repeatInterval: 0.05
+      repeatInterval: 0.04
       probability: 1
   SizeModule:
     enabled: 1
@@ -6988,7 +6988,7 @@ ParticleSystem:
     radial:
       serializedVersion: 2
       minMaxState: 2
-      scalar: 45
+      scalar: 60
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -7046,7 +7046,7 @@ ParticleSystem:
           outWeight: 0.3650139
         - serializedVersion: 3
           time: 1
-          value: -0.30995178
+          value: -0.34025574
           inSlope: -0.97455513
           outSlope: -0.97455513
           tangentMode: 0
@@ -9930,9 +9930,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Is_Show_All_Properties: 0
   Effect_Type: 1
-  Effect_Duration: 3.2
+  Effect_Duration: 2.8
   Is_Loop: 0
   Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -10041,7 +10043,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1.5
+    scalar: 1.18
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -14981,7 +14983,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1.5
+    scalar: 1.18
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -24739,7 +24741,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1.5
+    scalar: 1.18
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -29670,7 +29672,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1.5
+    scalar: 1.18
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -34700,11 +34702,11 @@ ParticleSystem:
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1
+    scalar: 0.78
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -34757,14 +34759,14 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 0
+  randomSeed: 1340707638
   InitialModule:
     serializedVersion: 3
     enabled: 1
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.6
+      scalar: 0.5
       minScalar: 0.4
       maxCurve:
         serializedVersion: 2
@@ -34934,9 +34936,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 5
-      minScalar: 4
+      minMaxState: 3
+      scalar: 12
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -34987,7 +34989,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 7
       minScalar: 3.8
       maxCurve:
@@ -35040,7 +35042,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -35628,7 +35630,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 1
+        scalar: 2
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -39617,7 +39619,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 1
+    scalar: 0.78
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -39848,7 +39850,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 6
       minScalar: 1.5
       maxCurve:
         serializedVersion: 2
@@ -40592,7 +40594,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
       cycleCount: 2
-      repeatInterval: 0.16
+      repeatInterval: 0.11
       probability: 1
   SizeModule:
     enabled: 1

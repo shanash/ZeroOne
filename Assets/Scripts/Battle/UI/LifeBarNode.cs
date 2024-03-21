@@ -1,5 +1,7 @@
 using FluffyDuck.Util;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,17 +10,17 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Box")]
     RectTransform Box;
 
-    [SerializeField, Tooltip("Life Back Bar")]
-    Image Life_Red_Back_Bar;
+    [Space()]
+    [Header("Slider Version")]
+    [SerializeField, Tooltip("Main Life Bar")]
+    Slider Main_Life_Bar;
 
-    /// <summary>
-    /// 일시적 추가 체력 및 보호막 추가 기능
-    /// </summary>
-    [SerializeField, Tooltip("Life Shield Bar")]
-    Image Life_Shield_Bar;
+    [SerializeField, Tooltip("Sub Life Bar")]
+    Slider Sub_Life_Bar;
 
-    [SerializeField, Tooltip("Life Bar")]
-    Image Life_Bar;
+    [SerializeField, Tooltip("Main Life Bar Knob")]
+    Image Main_Life_Bar_Knob;
+
 
     [SerializeField, Tooltip("Duration Icon Container")]
     RectTransform Duration_Icon_Container;
@@ -27,10 +29,162 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     Transform Target_Transform;
 
-    Coroutine Flush_Coroutine;
-
+    //  image version
     Coroutine Show_Coroutine;
 
+    //  slider version
+    Coroutine Slider_Flush_Coroutine;
+
+
+    HeroBase_V2 Hero;
+    /// <summary>
+    /// 지속성 효과 아이콘 리스트
+    /// </summary>
+    List<EnemyDurationSkillIconNode> Used_Duration_Skill_Icons = new List<EnemyDurationSkillIconNode>();
+
+    public void SetHeroBaseV2(HeroBase_V2 hero)
+    {
+        this.Hero = hero;
+        if (this.Hero.Team_Type == TEAM_TYPE.LEFT)
+        {
+            this.Hero.Slot_Events += SkillSlotEventCallback;
+        }
+        SetTargetTransform(this.Hero.GetHPPositionTransform());
+    }
+
+    void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
+    {
+        if (etype == SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE)
+        {
+            UpdateDurationSkillIcons();
+        }
+    }
+
+    /// <summary>
+    /// 지속성 효과 아이콘 추가
+    /// </summary>
+    void UpdateDurationSkillIcons()
+    {
+        if (Hero == null)
+        {
+            return;
+        }
+        ClearDurationSkillIcons();
+        float interval = 0.7f;
+
+        var pool = GameObjectPoolManager.Instance;
+        var dur_list = Hero.GetSkillManager().GetDurationSkillDataList();
+        int cnt = dur_list.Count;
+        int col = 0;
+        int row = 0;
+        float x, y;
+        for (int i = 0; i < cnt; i++)
+        {
+            col = i % 5;
+            row = i / 5;
+            x = col * interval;
+            y = row * interval;
+
+            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/EnemyDurationSkillIconNode", Duration_Icon_Container);
+            obj.transform.localPosition = new Vector3(x, y, 0);
+            var node = obj.GetComponent<EnemyDurationSkillIconNode>();
+            node.SetBattleDurationSkillData(dur_list[i]);
+            Used_Duration_Skill_Icons.Add(node);
+        }
+    }
+
+    void ClearDurationSkillIcons()
+    {
+        var pool = GameObjectPoolManager.Instance;
+        int cnt = Used_Duration_Skill_Icons.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            pool.UnusedGameObject(Used_Duration_Skill_Icons[i].gameObject);
+        }
+        Used_Duration_Skill_Icons.Clear();
+    }
+
+    public void SetTargetTransform(Transform t)
+    {
+        Target_Transform = t;
+        UpdatePosition();
+    }
+
+    void Update()
+    {
+        UpdatePosition();
+    }
+
+    void UpdatePosition()
+    {
+        if (Slider_Flush_Coroutine != null)
+        {
+            return;
+        }
+        if (Target_Transform != null)
+        {
+            Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, Target_Transform.position);
+            This_Rect.anchoredPosition3D = pos;
+        }
+    }
+
+    public void SetLifeSliderPercent(float percent, bool show)
+    {
+        float p = Mathf.Clamp01(percent);
+        Main_Life_Bar.value = p;
+        
+        if (show)
+        {
+            ShowLifeBar(2f);
+            FlushSubSlider();
+        }
+        else
+        {
+            HideLifeBar();
+            HideFlushSubSlider();
+        }
+    }
+
+    
+
+    /// <summary>
+    /// 숨겨진 상태에서는 코루틴이 안도니깐, 그냥 업데이트
+    /// </summary>
+    void HideFlushSubSlider()
+    {
+        Sub_Life_Bar.value = Main_Life_Bar.value;
+    }
+
+    public void FlushSubSlider()
+    {
+        if (Slider_Flush_Coroutine != null)
+        {
+            StopCoroutine(Slider_Flush_Coroutine);
+        }
+        Slider_Flush_Coroutine = StartCoroutine(SubSliderFlush());
+    }
+    /// <summary>
+    /// 서브 체력 슬라이더 플러쉬
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator SubSliderFlush()
+    {
+        Main_Life_Bar_Knob.gameObject.SetActive(true);
+        float life_rate = Main_Life_Bar.value;
+
+        float time = 0f;
+        const float duration = 1f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            Sub_Life_Bar.value = Mathf.Lerp(Sub_Life_Bar.value, life_rate, time / duration);
+            yield return null;
+        }
+        Slider_Flush_Coroutine = null;
+        Main_Life_Bar_Knob.gameObject.SetActive(false);
+    }
+
+   
 
     public void ShowLifeBar(float duration)
     {
@@ -40,108 +194,6 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         }
         Show_Coroutine = StartCoroutine(StartShowLifeBar(duration));
     }
-
-    public void SetTargetTransform(Transform t)
-    {
-        Target_Transform = t;
-        UpdatePosition();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        UpdatePosition();
-    }
-
-    void UpdatePosition()
-    {
-        if (Target_Transform != null)
-        {
-            Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, Target_Transform.position);
-            //this.transform.position = pos;
-            //(this.transform as RectTransform).anchoredPosition3D = pos;
-            This_Rect.anchoredPosition3D = pos;
-        }
-    }
-
-
-    public void SetLifePercent(float per)
-    {
-        float p = Mathf.Clamp01(per);
-        Life_Bar.fillAmount = p;
-        FlushBackBar();
-        if (Show_Coroutine != null)
-        {
-            StopCoroutine(Show_Coroutine);
-        }
-        Show_Coroutine = StartCoroutine(StartShowLifeBar(2f));
-    }
-
-    public void SetShieldPercent(float per)
-    {
-        float p = Mathf.Clamp01(per);
-        Life_Shield_Bar.fillAmount = p;
-    }
-
-    public void SetLifeAndShieldPercent(float life_per, float shield_per)
-    {
-        // 체력 + 보호막의 비율은 1을 초과할 수 없음. 1초과시 보호막의 수치를 낮춤
-        float max_per = life_per + shield_per;
-        if (max_per > 1f)
-        {
-            float diff = max_per - 1f;
-            shield_per -= diff;
-            if (shield_per < 0f)
-            {
-                shield_per = 0f;
-            }
-        }
-
-        SetLifePercent(life_per);
-        SetShieldPercent(life_per + shield_per);
-    }
-
-    /// <summary>
-    /// 체력 및 보호막의 수치가 적용되고 바로 호출되는 것이 아닌,
-    /// 해당 액션이 완전히 종료된 후 호출되는 함수.
-    /// 그래야 Back Bar가 체력게이지를 따라가는 연출을 볼 수 있음.
-    /// </summary>
-    public void FlushBackBar()
-    {
-        if (Flush_Coroutine != null)
-        {
-            StopCoroutine(Flush_Coroutine);
-        }
-
-        Flush_Coroutine = StartCoroutine(BackBarFlush());
-    }
-
-    IEnumerator BackBarFlush()
-    {
-        float life_rate = Life_Bar.fillAmount;
-        float shield_rate = Life_Shield_Bar.fillAmount;
-
-        float target_point = 0f;
-        if (shield_rate > life_rate)
-        {
-            target_point = shield_rate;
-        }
-        else
-        {
-            target_point = life_rate;
-        }
-        float start_point = Life_Red_Back_Bar.fillAmount;
-        float time = 0f;
-        const float duration = 0.3f;
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            Life_Red_Back_Bar.fillAmount = Mathf.Lerp(start_point, target_point, time / duration);
-            yield return null;
-        }
-        Flush_Coroutine = null;
-    }
-
     IEnumerator StartShowLifeBar(float delay)
     {
         Box.gameObject.SetActive(true);
@@ -162,9 +214,8 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     public void Spawned()
     {
-        Life_Bar.fillAmount = 1f;
-        Life_Red_Back_Bar.fillAmount = 1f;
-        Life_Shield_Bar.fillAmount = 1f;
+        Main_Life_Bar.value = 1f;
+        Sub_Life_Bar.value = 1f;
         if (This_Rect == null)
         {
             This_Rect = GetComponent<RectTransform>();
@@ -174,13 +225,13 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     public void Despawned()
     {
+        ClearDurationSkillIcons();
         Target_Transform = null;
-        if (Flush_Coroutine != null)
+        if (Slider_Flush_Coroutine != null)
         {
-            StopCoroutine(Flush_Coroutine);
+            StopCoroutine(Slider_Flush_Coroutine);
         }
-        Flush_Coroutine = null;
-
+        Slider_Flush_Coroutine = null;
         HideLifeBar();
     }
 

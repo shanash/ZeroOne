@@ -111,15 +111,6 @@ public class HeroListUI : PopupBase
             case CHARACTER_SORT.DESTINY:
                 Debug.Assert(false);
                 break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                Battle_Hero_Data_List.Sort((a, b) =>
-                {
-                    return
-                    Is_Ascended_Sort ?
-                    a.GetNormalSkillLevelSum().CompareTo(b.GetNormalSkillLevelSum()) :
-                    b.GetNormalSkillLevelSum().CompareTo(a.GetNormalSkillLevelSum());
-                });
-                break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
                 Battle_Hero_Data_List.Sort((a, b) =>
                 {

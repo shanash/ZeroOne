@@ -13,6 +13,7 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     {
         var m = MasterDataManager.Instance;
 
+        Skill_Group_ID = skill_group_id;
         Skill_Group = m.Get_NpcSkillGroup(skill_group_id);
 
         Debug.Assert(Skill_Group != null);

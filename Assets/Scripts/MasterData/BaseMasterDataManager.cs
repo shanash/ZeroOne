@@ -349,6 +349,14 @@ public class BaseMasterDataManager
 		private set;
 	} = new Dictionary<Tuple<int, int>, Player_Character_Level_Stat_Data>();
 	///	<summary>
+	///	 <b>key_1 int : player_level </b><br/>
+	///	</summary>
+	protected Dictionary<int, Player_Level_Reward_Data> _Player_Level_Reward_Data
+	{
+		get;
+		private set;
+	} = new Dictionary<int, Player_Level_Reward_Data>();
+	///	<summary>
 	///	 <b>key_1 int : reward_id </b><br/>
 	///	</summary>
 	protected Dictionary<int, Reward_Set_Data> _Reward_Set_Data
@@ -516,6 +524,7 @@ public class BaseMasterDataManager
 		await LoadMaster_Role_Icon_Data();
 		await LoadMaster_Attribute_Icon_Data();
 		await LoadMaster_Player_Character_Level_Stat_Data();
+		await LoadMaster_Player_Level_Reward_Data();
 		await LoadMaster_Reward_Set_Data();
 		await LoadMaster_Schedule_Data();
 		await LoadMaster_World_Data();
@@ -1128,6 +1137,20 @@ public class BaseMasterDataManager
 		}
 	}
 
+	protected async Task LoadMaster_Player_Level_Reward_Data()
+	{
+#if UNITY_5_3_OR_NEWER
+		string json = await LoadJsonDataAsync("Assets/AssetResources/Master/Player_Level_Reward_Data");
+#else
+		string json = await LoadJsonDataAsync("../Master/Player_Level_Reward_Data.json");
+#endif
+		var raw_data_list = JsonConvert.DeserializeObject<List<Raw_Player_Level_Reward_Data>>(json);
+		foreach (var raw_data in raw_data_list)
+		{
+			_Player_Level_Reward_Data.Add(raw_data.player_level, new Player_Level_Reward_Data(raw_data));
+		}
+	}
+
 	protected async Task LoadMaster_Reward_Set_Data()
 	{
 #if UNITY_5_3_OR_NEWER
@@ -1649,6 +1672,14 @@ public class BaseMasterDataManager
 		if(_Player_Character_Level_Stat_Data == null)
 		{
 			await LoadMaster_Player_Character_Level_Stat_Data();
+		}
+	}
+
+	protected async void Check_Player_Level_Reward_Data()
+	{
+		if(_Player_Level_Reward_Data == null)
+		{
+			await LoadMaster_Player_Level_Reward_Data();
 		}
 	}
 

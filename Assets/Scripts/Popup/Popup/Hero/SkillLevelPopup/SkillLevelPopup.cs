@@ -300,6 +300,10 @@ public class SkillLevelPopup : PopupBase
         Result_Exp_Bar.value = before_exp_per;
 
         int gauge_full_count = after_simulate.Value.Result_Lv - before_lv;
+        if (gauge_full_count > 1)
+        {
+            gauge_full_count = 1;
+        }
         float duration = 1f;
         float delta = 0f;
         var wait = new WaitForSeconds(0.01f);
@@ -307,7 +311,7 @@ public class SkillLevelPopup : PopupBase
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime * 4f;
+            delta += Time.deltaTime * 10f;
 
             Result_Exp_Bar.value = Mathf.Clamp01(delta);
             if (delta >= duration)
@@ -315,8 +319,10 @@ public class SkillLevelPopup : PopupBase
                 delta = 0f;
                 Result_Exp_Bar.value = 0f;
                 ++loop_count;
-                int lv = before_lv + loop_count;
-                var clone = skill.GetCloneSimulateLevelUpData(lv);
+                //int lv = before_lv + loop_count;
+                //var clone = skill.GetCloneSimulateLevelUpData(lv);
+
+                var clone = skill.GetCloneSimulateLevelUpData(after_simulate.Value.Result_Lv);
                 skillInfos[1].SetBattlePcSkillGroup(clone);
                 if (loop_count >= gauge_full_count)
                 {
@@ -344,7 +350,7 @@ public class SkillLevelPopup : PopupBase
         {
             while (true)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Result_Exp_Bar.value = Mathf.MoveTowards(Result_Exp_Bar.value, after_exp_per, duration * Time.deltaTime);
                 if (delta >= duration)
                 {
@@ -389,6 +395,10 @@ public class SkillLevelPopup : PopupBase
         Exp_Bar.value = before_exp_per;
 
         int gauge_full_count = result.Result_Lv - before_lv;
+        if (gauge_full_count > 1)
+        {
+            gauge_full_count = 1;
+        }
         float duration = 1f;
         float delta = 0f;
         var wait = new WaitForSeconds(0.01f);
@@ -396,15 +406,14 @@ public class SkillLevelPopup : PopupBase
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime * 4f;
+            delta += Time.deltaTime * 10f;
             Exp_Bar.value = Mathf.Clamp01(delta);
             if (delta >= duration)
             {
                 delta = 0f;
                 Exp_Bar.value = 0f;
                 ++loop_count;
-                int lv = before_lv + loop_count;
-                var clone = skill.GetCloneSimulateLevelUpData(lv);
+                var clone = skill.GetCloneSimulateLevelUpData(result.Result_Lv);
                 skillInfos[1].SetBattlePcSkillGroup(clone);
                 if (loop_count >= gauge_full_count)
                 {
@@ -431,7 +440,7 @@ public class SkillLevelPopup : PopupBase
         {
             while (true)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Exp_Bar.value = Mathf.MoveTowards(Exp_Bar.value, after_exp_per, duration * Time.deltaTime);
                 if (delta >= duration)
                 {
@@ -638,7 +647,7 @@ public class SkillLevelPopup : PopupBase
             //  exp count
             var lv_data = MasterDataManager.Instance.Get_PlayerCharacterSkillLevelData(simulate.Result_Lv);
             double need_exp = lv_data.need_exp;
-            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp - simulate.Over_Exp;
             Exp_Text.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
 
             //  필요 골드가 부족하면 빨간색

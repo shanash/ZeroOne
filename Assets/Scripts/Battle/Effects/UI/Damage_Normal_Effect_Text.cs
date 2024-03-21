@@ -4,6 +4,13 @@ using System;
 using TMPro;
 using UnityEngine;
 
+
+/// <summary>
+/// 데미지 포인트 표시<br/>
+/// 0~9 까지 이미지 폰트 사용. 사용방법. 각 숫자 텍스트를 <sprite=0>방식으로 적용 필요.<br/>
+/// 크리티컬 <sprite=10><br/>
+/// Miss(회피) <sprite=11><br/>
+/// </summary>
 public class Damage_Normal_Effect_Text : EffectBase
 {
     [SerializeField, Tooltip("Damage Text")]
@@ -40,62 +47,24 @@ public class Damage_Normal_Effect_Text : EffectBase
             bool a = false;
         }
         string dmg_str = dmg.ToString();
-        int cnt = dmg_str.Length;
-        var sb = ZString.CreateStringBuilder();
-        for (int i = 0; i < cnt; i++)
+        bool use_sprite_font = true;
+        if (use_sprite_font)
         {
-            sb.AppendFormat("<sprite={0}>", dmg_str[i]);
+            int cnt = dmg_str.Length;
+            var sb = ZString.CreateStringBuilder();
+            for (int i = 0; i < cnt; i++)
+            {
+                sb.AppendFormat("<sprite={0}>", dmg_str[i]);
+            }
+            Show_Text = sb.ToString();
         }
-        Show_Text = sb.ToString();
-
-        //if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.NONE)
-        //{
-        //    Damage_Text.text = ZString.Format("{0}", dmg);
-        //}
-        //else
-        //{
-        //    string txt_color = GetDurationEffectColorText(send_data.Duration_Effect_Type);
-        //    if (!string.IsNullOrEmpty(txt_color))
-        //    {
-        //        if (send_data.Duration_Effect_Type == DURATION_EFFECT_TYPE.DAMAGE_REDUCE)
-        //        {
-        //            Damage_Text.text = ZString.Format("<color=#{0}><size=30>피해감소</size></color>\n{1}", txt_color, dmg);
-        //        }
-        //        else
-        //        {
-        //            Damage_Text.text = ZString.Format("<color=#{0}>{1}</color>", txt_color, dmg);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Damage_Text.text = ZString.Format("{0}", dmg);
-        //    }
-        //}
+        else
+        {
+            Show_Text = dmg.ToString();
+        }
+       
     }
 
-    string GetDurationEffectColorText(DURATION_EFFECT_TYPE dtype)
-    {
-        string text_color = string.Empty;
-        switch (dtype)
-        {
-            case DURATION_EFFECT_TYPE.DAMAGE_REDUCE:
-                text_color = "ffff00";
-                break;
-            case DURATION_EFFECT_TYPE.POISON:
-                text_color = "CD00BE";
-                break;
-            case DURATION_EFFECT_TYPE.STUN:
-                break;
-            case DURATION_EFFECT_TYPE.SILENCE:
-                break;
-            case DURATION_EFFECT_TYPE.BIND:
-                break;
-            case DURATION_EFFECT_TYPE.FREEZE:
-                text_color = "4CAAFF";
-                break;
-        }
-        return text_color;
-    }
 
     private void Update()
     {

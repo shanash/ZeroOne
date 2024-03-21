@@ -86,8 +86,11 @@ public partial class BattleManager_V2 : SceneControllerBase
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
 
-        list.Add("Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode");
-        list.Add("Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode");
+        //list.Add("Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode");
+        //list.Add("Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode");
+        list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2");
+        list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2");
+
         list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
         list.Add("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2");
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
@@ -257,22 +260,44 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateSpawnBegin()
     {
         SpawnUnits();
+        //MainThreadDispatcher.Instance.AddAction(() =>
+        //{
+        //    ChangeState(GAME_STATES.MOVE_IN);
+        //});
     }
     public virtual void GameStateSpawn()
     {
-        ChangeState(GAME_STATES.WAVE_INFO);
+        ChangeState(GAME_STATES.MOVE_IN);
     }
     public virtual void GameStateSpawnExit() { }
 
 
     public virtual void GameStateWaveInfoBegin()
     {
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/WaveInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        if (Dungeon_Data.Game_Type == GAME_TYPE.STORY_MODE || Dungeon_Data.Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
         {
-            popup.SetHideCompleteCallback(WaveInfoCloseCallback);
-            Wave_Data wdata = (Wave_Data)Dungeon_Data.GetWaveData();
-            popup.ShowPopup(wdata, 1f);
-        });
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattleStartPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            {
+                popup.SetHideCompleteCallback(WaveInfoCloseCallback);
+                if (Dungeon_Data.Game_Type == GAME_TYPE.STORY_MODE)
+                {
+                    popup.ShowPopup(0);
+                }
+                else if (Dungeon_Data.Game_Type == GAME_TYPE.BOSS_DUNGEON_MODE)
+                {
+                    popup.ShowPopup(1);
+                }
+                else
+                {
+                    Debug.Assert(false);
+                }
+            });
+        }
+        else
+        {
+            WaveInfoCloseCallback();
+        }
+
     }
     public virtual void GameStateWaveInfo() { }
     public virtual void GameStateWaveInfoExit() { }
@@ -295,7 +320,15 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         if (is_all_idle)
         {
-            ChangeState(GAME_STATES.PLAY_READY);
+            //ChangeState(GAME_STATES.PLAY_READY);
+            if (Dungeon_Data.GetWave() == 0)
+            {
+                ChangeState(GAME_STATES.WAVE_INFO);
+            }
+            else
+            {
+                ChangeState(GAME_STATES.PLAY_READY);
+            }
         }
     }
     public virtual void GameStateMoveInExit() { }
@@ -351,7 +384,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         if (all_death_team != null)
         {
             var win_team = FindTeamManager(all_death_team.Team_Type == TEAM_TYPE.LEFT ? TEAM_TYPE.RIGHT : TEAM_TYPE.LEFT);
-
+            win_team.HideAllUnitLifeBar();
             if (win_team.Team_Type == TEAM_TYPE.LEFT)
             {
                 //  다음 웨이브가 있다면
@@ -361,7 +394,6 @@ public partial class BattleManager_V2 : SceneControllerBase
                 }
                 else // 없으면 게임 종료(승리)
                 {
-                    //ChangeState(GAME_STATES.GAME_OVER_WIN);
                     if (Game_Type == GAME_TYPE.STORY_MODE)
                     {
                         var story_data = (Stage_Data)Dungeon_Data.GetDungeonData();
@@ -497,7 +529,7 @@ public partial class BattleManager_V2 : SceneControllerBase
                     RevertState();
                 }
             });
-            popup.ShowPopup();
+            popup.ShowPopup(Dungeon_Data);
         });
     }
     public virtual void GameStatePause() { }

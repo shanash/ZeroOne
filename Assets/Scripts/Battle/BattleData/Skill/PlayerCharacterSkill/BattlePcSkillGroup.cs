@@ -15,6 +15,7 @@ public class BattlePcSkillGroup : BattleSkillGroup
     public override void SetSkillGroupID(int skill_group_id)
     {
         var m = MasterDataManager.Instance;
+        Skill_Group_ID = skill_group_id;
         Skill_Group = m.Get_PlayerCharacterSkillGroupData(skill_group_id);
 
         List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();

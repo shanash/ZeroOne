@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 5223849648844341077}
   - component: {fileID: 5349092770091013512}
   - component: {fileID: 2422430374904360998}
+  - component: {fileID: 4157672039949149614}
   m_Layer: 0
   m_Name: Monster_100003
   m_TagString: Untagged
@@ -280,6 +281,18 @@ MonoBehaviour:
   - Pos_Type: 1
     Trans: {fileID: 9193625318679657406}
   Ultimate_Skill_Playable_Director: {fileID: 0}
+--- !u!114 &4157672039949149614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393010332128506260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaa163268e120774a86f2d01de081743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1761662222302865810
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +335,7 @@ GameObject:
   - component: {fileID: 3707020071207925291}
   - component: {fileID: 2862540216591459134}
   m_Layer: 0
-  m_Name: shoadow
+  m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: d1de1604dfe4cb64c9d31246a8e43c78, type: 3}
   m_NavMeshLayer: 0
@@ -448,7 +461,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 3.5, y: 2.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3707020071207925291}
@@ -494,8 +507,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: fe6aa5da8e837e14eb1647728e9b5fed, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Sprite: {fileID: 21300000, guid: 1505d3572506a58418d2965c90af03c9, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

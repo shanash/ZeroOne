@@ -260,6 +260,16 @@ public class MasterDataManager : BaseMasterDataManager
         Check_Star_Upgrade_Data();
         return _Star_Upgrade_Data[cur_star_grade];
     }
+    /// <summary>
+    /// 플레이어 레벨 보상 정보 추가
+    /// </summary>
+    /// <param name="player_level"></param>
+    /// <returns></returns>
+    public Player_Level_Reward_Data Get_PlayerLevelRewardData(int player_level)
+    {
+        Check_Player_Level_Reward_Data();
+        return _Player_Level_Reward_Data[player_level];
+    }
 
     /// <summary>
     /// 플레이어 캐릭터 스킬 그룹 데이터 반환

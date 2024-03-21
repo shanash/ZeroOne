@@ -11,7 +11,7 @@ public class UserPlayerInfoData : UserDataBase
     SecureVar<double> Exp = null;
 
     Player_Level_Data Lv_Data;
-
+    Player_Level_Reward_Data Lv_Stamina_Data;
     public UserPlayerInfoData() : base() { }
 
     protected override void Reset()
@@ -39,7 +39,9 @@ public class UserPlayerInfoData : UserDataBase
 
     protected override void InitMasterData()
     {
-        Lv_Data = MasterDataManager.Instance.Get_PlayerLevelData(GetLevel());
+        var m = MasterDataManager.Instance;
+        Lv_Data = m.Get_PlayerLevelData(GetLevel());
+        Lv_Stamina_Data = m.Get_PlayerLevelRewardData(GetLevel());
     }
 
     public int GetLevel()
@@ -49,8 +51,20 @@ public class UserPlayerInfoData : UserDataBase
     void SetLevel(int lv)
     {
         Level.Set(lv);
-        Lv_Data = MasterDataManager.Instance.Get_PlayerLevelData(GetLevel());
+        var m = MasterDataManager.Instance;
+        Lv_Data = m.Get_PlayerLevelData(GetLevel());
+        Lv_Stamina_Data = m.Get_PlayerLevelRewardData(GetLevel());
     }
+
+    /// <summary>
+    /// 현재 레벨의 스테미너 증가량 
+    /// </summary>
+    /// <returns></returns>
+    public int GetAddMaxStaminaBound()
+    {
+        return Lv_Stamina_Data.increase_stamina;
+    }
+
     public double GetExp()
     {
         return Exp.Get();
@@ -120,6 +134,7 @@ public class UserPlayerInfoData : UserDataBase
         {
             Lv_Data = MasterDataManager.Instance.Get_PlayerLevelData(GetLevel());
         }
+        
         return Lv_Data.need_exp;
     }
 
@@ -149,10 +164,6 @@ public class UserPlayerInfoData : UserDataBase
 
     public override JsonData Serialized()
     {
-        //if (!IsUpdateData())
-        //{
-        //    return null;
-        //}
         var json = new LitJson.JsonData();
 
         json[NODE_PLAYER_NICKNAME] = Nickname;

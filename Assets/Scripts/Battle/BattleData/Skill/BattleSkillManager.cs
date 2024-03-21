@@ -515,30 +515,28 @@ public class BattleSkillManager : BattleDataBase
     }
 
     /// <summary>
-    /// 보유중인 스킬 레벨의 총 합
+    /// 보유중인 스킬 레벨의 총 합<br/>
+    /// 입반 공격 제외, 스킬 1 + 스킬 2 + 궁극기
     /// </summary>
     /// <returns></returns>
     public int GetSkillLevelSum()
     {
-        int sum = Skill_Groups.Sum(x => x.GetSkillLevel());
+        int sum = 0;
+        var skill_list = new List<BattleSkillGroup>();
+        for (int i = 0; i < Skill_Groups.Count; i++)
+        {
+            var grp = Skill_Groups[i];
+            if (grp.GetSkillType() != SKILL_TYPE.NORMAL_ATTACK)
+            {
+                if (!skill_list.Exists(x => x.Skill_Group_ID == grp.Skill_Group_ID))
+                {
+                    skill_list.Add(grp);
+                }
+            }
+        }
+        sum = skill_list.Sum(x => x.GetSkillLevel());
         return sum;
     }
 
-    /// <summary>
-    /// 보유중인 일반 스킬 레벨의 총 합
-    /// </summary>
-    /// <returns></returns>
-    public int GetNormalSkillLevelSum()
-    {
-        int sum = 0;
-        for (int i = 0; i < Skill_Groups.Count; i++)
-        {
-            var skill = Skill_Groups[i];
-            if (skill.GetSkillType() == SKILL_TYPE.SKILL_01 || skill.GetSkillType() == SKILL_TYPE.SKILL_02)
-            {
-                sum += skill.GetSkillLevel();
-            }
-        }
-        return sum;
-    }
+    
 }

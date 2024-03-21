@@ -130,7 +130,8 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     protected void WaveInfoCloseCallback()
     {
-        ChangeState(GAME_STATES.MOVE_IN);
+        //ChangeState(GAME_STATES.MOVE_IN);
+        ChangeState(GAME_STATES.PLAY_READY);
     }
 
     protected void TimeOutInfoCloseCallback()
@@ -172,8 +173,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
         else
         {
-            caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
             AllResumeUnitWithoutHero(caster);
+            caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
             GetEffectFactory().OnResumeAndShow();
             ChangeState(GAME_STATES.PLAYING);
         }
@@ -240,7 +241,17 @@ public partial class BattleManager_V2 : SceneControllerBase
             Used_Team_List[i].ShowUnitTargets(include_target);
         }
     }
-    
+    /// <summary>
+    /// 모든 캐릭터의 체력 게이지 보이지 않도록 하기
+    /// </summary>
+    public void HideAllUnitLifeBar()
+    {
+        for (int i = 0; i < Used_Team_List.Count; i++)
+        {
+            Used_Team_List[i].HideAllUnitLifeBar();
+        }
+    }
+
     /// <summary>
     /// 모든 유닛 보이기
     /// </summary>

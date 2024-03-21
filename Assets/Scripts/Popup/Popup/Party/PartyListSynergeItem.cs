@@ -95,9 +95,6 @@ public class PartyListSynergeItem : MonoBehaviour
             case CHARACTER_SORT.DESTINY:
                 filter = "0";
                 break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                filter = Unit_Data.GetSumSkillsLevel().ToString();
-                break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
                 {
                     var special_skill = Unit_Data.Skill_Mng.GetSpecialSkillGroup();

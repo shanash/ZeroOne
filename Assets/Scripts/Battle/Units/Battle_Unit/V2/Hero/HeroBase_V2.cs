@@ -171,9 +171,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected TeamManager_V2 Team_Mng = null;
 
     /// <summary>
-    /// 체력 게이지
+    /// 체력 게이지(슬라이더)
     /// </summary>
-    protected LifeBarNode_V2 Life_Bar_V2 = null;
+    protected LifeBarNode Life_Bar = null;
 
     /// <summary>
     /// 공격용 타겟 리스트
@@ -188,16 +188,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// 영웅 데이터
     /// </summary>
     protected BattleUnitData Unit_Data;
-
-    //protected object Duration_Lock = new object();
-    ///// <summary>
-    ///// 지속성 효과 데이터를 관리
-    ///// </summary>
-    //protected List<BattleDurationSkillData> Used_Battle_Duration_Data_List = new List<BattleDurationSkillData>();
-    ///// <summary>
-    ///// 삭제 예약을 위한 지속성 데이터 리스트
-    ///// </summary>
-    //protected List<BattleDurationSkillData> Remove_Reserved_Duration_Data_List = new List<BattleDurationSkillData>();
 
     public int Deck_Order { get; protected set; }
 
@@ -234,7 +224,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
     protected Vector3 Before_Hitted_Position = Vector3.zero;
 
+    /// <summary>
+    /// 각 스킬별 토탈 데미지를 계산하기 위해 데미지 정보 및 스킬 정보 등을 저장하는 함수
+    /// </summary>
+    protected List<Total_Damage_Data> Total_Damage_Data = new List<Total_Damage_Data>();
 
+    /// <summary>
+    /// 타임라인 이벤트 트리거 ID 리스트(ToString()으로 비교 사용)
+    /// </summary>
     protected enum TRIGGER_EVENT_IDS
     {
         chr_hide,
@@ -273,7 +270,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             for (int i = 0; i < tracks.Length; i++)
             {
                 var t = tracks[i];
-                t.TimeScale = Battle_Speed_Multiple;
+                if (t != null)
+                {
+                    t.TimeScale = Battle_Speed_Multiple;
+                }
             }
         }
 
@@ -496,16 +496,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// </summary>
     protected void AddLifeBar()
     {
-        if (Life_Bar_V2 == null)
+        if (Life_Bar == null)
         {
-            var obj = GameObjectPoolManager.Instance.GetGameObject("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2", GetHPPositionTransform());
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localScale = Vector3.one;
-            Life_Bar_V2 = obj.GetComponent<LifeBarNode_V2>();
-            if (Team_Type == TEAM_TYPE.RIGHT)
-            {
-                Life_Bar_V2.SetHeroBaseV2(this);
-            }
+            Life_Bar = UI_Mng.AddLifeBar(this);
         }
     }
     /// <summary>
@@ -513,11 +506,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// </summary>
     protected void RemoveLifeBar()
     {
-        if (Life_Bar_V2 != null)
-        {
-            GameObjectPoolManager.Instance.UnusedGameObject(Life_Bar_V2.gameObject);
-        }
-        Life_Bar_V2 = null;
+        UI_Mng.UnusedLifeBarNode(Life_Bar);
+        Life_Bar = null;
     }
     /// <summary>
     /// 체력바 업데이트
@@ -525,7 +515,16 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected void UpdateLifeBar()
     {
         float per = (float)(Life / Max_Life);
-        Life_Bar_V2?.SetLifePercent(per);
+        var state = GetCurrentState();
+        if (state == UNIT_STATES.ULTIMATE_PAUSE || state == UNIT_STATES.SKILL_1)
+        {
+            Life_Bar?.SetLifeSliderPercent(per, false);
+        }
+        else
+        {
+            Life_Bar?.SetLifeSliderPercent(per, true);
+        }
+        
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
 
@@ -541,8 +540,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Skeleton.AnimationState.Complete += SpineAnimationComplete;
             Skeleton.AnimationState.End += SpineAnimationEnd;
             Skeleton.AnimationState.Event += SpineAnimationEvent;
+            Skeleton.AnimationState.Interrupt += SpineAnimationInterrupt;
+            Skeleton.AnimationState.Dispose += SpineAnimationDispose;
         }
     }
+
+    protected virtual void SpineAnimationInterrupt(TrackEntry entry) { }
+    protected virtual void SpineAnimationDispose(TrackEntry entry) { }
 
     /// <summary>
     /// 스파인 애니메이션 시작시 호출되는 리스너
@@ -680,7 +684,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             FindTargetsSkillAddTargets(skill);
                         }
                         
-                        SpawnSkillEffect_V3(exec_list[i]);
+                        SpawnSkillEffect_V3(skill);
                     }
                 }
             }
@@ -719,7 +723,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         Team_Type = Team_Mng.Team_Type;
     }
-
+    public void HideLifeBar()
+    {
+        if (Life_Bar != null)
+        {
+            Life_Bar.HideLifeBar();
+        }
+    }
     /// <summary>
     /// 유닛 알파값 변경 애니메이션
     /// </summary>
@@ -738,7 +748,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         ShadowAlphaAnimation(alpha, dur);
         if (alpha == 0f)
         {
-            Life_Bar_V2?.HideLifeBar();
+            Life_Bar?.HideLifeBar();
         }
     }
     /// <summary>
@@ -1049,7 +1059,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="skill"></param>
     protected virtual void SpawnSkillEffect_V3(BattleSkillData skill)
     {
-        var factory = Battle_Mng.GetEffectFactory();
         if (skill.IsEmptyFindTarget())
         {
             return;
@@ -1065,14 +1074,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             //  트리거 이펙트가 없으면, 일회성/지속성 스킬로 트리거를 발생시킨다.(트리거 이펙트가 없으면, EFFECT_COUNT_TYPE.EACH_TARGET_EFFECT 형식으로 각각의 이펙트를 구현해준다)
             for (int i = 0; i < target_cnt; i++)
             {
-                //var target = Attack_Targets[i];
                 var target = skill.GetFindTargets()[i];
                 BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                 send_data.Caster = this;
                 send_data.AddTarget(target);
                 send_data.Skill = skill;
-                send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
-                send_data.Magic_Attack_Point = GetMagicAttackPoint();
+                //send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
+                //send_data.Magic_Attack_Point = GetMagicAttackPoint();
                 send_data.Effect_Weight_Index = effect_weight_index;
 
                 //  onetime skill
@@ -1120,8 +1128,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 send_data.Caster = this;
                 send_data.AddTargets(skill.GetFindTargets());
                 send_data.Skill = skill;
-                send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
-                send_data.Magic_Attack_Point = GetMagicAttackPoint();
+                //send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
+                //send_data.Magic_Attack_Point = GetMagicAttackPoint();
                 send_data.Effect_Weight_Index = effect_weight_index;
 
                 //  첫번재 이펙트만 보여줘야 하므로
@@ -1180,16 +1188,16 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 {
                     var target = skill.GetFindTargets()[i];
 
-                    BATTLE_SEND_DATA dmg = new BATTLE_SEND_DATA();
-                    dmg.Caster = this;
-                    dmg.AddTarget(target);
-                    dmg.Skill = skill;
-                    dmg.Physics_Attack_Point = GetPhysicsAttackPoint();
-                    dmg.Magic_Attack_Point = GetMagicAttackPoint();
-                    dmg.Effect_Weight_Index = effect_weight_index;
+                    BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
+                    send_data.Caster = this;
+                    send_data.AddTarget(target);
+                    send_data.Skill = skill;
+                    //send_data.Physics_Attack_Point = GetPhysicsAttackPoint();
+                    //send_data.Magic_Attack_Point = GetMagicAttackPoint();
+                    send_data.Effect_Weight_Index = effect_weight_index;
 
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
-                    SpawnOnetimeEffect(skill_trigger_effect_prefab, dmg, target, skill.GetFindTargets());
+                    SpawnOnetimeEffect(skill_trigger_effect_prefab, send_data, target, skill.GetFindTargets());
                     
                 }
             }
@@ -1314,7 +1322,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  물리 마법 결정 데미지
         double last_damage = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? data.Magic_Attack_Point : data.Physics_Attack_Point;
 
-        var target = data.Targets[0];
+        //var target = data.Targets[0];
         //double vampire_hp = last_damage * Attack_Life_Recovery / (Attack_Life_Recovery + target.GetLevel() + 100);
         double vampire_hp = last_damage * (Attack_Life_Recovery / (500 + Attack_Life_Recovery));
         vampire_hp = Math.Truncate(vampire_hp);
@@ -1322,9 +1330,75 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             AddLifeRecovery(vampire_hp);
         }
-
     }
 
+    /// <summary>
+    /// 피격자가 최종 합산 데미지를 계산 후 공격자에게 합산 데미지 정보를 전달해준다.<br/>
+    /// 공격자는 필요에 따라 최종 합산 데미지를 이용하여 회복 등을 사용할 수 있다.<br/>
+    /// 체력 회복량 = 준 데미지 * HP 흡수 포인트 / (HP 흡수 포인트 + 상대 레벨 + 100)
+    /// </summary>
+    /// <param name="total_data"></param>
+    public void SendLastTotalDamage(Total_Damage_Data total_data)
+    {
+        if (total_data.Skill_ID == 0 || total_data.GetTotalDamage() == 0)
+        {
+            return;
+        }
+        double total_damage = total_data.GetTotalDamage();
+        double vampire_hp = total_damage * (Attack_Life_Recovery / (500 + Attack_Life_Recovery));
+        vampire_hp = Math.Truncate(vampire_hp);
+        if (vampire_hp > 0)
+        {
+            AddLifeRecovery(vampire_hp);
+        }
+    }
+
+    /// <summary>
+    /// 데미지 합산을 계산하기 위한 함수<br/>
+    /// Max_Effect_Weight_Count에 도달할 경우, 시전자에게 최종 합산 데미지 정보를 전달해주고<br/>
+    /// 합산 데미지를 표시 요청해주는 역할을 해야한다<br/>
+    /// 시전자에게 정보를 보내는것은 막타에서 항상 보내주고<br/>
+    /// 합산 데미지는 2회 이상의 연타를 시전할 경우에만 보여준다.
+    /// </summary>
+    /// <param name="send_data"></param>
+    protected void AddTotalDamageInfo(BATTLE_SEND_DATA send_data)
+    {
+        if (send_data.Skill == null)
+        {
+            return;
+        }
+        int skill_id = send_data.Skill.GetSkillID();
+        int max_effect_count = send_data.Skill.GetMaxEffectWeightCount();
+        var find = Total_Damage_Data.Find(x => x.Skill_ID == skill_id);
+        if (find == null)
+        {
+            find = new Total_Damage_Data(skill_id);
+            find.Max_Effect_Weight_Count = max_effect_count;
+            find.Onetime_Effect_Type = send_data.Onetime.GetOnetimeEffectType();
+        }
+        bool is_last_attack = false;
+        if (find.Onetime_Effect_Type == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
+        {
+            is_last_attack = find.AddDamage(send_data.Effect_Weight_Index, send_data.Physics_Attack_Point);
+        }
+        else
+        {
+            is_last_attack = find.AddDamage(send_data.Effect_Weight_Index, send_data.Magic_Attack_Point);
+        }
+        //  막타라면 해야할일을 하자
+        if (is_last_attack)
+        {
+            Total_Damage_Data.Remove(find);
+            //  연타일 경우, 합산 정보 보여줌 (1타 공격인 경우 합산 정보 필요없음)
+            if (max_effect_count > 1)
+            {
+                //  todo
+            }
+
+            //  시전자에게 최종 합산 데미지 정보 전달해줘야 함
+            send_data.Caster.SendLastTotalDamage(find);
+        }
+    }
 
     /// <summary>
     /// 적에게서 데미지를 받는다.
@@ -1411,7 +1485,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
 
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
-        dmg.Caster.SendLastDamage(dmg);
+        //dmg.Caster.SendLastDamage(dmg);
+
+        //  토탈 데미지 계산을 위해서
+        AddTotalDamageInfo(dmg);
 
         //  색 반짝 / 넉백 
         AttackHittedKnockback();
@@ -1736,15 +1813,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
 
         var target_skill = skill_grp.GetSpecialSkillTargetSkill();
-        //if (target_skill != null)
-        //{
-        //    FindTargetsSkillAddTargets(target_skill);
-        //}
+        
         //  타겟이 잡혀있지 않다면, 일단 스킬 사용 안되도록
         if (target_skill.IsEmptyFindTarget())
         {
             return;
         }
+        //  모든 체력 게이지 숨기기
+        Battle_Mng.HideAllUnitLifeBar();
         //  주인공 이외의 모든 캐릭 pause
         Battle_Mng.AllPauseUnitWithoutHero(this);
 

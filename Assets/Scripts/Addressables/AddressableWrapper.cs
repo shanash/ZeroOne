@@ -8,6 +8,7 @@ namespace FluffyDuck.Addressable
         public static bool isTest = true;
 
         /// <summary>
+        /// FTP 경로
         /// TODO: 이후에 코드값으로 Addressables Profiles에서 참조해도 괜찮지 않을까?
         /// </summary>
         public static string remotePath
@@ -17,7 +18,7 @@ namespace FluffyDuck.Addressable
                 string path;
                 if (isTest)
                 {
-                    path = "http://10.10.0.20/clientdata";
+                    path = "http://cnd-test-01.fluffyduck.co.kr/clientdata";
                 }
                 else
                 {

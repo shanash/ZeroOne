@@ -303,11 +303,7 @@ public abstract class BattleUnitData : BattleDataBase
     /// <returns></returns>
     public virtual int GetSumSkillsLevel() { return Skill_Mng.GetSkillLevelSum(); }
 
-    /// <summary>
-    /// 일반 스킬의 레벨 합
-    /// </summary>
-    /// <returns></returns>
-    public virtual int GetNormalSkillLevelSum() { return Skill_Mng.GetNormalSkillLevelSum(); }
+    
 
     public virtual int GetSpecialSkillLevel()
     {

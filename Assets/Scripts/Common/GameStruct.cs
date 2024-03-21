@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 /// 본 파일은 게임내에 다양하게 사용되는 데이터 타입의 구조체 또는 클래스를 선언하기 위한 파일.
 public struct BATTLE_SEND_DATA
 {
@@ -13,7 +14,6 @@ public struct BATTLE_SEND_DATA
 
     public DURATION_EFFECT_TYPE Duration_Effect_Type;
 
-    //public ONETIME_EFFECT_TYPE Onetime_Effect_Type;
     public double Physics_Attack_Point;                   //  물리 공격력
     public double Magic_Attack_Point;                     //  마법 공격력
     public bool Is_Physics_Critical;                      //  물리 치명타 확률
@@ -31,7 +31,6 @@ public struct BATTLE_SEND_DATA
         Is_Physics_Critical = false;
         Is_Magic_Critical = false;
         Effect_Weight_Index = 0;
-        //Onetime_Effect_Type = ONETIME_EFFECT_TYPE.NONE;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
         ClearTargets();
     }
@@ -91,6 +90,44 @@ public struct BATTLE_SEND_DATA
     }
 }
 
+/// <summary>
+/// 누적 데미지 데이터
+/// </summary>
+public record Total_Damage_Data
+{
+    public int Skill_ID;
+    public int Max_Effect_Weight_Count;
+    public ONETIME_EFFECT_TYPE Onetime_Effect_Type = ONETIME_EFFECT_TYPE.NONE;
+    List<double> Damage_List = new List<double>();
+
+    public Total_Damage_Data(int skill_id)
+    {
+        Skill_ID = skill_id;
+        Max_Effect_Weight_Count = 0;
+        Damage_List.Clear();
+    }
+    /// <summary>
+    /// 데미지 합산을 위해 더해줌
+    /// </summary>
+    /// <param name="effect_weight_index"></param>
+    /// <param name="damage"></param>
+    /// <returns>막타면 true, 막타가 아니면 false</returns>
+    public bool AddDamage(int effect_weight_index, double damage)
+    {
+        if (effect_weight_index < Max_Effect_Weight_Count)
+        {
+            Damage_List.Add(damage);
+            return effect_weight_index == Max_Effect_Weight_Count - 1;
+        }
+        return false;
+    }
+
+    public double GetTotalDamage()
+    {
+        double sum = Damage_List.Sum();
+        return sum;
+    }
+}
 
 [Serializable]
 public struct Start_Projectile_Pos_Data

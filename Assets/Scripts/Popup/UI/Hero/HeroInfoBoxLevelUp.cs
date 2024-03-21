@@ -321,7 +321,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             //  exp bar
             var lv_data = MasterDataManager.Instance.Get_PlayerCharacterLevelData(simulate.Result_Lv);
             double need_exp = lv_data.need_exp;
-            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp;
+            double lv_exp = simulate.Result_Accum_Exp - lv_data.accum_exp - simulate.Over_Exp;
             //  exp count
             Exp_Count.text = ZString.Format("{0:N0} / {1:N0}", lv_exp, need_exp);
 
@@ -380,6 +380,10 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         Result_Exp_Bar.value = before_exp_per;
 
         int gauge_full_count = after_simulate.Value.Result_Lv - before_lv;
+        if (gauge_full_count > 1)
+        {
+            gauge_full_count = 1;
+        }
         float speed = 3f;
         float duration = 1f;
         float delta = 0f;
@@ -388,7 +392,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime * 4;
+            delta += Time.deltaTime * 10f;
 
             Result_Exp_Bar.value = Mathf.Clamp01(delta);
             if (delta >= duration)
@@ -396,10 +400,13 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
                 delta = 0f;
                 Result_Exp_Bar.value = 0f;
                 ++loop_count;
-                int lv = before_lv + loop_count;
-                Result_Level_Text.text = lv.ToString();
+                //int lv = before_lv + loop_count;
+                //Result_Level_Text.text = lv.ToString();
+                //UpdateHeroStatusInfoNodes(lv);
 
-                UpdateHeroStatusInfoNodes(lv);
+                Result_Level_Text.text = after_simulate.Value.Result_Lv.ToString();
+                UpdateHeroStatusInfoNodes(after_simulate.Value.Result_Lv);
+                
                 if (loop_count >= gauge_full_count)
                 {
                     break;
@@ -420,13 +427,13 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             double lv_exp = after_simulate.Value.Result_Accum_Exp - lv_data.accum_exp;
             after_exp_per = (float)(lv_exp / need_exp);
         }
-        //duration = Mathf.Abs(after_exp_per - Result_Exp_Bar.value);
+
         duration = 1f;
         if (after_exp_per > 0f)
         {
             while (true)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Result_Exp_Bar.value = Mathf.MoveTowards(Result_Exp_Bar.value, after_exp_per, duration * Time.deltaTime * speed);
                 if (delta >= duration)
                 {
@@ -466,6 +473,10 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         Current_Exp_Bar.value = before_exp_per;
 
         int gauge_full_count = result.Result_Lv - before_lv;
+        if (gauge_full_count > 1)
+        {
+            gauge_full_count = 1;
+        }
         float speed = 1f;
         float duration = 1f;
         float delta = 0f;
@@ -474,7 +485,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
         //  게이지 풀 횟수
         while (loop_count < gauge_full_count)
         {
-            delta += Time.deltaTime * 4f;
+            delta += Time.deltaTime * 10f;
 
             Current_Exp_Bar.value = Mathf.Clamp01(delta);
 
@@ -483,9 +494,8 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
                 delta = 0f;
                 Current_Exp_Bar.value = 0f;
                 ++loop_count;
-                int lv = before_lv + loop_count;
-                Result_Level_Text.text = lv.ToString();
-                UpdateHeroStatusInfoNodes(lv);
+                Result_Level_Text.text = result.Result_Lv.ToString();
+                UpdateHeroStatusInfoNodes(result.Result_Lv);
                 
                 if (loop_count >= gauge_full_count)
                 {
@@ -507,13 +517,12 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             double lv_exp = result.Result_Accum_Exp - lv_data.accum_exp;
             after_exp_per = (float)(lv_exp / need_exp);
         }
-        //duration = Mathf.Abs(after_exp_per - Current_Exp_Bar.value);
         duration = 1f;
         if (after_exp_per > 0f)
         {
             while (true)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Current_Exp_Bar.value = Mathf.MoveTowards(Current_Exp_Bar.value, after_exp_per, duration * Time.deltaTime * speed);
                 if (delta >= duration)
                 {

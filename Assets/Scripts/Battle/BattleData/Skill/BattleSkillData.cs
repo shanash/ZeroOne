@@ -204,6 +204,15 @@ public abstract class BattleSkillData : BattleDataBase
         Effect_Weight_Index = weight_index;
     }
     /// <summary>
+    /// 이펙트 비중 횟수
+    /// </summary>
+    /// <returns></returns>
+    public int GetMaxEffectWeightCount()
+    {
+        return Max_Effect_Count;
+    }
+
+    /// <summary>
     /// 타겟 추가
     /// </summary>
     /// <param name="t"></param>

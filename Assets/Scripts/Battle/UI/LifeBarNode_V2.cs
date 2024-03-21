@@ -117,10 +117,13 @@ public class LifeBarNode_V2 : MonoBehaviour, IPoolableComponent
     /// 체력 게이지 비율
     /// </summary>
     /// <param name="per"></param>
-    public void SetLifePercent(float per)
+    public void SetLifePercent(float per, bool show)
     {
         SetBarPercent(Life_Bar, per);
-        ShowLifeBar(2f);
+        if (show)
+        {
+            ShowLifeBar(2f);
+        }
     }
 
     /// <summary>

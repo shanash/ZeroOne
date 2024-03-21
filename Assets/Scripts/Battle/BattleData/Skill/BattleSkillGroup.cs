@@ -1,5 +1,6 @@
 using Cysharp.Text;
 using System.Collections.Generic;
+using System.Security.Permissions;
 
 public abstract class BattleSkillGroup : BattleDataBase
 {
@@ -9,6 +10,8 @@ public abstract class BattleSkillGroup : BattleDataBase
 
     public int Skill_Order { get; protected set; }
     public UNIT_SKILL_TYPE Unit_Skill_Type { get; protected set; }
+
+    public int Skill_Group_ID { get; protected set; } = 0;
 
     protected BattleSkillGroup(UNIT_SKILL_TYPE stype) : base() { Unit_Skill_Type = stype; }
 

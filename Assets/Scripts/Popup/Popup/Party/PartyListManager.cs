@@ -91,7 +91,7 @@ public class PartyListManager : MonoBehaviour
         double sum_synergy = synergy_list.Sum(x => x.multiple_type == mtype ? x.add_damage_per : 0);
         if (sum_synergy > 0)
         {
-            Battle_Point_Inc.text = ZString.Format("(+{0:P0})", sum_synergy);
+            Battle_Point_Inc.text = ZString.Format("{0}(+{1:P0})", GameDefine.GetLocalizeString("system_sorting_name_06"), sum_synergy);
         }
         else
         {

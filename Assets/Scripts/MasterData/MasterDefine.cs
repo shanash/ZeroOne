@@ -220,30 +220,28 @@ public enum TARGET_RULE_TYPE
 ///	</summary>
 public enum CHARACTER_SORT
 {
-	/// <summary>0 캐릭터 이름</summary>
-	NAME = 0,
 	/// <summary>1 캐릭터 레벨</summary>
-	LEVEL_CHARACTER = 1,
+	LEVEL_CHARACTER = 0,
+	/// <summary>10 속성</summary>
+	ATTRIBUTE = 1,
+	/// <summary>11 전투력</summary>
+	BATTLEPOWER = 2,
 	/// <summary>2 성급</summary>
-	STAR = 2,
-	/// <summary>3 인연 랭크</summary>
-	DESTINY = 3,
-	/// <summary>4 스킬 레벨</summary>
-	SKILL_LEVEL = 4,
+	STAR = 3,
 	/// <summary>5 궁극기 스킬 레벨</summary>
-	EX_SKILL_LEVEL = 5,
+	EX_SKILL_LEVEL = 4,
 	/// <summary>6 공격력</summary>
-	ATTACK = 6,
+	ATTACK = 5,
 	/// <summary>7 방어력</summary>
-	DEFEND = 7,
+	DEFEND = 6,
 	/// <summary>8 사거리</summary>
-	RANGE = 8,
+	RANGE = 7,
+	/// <summary>0 캐릭터 이름</summary>
+	NAME = 8,
 	/// <summary>9 호감도</summary>
 	LIKEABILITY = 9,
-	/// <summary>10 속성</summary>
-	ATTRIBUTE = 10,
-	/// <summary>11 전투력</summary>
-	BATTLEPOWER = 11,
+	/// <summary>3 인연 랭크</summary>
+	DESTINY = 10,
 }
 
 ///	<summary>

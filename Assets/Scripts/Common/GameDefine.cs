@@ -326,9 +326,6 @@ public class GameDefine : MonoBehaviour
                 break;
             case CHARACTER_SORT.DESTINY:
                 break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                filter = GetLocalizeString("system_sorting_name_04");
-                break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
                 filter = GetLocalizeString("system_sorting_name_05");
                 break;

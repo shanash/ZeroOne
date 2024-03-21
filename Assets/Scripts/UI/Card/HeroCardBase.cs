@@ -181,9 +181,6 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
             case CHARACTER_SORT.DESTINY:
                 filter = "0";
                 break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.GetNormalSkillLevelSum());
-                break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
                 {
                     int level = 0;

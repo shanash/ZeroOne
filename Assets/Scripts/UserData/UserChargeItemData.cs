@@ -76,7 +76,19 @@ public class UserChargeItemData : UserDataBase
     /// <returns></returns>
     public int GetMaxBound()
     {
-        return (int)Max_Bound_Data.base_max;
+        if (Charge_Item_Type == REWARD_TYPE.STAMINA)
+        {
+            var player_info = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+            if (player_info != null)
+            {
+                return (int)Max_Bound_Data.base_max + player_info.GetAddMaxStaminaBound();
+            }
+            return (int)Max_Bound_Data.base_max;
+        }
+        else
+        {
+            return (int)Max_Bound_Data.base_max;
+        }
     }
     /// <summary>
     /// 완충 상태인지 여부 체크

@@ -3,6 +3,7 @@ using FluffyDuck.Util;
 using Gpm.Ui;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -118,6 +119,7 @@ public class PartySettingPopup : PopupBase
             if (Is_Load_Complete && Is_Animation_End)
             {
                 FixedUpdatePopup();
+                //ChoiceFirstHeroInfo();
                 return;
             }
         }
@@ -145,8 +147,32 @@ public class PartySettingPopup : PopupBase
         {
             FixedUpdatePopup();
             UpdatePopup();
+            //ChoiceFirstHeroInfo();
         }
     }
+
+    ///// <summary>
+    ///// 창 오픈시 첫번째 캐릭터 정보 보기
+    ///// </summary>
+    //void ChoiceFirstHeroInfo()
+    //{
+    //    if (Battle_Hero_Data_List.Count > 0)
+    //    {
+    //        var first_hero = Battle_Hero_Data_List.FirstOrDefault();
+    //        if (first_hero != null)
+    //        {
+    //            Selected_Info_Box.SetPlayerCharacterID(first_hero.GetUnitID(), first_hero.GetUnitNum());
+    //        }
+    //        else
+    //        {
+    //            Selected_Info_Box.SetPlayerCharacterID(0, 0);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Selected_Info_Box.SetPlayerCharacterID(0, 0);
+    //    }
+    //}
 
     protected override void HidePopupAniEndCallback()
     {
@@ -162,17 +188,6 @@ public class PartySettingPopup : PopupBase
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
         List<UserHeroData> user_hero_list = new List<UserHeroData>();
-        //var battle_hero_list = new List<BattlePcData>();
-        
-        //hero_mng.GetUserHeroDataList(ref user_hero_list);
-
-        //for (int i = 0; i < user_hero_list.Count; i++)
-        //{
-        //    var user_hero = user_hero_list[i];
-        //    var b = new BattlePcData();
-        //    b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
-        //    battle_hero_list.Add(b);
-        //}
 
         //  sort
         if (Sort_Order == SORT_ORDER.ASC)
@@ -190,9 +205,6 @@ public class PartySettingPopup : PopupBase
                     break;
                 case CHARACTER_SORT.DESTINY:
                     Debug.Assert(false);
-                    break;
-                case CHARACTER_SORT.SKILL_LEVEL:
-                    Battle_Hero_Data_List.Sort((a, b) => a.GetNormalSkillLevelSum().CompareTo(b.GetNormalSkillLevelSum()));
                     break;
                 case CHARACTER_SORT.EX_SKILL_LEVEL:
                     Battle_Hero_Data_List.Sort((a, b) => a.GetSpecialSkillLevel().CompareTo(b.GetSpecialSkillLevel()));
@@ -233,9 +245,6 @@ public class PartySettingPopup : PopupBase
                     break;
                 case CHARACTER_SORT.DESTINY:
                     Debug.Assert(false);
-                    break;
-                case CHARACTER_SORT.SKILL_LEVEL:
-                    Battle_Hero_Data_List.Sort((a, b) => b.GetNormalSkillLevelSum().CompareTo(a.GetNormalSkillLevelSum()));
                     break;
                 case CHARACTER_SORT.EX_SKILL_LEVEL:
                     Battle_Hero_Data_List.Sort((a, b) => b.GetSpecialSkillLevel().CompareTo(a.GetSpecialSkillLevel()));
@@ -327,9 +336,6 @@ public class PartySettingPopup : PopupBase
                 filter = GameDefine.GetLocalizeString("system_sorting_name_03");
                 break;
             case CHARACTER_SORT.DESTINY:
-                break;
-            case CHARACTER_SORT.SKILL_LEVEL:
-                filter = GameDefine.GetLocalizeString("system_sorting_name_04");
                 break;
             case CHARACTER_SORT.EX_SKILL_LEVEL:
                 filter = GameDefine.GetLocalizeString("system_sorting_name_05");

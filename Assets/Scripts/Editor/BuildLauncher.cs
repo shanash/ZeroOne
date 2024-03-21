@@ -136,6 +136,14 @@ namespace FluffyDuck.EditorUtil
             set => PlayerSettings.Android.keyaliasPass = value;
         }
 
+        static bool Is_Development { get; set; } = true;
+
+        static bool Build_App_Bundle
+        {
+            get => EditorUserBuildSettings.buildAppBundle;
+            set => EditorUserBuildSettings.buildAppBundle = value;
+        }
+
         /*
         static string Adb_Path
         {
@@ -1112,8 +1120,8 @@ namespace FluffyDuck.EditorUtil
             ReadArguments();
             //SET IsRemotePath = false
             //SET IsCleanBuild = true
-            bool isAssetBuild = GetArguments("IsAssetBuild").Equals(true);
-            bool isPlayerBuild = GetArguments("IsPlayerBuild").Equals(true);
+            bool isAssetBuild = GetArguments("IsAssetBuild").Equals("true");
+            bool isPlayerBuild = GetArguments("IsPlayerBuild").Equals("true");
             if (isAssetBuild)
             {
                 if (0 != BuildAddressableConsole())
@@ -1137,8 +1145,8 @@ namespace FluffyDuck.EditorUtil
         {
             Debug.Log("Start BuildAddressableConsole");
 
-            IsRemotePath = GetArguments("IsRemotePath").Equals(true);
-            IsCleanBuild = GetArguments("IsCleanBuild").Equals(true);
+            IsRemotePath = GetArguments("IsRemotePath").Equals("true");
+            IsCleanBuild = GetArguments("IsCleanBuild").Equals("true");
 
             if (BuildAddressables(IsCleanBuild))
             {
@@ -1154,15 +1162,20 @@ namespace FluffyDuck.EditorUtil
         {
             Debug.Log("Start BuildPlayerConsole");
 
-            Keystore_Password = GetArguments("AndroidKeystorePassword");//Environment.ExpandEnvironmentVariables("%AndroidKeystorePassword%");
-            Key_Alias_Name = GetArguments("AndroidKeyAliasName"); //Environment.ExpandEnvironmentVariables("%AndroidKeyAliasName%");
-            Key_Alias_Password = GetArguments("AndroidKeyAliasPassword"); //Environment.ExpandEnvironmentVariables("%AndroidKeyAliasPassword%");
-            BUILD_ID = GetArguments("BUILD_ID"); //Environment.ExpandEnvironmentVariables("%BUILD_ID%");
-            SVN_REVISION = GetArguments("SVN_REVISION"); //Environment.ExpandEnvironmentVariables("%SVN_REVISION%");
+            Keystore_Password = GetArguments("AndroidKeystorePassword");
+            Key_Alias_Name = GetArguments("AndroidKeyAliasName");
+            Key_Alias_Password = GetArguments("AndroidKeyAliasPassword");
+            BUILD_ID = GetArguments("BUILD_ID");
+            SVN_REVISION = GetArguments("SVN_REVISION");
+            Is_Development = GetArguments("IsDevelopment").Equals("true");
+            Build_App_Bundle = GetArguments("BuildAppBundle").Equals("true");
 
             BuildPlayerOptions bpo = CreateDefalutBuildPlayerOptions();
 
-            bpo.options |= BuildOptions.Development;
+            if (Is_Development)
+            {
+                bpo.options |= BuildOptions.Development;
+            }
 
             if (!BuildPlayer(bpo))
             {

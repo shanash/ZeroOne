@@ -429,7 +429,7 @@ public class UserHeroData : UserDataBase
 
         double add_exp = 0;
         double need_gold = 0;
-
+        //  아이템 종류별 추가
         for (int i = 0; i < item_list.Count; i++)
         {
             var item_data = item_list[i];
@@ -443,11 +443,11 @@ public class UserHeroData : UserDataBase
                 Item_Type = item_data.item_type,
                 Item_ID = item_data.item_id,
             };
-
+            //  최대 레벨을 초과하기 전까지만 추가
             int ucnt = (int)user_item.GetCount();
             for (int u = 0; u < ucnt; u++)
             {
-                if (cur_exp + add_exp + item_data.int_var1 > max_level_data.accum_exp)
+                if (cur_exp + add_exp + item_data.int_var1 >= max_level_data.accum_exp)
                 {
                     break;
                 }
@@ -456,6 +456,58 @@ public class UserHeroData : UserDataBase
                 usable_item.Use_Count += 1;
             }
             if (usable_item.Use_Count > 0)
+            {
+                result.Auto_Item_Data_List.Add(usable_item);
+            }
+        }
+
+        //  여기까지 왔으면, 최대 레벨을 초과할 수 없는 상태임. 여기서 마지막으로 경험치가 적은 아이템부터 사용해서 최대 레벨을 달성할 수 있도록 추가해줘야함
+        //  경험치 사용량이 적은 아이템부터 정렬(오름차순)
+        item_list.Sort((a, b) => a.int_var1.CompareTo(b.int_var1));
+        for (int i = 0; i < item_list.Count; i++)
+        {
+            var item_data = item_list[i];
+            var user_item = item_mng.FindUserItem(item_data.item_type, item_data.item_id);
+            if (user_item == null)
+            {
+                continue;
+            }
+            bool is_exist = true;
+            USABLE_ITEM_DATA usable_item = result.Auto_Item_Data_List.Find(x => x.Item_Type == item_data.item_type && x.Item_ID == item_data.item_id);
+            if (usable_item == null)
+            {
+                is_exist = false;
+                usable_item = new USABLE_ITEM_DATA
+                {
+                    Item_Type = item_data.item_type,
+                    Item_ID = item_data.item_id,
+                };
+            }
+
+            //  최대 레벨을 초과할 때까지만 추가
+            int ucnt = (int)user_item.GetCount() - usable_item.Use_Count;
+            for (int u = 0; u < ucnt; u++)
+            {
+                //  이미 최대 레벨을 초과한 상태라면 그냥 멈춰
+                if (cur_exp + add_exp >= max_level_data.accum_exp)
+                {
+                    break;
+                }
+                //  현재 경험치 + 이미 추가된 경험치 + 현재 아이템의 경험치가 최대 레벨을 초과하면 여기까지만 적용하고 멈춰
+                if (cur_exp + add_exp + item_data.int_var1 >= max_level_data.accum_exp)
+                {
+                    add_exp += item_data.int_var1;
+                    need_gold += item_data.int_var2;
+                    usable_item.Use_Count += 1;
+                    break;
+                }
+
+                add_exp += item_data.int_var1;
+                need_gold += item_data.int_var2;
+                usable_item.Use_Count += 1;
+
+            }
+            if (usable_item.Use_Count > 0 && !is_exist)
             {
                 result.Auto_Item_Data_List.Add(usable_item);
             }
