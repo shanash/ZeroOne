@@ -59,7 +59,10 @@ public class SCManager : Singleton<SCManager>
         Current_Controller = current;
         Debug.Log($"SetCurrent {Current_SceneName}");
         Callback_Method_Names = callback_method_names;
-        Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
+        if (!Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName))
+        {
+            Debug.Assert(false, $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
+        }
     }
 
     public void ChangeScene(string scene_name, params object[] parameters)
@@ -72,7 +75,6 @@ public class SCManager : Singleton<SCManager>
 
     public void ChangeScene(SceneName scene_name = SceneName.None, params object[] parameters)
     {
-        Debug.Log("Start ChangeScene");
         if (Is_Changing)
             return;
 
@@ -100,39 +102,25 @@ public class SCManager : Singleton<SCManager>
 
     async UniTask ChangeSceneAsync(SceneName sceneName, params object[] parameters)
     {
-        Debug.Log($"시작: ChangeSceneAsync 호출됨. 목표 씬: {sceneName}");
         Is_Changing = true;
 
-        Debug.Log("화면 페이드아웃 시작.");
         //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
-        Debug.Log("화면 페이드아웃 완료.");
 
-        Debug.Log($"{sceneName}로 씬 로딩 시작.");
         await LoadSceneImmidiatlyAsync(sceneName.ToString());
-        Debug.Log($"{sceneName}로 씬 로딩 완료.");
 
-        Debug.Log("미사용 리소스 언로드 시작.");
         await Resources.UnloadUnusedAssets();
-        System.GC.Collect();
-        Debug.Log("미사용 리소스 언로드 및 가비지 컬렉션 완료.");
+        GC.Collect();
 
-        Debug.Log($"현재 씬 설정 대기 중. 목표 씬: {sceneName}");
         await UniTask.WaitUntil(() => sceneName == Current_SceneName);
-        Debug.Log("현재 씬 설정 완료.");
 
         if (parameters.Length > 0)
         {
-            Debug.Log("OnReceiveData 메서드 호출 준비.");
             InvokeOnReceiveData(Current_Controller, Callback_Method_Names, parameters);
-            Debug.Log("OnReceiveData 메서드 호출 완료.");
         }
 
-        Debug.Log("화면 페이드인 시작.");
         //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
-        Debug.Log("화면 페이드인 완료.");
 
         Is_Changing = false;
-        Debug.Log($"완료: ChangeSceneAsync 처리 완료. 현재 씬: {Current_SceneName}");
     }
 
 
