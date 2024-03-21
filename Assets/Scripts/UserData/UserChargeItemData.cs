@@ -70,25 +70,35 @@ public class UserChargeItemData : UserDataBase
     {
         return Count.Get();
     }
+
     /// <summary>
     /// 최대 수
     /// </summary>
     /// <returns></returns>
     public int GetMaxBound()
     {
-        if (Charge_Item_Type == REWARD_TYPE.STAMINA)
+        try
         {
-            var player_info = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
-            if (player_info != null)
+            if (Charge_Item_Type == REWARD_TYPE.STAMINA)
             {
-                return (int)Max_Bound_Data.base_max + player_info.GetAddMaxStaminaBound();
+                var player_info = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
+                if (player_info != null)
+                {
+                    return (int)Max_Bound_Data.base_max + player_info.GetAddMaxStaminaBound();
+                }
+                return (int)Max_Bound_Data.base_max;
             }
-            return (int)Max_Bound_Data.base_max;
+            else
+            {
+                return (int)Max_Bound_Data.base_max;
+            }
         }
-        else
+        catch (Exception e)
         {
-            return (int)Max_Bound_Data.base_max;
+            Debug.LogException(e);
         }
+
+        return 0;
     }
     /// <summary>
     /// 완충 상태인지 여부 체크
