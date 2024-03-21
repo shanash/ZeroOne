@@ -51,6 +51,8 @@ namespace FluffyDuck.Addressable
         public bool HasNewDataVersion()
         {
             int last_data_version = PlayerPrefs.GetInt("Data_Version", 0);
+            Debug.Log($"Last Data Version : {last_data_version}");
+            Debug.Log($"AddressableWrapper.Data_Version : {AddressableWrapper.Data_Version}");
             return AddressableWrapper.Data_Version > last_data_version;
         }
 

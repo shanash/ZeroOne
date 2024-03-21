@@ -195,10 +195,12 @@ namespace ZeroOne.Input
                     //Debug.Log($"{context.phase} : mouse.position.value : {mouse.position.value}");
                     break;
                 case Touchscreen touchscreen:
+                    /*
                     for (int i = 0; i < 2; i++)
                     {
                         Debug.Log($"{context.phase} : touchscreen.touches[{i}] : {touchscreen.touches[i].position.value}");
                     }
+                    */
                     break;
             }
 

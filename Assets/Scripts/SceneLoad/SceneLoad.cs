@@ -28,6 +28,7 @@ public class SceneLoad : SceneControllerBase
 
     void SetText(string text)
     {
+        Debug.Log(text);
         if (_UI_Text != null)
         {
             _UI_Text.text = text;
@@ -44,7 +45,9 @@ public class SceneLoad : SceneControllerBase
 
     void OnProgressDownload(string group_key, float progress, double size)
     {
-        SetText($"{group_key} : {progress * size:F2} / {size:F2}");
+        string log = $"{group_key} : {progress * size:F2} / {size:F2}";
+        Debug.Log(log);
+        SetText(log);
         SetProgress(progress);
     }
 
