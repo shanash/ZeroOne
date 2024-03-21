@@ -55,9 +55,7 @@ public class SCManager : Singleton<SCManager>
     /// <param name="current"></param>
     public void SetCurrent(SceneControllerBase current, params string[] callback_method_names)
     {
-        Debug.Log("Start SetCurrent");
         Current_Controller = current;
-        Debug.Log($"SetCurrent {Current_SceneName}");
         Callback_Method_Names = callback_method_names;
         if (!Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName))
         {
@@ -104,7 +102,7 @@ public class SCManager : Singleton<SCManager>
     {
         Is_Changing = true;
 
-        //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
+        await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
 
         await LoadSceneImmidiatlyAsync(sceneName.ToString());
 
@@ -118,7 +116,7 @@ public class SCManager : Singleton<SCManager>
             InvokeOnReceiveData(Current_Controller, Callback_Method_Names, parameters);
         }
 
-        //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
+        await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
 
         Is_Changing = false;
     }

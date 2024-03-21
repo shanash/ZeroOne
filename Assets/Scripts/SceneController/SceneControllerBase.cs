@@ -22,7 +22,6 @@ public class SceneControllerBase : MonoBehaviour
     /// </summary>
     protected virtual void Initialize()
     {
-        Debug.Log("Call SetCurrent at Base");
         SCManager.Instance.SetCurrent(this);
     }
     #endregion
