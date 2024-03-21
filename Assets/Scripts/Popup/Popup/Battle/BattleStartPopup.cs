@@ -38,12 +38,12 @@ public class BattleStartPopup : PopupBase
     {
         if (Start_Type == 0)
         {
-            Delay_Time = 2f;
+            Delay_Time = 1.2f;
             Normal_Start.gameObject.SetActive(true);
         }
         else 
         {
-            Delay_Time = 2f;
+            Delay_Time = 1.2f;
             Boss_Start.gameObject.SetActive(true);
         }
     }

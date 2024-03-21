@@ -102,7 +102,7 @@ public class SCManager : Singleton<SCManager>
         Is_Changing = true;
 
         Debug.Log("화면 페이드아웃 시작.");
-        await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
+        //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
         Debug.Log("화면 페이드아웃 완료.");
 
         Debug.Log($"{sceneName}로 씬 로딩 시작.");
@@ -126,7 +126,7 @@ public class SCManager : Singleton<SCManager>
         }
 
         Debug.Log("화면 페이드인 시작.");
-        await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
+        //await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
         Debug.Log("화면 페이드인 완료.");
 
         Is_Changing = false;
