@@ -17,6 +17,7 @@ public class UserPlayerInfoData : UserDataBase
     protected override void Reset()
     {
         InitSecureVars();
+        InitMasterData();
         Nickname = string.Empty;
     }
 

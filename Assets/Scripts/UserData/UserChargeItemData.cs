@@ -77,25 +77,14 @@ public class UserChargeItemData : UserDataBase
     /// <returns></returns>
     public int GetMaxBound()
     {
-        Debug.Log("Start GetMaxBound");
         try
         {
             if (Charge_Item_Type == REWARD_TYPE.STAMINA)
             {
-                Debug.Log("Start STAMINA");
-                var manager = GameData.Instance.GetUserGameInfoDataManager();
-                Debug.Log("Get manager");
-                var player_info = manager.GetCurrentPlayerInfoData();
-                Debug.Log("Get player_info");
+                var player_info = GameData.Instance.GetUserGameInfoDataManager().GetCurrentPlayerInfoData();
                 if (player_info != null)
                 {
-                    Debug.Log("Exist info");
-                    int bound = player_info.GetAddMaxStaminaBound();
-                    return (int)Max_Bound_Data.base_max + bound;
-                }
-                else
-                {
-                    Debug.Log("null info");
+                    return (int)Max_Bound_Data.base_max + player_info.GetAddMaxStaminaBound();
                 }
                 return (int)Max_Bound_Data.base_max;
             }
