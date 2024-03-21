@@ -26,11 +26,6 @@ public class SceneLoad : SceneControllerBase
     public static string Start_Scene_Name;
     SceneLoadingPopup Loading_Popup;    //  Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup
 
-    protected override void Initialize()
-    {
-        SCManager.Instance.SetCurrent(this);
-    }
-
     void SetText(string text)
     {
         if (_UI_Text != null)
