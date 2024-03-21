@@ -47,9 +47,9 @@ public class EasingScaler : EasingFade
     {
         float ev = func(0.0f, 1.0f, weight);
         Vector3 easingDelta = Diff_Scale * ev;
-        //transform.localScale = Start_Scale + new Vector3(easingDelta.x, easingDelta.y, 0f);
         transform.localScale = Start_Scale + easingDelta;
     }
+    
 
     protected override void UpdatePostDelayEnd()
     {

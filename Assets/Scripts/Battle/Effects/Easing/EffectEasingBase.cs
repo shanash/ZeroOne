@@ -35,7 +35,18 @@ public abstract class EffectEasingBase : EasingFade
         /// 지속시간(플레이 시간)
         /// </summary>
         public float Easing_Duration;
-
+        /// <summary>
+        /// 이펙트 시작전 대기 시간
+        /// </summary>
+        public float Pre_Delay;
+        /// <summary>
+        /// 이펙트 종료 후 대기시간
+        /// </summary>
+        public float Post_Delay;
+        /// <summary>
+        /// 반복 여부
+        /// </summary>
+        public bool Repeat;
     }
 
     [SerializeField, Tooltip("Easing Data List")]
@@ -73,7 +84,7 @@ public abstract class EffectEasingBase : EasingFade
             {
                 duration = DEFAULT_DURATION;
             }
-            SetEasing(find.Ease_Type, duration);
+            SetEasing(find.Ease_Type, find.Pre_Delay, duration, find.Post_Delay, find.Repeat);
             StartEasing(cb);
         }
     }

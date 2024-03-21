@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: -2496485246421482730}
   - component: {fileID: 8603069107045094015}
   - component: {fileID: 1960964133671838280}
+  - component: {fileID: 6042519373599168535}
   m_Layer: 0
   m_Name: Physics_Damage_Text_Normal
   m_TagString: Untagged
@@ -184,8 +185,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Particle_Effect: {fileID: 0}
   Damage_Text: {fileID: 8603069107045094015}
-  Writer: {fileID: 0}
   Weak_Icon: {fileID: 7270736506045157788}
+  Effect_Easing_List:
+  - {fileID: 6042519373599168535}
 --- !u!114 &8603069107045094015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,3 +292,32 @@ SortingGroup:
   m_SortingLayer: 6
   m_SortingOrder: 500
   m_SortAtRoot: 0
+--- !u!114 &6042519373599168535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8863358696057091391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be22169f40df684cbc5da156c537b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Easing_Data_List:
+  - Move_Type: 1
+    Ease_Type: 27
+    Easing_Vector: {x: 2, y: 2, z: 1}
+    Easing_Float: 0
+    Easing_Duration: 0.3
+    Pre_Delay: 0
+    Post_Delay: 0
+    Repeat: 0
+  - Move_Type: 2
+    Ease_Type: 21
+    Easing_Vector: {x: 0, y: 0, z: 0}
+    Easing_Float: 0
+    Easing_Duration: 0.3
+    Pre_Delay: 0
+    Post_Delay: 0
+    Repeat: 0

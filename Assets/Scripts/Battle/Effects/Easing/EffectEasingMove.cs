@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectEasingSlide : EffectEasingBase
+public class EffectEasingMove : EffectEasingBase
 {
     /// <summary>
     /// 이동전 시작 좌표
