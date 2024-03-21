@@ -468,7 +468,11 @@ namespace FluffyDuck.EditorUtil
 
                 int current_data_version = 0;
                 string old_override_player_version = s_Settings.OverridePlayerVersion;
-                Debug.Assert(int.TryParse(old_override_player_version, out int data_version), "기존에 저장된 OverridePlayerVersion의 형식이 맞지 않습니다 : 데이터 버전란이 숫자가 아닙니다");
+                if (!int.TryParse(old_override_player_version, out int data_version))
+                {
+                    Debug.Assert(false, "기존에 저장된 OverridePlayerVersion의 형식이 맞지 않습니다 : 데이터 버전란이 숫자가 아닙니다");
+                }
+
                 current_data_version = data_version;
                 if (groups.Count > 0)
                 {
