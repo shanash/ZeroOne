@@ -70,8 +70,10 @@ public class SCManager : Singleton<SCManager>
 
     public void ChangeScene(SceneName scene_name = SceneName.None, params object[] parameters)
     {
+        Debug.Log("Start ChangeScene");
         if (Is_Changing)
             return;
+
         if (scene_name == SceneName.None)
         {
             scene_name = Default_Scene;
@@ -94,30 +96,43 @@ public class SCManager : Singleton<SCManager>
         _ = ChangeSceneAsync(scene_name, parameters);
     }
 
-    private async UniTask ChangeSceneAsync(SceneName sceneName, params object[] parameters)
+    async UniTask ChangeSceneAsync(SceneName sceneName, params object[] parameters)
     {
+        Debug.Log($"시작: ChangeSceneAsync 호출됨. 목표 씬: {sceneName}");
         Is_Changing = true;
 
+        Debug.Log("화면 페이드아웃 시작.");
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_OUT, null, 0.3f);
+        Debug.Log("화면 페이드아웃 완료.");
 
+        Debug.Log($"{sceneName}로 씬 로딩 시작.");
         await LoadSceneImmidiatlyAsync(sceneName.ToString());
+        Debug.Log($"{sceneName}로 씬 로딩 완료.");
 
+        Debug.Log("미사용 리소스 언로드 시작.");
         await Resources.UnloadUnusedAssets();
         System.GC.Collect();
+        Debug.Log("미사용 리소스 언로드 및 가비지 컬렉션 완료.");
 
-        // SetCurrent가 호출될때까지 기다립니다
+        Debug.Log($"현재 씬 설정 대기 중. 목표 씬: {sceneName}");
         await UniTask.WaitUntil(() => sceneName == Current_SceneName);
+        Debug.Log("현재 씬 설정 완료.");
 
-        // 리플렉션을 사용하여 OnReceiveData 메소드 동적 호출
         if (parameters.Length > 0)
         {
+            Debug.Log("OnReceiveData 메서드 호출 준비.");
             InvokeOnReceiveData(Current_Controller, Callback_Method_Names, parameters);
+            Debug.Log("OnReceiveData 메서드 호출 완료.");
         }
 
+        Debug.Log("화면 페이드인 시작.");
         await ScreenEffectManager.Instance.StartActionAsync(ScreenEffect.FADE_IN, null, 0.3f);
+        Debug.Log("화면 페이드인 완료.");
 
         Is_Changing = false;
+        Debug.Log($"완료: ChangeSceneAsync 처리 완료. 현재 씬: {Current_SceneName}");
     }
+
 
     public async UniTask LoadSceneImmidiatlyAsync(string sceneName)
     {
