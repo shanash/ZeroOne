@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -21,7 +22,7 @@ namespace FluffyDuck.EditorUtil
             if (!is_initialized)
             {
                 EditorApplication.update += SetAndroidPlatform;
-                EditorApplication.update += CreateVersionText;
+                EditorApplication.update += CreateVersionTextWithRefresh;
                 SessionState.SetBool(SESSION_STATE_KEY, true);
             }
         }
@@ -45,11 +46,12 @@ namespace FluffyDuck.EditorUtil
         /// <summary>
         /// VersionText가 없으면 생성해주고 새로고침
         /// </summary>
-        static void CreateVersionText()
+        static void CreateVersionTextWithRefresh()
         {
             if (!BuildLauncher.ExistVersionText())
             {
                 BuildLauncher.CreateVersionText();
+
                 _ = BuildLauncher.ModifyVersionTextMeta();
 
                 AssetDatabase.Refresh();
@@ -63,7 +65,7 @@ namespace FluffyDuck.EditorUtil
                     return;
                 }
 
-                EditorApplication.update -= CreateVersionText;
+                EditorApplication.update -= CreateVersionTextWithRefresh;
                 EditorApplication.update += AddVersionTextToAddressableGroup;
             }
         }

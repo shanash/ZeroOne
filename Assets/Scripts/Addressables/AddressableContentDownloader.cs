@@ -15,11 +15,10 @@ namespace FluffyDuck.Addressable
         static readonly int CALL_HANDLER_GAP_MILLISECONDS = 1000;
         //TODO: 상수 string 정리 필요
         static readonly string ADDRESSABLE_GROUP = "Assets/AssetResources/Addressables/AddressableGroup";
-        static readonly string VERSION_KEY = $"{ADDRESSABLE_GROUP}Version";
+        public static readonly string VERSION_KEY = $"{ADDRESSABLE_GROUP}Version";
 
         public delegate void DownloadProgressHandler(string key, float value, double size);
         event DownloadProgressHandler _On_Download_Progress;
-
 
         /// <summary>
         /// 다운로더 초기화

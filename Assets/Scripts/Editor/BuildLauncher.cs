@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using FluffyDuck.Addressable;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace FluffyDuck.EditorUtil
         const string ADDRESSABLE_GROUP_TEXT_PATH = "AssetResources/Addressables";
         const string ADDRESSABLE_GROUP = "AddressableGroup";
         static readonly string ADDRESSABLE_GROUP_ROOT_TEXT_PATH = $"Assets/{ADDRESSABLE_GROUP_TEXT_PATH}";
-        public static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{ADDRESSABLE_GROUP_ROOT_TEXT_PATH}/{ADDRESSABLE_GROUP}Version.txt";
+        public static readonly string ADDRESSABLE_VERSION_FILE_PATH = $"{AddressableContentDownloader.VERSION_KEY}.txt";
 
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
@@ -763,17 +764,28 @@ namespace FluffyDuck.EditorUtil
             return File.Exists(ADDRESSABLE_VERSION_FILE_PATH);
         }
 
-        public static void CreateVersionText(string version_text = "000")
+        public static bool CreateVersionText(string version_text = "000")
         {
-            Directory.CreateDirectory(ADDRESSABLE_GROUP_ROOT_TEXT_PATH);
-
-            using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write))
+            try
             {
-                using (StreamWriter sw = new StreamWriter(fs))
+                Directory.CreateDirectory(ADDRESSABLE_GROUP_ROOT_TEXT_PATH);
+
+                using (FileStream fs = new FileStream(ADDRESSABLE_VERSION_FILE_PATH, FileMode.OpenOrCreate, FileAccess.Write))
                 {
-                    sw.WriteLine(version_text);
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine(version_text);
+                    }
                 }
+
+                return true;
             }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+
+            return false;
         }
 
         static void AddAdressableVersionText(string override_player_version)
@@ -1117,6 +1129,11 @@ namespace FluffyDuck.EditorUtil
 
         public static int BuildAllConsole()
         {
+            if (!ExistVersionText())
+            {
+                CreateVersionText();
+            }
+
             ReadArguments();
             //SET IsRemotePath = false
             //SET IsCleanBuild = true
