@@ -55,7 +55,9 @@ public class SCManager : Singleton<SCManager>
     /// <param name="current"></param>
     public void SetCurrent(SceneControllerBase current, params string[] callback_method_names)
     {
+        Debug.Log("Start SetCurrent");
         Current_Controller = current;
+        Debug.Log($"SetCurrent {Current_SceneName}");
         Callback_Method_Names = callback_method_names;
         Debug.Assert(Enum.TryParse(SceneManager.GetActiveScene().name, out Current_SceneName), $"enum SceneName에 {SceneManager.GetActiveScene().name}이 정의되어 있지 않습니다.");
     }

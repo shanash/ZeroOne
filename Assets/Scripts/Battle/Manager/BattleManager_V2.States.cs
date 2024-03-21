@@ -333,22 +333,17 @@ public partial class BattleManager_V2 : SceneControllerBase
     }
     public virtual void GameStateMoveInExit() { }
 
-    float Play_Ready_Delta = 0;
+    
     public virtual void GameStatePlayReadyBegin() 
     {
         if (IsPrevPause())
         {
             return;
         }
-        Play_Ready_Delta = 0.3f;
     }
     public virtual void GameStatePlayReady() 
     {
-        Play_Ready_Delta-= Time.deltaTime;
-        if (Play_Ready_Delta < 0f)
-        {
-            ChangeState(GAME_STATES.PLAYING);
-        }
+        ChangeState(GAME_STATES.PLAYING);
     }
     public virtual void GameStatePlayReadyExit() 
     {
