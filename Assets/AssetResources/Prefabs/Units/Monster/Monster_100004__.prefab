@@ -2602,13 +2602,13 @@ GameObject:
   - component: {fileID: 3219458769024110878}
   - component: {fileID: 5395566549689407683}
   - component: {fileID: 7376329580780059480}
+  - component: {fileID: 4380890798037539704}
   - component: {fileID: 6128631755300945406}
   - component: {fileID: 4923859851890745499}
   - component: {fileID: 3225678329820756722}
   - component: {fileID: 3215134816269962404}
   - component: {fileID: 574686436459768803}
   - component: {fileID: 4146300054983938135}
-  - component: {fileID: 6855036299509282629}
   m_Layer: 0
   m_Name: Monster_100004__
   m_TagString: Untagged
@@ -2682,6 +2682,30 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4380890798037539704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001520774800363488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56bf8d9c9e82e784d9cf72fa200d29af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Skeleton: {fileID: 6128631755300945406}
+  Life_Bar_Pos: {fileID: 5946401787272588101}
+  Shadow: {fileID: 2063580671470393554}
+  Start_Projectile_Transforms: []
+  Reach_Pos_Transforms:
+  - Pos_Type: 3
+    Trans: {fileID: 8638149271269892779}
+  - Pos_Type: 2
+    Trans: {fileID: 7831647680905905008}
+  - Pos_Type: 1
+    Trans: {fileID: 3405355185793282827}
+  Ultimate_Skill_Playable_Director: {fileID: 0}
 --- !u!114 &6128631755300945406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2719,7 +2743,7 @@ MonoBehaviour:
   disableRenderingOnOverride: 1
   updateTiming: 1
   unscaledTime: 0
-  _animationName: 00_Idle
+  _animationName: 00_idle
   loop: 1
   timeScale: 1
 --- !u!114 &4923859851890745499
@@ -2768,7 +2792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba6ce79edb23b3419f26a34a4a5accd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ZOrder: 0
+  ZOrder: 50
 --- !u!210 &574686436459768803
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -2777,8 +2801,8 @@ SortingGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9001520774800363488}
   m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 684861647
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &4146300054983938135
@@ -2793,27 +2817,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa163268e120774a86f2d01de081743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6855036299509282629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9001520774800363488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64011f6b9733d1f4f82debd09b590dab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Skeleton: {fileID: 6128631755300945406}
-  Life_Bar_Pos: {fileID: 5946401787272588101}
-  Shadow: {fileID: 2063580671470393554}
-  Start_Projectile_Transforms: []
-  Reach_Pos_Transforms:
-  - Pos_Type: 3
-    Trans: {fileID: 8638149271269892779}
-  - Pos_Type: 2
-    Trans: {fileID: 7831647680905905008}
-  - Pos_Type: 1
-    Trans: {fileID: 3405355185793282827}
-  Ultimate_Skill_Playable_Director: {fileID: 0}

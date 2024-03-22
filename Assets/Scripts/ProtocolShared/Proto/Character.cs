@@ -55,12 +55,8 @@ namespace ProtocolShared.Proto
 
     public class DeckInfo
     {
-        public uint No { get; set; }
-        public Guid Slot1 { get; set; }
-        public Guid? Slot2 { get; set; }
-        public Guid? Slot3 { get; set; }
-        public Guid? Slot4 { get; set; }
-        public Guid? Slot5 { get; set; }
+        public int No { get; set; }
+        public Guid[] Slot { get; set; }
     }
 
     public class DeckListResponse
