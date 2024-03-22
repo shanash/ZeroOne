@@ -449,7 +449,7 @@ namespace FluffyDuck.EditorUtil
 
             SetRemoteBuildAndLoadPath(IsRemotePath);
 
-            if (!ValidateSemVerBundleVersion())
+            if (!ValidateSemVerBundleVersion(PlayerSettings.bundleVersion))
             {
                 return false;
             }
@@ -468,9 +468,18 @@ namespace FluffyDuck.EditorUtil
 
                 int current_data_version = 0;
                 string old_override_player_version = s_Settings.OverridePlayerVersion;
-                if (!int.TryParse(old_override_player_version, out int data_version))
+
+                if (!ValidateSemVerBundleVersion(old_override_player_version))
                 {
-                    Debug.Assert(false, "기존에 저장된 OverridePlayerVersion의 형식이 맞지 않습니다 : 데이터 버전란이 숫자가 아닙니다");
+                    Debug.LogError("기존에 저장된 OverridePlayerVersion의 형식이 맞지 않습니다 : 데이터 버전란이 숫자가 아닙니다");
+                    s_Settings.OverridePlayerVersion = PlayerSettings.bundleVersion;
+                }
+
+                string old_data_version = ReadAddressableVersionText();
+
+                if (!int.TryParse(old_data_version, out int data_version))
+                {
+                    Debug.LogError("기존에 저장된 dataVersion의 형식이 맞지 않습니다 : 데이터 버전란이 숫자가 아닙니다");
                 }
 
                 current_data_version = data_version;
@@ -480,7 +489,7 @@ namespace FluffyDuck.EditorUtil
                 }
 
                 string override_player_version = $"{current_data_version.ToString("D3")}";
-                AddAdressableVersionText(override_player_version);
+                AddAddressableVersionText(override_player_version);
 
                 if (groups.Count > 0)
                 {
@@ -530,7 +539,7 @@ namespace FluffyDuck.EditorUtil
                     });
                 }
 
-                s_Settings.OverridePlayerVersion = override_player_version;
+                s_Settings.OverridePlayerVersion = PlayerSettings.bundleVersion;
 
                 EditorUtility.SetDirty(s_Settings);
                 AssetDatabase.SaveAssets();
@@ -611,12 +620,13 @@ namespace FluffyDuck.EditorUtil
             HashStorage.Save();
 
             Debug.Log("Reset Override Player Version");
-            s_Settings.OverridePlayerVersion = "000";
 
-            if (!ValidateSemVerBundleVersion())
+            if (!ValidateSemVerBundleVersion(PlayerSettings.bundleVersion))
             {
                 PlayerSettings.bundleVersion = "0.0.0";
             }
+
+            s_Settings.OverridePlayerVersion = PlayerSettings.bundleVersion;
 
             AssetDatabase.SaveAssets();
 
@@ -792,7 +802,24 @@ namespace FluffyDuck.EditorUtil
             return false;
         }
 
-        static void AddAdressableVersionText(string override_player_version)
+        public static string ReadAddressableVersionText()
+        {
+            bool asset_exist = AssetDatabase.GetMainAssetTypeAtPath(ADDRESSABLE_VERSION_FILE_PATH) != null;
+
+            string version_text = "000";
+
+            if (asset_exist)
+            {
+                using (StreamReader sr = new StreamReader(ADDRESSABLE_VERSION_FILE_PATH))
+                {
+                    version_text = sr.ReadToEnd();
+                }
+            }
+
+            return version_text;
+        }
+
+        static void AddAddressableVersionText(string override_player_version)
         {
             if (File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
             {
@@ -930,11 +957,9 @@ namespace FluffyDuck.EditorUtil
         /// 메이저.마이너.패치의 번들 버전형식이 올바른지 확인
         /// </summary>
         /// <returns>번들버전 형식 확인</returns>
-        static bool ValidateSemVerBundleVersion()
+        static bool ValidateSemVerBundleVersion(string versionText)
         {
-            string bundle_version = PlayerSettings.bundleVersion;
-
-            string[] versionNums = bundle_version.Split('.');
+            string[] versionNums = versionText.Split('.');
             if (versionNums.Length != 3)
             {
                 Debug.LogError("번들버전 형식이 맞지 않습니다 : 점 두개가 번들버전에 없습니다.");
