@@ -925,6 +925,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             if (ec != null)
             {
                 var tran = GetReachPosTypeTransform(eff.GetEffectComponent().Projectile_Reach_Pos_Type);
+                
                 eff.transform.position = tran.position;
             }
             else
