@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 /// 본 파일은 게임내에 다양하게 사용되는 데이터 타입의 구조체 또는 클래스를 선언하기 위한 파일.
 public struct BATTLE_SEND_DATA
 {
@@ -19,6 +20,8 @@ public struct BATTLE_SEND_DATA
     public bool Is_Physics_Critical;                      //  물리 치명타 확률
     public bool Is_Magic_Critical;                        //  마법 치명타 확률
 
+    public bool Is_Weak;                            //  역상성 공격을 받았을 경우
+
 
     public void Reset()
     {
@@ -32,6 +35,7 @@ public struct BATTLE_SEND_DATA
         Is_Magic_Critical = false;
         Effect_Weight_Index = 0;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
+        Is_Weak = false;
         ClearTargets();
     }
 
@@ -146,7 +150,7 @@ public struct Target_Reach_Pos_Data
 public struct Effect_Queue_Data
 {
     public string effect_path;
-    public UnityEngine.Transform Target_Position;
+    public UnityEngine.Vector3 Target_Position;
     public object Data;
     public float Duration;
 

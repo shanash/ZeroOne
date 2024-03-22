@@ -22,8 +22,8 @@ public class EffectEasingMove : EffectEasingBase
         {
             return;
         }
-        Start_Position = this.transform.localPosition;
-        Distance = found.Easing_Vector - Start_Position;
+        Start_Position = this.transform.position;
+        Distance = found.Easing_Vector;
         base.StartMove(mtype, cb);
     }
 
@@ -31,7 +31,7 @@ public class EffectEasingMove : EffectEasingBase
     {
         float ev = func(0f, 1f, weight);
         Vector3 easing_delta = Distance * ev;
-        this.transform.localPosition = Start_Position + easing_delta;
+        this.transform.position = Start_Position + easing_delta;
     }
 
     protected override void UpdatePostDelayEnd()
@@ -39,8 +39,9 @@ public class EffectEasingMove : EffectEasingBase
         var found = FindEasingData(Move_Type);
         if (found != null)
         {
-            this.transform.localPosition = found.Easing_Vector;
+            this.transform.position = Start_Position + found.Easing_Vector;
         }
+        
     }
 
     public override void ResetEase(params object[] data)
@@ -52,7 +53,7 @@ public class EffectEasingMove : EffectEasingBase
         if (data[0] is Vector3)
         {
             Vector3 pos = (Vector3)data[0];
-            this.transform.localPosition = pos;
+            this.transform.position = pos;
         }
     }
 }

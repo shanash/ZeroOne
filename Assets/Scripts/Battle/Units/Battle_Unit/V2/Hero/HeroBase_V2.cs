@@ -230,6 +230,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected List<Total_Damage_Data> Total_Damage_Data = new List<Total_Damage_Data>();
 
     /// <summary>
+    /// Weight Index 순서대로 표현해보자.
+    /// </summary>
+    List<Vector3> Damage_Text_Position_List = new List<Vector3>();
+
+    /// <summary>
     /// 타임라인 이벤트 트리거 ID 리스트(ToString()으로 비교 사용)
     /// </summary>
     protected enum TRIGGER_EVENT_IDS
@@ -1268,10 +1273,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             Render_Texture = GetComponent<UnitRenderTexture>();
         }
-        //if (Render_Texture.quad != null)
-        //{
-
-        //}
 
         if (Utility == null)
         {
@@ -1283,6 +1284,30 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             var color = Shadow.color;
             color.a = 1f;
             Shadow.color = color;
+        }
+
+        if (Damage_Text_Position_List.Count == 0)
+        {
+            //  중앙을 포함해서 8방향. 9개만 생성해주자.
+            Damage_Text_Position_List.Add(new Vector3(0, 0, 0));        //  center
+            
+            Damage_Text_Position_List.Add(new Vector3(.3f, .3f, 0));       //  top right
+
+            Damage_Text_Position_List.Add(new Vector3(-.3f, -.3f, 0));       //  left bottom 
+
+            Damage_Text_Position_List.Add(new Vector3(.3f, 0, 0));       //  right
+
+            Damage_Text_Position_List.Add(new Vector3(-.3f, 0, 0));       //  left
+
+            Damage_Text_Position_List.Add(new Vector3(.3f, -.3f, 0));       //  right bottom
+
+            Damage_Text_Position_List.Add(new Vector3(-.3f, .3f, 0));       //  left top 
+
+            Damage_Text_Position_List.Add(new Vector3(0, -.3f, 0));       //  bottom
+
+            Damage_Text_Position_List.Add(new Vector3(0, .3f, 0));       //  top
+
+            
         }
     }
     public override void Despawned()
@@ -1412,9 +1437,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
 
         ONETIME_EFFECT_TYPE etype = dmg.Onetime.GetOnetimeEffectType();
-
+        bool is_physics_dmg = etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
         //  물리 마법 결정 데미지
-        double damage = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? dmg.Magic_Attack_Point : dmg.Physics_Attack_Point;
+        double damage = is_physics_dmg ? dmg.Physics_Attack_Point : dmg.Magic_Attack_Point;
 
         double last_damage = damage;
 
@@ -1438,14 +1463,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         //  방어율 = 상수 + 방어력 / 100
         //  최종 데미지 계산 (최종 데미지 = 적 데미지 * 방어율)
-        last_damage = GetCalcDamage(last_damage, etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE);
+        last_damage = GetCalcDamage(last_damage, is_physics_dmg);
 
         //  치명타 확률
-        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel(), etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE);
+        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel(), is_physics_dmg);
         int r = UnityEngine.Random.Range(0, 100000);
         if (r < cri_chance)
         {
-            if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
+            if (is_physics_dmg)
             {
                 dmg.Is_Physics_Critical = true;
                 last_damage *= 1.5 * Physics_Critical_Power_Add;
@@ -1466,6 +1491,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         if (attribute_dmg_inc > 0)
         {
             last_damage += last_damage * attribute_dmg_inc;
+            dmg.Is_Weak = true;
         }
 
         //  소수점 이하 버리기
@@ -1474,7 +1500,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             return;
         }
-        if (etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
+        if (is_physics_dmg)
         {
             dmg.Physics_Attack_Point = last_damage;
         }
@@ -1501,7 +1527,15 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         if (Life <= 0)
         {
             Life = 0;
-            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
+            if (is_physics_dmg)
+            {
+                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + GetDamageTextPositionOrder(dmg.Effect_Weight_Index), dmg, 1.3f);
+            }
+            else
+            {
+                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + GetDamageTextPositionOrder(dmg.Effect_Weight_Index), dmg, 1.3f);
+            }
+            
             UpdateLifeBar();
             //  궁극기 피격시 죽어도 당장 죽이지는 않는다.(궁극기 종료 후 사라지도록)
             if (GetCurrentState() != UNIT_STATES.ULTIMATE_PAUSE && GetCurrentState() != UNIT_STATES.SKILL_1)
@@ -1510,8 +1544,15 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             }
             return;
         }
-
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY), dmg, 1f);
+        if (is_physics_dmg)
+        {
+            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + GetDamageTextPositionOrder(dmg.Effect_Weight_Index), dmg, 1.3f);
+        }
+        else
+        {
+            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + GetDamageTextPositionOrder(dmg.Effect_Weight_Index), dmg, 1.3f);
+        }
+        
         UpdateLifeBar();
 
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.HITTED);
@@ -1538,7 +1579,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life = Max_Life;
         }
 
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos, recovery_hp, 1f);
+        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos.position, recovery_hp, 1f);
         UpdateLifeBar();
     }
 
@@ -1577,13 +1618,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
 
 
-    public void AddSpawnEffectText(string path, Transform target, object data, float duration)
+    public void AddSpawnEffectText(string path, Vector3 target_pos, object data, float duration)
     {
         lock (Effect_Queue_Lock)
         {
             var d = new Effect_Queue_Data();
             d.effect_path = path;
-            d.Target_Position = target;
+            d.Target_Position = target_pos;
             d.Data = data;
             d.Duration = duration + ((Battle_Speed_Multiple - 1) * 1f);
             Effect_Queue_Data_List.Add(d);
@@ -1620,7 +1661,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     void SpawnQueueEffect(Effect_Queue_Data edata)
     {
         var effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.effect_path);
-        effect.transform.position = edata.Target_Position.position;
+        effect.transform.position = edata.Target_Position;
         effect.SetData(edata.Data);
         effect.StartParticle(edata.Duration);
     }

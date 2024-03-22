@@ -211,7 +211,7 @@ public class BattleSkillManager : BattleDataBase
                     Used_Battle_Duration_Data_List.Add(duration_skill);
 
                     //  add Spawn effect text
-                    Hero?.AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", Hero.GetTargetReachPostionByTargetReachPosType(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+                    Hero?.AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", Hero.GetTargetReachPostionByTargetReachPosType(TARGET_REACH_POS_TYPE.BODY).position + Hero.GetDamageTextPositionOrder(), d_type, 1f);
 
                     Hero?.SendSlotEvent(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
                 }
@@ -241,7 +241,7 @@ public class BattleSkillManager : BattleDataBase
                     Used_Battle_Duration_Data_List.Add(duration_skill);
 
                     //  add spawn effect text
-                    Hero?.AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", Hero.GetTargetReachPostionByTargetReachPosType(TARGET_REACH_POS_TYPE.BODY), d_type, 1f);
+                    Hero?.AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect", Hero.GetTargetReachPostionByTargetReachPosType(TARGET_REACH_POS_TYPE.BODY).position + Hero.GetDamageTextPositionOrder(), d_type, 1f);
 
                     Hero?.SendSlotEvent(SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE);
                 }

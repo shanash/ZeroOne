@@ -1,3 +1,4 @@
+using Coffee.UIParticleExtensions;
 using FluffyDuck.Util;
 using System;
 using System.Collections;
@@ -23,8 +24,13 @@ public abstract class EffectEasingBase : EasingFade
         /// </summary>
         public EASING_MOVE_TYPE Move_Type = EASING_MOVE_TYPE.NONE;
         public EasingFunction.Ease Ease_Type = EasingFunction.Ease.NotUse;
+
         /// <summary>
-        /// 좌표/스케일 등으로 사용할 벡터
+        /// 초기화에 사용될 벡터
+        /// </summary>
+        public Vector3 Init_Vector;
+        /// <summary>
+        /// 목표 스케일 / 이동 거리 등으로 사용할 벡터
         /// </summary>
         public Vector3 Easing_Vector;
         /// <summary>

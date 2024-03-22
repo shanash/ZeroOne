@@ -22,6 +22,7 @@ public class EffectEasingScale : EffectEasingBase
         {
             return;
         }
+        this.transform.localScale = found.Init_Vector;
         Start_Scale = this.transform.localScale;
         Diff_Scale = found.Easing_Vector - Start_Scale;
         base.StartMove(mtype, cb);
