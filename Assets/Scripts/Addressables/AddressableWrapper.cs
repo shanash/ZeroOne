@@ -63,7 +63,7 @@ namespace FluffyDuck.Addressable
             {
                 using (StreamReader sr = new StreamReader(ADDRESSABLE_VERSION_FILE_PATH))
                 {
-                    version_text = sr.ReadToEnd();
+                    version_text = sr.ReadLine().Trim('\r','\n');
                 }
             }
             else
