@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace FluffyDuck.Addressable
 {
@@ -34,7 +35,8 @@ namespace FluffyDuck.Addressable
 
         public static int Data_Version
         {
-            get; set;
+            get => PlayerPrefs.GetInt("Data_Version", 1);
+            set => PlayerPrefs.SetInt("Data Version", value);
         }
 
 #if UNITY_EDITOR
