@@ -568,9 +568,6 @@ public class SkillLevelPopup : PopupBase
         Exp_Text.text = ZString.Format("{0:N0}/{1:N0}", cur_exp, next_exp);
         Exp_Bar.value = per;
         Result_Exp_Bar.value = per;
-
-
-        
     }
 
     

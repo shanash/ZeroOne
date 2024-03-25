@@ -151,7 +151,6 @@ public class BattlePcSkillGroup : BattleSkillGroup
     {
         BattlePcSkillGroup clone = (BattlePcSkillGroup)this.Clone();
         clone.SetSkillLevel(lv);
-        //clone.User_Data.SetLevel(lv);
         return clone;
     }
 

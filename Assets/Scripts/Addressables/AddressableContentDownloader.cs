@@ -49,10 +49,9 @@ namespace FluffyDuck.Addressable
 
         public bool HasNewDataVersion()
         {
-            int last_data_version = PlayerPrefs.GetInt("Data_Version", 0);
-            Debug.Log($"Last Data Version : {last_data_version}");
+            Debug.Log($"Last Data Version : {GameDefine.Last_Data_Version}");
             Debug.Log($"AddressableWrapper.Data_Version : {AddressableWrapper.Data_Version}");
-            return AddressableWrapper.Data_Version > last_data_version;
+            return AddressableWrapper.Data_Version > GameDefine.Last_Data_Version;
         }
 
         public void AddDownloadProgressHandler(DownloadProgressHandler handler)
@@ -113,8 +112,7 @@ namespace FluffyDuck.Addressable
                     }
                 }
 
-                PlayerPrefs.SetInt("Data_Version", AddressableWrapper.Data_Version);
-                PlayerPrefs.Save();
+                GameDefine.Last_Data_Version = AddressableWrapper.Data_Version;
             }
             catch (Exception e)
             {

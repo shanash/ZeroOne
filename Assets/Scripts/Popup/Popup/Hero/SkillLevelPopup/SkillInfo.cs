@@ -37,6 +37,8 @@ public class SkillInfo : MonoBehaviour
         //  skill info [todo]
         Skill_Info.text = Skill_Group.GetSkillDesc();
 
+        Debug.Log($"=====>\n{this.gameObject.name} Lv {Skill_Group.GetSkillLevel()}\n{new System.Diagnostics.StackTrace().ToString()}\n<=====");
+
     }
 
     void ClearInfo()

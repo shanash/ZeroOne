@@ -45,7 +45,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     public void SetHeroBaseV2(HeroBase_V2 hero)
     {
         this.Hero = hero;
-        if (this.Hero.Team_Type == TEAM_TYPE.LEFT)
+        if (this.Hero.Team_Type == TEAM_TYPE.RIGHT)
         {
             this.Hero.Slot_Events += SkillSlotEventCallback;
         }
@@ -66,6 +66,10 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     void UpdateDurationSkillIcons()
     {
         if (Hero == null)
+        {
+            return;
+        }
+        if (Duration_Icon_Container == null)
         {
             return;
         }

@@ -148,6 +148,12 @@ public class GameDefine : MonoBehaviour
         { BATTLE_SPEED_TYPE.FAST_SPEED_X3, 3f },
     };
 
+    public static int Last_Data_Version
+    {
+        get => PlayerPrefs.GetInt("Data_Version", 1);
+        set { PlayerPrefs.SetInt("Data_Version", value); PlayerPrefs.Save(); }
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void SetUp()
     {

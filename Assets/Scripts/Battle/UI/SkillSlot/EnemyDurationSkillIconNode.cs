@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyDurationSkillIconNode : UIBase
 {
     [SerializeField, Tooltip("Box")]
-    Transform Box;
+    RectTransform Box;
 
     [SerializeField, Tooltip("지속성 스킬 아이콘 ")]
-    SpriteRenderer Duration_Skill_Icon;
+    Image Duration_Skill_Icon;
 
     [SerializeField, Tooltip("같은 지속성 스킬 중첩 횟수")]
     TMP_Text Duplication_Count;

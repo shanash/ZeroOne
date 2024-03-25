@@ -86,8 +86,6 @@ public partial class BattleManager_V2 : SceneControllerBase
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
 
-        //list.Add("Assets/AssetResources/Prefabs/UI/LeftTeam_LifeBarNode");
-        //list.Add("Assets/AssetResources/Prefabs/UI/RightTeam_LifeBarNode");
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2");
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2");
 

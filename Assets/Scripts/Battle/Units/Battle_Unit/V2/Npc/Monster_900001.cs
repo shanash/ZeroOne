@@ -7,16 +7,15 @@ public class Monster_900001 : MonsterBase_V2
     #region States
     public override void UnitStateSkillReady01()
     {
-        //if (!IsAlive())
-        //{
-        //    ChangeState(UNIT_STATES.DEATH);
-        //    return;
-        //}
         ChangeState(UNIT_STATES.SKILL_1);
     }
 
     public override void UnitStateSkill01Begin()
     {
+        if (IsPreviousStatePause() || IsPreviousStateUltimatePause())
+        {
+            return;
+        }
         string skill_action_name = GetSkillManager().GetSpecialSkillGroup().GetSkillActionName();
         var name_list = skill_action_name.Split('_');
         int track = 0;

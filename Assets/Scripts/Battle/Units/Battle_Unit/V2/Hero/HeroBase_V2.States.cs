@@ -152,6 +152,10 @@ public partial class HeroBase_V2 : UnitBase_V2
     }
     public override void UnitStateAttack01Begin()
     {
+        if (IsPreviousStatePause() || IsPreviousStateUltimatePause())
+        {
+            return;
+        }
         string skill_action_name = GetSkillManager().GetCurrentSkillGroup().GetSkillActionName();
         var name_list = skill_action_name.Split('_');
         int track = 0;

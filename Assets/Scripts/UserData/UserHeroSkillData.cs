@@ -700,10 +700,6 @@ public class UserHeroSkillData : UserDataBase
 
     public override JsonData Serialized()
     {
-        if (!IsUpdateData())
-        {
-            return null;
-        }
         var json = new JsonData();
         json[NODE_HERO_SKILL_GROUP_ID] = GetSkillGroupID();
         json[NODE_PLAYER_CHARACTER_ID] = GetPlayerCharacterID();

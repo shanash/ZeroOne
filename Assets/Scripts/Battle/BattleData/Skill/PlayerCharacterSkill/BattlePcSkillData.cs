@@ -332,7 +332,7 @@ public class BattlePcSkillData : BattleSkillData, FluffyDuck.Util.Factory.IProdu
             UnityEngine.Debug.LogWarning(e);
             convert = $"Failed => {pattern}";
         }
-
+        //convert = $"Lv.{Skill_Level} => {convert}";
         return convert;
     }
 

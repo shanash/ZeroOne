@@ -33,11 +33,11 @@ namespace FluffyDuck.Addressable
             }
         }
 
-        public static int Data_Version
-        {
-            get => PlayerPrefs.GetInt("Data_Version", 1);
-            set => PlayerPrefs.SetInt("Data Version", value);
-        }
+        /// <summary>
+        /// \Assets\AssetResources\Addressables\AddressableGroupVersion.txt 에 적혀있는 데이터버전
+        /// Default그룹에서 가져옵니다
+        /// </summary>
+        public static int Data_Version { get; set; } = 0;
 
 #if UNITY_EDITOR
         public static string dataVersion

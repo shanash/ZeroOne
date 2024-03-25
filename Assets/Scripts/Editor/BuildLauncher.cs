@@ -29,7 +29,7 @@ namespace FluffyDuck.EditorUtil
         static readonly string IS_REMOTE_PATH_KEY = "IsRemotePath";
         static readonly string IS_ADDRESSABLES_BUILD_KEY = "IsAddressablesBuild";
         static readonly string IS_PLAYER_BUILD_KEY = "IsPlayerBuild";
-        static readonly string IS_CLEAN_BUILD_KEY = "IsCleanBuild";
+        static readonly string IS_CLEAN_ASSET_BUILD_KEY = "IsCleanAssetBuild";
 
         static readonly string BUILT_IN_DATA_GROUP_NAME = "Built In Data";
         public static readonly string DEFAULT_GROUP_NAME = "Default";
@@ -100,10 +100,10 @@ namespace FluffyDuck.EditorUtil
             set => EditorPrefs.SetBool(IS_PLAYER_BUILD_KEY, value);
         }
 
-        static bool IsCleanBuild
+        static bool IsCleanAssetBuild
         {
-            get => EditorPrefs.GetBool(IS_CLEAN_BUILD_KEY, false);
-            set => EditorPrefs.SetBool(IS_CLEAN_BUILD_KEY, value);
+            get => EditorPrefs.GetBool(IS_CLEAN_ASSET_BUILD_KEY, false);
+            set => EditorPrefs.SetBool(IS_CLEAN_ASSET_BUILD_KEY, value);
         }
 
         static int Select_Asset_Location_Index
@@ -211,7 +211,7 @@ namespace FluffyDuck.EditorUtil
             GUILayout.Label("Addressables Build Options", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
             Select_Asset_Location_Index = EditorGUILayout.Popup("Select Asset Location", Select_Asset_Location_Index, Dropdown_Options);
-            IsCleanBuild = EditorGUILayout.Toggle("Clean Asset Build", IsCleanBuild);
+            IsCleanAssetBuild = EditorGUILayout.Toggle("Clean Asset Build", IsCleanAssetBuild);
 
             GUILayout.Space(10);
 
@@ -310,7 +310,7 @@ namespace FluffyDuck.EditorUtil
 
             if (IsAddressablesBuild)
             {
-                addressable_build_succeeded = BuildAddressables(IsCleanBuild);
+                addressable_build_succeeded = BuildAddressables(IsCleanAssetBuild);
             }
 
             if (IsPlayerBuild)
@@ -1197,9 +1197,9 @@ namespace FluffyDuck.EditorUtil
             Debug.Log("Start BuildAddressableConsole");
 
             IsRemotePath = GetArguments("IsRemotePath").Equals("true");
-            IsCleanBuild = GetArguments("IsCleanBuild").Equals("true");
+            IsCleanAssetBuild = GetArguments("IsCleanBuild").Equals("true");
 
-            if (BuildAddressables(IsCleanBuild))
+            if (BuildAddressables(IsCleanAssetBuild))
             {
                 Debug.Log("Success BuildAddressableConsole");
 
