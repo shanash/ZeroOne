@@ -85,7 +85,6 @@ public class PartySettingPopup : PopupBase
         UpdateFilterType();
         InitPopupUI();
 
-        Battle_Hero_Data_List.Clear();
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
         List<UserHeroData> user_hero_list = new List<UserHeroData>();
@@ -95,9 +94,14 @@ public class PartySettingPopup : PopupBase
         for (int i = 0; i < user_hero_list.Count; i++)
         {
             var user_hero = user_hero_list[i];
-            var b = new BattlePcData();
-            b.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
-            Battle_Hero_Data_List.Add(b);
+            var found = Battle_Hero_Data_List.Find(x => x.GetUnitID() == user_hero.GetPlayerCharacterID() && x.GetUnitNum() == user_hero.Player_Character_Num);
+            if (found == null)
+            {
+                found = new BattlePcData();
+                found.SetUnitID(user_hero.GetPlayerCharacterID(), user_hero.Player_Character_Num);
+                Battle_Hero_Data_List.Add(found);
+            }
+
         }
 
         return true;

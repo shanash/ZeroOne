@@ -55,6 +55,7 @@ public class BossStageListNode : UIBase
     void UpdateBossDungeonList()
     {
         Lock_Cover.gameObject.SetActive(User_Dungeon == null);
+        var boss_mng = GameData.Instance.GetUserBossStageDataManager();
         //  아직 던전이 열리지 않았을 때
         if (User_Dungeon == null)
         {
@@ -66,9 +67,17 @@ public class BossStageListNode : UIBase
         {
             ShowStarPoint(User_Dungeon.GetStarPoint());
             //  던전이 열려있을 경우에만 skip lock cover를 체크할 필요가 있음.
-            Skip_Lock_Cover.gameObject.SetActive(User_Dungeon.GetStarPoint() != 3);
+            Skip_Lock_Cover.gameObject.SetActive(!User_Dungeon.IsEnableSkip());
+            if (User_Dungeon.IsEnableSkip())
+            {
+                Skip_Btn.interactable = boss_mng.GetCount() > 0;
+            }
+            else
+            {
+                Skip_Btn.interactable = false;
+            }
 
-            Skip_Btn.interactable = User_Dungeon.GetStarPoint() == 3;
+            Enter_Btn.interactable = boss_mng.GetCount() > 0;
         }
         //  stage name
         Stage_Name.text = GameDefine.GetLocalizeString(Stage.stage_name);

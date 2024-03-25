@@ -489,7 +489,7 @@ namespace FluffyDuck.EditorUtil
                 }
 
                 string override_player_version = $"{current_data_version.ToString("D3")}";
-                SetAddressableVersionText(override_player_version);
+                AddAddressableVersionText(override_player_version);
 
                 if (groups.Count > 0)
                 {
@@ -639,16 +639,12 @@ namespace FluffyDuck.EditorUtil
                 Directory.Delete(item, true);
             }
 
-
-            SetAddressableVersionText("000");
-            /*
             if (File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
             {
                 File.Delete(ADDRESSABLE_VERSION_FILE_PATH);
                 File.Delete($"{ADDRESSABLE_VERSION_FILE_PATH}.meta");
                 Debug.Log("delete file at " + ADDRESSABLE_VERSION_FILE_PATH);
             }
-            */
 
             Caching.ClearCache();
 
@@ -823,11 +819,11 @@ namespace FluffyDuck.EditorUtil
             return version_text;
         }
 
-        static void SetAddressableVersionText(string override_player_version)
+        static void AddAddressableVersionText(string override_player_version)
         {
-            if (!File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
+            if (File.Exists(ADDRESSABLE_VERSION_FILE_PATH))
             {
-                CreateVersionText(override_player_version);
+                CreateVersionText();
                 return;
             }
 
