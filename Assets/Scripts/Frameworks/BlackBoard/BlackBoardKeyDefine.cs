@@ -21,6 +21,7 @@ namespace FluffyDuck.Util
         //  test
         PLAYER_ATTACK_INC_MULTIPLE          = 100001,       //  플레이어 캐릭터 공격력 증가
         PLAYER_DEFENSE_INC_MULTIPLE,                       //  플레이어 캐릭터 방어력 증가
+        PLAYER_CRITICAL_CHANCE_INC_MULTIPLE,                //  플레이어 캐릭터 크리티컬 확률 증가
     }
 }
 

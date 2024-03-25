@@ -162,7 +162,6 @@ public class PartySettingPopup : PopupBase
         const int column_count = 6;
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
-        List<UserHeroData> user_hero_list = new List<UserHeroData>();
 
         //  sort
         if (Sort_Order == SORT_ORDER.ASC)
@@ -247,16 +246,9 @@ public class PartySettingPopup : PopupBase
             }
         }
 
-        //  사용자 영웅 데이터로 정리
-        user_hero_list.Clear();
-        for (int i = 0; i < Battle_Hero_Data_List.Count; i++)
-        {
-            user_hero_list.Add(Battle_Hero_Data_List[i].User_Data);
-        }
-
         //  가로 컬럼 6개(보유중인 영웅 리스트 불러오기)
         int start = 0;
-        int hero_count = user_hero_list.Count;
+        int hero_count = Battle_Hero_Data_List.Count;
         int rows = hero_count / column_count;
         if (hero_count % column_count > 0)
         {
@@ -272,11 +264,11 @@ public class PartySettingPopup : PopupBase
             new_data.SetFilterType(Filter_Type);
             if (start + column_count < hero_count)
             {
-                new_data.SetUserHeroDataList(user_hero_list.GetRange(start, column_count));
+                new_data.SetBattleHeroDataList(Battle_Hero_Data_List.GetRange(start, column_count));
             }
             else
             {
-                new_data.SetUserHeroDataList(user_hero_list.GetRange(start, hero_count - start));
+                new_data.SetBattleHeroDataList(Battle_Hero_Data_List.GetRange(start, hero_count - start));
             }
             Character_LIst_View.InsertData(new_data);
         }
@@ -358,7 +350,8 @@ public class PartySettingPopup : PopupBase
 
         var hero = hero_obj as PartyCharacterListItem;
 
-        if (hero.GetUserHeroData() == null)
+        var unit_data = hero.GetBattleHeroData();
+        if (unit_data == null)
         {
             return;
         }
@@ -367,21 +360,20 @@ public class PartySettingPopup : PopupBase
 
         var user_deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
         var user_deck = user_deck_mng.FindSelectedDeck(Game_Type == GAME_TYPE.NONE ? GAME_TYPE.STORY_MODE : Game_Type);
-        var user_hero_data = hero.GetUserHeroData();
 
         //  선택 캐릭터 정보
-        Selected_Info_Box.SetPlayerCharacterID(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+        Selected_Info_Box.SetPlayerCharacterID(unit_data.GetUnitID(), unit_data.GetUnitNum());
 
         //  이미 덱에 포함되어 있는 영웅이라면 덱에서 제거
-        if (user_deck.IsExistHeroInDeck(user_hero_data))
+        if (user_deck.IsExistHeroInDeck(unit_data.GetUnitID(), unit_data.GetUnitNum()))
         {
-            user_deck.RemoveHero(user_hero_data);
+            user_deck.RemoveHero(unit_data.GetUnitID(), unit_data.GetUnitNum());
             Party_Mng.UpdateUserPartySettings();
-            hero.UpdateCellItem();
+            hero.UpdateCellItem_V2();
         }
         else // 처음 선택되는 영웅이라면 덱에 빈 슬롯이 있는지 찾아보고, 빈 슬롯이 있으면 추가
         {
-            RESPONSE_TYPE code = user_deck.AddSlotHero(user_hero_data.GetPlayerCharacterID(), user_hero_data.Player_Character_Num);
+            RESPONSE_TYPE code = user_deck.AddSlotHero(unit_data.GetUnitID(), unit_data.GetUnitNum());
             if (code != RESPONSE_TYPE.SUCCESS)
             {
                 if (code == RESPONSE_TYPE.NOT_EXIST_EMPTY_SLOT)
@@ -394,7 +386,7 @@ public class PartySettingPopup : PopupBase
                 return;
             }
             Party_Mng.UpdateUserPartySettings();
-            hero.UpdateCellItem();
+            hero.UpdateCellItem_V2();
         }
         user_deck_mng.Save();
     }

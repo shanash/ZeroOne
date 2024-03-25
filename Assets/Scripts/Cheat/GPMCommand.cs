@@ -32,6 +32,10 @@ public class GPMCommand : MonoBehaviour
 
         func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x10</color>", new object[] { 10 });
         func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x50</color>", new object[] { 50 });
+        
+        func.AddCommand(this, "CheatCriticalChanceInc", "크리티컬 확률 <color=#00ff00>x100</color>", new object[] { 100 });
+
+
     }
     /// <summary>
     /// 플레이어 레벨업<br/>
@@ -141,6 +145,13 @@ public class GPMCommand : MonoBehaviour
         var board = BlackBoard.Instance;
         board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, multiple);
         CommonUtils.ShowToast($"전투 방어력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
+
+    void CheatCriticalChanceInc(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_CRITICAL_CHANCE_INC_MULTIPLE, multiple);
+        CommonUtils.ShowToast($"전투 크리티컬 확률이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
     }
     /// <summary>
     /// 각종 치트 키 사용 콜백<br/>

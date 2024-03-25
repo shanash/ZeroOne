@@ -1462,7 +1462,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         last_damage = GetCalcDamage(last_damage, is_physics_dmg);
 
         //  치명타 확률
-        double cri_chance = GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel(), is_physics_dmg);
+        double cri_chance = dmg.Caster.GetCriticalChanceRate(dmg.Caster.GetLevel(), GetLevel(), is_physics_dmg);
         int r = UnityEngine.Random.Range(0, 100000);
         if (r < cri_chance)
         {
@@ -1623,11 +1623,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             if (is_multi_damage)
             {
                 prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
-//                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, send_data, 1.3f, UI_Mng.GetDamageContainer());
             }
             else
             {
                 prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
+                
             }
             if (send_data.Is_Weak)
             {

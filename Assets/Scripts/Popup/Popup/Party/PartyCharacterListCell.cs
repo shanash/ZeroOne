@@ -13,7 +13,7 @@ public class PartyCharacterListCell : InfiniteScrollItem
 
         var data = (PartyCharacterListData)scroll_data;
 
-        var hero_list = data.GetUserHeroDataList();
+        var hero_list = data.GetBattleHeroDataList();
         int cnt = Card_Item_List.Count;
         for (int i = 0; i < cnt; i++)
         {
@@ -22,11 +22,11 @@ public class PartyCharacterListCell : InfiniteScrollItem
             slot.Click_Hero_Callback.AddListener(data.Click_Hero_Callback);
             if (i < hero_list.Count)
             {
-                slot.SetUserHeroData(hero_list[i], data.Game_Type, data.Filter_Type);
+                slot.SetBattleUnitData(hero_list[i], data.Game_Type, data.Filter_Type);
             }
             else
             {
-                slot.SetUserHeroData(null, data.Game_Type, data.Filter_Type);
+                slot.SetBattleUnitData(null, data.Game_Type, data.Filter_Type);
             }
         }
     }

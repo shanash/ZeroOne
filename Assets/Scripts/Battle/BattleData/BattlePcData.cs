@@ -487,6 +487,13 @@ public class BattlePcData : BattleUnitData
                 point += (dur_value_inc - dur_value_dec);
             }
 
+            //  치트 (크리티컬 확률 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_CRITICAL_CHANCE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
+
 
             return point;
         }
@@ -541,6 +548,12 @@ public class BattlePcData : BattleUnitData
             if (dur_value_inc - dur_value_dec != 0)
             {
                 point += (dur_value_inc - dur_value_dec);
+            }
+            //  치트 (크리티컬 확률 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_CRITICAL_CHANCE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
             }
 
 

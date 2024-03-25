@@ -3,6 +3,7 @@
 using LitJson;
 using System;
 using System.Collections.Generic;
+using static ConstString;
 
 public class UserDeckData : UserDataBase
 {
@@ -129,13 +130,9 @@ public class UserDeckData : UserDataBase
         return AddSlotHero(mount_hero);
     }
 
-    /// <summary>
-    /// 영웅 덱 정보를 이용하여 덱에서 영웅 제거
-    /// </summary>
-    /// <param name="hero"></param>
-    public void RemoveHero(UserHeroDeckMountData hero)
+    public void RemoveHero(int player_character_id, int player_character_num)
     {
-        var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.Player_Character_ID && x.Player_Character_Num == hero.Player_Character_Num);
+        var found = Deck_Heroes.Find(x => x.Player_Character_ID == player_character_id && x.Player_Character_Num == player_character_num);
         if (found != null)
         {
             Deck_Heroes.Remove(found);
@@ -146,6 +143,25 @@ public class UserDeckData : UserDataBase
             CalcTeamSynergy();
             Is_Update_Data = true;
         }
+    }
+    /// <summary>
+    /// 영웅 덱 정보를 이용하여 덱에서 영웅 제거
+    /// </summary>
+    /// <param name="hero"></param>
+    public void RemoveHero(UserHeroDeckMountData hero)
+    {
+        RemoveHero(hero.Player_Character_ID, hero.Player_Character_Num);
+        //var found = Deck_Heroes.Find(x => x.Player_Character_ID == hero.Player_Character_ID && x.Player_Character_Num == hero.Player_Character_Num);
+        //if (found != null)
+        //{
+        //    Deck_Heroes.Remove(found);
+        //    if (found.Is_Leader && Deck_Heroes.Count > 0)
+        //    {
+        //        Deck_Heroes[0].SetLeader(true);
+        //    }
+        //    CalcTeamSynergy();
+        //    Is_Update_Data = true;
+        //}
     }
 
     /// <summary>

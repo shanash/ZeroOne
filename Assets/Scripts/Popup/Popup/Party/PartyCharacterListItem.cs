@@ -23,31 +23,49 @@ public class PartyCharacterListItem : MonoBehaviour
     [SerializeField, Tooltip("Filter Text")]
     TMP_Text Filter_Text;
 
-    BattlePcData Unit_Data;
+    
 
     public UnityEvent<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Hero_Callback => Button.Touch_Tooltip_Callback;
 
+    BattlePcData Unit_Data;
     UserHeroData User_Data;
 
     GAME_TYPE Game_Type = GAME_TYPE.NONE;
     CHARACTER_SORT Filter_Type = CHARACTER_SORT.NAME;
 
-    public void SetUserHeroData(UserHeroData ud, GAME_TYPE gtype, CHARACTER_SORT ftype)
+    //public void SetUserHeroData(UserHeroData ud, GAME_TYPE gtype, CHARACTER_SORT ftype)
+    //{
+    //    User_Data = ud;
+    //    Game_Type = gtype;
+    //    Filter_Type = ftype;
+    //    if (User_Data != null)
+    //    {
+    //        Unit_Data = new BattlePcData();
+    //        Unit_Data.SetUnitID(User_Data.GetPlayerCharacterID(), User_Data.Player_Character_Num);
+    //    }
+    //    else
+    //    {
+    //        Unit_Data = null;
+    //    }
+
+    //    UpdateCellItem();
+
+    //    if (Button != null)
+    //    {
+    //        Button.Tooltip_Data = this;
+    //    }
+    //}
+
+    public void SetBattleUnitData(BattlePcData unit_data, GAME_TYPE gtype, CHARACTER_SORT ftype)
     {
-        User_Data = ud;
-        Game_Type = gtype;
+        Unit_Data = unit_data;
         Filter_Type = ftype;
-        if (User_Data != null)
+        Game_Type = gtype;
+        if (unit_data != null)
         {
-            Unit_Data = new BattlePcData();
-            Unit_Data.SetUnitID(User_Data.GetPlayerCharacterID(), User_Data.Player_Character_Num);
+            User_Data = (UserHeroData)unit_data.GetUserUnitData();
         }
-        else
-        {
-            Unit_Data = null;
-        }
-        
-        UpdateCellItem();
+        UpdateCellItem_V2();
 
         if (Button != null)
         {
@@ -55,18 +73,48 @@ public class PartyCharacterListItem : MonoBehaviour
         }
     }
 
-    public UserHeroData GetUserHeroData()
+    //public UserHeroData GetUserHeroData()
+    //{
+    //    if (User_Data == null)
+    //    {
+    //        return (UserHeroData)Unit_Data.GetUserUnitData();
+    //    }
+    //    return User_Data;
+    //}
+
+    public BattlePcData GetBattleHeroData()
     {
-        return User_Data;
+        return Unit_Data;
     }
 
-    public void UpdateCellItem()
+    //public void UpdateCellItem()
+    //{
+    //    if (User_Data == null)
+    //    {
+    //        Box.gameObject.SetActive(false);
+    //        return;
+    //    }
+    //    if (!Box.gameObject.activeSelf)
+    //    {
+    //        Box.gameObject.SetActive(true);
+    //    }
+    //    var deck_mng = GameData.Instance.GetUserHeroDeckMountDataManager();
+    //    var deck = deck_mng.FindSelectedDeck(Game_Type);
+
+    //    Card.SetHeroData(Unit_Data, Filter_Type);
+
+    //    //  select
+    //    Card.SetPartySelect(deck.IsExistHeroInDeck(User_Data));
+    //}
+
+    public void UpdateCellItem_V2()
     {
-        if (User_Data == null)
+        if (Unit_Data == null)
         {
             Box.gameObject.SetActive(false);
             return;
         }
+
         if (!Box.gameObject.activeSelf)
         {
             Box.gameObject.SetActive(true);
@@ -76,7 +124,7 @@ public class PartyCharacterListItem : MonoBehaviour
 
         Card.SetHeroData(Unit_Data, Filter_Type);
 
-        //  select
-        Card.SetPartySelect(deck.IsExistHeroInDeck(User_Data));
+        //  select check
+        Card.SetPartySelect(deck.IsExistHeroInDeck(Unit_Data.GetUnitID(), Unit_Data.GetUnitNum()));
     }
 }

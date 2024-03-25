@@ -18,6 +18,7 @@ public class Damage_Node_V3 : EffectBase
     Animator Anim;
 
     BATTLE_SEND_DATA? Send_Data;
+    [SerializeField, Tooltip("Damage Type")]
     DAMAGE_TYPE Damage_Type = DAMAGE_TYPE.NORMAL;
 
     public override void StartParticle(float duration, bool loop = false)

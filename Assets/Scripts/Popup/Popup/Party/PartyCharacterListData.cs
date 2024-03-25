@@ -8,6 +8,8 @@ public class PartyCharacterListData : InfiniteScrollData
 {
     List<UserHeroData> User_Hero_Data_List = new List<UserHeroData>();
 
+    List<BattlePcData> Battle_Hero_Data_List = new List<BattlePcData>();
+
     public UnityAction<TOUCH_RESULT_TYPE, Func<bool, Rect>, object> Click_Hero_Callback;
 
     public GAME_TYPE Game_Type { get; protected set; } = GAME_TYPE.NONE;
@@ -22,7 +24,14 @@ public class PartyCharacterListData : InfiniteScrollData
             User_Hero_Data_List.AddRange(list);
         }
     }
-
+    public void SetBattleHeroDataList(List<BattlePcData> list)
+    {
+        Battle_Hero_Data_List.Clear();
+        if (list != null)
+        {
+            Battle_Hero_Data_List.AddRange(list);
+        }
+    }
     public void SetGameType(GAME_TYPE gtype)
     {
         Game_Type = gtype;
@@ -36,5 +45,9 @@ public class PartyCharacterListData : InfiniteScrollData
     public List<UserHeroData> GetUserHeroDataList()
     {
         return User_Hero_Data_List;
+    }
+    public List<BattlePcData> GetBattleHeroDataList()
+    {
+        return Battle_Hero_Data_List;
     }
 }
