@@ -1506,10 +1506,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
 
 
-        //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
-        //dmg.Caster.SendLastDamage(dmg);
-
-
         //  색 반짝 / 넉백 
         AttackHittedKnockback();
 
@@ -1518,43 +1514,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life -= last_damage;
         }
 
-        //Vector3 dmg_text_position = Vector3.zero;
-        //bool is_multi_damage = dmg.Skill.GetMaxEffectWeightCount() > 1;
-        //if (is_multi_damage)
-        //{
-        //    dmg_text_position = GetDamageTextPositionByIndex(0);
-        //}
-        //else
-        //{
-        //    dmg_text_position = GetDamageTextPositionOrder();
-        //}
+        
         if (Life <= 0)
         {
             Life = 0;
-            //if (is_physics_dmg)
-            //{
-            //    if (is_multi_damage)
-            //    {
-            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            //    }
-            //    else
-            //    {
-            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            //    }
 
-            //}
-            //else
-            //{
-            //    if (is_multi_damage)
-            //    {
-            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            //    }
-            //    else
-            //    {
-            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            //    }
-
-            //}
             AddDamageText(dmg);
             //  토탈 데미지 계산을 위해서
             AddTotalDamageInfo(dmg);
@@ -1568,30 +1532,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             return;
         }
 
-        //if (is_physics_dmg)
-        //{
-        //    if (is_multi_damage)
-        //    {
-        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        //    }
-        //    else
-        //    {
-        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        //    }
-
-        //}
-        //else
-        //{
-        //    if (is_multi_damage)
-        //    {
-        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        //    }
-        //    else
-        //    {
-        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        //    }
-
-        //}
         AddDamageText(dmg);
         //  토탈 데미지 계산을 위해서
         AddTotalDamageInfo(dmg);
@@ -1678,19 +1618,27 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             }
         }
 
-        //AddSpawnEffectText(prefab_path, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, send_data, 1.3f, UI_Mng.GetDamageContainer());
+        //lock (Effect_Queue_Lock)
+        //{
+        //    var d = new Effect_Queue_Data();
+        //    d.Effect_path = prefab_path;
+        //    d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
+        //    d.Data = send_data;
+        //    d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
+        //    d.Parent_Transform = UI_Mng.GetDamageContainer();
+        //    d.Damage_Type = dmg_type;
+        //    Effect_Queue_Data_List.Add(d);
+        //}
 
-        lock (Effect_Queue_Lock)
-        {
-            var d = new Effect_Queue_Data();
-            d.Effect_path = prefab_path;
-            d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
-            d.Data = send_data;
-            d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
-            d.Parent_Transform = UI_Mng.GetDamageContainer();
-            d.Damage_Type = dmg_type;
-            Effect_Queue_Data_List.Add(d);
-        }
+        var d = new Effect_Queue_Data();
+        d.Effect_path = prefab_path;
+        d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
+        d.Data = send_data;
+        d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
+        d.Parent_Transform = UI_Mng.GetDamageContainer();
+        d.Damage_Type = dmg_type;
+        SpawnQueueEffect(d);
+
     }
 
     /// <summary>

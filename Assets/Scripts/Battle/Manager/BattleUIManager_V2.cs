@@ -98,7 +98,6 @@ public class BattleUIManager_V2 : MonoBehaviour
             }
             else
             {
-                //Battle_Mng.ChangeState(GAME_STATES.PAUSE);
                 ChangePause();
             }
 
@@ -158,7 +157,7 @@ public class BattleUIManager_V2 : MonoBehaviour
     void ChangePause()
     {
         var state = Battle_Mng.GetCurrentState();
-        if (state >= GAME_STATES.PLAYING)
+        if (state >= GAME_STATES.PLAYING && state <= GAME_STATES.ULTIMATE_SKILL)
         {
             Battle_Mng?.ChangeState(GAME_STATES.PAUSE);
         }

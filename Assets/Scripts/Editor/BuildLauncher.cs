@@ -1061,13 +1061,17 @@ namespace FluffyDuck.EditorUtil
             }
 
             // HashStorage에서 현재 그룹에 없는 GUID 및 해시 제거
-            foreach (var stored_guid in HashStorage.GetAllGuids(group.Name))
+            var list = HashStorage.GetAllGuids(group.Name);
+            if (list != null)
             {
-                if (!current_guids.Contains(stored_guid))
+                foreach (var stored_guid in list)
                 {
-                    Debug.Log($"Delete {group.Name} : {stored_guid}");
-                    HashStorage.RemoveHash(group.Name, stored_guid); // HashStorage에서 해당 GUID 및 해시 제거
-                    changed = true;
+                    if (!current_guids.Contains(stored_guid))
+                    {
+                        Debug.Log($"Delete {group.Name} : {stored_guid}");
+                        HashStorage.RemoveHash(group.Name, stored_guid); // HashStorage에서 해당 GUID 및 해시 제거
+                        changed = true;
+                    }
                 }
             }
 
@@ -1472,6 +1476,10 @@ namespace FluffyDuck.EditorUtil
 
             public static List<string> GetAllGuids(string group_name)
             {
+                if (!_assets_hashes.ContainsKey(group_name))
+                {
+                    return null;
+                }
                 return _assets_hashes[group_name].Keys.ToList();
             }
 
