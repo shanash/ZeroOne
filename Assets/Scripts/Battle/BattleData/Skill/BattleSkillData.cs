@@ -80,6 +80,24 @@ public abstract class BattleSkillData : BattleDataBase
         }
     }
 
+    public int[] GetSkillLevel()
+    {
+        List<int> result = new List<int>();
+
+        int cnt = Onetime_Skill_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            result.Add(Onetime_Skill_List[i].GetSkillLevel());
+        }
+        cnt = Duration_Skill_List.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            result.Add(Duration_Skill_List[i].GetSkillLevel());
+        }
+
+        return result.ToArray();
+    }
+
     protected void AddOnetimeSkillData(BattleOnetimeSkillData onetime)
     {
         Onetime_Skill_List.Add(onetime);

@@ -158,9 +158,8 @@ public class BattlePcSkillGroup : BattleSkillGroup
     {
         BattlePcSkillGroup clone = (BattlePcSkillGroup)MemberwiseClone();
         clone.User_Data = (UserHeroSkillData)User_Data.Clone();
-        clone.Battle_Skill_Data_List.Clear();
-        clone.SetSkillGroupID(User_Data.GetSkillGroupID());
+        Clone_BattleSkillDataList(ref clone);
+
         return clone;
     }
-
 }

@@ -239,4 +239,21 @@ public abstract class BattleSkillGroup : BattleDataBase
         }
         return sb.ToString();
     }
+
+    /// <summary>
+    /// 배틀 스킬 데이터들을 클론합니다
+    /// </summary>
+    /// <param name="clone_obj"></param>
+    protected void Clone_BattleSkillDataList(ref BattlePcSkillGroup clone_obj)
+    {
+        clone_obj.Battle_Skill_Data_List = new List<BattleSkillData>();
+        foreach (var battle_skill in Battle_Skill_Data_List)
+        {
+            var obj = battle_skill.Clone();
+            if (obj is BattleSkillData)
+            {
+                clone_obj.Battle_Skill_Data_List.Add(obj as BattleSkillData);
+            }
+        }
+    }
 }
