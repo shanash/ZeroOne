@@ -100,15 +100,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Boss_Point");
 
         //  effect
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/DamageText_Effect_V2");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect");
 
         //  damage text
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal");
-
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");

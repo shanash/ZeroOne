@@ -7,14 +7,6 @@ using UnityEngine;
 
 public class Damage_Node_V3 : EffectBase
 {
-    public enum DAMAGE_TYPE
-    {
-        NORMAL,
-        WEAK,
-        CRITICAL,
-        WEAK_CRITICAL,
-        TOTAL
-    }
 
     [SerializeField, Tooltip("Damage Orange Text")]
     TMP_Text Damage_Orange_Text;

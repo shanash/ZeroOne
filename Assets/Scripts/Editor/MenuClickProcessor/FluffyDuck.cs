@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Diagnostics;
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -84,30 +85,30 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         [MenuItem("FluffyDuck/Move Scene/Title _&1", false, 31)]
         static void MoveScene_Title()
         {
-            MoveScene("title");
+            MoveScene(SceneName.title);
         }
 
         [MenuItem("FluffyDuck/Move Scene/Lobby _&2", false, 32)]
         static void MoveScene_Lobby()
         {
-            MoveScene("home");
+            MoveScene(SceneName.home);
         }
         [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
         static void MoveScene_Battle()
         {
-            MoveScene("battle");
+            MoveScene(SceneName.battle);
         }
 
         [MenuItem("FluffyDuck/Move Scene/Essence _&4", false, 34)]
         static void MoveScene_Essence()
         {
-            MoveScene("essence");
+            MoveScene(SceneName.essence);
         }
 
-        static void MoveScene(string name)
+        static void MoveScene(SceneName name)
         {
             string scene_name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            if (scene_name.Equals(name))
+            if (scene_name.Equals(name.ToString()))
             {
                 return;
             }

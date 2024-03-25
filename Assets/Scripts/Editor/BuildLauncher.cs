@@ -1156,35 +1156,36 @@ namespace FluffyDuck.EditorUtil
             }
         }
 
-        public static int BuildAllConsole()
+        public static void BuildAllConsole()
         {
+            int result_code = 0;
+
             if (!ExistVersionText())
             {
                 CreateVersionText();
             }
 
             ReadArguments();
-            //SET IsRemotePath = false
-            //SET IsCleanBuild = true
             bool isAssetBuild = GetArguments("IsAssetBuild").Equals("true");
             bool isPlayerBuild = GetArguments("IsPlayerBuild").Equals("true");
-            if (isAssetBuild)
+
+            if (0 == result_code && isAssetBuild)
             {
                 if (0 != BuildAddressableConsole())
                 {
-                    return 1;
+                    result_code = 1;
                 }
             }
 
-            if (isPlayerBuild)
+            if (0 == result_code && isPlayerBuild)
             {
                 if (0 != BuildPlayerConsole())
                 {
-                    return 1;
+                    result_code = 1;
                 }
             }
 
-            return 0;
+            EditorApplication.Exit(result_code);
         }
 
         public static int BuildAddressableConsole()

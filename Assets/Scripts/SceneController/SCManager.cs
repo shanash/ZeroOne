@@ -14,15 +14,6 @@ public enum SceneName
     essence,
     dialogue_Intro,
     battle,
-    dialogue_StoryScene1_1,
-    dialogue_StoryScene1_2,
-    dialogue_StoryScene2_1,
-    dialogue_StoryScene2_2,
-    dialogue_StoryScene3,
-    dialogue_StoryScene4,
-    dialogue_StoryScene5,
-    dialogue_StoryScene6,
-    dialogue_StoryScene7
 }
 
 public class SCManager : Singleton<SCManager>

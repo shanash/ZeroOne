@@ -1510,8 +1510,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  최종 데미지 계산 후, 캐스터(공격자)에게 전달. 결과를 사용할 일이 있기 때문에
         //dmg.Caster.SendLastDamage(dmg);
 
-        //  토탈 데미지 계산을 위해서
-        AddTotalDamageInfo(dmg);
 
         //  색 반짝 / 넉백 
         AttackHittedKnockback();
@@ -1521,27 +1519,47 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life -= last_damage;
         }
 
-        Vector3 dmg_text_position = Vector3.zero;
-        if (dmg.Skill.GetMaxEffectWeightCount() > 1)
-        {
-            dmg_text_position = GetDamageTextPositionByIndex(0);
-        }
-        else
-        {
-            dmg_text_position = GetDamageTextPositionOrder();
-        }
+        //Vector3 dmg_text_position = Vector3.zero;
+        //bool is_multi_damage = dmg.Skill.GetMaxEffectWeightCount() > 1;
+        //if (is_multi_damage)
+        //{
+        //    dmg_text_position = GetDamageTextPositionByIndex(0);
+        //}
+        //else
+        //{
+        //    dmg_text_position = GetDamageTextPositionOrder();
+        //}
         if (Life <= 0)
         {
             Life = 0;
-            if (is_physics_dmg)
-            {
-                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            }
-            else
-            {
-                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-            }
-            
+            //if (is_physics_dmg)
+            //{
+            //    if (is_multi_damage)
+            //    {
+            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+            //    }
+            //    else
+            //    {
+            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+            //    }
+
+            //}
+            //else
+            //{
+            //    if (is_multi_damage)
+            //    {
+            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+            //    }
+            //    else
+            //    {
+            //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+            //    }
+
+            //}
+            AddDamageText(dmg);
+            //  토탈 데미지 계산을 위해서
+            AddTotalDamageInfo(dmg);
+
             UpdateLifeBar();
             //  궁극기 피격시 죽어도 당장 죽이지는 않는다.(궁극기 종료 후 사라지도록)
             if (GetCurrentState() != UNIT_STATES.ULTIMATE_PAUSE && GetCurrentState() != UNIT_STATES.SKILL_1)
@@ -1551,18 +1569,129 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             return;
         }
 
-        if (is_physics_dmg)
-        {
-            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        }
-        else
-        {
-            AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
-        }
-        
+        //if (is_physics_dmg)
+        //{
+        //    if (is_multi_damage)
+        //    {
+        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+        //    }
+        //    else
+        //    {
+        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+        //    }
+
+        //}
+        //else
+        //{
+        //    if (is_multi_damage)
+        //    {
+        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+        //    }
+        //    else
+        //    {
+        //        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, dmg, 1.3f, UI_Mng.GetDamageContainer());
+        //    }
+
+        //}
+        AddDamageText(dmg);
+        //  토탈 데미지 계산을 위해서
+        AddTotalDamageInfo(dmg);
+
         UpdateLifeBar();
 
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.HITTED);
+    }
+
+    void AddDamageText(BATTLE_SEND_DATA send_data)
+    {
+        DAMAGE_TYPE dmg_type = DAMAGE_TYPE.NORMAL;
+        Vector3 dmg_text_position = Vector3.zero;
+        var etype = send_data.Onetime.GetOnetimeEffectType();
+        bool is_physics_dmg = etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
+        bool is_multi_damage = send_data.Skill.GetMaxEffectWeightCount() > 1;
+        string prefab_path = string.Empty;
+        if (is_multi_damage)
+        {
+            dmg_text_position = GetDamageTextPositionByIndex(0);
+        }
+        else
+        {
+            dmg_text_position = GetDamageTextPositionOrder();
+        }
+
+        if (is_physics_dmg)
+        {
+            if (is_multi_damage)
+            {
+                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
+//                AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node", GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, send_data, 1.3f, UI_Mng.GetDamageContainer());
+            }
+            else
+            {
+                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
+            }
+            if (send_data.Is_Weak)
+            {
+                if (send_data.Is_Physics_Critical)
+                {
+                    dmg_type = DAMAGE_TYPE.WEAK_CRITICAL;
+                }
+                else
+                {
+                    dmg_type = DAMAGE_TYPE.WEAK;
+                }
+            }
+            else
+            {
+                if (send_data.Is_Physics_Critical)
+                {
+                    dmg_type = DAMAGE_TYPE.CRITICAL;
+                }
+            }
+        }
+        else
+        {
+            if (is_multi_damage)
+            {
+                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node";
+            }
+            else
+            {
+                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
+            }
+            if (send_data.Is_Weak)
+            {
+                if (send_data.Is_Magic_Critical)
+                {
+                    dmg_type = DAMAGE_TYPE.WEAK_CRITICAL;
+                }
+                else
+                {
+                    dmg_type = DAMAGE_TYPE.WEAK;
+                }
+            }
+            else
+            {
+                if (send_data.Is_Magic_Critical)
+                {
+                    dmg_type = DAMAGE_TYPE.CRITICAL;
+                }
+            }
+        }
+
+        //AddSpawnEffectText(prefab_path, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, send_data, 1.3f, UI_Mng.GetDamageContainer());
+
+        lock (Effect_Queue_Lock)
+        {
+            var d = new Effect_Queue_Data();
+            d.Effect_path = prefab_path;
+            d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
+            d.Data = send_data;
+            d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
+            d.Parent_Transform = UI_Mng.GetDamageContainer();
+            d.Damage_Type = dmg_type;
+            Effect_Queue_Data_List.Add(d);
+        }
     }
 
     /// <summary>
@@ -1623,8 +1752,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
     }
 
-
-
     public void AddSpawnEffectText(string path, Vector3 target_pos, object data, float duration, Transform parent)
     {
         lock (Effect_Queue_Lock)
@@ -1668,7 +1795,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="edata"></param>
     void SpawnQueueEffect(Effect_Queue_Data edata)
     {
-        
         if (edata.Parent_Transform == null)
         {
             EffectBase effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.Effect_path);
@@ -1678,76 +1804,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            var pool = GameObjectPoolManager.Instance;
-            BATTLE_SEND_DATA send_data = (BATTLE_SEND_DATA)edata.Data;
-
-            Damage_Node_V3.DAMAGE_TYPE dmg_type = Damage_Node_V3.DAMAGE_TYPE.NORMAL;
-            bool is_physics_dmg = send_data.Onetime.GetOnetimeEffectType() == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
-            string prefab_name = string.Empty;
-
-            if (is_physics_dmg)
-            {
-                if (send_data.Skill.GetMaxEffectWeightCount() > 1)
-                {
-                    prefab_name = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
-                }
-                else
-                {
-                    prefab_name = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
-                }
-                if (send_data.Is_Weak)
-                {
-                    if (send_data.Is_Physics_Critical)
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.WEAK_CRITICAL;
-                    }
-                    else
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.WEAK;
-                    }
-                }
-                else
-                {
-                    if (send_data.Is_Physics_Critical)
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.CRITICAL;
-                    }
-                }
-            }
-            else
-            {
-                if (send_data.Skill.GetMaxEffectWeightCount() > 1)
-                {
-                    prefab_name = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node";
-                }
-                else
-                {
-                    prefab_name = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
-                }
-                if (send_data.Is_Weak)
-                {
-                    if (send_data.Is_Magic_Critical)
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.WEAK_CRITICAL;
-                    }
-                    else
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.WEAK;
-                    }
-                }
-                else
-                {
-                    if (send_data.Is_Magic_Critical)
-                    {
-                        dmg_type = Damage_Node_V3.DAMAGE_TYPE.CRITICAL;
-                    }
-                }
-            }
-            EffectBase effect = Battle_Mng.GetEffectFactory().CreateEffect(prefab_name, edata.Parent_Transform);
-            
-            effect.SetData(send_data, dmg_type, edata.Target_Position);
-            effect.StartParticle(1f);
-
+            EffectBase effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.Effect_path, edata.Parent_Transform);
+            effect.SetData(edata.Data, edata.Damage_Type, edata.Target_Position);
+            effect.StartParticle(edata.Duration);
         }
 
     }

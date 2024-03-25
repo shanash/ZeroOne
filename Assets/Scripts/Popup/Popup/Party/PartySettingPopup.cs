@@ -119,7 +119,6 @@ public class PartySettingPopup : PopupBase
             if (Is_Load_Complete && Is_Animation_End)
             {
                 FixedUpdatePopup();
-                //ChoiceFirstHeroInfo();
                 return;
             }
         }
@@ -152,36 +151,7 @@ public class PartySettingPopup : PopupBase
         {
             FixedUpdatePopup();
             UpdatePopup();
-            //ChoiceFirstHeroInfo();
         }
-    }
-
-    ///// <summary>
-    ///// 창 오픈시 첫번째 캐릭터 정보 보기
-    ///// </summary>
-    //void ChoiceFirstHeroInfo()
-    //{
-    //    if (Battle_Hero_Data_List.Count > 0)
-    //    {
-    //        var first_hero = Battle_Hero_Data_List.FirstOrDefault();
-    //        if (first_hero != null)
-    //        {
-    //            Selected_Info_Box.SetPlayerCharacterID(first_hero.GetUnitID(), first_hero.GetUnitNum());
-    //        }
-    //        else
-    //        {
-    //            Selected_Info_Box.SetPlayerCharacterID(0, 0);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Selected_Info_Box.SetPlayerCharacterID(0, 0);
-    //    }
-    //}
-
-    protected override void HidePopupAniEndCallback()
-    {
-        base.HidePopupAniEndCallback();
     }
 
 
@@ -429,7 +399,7 @@ public class PartySettingPopup : PopupBase
         user_deck_mng.Save();
     }
 
-    void PartySlotCardChoiceCallback(TOUCH_RESULT_TYPE type, Func<bool, Rect> hole, object slot_obj)//PartySlotNode slot)
+    void PartySlotCardChoiceCallback(TOUCH_RESULT_TYPE type, Func<bool, Rect> hole, object slot_obj)
     {
         if (type != TOUCH_RESULT_TYPE.CLICK || slot_obj == null || slot_obj is not PartySlotNode)
         {

@@ -147,6 +147,15 @@ public struct Target_Reach_Pos_Data
     public UnityEngine.Transform Trans;
 }
 
+public enum DAMAGE_TYPE
+{
+    NORMAL,
+    WEAK,
+    CRITICAL,
+    WEAK_CRITICAL,
+    TOTAL
+}
+
 public struct Effect_Queue_Data
 {
     public string Effect_path;
@@ -154,7 +163,7 @@ public struct Effect_Queue_Data
     public object Data;
     public float Duration;
     public UnityEngine.Transform Parent_Transform;
-
+    public DAMAGE_TYPE Damage_Type;
 }
 
 #region Exp Simulate Data
