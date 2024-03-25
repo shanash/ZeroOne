@@ -127,15 +127,20 @@ public class PartySettingPopup : PopupBase
 
     void InitPopupUI()
     {
+        //  팝업 타이틀
+        Popup_Title.text = GameDefine.GetLocalizeString("system_party_title");
+
         //  cancel / confirm btn
         if (Game_Type == GAME_TYPE.NONE)
         {
-            Confirm_Btn_Text.text = "확인";
+            //  확인
+            Confirm_Btn_Text.text = GameDefine.GetLocalizeString("system_answer_ok");
             Cancel_Btn.gameObject.SetActive(false);
         }
         else
         {
-            Confirm_Btn_Text.text = "진입";
+            //  진입
+            Confirm_Btn_Text.text = GameDefine.GetLocalizeString("system_entrance");
             Cancel_Btn.gameObject.SetActive(true);
         }
     }

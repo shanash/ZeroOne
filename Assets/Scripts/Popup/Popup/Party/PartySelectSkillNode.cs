@@ -80,13 +80,13 @@ public class PartySelectSkillNode : MonoBehaviour
             switch (Skill_Type)
             {
                 case SKILL_TYPE.SKILL_01:
-                    Skill_Type_Text.text = "액티브 스킬 1";
+                    Skill_Type_Text.text = GameDefine.GetLocalizeString("system_skill_001");
                     break;
                 case SKILL_TYPE.SKILL_02:
-                    Skill_Type_Text.text = "액티브 스킬 2";
+                    Skill_Type_Text.text = GameDefine.GetLocalizeString("system_skill_002");
                     break;
                 case SKILL_TYPE.SPECIAL_SKILL:
-                    Skill_Type_Text.text = "궁극기";
+                    Skill_Type_Text.text = GameDefine.GetLocalizeString("system_skill_003");
                     break;
                 case SKILL_TYPE.NONE:
                     Skill_Type_Text.text = "EMPTY";

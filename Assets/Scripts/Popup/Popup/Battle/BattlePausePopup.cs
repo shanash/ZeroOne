@@ -53,7 +53,7 @@ public class BattlePausePopup : PopupBase
             //  
             Boss_Stage_Data stage_data = (Boss_Stage_Data)Dungeon.GetDungeonData();
             Boss_Data boss = m.Get_BossDataByBossStageGroupID(stage_data.boss_stage_group_id);
-            Zone_Stage_Name.text = ZString.Format("보스 던전 {0}", GameDefine.GetLocalizeString(boss.boss_name));
+            Zone_Stage_Name.text = ZString.Format("{0} {1}", GameDefine.GetLocalizeString("system_boss_desc"), GameDefine.GetLocalizeString(boss.boss_name));
 
         }
 

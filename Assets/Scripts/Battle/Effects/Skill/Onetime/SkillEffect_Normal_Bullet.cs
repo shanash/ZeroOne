@@ -9,7 +9,6 @@ using UnityEngine;
 /// </summary>
 public class SkillEffect_Normal_Bullet : SkillEffectBase
 {
-
     public override void MoveTarget(Vector3 target, float duration)
     {
         var ec = GetEffectComponent();

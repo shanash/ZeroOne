@@ -10,6 +10,6 @@ public class Monster_100017 : MonsterBase_V2
 {
 
     
-
+    
 
 }

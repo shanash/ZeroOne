@@ -5006,8 +5006,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 086ae3849c4cdd54cbcb81ccf90f07de, type: 2}
-  - {fileID: 2100000, guid: 086ae3849c4cdd54cbcb81ccf90f07de, type: 2}
+  - {fileID: 0}
+  - {fileID: 2100000, guid: 49a7393a5fe1fe343ae54fac74dc6680, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -24819,6 +24819,8 @@ MonoBehaviour:
   Effect_Duration: 0
   Is_Loop: 0
   Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 1
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 1
@@ -24829,6 +24831,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 5824527524091882735}
   Projectile_Velocity: 200
+  Projectile_Duration: 0
   Use_Hide_Transforms: 1
   Hide_Transforms:
   - {fileID: 5924998232385705750}

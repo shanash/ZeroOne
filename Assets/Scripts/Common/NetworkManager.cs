@@ -117,7 +117,7 @@ public class NetworkManager : Singleton<NetworkManager>
             {
                 retry = false;
 
-                ResponseData<TResponse> response = await Client.HttpRequest<TResponse, TRequest>(
+                ResponseData<TResponse> response = await Client.HttpRequest<TRequest, TResponse>(
                     $"{Base_Uri}{((Method_Path[0].Equals('/')) ? Method_Path[1..] : Method_Path)}",
                     request, Method);
 

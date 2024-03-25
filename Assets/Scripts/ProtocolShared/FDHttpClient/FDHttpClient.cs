@@ -6,6 +6,8 @@ using System.Threading;
 using System.Net.Http;
 using ProtocolShared.Proto.Base;
 using ProtocolShared.Proto;
+using UnityEditor.PackageManager.Requests;
+using PixelCrushers.DialogueSystem;
 
 #nullable disable
 
@@ -53,14 +55,13 @@ namespace ProtocolShared.FDHttpClient
             _refrashToken = refrashToken;
         }
 
-        public async Task HttpRequest<T, U>(string url, U data, HttpMethod httpMethod, Action<ResponseData<T>> onComplete) where T : class
+        public async Task HttpRequest<TRequest, TResponse>(string url, TRequest data, HttpMethod httpMethod, Action<ResponseData<TResponse>> onComplete) where TResponse : class
         {
-            ResponseData<T> res = await HttpRequest<T, U>(url, data, httpMethod);
-
+            ResponseData<TResponse> res = await HttpRequest<TRequest, TResponse>(url, data, httpMethod);
             onComplete?.Invoke(res);
         }
 
-        public async Task<ResponseData<T>> HttpRequest<T, U>(string url, U data, HttpMethod httpMethod) where T : class
+        public async Task<ResponseData<TResponse>> HttpRequest<TRequest, TResponse>(string url, TRequest data, HttpMethod httpMethod) where TResponse : class
         {
             try
             {
@@ -104,22 +105,22 @@ namespace ProtocolShared.FDHttpClient
 
                     if (response == null)
                     {
-                        return new ResponseData<T> { ResType = RESPONSE_TYPE.NULL_RESPONSE };
+                        return new ResponseData<TResponse> { ResType = RESPONSE_TYPE.NULL_RESPONSE };
                     }
 
                     if (response.IsSuccessStatusCode == false)
                     {
-                        return new ResponseData<T> { ResType = (RESPONSE_TYPE)response.StatusCode };
+                        return new ResponseData<TResponse> { ResType = (RESPONSE_TYPE)response.StatusCode };
                     }
 
                     byte[] results = await response.Content.ReadAsByteArrayAsync();
                     var bodyString = Encoding.UTF8.GetString(results);
 
-                    ResponseData<T> bodyObj = JsonConvert.DeserializeObject<ResponseData<T>>(bodyString) ?? new ResponseData<T> { ResType = RESPONSE_TYPE.EMPTY_BODY };
+                    ResponseData<TResponse> bodyObj = JsonConvert.DeserializeObject<ResponseData<TResponse>>(bodyString) ?? new ResponseData<TResponse> { ResType = RESPONSE_TYPE.EMPTY_BODY };
 
                     if (bodyObj == null)
                     {
-                        return new ResponseData<T> { ResType = RESPONSE_TYPE.JSON_PARSE_FAILED };
+                        return new ResponseData<TResponse> { ResType = RESPONSE_TYPE.JSON_PARSE_FAILED };
                     }
 
                     if (bodyObj.ResType == RESPONSE_TYPE.DUPLICATION_REQUEST)
@@ -133,7 +134,7 @@ namespace ProtocolShared.FDHttpClient
                     if (bodyObj.ResType == RESPONSE_TYPE.EXPIRED_ACCESS_TOKEN)
                     {
                         // accessToken 이 만료되어 refreshToken 으로 갱신 요청
-                        ResponseData<RefreshTokenResponse> tokenRes = await HttpRequest<RefreshTokenResponse, RefreshTokenRequest>(_refrashUrl, new RefreshTokenRequest { RefreshToken = _refrashToken }, HttpMethod.POST);
+                        ResponseData<RefreshTokenResponse> tokenRes = await HttpRequest<RefreshTokenRequest, RefreshTokenResponse> (_refrashUrl, new RefreshTokenRequest { RefreshToken = _refrashToken }, HttpMethod.POST);
 
                         if (tokenRes.ResType == RESPONSE_TYPE.SUCCESS)
                         {
@@ -145,17 +146,17 @@ namespace ProtocolShared.FDHttpClient
                         else
                         {
                             // 실패하면 에러 코드 리턴 (다시 로그인 해야 됨)
-                            return new ResponseData<T> { ResType = tokenRes.ResType };
+                            return new ResponseData<TResponse> { ResType = tokenRes.ResType };
                         }
                     }
 
                     return bodyObj;
                 }
-                return new ResponseData<T> { ResType = RESPONSE_TYPE.EXCEEDED_RETRY_COUNT };
+                return new ResponseData<TResponse> { ResType = RESPONSE_TYPE.EXCEEDED_RETRY_COUNT };
             }
             catch (Exception)
             {
-                return new ResponseData<T> { ResType = RESPONSE_TYPE.EXCEPTION };
+                return new ResponseData<TResponse> { ResType = RESPONSE_TYPE.EXCEPTION };
             }
         }
     }

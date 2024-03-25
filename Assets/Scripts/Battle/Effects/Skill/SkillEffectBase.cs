@@ -9,8 +9,7 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(SortingGroup))]
 public class SkillEffectBase : EffectBase
 {
- 
-    protected BATTLE_SEND_DATA Send_Data;
+     protected BATTLE_SEND_DATA Send_Data;
 
     protected EffectComponent Effect_Comp;
 
@@ -63,8 +62,6 @@ public class SkillEffectBase : EffectBase
         ExecSecondTargetOnetimeSkills_V2(targets);
         ExecSecondTargetDurationSkills_V2(targets);
     }
-
-    
 
     void ExecSecondTargetOnetimeSkills_V2(List<HeroBase_V2> targets)
     {
@@ -180,22 +177,47 @@ public class SkillEffectBase : EffectBase
             var first_target = Send_Data.Targets.First();
             TeamManager_V2 team_mng = first_target.GetTeamManager();
             team_mng.FindSecondTargetInRange(first_target, skill.GetSecondTargetRuleType(), (float)skill.GetSecondTargetRange(), skill.GetMaxSecondTargetCount(), ref targets);
+            ExecOnetimeSkills_V2(Send_Data, targets);
+            ExecDurationSkills_V2(Send_Data, targets);
         }
         else
         {
-            targets.AddRange(Send_Data.Targets);
+            if (skill.GetEffectCountType() == EFFECT_COUNT_TYPE.SINGLE_EFFECT)
+            {
+                var clone_send_data = Send_Data.Clone();
+                
+                for (int i = 0; i < Send_Data.Targets.Count; i++)
+                {
+                    targets.Clear();
+                    clone_send_data.ClearTargets();
+                    var t = Send_Data.Targets[i];
+
+                    clone_send_data.AddTarget(t);
+                    targets.Add(t);
+
+                    ExecOnetimeSkills_V2(clone_send_data, targets);
+                    ExecDurationSkills_V2(clone_send_data, targets);
+                }
+            }
+            else
+            {
+                targets.AddRange(Send_Data.Targets);
+                ExecOnetimeSkills_V2(Send_Data, targets);
+                ExecDurationSkills_V2(Send_Data, targets);
+            }
+
+            
         }
 
-        ExecOnetimeSkills_V2(targets);
-        ExecDurationSkills_V2(targets);
+        
     }
 
     /// <summary>
     /// 일회성 스킬 이펙트 구현
     /// </summary>
-    protected void ExecOnetimeSkills_V2(List<HeroBase_V2> targets)
+    protected void ExecOnetimeSkills_V2(BATTLE_SEND_DATA send_data, List<HeroBase_V2> targets)
     {
-        var onetime_list = Send_Data.Skill.GetOnetimeSkillDataList();
+        var onetime_list = send_data.Skill.GetOnetimeSkillDataList();
         int t_cnt = targets.Count;
         for (int t = 0; t < t_cnt; t++)
         {
@@ -207,13 +229,13 @@ public class SkillEffectBase : EffectBase
                 string effect_path = onetime.GetEffectPrefab();
                 if (string.IsNullOrEmpty(effect_path))
                 {
-                    onetime.ExecSkill(Send_Data);
+                    onetime.ExecSkill(send_data);
                     continue;
                 }
-                Send_Data.Onetime = onetime;
+                send_data.Onetime = onetime;
 
-                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, Send_Data.Caster.GetUnitScale());
-                effect.SetBattleSendData(Send_Data);
+                var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, send_data.Caster.GetUnitScale());
+                effect.SetBattleSendData(send_data);
 
                 var ec = effect.GetEffectComponent();
                 var target_trans = ec.GetTargetReachPosition(target);
@@ -229,9 +251,9 @@ public class SkillEffectBase : EffectBase
     /// <summary>
     /// 지속섣 스킬 이펙트 구현
     /// </summary>
-    protected void ExecDurationSkills_V2(List<HeroBase_V2> targets)
+    protected void ExecDurationSkills_V2(BATTLE_SEND_DATA send_data, List<HeroBase_V2> targets)
     {
-        var duration_list = Send_Data.Skill.GetDurationSkillDataList();
+        var duration_list = send_data.Skill.GetDurationSkillDataList();
         int t_cnt = targets.Count;
         for (int t = 0; t < t_cnt; t++)
         {
@@ -243,13 +265,13 @@ public class SkillEffectBase : EffectBase
                 string effect_path = duration.GetEffectPrefab();
                 if (string.IsNullOrEmpty(effect_path))
                 {
-                    duration.ExecSkill(Send_Data);
+                    duration.ExecSkill(send_data);
                     continue;
                 }
-                Send_Data.Duration = duration;
+                send_data.Duration = duration;
 
                 var effect = (SkillEffectBase)Factory.CreateEffect(effect_path, target.GetUnitScale());
-                effect.SetBattleSendData(Send_Data);
+                effect.SetBattleSendData(send_data);
 
                 var ec = effect.GetEffectComponent();
                 if (ec != null)

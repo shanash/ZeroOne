@@ -149,10 +149,11 @@ public struct Target_Reach_Pos_Data
 
 public struct Effect_Queue_Data
 {
-    public string effect_path;
+    public string Effect_path;
     public UnityEngine.Vector3 Target_Position;
     public object Data;
     public float Duration;
+    public UnityEngine.Transform Parent_Transform;
 
 }
 

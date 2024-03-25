@@ -109,6 +109,11 @@ public partial class BattleManager_V2 : SceneControllerBase
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Damage_Text_Normal");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Damage_Text_Normal");
 
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node");
+
         //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode");

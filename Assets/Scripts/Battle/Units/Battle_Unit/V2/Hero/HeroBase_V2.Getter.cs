@@ -191,10 +191,17 @@ public partial class HeroBase_V2 : UnitBase_V2
     /// 데미지 맞는 순서
     /// </summary>
     /// <returns></returns>
-    public Vector3 GetDamageTextPositionOrder(int idx = 0)
+    public Vector3 GetDamageTextPositionByIndex(int idx = 0)
     {
         int index = idx % Damage_Text_Position_List.Count;
         return Damage_Text_Position_List[index];
+    }
+
+    public Vector3 GetDamageTextPositionOrder() 
+    {
+        var pos = GetDamageTextPositionByIndex(Damage_Text_Position_Order_Index);
+        Damage_Text_Position_Order_Index++;
+        return pos;
     }
 
     public BattleUnitData GetBattleUnitData()

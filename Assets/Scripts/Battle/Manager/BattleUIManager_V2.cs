@@ -4,7 +4,6 @@ using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleUIManager_V2 : MonoBehaviour
@@ -15,9 +14,11 @@ public class BattleUIManager_V2 : MonoBehaviour
     [SerializeField, Tooltip("HP Bar Container")]
     RectTransform HP_Bar_Container;
 
+    [SerializeField, Tooltip("Damage Container")]
+    RectTransform Damage_Container;
+
     [SerializeField, Tooltip("Box")]
     RectTransform Box_Rect;
-
 
     [Header("UI")]
     [SerializeField, Tooltip("Timer Box")]
@@ -102,6 +103,11 @@ public class BattleUIManager_V2 : MonoBehaviour
             }
 
         }
+    }
+
+    public RectTransform GetDamageContainer()
+    {
+        return Damage_Container;
     }
 
     void UpdateFastSpeed()

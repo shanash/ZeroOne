@@ -1314,8 +1314,8 @@ public partial class TeamManager_V2
             {
                 return;
             }
-            members.Remove(target);
-            targets.Add(target);
+            //members.Remove(target);
+            //targets.Add(target);
 
             var temp_list = members.FindAll(x => x.GetDistanceFromCenter(target) <= target_range);
             temp_list.Sort((a, b) => b.GetDistanceFromCenter(target).CompareTo(a.GetDistanceFromCenter(target)));

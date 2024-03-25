@@ -154,16 +154,16 @@ public class UserHeroSkillData : UserDataBase
             switch (Group_Data.skill_type)
             {
                 case SKILL_TYPE.NORMAL_ATTACK:
-                    result = "일반 공격";
+                    result = GameDefine.GetLocalizeString("skill_title_pc_001");
                     break;
                 case SKILL_TYPE.SKILL_01:
-                    result = "액티브 스킬 1";
+                    result = GameDefine.GetLocalizeString("system_skill_001");
                     break;
                 case SKILL_TYPE.SKILL_02:
-                    result = "액티브 스킬 2";
+                    result = GameDefine.GetLocalizeString("system_skill_002");
                     break;
                 case SKILL_TYPE.SPECIAL_SKILL:
-                    result = "궁극기";
+                    result = GameDefine.GetLocalizeString("system_skill_003");
                     break;
                 case SKILL_TYPE.PASSIVE_SKILL:
                     result = "패시브 스킬";

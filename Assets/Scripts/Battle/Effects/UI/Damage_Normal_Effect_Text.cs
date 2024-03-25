@@ -42,10 +42,7 @@ public class Damage_Normal_Effect_Text : EffectBase
         ONETIME_EFFECT_TYPE etype = send_data.Onetime.GetOnetimeEffectType();
 
         double dmg = etype == ONETIME_EFFECT_TYPE.MAGIC_DAMAGE ? Math.Truncate(send_data.Magic_Attack_Point) : Math.Truncate(send_data.Physics_Attack_Point);
-        if (dmg <= 0)
-        {
-            bool a = false;
-        }
+       
         string dmg_str = dmg.ToString();
         bool use_sprite_font = true;
         if (use_sprite_font)

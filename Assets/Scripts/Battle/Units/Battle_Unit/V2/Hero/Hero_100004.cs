@@ -1,5 +1,6 @@
 using UnityEngine.Timeline;
 using UnityEngine;
+using Spine;
 /// <summary>
 /// 데이지
 /// </summary>
@@ -92,7 +93,58 @@ public class Hero_100004 : HeroBase_V2
         ChangeState(UNIT_STATES.SKILL_READY_1);
     }
 
-    
+    protected override void SpineAnimationEvent(TrackEntry entry, Spine.Event evt)
+    {
+        string animation_name = entry.Animation.Name;
+        string evt_name = evt.Data.Name;
+        UNIT_STATES state = GetCurrentState();
+
+        if (state == UNIT_STATES.ATTACK_1)
+        {
+            var skill_grp = GetSkillManager().GetCurrentSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
+            {
+                var exec_list = skill_grp.GetExecutableCloneSkillDatas(evt_name);
+                if (exec_list.Count > 0)
+                {
+                    int cnt = exec_list.Count;
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        var skill = exec_list[i];
+                        if (skill.IsEmptyFindTarget())
+                        {
+                            FindTargetsSkillAddTargets(skill);
+                        }
+
+                        SpawnSkillEffect_V3(skill);
+                    }
+                }
+            }
+        }
+        else if (state == UNIT_STATES.SKILL_1)
+        {
+            var skill_grp = GetSkillManager().GetSpecialSkillGroup();
+            if (animation_name.Equals(skill_grp.GetSkillActionName()))
+            {
+                var exec_list = skill_grp.GetExecutableCloneSkillDatas(evt_name);
+                if (exec_list.Count > 0)
+                {
+                    int cnt = exec_list.Count;
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        var skill = exec_list[i];
+                        if (skill.IsEmptyFindTarget())
+                        {
+                            FindTargetsSkillAddTargets(skill);
+                        }
+                        SpawnSkillEffect_V3(skill);
+                    }
+                }
+            }
+        }
+    }
+
+
     public override void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
     {
         //  감추기
