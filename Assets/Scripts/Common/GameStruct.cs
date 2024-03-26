@@ -8,6 +8,7 @@ public struct BATTLE_SEND_DATA
 {
     public HeroBase_V2 Caster;                      //  시전자
     public List<HeroBase_V2> Targets;               //  대상(타겟)
+    public BattleSkillGroup Skill_Group;
     public BattleSkillData Skill;                   //  사용 스킬
     public BattleOnetimeSkillData Onetime;          //  일회성 스킬
     public BattleDurationSkillData Duration;        //  지속성 스킬
@@ -26,6 +27,7 @@ public struct BATTLE_SEND_DATA
     public void Reset()
     {
         Caster = null;
+        Skill_Group = null;
         Skill = null;
         Onetime = null;
         Duration = null;
@@ -75,6 +77,7 @@ public struct BATTLE_SEND_DATA
     {
         BATTLE_SEND_DATA result = new BATTLE_SEND_DATA();
         result.Caster = Caster;
+        result.Skill_Group = Skill_Group;
         result.Skill = Skill;
         result.Onetime = Onetime;
         result.Duration = Duration;

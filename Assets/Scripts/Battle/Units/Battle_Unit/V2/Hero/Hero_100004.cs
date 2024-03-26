@@ -116,7 +116,7 @@ public class Hero_100004 : HeroBase_V2
                             FindTargetsSkillAddTargets(skill);
                         }
 
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }
@@ -137,7 +137,7 @@ public class Hero_100004 : HeroBase_V2
                         {
                             FindTargetsSkillAddTargets(skill);
                         }
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }

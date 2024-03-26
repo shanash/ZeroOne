@@ -94,7 +94,7 @@ public class Monster_100013 : MonsterBase_V2
                             FindTargetsSkillAddTargets(skill);
                         }
 
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class Monster_100013 : MonsterBase_V2
                         {
                             FindTargetsSkillAddTargets(skill);
                         }
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }

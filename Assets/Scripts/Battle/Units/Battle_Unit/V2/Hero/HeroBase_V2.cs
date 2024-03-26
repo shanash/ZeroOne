@@ -1,4 +1,5 @@
 using Cysharp.Text;
+using DocumentFormat.OpenXml.Drawing;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
@@ -691,7 +692,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                             FindTargetsSkillAddTargets(skill);
                         }
                         
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }
@@ -712,7 +713,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                         {
                             FindTargetsSkillAddTargets(skill);
                         }
-                        SpawnSkillEffect_V3(skill);
+                        SpawnSkillEffect_V3(skill_grp, skill);
                     }
                 }
             }
@@ -1065,7 +1066,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// 스킬에 이펙트 프리팹 정보가 없을 경우, 즉시 발동하는 스킬로 해당 스킬에서 바로 적용할 수 있도록 한다.
     /// </summary>
     /// <param name="skill"></param>
-    protected virtual void SpawnSkillEffect_V3(BattleSkillData skill)
+    protected virtual void SpawnSkillEffect_V3(BattleSkillGroup group, BattleSkillData skill)
     {
         if (skill.IsEmptyFindTarget())
         {
@@ -1086,6 +1087,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                 send_data.Caster = this;
                 send_data.AddTarget(target);
+                send_data.Skill_Group = group;
                 send_data.Skill = skill;
                 send_data.Effect_Weight_Index = effect_weight_index;
 
@@ -1133,6 +1135,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                 send_data.Caster = this;
                 send_data.AddTargets(skill.GetFindTargets());
+                send_data.Skill_Group = group;
                 send_data.Skill = skill;
                 send_data.Effect_Weight_Index = effect_weight_index;
 
@@ -1195,6 +1198,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     BATTLE_SEND_DATA send_data = new BATTLE_SEND_DATA();
                     send_data.Caster = this;
                     send_data.AddTarget(target);
+                    send_data.Skill_Group = group;
                     send_data.Skill = skill;
                     send_data.Effect_Weight_Index = effect_weight_index;
                     //  트리거 이펙트가 있으면, 본 이펙트를 출현함으로써 일회성/지속성 스킬의 트리거로 사용할 수 있다.
@@ -1390,12 +1394,13 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         int skill_id = send_data.Skill.GetSkillID();
         int max_effect_count = send_data.Skill.GetMaxEffectWeightCount();
-        var find = Total_Damage_Data.Find(x => x.Skill_ID == skill_id);
+        Total_Damage_Data find = Total_Damage_Data.Find(x => x.Skill_ID == skill_id);
         if (find == null)
         {
             find = new Total_Damage_Data(skill_id);
             find.Max_Effect_Weight_Count = max_effect_count;
             find.Onetime_Effect_Type = send_data.Onetime.GetOnetimeEffectType();
+            Total_Damage_Data.Add(find);
         }
         bool is_last_attack = false;
         if (find.Onetime_Effect_Type == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE)
@@ -1414,6 +1419,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             if (max_effect_count > 1)
             {
                 //  todo
+                AddTotalDamageText(find);
             }
 
             //  시전자에게 최종 합산 데미지 정보 전달해줘야 함
@@ -1534,13 +1540,50 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         AddDamageText(dmg);
         //  토탈 데미지 계산을 위해서
-        AddTotalDamageInfo(dmg);
+        if (dmg.Skill_Group != null && dmg.Skill_Group.GetSkillType() == SKILL_TYPE.SPECIAL_SKILL)
+        {
+            AddTotalDamageInfo(dmg);
+        }
 
         UpdateLifeBar();
 
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.HITTED);
     }
 
+    /// <summary>
+    /// 합산 데미지 폰트 생성
+    /// </summary>
+    /// <param name="total"></param>
+    void AddTotalDamageText(Total_Damage_Data total)
+    {
+        DAMAGE_TYPE dmg_type = DAMAGE_TYPE.TOTAL;
+        Vector3 target_pos = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position;
+        bool is_physics = total.Onetime_Effect_Type == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
+        string prefab_path = string.Empty;
+        if (is_physics)
+        {
+            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node";
+        }
+        else
+        {
+            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node";
+        }
+
+        var d = new Effect_Queue_Data();
+        d.Effect_path = prefab_path;
+        d.Target_Position = target_pos;
+        d.Data = total;
+        d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
+        d.Parent_Transform = UI_Mng.GetDamageContainer();
+        d.Damage_Type = dmg_type;
+        SpawnQueueEffect(d);
+    }
+
+
+    /// <summary>
+    /// 데미지 폰트 생성
+    /// </summary>
+    /// <param name="send_data"></param>
     void AddDamageText(BATTLE_SEND_DATA send_data)
     {
         DAMAGE_TYPE dmg_type = DAMAGE_TYPE.NORMAL;
@@ -1617,18 +1660,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 }
             }
         }
-
-        //lock (Effect_Queue_Lock)
-        //{
-        //    var d = new Effect_Queue_Data();
-        //    d.Effect_path = prefab_path;
-        //    d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
-        //    d.Data = send_data;
-        //    d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
-        //    d.Parent_Transform = UI_Mng.GetDamageContainer();
-        //    d.Damage_Type = dmg_type;
-        //    Effect_Queue_Data_List.Add(d);
-        //}
 
         var d = new Effect_Queue_Data();
         d.Effect_path = prefab_path;

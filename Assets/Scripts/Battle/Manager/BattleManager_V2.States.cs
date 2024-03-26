@@ -18,6 +18,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     IEnumerator InitAssets()
     {
+        bool is_set_scene = false;
         var handle = Addressables.InitializeAsync();
         yield return handle;
 
@@ -104,8 +105,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  damage text
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node");
+        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node");
 
         //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
@@ -133,8 +136,8 @@ public partial class BattleManager_V2 : SceneControllerBase
             InitStates();
             return;
         }
-        float per = (float)load_cnt / (float)total_cnt;
-        Debug.LogFormat("Load Resource [{0}/{1}] <color=#ffffff>({2:P1})</color>", load_cnt, total_cnt, per);
+        //float per = (float)load_cnt / (float)total_cnt;
+        //Debug.LogFormat("Load Resource [{0}/{1}] <color=#ffffff>({2:P1})</color>", load_cnt, total_cnt, per);
         if (load_cnt == total_cnt)
         {
             InitStates();
@@ -166,7 +169,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         FSM.Lazy_Init_Setting(this, UI_Mng, GAME_STATES.INIT);
 
-        SCManager.Instance.SetCurrent(this);
+        //SCManager.Instance.SetCurrent(this);
     }
     public void ChangeState(GAME_STATES trans)
     {
@@ -235,18 +238,21 @@ public partial class BattleManager_V2 : SceneControllerBase
                 {
                     popup.AddClosedCallbackDelegate(EnterStoryDialogueCloseCallback);
                     popup.ShowPopup(story_data.entrance_dialogue);
-                    
+                    SCManager.Instance.SetCurrent(this);
+
                 });
                 ChangeState(GAME_STATES.ENTER_STORY_DIALOGUE);
             }
             else
             {
                 ChangeState(GAME_STATES.SPAWN);
+                SCManager.Instance.SetCurrent(this);
             }
         }
         else
         {
             ChangeState(GAME_STATES.SPAWN);
+            SCManager.Instance.SetCurrent(this);
         }
     }
     public virtual void GameStateReadyExit() { }

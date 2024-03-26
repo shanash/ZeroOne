@@ -1,7 +1,5 @@
 using Cysharp.Text;
-using FluffyDuck.Util;
-using System.Collections;
-using System.Collections.Generic;
+using Febucci.UI;
 using TMPro;
 using UnityEngine;
 
@@ -17,20 +15,31 @@ public class Damage_Node_V3 : EffectBase
     [SerializeField, Tooltip("Animator")]
     Animator Anim;
 
+    [SerializeField, Tooltip("Type Writer")]
+    TypewriterByCharacter Writer;
+
     BATTLE_SEND_DATA? Send_Data;
-    [SerializeField, Tooltip("Damage Type")]
+    double Total_Damage;
     DAMAGE_TYPE Damage_Type = DAMAGE_TYPE.NORMAL;
 
     public override void StartParticle(float duration, bool loop = false)
     {
-        if (Send_Data == null)
+        //if (Send_Data == null)
+        //{
+        //    UnusedEffect();
+        //    return;
+        //}
+        if (Send_Data != null)
         {
-            UnusedEffect();
-            return;
+            bool is_physics = Send_Data.Value.Onetime.GetOnetimeEffectType() == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
+            double damage = is_physics ? Send_Data.Value.Physics_Attack_Point : Send_Data.Value.Magic_Attack_Point;
+            StartMove(damage, Damage_Type);
         }
-        bool is_physics = Send_Data.Value.Onetime.GetOnetimeEffectType() == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
-        double damage = is_physics ? Send_Data.Value.Physics_Attack_Point : Send_Data.Value.Magic_Attack_Point;
-        StartMove(damage, Damage_Type);
+        else
+        {
+            StartMove(Total_Damage, Damage_Type);
+            
+        }
 
         base.StartParticle(duration, loop);
     }
@@ -54,6 +63,11 @@ public class Damage_Node_V3 : EffectBase
         Damage_Orange_Text.text = sb.ToString();
         Damage_White_Text.text = sb.ToString();
 
+        if (Writer != null)
+        {
+            Writer.ShowText(sb.ToString());
+        }
+
         StartAnimation(dmg_type);
     }
 
@@ -63,7 +77,17 @@ public class Damage_Node_V3 : EffectBase
         {
             return;
         }
-        Send_Data = (BATTLE_SEND_DATA)data[0];
+        var obj = data[0];
+        if (obj is BATTLE_SEND_DATA)
+        {
+            Send_Data = (BATTLE_SEND_DATA)obj;
+        }
+        else if (obj is Total_Damage_Data)
+        {
+            Total_Damage_Data total = (Total_Damage_Data)obj;
+            Total_Damage = total.GetTotalDamage();
+        }
+        
         Damage_Type = (DAMAGE_TYPE)data[1];
 
         var target_position = (Vector3)data[2];
@@ -107,6 +131,7 @@ public class Damage_Node_V3 : EffectBase
     {
         Damage_Orange_Text.text = string.Empty;
         Damage_White_Text.text = string.Empty;
-
+        Total_Damage = 0;
+        Send_Data = null;
     }
 }
