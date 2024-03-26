@@ -1,10 +1,9 @@
 using FluffyDuck.Util;
-using Spine.Unity.Examples;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class UnitRenderTexture : SkeletonRenderTexture
+public class UnitRenderTexture : ZeroOne.SkeletonRenderTexture
 {
     protected MaterialPropertyBlock Property_Block;
 
