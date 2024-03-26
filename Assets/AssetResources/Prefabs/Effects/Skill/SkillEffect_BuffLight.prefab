@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5873036471000563652}
   - component: {fileID: 8343407972314965651}
   - component: {fileID: 3250344380217317446}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4898,7 +4898,7 @@ GameObject:
   - component: {fileID: 8748706480374359577}
   - component: {fileID: 7218849522438160867}
   - component: {fileID: 792818286812244127}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9729,7 +9729,7 @@ GameObject:
   - component: {fileID: 2394333300683101707}
   - component: {fileID: 7690771699127850837}
   - component: {fileID: 1578304116275176706}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14557,7 +14557,7 @@ GameObject:
   - component: {fileID: 7593791153843781072}
   - component: {fileID: 4431027856372274148}
   - component: {fileID: 2699886172657645416}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19446,7 +19446,7 @@ GameObject:
   - component: {fileID: -1576799258618298527}
   - component: {fileID: 6579781365392104333}
   - component: {fileID: -5506116537437273751}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_BuffLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19516,7 +19516,7 @@ SortingGroup:
   m_GameObject: {fileID: 3498393414019595301}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &-5506116537437273751
@@ -19535,6 +19535,9 @@ MonoBehaviour:
   Effect_Type: 2
   Effect_Duration: 0
   Is_Loop: 0
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 1
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 3
@@ -19545,6 +19548,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 20
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0

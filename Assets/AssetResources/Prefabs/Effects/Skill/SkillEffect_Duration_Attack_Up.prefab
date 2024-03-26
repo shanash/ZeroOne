@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6115874131504177870}
   - component: {fileID: 4199964626475194770}
   - component: {fileID: 7290998250776580862}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4842,7 +4842,7 @@ GameObject:
   - component: {fileID: 4964598784278510148}
   - component: {fileID: 4306718935843901210}
   - component: {fileID: 3747433600831881311}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9679,7 +9679,7 @@ GameObject:
   - component: {fileID: 99382031073438880}
   - component: {fileID: 1664412662011965387}
   - component: {fileID: 8003241899102309940}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14623,7 +14623,7 @@ GameObject:
   - component: {fileID: 7275822330922839769}
   - component: {fileID: 2269083085872939753}
   - component: {fileID: 4672609224328670193}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19462,7 +19462,7 @@ GameObject:
   - component: {fileID: 6667898919201072417}
   - component: {fileID: 3792618060986039428}
   - component: {fileID: 3092543319610624733}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Duration_Attack_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19539,6 +19539,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 0
   Is_Loop: 1
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -19549,6 +19552,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0

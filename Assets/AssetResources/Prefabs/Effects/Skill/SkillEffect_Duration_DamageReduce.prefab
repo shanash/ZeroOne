@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 326228837614658722}
   - component: {fileID: 7125685000321660793}
   - component: {fileID: -5878226447415428334}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Duration_DamageReduce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ SortingGroup:
   m_GameObject: {fileID: 364876171350765119}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &-5878226447415428334
@@ -90,6 +90,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 0
   Is_Loop: 1
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -100,6 +103,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -114,7 +118,7 @@ GameObject:
   - component: {fileID: 6113031215319448469}
   - component: {fileID: 2246963428833611515}
   - component: {fileID: 2019867181626155960}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4948,7 +4952,7 @@ GameObject:
   - component: {fileID: 3918740177721324209}
   - component: {fileID: 3713549086706746685}
   - component: {fileID: 4517020495307405227}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9870,7 +9874,7 @@ GameObject:
   - component: {fileID: 4854312880301119411}
   - component: {fileID: 4557946548700678917}
   - component: {fileID: 47893038417209311}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: hexa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14765,7 +14769,7 @@ GameObject:
   - component: {fileID: 8969650567149978339}
   - component: {fileID: 4250871445354601046}
   - component: {fileID: 2209353114159118303}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19660,7 +19664,7 @@ GameObject:
   - component: {fileID: 9181730782896715369}
   - component: {fileID: 6153020879986043210}
   - component: {fileID: 8695934255720102883}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24497,7 +24501,7 @@ GameObject:
   - component: {fileID: 1211482150857715138}
   - component: {fileID: 2294686683991068418}
   - component: {fileID: 1062608262512279357}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: hexa (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29392,7 +29396,7 @@ GameObject:
   - component: {fileID: 2260959285899465660}
   - component: {fileID: 149521386851076723}
   - component: {fileID: 2791471861161205446}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}

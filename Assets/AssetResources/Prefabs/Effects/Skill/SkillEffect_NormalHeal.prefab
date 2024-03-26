@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3941267569617201997}
   - component: {fileID: 1180177442201227883}
   - component: {fileID: 6471560109363664726}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: cross
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4915,7 +4915,7 @@ GameObject:
   - component: {fileID: 7726781172921047348}
   - component: {fileID: 6361668364583135039}
   - component: {fileID: 4183082978964901506}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9812,7 +9812,7 @@ GameObject:
   - component: {fileID: 3556756999757822104}
   - component: {fileID: 4919379282458016849}
   - component: {fileID: 330340307504622854}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_NormalHeal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9870,7 +9870,7 @@ SortingGroup:
   m_GameObject: {fileID: 3856926646240328607}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &330340307504622854
@@ -9889,6 +9889,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 1
   Is_Loop: 0
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -9899,6 +9902,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -9913,7 +9917,7 @@ GameObject:
   - component: {fileID: 7527878201172522745}
   - component: {fileID: 6416517330856290624}
   - component: {fileID: 264071742213876203}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14799,7 +14803,7 @@ GameObject:
   - component: {fileID: 95582083232649294}
   - component: {fileID: 4502488721134542071}
   - component: {fileID: 7041431502067628029}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19703,7 +19707,7 @@ GameObject:
   - component: {fileID: 3486898940819220236}
   - component: {fileID: 779326374678882210}
   - component: {fileID: 4737572887613304076}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24608,7 +24612,7 @@ GameObject:
   - component: {fileID: 182886205020320035}
   - component: {fileID: 877285518208412661}
   - component: {fileID: 1215611185311554559}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}

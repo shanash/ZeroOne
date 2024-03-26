@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2998384877514245258}
   - component: {fileID: 7767998766572257645}
   - component: {fileID: 8311907978390554929}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: silence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4899,7 +4899,7 @@ GameObject:
   - component: {fileID: 520783409038841767}
   - component: {fileID: 9087202348727561301}
   - component: {fileID: 1951371243542243943}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Duration_Silence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4957,7 +4957,7 @@ SortingGroup:
   m_GameObject: {fileID: 7419901891855153367}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &1951371243542243943
@@ -4976,6 +4976,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 0
   Is_Loop: 1
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -4986,6 +4989,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 1
   Hide_Transforms: []
   Hide_After_Delay_Time: 0

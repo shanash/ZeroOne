@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6366003926505437015}
   - component: {fileID: 4588264932515834246}
   - component: {fileID: 1439740549209324815}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Normal_Melee_Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ SortingGroup:
   m_GameObject: {fileID: 687440474172790967}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &1439740549209324815
@@ -90,6 +90,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 1
   Is_Loop: 0
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 2
   Throwing_Type: 0
@@ -100,6 +103,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
@@ -114,7 +118,7 @@ GameObject:
   - component: {fileID: 334111644864292702}
   - component: {fileID: 1460703221646088892}
   - component: {fileID: 6107547805414837327}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: minifire (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5013,7 +5017,7 @@ GameObject:
   - component: {fileID: 3529302128165623485}
   - component: {fileID: 5445312778427145913}
   - component: {fileID: 9032393635561279823}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: explosion (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9899,7 +9903,7 @@ GameObject:
   - component: {fileID: 4317554750663971729}
   - component: {fileID: 7064284872790583276}
   - component: {fileID: 79033776687890340}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: air
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14785,7 +14789,7 @@ GameObject:
   - component: {fileID: 6137435604707202473}
   - component: {fileID: 7903365088699825711}
   - component: {fileID: 1430370745848195154}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19671,7 +19675,7 @@ GameObject:
   - component: {fileID: 6756608406375960463}
   - component: {fileID: 2151905589196916684}
   - component: {fileID: 1523686871717664127}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24593,7 +24597,7 @@ GameObject:
   - component: {fileID: 8702974426004128051}
   - component: {fileID: 835858774827976837}
   - component: {fileID: 5614953003072852502}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29480,7 +29484,7 @@ GameObject:
   - component: {fileID: 2740375340828815048}
   - component: {fileID: 4441632612838201336}
   - component: {fileID: 521258494516850391}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34384,7 +34388,7 @@ GameObject:
   - component: {fileID: 4307456229099952999}
   - component: {fileID: 5239541113792923195}
   - component: {fileID: 8876527009106554537}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: minifire (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39288,7 +39292,7 @@ GameObject:
   - component: {fileID: 9138585633099258151}
   - component: {fileID: 5760569247813189811}
   - component: {fileID: 3418878652846927725}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44124,7 +44128,7 @@ GameObject:
   - component: {fileID: 6950600525601287422}
   - component: {fileID: 5927957779588132430}
   - component: {fileID: 1481979227322990193}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7746796475119170052}
   - component: {fileID: 1640449372284500166}
   - component: {fileID: 4741693445832512254}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: empty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4842,7 +4842,7 @@ GameObject:
   - component: {fileID: 281486544252050500}
   - component: {fileID: 4932151472604648925}
   - component: {fileID: 3817528124484972413}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9679,7 +9679,7 @@ GameObject:
   - component: {fileID: 878464983417941827}
   - component: {fileID: 2514069809658179046}
   - component: {fileID: 8284350520777265410}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: lightparticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14516,7 +14516,7 @@ GameObject:
   - component: {fileID: 1804898530698564825}
   - component: {fileID: 4378927537926376457}
   - component: {fileID: 5799846590422132788}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19462,7 +19462,7 @@ GameObject:
   - component: {fileID: 2833233979825500565}
   - component: {fileID: 234167624077110237}
   - component: {fileID: -3471486647685295989}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Duration_AttackDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19507,7 +19507,7 @@ SortingGroup:
   m_GameObject: {fileID: 5124684270468826828}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &234167624077110237
@@ -19539,6 +19539,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 0
   Is_Loop: 1
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -19549,6 +19552,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0

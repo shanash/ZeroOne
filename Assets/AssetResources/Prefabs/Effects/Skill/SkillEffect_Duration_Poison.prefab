@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2354617250290998952}
   - component: {fileID: 1426835035960033475}
   - component: {fileID: 369933754382972312}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: poison
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5021,7 +5021,7 @@ GameObject:
   - component: {fileID: 703702013901714102}
   - component: {fileID: 6965450852999343215}
   - component: {fileID: 6372594626931514294}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: poisondust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9925,7 +9925,7 @@ GameObject:
   - component: {fileID: 5780939675593959723}
   - component: {fileID: 3226065821274131129}
   - component: {fileID: 2529011798587214765}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: poisonparticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14813,7 +14813,7 @@ GameObject:
   - component: {fileID: 1488289576494144632}
   - component: {fileID: 8939978441344537471}
   - component: {fileID: 7380252424658145445}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SkillEffect_Duration_Poison
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14871,7 +14871,7 @@ SortingGroup:
   m_GameObject: {fileID: 7427605272974385742}
   m_Enabled: 1
   m_SortingLayerID: 684861647
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &7380252424658145445
@@ -14890,6 +14890,9 @@ MonoBehaviour:
   Effect_Type: 3
   Effect_Duration: 0
   Is_Loop: 1
+  Delay_Time: 0
+  Change_Sorting_Layer_Delay_Time: 0
+  Change_Sort_Type: 0
   Projectile_Start_Pos_Type: 0
   Projectile_Reach_Pos_Type: 3
   Throwing_Type: 0
@@ -14900,6 +14903,7 @@ MonoBehaviour:
   Parabola_Height: 0
   Mover: {fileID: 0}
   Projectile_Velocity: 0
+  Projectile_Duration: 0
   Use_Hide_Transforms: 0
   Hide_Transforms: []
   Hide_After_Delay_Time: 0
