@@ -47,6 +47,9 @@ public class UnitRenderTexture : ZeroOne.SkeletonRenderTexture
             }
         }
 
+        // 레이어를 유닛으로 고정합니다
+        quad.layer = 12;
+
         this.enabled = false;
     }
 
