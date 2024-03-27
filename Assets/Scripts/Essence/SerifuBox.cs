@@ -40,6 +40,14 @@ public class SerifuBox : MonoBehaviour
         CanvasGroup.alpha = 0.0f;
     }
 
+    private void OnDestroy()
+    {
+        if (Head_Texture != null)
+        {
+            Head_Texture.Release();
+        }
+    }
+
     public void OnReceiveSpineMessage(string message, float duration, bool show_chara_head)
     {
         Head_UI.SetActive(show_chara_head);

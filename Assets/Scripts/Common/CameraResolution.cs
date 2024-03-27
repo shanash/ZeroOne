@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraResolution : MonoBehaviour
@@ -10,28 +8,25 @@ public class CameraResolution : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetResolution();
+        SetResolution(GameDefine.RESOLUTION_SCREEN_WIDTH, GameDefine.RESOLUTION_SCREEN_HEIGHT);
     }
-    void SetResolution()
-    {
-        int setWidth = GameDefine.RESOLUTION_SCREEN_WIDTH; // 사용자 설정 너비
-        int setHeight = GameDefine.RESOLUTION_SCREEN_HEIGHT; // 사용자 설정 높이
 
+    public void SetResolution(int width, int height)
+    {
         int deviceWidth = Screen.width; // 기기 너비 저장
         int deviceHeight = Screen.height; // 기기 높이 저장
 
-        Screen.SetResolution(setWidth, (int)(((float)deviceHeight / deviceWidth) * setWidth), true); // SetResolution 함수 제대로 사용하기
+        Screen.SetResolution(width, (int)(((float)deviceHeight / deviceWidth) * width), true); // SetResolution 함수 제대로 사용하기
 
-        if ((float)setWidth / setHeight < (float)deviceWidth / deviceHeight) // 기기의 해상도 비가 더 큰 경우
+        if ((float)width / height < (float)deviceWidth / deviceHeight) // 기기의 해상도 비가 더 큰 경우
         {
-            float newWidth = ((float)setWidth / setHeight) / ((float)deviceWidth / deviceHeight); // 새로운 너비
+            float newWidth = ((float)width / height) / ((float)deviceWidth / deviceHeight); // 새로운 너비
             Cam.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f); // 새로운 Rect 적용
         }
         else // 게임의 해상도 비가 더 큰 경우
         {
-            float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
+            float newHeight = ((float)deviceWidth / deviceHeight) / ((float)width / height); // 새로운 높이
             Cam.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
         }
     }
-    
 }
