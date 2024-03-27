@@ -16,8 +16,6 @@ public class SceneLoad : SceneControllerBase
     /// </summary>
     const float SHOW_LOADINGPOPUP_MIN_DURATION = 8.0f;
 
-    AddressableContentDownloader _Downloader = new AddressableContentDownloader();
-
     [SerializeField]
     TMP_Text _UI_Text = null;
     [SerializeField]
@@ -26,30 +24,6 @@ public class SceneLoad : SceneControllerBase
     public static string Start_Scene_Name;
     SceneLoadingPopup Loading_Popup;    //  Assets/AssetResources/Prefabs/Popup/Modal/Loading/SceneLoadingPopup
 
-    void SetText(string text)
-    {
-        Debug.Log(text);
-        if (_UI_Text != null)
-        {
-            _UI_Text.text = text;
-        }
-    }
-
-    void SetProgress(float progress)
-    {
-        if (_UI_Progress != null)
-        {
-            _UI_Progress.value = progress;
-        }
-    }
-
-    void OnProgressDownload(string group_key, float progress, double size)
-    {
-        string log = $"{group_key} : {progress * size:F2} / {size:F2}";
-        Debug.Log(log);
-        SetText(log);
-        SetProgress(progress);
-    }
 
     async void Start()
     {
@@ -69,24 +43,6 @@ public class SceneLoad : SceneControllerBase
             popup.ShowPopup();
             Loading_Popup = (SceneLoadingPopup)popup;
         });
-
-        SetText("다운로더 초기화중입니다.");
-        if (!await _Downloader.Init())
-        {
-            SetText("초기화 실패");
-            return;
-        }
-
-        SetText("버전 확인중입니다.");
-        if (_Downloader.HasNewDataVersion())
-        {
-            _UI_Progress.gameObject.SetActive(true);
-            SetText("다운로드를 시작합니다.");
-            _Downloader.AddDownloadProgressHandler(OnProgressDownload);
-            await _Downloader.Download();
-            await Task.Delay(500); // 짧은 지연 후 로그 추가
-        }
-        SetText("시작 준비 완료");
 
         float progress_min_value = 0f;
 
