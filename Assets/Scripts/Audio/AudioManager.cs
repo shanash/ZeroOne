@@ -189,6 +189,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     //readonly string FX_GROUP_NAME = "FX";
     readonly string VOICE_GROUP_NAME = "VOICE";
 
+
     bool _BGM_Enable = true;
     bool _FX_Enable = true;
     bool _Voice_Enable = true;
