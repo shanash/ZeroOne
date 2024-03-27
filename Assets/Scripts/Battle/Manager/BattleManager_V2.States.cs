@@ -592,6 +592,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         Game_Over_Delta = 1f;
 
         SetBlur(true);
+        Camera.main.RemoveLayerToCullingMask(12); // Unit
+        Camera.main.RemoveLayerToCullingMask(13); // UnitEffect
         var tp = Camera.main.GetComponent<TexturePhotographer>();
         tp.Capture((tex) =>
         {
@@ -599,6 +601,8 @@ public partial class BattleManager_V2 : SceneControllerBase
             {
                 popup.ShowPopup(this, Dungeon_Data, tex);
             });
+            Camera.main.AddLayerToCullingMask(12); // Unit
+            Camera.main.AddLayerToCullingMask(13); // UnitEffect
 
             SetBlur(false);
         });

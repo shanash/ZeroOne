@@ -50,6 +50,16 @@ namespace FluffyDuck.Util
                 viewport.height * screenHeight);
         }
 
+        public static void AddLayerToCullingMask(this Camera cam, int layer)
+        {
+            cam.cullingMask |= 1 << layer;
+        }
+
+        public static void RemoveLayerToCullingMask(this Camera cam, int layer)
+        {
+            cam.cullingMask &= ~(1 << layer);
+        }
+
         public static Rect GetScreenRect(RectTransform rectTransform, Vector2 fixed_resolution = default(Vector2))
         {
             Canvas canvas = rectTransform.GetComponentInParent<Canvas>();
