@@ -10,6 +10,7 @@ using UnityEngine;
 /// 0~9 까지 이미지 폰트 사용. 사용방법. 각 숫자 텍스트를 <sprite=0>방식으로 적용 필요.<br/>
 /// 크리티컬 <sprite=10><br/>
 /// Miss(회피) <sprite=11><br/>
+/// 사용 안함. 삭제 예정
 /// </summary>
 public class Damage_Normal_Effect_Text : EffectBase
 {

@@ -192,9 +192,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
     public int Deck_Order { get; protected set; }
 
-    protected object Effect_Queue_Lock = new object();
-    protected float Effect_Queue_Interval;
-    protected List<Effect_Queue_Data> Effect_Queue_Data_List = new List<Effect_Queue_Data>();
+    //protected object Effect_Queue_Lock = new object();
+    //protected float Effect_Queue_Interval;
+    //protected List<Effect_Queue_Data> Effect_Queue_Data_List = new List<Effect_Queue_Data>();
 
     /// <summary>
     /// 스킬 슬롯에서 필요한 이벤트를 받기 위해 델리게이트 등록
@@ -1574,30 +1574,23 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="total"></param>
     void AddTotalDamageText(Total_Damage_Data total)
     {
-        DAMAGE_TYPE dmg_type = DAMAGE_TYPE.TOTAL;
         Vector3 target_pos = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position;
         bool is_physics = total.Onetime_Effect_Type == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
         string prefab_path = string.Empty;
         if (is_physics)
         {
-            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node";
+            prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Physics_Total_Damage_Text_Node";
         }
         else
         {
-            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node";
+            prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Magic_Total_Damage_Text_Node";
         }
 
-        var d = new Effect_Queue_Data();
-        d.Effect_path = prefab_path;
-        d.Target_Position = target_pos;
-        d.Data = total;
-        d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
-        d.Parent_Transform = UI_Mng.GetDamageContainer();
-        d.Damage_Type = dmg_type;
-        SpawnQueueEffect(d);
+        var total_text = Battle_Mng.GetDamageTextFactory().Create(prefab_path);
+        total_text.ShowText(total, target_pos);
     }
 
-
+    
     /// <summary>
     /// 데미지 폰트 생성
     /// </summary>
@@ -1621,7 +1614,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         if (is_physics_dmg)
         {
-            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
+            //prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
+            prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Physics_Damage_Text_Node";
             if (send_data.Is_Weak)
             {
                 if (send_data.Is_Physics_Critical)
@@ -1643,7 +1637,8 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
+            //prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
+            prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Magic_Damage_Text_Node";
             if (send_data.Is_Weak)
             {
                 if (send_data.Is_Magic_Critical)
@@ -1664,16 +1659,19 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             }
         }
 
-        var d = new Effect_Queue_Data();
-        d.Effect_path = prefab_path;
-        d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
-        d.Data = send_data;
-        d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
-        d.Parent_Transform = UI_Mng.GetDamageContainer();
-        d.Damage_Type = dmg_type;
-        d.Need_Move = true;
-        d.Target_Team_Type = Team_Type;
-        SpawnQueueEffect(d);
+        //var d = new Effect_Queue_Data();
+        //d.Effect_path = prefab_path;
+        //d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
+        //d.Data = send_data;
+        //d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
+        //d.Parent_Transform = UI_Mng.GetDamageContainer();
+        //d.Damage_Type = dmg_type;
+        //d.Need_Move = true;
+        //d.Target_Team_Type = Team_Type;
+        //SpawnQueueEffect(d);
+
+        var dmg_text = Battle_Mng.GetDamageTextFactory().Create(prefab_path);
+        dmg_text.ShowText(send_data, dmg_type, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, Team_Type == TEAM_TYPE.LEFT ? DAMAGE_DIRECTION.LEFT : DAMAGE_DIRECTION.RIGHT);
 
     }
 
@@ -1698,7 +1696,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life = Max_Life;
         }
 
-        AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos.position, recovery_hp, 1f, null);
+        //AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos.position, recovery_hp, 1f, null);
+        var recovery_text = Battle_Mng.GetDamageTextFactory().Create("Assets/AssetResources/Prefabs/Damage_Text/Recovery_Text_Node");
+        //recovery_text.ShowText(recovery_hp, DAMAGE_TYPE.NORMAL, Life_Bar_Pos.position);
+        recovery_text.ShowText(recovery_hp, DAMAGE_TYPE.NORMAL, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position);
         UpdateLifeBar();
     }
 
@@ -1735,42 +1736,42 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
     }
 
-    public void AddSpawnEffectText(string path, Vector3 target_pos, object data, float duration, Transform parent)
-    {
-        lock (Effect_Queue_Lock)
-        {
-            var d = new Effect_Queue_Data();
-            d.Effect_path = path;
-            d.Target_Position = target_pos;
-            d.Data = data;
-            d.Duration = duration + ((Battle_Speed_Multiple - 1) * 1f);
-            d.Parent_Transform = parent;
-            Effect_Queue_Data_List.Add(d);
-        }
-    }
+    //public void AddSpawnEffectText(string path, Vector3 target_pos, object data, float duration, Transform parent)
+    //{
+    //    lock (Effect_Queue_Lock)
+    //    {
+    //        var d = new Effect_Queue_Data();
+    //        d.Effect_path = path;
+    //        d.Target_Position = target_pos;
+    //        d.Data = data;
+    //        d.Duration = duration + ((Battle_Speed_Multiple - 1) * 1f);
+    //        d.Parent_Transform = parent;
+    //        Effect_Queue_Data_List.Add(d);
+    //    }
+    //}
 
-    public override void OnUpdate(float dt)
-    {
-        base.OnUpdate(dt);
+    //public override void OnUpdate(float dt)
+    //{
+    //    base.OnUpdate(dt);
 
-        lock (Effect_Queue_Lock)
-        {
-            if (Effect_Queue_Data_List.Count > 0)
-            {
-                Effect_Queue_Interval -= dt;
-                if (Effect_Queue_Interval < 0f)
-                {
-                    var edata = Effect_Queue_Data_List[0];
-                    Effect_Queue_Data_List.RemoveAt(0);
+    //    lock (Effect_Queue_Lock)
+    //    {
+    //        if (Effect_Queue_Data_List.Count > 0)
+    //        {
+    //            Effect_Queue_Interval -= dt;
+    //            if (Effect_Queue_Interval < 0f)
+    //            {
+    //                var edata = Effect_Queue_Data_List[0];
+    //                Effect_Queue_Data_List.RemoveAt(0);
 
-                    SpawnQueueEffect(edata);
+    //                SpawnQueueEffect(edata);
 
-                    Effect_Queue_Interval = 0.09f / Battle_Speed_Multiple;
-                }
+    //                Effect_Queue_Interval = 0.09f / Battle_Speed_Multiple;
+    //            }
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// 이펙트 소환

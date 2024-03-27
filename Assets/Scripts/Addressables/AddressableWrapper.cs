@@ -22,7 +22,7 @@ namespace FluffyDuck.Addressable
                 string path;
                 if (isTest)
                 {
-                    path = "http://cnd-test-01.fluffyduck.co.kr/clientdata";
+                    path = "http://10.10.0.20/clientdata";
                 }
                 else
                 {

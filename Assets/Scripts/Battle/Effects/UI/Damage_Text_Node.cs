@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-
+/// <summary>
+/// 사용 안함. 삭제 예정
+/// </summary>
 public class Damage_Text_Node : EffectBase
 {
     [SerializeField, Tooltip("Box")]

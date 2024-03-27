@@ -19,7 +19,6 @@ public enum SKILL_SLOT_EVENT_TYPE
 
 }
 
-
 public class BattleSkillSlot_V2 : UIBase, IUpdateComponent
 {
     [SerializeField, Tooltip("Box")]
@@ -238,6 +237,7 @@ public class BattleSkillSlot_V2 : UIBase, IUpdateComponent
             }
             return;
         }
+
         if (Skill_Ready.gameObject.activeSelf)
         {
             Skill_Ready.gameObject.SetActive(false);
@@ -246,11 +246,22 @@ public class BattleSkillSlot_V2 : UIBase, IUpdateComponent
         {
             Cooltime_Gauge.gameObject.SetActive(true);
         }
+
         float cooltime = (float)skill_group.GetCooltime();
         float remain_time = (float)skill_group.GetRemainCooltime();
         float per = Mathf.Clamp01(remain_time / cooltime);
         Cooltime_Gauge.fillAmount = (float)per;
-        Cooltime_Count.text = remain_time.ToString("N0");
+
+        if (remain_time > cooltime - 1f || (remain_time < 3f))
+        {
+            Cooltime_Count.text = remain_time.ToString("N0");
+        }
+        else
+        {
+            Cooltime_Count.text = string.Empty;
+        }
+
+        
     }
 
     void HideSkillReadyAndCooltime()

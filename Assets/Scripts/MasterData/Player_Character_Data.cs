@@ -139,6 +139,24 @@ public class Player_Character_Data : System.IDisposable
 	public bool first_open_check => _first_open_check;
 	bool _first_open_check;
 
+	///	<summary>
+	///	전투 편성창 선택 보이스
+	///	</summary>
+	public string battle_selcet_voice => _battle_selcet_voice;
+	string _battle_selcet_voice;
+
+	///	<summary>
+	///	사망 보이스
+	///	</summary>
+	public string die_voice => _die_voice;
+	string _die_voice;
+
+	///	<summary>
+	///	승리 보이스
+	///	</summary>
+	public string win_voice => _win_voice;
+	string _win_voice;
+
 	private bool disposed = false;
 
 	public Player_Character_Data(Raw_Player_Character_Data raw_data)
@@ -166,6 +184,9 @@ public class Player_Character_Data : System.IDisposable
 		_script = raw_data.script;
 		_scale = raw_data.scale;
 		_first_open_check = raw_data.first_open_check;
+		_battle_selcet_voice = raw_data.battle_selcet_voice;
+		_die_voice = raw_data.die_voice;
+		_win_voice = raw_data.win_voice;
 	}
 
 	public void Dispose()
@@ -219,6 +240,9 @@ public class Player_Character_Data : System.IDisposable
 		sb.AppendFormat("[script] = <color=yellow>{0}</color>", script).AppendLine();
 		sb.AppendFormat("[scale] = <color=yellow>{0}</color>", scale).AppendLine();
 		sb.AppendFormat("[first_open_check] = <color=yellow>{0}</color>", first_open_check).AppendLine();
+		sb.AppendFormat("[battle_selcet_voice] = <color=yellow>{0}</color>", battle_selcet_voice).AppendLine();
+		sb.AppendFormat("[die_voice] = <color=yellow>{0}</color>", die_voice).AppendLine();
+		sb.AppendFormat("[win_voice] = <color=yellow>{0}</color>", win_voice).AppendLine();
 		return sb.ToString();
 	}
 }

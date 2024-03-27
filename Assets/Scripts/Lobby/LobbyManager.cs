@@ -37,6 +37,11 @@ public class LobbyManager : SceneControllerBase
 
     protected override void Initialize()
     {
+        if (!MasterDataManager.Instance.IsLoaded)
+        {
+            return;
+        }
+
         var audio = AudioManager.Instance;
 
         List<string> audio_clip_list = new List<string>();

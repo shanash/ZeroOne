@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
-
+/// <summary>
+/// 사용 안함. 삭제 예정
+/// </summary>
 public class Trans_Effect_Text : EffectBase
 {
     [SerializeField, Tooltip("Trans Text")]

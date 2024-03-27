@@ -1,3 +1,6 @@
+/// <summary>
+/// 클레어
+/// </summary>
 public class Hero_100005 : HeroBase_V2
 {
 

@@ -12,6 +12,11 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 	public string icon {get; set;}
 	public string action_name {get; set;}
 	public string[] cast_effect_path {get; set;}
+	public double sfx_delay {get; set;}
+	public string skill_sfx_path {get; set;}
+	public string skill_voice_path_1 {get; set;}
+	public string skill_voice_path_2 {get; set;}
+	public string skill_voice_path_3 {get; set;}
 
 	private bool disposed = false;
 
@@ -23,6 +28,10 @@ public class Raw_Npc_Skill_Group : System.IDisposable
 		target_skill_id = 0;
 		icon = string.Empty;
 		action_name = string.Empty;
+		skill_sfx_path = string.Empty;
+		skill_voice_path_1 = string.Empty;
+		skill_voice_path_2 = string.Empty;
+		skill_voice_path_3 = string.Empty;
 	}
 
 	public void Dispose()

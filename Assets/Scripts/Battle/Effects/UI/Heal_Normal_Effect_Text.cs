@@ -3,7 +3,9 @@ using Febucci.UI;
 using System;
 using TMPro;
 using UnityEngine;
-
+/// <summary>
+/// 사용 안함. 삭제 예정
+/// </summary>
 public class Heal_Normal_Effect_Text : EffectBase
 {
     [SerializeField, Tooltip("Heal Text")]

@@ -3,7 +3,9 @@ using Febucci.UI;
 using FluffyDuck.UI;
 using TMPro;
 using UnityEngine;
-
+/// <summary>
+/// 사용 안함. 삭제 예정
+/// </summary>
 public class Damage_Node_V3 : EffectBase
 {
 
@@ -119,24 +121,6 @@ public class Damage_Node_V3 : EffectBase
             Move_Type = (UIEaseBase.MOVE_TYPE)data[3];
             Team_Type = (TEAM_TYPE)data[4];
         }
-
-        //var obj = data[0];
-        //if (obj is BATTLE_SEND_DATA)
-        //{
-        //    Send_Data = (BATTLE_SEND_DATA)obj;
-        //}
-        //else if (obj is Total_Damage_Data)
-        //{
-        //    Total_Damage_Data total = (Total_Damage_Data)obj;
-        //    Total_Damage = total.GetTotalDamage();
-        //}
-        
-        //Damage_Type = (DAMAGE_TYPE)data[1];
-        //var target_position = (Vector3)data[2];
-        //Move_Type = (UIEaseBase.MOVE_TYPE)data[3];
-        //Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, target_position);
-        //GetComponent<RectTransform>().anchoredPosition3D = pos;
-        
     }
 
     void StartAnimation(DAMAGE_TYPE dmg_type)

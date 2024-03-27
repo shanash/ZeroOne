@@ -103,12 +103,19 @@ public partial class BattleManager_V2 : SceneControllerBase
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect");
 
         //  damage text
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node");
-        list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node");
+        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node");
+
+        //  damage text v2
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Recovery_Text_Node");
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Physics_Total_Damage_Text_Node");
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Physics_Damage_Text_Node");
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Magic_Total_Damage_Text_Node");
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Magic_Damage_Text_Node");
 
         //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");

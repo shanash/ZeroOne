@@ -17,6 +17,9 @@ public partial class BattleManager_V2 : SceneControllerBase
     [SerializeField, Tooltip("Skill Slot Manager")]
     protected BattleSkillSlotManager Skill_Slot_Mng;
 
+    [SerializeField, Tooltip("Damage Text Factory")]
+    protected DamageTextFactory Dmg_Factory;
+
     protected List<TeamManager_V2> Used_Team_List = new List<TeamManager_V2>();
 
     protected BattleField Field;
@@ -41,6 +44,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     public BattleField GetBattleField() { return Field; }
 
     public EffectFactory GetEffectFactory() { return Field.GetEffectFactory(); }
+
+    public DamageTextFactory GetDamageTextFactory() { return Dmg_Factory; }
 
     public int GetMaxWave()
     {
@@ -79,6 +84,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
         //  effect speed
         GetEffectFactory().SetEffectSpeedMultiple(Battle_Speed_Multiple);
+        GetDamageTextFactory().SetBattleSpeedMultiple(Battle_Speed_Multiple);
 
     }
 
@@ -166,6 +172,9 @@ public partial class BattleManager_V2 : SceneControllerBase
         HideAllUnitLifeBar();
         //  진행중이던 이펙트 모두 숨기기
         GetEffectFactory().OnPauseAndHide();
+        //  데미지 텍스트 모두 지우기
+        GetDamageTextFactory().ClearAllTexts();
+
 
         ChangeState(GAME_STATES.ULTIMATE_SKILL);
     }

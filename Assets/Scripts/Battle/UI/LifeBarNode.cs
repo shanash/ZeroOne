@@ -147,7 +147,8 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         if (Target_Transform != null)
         {
             Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, Target_Transform.position);
-            This_Rect.anchoredPosition3D = pos;
+            //This_Rect.anchoredPosition3D = pos;
+            This_Rect.anchoredPosition = pos;
         }
     }
 

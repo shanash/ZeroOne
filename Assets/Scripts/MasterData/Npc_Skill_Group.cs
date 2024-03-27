@@ -56,6 +56,39 @@ public class Npc_Skill_Group : System.IDisposable
 	public string[] cast_effect_path => _cast_effect_path;
 	string[] _cast_effect_path;
 
+	///	<summary>
+	///	SFX 재생 전 딜레이
+	///	딜레이 타임 또한 배속에 따라서 처리
+	///	2배속 시, 딜레이/2 =최종딜레이
+	///	3배속 시, 딜레이/3 =최종딜레이
+	///	</summary>
+	public double sfx_delay => _sfx_delay;
+	double _sfx_delay;
+
+	///	<summary>
+	///	Skill SFX
+	///	</summary>
+	public string skill_sfx_path => _skill_sfx_path;
+	string _skill_sfx_path;
+
+	///	<summary>
+	///	목소리 1배속
+	///	</summary>
+	public string skill_voice_path_1 => _skill_voice_path_1;
+	string _skill_voice_path_1;
+
+	///	<summary>
+	///	목소리 2배속
+	///	</summary>
+	public string skill_voice_path_2 => _skill_voice_path_2;
+	string _skill_voice_path_2;
+
+	///	<summary>
+	///	목소리 3배속
+	///	</summary>
+	public string skill_voice_path_3 => _skill_voice_path_3;
+	string _skill_voice_path_3;
+
 	private bool disposed = false;
 
 	public Npc_Skill_Group(Raw_Npc_Skill_Group raw_data)
@@ -69,6 +102,11 @@ public class Npc_Skill_Group : System.IDisposable
 		_action_name = raw_data.action_name;
 		if(raw_data.cast_effect_path != null)
 			_cast_effect_path = raw_data.cast_effect_path.ToArray();
+		_sfx_delay = raw_data.sfx_delay;
+		_skill_sfx_path = raw_data.skill_sfx_path;
+		_skill_voice_path_1 = raw_data.skill_voice_path_1;
+		_skill_voice_path_2 = raw_data.skill_voice_path_2;
+		_skill_voice_path_3 = raw_data.skill_voice_path_3;
 	}
 
 	public void Dispose()
@@ -108,6 +146,11 @@ public class Npc_Skill_Group : System.IDisposable
 			}
 		}
 
+		sb.AppendFormat("[sfx_delay] = <color=yellow>{0}</color>", sfx_delay).AppendLine();
+		sb.AppendFormat("[skill_sfx_path] = <color=yellow>{0}</color>", skill_sfx_path).AppendLine();
+		sb.AppendFormat("[skill_voice_path_1] = <color=yellow>{0}</color>", skill_voice_path_1).AppendLine();
+		sb.AppendFormat("[skill_voice_path_2] = <color=yellow>{0}</color>", skill_voice_path_2).AppendLine();
+		sb.AppendFormat("[skill_voice_path_3] = <color=yellow>{0}</color>", skill_voice_path_3).AppendLine();
 		return sb.ToString();
 	}
 }

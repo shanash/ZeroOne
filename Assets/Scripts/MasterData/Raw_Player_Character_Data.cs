@@ -26,6 +26,9 @@ public class Raw_Player_Character_Data : System.IDisposable
 	public string script {get; set;}
 	public double scale {get; set;}
 	public bool first_open_check {get; set;}
+	public string battle_selcet_voice {get; set;}
+	public string die_voice {get; set;}
+	public string win_voice {get; set;}
 
 	private bool disposed = false;
 
@@ -51,6 +54,9 @@ public class Raw_Player_Character_Data : System.IDisposable
 		Illustration_path = string.Empty;
 		script = string.Empty;
 		first_open_check = false;
+		battle_selcet_voice = string.Empty;
+		die_voice = string.Empty;
+		win_voice = string.Empty;
 	}
 
 	public void Dispose()

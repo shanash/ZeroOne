@@ -158,7 +158,7 @@ public class BattleUIManager_V2 : MonoBehaviour
     {
         var time_span = TimeSpan.FromSeconds(limit_time);
         Timer_Text.text = ZString.Format("{0:D2} : {1:D2}", time_span.Minutes, time_span.Seconds);
-        if (!Is_Alarm && time_span.TotalSeconds < 30)
+        if (!Is_Alarm && time_span.TotalSeconds < 10)
         {
             Is_Alarm = true;
             Timer_Anim.SetTrigger("Alarm");

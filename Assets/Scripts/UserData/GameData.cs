@@ -36,6 +36,7 @@ public class GameData : Singleton<GameData>
             }
             User_Data_Manager_List.Add(mng);
         }
+
         //  item data
         {
             var mng = new UserItemDataManager(USER_DATA_MANAGER_TYPE.USER_ITEM_DATA_MANAGER);
