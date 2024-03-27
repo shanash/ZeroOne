@@ -147,6 +147,7 @@ public abstract partial class ActorBase : MonoBehaviour
 
     public virtual void ActorStateReactUpdate()
     {
+        // 입 움직임을 부드럽게 변경해줍니다
         var te = FindTrack(MOUTH_TRACK);
         if (te != null)
         {
@@ -154,6 +155,8 @@ public abstract partial class ActorBase : MonoBehaviour
             te.Alpha = Mathf.Lerp(Origin_Mouth_Alpha, Dest_Mouth_Alpha, System.Math.Min(1.0f, Elapsed_Time_For_Mouth_Open / AudioManager.VOICE_TERM_SECONDS));
         }
 
+        // TODO: M2를 위해 임시로 넣은 Timeline 객체들 초기화 코드
+        // 초기화 되는 구조를 별도로 구성해주면 좋을 것 같습니다.
         if (Current_Timeline_Id != 0 && Director.state == UnityEngine.Playables.PlayState.Paused)
         {
             GameObject.Find("Square").GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);

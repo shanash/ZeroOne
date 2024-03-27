@@ -196,10 +196,10 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         SpineCharaDefine.TryParseEvent(evt.Data.Name.ToUpper(), out SpineCharaDefine.SPINE_EVENT eEvt);
         switch (eEvt)
         {
-            case SpineCharaDefine.SPINE_EVENT.MOUTH_SHAPE:
+            case SpineCharaDefine.SPINE_EVENT.MOUTH_SHAPE: // 입모양 애니메이션 지정. 이후 입모양이 움직이는 애니메이션으로 이행
                 Current_Mouth_Anim_Name = evt.String.Equals("close") ? string.Empty : evt.String;
                 break;
-            case SpineCharaDefine.SPINE_EVENT.VOICE:
+            case SpineCharaDefine.SPINE_EVENT.VOICE: // 대사 출력 및 재생
                 if (Current_Chat_Motion_Id == -1)
                 {
                     Debug.Assert(false, $"출력할 대사가 없습니다. {Current_Chat_Motion_Id} :: {Current_Serifu_Index}");
@@ -241,7 +241,7 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
                     }
                 }
                 break;
-            case SpineCharaDefine.SPINE_EVENT.SOUND:
+            case SpineCharaDefine.SPINE_EVENT.SOUND: // 사운드만 재생
                 AudioManager.Instance.PlayFX($"Assets/AssetResources/Audio/Voice/Eileen/{evt.String}");
                 break;
         }
@@ -564,7 +564,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
         if (type == SPINE_CHARA_LOCATION_TYPE.LOBBY || type == SPINE_CHARA_LOCATION_TYPE.HERO_INFO)
         {
-            // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다 -_- 나중에 쓸데 없으면 바로 제거해주자
+            // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다
+            // M2 이후에 처리하는게 좋을 것 같습니다.
             var tr = this.transform.Find("Sprite");
             if (tr != null)
             {
@@ -678,6 +679,8 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
 
     bool GetSkeletonComponents()
     {
+        // 손가락 방향을 따라 얼굴이 따라가는 애니메이션을 위한 얼굴 추적 기준 본과
+        // 말풍선을 띄우기 위한 말풍선 본이 현재는 없어서 주석처리했습니다
         //TODO: 나중에 살릴 것
         /*
         try
@@ -924,6 +927,11 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         }
     }
 
+    /// <summary>
+    /// 아무 반응이 없을때 자동으로 재생되는 애니메이션(Bored_Chatmotion)을 재생하기 위한 record..였는데
+    /// 현재는 그런 애니메이션 데이터가 없어서 의미가 없는 상태입니다
+    /// 나중에 아예 안쓰는게 확정되면 정리해주세요
+    /// </summary>
     public record IdleAnimationData
     {
         public string Animation_Idle_Name;
