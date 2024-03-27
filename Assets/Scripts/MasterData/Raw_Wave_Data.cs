@@ -9,6 +9,7 @@ public class Raw_Wave_Data : System.IDisposable
 	public int wave_sequence {get; set;}
 	public int enemy_appearance_count {get; set;}
 	public int[] enemy_appearance_info {get; set;}
+	public int boss_id_info {get; set;}
 	public int[] npc_levels {get; set;}
 	public int[] npc_skill_levels {get; set;}
 	public int[] npc_ultimate_skill_levels {get; set;}
@@ -23,6 +24,7 @@ public class Raw_Wave_Data : System.IDisposable
 		wave_group_id = 0;
 		wave_sequence = 0;
 		enemy_appearance_count = 0;
+		boss_id_info = 0;
 		wave_time = 0;
 	}
 

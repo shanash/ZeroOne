@@ -5,63 +5,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LifeBarNode : MonoBehaviour, IPoolableComponent
+public class LifeBarNode : MonoBehaviour, IPoolableComponent, IUpdateComponent
 {
     [SerializeField, Tooltip("Box")]
-    RectTransform Box;
+    protected RectTransform Box;
 
     [Space()]
     [Header("Slider Version")]
     [SerializeField, Tooltip("Main Life Bar")]
-    Slider Main_Life_Bar;
+    protected Slider Main_Life_Bar;
 
     [SerializeField, Tooltip("Sub Life Bar")]
-    Slider Sub_Life_Bar;
+    protected Slider Sub_Life_Bar;
 
     [SerializeField, Tooltip("Main Life Bar Knob")]
-    Image Main_Life_Bar_Knob;
+    protected Image Main_Life_Bar_Knob;
 
     [Space()]
-    [Header("Image Fillamount Version")]
-    [SerializeField, Tooltip("Main Life Image Bar")]
-    Image Main_Life_Image_Bar;
-
-    [SerializeField, Tooltip("Sub Life Image Bar")]
-    Image Sub_Life_Image_Bar;
-
-    [SerializeField, Tooltip("Main Life Image Bar Knob")]
-    Image Main_Life_Image_Bar_Knob;
-
-
+    [Header("지속성 아이콘")]
     [SerializeField, Tooltip("Duration Icon Container")]
-    RectTransform Duration_Icon_Container;
+    protected RectTransform Duration_Icon_Container;
 
-    RectTransform This_Rect;
+    protected RectTransform This_Rect;
 
-    Transform Target_Transform;
+    protected Transform Target_Transform;
 
     //  image version
-    Coroutine Show_Coroutine;
+    protected Coroutine Show_Coroutine;
 
     //  slider version
-    Coroutine Slider_Flush_Coroutine;
-
-    bool Use_Slider = true;
+    protected Coroutine Slider_Flush_Coroutine;
 
 
-    HeroBase_V2 Hero;
+    protected bool Is_Boss_Gauge;
+
+
+    protected HeroBase_V2 Hero;
     /// <summary>
     /// 지속성 효과 아이콘 리스트
     /// </summary>
-    List<EnemyDurationSkillIconNode> Used_Duration_Skill_Icons = new List<EnemyDurationSkillIconNode>();
+    protected List<EnemyDurationSkillIconNode> Used_Duration_Skill_Icons = new List<EnemyDurationSkillIconNode>();
 
-    RectTransform Canvas_Rect;
-    public void SetCanvasRect(RectTransform canvas_rect)
-    {
-        this.Canvas_Rect = canvas_rect;
-    }
-
-    public void SetHeroBaseV2(HeroBase_V2 hero)
+    public virtual void SetHeroBaseV2(HeroBase_V2 hero)
     {
         this.Hero = hero;
         if (this.Hero.Team_Type == TEAM_TYPE.RIGHT)
@@ -69,9 +54,16 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
             this.Hero.Slot_Events += SkillSlotEventCallback;
         }
         SetTargetTransform(this.Hero.GetHPPositionTransform());
+        Is_Boss_Gauge = false;
+        
     }
 
-    void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
+    public bool IsBossGauge()
+    {
+        return Is_Boss_Gauge;
+    }
+
+    protected void SkillSlotEventCallback(SKILL_SLOT_EVENT_TYPE etype)
     {
         if (etype == SKILL_SLOT_EVENT_TYPE.DURATION_SKILL_ICON_UPDATE)
         {
@@ -82,7 +74,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     /// <summary>
     /// 지속성 효과 아이콘 추가
     /// </summary>
-    void UpdateDurationSkillIcons()
+    protected void UpdateDurationSkillIcons()
     {
         if (Hero == null)
         {
@@ -116,7 +108,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         }
     }
 
-    void ClearDurationSkillIcons()
+    protected void ClearDurationSkillIcons()
     {
         var pool = GameObjectPoolManager.Instance;
         int cnt = Used_Duration_Skill_Icons.Count;
@@ -133,12 +125,9 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         UpdatePosition();
     }
 
-    void Update()
-    {
-        UpdatePosition();
-    }
+    
 
-    void UpdatePosition()
+    protected virtual void UpdatePosition()
     {
         if (Slider_Flush_Coroutine != null)
         {
@@ -147,26 +136,14 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         if (Target_Transform != null)
         {
             Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, Target_Transform.position);
-            //This_Rect.anchoredPosition3D = pos;
-            This_Rect.anchoredPosition = pos;
+            This_Rect.anchoredPosition3D = pos;
         }
     }
 
-    public void SetLifeSliderPercent(float percent, bool show)
+    public virtual void SetLifeSliderPercent(float percent, bool show)
     {
         float p = Mathf.Clamp01(percent);
-        if (Use_Slider)
-        {
-            Main_Life_Bar.value = p;
-        }
-        else
-        {
-            Main_Life_Image_Bar.fillAmount = p;
-            float bar_width = 168;
-            var pos = Main_Life_Image_Bar_Knob.transform.localPosition;
-            pos.x = bar_width * p;
-            Main_Life_Image_Bar_Knob.transform.localPosition = pos;
-        }
+        Main_Life_Bar.value = p;
 
         if (show)
         {
@@ -185,16 +162,9 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     /// <summary>
     /// 숨겨진 상태에서는 코루틴이 안도니깐, 그냥 업데이트
     /// </summary>
-    void HideFlushSubSlider()
+    protected void HideFlushSubSlider()
     {
-        if (Use_Slider)
-        {
-            Sub_Life_Bar.value = Main_Life_Bar.value;
-        }
-        else
-        {
-            Sub_Life_Image_Bar.fillAmount = Main_Life_Image_Bar.fillAmount;
-        }
+        Sub_Life_Bar.value = Main_Life_Bar.value;
    }
 
     public void FlushSubSlider()
@@ -203,52 +173,38 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         {
             StopCoroutine(Slider_Flush_Coroutine);
         }
-        Slider_Flush_Coroutine = StartCoroutine(SubSliderFlush());
+        if (this.isActiveAndEnabled)
+        {
+            Slider_Flush_Coroutine = StartCoroutine(SubSliderFlush());
+        }
+        else
+        {
+            HideFlushSubSlider();
+        }
     }
     /// <summary>
     /// 서브 체력 슬라이더 플러쉬
     /// </summary>
     /// <returns></returns>
-    IEnumerator SubSliderFlush()
+    protected IEnumerator SubSliderFlush()
     {
-        if (Use_Slider)
-        {
-            Main_Life_Bar_Knob.gameObject.SetActive(true);
-            float life_rate = Main_Life_Bar.value;
+        Main_Life_Bar_Knob.gameObject.SetActive(true);
+        float life_rate = Main_Life_Bar.value;
 
-            float time = 0f;
-            const float duration = 1f;
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                Sub_Life_Bar.value = Mathf.Lerp(Sub_Life_Bar.value, life_rate, time / duration);
-                yield return null;
-            }
-            Slider_Flush_Coroutine = null;
-            Main_Life_Bar_Knob.gameObject.SetActive(false);
-        }
-        else
+        float time = 0f;
+        const float duration = 0.5f;
+        while (time < duration)
         {
-            Main_Life_Image_Bar_Knob.gameObject.SetActive(true);
-            float life_rate = Main_Life_Image_Bar.fillAmount;
-
-            float time = 0f;
-            const float duration = 1f;
-            while (time < duration)
-            {
-                time += Time.deltaTime;
-                Sub_Life_Image_Bar.fillAmount = Mathf.Lerp(Sub_Life_Image_Bar.fillAmount, life_rate, time / duration);
-                yield return null;
-            }
-            Slider_Flush_Coroutine = null;
-            Main_Life_Image_Bar_Knob.gameObject.SetActive(false);
+            time += Time.deltaTime;
+            Sub_Life_Bar.value = Mathf.Lerp(Sub_Life_Bar.value, life_rate, time / duration);
+            yield return null;
         }
+        Slider_Flush_Coroutine = null;
+        Main_Life_Bar_Knob.gameObject.SetActive(false);
         
     }
 
-   
-
-    public void ShowLifeBar(float duration)
+    public virtual void ShowLifeBar(float duration)
     {
         if (Show_Coroutine != null)
         {
@@ -264,7 +220,7 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         Show_Coroutine = null;
     }
 
-    public void HideLifeBar()
+    public virtual void HideLifeBar()
     {
         if (Show_Coroutine != null)
         {
@@ -274,30 +230,21 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         Box.gameObject.SetActive(false);
     }
 
-    public void Spawned()
+    public virtual void Spawned()
     {
-        if (Use_Slider)
-        {
-            Main_Life_Bar.value = 1f;
-            Sub_Life_Bar.value = 1f;
-        }
-        else
-        {
-            Main_Life_Image_Bar.fillAmount = 1f;
-            Sub_Life_Image_Bar.fillAmount = 1f;
-            var pos = Main_Life_Image_Bar_Knob.transform.localPosition;
-            pos.x = 168;
-            Main_Life_Image_Bar_Knob.transform.localPosition = pos;
-        }
+        Main_Life_Bar.value = 1f;
+        Sub_Life_Bar.value = 1f;
 
         if (This_Rect == null)
         {
             This_Rect = GetComponent<RectTransform>();
         }
         HideLifeBar();
+
+        CustomUpdateManager.Instance.RegistCustomUpdateComponent(this);
     }
 
-    public void Despawned()
+    public virtual void Despawned()
     {
         ClearDurationSkillIcons();
         Target_Transform = null;
@@ -307,8 +254,12 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
         }
         Slider_Flush_Coroutine = null;
         HideLifeBar();
+
+        CustomUpdateManager.Instance.DeregistCustomUpdateComponent(this);
     }
 
-
-
+    public void OnUpdate(float dt)
+    {
+        UpdatePosition();
+    }
 }

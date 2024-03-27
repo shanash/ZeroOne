@@ -121,6 +121,18 @@ public class Stage_Data : System.IDisposable
 	public string outrance_dialogue => _outrance_dialogue;
 	string _outrance_dialogue;
 
+	///	<summary>
+	///	스테이지 백그라운드 이미지 경로
+	///	</summary>
+	public string background_image_path => _background_image_path;
+	string _background_image_path;
+
+	///	<summary>
+	///	스테이지 BGM 경로
+	///	</summary>
+	public string bgm_path => _bgm_path;
+	string _bgm_path;
+
 	private bool disposed = false;
 
 	public Stage_Data(Raw_Stage_Data raw_data)
@@ -144,6 +156,8 @@ public class Stage_Data : System.IDisposable
 		_reward_id = raw_data.reward_id;
 		_entrance_dialogue = raw_data.entrance_dialogue;
 		_outrance_dialogue = raw_data.outrance_dialogue;
+		_background_image_path = raw_data.background_image_path;
+		_bgm_path = raw_data.bgm_path;
 	}
 
 	public void Dispose()
@@ -184,6 +198,8 @@ public class Stage_Data : System.IDisposable
 		sb.AppendFormat("[reward_id] = <color=yellow>{0}</color>", reward_id).AppendLine();
 		sb.AppendFormat("[entrance_dialogue] = <color=yellow>{0}</color>", entrance_dialogue).AppendLine();
 		sb.AppendFormat("[outrance_dialogue] = <color=yellow>{0}</color>", outrance_dialogue).AppendLine();
+		sb.AppendFormat("[background_image_path] = <color=yellow>{0}</color>", background_image_path).AppendLine();
+		sb.AppendFormat("[bgm_path] = <color=yellow>{0}</color>", bgm_path).AppendLine();
 		return sb.ToString();
 	}
 }

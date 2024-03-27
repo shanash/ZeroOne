@@ -423,6 +423,10 @@ public partial class TeamManager_V2 : IDisposable
             var npc = new BattleNpcData();
             //  npc id, npc lv, stat id, skill lv, ultimate lv
             npc.SetUnitID(wdata.enemy_appearance_info[i], lv_list[i], stat_list[i], skill_lv_list[i], ultimate_skill_lv_list[i]);
+            if (wdata.boss_id_info != 0)
+            {
+                npc.SetEnemyBoss(npc.GetUnitID() == wdata.boss_id_info);
+            }
 
             var obj = pool.GetGameObject(npc.GetPrefabPath(), Unit_Container);
             //  npc 중 pc 캐릭터와 같이 사용하는 캐릭터는 x 스케일을 -로 적용해 줘야함

@@ -23,6 +23,8 @@ public class Raw_Stage_Data : System.IDisposable
 	public int reward_id {get; set;}
 	public string entrance_dialogue {get; set;}
 	public string outrance_dialogue {get; set;}
+	public string background_image_path {get; set;}
+	public string bgm_path {get; set;}
 
 	private bool disposed = false;
 
@@ -47,6 +49,8 @@ public class Raw_Stage_Data : System.IDisposable
 		reward_id = 0;
 		entrance_dialogue = string.Empty;
 		outrance_dialogue = string.Empty;
+		background_image_path = string.Empty;
+		bgm_path = string.Empty;
 	}
 
 	public void Dispose()

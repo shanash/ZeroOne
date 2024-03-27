@@ -39,6 +39,12 @@ public class Wave_Data : System.IDisposable
 	int[] _enemy_appearance_info;
 
 	///	<summary>
+	///	Main 보스 배치 정보
+	///	</summary>
+	public int boss_id_info => _boss_id_info;
+	int _boss_id_info;
+
+	///	<summary>
 	///	NPC 레벨 정보
 	///	</summary>
 	public int[] npc_levels => _npc_levels;
@@ -78,6 +84,7 @@ public class Wave_Data : System.IDisposable
 		_enemy_appearance_count = raw_data.enemy_appearance_count;
 		if(raw_data.enemy_appearance_info != null)
 			_enemy_appearance_info = raw_data.enemy_appearance_info.ToArray();
+		_boss_id_info = raw_data.boss_id_info;
 		if(raw_data.npc_levels != null)
 			_npc_levels = raw_data.npc_levels.ToArray();
 		if(raw_data.npc_skill_levels != null)
@@ -123,6 +130,7 @@ public class Wave_Data : System.IDisposable
 			}
 		}
 
+		sb.AppendFormat("[boss_id_info] = <color=yellow>{0}</color>", boss_id_info).AppendLine();
 		sb.AppendLine("[npc_levels]");
 		if(npc_levels != null)
 		{

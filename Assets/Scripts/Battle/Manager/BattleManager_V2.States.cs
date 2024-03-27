@@ -89,6 +89,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2");
         list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2");
+        list.Add("Assets/AssetResources/Prefabs/UI/LifeBar/Boss_Life_Bar_Node");
 
         list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
         list.Add("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2");
@@ -101,14 +102,6 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  effect
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect");
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/TransText_Effect");
-
-        //  damage text
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node");
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node");
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Physics_Total_Damage_Node");
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node");
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node");
-        //list.Add("Assets/AssetResources/Prefabs/Effects/Common/Magic_Total_Damage_Node");
 
         //  damage text v2
         list.Add("Assets/AssetResources/Prefabs/Damage_Text/Recovery_Text_Node");

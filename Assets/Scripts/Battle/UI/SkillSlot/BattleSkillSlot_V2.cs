@@ -169,7 +169,7 @@ public class BattleSkillSlot_V2 : UIBase, IUpdateComponent
         float life_rate = Main_Life_Bar.value;
 
         float time = 0f;
-        const float duration = 1f;
+        const float duration = 0.5f;
         while (time < duration)
         {
             time += Time.deltaTime;

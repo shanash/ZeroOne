@@ -45,6 +45,9 @@ public class BattleUIManager_V2 : MonoBehaviour
     [SerializeField, Tooltip("Fast Arrow List")]
     List<RectTransform> Fast_Arrow_List;
 
+    [SerializeField, Tooltip("Boss Life Container")]
+    RectTransform Boss_Life_Container;
+
     bool Is_Alarm;
 
     /// <summary>
@@ -64,23 +67,37 @@ public class BattleUIManager_V2 : MonoBehaviour
     }
     public LifeBarNode AddLifeBar(HeroBase_V2 hero)
     {
-        var target = hero.GetHPPositionTransform();
-        string prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2";
-        if (hero.Team_Type == TEAM_TYPE.RIGHT)
-        {
-            prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2";
-        }
-        if (string.IsNullOrEmpty(prefab_name))
-        {
-            return null;
-        }
         var pool = GameObjectPoolManager.Instance;
-        var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
-        var life = obj.GetComponent<LifeBarNode>();
-        life.SetHeroBaseV2(hero);
-        Used_Life_Bar_List.Add(life);
+        if (hero.GetBattleUnitData().IsEnemyBoss())
+        {
+            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/LifeBar/Boss_Life_Bar_Node", Boss_Life_Container);
+            obj.transform.localPosition = Vector2.zero;
+            var life = obj.GetComponent<LifeBarNode>();
+            life.SetHeroBaseV2(hero);
+            Used_Life_Bar_List.Add(life);
+            return life;
+        }
+        else
+        {
+            var target = hero.GetHPPositionTransform();
+            string prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/LeftTeam_LifeBar_V2";
+            if (hero.Team_Type == TEAM_TYPE.RIGHT)
+            {
+                prefab_name = "Assets/AssetResources/Prefabs/UI/LifeBar/RightTeam_LifeBar_V2";
+            }
+            if (string.IsNullOrEmpty(prefab_name))
+            {
+                return null;
+            }
+            
+            var obj = pool.GetGameObject(prefab_name, HP_Bar_Container);
+            var life = obj.GetComponent<LifeBarNode>();
+            life.SetHeroBaseV2(hero);
+            Used_Life_Bar_List.Add(life);
 
-        return life;
+            return life;
+        }
+        
     }
 
     public void UnusedLifeBarNode(LifeBarNode node)

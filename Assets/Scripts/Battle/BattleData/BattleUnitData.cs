@@ -12,6 +12,8 @@ public abstract class BattleUnitData : BattleDataBase
 
     public CHARACTER_TYPE Character_Type { get; protected set; } = CHARACTER_TYPE.NONE;
 
+    protected bool Is_Boss;
+
     /// <summary>
     /// 팀 속성 시너지 데이터
     /// </summary>
@@ -27,6 +29,7 @@ public abstract class BattleUnitData : BattleDataBase
     {
         Character_Type = ctype;
         Add_Approach_Distance = 0f;
+        Is_Boss = false;
     }
 
     public abstract BattleUnitData SetUnitID(params int[] unit_ids);
@@ -143,6 +146,9 @@ public abstract class BattleUnitData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual ATTRIBUTE_TYPE GetAttributeType() {  return ATTRIBUTE_TYPE.NONE; }
+
+    public void SetEnemyBoss(bool boss) { Is_Boss = boss; }
+    public bool IsEnemyBoss() { return Is_Boss; }
 
     /// <summary>
     /// 전투력 포인트
