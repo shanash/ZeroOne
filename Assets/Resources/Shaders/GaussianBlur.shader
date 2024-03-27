@@ -4,9 +4,8 @@ Shader "FluffyDuck/GaussianBlur"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Color ("Color", Color) = (1,1,1,1)
-        _BlurSize ("Blur Size", Float) = 20.0
+        _BlurSize ("Blur Size", Float) = 20.0 // 블러 범위
         _Quality ("Quality", Float) = 1.0 // 0~1까지의 값
-        _Strength ("Strength", Float) = 5.0
     }
 
     SubShader
@@ -93,7 +92,7 @@ Shader "FluffyDuck/GaussianBlur"
                         float2 sampleUV = clamp(uv + offsets, 0.0, 1.0); // [0, 1] 범위 내로 제한
 
                         // 가우시안 가중치 계산
-                        float weight = exp(-0.5 * pow(distance_normalized, 2) * _Strength); // 가우시안 함수를 이용한 가중치
+                        float weight = exp(-0.5 * pow(distance_normalized, 2) * 5); // 가우시안 함수를 이용한 가중치
                         weight_total += weight; // 가중치 총합 업데이트
                         col += _MainTex.Sample(sampler_MainTex, sampleUV) * weight; // 샘플링된 색상에 가중치 적용
                     }
