@@ -23,10 +23,11 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     protected GAME_TYPE Game_Type = GAME_TYPE.NONE;
 
-
     protected BattleDungeonData Dungeon_Data;
-
     protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+    
+    // 배경화면 재질 임시 저장용 변수
+    Material Material_Temp_BG = null;
 
 
     protected Coroutine UI_Hide_Coroutine;
@@ -320,6 +321,22 @@ public partial class BattleManager_V2 : SceneControllerBase
         //{
         //    Used_Team_List[i].Dispose();
         //}
+    }
+
+    public void SetBlur(bool value)
+    {
+        if (value)
+        {
+            var sr = Field.GetBGSpriteRenderer();
+            Material_Temp_BG = sr.material;
+            sr.material = new Material(Shader.Find("FluffyDuck/GaussianBlur"));
+            sr.material.SetTexture("_MainTex", sr.sprite.texture);
+        }
+        else
+        {
+            Field.GetBGSpriteRenderer().material = Material_Temp_BG != null ? Material_Temp_BG : null;
+            Material_Temp_BG = null;
+        }
     }
 
     /// <summary>

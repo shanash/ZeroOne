@@ -31,6 +31,25 @@ namespace FluffyDuck.Util
             }
         }
 
+        /// <summary>
+        /// 카메라가 비추는 실제 화면의 픽셀 Rect
+        /// </summary>
+        /// <param name="cam"></param>
+        /// <returns></returns>
+        public static Rect GetPixelRect(Camera cam)
+        {
+            Rect viewport = cam.rect;
+
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+
+            // Rect의 x, y는 화면의 시작 위치를, width와 height는 크기를 나타냅니다.
+            return new Rect(viewport.x * screenWidth,
+                viewport.y * screenHeight,
+                viewport.width * screenWidth,
+                viewport.height * screenHeight);
+        }
+
         public static Rect GetScreenRect(RectTransform rectTransform, Vector2 fixed_resolution = default(Vector2))
         {
             Canvas canvas = rectTransform.GetComponentInParent<Canvas>();

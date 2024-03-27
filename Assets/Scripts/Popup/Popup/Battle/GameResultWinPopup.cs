@@ -102,24 +102,26 @@ public class GameResultWinPopup : PopupBase
     [SerializeField, Tooltip("Next Stage Btn")]
     UIButtonBase Next_Stage_Btn;
 
-    List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
+    [SerializeField, Tooltip("Background")]
+    RawImage Background_Image = null;
 
+    List<GameResultPlayerCharacterInfo> Used_Player_Character_Info_List = new List<GameResultPlayerCharacterInfo>();
     List<BattleRewardItemCard> Used_Reward_Item_List = new List<BattleRewardItemCard>();
 
     BattleManager_V2 Battle_Mng;
     BattleDungeonData Dungeon;
-
-    PopupBase Tooltip = null;
+    Texture BG_Texture;
 
     protected override bool Initialize(object[] data)
     {
-        if (data.Length != 2)
+        if (data.Length != 3)
         {
             return false;
         }
 
         Battle_Mng = (BattleManager_V2)data[0];
         Dungeon = (BattleDungeonData)data[1];
+        BG_Texture = (Texture)data[2];
 
         SetEnableEscKeyExit(false);
         InitAssets();
@@ -147,6 +149,8 @@ public class GameResultWinPopup : PopupBase
                 asset_list.Add(hero.GetUserHeroData().GetPlayerCharacterData().sd_prefab_path);
             }
         }
+
+        Background_Image.texture = BG_Texture;
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
     }

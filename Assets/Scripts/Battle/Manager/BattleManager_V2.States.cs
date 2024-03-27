@@ -590,11 +590,20 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         UI_Mng.ShowBattleUI(false);
         Game_Over_Delta = 1f;
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+
+        SetBlur(true);
+        var tp = Camera.main.GetComponent<TexturePhotographer>();
+        tp.Capture((tex) =>
         {
-            popup.ShowPopup(this, Dungeon_Data);
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            {
+                popup.ShowPopup(this, Dungeon_Data, tex);
+            });
+
+            SetBlur(false);
         });
     }
+
     public virtual void GameStateGameOverWin() 
     {
         Game_Over_Delta -= Time.deltaTime;
