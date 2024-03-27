@@ -105,11 +105,11 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             {
                 if (_Voice_Enable)
                 {
-                    Audio_MIxer.SetFloat(VOICE_GROUP_NAME, GetCalcVoiceVolume(VoiceVolume)); //  현재 볼륨으로 처리
+                    Audio_MIxer.SetFloat($"{VOICE_GROUP_NAME}_{VOLUME_END}", GetCalcVoiceVolume(VoiceVolume)); //  현재 볼륨으로 처리
                 }
                 else
                 {
-                    Audio_MIxer.SetFloat(VOICE_GROUP_NAME, -80); //  무음처리
+                    Audio_MIxer.SetFloat($"{VOICE_GROUP_NAME}_{VOLUME_END}", -80); //  무음처리
                 }
             }
         }
@@ -171,7 +171,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             _Voice_Volume = value;
             if (Audio_MIxer != null)
             {
-                Audio_MIxer.SetFloat(VOICE_GROUP_NAME, GetCalcVoiceVolume(value));
+                Audio_MIxer.SetFloat($"{VOICE_GROUP_NAME}_{VOLUME_END}", GetCalcVoiceVolume(value));
             }
             GameConfig.Instance.SetGameConfig<float>(GAME_CONFIG_KEY.SOUND_VOICE_VOLUME, _Voice_Volume);
         }
@@ -181,14 +181,31 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             return _Voice_Volume;
         }
     }
+
+    public float FXTimeStretch
+    {
+        get => _FXTimeStretch;
+        set
+        {
+            _FXTimeStretch = value;
+            foreach (var src in _FX_Srcs)
+            {
+                src.pitch = _FXTimeStretch;
+                Audio_MIxer.SetFloat($"{FX_GROUP_NAME}_{PITCH_END}", 1f / _FXTimeStretch);
+            }
+        }
+    }
+    float _FXTimeStretch = 1;
     #endregion
 
     #region Variables
 
-    //readonly string BGM_GROUP_NAME = "BGM";
-    //readonly string FX_GROUP_NAME = "FX";
+    readonly string BGM_GROUP_NAME = "BGM";
+    readonly string FX_GROUP_NAME = "FX";
     readonly string VOICE_GROUP_NAME = "VOICE";
 
+    readonly string VOLUME_END = "Volume";
+    readonly string PITCH_END = "Pitch";
 
     bool _BGM_Enable = true;
     bool _FX_Enable = true;
@@ -214,6 +231,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     Coroutine _Voice_Play_Coroutine = null;
     float[] _Voice_Sample_Data = new float[VOICE_SAMPLE_COUNT];
     AudioMixer Audio_MIxer = null;
+    Dictionary<string, AudioMixerGroup> AudioMixerGroup = new Dictionary<string, AudioMixerGroup>();
     #endregion
 
     #region Methods
@@ -354,11 +372,16 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     /// </summary>
     /// <param name="volume">초기화 볼륨</param>
     /// <returns>만들어진 오디오소스</returns>
-    AudioSource CreateAudioSource(float volume = 1.0f)
+    AudioSource CreateAudioSource(float volume = 1.0f, string audio_mixer_group_name = default)
     {
         AudioSource result = gameObject.AddComponent<AudioSource>();
         result.playOnAwake = false;
         result.volume = volume;
+
+        if (!string.IsNullOrEmpty(audio_mixer_group_name) && AudioMixerGroup.ContainsKey(audio_mixer_group_name))
+        {
+            result.outputAudioMixerGroup = AudioMixerGroup[audio_mixer_group_name];
+        }
 
         return result;
     }
@@ -370,20 +393,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     /// <returns></returns>
     AudioSource CreateVoiceSource(float volume = 1f)
     {
-        AudioSource result = gameObject.AddComponent<AudioSource>();
-        result.playOnAwake = false;
-        result.volume = 1f;
-        float calc_db_volume = GetCalcVoiceVolume(volume);
-
-        //  mixer group set
-        Audio_MIxer = Resources.Load<AudioMixer>("AudioMixer/PRMixer");
-        AudioMixerGroup[] grps = Audio_MIxer.FindMatchingGroups(VOICE_GROUP_NAME);
-        int cnt = grps.Length;
-        if (cnt > 0)
-        {
-            result.outputAudioMixerGroup = grps[0];
-            Audio_MIxer.SetFloat(VOICE_GROUP_NAME, calc_db_volume);
-        }
+        var result = CreateAudioSource(1, VOICE_GROUP_NAME);
+        Audio_MIxer.SetFloat(VOICE_GROUP_NAME, GetCalcVoiceVolume(volume));
         return result;
     }
 
@@ -409,7 +420,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         {
             Debug.Assert(MAX_FX_COUNT > _FX_Srcs.Count, $"FX MAX Count(={MAX_FX_COUNT}) Over!!");
 
-            src = CreateAudioSource(_FX_Volume);
+            src = CreateAudioSource(_FX_Volume, FX_GROUP_NAME);
             _FX_Srcs.Add(src);
         }
 
@@ -891,9 +902,15 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     public void OnInit()
     {
         LoadConfig();
+        Audio_MIxer = Resources.Load<AudioMixer>("AudioMixer/PRMixer");
+        var mixers = Audio_MIxer.FindMatchingGroups(FX_GROUP_NAME);
+        if (mixers.Length > 0)
+        {
+            AudioMixerGroup.Add(VOICE_GROUP_NAME, mixers[0]);
+        }
 
-        _BGM_Src = CreateAudioSource(_BGM_Volume);
-        _Fadeout_Bgm_Src = CreateAudioSource(0);
+        _BGM_Src = CreateAudioSource(_BGM_Volume, BGM_GROUP_NAME);
+        _Fadeout_Bgm_Src = CreateAudioSource(0, BGM_GROUP_NAME);
         _Voice_Src = CreateVoiceSource(VoiceVolume);
     }
 

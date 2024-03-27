@@ -85,7 +85,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  effect speed
         GetEffectFactory().SetEffectSpeedMultiple(Battle_Speed_Multiple);
         GetDamageTextFactory().SetBattleSpeedMultiple(Battle_Speed_Multiple);
-
+        //AudioManager.Instance.FXTimeStretch = speed;
     }
 
     protected void CreateBattleField()
