@@ -42,6 +42,12 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     /// </summary>
     List<EnemyDurationSkillIconNode> Used_Duration_Skill_Icons = new List<EnemyDurationSkillIconNode>();
 
+    RectTransform Canvas_Rect;
+    public void SetCanvasRect(RectTransform canvas_rect)
+    {
+        this.Canvas_Rect = canvas_rect;
+    }
+
     public void SetHeroBaseV2(HeroBase_V2 hero)
     {
         this.Hero = hero;

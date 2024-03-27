@@ -241,7 +241,7 @@ public abstract class BattleSkillGroup : BattleDataBase
     }
 
     /// <summary>
-    /// 배틀 스킬 데이터들을 클론합니다
+    /// 배틀 스킬 데이터들을 복제합니다
     /// </summary>
     /// <param name="clone_obj"></param>
     protected void Clone_BattleSkillDataList(ref BattlePcSkillGroup clone_obj)

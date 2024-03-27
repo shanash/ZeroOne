@@ -12,10 +12,11 @@ namespace Gpm.Ui
     {
         public class DataContext
         {
-            public DataContext(InfiniteScrollData data, int index)
+            public DataContext(InfiniteScrollData data, int index, bool bExpectHero = false)
             {
                 this.index = index;
                 this.data = data;
+                this.haveHero = bExpectHero;
             }
 
             internal InfiniteScrollData data;
@@ -23,6 +24,8 @@ namespace Gpm.Ui
 
             internal float scrollItemSize = 0;
             internal bool updateItemSize = false;
+
+            internal bool haveHero = false;
 
             public float GetItemSize()
             {
@@ -33,6 +36,11 @@ namespace Gpm.Ui
             {
                 scrollItemSize = value;
                 updateItemSize = true;
+            }
+
+            public bool GetExpectHero()
+            {
+                return haveHero;
             }
         }
 

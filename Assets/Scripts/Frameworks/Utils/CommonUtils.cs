@@ -85,24 +85,7 @@ namespace FluffyDuck.Util
             return sb.ToString();
         }
 
-        /// <summary>
-        /// 한글 영문 체크
-        /// </summary>
-        /// <param name="en"></param>
-        /// <param name="kr"></param>
-        /// <returns></returns>
-        public static string GetLanguageString(string en, string kr)
-        {
-            if (Application.systemLanguage == SystemLanguage.Korean)
-            {
-                return kr;
-            }
-            else
-            {
-                return en;
-            }
-        }
-
+      
         /// <summary>
         /// 인터넷이 연결되지 않은 상태인지 체크
         /// </summary>

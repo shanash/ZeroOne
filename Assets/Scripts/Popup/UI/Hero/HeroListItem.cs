@@ -1,3 +1,4 @@
+using FluffyDuck.Util;
 using UnityEngine;
 
 public class HeroListItem : MonoBehaviour
@@ -13,6 +14,7 @@ public class HeroListItem : MonoBehaviour
     CHARACTER_SORT Filter_Type;
 
     public BattlePcData BattlePcData { get; private set; }
+    public HeroData HeroDataInfo { get; private set; }
 
     public void SetUserHeroData(BattlePcData ud, CHARACTER_SORT filter = CHARACTER_SORT.NAME)
     {
@@ -45,9 +47,35 @@ public class HeroListItem : MonoBehaviour
     {
         if (BattlePcData == null)
         {
-            return;
+            // todo : 미보유 캐릭터 임시작업
+            Debug.Log("미보유 캐릭터 선택함.");
+            //return;
         }
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         Click_Hero_Callback?.Invoke(this);
     }
+
+    public void SetHeroData(HeroData ud, CHARACTER_SORT filter = CHARACTER_SORT.NAME)
+    {
+        HeroDataInfo = ud;
+        Filter_Type = filter;
+        UpdateCellItemEx();
+    }
+
+    public void UpdateCellItemEx()
+    {
+        if (HeroDataInfo == null)
+        {
+            Box.gameObject.SetActive(false);
+            return;
+        }
+        if (!Box.gameObject.activeSelf)
+        {
+            Box.gameObject.SetActive(true);
+        }
+
+        Card.SetHeroData(HeroDataInfo, Filter_Type);
+    }
+
+
 }

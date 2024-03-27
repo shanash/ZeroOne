@@ -90,6 +90,23 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
 
         UpdateCardBase();
     }
+    public void SetHeroData(HeroData data, CHARACTER_SORT filter_type)
+    {
+        Data = data.Data;
+        Battle_Data = data.Battle_Data;
+
+        SetLevel(data.GetLevel());
+        // star
+        SetStarGrade(data.GetStarGrade());
+        // role type
+        SetRoleType(Data.role_type);
+        // 
+        SetName(data.GetUnitName());
+
+        SetFilter(data, filter_type);
+
+        UpdateCardBase();
+    }
 
     public void SetHeroDataID(int hero_data_id)
     {
@@ -212,6 +229,77 @@ public class HeroCardBase : MonoBehaviour, IPoolableComponent
                 break;
             case CHARACTER_SORT.BATTLEPOWER:
                 filter = unit_data.GetCombatPoint().ToString("N0");
+                break;
+            default:
+                Debug.Assert(false);
+                break;
+        }
+
+        Filter_Text.text = filter;
+    }
+
+    public void SetFilter(HeroData unit_data, CHARACTER_SORT filter_type)
+    {
+        // Filter
+        if (Filter_Box != null)
+        {
+            Filter_Box.gameObject.SetActive(filter_type != CHARACTER_SORT.NAME);
+        }
+
+        //  attribute color
+        if (Filter_Image != null)
+        {
+            var attr_data = MasterDataManager.Instance.Get_AttributeIconData(unit_data.GetAttributeType());
+            Filter_Image.color = CommonUtils.ToRGBFromHex(attr_data.color);
+        }
+
+        string filter = "EMPTY";
+        switch (filter_type)
+        {
+            case CHARACTER_SORT.NAME:
+                filter = unit_data.GetUnitName();
+                break;
+            case CHARACTER_SORT.LEVEL_CHARACTER:
+                filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.GetLevel());
+                break;
+            case CHARACTER_SORT.STAR:
+                filter = unit_data.GetStarGrade().ToString();
+                break;
+            case CHARACTER_SORT.DESTINY:
+                filter = "0";
+                break;
+            case CHARACTER_SORT.EX_SKILL_LEVEL:
+                {
+                    int level = 0;
+
+                    /*var special_skill = unit_data.Skill_Mng.GetSpecialSkillGroup();
+                    if (special_skill != null)
+                    {
+                        level = special_skill.GetSkillLevel();
+                    }*/
+                    filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), level);
+                }
+                break;
+            case CHARACTER_SORT.ATTACK:
+                //filter = unit_data.GetTotalAttackPoint().ToString("N0");
+                break;
+            case CHARACTER_SORT.DEFEND:
+                //filter = unit_data.GetTotalDefensePoint().ToString("N0");
+                break;
+            case CHARACTER_SORT.RANGE:
+                //filter = unit_data.GetApproachDistance().ToString();
+                break;
+            case CHARACTER_SORT.LIKEABILITY:
+                //filter = ZString.Format(GameDefine.GetLocalizeString("system_level_format"), unit_data.User_Data.GetLoveLevel());
+                break;
+            case CHARACTER_SORT.ATTRIBUTE:
+                {
+                    var attr_data = MasterDataManager.Instance.Get_AttributeIconData(unit_data.GetAttributeType());
+                    filter = GameDefine.GetLocalizeString(attr_data.name_id);
+                }
+                break;
+            case CHARACTER_SORT.BATTLEPOWER:
+                //filter = unit_data.GetCombatPoint().ToString("N0");
                 break;
             default:
                 Debug.Assert(false);

@@ -91,6 +91,22 @@ namespace FluffyDuck.UI
             }
         }
 
+        public virtual void StartMove(MOVE_TYPE mtype, object data, System.Action cb = null)
+        {
+            var found = FindEaseData(mtype);
+            if (found != null)
+            {
+                Move_Type = found.Move_Type;
+                float duration = found.Ease_Duration;
+                if (duration == 0f)
+                {
+                    duration = DEFAULT_DURATION;
+                }
+                SetEasing(found.Ease_Type, 0, duration);
+                StartEasing(cb);
+            }
+        }
+
         protected override void OnFadeUpdate(float weight)
         {
             if (EaseFade == EasingFunction.Ease.NotUse)

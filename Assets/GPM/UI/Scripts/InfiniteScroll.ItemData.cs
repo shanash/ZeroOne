@@ -1,4 +1,4 @@
-﻿namespace Gpm.Ui
+namespace Gpm.Ui
 {
     using System;
     using System.Collections.Generic;
@@ -75,9 +75,9 @@
             });
         }
 
-        protected void AddData(InfiniteScrollData data)
+        protected void AddData(InfiniteScrollData data, bool bExpectHero = false)
         {
-            dataList.Add(new DataContext(data, dataList.Count));
+            dataList.Add(new DataContext(data, dataList.Count, bExpectHero));
         }
 
         protected void InsertData(InfiniteScrollData data, int insertIndex)
@@ -166,5 +166,6 @@
             {
             }
         }
+
     }
 }

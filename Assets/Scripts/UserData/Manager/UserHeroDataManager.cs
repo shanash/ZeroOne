@@ -1,5 +1,6 @@
 using LitJson;
 using System.Collections.Generic;
+using System.Linq;
 
 public class UserHeroDataManager : ManagerBase
 {
@@ -53,6 +54,15 @@ public class UserHeroDataManager : ManagerBase
     public IReadOnlyList<UserHeroData> GetUserHeroDataList()
     {
         return User_Hero_Data_List;
+    }
+
+    /// <summary>
+    /// 사용자 캐릭터아이디 리스트 반환. 
+    /// </summary>
+    /// <param name="list"></param>
+    public void GetUserHeroIDList( ref List<int> list )
+    {
+        list = User_Hero_Data_List.Select(item => item.GetPlayerCharacterID()).ToList();
     }
 
     /// <summary>

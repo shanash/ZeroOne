@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BattleSkillSlotManager : MonoBehaviour
 {
-    List<BattleSkillSlot> Used_Battle_Skill_Slots = new List<BattleSkillSlot>();
+    List<BattleSkillSlot_V2> Used_Battle_Skill_Slots = new List<BattleSkillSlot_V2>();
 
     /// <summary>
     /// 슬롯 생성<br/>
@@ -21,8 +21,8 @@ public class BattleSkillSlotManager : MonoBehaviour
         for (int i = 0; i < cnt; i++)
         {
             var hero = members[i];
-            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot", this.transform);
-            var slot = obj.GetComponent<BattleSkillSlot>();
+            var obj = pool.GetGameObject("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot_V2", this.transform);
+            var slot = obj.GetComponent<BattleSkillSlot_V2>();
             slot.SetHeroBase(hero);
 
             Used_Battle_Skill_Slots.Add(slot);

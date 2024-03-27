@@ -78,14 +78,15 @@ namespace Gpm.Ui
             }
         }
 
-        public void InsertData(InfiniteScrollData data, bool immediately = false)
+
+        public void InsertData(InfiniteScrollData data, bool immediately = false, bool bExpectHero = false)
         {
             if (isInitialize == false)
             {
                 Initialize();
             }
 
-            AddData(data);
+            AddData(data, bExpectHero);
 
             isChangedSize = true;
 
@@ -286,7 +287,7 @@ namespace Gpm.Ui
             float size = 0;
             if (isVertical == true)
             {
-                size = viewport.rect.height;
+                size = viewport.rect.height;    // + 200;
             }
             else
             {
@@ -303,7 +304,7 @@ namespace Gpm.Ui
 
             if (isVertical == true)
             {
-                content.sizeDelta = new Vector2(currentSize.x, size);
+                content.sizeDelta = new Vector2(currentSize.x, size);   //  + 200
             }
             else
             {
@@ -362,9 +363,12 @@ namespace Gpm.Ui
             float itemPivot = GetItemPivot();
             float passingItemSize = GetItemSizeSumToIndex(dataIndex);
 
+            DataContext dc = dataList[dataIndex];
+            var expectSize = dc.haveHero ? 200 : 0;
+
             if (isVertical == true)
             {
-                return itemPivot - passingItemSize;
+                return itemPivot - passingItemSize - expectSize;
             }
             else
             {
@@ -494,7 +498,9 @@ namespace Gpm.Ui
                 int dataLineIndex = layout.GetLineIndex(dataIndex);
                 if (lineIndex != dataLineIndex)
                 {
-                    itemPosition += lineSize + space;
+                    DataContext dc = dataList[dataIndex];
+
+                    itemPosition += lineSize + space;   // + (dc.haveHero ? 200 : 0);
 
                     lineIndex = dataLineIndex;
                     lineSize = layout.GetLineSize(lineIndex);
@@ -644,7 +650,11 @@ namespace Gpm.Ui
             int lineCount = layout.GetLineCount();
             for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
             {
+                DataContext dc = dataList[lineIndex];
+                var expectSize = dc.haveHero ? 200 : 0;
+
                 lastPosition += layout.GetLineSize(lineIndex);
+                //lastPosition += expectSize;
 
                 if (IsShowBeforePosition(lastPosition, contentPosition) == false)
                 {
@@ -672,13 +682,18 @@ namespace Gpm.Ui
             int lineCount = layout.GetLineCount();
             for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
             {
-                if (IsShowAfterPosition(linePosition, contentPosition, viewportSize) == true)
+                DataContext dc = dataList[lineIndex];
+                var expectSize = 0; // dc.haveHero ? 200 : 0;
+
+                if (IsShowAfterPosition(linePosition + expectSize, contentPosition, viewportSize) == true)
                 {
                     return lineIndex;
                 }
 
                 linePosition += layout.GetLineSize(lineIndex);
                 linePosition += space;
+                linePosition += expectSize;
+
             }
 
             return lineCount;
@@ -709,6 +724,40 @@ namespace Gpm.Ui
             public ChangeValueEvent()
             {
             }
+        }
+
+        // Custom
+        public void InsertCustomData(Transform obj)
+        {
+            AttachCustomLine(obj.gameObject);
+            obj.gameObject.SetActive(true);
+
+            //var pos = GetChildPosistion(itemDatas.Count);
+            Vector2 sizeitem = ((RectTransform)itemPrefab.transform).sizeDelta;
+
+            var pos = new Vector2 (0, -sizeitem.y * dataList.Count);
+
+            obj.localPosition = new Vector3(pos.x, pos.y, 0);
+        }
+
+        protected void AttachCustomLine(GameObject customItem, bool auto_size = true, float height = 0.0f)
+        {
+            var rectTrans = customItem.GetComponent<RectTransform>();
+
+            rectTrans.SetParent(scrollRect.content.transform);
+
+            rectTrans.anchorMin = new Vector2(0, 1);
+            rectTrans.anchorMax = new Vector2(1, 1);
+            rectTrans.pivot = new Vector2(0.5f, 1);
+
+            float size = GetItemTotalSize();
+
+            // Anchor stretch : left, top, right, bottom
+            rectTrans.offsetMin.Set(0, 0);   // Left, Bottom
+            rectTrans.offsetMax.Set(0, 100);   // Right, Top
+
+            rectTrans.sizeDelta = new Vector2(0, 100);
+            rectTrans.localScale = Vector3.one;
         }
     }
 }

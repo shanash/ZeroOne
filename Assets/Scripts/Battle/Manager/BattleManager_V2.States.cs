@@ -112,6 +112,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         //  skill slot
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
+        list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot_V2");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/EnemyDurationSkillIconNode");
 
@@ -160,10 +161,13 @@ public partial class BattleManager_V2 : SceneControllerBase
         FSM.AddTransition(new GameStatePlayingV2());
         FSM.AddTransition(new GameStateUltimateSkillV2());
         FSM.AddTransition(new GameStateNextWaveV2());
+        FSM.AddTransition(new GameStateWaveRunReadyV2());
         FSM.AddTransition(new GameStateWaveRunV2());
         FSM.AddTransition(new GameStatePauseV2());
         FSM.AddTransition(new GameStateTimeOutV2());
+        FSM.AddTransition(new GameStateGameOverWinReadyV2());
         FSM.AddTransition(new GameStateGameOverWinV2());
+        FSM.AddTransition(new GameStateGameOverLoseReadyV2());
         FSM.AddTransition(new GameStateGameOverLoseV2());
         FSM.AddTransition(new GameStateEndV2());
 
@@ -361,11 +365,14 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateUltimateSkillBegin() 
     {
-        UI_Mng.ShowBattleUI(false);
+        if (UI_Hide_Coroutine != null)
+        {
+            StopCoroutine(UI_Hide_Coroutine);
+        }
+        StartCoroutine(DelayHideBattleUI(0.2f));
     }
     public virtual void GameStateUltimateSkill() 
     {
-        //CalcDungeonLimitTime();
     }
     public virtual void GameStateUltimateSkillExit() 
     {
@@ -393,7 +400,7 @@ public partial class BattleManager_V2 : SceneControllerBase
                 //  다음 웨이브가 있다면
                 if (Dungeon_Data.HasNextWave())
                 {
-                    ChangeState(GAME_STATES.WAVE_RUN);
+                    ChangeState(GAME_STATES.WAVE_RUN_READY);
                 }
                 else // 없으면 게임 종료(승리)
                 {
@@ -413,19 +420,19 @@ public partial class BattleManager_V2 : SceneControllerBase
                         }
                         else
                         {
-                            ChangeState(GAME_STATES.GAME_OVER_WIN);
+                            ChangeState(GAME_STATES.GAME_OVER_WIN_READY);
                         }
                     }
                     else
                     {
-                        ChangeState(GAME_STATES.GAME_OVER_WIN);
+                        ChangeState(GAME_STATES.GAME_OVER_WIN_READY);
                     }
                 }
 
             }
             else
             {
-                ChangeState(GAME_STATES.GAME_OVER_LOSE);
+                ChangeState(GAME_STATES.GAME_OVER_LOSE_READY);
             }
         }
         CalcDungeonLimitTime();
@@ -494,6 +501,19 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateNextWave() { }
     public virtual void GameStateNextWaveExit() { }
 
+    public virtual void GameStateWaveRunReadyBegin() 
+    {
+        Game_Over_Delta = 1.5f;
+    }
+    public virtual void GameStateWaveRunReady() 
+    {
+        Game_Over_Delta -= Time.deltaTime;
+        if (Game_Over_Delta < 0f)
+        {
+            ChangeState(GAME_STATES.WAVE_RUN);
+        }
+    }
+    public virtual void GameStateWaveRunReadyExit() { }
     public virtual void GameStateWaveRunBegin()
     {
         if (IsPrevPause())
@@ -542,6 +562,20 @@ public partial class BattleManager_V2 : SceneControllerBase
         GetEffectFactory().OnResume();
     }
 
+    
+    public virtual void GameStateGameOverWinReadyBegin() 
+    {
+        Game_Over_Delta = 1.5f;
+    }
+    public virtual void GameStateGameOverWinReady() 
+    {
+        Game_Over_Delta -= Time.deltaTime;
+        if (Game_Over_Delta < 0f)
+        {
+            ChangeState(GAME_STATES.GAME_OVER_WIN);
+        }
+    }
+    public virtual void GameStateGameOverWinReadyExit() { }
     public virtual void GameStateGameOverWinBegin()
     {
         TooltipManager.I.CloseAll();
@@ -570,6 +604,21 @@ public partial class BattleManager_V2 : SceneControllerBase
         }
     }
     public virtual void GameStateGameOverWinExit() { }
+
+
+    public virtual void GameStateGameOverLoseReadyBegin() 
+    {
+        Game_Over_Delta = 1.5f;
+    }
+    public virtual void GameStateGameOverLoseReady() 
+    {
+        Game_Over_Delta -= Time.deltaTime;
+        if (Game_Over_Delta < 0f)
+        {
+            ChangeState(GAME_STATES.GAME_OVER_LOSE);
+        }
+    }
+    public virtual void GameStateGameOverLoseReadyExit() { }
 
     public virtual void GameStateGameOverLoseBegin()
     {

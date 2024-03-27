@@ -52,7 +52,7 @@ public class BossStageListNode : UIBase
         Skip_Refresh_Callback = cb;
     }
 
-    void UpdateBossDungeonList()
+    public void UpdateBossDungeonList()
     {
         Lock_Cover.gameObject.SetActive(User_Dungeon == null);
         var boss_mng = GameData.Instance.GetUserBossStageDataManager();
@@ -67,14 +67,15 @@ public class BossStageListNode : UIBase
         {
             ShowStarPoint(User_Dungeon.GetStarPoint());
             //  던전이 열려있을 경우에만 skip lock cover를 체크할 필요가 있음.
-            Skip_Lock_Cover.gameObject.SetActive(!User_Dungeon.IsEnableSkip());
-            if (User_Dungeon.IsEnableSkip())
+            bool is_enable_skip = User_Dungeon.IsEnableSkip();
+            Skip_Lock_Cover.gameObject.SetActive(!is_enable_skip);
+            if (is_enable_skip)
             {
                 Skip_Btn.interactable = boss_mng.GetCount() > 0;
             }
             else
             {
-                Skip_Btn.interactable = false;
+                Skip_Btn.interactable = true;
             }
 
             Enter_Btn.interactable = boss_mng.GetCount() > 0;
@@ -91,11 +92,12 @@ public class BossStageListNode : UIBase
         {
             Recommand_Level.text = ZString.Format("{0}{1}", GameDefine.GetLocalizeString("system_recomment_level"), Stage.recomment_level);
         }
-        
+
         //  enter btn text
+        Enter_Btn_Text.text = GameDefine.GetLocalizeString("system_entrance");
 
         //  skip btn text
-        
+        Skip_Btn_Text.text = GameDefine.GetLocalizeString("system_skip");
     }
 
     public void ShowStarPoint(int pt)

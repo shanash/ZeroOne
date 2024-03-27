@@ -14,13 +14,17 @@ public enum GAME_STATES
     PLAYING,            //  전투 
     ULTIMATE_SKILL,     //  궁극기 시전중
     NEXT_WAVE,          //  다음 스테이지
+
+    WAVE_RUN_READY,     //  WAVE_RUN 직전 잠시 대기 상태(이전에 전투 영상이 종료되어야 하기 때문)
     WAVE_RUN,
 
     FINISH_STORY_DIALOGUE,      //  전투 종료 후 스토리 다이얼로그 
 
     PAUSE,
     TIME_OUT,           //  제한 시간 초과
+    GAME_OVER_WIN_READY,        //  GAME_OVER_WIN 직전 잠시 대기
     GAME_OVER_WIN,
+    GAME_OVER_LOSE_READY,       //  GAME_OVER_LOSE 직전 잠시 대기
     GAME_OVER_LOSE,
 
     END

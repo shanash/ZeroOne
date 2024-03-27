@@ -1,4 +1,4 @@
-﻿namespace Gpm.Ui
+namespace Gpm.Ui
 {
     using System;
     using System.Collections.Generic;
@@ -219,7 +219,7 @@
         {
             float itemTotalSize = GetItemSizeSum(GetItemCount());
 
-            return itemTotalSize + padding * UPDOWN_MULTIPLY;
+            return itemTotalSize + padding * UPDOWN_MULTIPLY + 200;
         }
 
         private InfiniteScrollItem PullItemByDataIndex(int dataIndex)

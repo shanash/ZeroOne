@@ -214,6 +214,18 @@ public class MasterDataManager : BaseMasterDataManager
     }
 
     /// <summary>
+    /// 모든 캐릭터 아이디 반환.
+    /// </summary>
+    /// <param name="list"></param>
+    public List<int> GetHeroIDList()
+    {
+        Check_Player_Character_Data();
+        _Player_Character_Data.Values.ToList();
+
+        return _Player_Character_Data.Select(item => item.Value.player_character_id).ToList();
+    }
+
+    /// <summary>
     /// 최초 지급 캐릭터 반환
     /// </summary>
     /// <returns></returns>

@@ -109,6 +109,8 @@ public class BossStageChoiceUI : PopupBase
         int entrance_cnt = boss_mng.GetCount();
         int max_entrance_cnt = boss_mng.GetMaxEntranceCount();
         Entrance_Count.text = ZString.Format("{0} {1}/{2}", GameDefine.GetLocalizeString("system_limitcount_daily_enter"), entrance_cnt, max_entrance_cnt);
+
+        Used_Boss_Stage_List_Nodes.ForEach(x => x.UpdateBossDungeonList());
     }
 
     void ClearBossStageListNode()

@@ -5901,7 +5901,7 @@ GameObject:
   - component: {fileID: 157536153553702135}
   - component: {fileID: 4908794734743342638}
   - component: {fileID: 6380977631478175883}
-  - component: {fileID: 621468172955603131}
+  - component: {fileID: 456829002743153942}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -5967,23 +5967,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!111 &621468172955603131
-Animation:
+--- !u!95 &456829002743153942
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989205384902506351}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 37e2743e35f72bd4b8d23cbb51034dd4, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 37e2743e35f72bd4b8d23cbb51034dd4, type: 2}
-  - {fileID: 7400000, guid: bed2215cb7a54614cbb636ffd20add6f, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1991955022355117750
 GameObject:
   m_ObjectHideFlags: 0

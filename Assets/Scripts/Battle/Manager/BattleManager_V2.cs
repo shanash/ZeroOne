@@ -29,6 +29,9 @@ public partial class BattleManager_V2 : SceneControllerBase
     protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
 
+    protected Coroutine UI_Hide_Coroutine;
+
+
     public VirtualCineManager GetVirtualCineManager()
     {
         return Cine_Mng;
@@ -130,7 +133,6 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     protected void WaveInfoCloseCallback()
     {
-        //ChangeState(GAME_STATES.MOVE_IN);
         ChangeState(GAME_STATES.PLAY_READY);
     }
 
@@ -160,6 +162,13 @@ public partial class BattleManager_V2 : SceneControllerBase
     public void StartUltimateSkill()
     {
         ChangeState(GAME_STATES.ULTIMATE_SKILL);
+    }
+
+    IEnumerator DelayHideBattleUI(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UI_Mng.ShowBattleUI(false);
+        UI_Hide_Coroutine = null;
     }
     public void FinishUltimateSkill(HeroBase_V2 caster)
     {

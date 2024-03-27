@@ -4,6 +4,22 @@ using Gpm.Ui;
 using System.Collections.Generic;
 using FluffyDuck.Util;
 using TMPro;
+using static ConstString;
+
+public class HeroListCustomLine
+{
+    public GameObject lineObj;
+    public string title_name;
+
+    private TMP_Text _txtComponent = null;
+    public HeroListCustomLine(GameObject obj, string txt)
+    {
+        lineObj = obj;
+        this.title_name = txt;
+        _txtComponent = lineObj.GetComponentInChildren<TMP_Text>();
+        _txtComponent.text = txt;
+    }
+}
 
 public class HeroListUI : PopupBase
 {
@@ -20,8 +36,14 @@ public class HeroListUI : PopupBase
     RectTransform Filter_Sort_Direction_Image;
 
     List<BattlePcData> Battle_Hero_Data_List;
+    List<HeroData> Expect_Hero_Data_List;
+
     CHARACTER_SORT Filter_Type;
     SORT_ORDER Sort_Order = SORT_ORDER.ASC;
+
+    [SerializeField] GameObject _customObj = null;
+
+    private List<HeroListCustomLine> _customLines = new List<HeroListCustomLine>();
 
     bool Is_Ascended_Sort => Sort_Order == SORT_ORDER.ASC;
 
@@ -63,6 +85,12 @@ public class HeroListUI : PopupBase
 
         Character_LIst_View.Clear();
 
+        foreach (var line in _customLines)
+        {
+            Destroy(line.lineObj);
+        }
+        _customLines.Clear();
+
         const int column_count = 5;
         var gd = GameData.Instance;
         var hero_mng = gd.GetUserHeroDataManager();
@@ -71,13 +99,34 @@ public class HeroListUI : PopupBase
 
         Battle_Hero_Data_List = new List<BattlePcData>();
 
+
         foreach (var data in user_hero_datas)
         {
             var battle_pc_data = new BattlePcData();
             battle_pc_data.SetUnitID(data.GetPlayerCharacterID(), data.Player_Character_Num);
 
-            Battle_Hero_Data_List.Add(battle_pc_data);
+            if (battle_pc_data.Data.first_open_check)
+                Battle_Hero_Data_List.Add(battle_pc_data);
+/*            else
+                Expect_Hero_Data_List.Add(battle_pc_data);*/
         }
+
+        /// ----------------------------------------
+        // 미보유 Hero Data List 생성.
+        //var m = MasterDataManager.Instance;
+        //var allHeroList = m.Get_PlayerCharacterDataList();
+        Expect_Hero_Data_List = new List<HeroData>();
+
+        var expectIDList = HeroDataManager.I.GetExpectHeroDataList();
+
+        foreach( var heroID in expectIDList )
+        {
+            var hero_data = new HeroData();
+            hero_data.SetUnitID(heroID);
+            Expect_Hero_Data_List.Add(hero_data);
+        }
+
+        /// ----------------------------------------
 
         switch (Filter_Type)
         {
@@ -98,6 +147,7 @@ public class HeroListUI : PopupBase
                     a.GetLevel().CompareTo(b.GetLevel()) :
                     b.GetLevel().CompareTo(a.GetLevel());
                 });
+
                 break;
             case CHARACTER_SORT.STAR:
                 Battle_Hero_Data_List.Sort((a, b) =>
@@ -192,6 +242,7 @@ public class HeroListUI : PopupBase
             HeroListData new_data = new HeroListData();
             new_data.Filter_Type = Filter_Type;
             new_data.Click_Hero_Callback = SelectCharacterCallback;
+            new_data.ExpectHero = false;
 
             if (start + column_count < hero_count)
             {
@@ -201,8 +252,44 @@ public class HeroListUI : PopupBase
             {
                 new_data.SetUserHeroDataList(Battle_Hero_Data_List.GetRange(start, hero_count - start));
             }
-            Character_LIst_View.InsertData(new_data);
+            Character_LIst_View.InsertData(new_data, false, false);
         }
+
+        // Custom Line 추가
+        HeroListCustomLine customLine = new HeroListCustomLine(Instantiate(_customObj), "미보유");
+        _customLines.Add(customLine);
+
+        Character_LIst_View.InsertCustomData(customLine.lineObj.transform);
+
+        // 미보유 캐릭터 리스트
+        start = 0;
+        int expect_hero_count = Expect_Hero_Data_List.Count;
+        int expect_rows = expect_hero_count / column_count;
+        if (expect_hero_count % column_count > 0)
+        {
+            expect_rows += 1;
+        }
+
+        for (int r = 0; r < expect_rows; r++)
+        {
+            start = r * column_count;
+
+            HeroListData new_data = new HeroListData();
+            new_data.Filter_Type = Filter_Type;
+            new_data.Click_Hero_Callback = SelectCharacterCallback;
+            new_data.ExpectHero = true;
+
+            if (start + column_count < expect_hero_count)
+            {
+                new_data.SetHeroDataList(Expect_Hero_Data_List.GetRange(start, column_count));
+            }
+            else
+            {
+                new_data.SetHeroDataList(Expect_Hero_Data_List.GetRange(start, expect_hero_count - start));
+            }
+            Character_LIst_View.InsertData(new_data, false, true);
+        }
+
 
         UpdateFilterType();
     }
@@ -219,6 +306,13 @@ public class HeroListUI : PopupBase
     /// <param name="ud"></param>
     void SelectCharacterCallback(HeroListItem hero)
     {
+        // todo: 미보유 캐릭터의 경우 에외처리 필요.
+        if (hero.BattlePcData == null)
+        {
+            Debug.LogWarning("미보유 캐릭터 클릭" );
+            return;
+        }
+
         int index = Battle_Hero_Data_List.IndexOf(hero.BattlePcData);
 
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/UI/Hero/HeroInfoUI", POPUP_TYPE.FULLPAGE_TYPE, (popup) =>

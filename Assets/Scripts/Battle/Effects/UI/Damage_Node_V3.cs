@@ -1,5 +1,6 @@
 using Cysharp.Text;
 using Febucci.UI;
+using FluffyDuck.UI;
 using TMPro;
 using UnityEngine;
 
@@ -18,31 +19,45 @@ public class Damage_Node_V3 : EffectBase
     [SerializeField, Tooltip("Type Writer")]
     TypewriterByCharacter Writer;
 
+    [SerializeField, Tooltip("Ease Random Mover")]
+    UIEaseRandomMove Mover;
+
     BATTLE_SEND_DATA? Send_Data;
     double Total_Damage;
     DAMAGE_TYPE Damage_Type = DAMAGE_TYPE.NORMAL;
+    TEAM_TYPE Team_Type = TEAM_TYPE.LEFT;
+
+    UIEaseBase.MOVE_TYPE Move_Type = UIEaseBase.MOVE_TYPE.NONE;
 
     public override void StartParticle(float duration, bool loop = false)
     {
-        //if (Send_Data == null)
-        //{
-        //    UnusedEffect();
-        //    return;
-        //}
         if (Send_Data != null)
         {
             bool is_physics = Send_Data.Value.Onetime.GetOnetimeEffectType() == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
             double damage = is_physics ? Send_Data.Value.Physics_Attack_Point : Send_Data.Value.Magic_Attack_Point;
             StartMove(damage, Damage_Type);
+            MoveTarget(Move_Type);
         }
         else
         {
             StartMove(Total_Damage, Damage_Type);
-            
         }
 
         base.StartParticle(duration, loop);
     }
+
+    void MoveTarget(UIEaseBase.MOVE_TYPE mtype)
+    {
+        if (mtype == UIEaseBase.MOVE_TYPE.NONE)
+        {
+            return;
+        }
+        if (Mover != null)
+        {
+            Mover.StartMove(mtype, Team_Type);
+        }
+    }
+
     public void StartMove(double dmg, DAMAGE_TYPE dmg_type)
     {
         string dmg_str = dmg.ToString();
@@ -50,10 +65,10 @@ public class Damage_Node_V3 : EffectBase
         var sb = ZString.CreateStringBuilder();
 
         //  크리티컬
-        if (dmg_type == DAMAGE_TYPE.WEAK_CRITICAL || dmg_type == DAMAGE_TYPE.CRITICAL)
-        {
-            sb.Append("<sprite=10>");
-        }
+        //if (dmg_type == DAMAGE_TYPE.WEAK_CRITICAL || dmg_type == DAMAGE_TYPE.CRITICAL)
+        //{
+        //    sb.Append("<sprite=10>");
+        //}
 
         for (int i = 0; i < cnt; i++)
         {
@@ -73,10 +88,11 @@ public class Damage_Node_V3 : EffectBase
 
     public override void SetData(params object[] data)
     {
-        if (data.Length != 3)
+        if (data.Length < 4)
         {
             return;
         }
+
         var obj = data[0];
         if (obj is BATTLE_SEND_DATA)
         {
@@ -87,12 +103,39 @@ public class Damage_Node_V3 : EffectBase
             Total_Damage_Data total = (Total_Damage_Data)obj;
             Total_Damage = total.GetTotalDamage();
         }
-        
-        Damage_Type = (DAMAGE_TYPE)data[1];
 
+        Damage_Type = (DAMAGE_TYPE)data[1];
         var target_position = (Vector3)data[2];
         Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, target_position);
         GetComponent<RectTransform>().anchoredPosition3D = pos;
+
+        if (data.Length == 4)
+        {
+            Move_Type = UIEaseBase.MOVE_TYPE.NONE;
+            Team_Type = (TEAM_TYPE)data[3];
+        }
+        else if (data.Length == 5)
+        {
+            Move_Type = (UIEaseBase.MOVE_TYPE)data[3];
+            Team_Type = (TEAM_TYPE)data[4];
+        }
+
+        //var obj = data[0];
+        //if (obj is BATTLE_SEND_DATA)
+        //{
+        //    Send_Data = (BATTLE_SEND_DATA)obj;
+        //}
+        //else if (obj is Total_Damage_Data)
+        //{
+        //    Total_Damage_Data total = (Total_Damage_Data)obj;
+        //    Total_Damage = total.GetTotalDamage();
+        //}
+        
+        //Damage_Type = (DAMAGE_TYPE)data[1];
+        //var target_position = (Vector3)data[2];
+        //Move_Type = (UIEaseBase.MOVE_TYPE)data[3];
+        //Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, target_position);
+        //GetComponent<RectTransform>().anchoredPosition3D = pos;
         
     }
 
@@ -133,5 +176,6 @@ public class Damage_Node_V3 : EffectBase
         Damage_White_Text.text = string.Empty;
         Total_Damage = 0;
         Send_Data = null;
+        Move_Type = UIEaseBase.MOVE_TYPE.NONE;
     }
 }

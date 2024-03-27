@@ -167,6 +167,8 @@ public struct Effect_Queue_Data
     public float Duration;
     public UnityEngine.Transform Parent_Transform;
     public DAMAGE_TYPE Damage_Type;
+    public bool Need_Move;
+    public TEAM_TYPE Target_Team_Type;
 }
 
 #region Exp Simulate Data

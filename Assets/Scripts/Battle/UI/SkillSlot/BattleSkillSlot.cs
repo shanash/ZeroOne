@@ -1,25 +1,10 @@
-using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public enum SKILL_SLOT_EVENT_TYPE
-{
-    NONE = 0,
-
-    HITTED,                     //  피격
-    LIFE_UPDATE,                //  체력 게이지 업데이트
-    DURATION_SKILL_ICON_UPDATE, //  지속성 효과 아이콘 업데이트
-    COOLTIME_INIT,              //  쿨타임 최초 업데이트
-
-    DEATH,                      //  죽었을 때
-
-}
 
 public class BattleSkillSlot : UIBase, IUpdateComponent
 {

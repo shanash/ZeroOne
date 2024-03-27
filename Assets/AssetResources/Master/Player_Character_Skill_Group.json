@@ -5,9 +5,9 @@
     "name_kr": "일반 공격",
     "skill_use_delay": 1.5,
     "skill_type": 1,
-    "script": "원거리 전방 1명 공격 (1히트)",
+    "script": "루시아/일반/원거리 공격/공격력 100%",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Magic",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Lucia/SkillEffect_Lucia_Attack_01_Cast"
@@ -18,11 +18,11 @@
     "pc_skill_group_id": 100002,
     "name_id": "skill_title_lucia_01",
     "name_kr": "회복",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.3,
     "skill_type": 2,
-    "script": "체력이 가장 낮은 아군 체력 회복",
+    "script": "루시아/스킬1/원거리 스킬/체력이 가장 낮은 아군 체력 회복(즉발형)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Heal",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Lucia/SkillEffect_Lucia_Skill_01_Cast"
@@ -33,11 +33,11 @@
     "pc_skill_group_id": 100003,
     "name_id": "skill_title_lucia_02",
     "name_kr": "닉뢰",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.8,
     "skill_type": 3,
-    "script": "원거리 전방 1명 공격 (1히트)",
+    "script": "루시아/스킬2/원거리 스킬/전방의 적 1명 공격(발사체 발사)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Magic",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Lucia/SkillEffect_Lucia_Skill_02_Cast"
@@ -50,9 +50,9 @@
     "name_kr": "전체 회복",
     "skill_use_delay": 15.0,
     "skill_type": 4,
-    "script": "아군 전체 체력 회복 (1히트)",
+    "script": "힐러/궁극기/원거리 스킬/전체 체력 회복",
     "target_skill_id": 100004,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Heal",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Lucia_Ultimate_Cast"
@@ -67,11 +67,11 @@
     "pc_skill_group_id": 100101,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.45,
     "skill_type": 1,
-    "script": "근접 전방 1명 공격 (1히트)",
+    "script": "라일라/일반 (공격력 100%)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Laila/SkillEffect_Laila_Attack_01_Cast"
@@ -82,11 +82,11 @@
     "pc_skill_group_id": 100102,
     "name_id": "skill_title_laila_01",
     "name_kr": "저격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.7,
     "skill_type": 2,
-    "script": "자신의 공격력 증가",
+    "script": "라일라/스킬 1/단일 공격",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Laila/SkillEffect_Laila_Skill_1_Cast"
@@ -97,11 +97,11 @@
     "pc_skill_group_id": 100103,
     "name_id": "skill_title_laila_02",
     "name_kr": "방어구 파괴",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.6,
     "skill_type": 3,
-    "script": "근접 전방 1명 공격 (2히트)",
+    "script": "라일라/스킬2/가까운 대상에게 단일 공격/단발 (이펙트)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Debuff",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Laila/SkillEffect_Laila_Skill_2_Cast"
@@ -114,9 +114,9 @@
     "name_kr": "폭발 사격",
     "skill_use_delay": 16.0,
     "skill_type": 4,
-    "script": "원거리 전방 1명 공격 (3히트)",
+    "script": "라일라/궁극기/단일 공격",
     "target_skill_id": 100106,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Ultimate_Physics",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Laila_Ultimate_Cast",
@@ -133,11 +133,11 @@
     "pc_skill_group_id": 100201,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.4,
     "skill_type": 1,
-    "script": "원거리 전방 1명 공격 (즉발형 1히트)",
+    "script": "바이올렛/일반",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Violet/SkillEffect_Violet_Attack_01_Cast"
@@ -148,11 +148,11 @@
     "pc_skill_group_id": 100202,
     "name_id": "skill_title_violet_01",
     "name_kr": "충전 사격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.65,
     "skill_type": 2,
-    "script": "원거리 전방 1명 공격(즉발형 1히트)",
+    "script": "바이올렛/스킬1/전방 1명 대미지 (스킬 대미지 120%)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Violet/SkillEffect_Violet_Skill_01_Cast"
@@ -164,11 +164,11 @@
     "pc_skill_group_id": 100203,
     "name_id": "skill_title_violet_02",
     "name_kr": "약점 포착",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.8,
     "skill_type": 3,
-    "script": "원거리 전방 적을 타겟하고 범위 데미지 (즉발형 6히트) - 주변 스플래쉬",
+    "script": "바이올렛/스킬2/크리티컬 증가",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Buff",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Violet/SkillEffect_Violet_Skill_02_Cast"
@@ -182,9 +182,9 @@
     "name_kr": "섬광 폭발",
     "skill_use_delay": 16.0,
     "skill_type": 4,
-    "script": "원거리 전방 1명을 공격하고, 뒤에 있는 아군에게 버프",
+    "script": "바이올렛/궁극기/전방 적 1명 공격 (스킬 대미지 250%)",
     "target_skill_id": 100204,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Ultimate_Physics",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Violet_Ultimate_Cast"
@@ -199,11 +199,11 @@
     "pc_skill_group_id": 100301,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.4,
     "skill_type": 1,
-    "script": "원거리 전방 1명 공격(투사체형 1히트)",
+    "script": "데이지/일반/3연타",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Daisy/SkillEffect_Daisy_Attack_01_Cast"
@@ -216,9 +216,9 @@
     "name_kr": "충전 사격",
     "skill_use_delay": 1.5,
     "skill_type": 2,
-    "script": "원거리 전방 1명의 방어력 감소",
+    "script": "데이지/스킬1/전방 1명 5 연타 데미지(120%)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Daisy/SkillEffect_Daisy_Skill1_01_Cast"
@@ -230,11 +230,11 @@
     "pc_skill_group_id": 100303,
     "name_id": "skill_title_daisy_02",
     "name_kr": "약점 파괴",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.7,
     "skill_type": 3,
-    "script": "원거리 전방 적을 타겟하고 범위 데미지 (투사체형 2히트) - 피격자 뒤로 스플래쉬",
+    "script": "데이지/스킬2/아군 전체 크리티컬 데미지 6초간 증가",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Buff",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Daisy/SkillEffect_Daisy_Skill2_01_Cast"
@@ -248,9 +248,9 @@
     "name_kr": "집중광선",
     "skill_use_delay": 16.0,
     "skill_type": 4,
-    "script": "원거리 전방 1명을 공격하고, 주변에 있는 아군에게 버프",
+    "script": "데이지/궁극기/ 전방 적 1명 18연타 (공격력 250%)",
     "target_skill_id": 100304,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Ultimate_Physics",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Daisy_Ultimate_Cast"
@@ -265,11 +265,11 @@
     "pc_skill_group_id": 100401,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.35,
     "skill_type": 1,
-    "script": "원거리 전방 1명 공격(즉발형 1히트)",
+    "script": "에일린/일반",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Attack_01_Cast"
@@ -280,11 +280,11 @@
     "pc_skill_group_id": 100402,
     "name_id": "skill_title_ailyn_01",
     "name_kr": "섬광탄",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.85,
     "skill_type": 2,
-    "script": "가장 가까운 적 반경 3m내 공격 및 기절 효과 부여",
+    "script": "에일린/스킬1/기절 섬광탄",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_attack",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Skill1_01_Cast"
@@ -297,9 +297,9 @@
     "name_kr": "응급 치료",
     "skill_use_delay": 1.5,
     "skill_type": 3,
-    "script": "원거리 전방 1명 공격(즉발형 1히트)",
+    "script": "에일린/스킬2/자기 자신 회복",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Heal",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Eileen/SkillEffect_Eileen_Skill1_02_Cast"
@@ -312,9 +312,9 @@
     "name_kr": "근원 발현",
     "skill_use_delay": 15.0,
     "skill_type": 4,
-    "script": "자신 체력 회복하고 범위 버프(물리 방어력 증가)",
+    "script": "에일린/궁극기/물리 방어력 증가",
     "target_skill_id": 100404,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Buff",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Eileen_Ultimate_Cast_Ground",
@@ -327,11 +327,11 @@
     "pc_skill_group_id": 100501,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.33,
     "skill_type": 1,
-    "script": "근거리 전방 1명 공격(1히트)",
+    "script": "클레어/근접 일반 공격(공격력 100%)",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_common",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Attack_01_Cast"
@@ -344,9 +344,9 @@
     "name_kr": "자가 회복",
     "skill_use_delay": 1.5,
     "skill_type": 2,
-    "script": "자신에게 체력 회복",
+    "script": "클레어/스킬1/자기 힐",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Heal",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Skill1_01_Cast"
@@ -358,11 +358,11 @@
     "pc_skill_group_id": 100503,
     "name_id": "skill_title_claire_02",
     "name_kr": "강격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.55,
     "skill_type": 3,
-    "script": "근거리 전방 1명 공격(1히트)",
+    "script": "클레어/스킬2/근접 공격",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Physics",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Claire/SkillEffect_Claire_Skill1_02_Cast"
@@ -375,9 +375,9 @@
     "name_kr": "빛의 분노",
     "skill_use_delay": 17.0,
     "skill_type": 4,
-    "script": "자기 자신에게 방어력 증가",
+    "script": "클레어/궁극기/전체 공격",
     "target_skill_id": 100504,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Ultimate_Physics",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Claire_Ultimate_Cast",
@@ -390,11 +390,11 @@
     "pc_skill_group_id": 100601,
     "name_id": "skill_title_pc_001",
     "name_kr": "일반 공격",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.6,
     "skill_type": 1,
-    "script": "원거리 전방 1명 공격(1히트)",
+    "script": "엘리자베스/평타/가까운 대상 단일 공격",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Magic",
     "action_name": "00_common",
     "sfx_delay": 0.0
   },
@@ -402,11 +402,11 @@
     "pc_skill_group_id": 100602,
     "name_id": "skill_title_elizabath_01",
     "name_kr": "절망의 구슬",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.4,
     "skill_type": 2,
-    "script": "원거리 전방 1명 공격",
+    "script": "엘리자베스/스킬1/가까운 대상 단일 공격",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Magic",
     "action_name": "00_skill_01",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Elizabeth/SkillEffect_Elizabeth_Skill1_01_Cast"
@@ -417,11 +417,11 @@
     "pc_skill_group_id": 100603,
     "name_id": "skill_title_elizabath_02",
     "name_kr": "암흑의 포식",
-    "skill_use_delay": 1.5,
+    "skill_use_delay": 1.75,
     "skill_type": 3,
-    "script": "원거리 전체 공격(1히트)",
+    "script": "엘리자베스/스킬2/전체 공격",
     "target_skill_id": 0,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Debuff",
     "action_name": "00_skill_02",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Left/Elizabeth/SkillEffect_Elizabeth_Skill2_01_Cast_Ground",
@@ -434,11 +434,11 @@
     "pc_skill_group_id": 100604,
     "name_id": "skill_title_elizabath_03",
     "name_kr": "공포의 강림",
-    "skill_use_delay": 17.0,
+    "skill_use_delay": 18.0,
     "skill_type": 4,
-    "script": "자기 자신에게 방어력 증가",
+    "script": "엘리자베스/궁극/전체공격",
     "target_skill_id": 100607,
-    "icon": "Assets/AssetResources/Textures/Icons/Icon_Skill_Dummy",
+    "icon": "Assets/AssetResources/Textures/Icons/Icon_Ultimate_Magic",
     "action_name": "00_ultimate",
     "cast_effect_path": [
       "Assets/AssetResources/Prefabs/Effects/Skill/Ultimate/SkillEffect_Elizabeth_Ultimate_Cast"

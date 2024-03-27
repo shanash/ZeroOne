@@ -1,5 +1,5 @@
 using Cysharp.Text;
-using DocumentFormat.OpenXml.Drawing;
+using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Spine;
 using Spine.Unity;
@@ -843,6 +843,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_01:
                 PlayAnimation(0, "00_damage", false);
+                AddAnimation(0, "00_idle", true);
                 break;
             case HERO_PLAY_ANIMATION_TYPE.DAMAGE_02:
                 break;
@@ -1433,10 +1434,24 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="dmg"></param>
     public void AddDamage(BATTLE_SEND_DATA dmg)
     {
-        if (!IsAlive())
+        if (dmg.Skill_Group != null)
         {
-            return;
+            if (dmg.Skill_Group.GetSkillType() != SKILL_TYPE.SPECIAL_SKILL)
+            {
+                if (!IsAlive())
+                {
+                    return;
+                }
+            }
         }
+        else
+        {
+            if (!IsAlive())
+            {
+                return;
+            }
+        }
+        
 
         ONETIME_EFFECT_TYPE etype = dmg.Onetime.GetOnetimeEffectType();
         bool is_physics_dmg = etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
@@ -1475,12 +1490,12 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             if (is_physics_dmg)
             {
                 dmg.Is_Physics_Critical = true;
-                last_damage *= 1.5 * Physics_Critical_Power_Add;
+                last_damage += last_damage * (1.5 + Physics_Critical_Power_Add);
             }
             else
             {
                 dmg.Is_Magic_Critical = true;
-                last_damage *= 1.5 * Magic_Critical_Power_Add;
+                last_damage += last_damage * (1.5 + Magic_Critical_Power_Add);
             }
         }
 
@@ -1527,7 +1542,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
             AddDamageText(dmg);
             //  토탈 데미지 계산을 위해서
-            AddTotalDamageInfo(dmg);
+            if (dmg.Skill_Group != null && dmg.Skill_Group.GetSkillType() == SKILL_TYPE.SPECIAL_SKILL)
+            {
+                AddTotalDamageInfo(dmg);
+            }
 
             UpdateLifeBar();
             //  궁극기 피격시 죽어도 당장 죽이지는 않는다.(궁극기 종료 후 사라지도록)
@@ -1595,23 +1613,25 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         if (is_multi_damage)
         {
             dmg_text_position = GetDamageTextPositionByIndex(0);
+            //dmg_text_position = GetDamageTextPositionOrder();
         }
         else
         {
-            dmg_text_position = GetDamageTextPositionOrder();
+            dmg_text_position = GetDamageTextPositionByIndex(0);
+            //dmg_text_position = GetDamageTextPositionOrder();
         }
 
         if (is_physics_dmg)
         {
-            if (is_multi_damage)
-            {
-                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
-            }
-            else
-            {
-                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
-                
-            }
+            //if (is_multi_damage)
+            //{
+            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
+            //}
+            //else
+            //{
+            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
+            //}
+            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
             if (send_data.Is_Weak)
             {
                 if (send_data.Is_Physics_Critical)
@@ -1633,14 +1653,15 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            if (is_multi_damage)
-            {
-                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node";
-            }
-            else
-            {
-                prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
-            }
+            //if (is_multi_damage)
+            //{
+            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node";
+            //}
+            //else
+            //{
+            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
+            //}
+            prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
             if (send_data.Is_Weak)
             {
                 if (send_data.Is_Magic_Critical)
@@ -1668,6 +1689,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
         d.Parent_Transform = UI_Mng.GetDamageContainer();
         d.Damage_Type = dmg_type;
+        //d.Need_Move = !is_multi_damage;
+        d.Need_Move = true;
+        d.Target_Team_Type = Team_Type;
         SpawnQueueEffect(d);
 
     }
@@ -1783,7 +1807,15 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         else
         {
             EffectBase effect = Battle_Mng.GetEffectFactory().CreateEffect(edata.Effect_path, edata.Parent_Transform);
-            effect.SetData(edata.Data, edata.Damage_Type, edata.Target_Position);
+            if (edata.Need_Move)
+            {
+                effect.SetData(edata.Data, edata.Damage_Type, edata.Target_Position, UIEaseBase.MOVE_TYPE.MOVE_OUT, edata.Target_Team_Type);
+            }
+            else
+            {
+                effect.SetData(edata.Data, edata.Damage_Type, edata.Target_Position, edata.Target_Team_Type);
+            }
+            
             effect.StartParticle(edata.Duration);
         }
 
@@ -2028,7 +2060,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     protected void AttackHittedKnockback()
     {
         //  피격 색 반짝 기능 기본
-        Render_Texture.SetHitColorV2(Color.white, 0.05f);
+        Render_Texture.SetHitColorV2(Color.white, 0.1f);
 
         //  피격시 현재 상태에 따라 피격 동작 추가할 것인지 여부 판단
         var state = GetCurrentState();

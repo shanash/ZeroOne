@@ -3,8 +3,10 @@ using FluffyDuck.UI;
 using FluffyDuck.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleUIManager_V2 : MonoBehaviour
 {
@@ -21,8 +23,8 @@ public class BattleUIManager_V2 : MonoBehaviour
     RectTransform Box_Rect;
 
     [Header("UI")]
-    [SerializeField, Tooltip("Timer Box")]
-    RectTransform Timer_Box;
+    [SerializeField, Tooltip("Timer Animator")]
+    Animator Timer_Anim;
     [SerializeField, Tooltip("Timer")]
     TMP_Text Timer_Text;
 
@@ -33,14 +35,17 @@ public class BattleUIManager_V2 : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField, Tooltip("Menu Btn")]
-    UIButtonBase Menu_Btn;
+    Button Menu_Btn;
     [SerializeField, Tooltip("Auto Btn")]
-    UIButtonBase Auto_Btn;
+    Button Auto_Btn;
     
     [SerializeField, Tooltip("Fast Btn")]
-    UIButtonBase Fast_Btn;
-    [SerializeField, Tooltip("Fast Speed")]
-    TMP_Text Fast_Speed;
+    Button Fast_Btn;
+
+    [SerializeField, Tooltip("Fast Arrow List")]
+    List<RectTransform> Fast_Arrow_List;
+
+    bool Is_Alarm;
 
     /// <summary>
     /// 체력 게이지 
@@ -50,8 +55,9 @@ public class BattleUIManager_V2 : MonoBehaviour
     private void Start()
     {
         UpdateFastSpeed();
+        Is_Alarm = false;
+        Timer_Anim.SetTrigger("Start");
     }
-
     public LifeBarNode AddLifeBar(HeroBase_V2 hero)
     {
         var target = hero.GetHPPositionTransform();
@@ -112,14 +118,10 @@ public class BattleUIManager_V2 : MonoBehaviour
     void UpdateFastSpeed()
     {
         BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
-        Fast_Speed.gameObject.SetActive(speed_type != BATTLE_SPEED_TYPE.NORMAL_TYPE);
-        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X2)
+        int cnt = Fast_Arrow_List.Count;
+        for (int i = 0; i < cnt; i++)
         {
-            Fast_Speed.text = "x2";
-        }
-        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X3)
-        {
-            Fast_Speed.text = "x3";
+            Fast_Arrow_List[i].gameObject.SetActive(i == (int)speed_type);
         }
     }
 
@@ -152,6 +154,11 @@ public class BattleUIManager_V2 : MonoBehaviour
     {
         var time_span = TimeSpan.FromSeconds(limit_time);
         Timer_Text.text = ZString.Format("{0:D2} : {1:D2}", time_span.Minutes, time_span.Seconds);
+        if (!Is_Alarm && time_span.TotalSeconds < 30)
+        {
+            Is_Alarm = true;
+            Timer_Anim.SetTrigger("Alarm");
+        }
     }
 
     void ChangePause()
