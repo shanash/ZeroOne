@@ -153,7 +153,15 @@ public class BattleSkillSlot_V2 : UIBase, IUpdateComponent
         {
             StopCoroutine(Flush_Coroutine);
         }
-        Flush_Coroutine = StartCoroutine(SubSliderFlush());
+
+        if (this.isActiveAndEnabled)
+        {
+            Flush_Coroutine = StartCoroutine(SubSliderFlush());
+        }
+        else
+        {
+            Sub_Life_Bar.value = Main_Life_Bar.value;
+        }
     }
 
     IEnumerator SubSliderFlush()

@@ -1613,24 +1613,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         if (is_multi_damage)
         {
             dmg_text_position = GetDamageTextPositionByIndex(0);
-            //dmg_text_position = GetDamageTextPositionOrder();
         }
         else
         {
             dmg_text_position = GetDamageTextPositionByIndex(0);
-            //dmg_text_position = GetDamageTextPositionOrder();
         }
 
         if (is_physics_dmg)
         {
-            //if (is_multi_damage)
-            //{
-            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Multi_Damage_Node";
-            //}
-            //else
-            //{
-            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
-            //}
             prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
             if (send_data.Is_Weak)
             {
@@ -1653,14 +1643,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            //if (is_multi_damage)
-            //{
-            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Multi_Damage_Node";
-            //}
-            //else
-            //{
-            //    prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
-            //}
             prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
             if (send_data.Is_Weak)
             {
@@ -1689,7 +1671,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
         d.Parent_Transform = UI_Mng.GetDamageContainer();
         d.Damage_Type = dmg_type;
-        //d.Need_Move = !is_multi_damage;
         d.Need_Move = true;
         d.Target_Team_Type = Team_Type;
         SpawnQueueEffect(d);
@@ -2015,13 +1996,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         {
             return;
         }
-        //  모든 체력 게이지 숨기기
-        Battle_Mng.HideAllUnitLifeBar();
+        
         //  주인공 이외의 모든 캐릭 pause
         Battle_Mng.AllPauseUnitWithoutHero(this);
-
-        //  진행중이던 이펙트 모두 숨기기
-        Battle_Mng.GetEffectFactory().OnPauseAndHide();
 
         //  주인공 및 타겟을 제외한 다른 유닛은 모두 숨기기
         List<HeroBase_V2> targets = new List<HeroBase_V2>();

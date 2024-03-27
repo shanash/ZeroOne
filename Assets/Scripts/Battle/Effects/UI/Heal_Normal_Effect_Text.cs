@@ -36,7 +36,6 @@ public class Heal_Normal_Effect_Text : EffectBase
             sb.AppendFormat("<sprite={0}>", hp_str[i]);
         }
         Show_Text = sb.ToString();
-        //Heal_Text.text = ZString.Format("{0}", recovery_hp);
     }
 
     private void Update()

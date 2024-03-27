@@ -52,6 +52,10 @@ public class BattleUIManager_V2 : MonoBehaviour
     /// </summary>
     List<LifeBarNode> Used_Life_Bar_List = new List<LifeBarNode>();
 
+    /// <summary>
+    /// 데미지 폰트
+    /// </summary>
+
     private void Start()
     {
         UpdateFastSpeed();

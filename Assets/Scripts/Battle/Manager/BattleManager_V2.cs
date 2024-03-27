@@ -162,6 +162,11 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public void StartUltimateSkill()
     {
+        //  모든 체력 게이지 숨기기
+        HideAllUnitLifeBar();
+        //  진행중이던 이펙트 모두 숨기기
+        GetEffectFactory().OnPauseAndHide();
+
         ChangeState(GAME_STATES.ULTIMATE_SKILL);
     }
 

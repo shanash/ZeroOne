@@ -21,6 +21,17 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     [SerializeField, Tooltip("Main Life Bar Knob")]
     Image Main_Life_Bar_Knob;
 
+    [Space()]
+    [Header("Image Fillamount Version")]
+    [SerializeField, Tooltip("Main Life Image Bar")]
+    Image Main_Life_Image_Bar;
+
+    [SerializeField, Tooltip("Sub Life Image Bar")]
+    Image Sub_Life_Image_Bar;
+
+    [SerializeField, Tooltip("Main Life Image Bar Knob")]
+    Image Main_Life_Image_Bar_Knob;
+
 
     [SerializeField, Tooltip("Duration Icon Container")]
     RectTransform Duration_Icon_Container;
@@ -34,6 +45,8 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     //  slider version
     Coroutine Slider_Flush_Coroutine;
+
+    bool Use_Slider = true;
 
 
     HeroBase_V2 Hero;
@@ -141,8 +154,19 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     public void SetLifeSliderPercent(float percent, bool show)
     {
         float p = Mathf.Clamp01(percent);
-        Main_Life_Bar.value = p;
-        
+        if (Use_Slider)
+        {
+            Main_Life_Bar.value = p;
+        }
+        else
+        {
+            Main_Life_Image_Bar.fillAmount = p;
+            float bar_width = 168;
+            var pos = Main_Life_Image_Bar_Knob.transform.localPosition;
+            pos.x = bar_width * p;
+            Main_Life_Image_Bar_Knob.transform.localPosition = pos;
+        }
+
         if (show)
         {
             ShowLifeBar(2f);
@@ -162,8 +186,15 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     /// </summary>
     void HideFlushSubSlider()
     {
-        Sub_Life_Bar.value = Main_Life_Bar.value;
-    }
+        if (Use_Slider)
+        {
+            Sub_Life_Bar.value = Main_Life_Bar.value;
+        }
+        else
+        {
+            Sub_Life_Image_Bar.fillAmount = Main_Life_Image_Bar.fillAmount;
+        }
+   }
 
     public void FlushSubSlider()
     {
@@ -179,19 +210,39 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
     /// <returns></returns>
     IEnumerator SubSliderFlush()
     {
-        Main_Life_Bar_Knob.gameObject.SetActive(true);
-        float life_rate = Main_Life_Bar.value;
-
-        float time = 0f;
-        const float duration = 1f;
-        while (time < duration)
+        if (Use_Slider)
         {
-            time += Time.deltaTime;
-            Sub_Life_Bar.value = Mathf.Lerp(Sub_Life_Bar.value, life_rate, time / duration);
-            yield return null;
+            Main_Life_Bar_Knob.gameObject.SetActive(true);
+            float life_rate = Main_Life_Bar.value;
+
+            float time = 0f;
+            const float duration = 1f;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                Sub_Life_Bar.value = Mathf.Lerp(Sub_Life_Bar.value, life_rate, time / duration);
+                yield return null;
+            }
+            Slider_Flush_Coroutine = null;
+            Main_Life_Bar_Knob.gameObject.SetActive(false);
         }
-        Slider_Flush_Coroutine = null;
-        Main_Life_Bar_Knob.gameObject.SetActive(false);
+        else
+        {
+            Main_Life_Image_Bar_Knob.gameObject.SetActive(true);
+            float life_rate = Main_Life_Image_Bar.fillAmount;
+
+            float time = 0f;
+            const float duration = 1f;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                Sub_Life_Image_Bar.fillAmount = Mathf.Lerp(Sub_Life_Image_Bar.fillAmount, life_rate, time / duration);
+                yield return null;
+            }
+            Slider_Flush_Coroutine = null;
+            Main_Life_Image_Bar_Knob.gameObject.SetActive(false);
+        }
+        
     }
 
    
@@ -224,8 +275,20 @@ public class LifeBarNode : MonoBehaviour, IPoolableComponent
 
     public void Spawned()
     {
-        Main_Life_Bar.value = 1f;
-        Sub_Life_Bar.value = 1f;
+        if (Use_Slider)
+        {
+            Main_Life_Bar.value = 1f;
+            Sub_Life_Bar.value = 1f;
+        }
+        else
+        {
+            Main_Life_Image_Bar.fillAmount = 1f;
+            Sub_Life_Image_Bar.fillAmount = 1f;
+            var pos = Main_Life_Image_Bar_Knob.transform.localPosition;
+            pos.x = 168;
+            Main_Life_Image_Bar_Knob.transform.localPosition = pos;
+        }
+
         if (This_Rect == null)
         {
             This_Rect = GetComponent<RectTransform>();
