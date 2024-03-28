@@ -392,7 +392,6 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     void PlayAudioSource(AudioSource src, AudioClip clip, bool loop)
     {
         SetAudioSource(src, clip, loop);
-        src.pitch = _FXTimeStretch;
         src.Play();
     }
 
@@ -661,6 +660,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         }
 
         AudioSource fxPlayer = GetFXAudioSource();
+        fxPlayer.pitch = _FXTimeStretch;
         PlayAudioSource(fxPlayer, clip_Control.Clip, loop);
 
         if (callback != null)

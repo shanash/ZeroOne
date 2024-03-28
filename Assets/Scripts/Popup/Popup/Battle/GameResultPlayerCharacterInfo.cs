@@ -92,7 +92,7 @@ public class GameResultPlayerCharacterInfo : UIBase
                 Level_Text.text = after_lv.ToString();
                 if (loop_count >= fullcharge_count)
                 {
-                    Lv_Up_Animator?.Play();
+                    //Lv_Up_Animator?.Play();
                     break;
                 }
             }
