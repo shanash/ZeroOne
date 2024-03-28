@@ -58,8 +58,8 @@ public class HeroInfoBox : MonoBehaviour
 
         for (int i = 0; i < cnt; i++)
         {
-            Tab_Off_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
-            Tab_On_Names[i].text = ConstString.HeroInfoUI.TAB_NAMES[i];
+            Tab_Off_Names[i].text = GameDefine.GetLocalizeString(ConstString.HeroInfoUI.TAB_NAMES[i]);
+            Tab_On_Names[i].text = GameDefine.GetLocalizeString(ConstString.HeroInfoUI.TAB_NAMES[i]);
         }
 
         Refresh();
@@ -78,7 +78,7 @@ public class HeroInfoBox : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 }

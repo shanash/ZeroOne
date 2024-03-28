@@ -75,7 +75,7 @@ public class HeroListUI : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        Title.text = ConstString.HeroListUI.TITLE;
+        Title.text = GameDefine.GetLocalizeString("system_character");
         UpdatePopup();
     }
 

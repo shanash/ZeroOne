@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
@@ -117,7 +118,7 @@ public class EssenceController : SceneControllerBase
         int gap = (int)((value * 100) - (origin * 100));
         if (gap > 0) AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/DM-CGS-26");
 
-        text.text = $"+{gap.ToString("N0")}";
+        text.text = ZString.Format(GameDefine.GetLocalizeString("system_plus_format"), gap.ToString("N0"));
         text.alpha = 0;
         float text_origin_y = text.rectTransform.anchoredPosition.y;
         float text_dest_y = text.rectTransform.anchoredPosition.y + 50;

@@ -140,7 +140,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
                 new StatusItemData(GameDefine.GetLocalizeString("system_stat_resist"), Unit_Data.GetResistPoint().ToString("N0"))
             };
 
-            popup.ShowPopup(ConstString.StatusPopup.ABILITY_TITLE, status_list, 0);
+            popup.ShowPopup(GameDefine.GetLocalizeString("system_stat_detail_information"), status_list, 0);
         });
     }
 
@@ -149,7 +149,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 
@@ -158,7 +158,7 @@ public class HeroInfoBoxBasic : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 }

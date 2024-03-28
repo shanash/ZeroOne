@@ -148,7 +148,7 @@ public class GameResultLosePopup : PopupBase
         Player_Exp_Gauge.value = before_exp_per;
         if (Dungeon.Game_Type == GAME_TYPE.STORY_MODE)
         {
-            Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
+            Player_Exp.text = ZString.Format(GameDefine.GetLocalizeString("system_plus_format"), gain_player_exp);
         }
         else
         {

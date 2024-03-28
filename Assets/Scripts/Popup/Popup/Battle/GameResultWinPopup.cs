@@ -295,7 +295,7 @@ public class GameResultWinPopup : PopupBase
 
         Player_Lv.text = before_lv.ToString();
         Player_Exp_Gauge.value = before_exp_per;
-        Player_Exp.text = ZString.Format("+{0}", gain_player_exp);
+        Player_Exp.text = ZString.Format(GameDefine.GetLocalizeString("system_plus_format"), gain_player_exp);
         Stage_Reward_Gold_Count.text = gain_default_gold.ToString("N0");
 
         //  금화 획득

@@ -144,7 +144,7 @@ public class HeroInfoUI : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        Title.text = ConstString.HeroInfoUI.TITLE;
+        Title.text = GameDefine.GetLocalizeString("system_character");
 
         UpdatePopup();
     }
@@ -171,12 +171,12 @@ public class HeroInfoUI : PopupBase
         index = (int)User_Hero_Battle_Data.GetTribeType() - 1;
         Tribe_Box.sprite = Tribe_Box_Sprites[index];
         Tribe_Tag.sprite = Tribe_Tag_Sprites[index];
-        Tribe_Text.text = ConstString.Hero.TRIBES[(int)Hero_Base_Data.tribe_type];
+        Tribe_Text.text = GameDefine.GetLocalizeString(ConstString.Hero.TRIBE[(int)Hero_Base_Data.tribe_type]);
 
         // 역할 태그 설정
         index = (int)Hero_Base_Data.role_type - 1;
         Role_Icon.sprite = Role_Icon_Sprites[index];
-        Role_Text.text = ConstString.Hero.ROLE[(int)Hero_Base_Data.role_type];
+        Role_Text.text = GameDefine.GetLocalizeString(ConstString.Hero.ROLE[(int)Hero_Base_Data.role_type]);
 
         SetRenderTextureAndCamera();
 
@@ -222,7 +222,7 @@ public class HeroInfoUI : PopupBase
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 

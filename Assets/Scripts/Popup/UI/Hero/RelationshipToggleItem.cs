@@ -1,4 +1,5 @@
 
+using Cysharp.Text;
 using FluffyDuck.UI;
 using Gpm.Ui;
 using TMPro;
@@ -46,7 +47,8 @@ public class RelationshipToggleItem : InfiniteScrollItem
     {
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Hero.FormatLimitLoveLevel(Data.Index));
+            popup.ShowPopup(3f, ZString.Format(GameDefine.GetLocalizeString("system_desc_love_level_help"), 
+                GameDefine.GetLocalizeString(ConstString.Hero.LOVE_LEVEL[Data.Index])));
         });
     }
 }

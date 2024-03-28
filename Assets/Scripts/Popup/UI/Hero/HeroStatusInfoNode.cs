@@ -127,7 +127,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
     }
     void UpdateStatusPhysicsAttack()
@@ -145,7 +145,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
     }
     void UpdateStatusMagicAttack()
@@ -164,7 +164,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
     }
     void UpdateStatusPhysicsDefense()
@@ -182,7 +182,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -201,7 +201,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
     }
 
@@ -220,7 +220,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -239,7 +239,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -258,7 +258,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -277,7 +277,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -296,7 +296,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -316,7 +316,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -335,7 +335,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -354,7 +354,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }
@@ -373,7 +373,7 @@ public class HeroStatusInfoNode : MonoBehaviour
         if (Add_Status_Value != null)
         {
             double add_value = result_val - cur_val;
-            Add_Status_Value.text = ZString.Format("(+{0:N0})", add_value);
+            Add_Status_Value.text = ZString.Format("(" + GameDefine.GetLocalizeString("system_plus_format") + ")", add_value.ToString("N0"));
         }
 
     }

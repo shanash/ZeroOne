@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using TMPro;
@@ -62,10 +63,10 @@ public class ProfilePopup : PopupBase
 
     protected override void FixedUpdatePopup()
     {
-        Age_Subject.text = ConstString.ProfilePopup.AGE;
-        Birthday_Subject.text = ConstString.ProfilePopup.BIRTHDAY;
-        Height_Subject.text = ConstString.ProfilePopup.HEIGHT;
-        Hobby_Subject.text = ConstString.ProfilePopup.HOBBY;
+        Age_Subject.text = GameDefine.GetLocalizeString("system_age");
+        Birthday_Subject.text = GameDefine.GetLocalizeString("system_birthday");
+        Height_Subject.text = GameDefine.GetLocalizeString("system_height");
+        Hobby_Subject.text = GameDefine.GetLocalizeString("system_hobby");
 
         CommonUtils.GetResourceFromAddressableAsset<Sprite>(Data.icon_path, (spr) =>
         {
@@ -74,9 +75,9 @@ public class ProfilePopup : PopupBase
         
 
         Name.text = GameDefine.GetLocalizeString(Data.name_id);
-        Age.text = ConstString.Hero.FormatHeroAge(Data.profile_age);
-        Birthday.text = ConstString.Hero.FormatHeroBirthday(Data.profile_birthday);
-        Height.text = ConstString.Hero.FormatHeroHeight(Data.profile_high);
+        Age.text = ZString.Format(GameDefine.GetLocalizeString("system_age_format"), Data.profile_age);
+        Birthday.text = ZString.Format(GameDefine.GetLocalizeString("system_birthday_format"), Data.profile_birthday[0], Data.profile_birthday[1]);
+        Height.text = ZString.Format(GameDefine.GetLocalizeString("system_height_format"), Data.profile_high);
         Hobby.text = Data.profile_habby;
         Descriptions.text = Data.script;
     }

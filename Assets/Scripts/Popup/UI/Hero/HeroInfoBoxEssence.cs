@@ -1,3 +1,4 @@
+using Cysharp.Text;
 using FluffyDuck.UI;
 using FluffyDuck.Util;
 using Gpm.Ui;
@@ -114,12 +115,12 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
     public void FixedUpdatePopup()
     {
-        TransferEssencePercent_Subject.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER_PERCENT;
-        CombatPower_Subject.text = ConstString.Hero.COMBAT_POWER;
-        TransferReaction_Subject.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER_REACTION;
-        FoundSpot_Subject.text = ConstString.HeroInfoUI.ESSENCE_FOUND_SPOT;
-        FoundSpot_Skip_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_SKIP;
-        TransferEssence_Button_Value.text = ConstString.HeroInfoUI.ESSENCE_TRANSFER;
+        TransferEssencePercent_Subject.text = GameDefine.GetLocalizeString("system_essence_archive");
+        CombatPower_Subject.text = GameDefine.GetLocalizeString("system_stat_battlepower");
+        TransferReaction_Subject.text = GameDefine.GetLocalizeString("system_stat_life");
+        FoundSpot_Subject.text = GameDefine.GetLocalizeString("system_essence_find_spot");
+        FoundSpot_Skip_Button_Value.text = GameDefine.GetLocalizeString("system_essence_skip");
+        TransferEssence_Button_Value.text = GameDefine.GetLocalizeString("system_essence_send_essence");
 
         //int percent = PERCENT;
 
@@ -138,7 +139,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
             */
             //TODO: M2를 위해서 하드코딩으로 0번째 1번째만 활성화 시켜줍니다
             var toggle_data = new RelationshipToggleItemData(i,
-                ConstString.Hero.LOVE_LEVEL[i],
+                GameDefine.GetLocalizeString(ConstString.Hero.LOVE_LEVEL[i]),
                 TransferReaction_ToggleGroup,
                 i <= 1,
                 OnToggleChangedRelationship);
@@ -215,7 +216,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
 
         var combat = (int)GameCalc.GetCombatPoint(add_hp, add_atk, add_def, 0, 0, 0, 0, 0);
         
-        AddedCombatPower_Value.text = ConstString.FormatPlus(combat);
+        AddedCombatPower_Value.text = ZString.Format(GameDefine.GetLocalizeString("system_plus_format"),combat.ToString("N0"));
 
         for (int i = 0; i < FoundSpot_Value.Count; i++)
         {
@@ -246,7 +247,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
                 status_list.Add(new StatusItemData(data.essence_charge_per.ToPercentage(), data.ToStringForUI(), (data.essence_charge_per.Equals(percent))));
             }
 
-            popup.ShowPopup(ConstString.StatusPopup.ESSENCE_TITLE, status_list, percent);
+            popup.ShowPopup(GameDefine.GetLocalizeString("system_detail_information"), status_list, percent);
         });
     }
 
@@ -282,7 +283,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 
@@ -291,7 +292,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
         {
-            popup.ShowPopup(3f, ConstString.Message.NOT_YET);
+            popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_preparing"));
         });
     }
 

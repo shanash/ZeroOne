@@ -27,7 +27,7 @@ public class TitleManager : SceneControllerBase
                     CheckAndDownloadAssets(() => SCManager.Instance.ChangeScene(SceneName.load)).Forget();
                     break;
                 case "MenuBtn":
-                    CommonUtils.ShowToast(ConstString.Message.NOT_YET, TOAST_BOX_LENGTH.SHORT);
+                    CommonUtils.ShowToast(GameDefine.GetLocalizeString("system_alert_preparing"), TOAST_BOX_LENGTH.SHORT);
                     break;
             }
         }
