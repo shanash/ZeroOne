@@ -736,7 +736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC18C\uC6D0\uC744 \uB4E4\uC5B4\uC8FC\uB294 \uD1A0\uB07C"
+  m_text: "\uACF5\uD3EC\uC758 \uC5EC\uC655"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
   m_sharedMaterial: {fileID: -833051949779937289, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
@@ -763,8 +763,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 20
@@ -978,7 +978,7 @@ GameObject:
   - component: {fileID: 8560417608552315973}
   - component: {fileID: 9115473814318716195}
   m_Layer: 5
-  m_Name: EventMissionBtn
+  m_Name: BossDungeonBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1056,7 +1056,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3428823886305147000}
         m_TargetAssemblyTypeName: MissionGateUI, Assembly-CSharp
-        m_MethodName: OnClickSpecialMission
+        m_MethodName: OnClickBossBattle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1203,8 +1203,8 @@ MonoBehaviour:
   Box_Rect: {fileID: 508451430534434048}
   Popup_Type: 1
   Ease_Base: {fileID: 0}
-  Boss_Dungeon_Btn: {fileID: 791984560891478387}
-  Boss_Dungeon_Lock: {fileID: 1402844830328966323}
+  Boss_Dungeon_Btn: {fileID: 8560417608552315973}
+  Boss_Dungeon_Lock: {fileID: 4658353221936486813}
 --- !u!1 &3964934843338353444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,10 +1237,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6251571967760339628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -67, y: -44}
-  m_SizeDelta: {x: 300, y: 30}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -67, y: 70}
+  m_SizeDelta: {x: 300, y: 60}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &1350607278863716882
 CanvasRenderer:
@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD2B9\uC218 \uC784\uBB34"
+  m_text: "\uBCF4\uC2A4\uC804"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
   m_sharedMaterial: {fileID: -833051949779937289, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
@@ -1297,8 +1297,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 20
@@ -1509,7 +1509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5822164646908548994
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1712,7 +1712,7 @@ GameObject:
   - component: {fileID: 4088998299684235638}
   - component: {fileID: 791984560891478387}
   m_Layer: 5
-  m_Name: BossBattleBtn
+  m_Name: EventMissionBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1788,7 +1788,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3428823886305147000}
         m_TargetAssemblyTypeName: MissionGateUI, Assembly-CSharp
-        m_MethodName: OnClickBossBattle
+        m_MethodName: OnClickSpecialMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1833,9 +1833,9 @@ RectTransform:
   - {fileID: 6634220298006172884}
   m_Father: {fileID: 6251571967760339628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60, y: -86}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -60, y: 30}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2272474999324143270
@@ -3225,7 +3225,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBCF4\uC2A4\uC804"
+  m_text: "\uD2B9\uC218 \uC784\uBB34"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
   m_sharedMaterial: {fileID: -833051949779937289, guid: 7031ec5bd4d59584599ad95ffb4d925c, type: 2}
@@ -3769,6 +3769,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622617967306803602, guid: de8eea1a0d3ca9c40a7607a1ff2757a0, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1709483502743402143, guid: de8eea1a0d3ca9c40a7607a1ff2757a0, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3199510411067003623, guid: de8eea1a0d3ca9c40a7607a1ff2757a0, type: 3}

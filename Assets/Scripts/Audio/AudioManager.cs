@@ -518,7 +518,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         if (clip_Control == null)
         {
-            Debug.Assert(clip_Control != null, "미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다.");
+            Debug.Assert(clip_Control != null, $"미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다. [{key}]");
             _ = PreloadAudioAsync(key);
 
             return;
@@ -654,7 +654,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         var clip_Control = GetAudioClipController(key);
         if (clip_Control == null)
         {
-            Debug.Assert(clip_Control != null, "미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다.");
+            Debug.Assert(clip_Control != null, $"미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다. [{key}]");
             _ = PreloadAudioAsync(key);
 
             return false;
@@ -684,7 +684,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         var clip_Control = GetAudioClipController(key);
         if (clip_Control == null)
         {
-            Debug.Assert(clip_Control != null, "미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다.");
+            Debug.Assert(clip_Control != null, $"미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다. [{key}]");
             _ = PreloadAudioAsync(key);
 
             return false;

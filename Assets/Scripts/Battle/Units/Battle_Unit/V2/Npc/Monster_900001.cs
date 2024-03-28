@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Monster_900001 : MonsterBase_V2
 {
+    [SerializeField, Tooltip("Aura Fx Effect")]
+    GameObject Aura_Fx_Effect;
 
     #region States
     public override void UnitStateSkillReady01()
@@ -26,12 +28,20 @@ public class Monster_900001 : MonsterBase_V2
         PlayAnimation(track, skill_action_name, false);
     }
 
+    public override void UnitStateDeathBegin()
+    {
+        base.UnitStateDeathBegin();
+        Aura_Fx_Effect.gameObject.SetActive(false);
+    }
+
     #endregion
 
 
 
 
     #region Etc Funcs
+
+
 
     public override void UltimateSkillExec()
     {
@@ -78,45 +88,7 @@ public class Monster_900001 : MonsterBase_V2
             ChangeState(UNIT_STATES.ATTACK_READY_1);
         }
     }
-    /// <summary>
-    /// 스파인 애니메이션 시작시 호출되는 리스너
-    /// </summary>
-    /// <param name="entry"></param>
-    protected override void SpineAnimationStart(TrackEntry entry)
-    {
-        string animation_name = entry.Animation.Name;
-        entry.TimeScale = Battle_Speed_Multiple;
-
-        UNIT_STATES state = GetCurrentState();
-        if (state == UNIT_STATES.ATTACK_1)
-        {
-            var skill_grp = GetSkillManager().GetCurrentSkillGroup();
-            //  스킬 시작시 각 스킬의 타겟을 미리 설정해준다.(중간에 변경되는 일이 없도록 하기 위해)
-            if (animation_name.Equals(skill_grp.GetSkillActionName()))
-            {
-                for (int i = 0; i < skill_grp.GetBattleSkillDataList().Count; i++)
-                {
-                    var skill = skill_grp.GetBattleSkillDataList()[i];
-                    FindTargetsSkillAddTargets(skill);
-                }
-                SpawnSkillCastEffect(skill_grp);
-            }
-        }
-        else if (state == UNIT_STATES.SKILL_1)
-        {
-            var skill_grp = GetSkillManager().GetSpecialSkillGroup();
-            if (animation_name.Equals(skill_grp.GetSkillActionName()))
-            {
-                for (int i = 0; i < skill_grp.GetBattleSkillDataList().Count; i++)
-                {
-                    var skill = skill_grp.GetBattleSkillDataList()[i];
-                    FindTargetsSkillAddTargets(skill);
-                }
-
-                SpawnSkillCastEffect(skill_grp);
-            }
-        }
-    }
+    
 
     /// <summary>
     /// 스파인 애니메이션 동작 완료시 호출되는 리스너
@@ -238,6 +210,21 @@ public class Monster_900001 : MonsterBase_V2
         }
     }
 
+    public override void SetAlphaAnimation(float alpha, float duration, bool finish_render_enable)
+    {
+        base.SetAlphaAnimation(alpha, duration, finish_render_enable);
+
+        Aura_Fx_Effect?.gameObject.SetActive(alpha != 0);
+    }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        if (!Aura_Fx_Effect.gameObject.activeSelf)
+        {
+            Aura_Fx_Effect.gameObject.SetActive(true);
+        }
+    }
     #endregion
 
 

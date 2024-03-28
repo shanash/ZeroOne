@@ -114,6 +114,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         //  npc prefabs
         Dungeon_Data.GetMonsterPrefabsPath(ref list);
+        Dungeon_Data.GetMonsterSkillVoiceAndFxSoundPath(ref audio_clip_list);
 
         var player_team = FindTeamManager(TEAM_TYPE.LEFT);
         if (player_team != null)
@@ -565,6 +566,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         Game_Over_Delta = 1.5f;
         AudioManager.Instance.StopAllFX();
+        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
     }
     public virtual void GameStateGameOverWinReady() 
     {
@@ -622,6 +624,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         Game_Over_Delta = 1.5f;
         AudioManager.Instance.StopAllFX();
+        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
     }
     public virtual void GameStateGameOverLoseReady() 
     {
@@ -665,6 +668,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateTimeOutBegin() 
     {
         GetEffectFactory().ClearAllEffects();
+        AudioManager.Instance.StopAllFX();
+        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
         //  동작 정지
         TeamMembersChangeState(UNIT_STATES.TIME_OUT);
         

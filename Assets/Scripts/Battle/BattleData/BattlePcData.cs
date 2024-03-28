@@ -649,7 +649,12 @@ public class BattlePcData : BattleUnitData
     {
         if (Battle_Data != null)
         {
-            return (float)Battle_Data.approach + Add_Approach_Distance;
+            float dist = (float)Battle_Data.approach + Add_Approach_Distance;
+            if (dist > 14f)
+            {
+                dist = 14f;
+            }
+            return dist;
         }
         return 0;
     }

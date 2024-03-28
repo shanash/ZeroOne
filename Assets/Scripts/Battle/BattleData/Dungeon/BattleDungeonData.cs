@@ -73,12 +73,8 @@ public class BattleDungeonData : BattleDataBase
     /// 몬스터 궁극기 스킬 보이스 반환
     /// </summary>
     /// <param name="path"></param>
-    public virtual void GetSkillVoicePath(ref List<string> path) { }
-    /// <summary>
-    /// 몬스터 스킬 이펙트 사운드 반환
-    /// </summary>
-    /// <param name="path"></param>
-    public virtual void GetSkillEffectSoundPath(ref List<string> path) { }
+    public virtual void GetMonsterSkillVoiceAndFxSoundPath(ref List<string> path) { }
+    
 
     public virtual object GetWaveData() { return null; }
 
@@ -88,6 +84,103 @@ public class BattleDungeonData : BattleDataBase
     /// <param name="dt"></param>
     /// <returns>제한시간이 남아 있으면 <b>false</b>, 제한시간이 모두 소진되었으면 <b>true</b></returns>
     public virtual bool CalcDundeonLimitTime(float dt) { return false; }
+
+    /// <summary>
+    /// NPC의 스킬에 사용될 보이스 및 이벡트 사운드 경로들을 가져온다
+    /// </summary>
+    /// <param name="npc"></param>
+    /// <param name="sound_list"></param>
+    protected void GetNpcSkillVoiceAndSfxSoundPath(Npc_Data npc, ref List<string> sound_list)
+    {
+        var m = MasterDataManager.Instance;
+        List<Npc_Skill_Data> skill_list = new List<Npc_Skill_Data>();
+
+        //  battle data
+        var bdata = m.Get_NpcBattleData(npc.npc_battle_id);
+        if (bdata != null)
+        {
+            List<int> skill_group_ids = new List<int>();
+            skill_group_ids.AddRange(bdata.skill_pattern);
+            skill_group_ids.Add(bdata.special_skill_group_id);
+            int grp_cnt = skill_group_ids.Count;
+
+            for (int g = 0; g < grp_cnt; g++)
+            {
+                int gid = skill_group_ids[g];
+                if (gid == 0)
+                {
+                    continue;
+                }
+                //  skill group
+                var skill_group = m.Get_NpcSkillGroup(gid);
+                if (skill_group == null)
+                {
+                    UnityEngine.Debug.Assert(false);
+                    continue;
+                }
+                //  skill group cast voice & cas sfx
+                if (!string.IsNullOrEmpty(skill_group.skill_sfx_path) && !sound_list.Contains(skill_group.skill_sfx_path))
+                {
+                    sound_list.Add(skill_group.skill_sfx_path);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_1) && !sound_list.Contains(skill_group.skill_voice_path_1))
+                {
+                    sound_list.Add(skill_group.skill_voice_path_1);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_2) && !sound_list.Contains(skill_group.skill_voice_path_2))
+                {
+                    sound_list.Add(skill_group.skill_voice_path_2);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_3) && !sound_list.Contains(skill_group.skill_voice_path_3))
+                {
+                    sound_list.Add(skill_group.skill_voice_path_3);
+                }
+
+                //  skill list
+                m.Get_NpcSkillDataListBySkillGroup(skill_group.npc_skill_group_id, ref skill_list);
+
+                //int skill_cnt = skill_list.Count;
+                //for (int s = 0; s < skill_cnt; s++)
+                //{
+                //    var npc_skill = skill_list[s];
+                //    //  npc skill effect
+                //    if (!string.IsNullOrEmpty(npc_skill.trigger_effect_path) && !prefab_list.Contains(npc_skill.trigger_effect_path))
+                //    {
+                //        prefab_list.Add(npc_skill.trigger_effect_path);
+                //    }
+
+                //    //  onetime skill list
+                //    for (int o = 0; o < npc_skill.onetime_effect_ids.Length; o++)
+                //    {
+                //        int onetime_skill_id = npc_skill.onetime_effect_ids[o];
+                //        if (onetime_skill_id == 0)
+                //        {
+                //            continue;
+                //        }
+                //        var onetime_data = m.Get_NpcSkillOnetimeData(onetime_skill_id);
+                //        if (!string.IsNullOrEmpty(onetime_data.effect_path) && !prefab_list.Contains(onetime_data.effect_path))
+                //        {
+                //            prefab_list.Add(onetime_data.effect_path);
+                //        }
+                //    }
+                //    //  duration skill list
+                //    for (int d = 0; d < npc_skill.duration_effect_ids.Length; d++)
+                //    {
+                //        int duration_skill_id = npc_skill.duration_effect_ids[d];
+                //        if (duration_skill_id == 0)
+                //        {
+                //            continue;
+                //        }
+                //        var duration_data = m.Get_NpcSkillDurationData(duration_skill_id);
+                //        if (!string.IsNullOrEmpty(duration_data.effect_path) && !prefab_list.Contains(duration_data.effect_path))
+                //        {
+                //            prefab_list.Add(duration_data.effect_path);
+                //        }
+                //    }
+                //}
+            }
+        }
+    }
 
     /// <summary>
     /// NPC의 스킬에 사용될 이펙트 프리팹 경로들을 가져온다

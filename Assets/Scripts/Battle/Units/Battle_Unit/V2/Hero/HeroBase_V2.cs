@@ -539,6 +539,23 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         SendSlotEvent(SKILL_SLOT_EVENT_TYPE.LIFE_UPDATE);
     }
 
+    protected void PlaySkillVoiceAndSfx(BattleSkillGroup skill_grp)
+    {
+        var audio = AudioManager.Instance;
+        //  voice
+        string voice = skill_grp.GetSkillVoiceSound(Speed_Type);
+        if (!string.IsNullOrEmpty(voice))
+        {
+            audio.PlayBattleVoice(voice, false);
+        }
+
+        //  cast sfx
+        string sfx = skill_grp.GetSkillFxSound();
+        if (!string.IsNullOrEmpty(sfx))
+        {
+            audio.PlayFX(sfx, false);
+        }
+    }
 
     /// <summary>
     /// 스켈레톤(스파인) 이벤트 리스너 등록
@@ -581,6 +598,10 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                     FindTargetsSkillAddTargets(skill);
                 }
                 SpawnSkillCastEffect(skill_grp);
+
+                //  sfx sound
+                PlaySkillVoiceAndSfx(skill_grp);
+
             }
         }
         else if (state == UNIT_STATES.SKILL_1)
@@ -595,10 +616,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 }
 
                 SpawnSkillCastEffect(skill_grp);
+                //  sfx sound
+                PlaySkillVoiceAndSfx(skill_grp);
             }
         }
-
     }
+
+    
+
     /// <summary>
     /// 스파인 애니메이션 동작 완료시 호출되는 리스너
     /// </summary>
@@ -747,7 +772,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="alpha"></param>
     /// <param name="duration"></param>
     /// <param name="finish_render_enable">애니메이션 종료 후 렌더러 상태 적용</param>
-    public void SetAlphaAnimation(float alpha, float duration, bool finish_render_enable)
+    public virtual void SetAlphaAnimation(float alpha, float duration, bool finish_render_enable)
     {
         if (Render_Texture == null)
         {
@@ -2020,18 +2045,9 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         Battle_Mng.StartUltimateSkill();
         ChangeState(UNIT_STATES.SKILL_READY_1);
 
-        string voice = skill_grp.GetSkillVoiceSound(Speed_Type);
-        if (!string.IsNullOrEmpty(voice))
-        {
-            AudioManager.Instance.PlayFX(voice, false);
-        }
+        //  voice / sfx sound
+        PlaySkillVoiceAndSfx(skill_grp);
 
-        //  cast sfx
-        string sfx = skill_grp.GetSkillFxSound();
-        if (!string.IsNullOrEmpty(sfx))
-        {
-            AudioManager.Instance.PlayFX(sfx, false);
-        }
     }
 
     public void SetChangeColor(string color, bool is_rollback)

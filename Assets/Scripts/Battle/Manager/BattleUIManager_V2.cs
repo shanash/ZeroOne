@@ -203,7 +203,7 @@ public class BattleUIManager_V2 : MonoBehaviour
     }
     public void OnClickFastPlay()
     {
-        AudioManager.Instance.PlayBattleVoice("Assets/AssetResources/Audio/FX/click_01");
+        AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
         int speed_type = GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
         speed_type += 1;
         if (speed_type > GameDefine.GAME_SPEEDS.Count -1)

@@ -79,7 +79,7 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
         }
     }
 
-    public override void GetSkillVoicePath(ref List<string> list)
+    public override void GetMonsterSkillVoiceAndFxSoundPath(ref List<string> list)
     {
         var m = MasterDataManager.Instance;
         int wave_cnt = Wave_Datas.Count;
@@ -94,14 +94,7 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
                 var npc = m.Get_NpcData(npc_id);
                 if (npc != null)
                 {
-                    ////  npc prefab path add
-                    //if (!list.Contains(npc.voic))
-                    //{
-                    //    list.Add(npc.prefab_path);
-                    //}
-                    
-
-                    //GetNpcSkillEffectPrefabPath(npc, ref list);
+                    GetNpcSkillVoiceAndSfxSoundPath(npc, ref list);
                 }
             }
         }

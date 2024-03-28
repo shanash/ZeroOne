@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +74,28 @@ public class BattleDungeon_BossStageData : BattleDungeonData
             }
         }
     }
+
+    public override void GetMonsterSkillVoiceAndFxSoundPath(ref List<string> list)
+    {
+        var m = MasterDataManager.Instance;
+        int wave_cnt = Wave_Datas.Count;
+        //  웨이브별 npc 프리팹
+        for (int w = 0; w < wave_cnt; w++)
+        {
+            var wdata = Wave_Datas[w];
+            int len = wdata.enemy_appearance_info.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int npc_id = wdata.enemy_appearance_info[i];
+                var npc = m.Get_NpcData(npc_id);
+                if (npc != null)
+                {
+                    GetNpcSkillVoiceAndSfxSoundPath(npc, ref list);
+                }
+            }
+        }
+    }
+
     public override int GetPlayerExp()
     {
         var repeat_reward_data_list = MasterDataManager.Instance.Get_RewardSetDataList(GetRepeatRewardGroupID()).ToList();
