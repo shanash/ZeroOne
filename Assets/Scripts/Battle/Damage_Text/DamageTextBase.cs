@@ -43,12 +43,27 @@ public class DamageTextBase : MonoBehaviour, IPoolableComponent
         SetPosition(target_pos);
         StartMove(point, dtype);
     }
-
+    /// <summary>
+    /// 토탈 포인트 전용
+    /// </summary>
+    /// <param name="total"></param>
+    /// <param name="target_pos"></param>
     public virtual void ShowText(Total_Damage_Data total, Vector3 target_pos)
     {
         double point = total.GetTotalDamage();
         SetPosition(target_pos);
         StartMove(point, DAMAGE_TYPE.TOTAL);
+    }
+
+    /// <summary>
+    /// Miss 전용
+    /// </summary>
+    /// <param name="target_pos"></param>
+    public virtual void ShowText(Vector3 target_pos)
+    {
+        double point = 0;
+        SetPosition(target_pos);
+        StartMove(point, DAMAGE_TYPE.NORMAL);
     }
 
     protected void SetPosition(Vector3 target_pos)
@@ -59,13 +74,19 @@ public class DamageTextBase : MonoBehaviour, IPoolableComponent
 
     protected void StartMove(double pt, DAMAGE_TYPE dtype)
     {
-        string point_str = pt.ToString();
-        int cnt = point_str.Length;
         var sb = ZString.CreateStringBuilder();
-
-        for (int i = 0; i < cnt; i++)
+        if (pt == 0)
         {
-            sb.AppendFormat("<sprite={0}>", point_str[i]);
+            sb.Append("<sprite=11>");
+        }
+        else
+        {
+            string point_str = pt.ToString();
+            int cnt = point_str.Length;
+            for (int i = 0; i < cnt; i++)
+            {
+                sb.AppendFormat("<sprite={0}>", point_str[i]);
+            }
         }
 
         Damage_Main_Text.text = sb.ToString();

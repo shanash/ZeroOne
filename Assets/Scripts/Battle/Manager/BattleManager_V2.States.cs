@@ -75,14 +75,9 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         CreateTeamManagers();
 
-        {
-            var audio = AudioManager.Instance;
-
-            List<string> audio_clip_list = new List<string>();
-            audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
-
-            audio.PreloadAudioClipsAsync(audio_clip_list, null);
-        }
+        //  audio
+        List<string> audio_clip_list = new List<string>();
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
@@ -109,9 +104,9 @@ public partial class BattleManager_V2 : SceneControllerBase
         list.Add("Assets/AssetResources/Prefabs/Damage_Text/Physics_Damage_Text_Node");
         list.Add("Assets/AssetResources/Prefabs/Damage_Text/Magic_Total_Damage_Text_Node");
         list.Add("Assets/AssetResources/Prefabs/Damage_Text/Magic_Damage_Text_Node");
+        list.Add("Assets/AssetResources/Prefabs/Damage_Text/Miss_Text_Node");
 
         //  skill slot
-        list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleSkillSlot_V2");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/BattleDurationSkillIconNode");
         list.Add("Assets/AssetResources/Prefabs/UI/Battle/EnemyDurationSkillIconNode");
@@ -124,7 +119,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         if (player_team != null)
         {
             player_team.GetHeroPrefabsPath(ref list);
+            player_team.GetHeroVoicePath(ref audio_clip_list);
         }
+
+        AudioManager.Instance.PreloadAudioClipsAsync(audio_clip_list, null);
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(list, PreloadCallback);
     }
@@ -566,6 +564,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverWinReadyBegin() 
     {
         Game_Over_Delta = 1.5f;
+        AudioManager.Instance.StopAllFX();
     }
     public virtual void GameStateGameOverWinReady() 
     {
@@ -622,6 +621,7 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverLoseReadyBegin() 
     {
         Game_Over_Delta = 1.5f;
+        AudioManager.Instance.StopAllFX();
     }
     public virtual void GameStateGameOverLoseReady() 
     {

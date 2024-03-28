@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,6 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     UserStoryStageData User_Data;
     Stage_Data Stage;
     List<Wave_Data> Wave_Datas = new List<Wave_Data>();
-
     public BattleDungeon_StoryStageData() : base(GAME_TYPE.STORY_MODE) { }
 
     public override void SetDungeonID(int dungeon_id)
@@ -74,6 +74,34 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
                     }
 
                     GetNpcSkillEffectPrefabPath(npc, ref list);
+                }
+            }
+        }
+    }
+
+    public override void GetSkillVoicePath(ref List<string> list)
+    {
+        var m = MasterDataManager.Instance;
+        int wave_cnt = Wave_Datas.Count;
+        //  웨이브별 npc 프리팹
+        for (int w = 0; w < wave_cnt; w++)
+        {
+            var wdata = Wave_Datas[w];
+            int len = wdata.enemy_appearance_info.Length;
+            for (int i = 0; i < len; i++)
+            {
+                int npc_id = wdata.enemy_appearance_info[i];
+                var npc = m.Get_NpcData(npc_id);
+                if (npc != null)
+                {
+                    ////  npc prefab path add
+                    //if (!list.Contains(npc.voic))
+                    //{
+                    //    list.Add(npc.prefab_path);
+                    //}
+                    
+
+                    //GetNpcSkillEffectPrefabPath(npc, ref list);
                 }
             }
         }

@@ -93,4 +93,25 @@ public class BattleNpcSkillGroup : BattleSkillGroup
     {
         return Skill_Level;
     }
+
+    public override string GetSkillFxSound()
+    {
+        return Skill_Group.skill_sfx_path;
+    }
+
+    public override string GetSkillVoiceSound(BATTLE_SPEED_TYPE speed)
+    {
+        switch (speed)
+        {
+            case BATTLE_SPEED_TYPE.NORMAL_TYPE:
+                return Skill_Group.skill_voice_path_1;
+            case BATTLE_SPEED_TYPE.FAST_SPEED_X2:
+                return Skill_Group.skill_voice_path_2;
+            case BATTLE_SPEED_TYPE.FAST_SPEED_X3:
+                return Skill_Group.skill_voice_path_3;
+        }
+        return string.Empty;
+    }
+
+
 }

@@ -207,6 +207,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// 게임 배속
     /// </summary>
     protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+    protected BATTLE_SPEED_TYPE Speed_Type = BATTLE_SPEED_TYPE.NORMAL_TYPE;
 
     /// <summary>
     /// 게임 타입
@@ -269,9 +270,11 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         SetTeamFieldPosition(Team_Field_Position);
     }
 
-    public void SetBattleSpeed(float speed)
+    public void SetBattleSpeed(BATTLE_SPEED_TYPE stype)
     {
-        Battle_Speed_Multiple = speed;
+        Speed_Type = stype;
+        Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[Speed_Type];
+        
         var tracks = FindAllTrakcs();
         if (tracks != null && tracks.Length > 0)
         {
@@ -1451,7 +1454,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 return;
             }
         }
-        
 
         ONETIME_EFFECT_TYPE etype = dmg.Onetime.GetOnetimeEffectType();
         bool is_physics_dmg = etype == ONETIME_EFFECT_TYPE.PHYSICS_DAMAGE;
@@ -1463,8 +1465,17 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         //  회피 여기서 계산할까? 회피하면 미스 판정.(데미지 0)
         if (IsEvation(dmg.Caster.Accuracy))
         {
-            //last_damage = damage * 0.9;  //  임시로 회피시 데미지의 90%만 들어가도록 하자.
             //  miss 소환 필요
+            dmg.Is_Miss = true;
+            dmg.Physics_Attack_Point = 0;
+            dmg.Magic_Attack_Point = 0;
+            AddMissText();
+            //  토탈 데미지 계산을 위해서
+            if (dmg.Skill_Group != null && dmg.Skill_Group.GetSkillType() == SKILL_TYPE.SPECIAL_SKILL)
+            {
+                AddTotalDamageInfo(dmg);
+            }
+
             return;
         }
 
@@ -1590,6 +1601,14 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         total_text.ShowText(total, target_pos);
     }
 
+    void AddMissText()
+    {
+        Vector3 target_pos = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position;
+        string prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Miss_Text_Node";
+
+        var miss_text = Battle_Mng.GetDamageTextFactory().Create(prefab_path);
+        miss_text.ShowText(target_pos);
+    }
     
     /// <summary>
     /// 데미지 폰트 생성
@@ -1614,7 +1633,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         if (is_physics_dmg)
         {
-            //prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Physics_Single_Damage_Node";
             prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Physics_Damage_Text_Node";
             if (send_data.Is_Weak)
             {
@@ -1637,7 +1655,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         }
         else
         {
-            //prefab_path = "Assets/AssetResources/Prefabs/Effects/Common/Magic_Single_Damage_Node";
             prefab_path = "Assets/AssetResources/Prefabs/Damage_Text/Magic_Damage_Text_Node";
             if (send_data.Is_Weak)
             {
@@ -1658,17 +1675,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 }
             }
         }
-
-        //var d = new Effect_Queue_Data();
-        //d.Effect_path = prefab_path;
-        //d.Target_Position = GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position;
-        //d.Data = send_data;
-        //d.Duration = 1f + ((Battle_Speed_Multiple - 1) * 1f);
-        //d.Parent_Transform = UI_Mng.GetDamageContainer();
-        //d.Damage_Type = dmg_type;
-        //d.Need_Move = true;
-        //d.Target_Team_Type = Team_Type;
-        //SpawnQueueEffect(d);
 
         var dmg_text = Battle_Mng.GetDamageTextFactory().Create(prefab_path);
         dmg_text.ShowText(send_data, dmg_type, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position + dmg_text_position, Team_Type == TEAM_TYPE.LEFT ? DAMAGE_DIRECTION.LEFT : DAMAGE_DIRECTION.RIGHT);
@@ -1696,9 +1702,7 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
             Life = Max_Life;
         }
 
-        //AddSpawnEffectText("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect", Life_Bar_Pos.position, recovery_hp, 1f, null);
         var recovery_text = Battle_Mng.GetDamageTextFactory().Create("Assets/AssetResources/Prefabs/Damage_Text/Recovery_Text_Node");
-        //recovery_text.ShowText(recovery_hp, DAMAGE_TYPE.NORMAL, Life_Bar_Pos.position);
         recovery_text.ShowText(recovery_hp, DAMAGE_TYPE.NORMAL, GetReachPosTypeTransform(TARGET_REACH_POS_TYPE.BODY).position);
         UpdateLifeBar();
     }
@@ -2015,6 +2019,19 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
 
         Battle_Mng.StartUltimateSkill();
         ChangeState(UNIT_STATES.SKILL_READY_1);
+
+        string voice = skill_grp.GetSkillVoiceSound(Speed_Type);
+        if (!string.IsNullOrEmpty(voice))
+        {
+            AudioManager.Instance.PlayFX(voice, false);
+        }
+
+        //  cast sfx
+        string sfx = skill_grp.GetSkillFxSound();
+        if (!string.IsNullOrEmpty(sfx))
+        {
+            AudioManager.Instance.PlayFX(sfx, false);
+        }
     }
 
     public void SetChangeColor(string color, bool is_rollback)
@@ -2144,8 +2161,24 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
     /// <param name="evt_val"></param>
     public virtual void TriggerEventListener(string trigger_id, EventTriggerValue evt_val)
     {
-        Debug.Log($"{trigger_id} => {evt_val.ToString()}");
-        
+        //  감추기
+        if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.chr_hide.ToString()))
+        {
+            HideCharacters(evt_val);
+        }   //  보이기
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.chr_show.ToString()))
+        {
+            ShowCharacters(evt_val);
+        }
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.change_color.ToString()))
+        {
+            ChangeColorCharacter(evt_val);
+        }
+        else if (trigger_id.Trim().ToLower().Equals(TRIGGER_EVENT_IDS.rollback_color.ToString()))
+        {
+            RollbackColorCharacter(evt_val);
+        }
+
     }
 
   

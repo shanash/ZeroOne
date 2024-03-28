@@ -25,6 +25,7 @@ public partial class TeamManager_V2 : IDisposable
     /// 게임 배속
     /// </summary>
     protected float Battle_Speed_Multiple = 1f;
+    protected BATTLE_SPEED_TYPE Speed_Type = BATTLE_SPEED_TYPE.NORMAL_TYPE;
 
     private bool disposed = false;
 
@@ -66,13 +67,15 @@ public partial class TeamManager_V2 : IDisposable
         Used_Members.Clear();
     }
 
-    public void SetBattleSpeed(float speed)
+    public void SetBattleSpeed(BATTLE_SPEED_TYPE stype)
     {
-        Battle_Speed_Multiple = speed;
+        Speed_Type = stype;
+        Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[Speed_Type];
+        
         int cnt = Used_Members.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Used_Members[i].SetBattleSpeed(speed);
+            Used_Members[i].SetBattleSpeed(stype);
         }
     }
 
@@ -157,7 +160,7 @@ public partial class TeamManager_V2 : IDisposable
             HeroBase_V2 hero = obj.GetComponent<HeroBase_V2>();
             hero.SetTeamManager(this);
             hero.SetBattleUnitData(unit_data);
-            hero.SetBattleSpeed(Battle_Speed_Multiple);
+            hero.SetBattleSpeed(Speed_Type);
             hero.SetDeckOrder(i);
             hero.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
 
@@ -444,7 +447,7 @@ public partial class TeamManager_V2 : IDisposable
             monster.SetTeamManager(this);
 
             monster.SetBattleUnitData(npc);
-            monster.SetBattleSpeed(Battle_Speed_Multiple);
+            monster.SetBattleSpeed(Speed_Type);
 
             monster.SetDeckOrder(i);
             monster.Lazy_Init(Battle_Mng, UI_Mng, UNIT_STATES.INIT);
@@ -766,6 +769,8 @@ public partial class TeamManager_V2 : IDisposable
         }
     }
 
+    
+
 
     /// <summary>
     /// 스토리 모드의 플레이어 캐릭터 프리팹 반환
@@ -779,11 +784,188 @@ public partial class TeamManager_V2 : IDisposable
         for (int i = 0; i < cnt; i++)
         {
             UserHeroDeckMountData hero = deck_heroes[i];
-            Player_Character_Data hdata = hero.GetUserHeroData().GetPlayerCharacterData();
-            if (hdata != null)
+            //Player_Character_Data hdata = hero.GetUserHeroData().GetPlayerCharacterData();
+            if (hero.GetUserHeroData() != null)
             {
                 GetPcSkillEffectPrefabPath(hero.GetUserHeroData(), ref list);
             }
+        }
+    }
+
+    /// <summary>
+    /// 스킬 보이스 및 승리 보이스 / 죽음 보이스 등
+    /// </summary>
+    /// <param name="list"></param>
+    public void GetHeroVoicePath(ref List<string> list)
+    {
+        GetPlayerCharacterDeckVoiceList(Game_Type, ref list);
+    }
+    
+
+    /// <summary>
+    /// 보이스
+    /// </summary>
+    /// <param name="gtype"></param>
+    /// <param name="list"></param>
+    protected void GetPlayerCharacterDeckVoiceList(GAME_TYPE gtype, ref List<string> list)
+    {
+        var deck = GameData.Instance.GetUserHeroDeckMountDataManager().FindSelectedDeck(gtype);
+        var deck_heroes = deck.GetDeckHeroes();
+        int cnt = deck_heroes.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            UserHeroDeckMountData hero = deck_heroes[i];
+            if (hero.GetUserHeroData() != null)
+            {
+                GetPcSoundEffectPath(hero.GetUserHeroData(), ref list);
+            }
+        }
+    }
+    /// <summary>
+    /// 보이스 및 스킬 사운드 이펙트 가져오기
+    /// </summary>
+    /// <param name="user_dat"></param>
+    /// <param name="list"></param>
+    protected void GetPcSoundEffectPath(UserHeroData user_data, ref List<string> list)
+    {
+        var pc_data = user_data.GetPlayerCharacterData();
+        var m = MasterDataManager.Instance;
+        List<Player_Character_Skill_Data> skill_list = new List<Player_Character_Skill_Data>();
+
+        //  voice
+        //if (!list.Contains(pc_data.win_voice))
+        //{
+        //    list.Add(pc_data.win_voice);
+        //}
+        //if (!list.Contains(pc_data.die_voice))
+        //{
+        //    list.Add(pc_data.die_voice);
+        //}
+
+        //  battle data
+        var bdata = user_data.GetPlayerCharacterBattleData();
+        if (bdata != null)
+        {
+            List<int> skill_group_ids = new List<int>();
+            skill_group_ids.AddRange(bdata.skill_pattern);
+            skill_group_ids.Add(bdata.special_skill_group_id);
+
+            int grp_cnt = skill_group_ids.Count;
+
+            for (int g = 0; g < grp_cnt; g++)
+            {
+                int gid = skill_group_ids[g];
+                if (gid == 0)
+                {
+                    continue;
+                }
+                //  skill group
+                var skill_group = m.Get_PlayerCharacterSkillGroupData(gid);
+                if (skill_group == null)
+                {
+                    Debug.Assert(false);
+                    continue;
+                }
+                //  skill group cast voice & cast sfx
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_1) && !list.Contains(skill_group.skill_voice_path_1))
+                {
+                    list.Add(skill_group.skill_voice_path_1);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_2) && !list.Contains(skill_group.skill_voice_path_2))
+                {
+                    list.Add(skill_group.skill_voice_path_2);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_voice_path_3) && !list.Contains(skill_group.skill_voice_path_3))
+                {
+                    list.Add(skill_group.skill_voice_path_3);
+                }
+                if (!string.IsNullOrEmpty(skill_group.skill_sfx_path) && !list.Contains(skill_group.skill_sfx_path))
+                {
+                    list.Add(skill_group.skill_sfx_path);
+                }
+                
+
+                //  skill list
+                //m.Get_PlayerCharacterSkillDataListBySkillGroup(skill_group.pc_skill_group_id, ref skill_list);
+                //int skill_cnt = skill_list.Count;
+                //for (int s = 0; s < skill_cnt; s++)
+                //{
+                //    var pc_skill = skill_list[s];
+                //    //  pc skill effect
+                //    if (!string.IsNullOrEmpty(pc_skill.trigger_effect_path) && !list.Contains(pc_skill.trigger_effect_path))
+                //    {
+                //        list.Add(pc_skill.trigger_effect_path);
+                //    }
+                //    if (pc_skill.onetime_effect_ids != null)
+                //    {
+                //        //  onetime skill iist
+                //        for (int o = 0; o < pc_skill.onetime_effect_ids.Length; o++)
+                //        {
+                //            int onetime_skill_id = pc_skill.onetime_effect_ids[o];
+                //            if (onetime_skill_id == 0)
+                //            {
+                //                continue;
+                //            }
+                //            var onetime_data = m.Get_PlayerCharacterSkillOnetimeData(onetime_skill_id);
+                //            Debug.Assert(onetime_data != null);
+                //            if (!string.IsNullOrEmpty(onetime_data.effect_path) && !list.Contains(onetime_data.effect_path))
+                //            {
+                //                list.Add(onetime_data.effect_path);
+                //            }
+                //        }
+                //    }
+
+
+                //    //  duration skill list
+                //    if (pc_skill.duration_effect_ids != null)
+                //    {
+                //        for (int d = 0; d < pc_skill.duration_effect_ids.Length; d++)
+                //        {
+                //            int duration_skill_id = pc_skill.duration_effect_ids[d];
+                //            if (duration_skill_id == 0)
+                //            {
+                //                continue;
+                //            }
+                //            var duration_data = m.Get_PlayerCharacterSkillDurationData(duration_skill_id);
+                //            Debug.Assert(duration_data != null);
+                //            if (!string.IsNullOrEmpty(duration_data.effect_path) && !list.Contains(duration_data.effect_path))
+                //            {
+                //                list.Add(duration_data.effect_path);
+                //            }
+                //            //  반복 효과용 일회성 스킬 이펙트
+                //            int repeat_len = duration_data.repeat_pc_onetime_ids.Length;
+                //            for (int r = 0; r < repeat_len; r++)
+                //            {
+                //                int repeat_id = duration_data.repeat_pc_onetime_ids[r];
+                //                if (repeat_id == 0)
+                //                    continue;
+                //                var repeat_onetime = m.Get_PlayerCharacterSkillOnetimeData(repeat_id);
+                //                if (!string.IsNullOrEmpty(repeat_onetime.effect_path) && !list.Contains(repeat_onetime.effect_path))
+                //                {
+                //                    list.Add(repeat_onetime.effect_path);
+                //                }
+                //            }
+
+                //            //  종료 효과용 일회성 스킬 이펙트
+                //            int finish_len = duration_data.finish_pc_onetime_ids.Length;
+                //            for (int f = 0; f < finish_len; f++)
+                //            {
+                //                int finish_id = duration_data.finish_pc_onetime_ids[f];
+                //                if (finish_id == 0)
+                //                    continue;
+                //                var finish_onetime = m.Get_PlayerCharacterSkillOnetimeData(finish_id);
+                //                if (!string.IsNullOrEmpty(finish_onetime.effect_path) && !list.Contains(finish_onetime.effect_path))
+                //                {
+                //                    list.Add(finish_onetime.effect_path);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+
+
+            }
+
         }
     }
 

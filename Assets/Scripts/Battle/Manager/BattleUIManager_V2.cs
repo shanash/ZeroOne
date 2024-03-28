@@ -212,8 +212,8 @@ public class BattleUIManager_V2 : MonoBehaviour
         }
         GameConfig.Instance.SetGameConfig<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, speed_type);
         UpdateFastSpeed();
-        float speed = GameDefine.GAME_SPEEDS[(BATTLE_SPEED_TYPE)speed_type];
-        Battle_Mng.SetBattleFastSpeed(speed);
+        //float speed = GameDefine.GAME_SPEEDS[(BATTLE_SPEED_TYPE)speed_type];
+        Battle_Mng.SetBattleFastSpeed((BATTLE_SPEED_TYPE)speed_type);
     }
     #endregion
 }

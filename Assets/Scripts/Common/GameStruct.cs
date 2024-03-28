@@ -22,6 +22,7 @@ public struct BATTLE_SEND_DATA
     public bool Is_Magic_Critical;                        //  마법 치명타 확률
 
     public bool Is_Weak;                            //  역상성 공격을 받았을 경우
+    public bool Is_Miss;
 
 
     public void Reset()
@@ -35,6 +36,7 @@ public struct BATTLE_SEND_DATA
         Magic_Attack_Point = 0;
         Is_Physics_Critical = false;
         Is_Magic_Critical = false;
+        Is_Miss = false;
         Effect_Weight_Index = 0;
         Duration_Effect_Type = DURATION_EFFECT_TYPE.NONE;
         Is_Weak = false;

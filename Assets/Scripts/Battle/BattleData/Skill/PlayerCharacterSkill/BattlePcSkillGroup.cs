@@ -141,6 +141,25 @@ public class BattlePcSkillGroup : BattleSkillGroup
             Battle_Skill_Data_List[i].SetSkillLevel(lv);
         }
     }
+
+    public override string GetSkillFxSound()
+    {
+        return Skill_Group.skill_sfx_path;
+    }
+    public override string GetSkillVoiceSound(BATTLE_SPEED_TYPE speed)
+    {
+        switch (speed)
+        {
+            case BATTLE_SPEED_TYPE.NORMAL_TYPE:
+                return Skill_Group.skill_voice_path_1;
+            case BATTLE_SPEED_TYPE.FAST_SPEED_X2:
+                return Skill_Group.skill_voice_path_2;
+            case BATTLE_SPEED_TYPE.FAST_SPEED_X3:
+                return Skill_Group.skill_voice_path_3;
+        }
+        return string.Empty;
+    }
+
     /// <summary>
     /// 객체를 복사한 후, 해당 객체의 레벨을 지정<br/>
     /// 변경된 스탯 값을 가져올 수 있다.

@@ -64,8 +64,21 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     /// <returns>다음 웨이브가 있으면 <b>true</b>, 마지막 웨이브면 <b>false</b></returns>
     public virtual bool NextWave() { return false; }
-
+    /// <summary>
+    /// 몬스터 프리팹 경로 반환
+    /// </summary>
+    /// <param name="path"></param>
     public virtual void GetMonsterPrefabsPath(ref List<string> path) { }
+    /// <summary>
+    /// 몬스터 궁극기 스킬 보이스 반환
+    /// </summary>
+    /// <param name="path"></param>
+    public virtual void GetSkillVoicePath(ref List<string> path) { }
+    /// <summary>
+    /// 몬스터 스킬 이펙트 사운드 반환
+    /// </summary>
+    /// <param name="path"></param>
+    public virtual void GetSkillEffectSoundPath(ref List<string> path) { }
 
     public virtual object GetWaveData() { return null; }
 
@@ -80,8 +93,8 @@ public class BattleDungeonData : BattleDataBase
     /// NPC의 스킬에 사용될 이펙트 프리팹 경로들을 가져온다
     /// </summary>
     /// <param name="npc"></param>
-    /// <param name="list"></param>
-    protected void GetNpcSkillEffectPrefabPath(Npc_Data npc, ref List<string> list)
+    /// <param name="prefab_list"></param>
+    protected void GetNpcSkillEffectPrefabPath(Npc_Data npc, ref List<string> prefab_list)
     {
         var m = MasterDataManager.Instance;
         List<Npc_Skill_Data> skill_list = new List<Npc_Skill_Data>();
@@ -115,9 +128,9 @@ public class BattleDungeonData : BattleDataBase
                     for (int c = 0; c < skill_group.cast_effect_path.Length; c++)
                     {
                         string cast_path = skill_group.cast_effect_path[c];
-                        if (!string.IsNullOrEmpty(cast_path) && !list.Contains(cast_path))
+                        if (!string.IsNullOrEmpty(cast_path) && !prefab_list.Contains(cast_path))
                         {
-                            list.Add(cast_path);
+                            prefab_list.Add(cast_path);
                         }
                     }
                 }
@@ -130,9 +143,9 @@ public class BattleDungeonData : BattleDataBase
                 {
                     var npc_skill = skill_list[s];
                     //  npc skill effect
-                    if (!string.IsNullOrEmpty(npc_skill.trigger_effect_path) && !list.Contains(npc_skill.trigger_effect_path))
+                    if (!string.IsNullOrEmpty(npc_skill.trigger_effect_path) && !prefab_list.Contains(npc_skill.trigger_effect_path))
                     {
-                        list.Add(npc_skill.trigger_effect_path);
+                        prefab_list.Add(npc_skill.trigger_effect_path);
                     }
 
                     //  onetime skill list
@@ -144,9 +157,9 @@ public class BattleDungeonData : BattleDataBase
                             continue;
                         }
                         var onetime_data = m.Get_NpcSkillOnetimeData(onetime_skill_id);
-                        if (!string.IsNullOrEmpty(onetime_data.effect_path) && !list.Contains(onetime_data.effect_path))
+                        if (!string.IsNullOrEmpty(onetime_data.effect_path) && !prefab_list.Contains(onetime_data.effect_path))
                         {
-                            list.Add(onetime_data.effect_path);
+                            prefab_list.Add(onetime_data.effect_path);
                         }
                     }
                     //  duration skill list
@@ -158,9 +171,9 @@ public class BattleDungeonData : BattleDataBase
                             continue;
                         }
                         var duration_data = m.Get_NpcSkillDurationData(duration_skill_id);
-                        if (!string.IsNullOrEmpty(duration_data.effect_path) && !list.Contains(duration_data.effect_path))
+                        if (!string.IsNullOrEmpty(duration_data.effect_path) && !prefab_list.Contains(duration_data.effect_path))
                         {
-                            list.Add(duration_data.effect_path);
+                            prefab_list.Add(duration_data.effect_path);
                         }
                     }
                 }

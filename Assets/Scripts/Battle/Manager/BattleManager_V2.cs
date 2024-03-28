@@ -28,6 +28,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     protected BattleDungeonData Dungeon_Data;
     protected float Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+    protected BATTLE_SPEED_TYPE Speed_Type = BATTLE_SPEED_TYPE.NORMAL_TYPE;
     
     // 배경화면 재질 임시 저장용 변수
     Material Material_Temp_BG = null;
@@ -61,31 +62,33 @@ public partial class BattleManager_V2 : SceneControllerBase
         CreateBattleField();
 
         BATTLE_SPEED_TYPE speed_type = (BATTLE_SPEED_TYPE)GameConfig.Instance.GetGameConfigValue<int>(GAME_CONFIG_KEY.BATTLE_SPEED_TYPE, 0);
-        float speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
-        if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X2)
-        {
-            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X2];
-        }
-        else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X3)
-        {
-            speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X3];
-        }
-        SetBattleFastSpeed(speed);
+        //float speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+        //if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X2)
+        //{
+        //    speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X2];
+        //}
+        //else if (speed_type == BATTLE_SPEED_TYPE.FAST_SPEED_X3)
+        //{
+        //    speed = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.FAST_SPEED_X3];
+        //}
+        SetBattleFastSpeed(speed_type);
     }
 
-    public void SetBattleFastSpeed(float speed)
+    public void SetBattleFastSpeed(BATTLE_SPEED_TYPE stype)
     {
-        Battle_Speed_Multiple = speed;
+        Speed_Type = stype;
+        Battle_Speed_Multiple = GameDefine.GAME_SPEEDS[Speed_Type];
+        
         //  team speed
         int cnt = Used_Team_List.Count;
         for (int i = 0; i < cnt; i++)
         {
-            Used_Team_List[i].SetBattleSpeed(speed);
+            Used_Team_List[i].SetBattleSpeed(Speed_Type);
         }
         //  effect speed
         GetEffectFactory().SetEffectSpeedMultiple(Battle_Speed_Multiple);
         GetDamageTextFactory().SetBattleSpeedMultiple(Battle_Speed_Multiple);
-        //AudioManager.Instance.FXTimeStretch = speed;
+        AudioManager.Instance.FXTimeStretch = Battle_Speed_Multiple;
     }
 
     protected void CreateBattleField()

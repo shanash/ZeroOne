@@ -14,7 +14,6 @@ public class Raw_Player_Character_Skill_Group : System.IDisposable
 	public string icon {get; set;}
 	public string action_name {get; set;}
 	public string[] cast_effect_path {get; set;}
-	public double sfx_delay {get; set;}
 	public string skill_sfx_path {get; set;}
 	public string skill_voice_path_1 {get; set;}
 	public string skill_voice_path_2 {get; set;}

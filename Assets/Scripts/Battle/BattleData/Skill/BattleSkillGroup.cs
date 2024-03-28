@@ -225,6 +225,18 @@ public abstract class BattleSkillGroup : BattleDataBase
     public virtual int GetSkillLevel() { return 0; }
     public virtual void SetSkillLevel(int lv) { }
 
+    /// <summary>
+    /// 스킬 캐스트 사운드 이펙트
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetSkillFxSound() { return string.Empty; }
+    /// <summary>
+    /// 궁극기 스킬 보이스
+    /// </summary>
+    /// <param name="speed"></param>
+    /// <returns></returns>
+    public virtual string GetSkillVoiceSound(BATTLE_SPEED_TYPE speed) {  return string.Empty; }
+
     public override string ToString()
     {
         var sb = ZString.CreateStringBuilder();
