@@ -7,6 +7,7 @@ namespace FluffyDuck.Util
         SOUND_BGM_VOLUME = 100,
         SOUND_FX_VOLUME = 101,
         SOUND_VOICE_VOLUME = 102,
+        SOUND_BATTLEVOICE_VOLUME = 103,
 
         BATTLE_SPEED_TYPE = 111,
 

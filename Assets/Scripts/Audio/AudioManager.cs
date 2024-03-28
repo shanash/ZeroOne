@@ -90,6 +90,24 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         }
     }
 
+    public bool EnableBattleVoice
+    {
+        set
+        {
+            _BattleVoice_Enable = value;
+            int cnt = _BattleVoice_Srcs.Count;
+            for (int i = 0; i < cnt; ++i)
+            {
+                _BattleVoice_Srcs[i].enabled = _BattleVoice_Enable;
+            }
+        }
+
+        get
+        {
+            return _BattleVoice_Enable;
+        }
+    }
+
 
     /// <summary>
     /// 보이스 오디오 소스는 비활성 처리하면 절대 안됨. 항상 플레이 가능하고 볼륨은 최대 상태여야 함
@@ -160,6 +178,25 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             return _FX_Volume;
         }
     }
+
+    public float BattleVoiceVolume
+    {
+        set
+        {
+            if (!EnableBattleVoice) return;
+            _BattleVoice_Volume = value;
+            foreach (AudioSource asrc in _BattleVoice_Srcs)
+            {
+                asrc.volume = _BattleVoice_Volume;
+            }
+            GameConfig.Instance.SetGameConfig<float>(GAME_CONFIG_KEY.SOUND_BATTLEVOICE_VOLUME, _BattleVoice_Volume);
+        }
+        get
+        {
+            return _BattleVoice_Volume;
+        }
+    }
+
     /// <summary>
     /// 보이스 볼륨 조절
     /// 보이스의 볼륨은 오디오 소스의 볼륨이 아닌 오디오 믹서의 볼륨을 조절해야 함
@@ -209,10 +246,12 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     bool _BGM_Enable = true;
     bool _FX_Enable = true;
+    bool _BattleVoice_Enable = true;
     bool _Voice_Enable = true;
 
     float _BGM_Volume = 1f;
     float _FX_Volume = 1f;
+    float _BattleVoice_Volume = 1f;
     float _Voice_Volume = 1f;
 
     BGMPlayOption _Option = BGMPlayOption.None;
@@ -226,6 +265,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     AudioSource _BGM_Src = null;
     AudioSource _Fadeout_Bgm_Src = null;
     List<AudioSource> _FX_Srcs = new List<AudioSource>();
+    List<AudioSource> _BattleVoice_Srcs = new List<AudioSource>();
+    
     //  voice variables
     AudioSource _Voice_Src = null;
     Coroutine _Voice_Play_Coroutine = null;
@@ -426,6 +467,36 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         return src;
     }
+
+    /// <summary>
+    /// FX 오디오소스 가져오기
+    /// </summary>
+    /// <returns>오디오소스</returns>
+    AudioSource GetBattleVoiceAudioSource()
+    {
+        AudioSource src = null;
+        int cnt = _BattleVoice_Srcs.Count;
+        for (int i = 0; i < cnt; ++i)
+        {
+            if (!_BattleVoice_Srcs[i].isPlaying)
+            {
+                src = _BattleVoice_Srcs[i];
+                break;
+            }
+        }
+
+        // 찾아봤는데 남는 오디오소스가 없으면 만든다
+        if (src == null)
+        {
+            Debug.Assert(MAX_FX_COUNT > _BattleVoice_Srcs.Count, $"FX MAX Count(={MAX_FX_COUNT}) Over!!");
+
+            src = CreateAudioSource(_BattleVoice_Volume);
+            _BattleVoice_Srcs.Add(src);
+        }
+
+        return src;
+    }
+
     #endregion
 
     #region Public Methods
@@ -600,6 +671,36 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         return true;
     }
 
+    public bool PlayBattleVoice(string key, bool loop = false, Action<string> callback = null)
+    {
+        if (!IsInit)
+        {
+            Debug.LogWarning("Plz Initialize Before Call PlayBGM");
+            OnInit();
+        }
+
+        if (!EnableFX) return false;
+
+        var clip_Control = GetAudioClipController(key);
+        if (clip_Control == null)
+        {
+            Debug.Assert(clip_Control != null, "미리 로딩하지 않고 불러오려 하면 첫번째 호출에서는 재생되지 않습니다.");
+            _ = PreloadAudioAsync(key);
+
+            return false;
+        }
+
+        AudioSource voicePlayer = GetBattleVoiceAudioSource();
+        PlayAudioSource(voicePlayer, clip_Control.Clip, loop);
+
+        if (callback != null)
+        {
+            StartCoroutine(WaitForCallback(voicePlayer, clip_Control, callback));
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// 콜백 호출하기 위한 함수
     /// </summary>
@@ -632,6 +733,24 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     }
 
     /// <summary>
+    /// 사운드 이펙트 재생 중지
+    /// </summary>
+    /// <param name="key">정지할 path 경로</param>
+    public void StopBattleVoice(string key)
+    {
+        if (!EnableFX) return;
+
+        Debug.AssertFormat(_Audio_Clips.ContainsKey(key), "Error : Inserted Wrong FX path. please Confirm FX path {0}", key);
+
+        var founds = _BattleVoice_Srcs.FindAll(src => src.clip == _Audio_Clips[key].Clip);
+        int cnt = founds.Count;
+        for (int i = 0; i < cnt; ++i)
+        {
+            founds[i].Stop();
+        }
+    }
+
+    /// <summary>
     /// 모든 사운드 이펙트 재생 중지
     /// </summary>
     public void StopAllFX()
@@ -646,10 +765,32 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     }
 
     /// <summary>
+    /// 모든 사운드 이펙트 재생 중지
+    /// </summary>
+    public void StopAllBattleVoice()
+    {
+        if (!EnableFX) return;
+
+        int cnt = _BattleVoice_Srcs.Count;
+        for (int i = 0; i < cnt; ++i)
+        {
+            _BattleVoice_Srcs[i].Stop();
+        }
+    }
+
+    /// <summary>
     /// 사운드 이펙트 재생 확인
     /// </summary>
     /// <param name="key">재생할 FX의 키</param>
     public bool IsPlayingFX(string key)
+    {
+        Debug.AssertFormat(_Audio_Clips.ContainsKey(key), "Error : Inserted Wrong FX path. please Confirm FX path {0}", key);
+
+        var src = _FX_Srcs.Find(src => src.clip == _Audio_Clips[key].Clip);
+        return src != null;
+    }
+
+    public bool IsPlayingBattleVoice(string key)
     {
         Debug.AssertFormat(_Audio_Clips.ContainsKey(key), "Error : Inserted Wrong FX path. please Confirm FX path {0}", key);
 
