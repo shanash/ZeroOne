@@ -10,6 +10,9 @@ public class GameResultPlayerCharacterInfo : UIBase
     [SerializeField, Tooltip("Box")]
     RectTransform Box;
 
+    [SerializeField, Tooltip("Level Up Animator")]
+    Animation Lv_Up_Animator;
+
     [SerializeField, Tooltip("Level Text")]
     TMP_Text Level_Text;
 
@@ -66,6 +69,10 @@ public class GameResultPlayerCharacterInfo : UIBase
         double after_remain_need_xp = User_Data.GetRemainNextExp();
 
         int fullcharge_count = after_lv - before_lv;
+        if (fullcharge_count > 1)
+        {
+            fullcharge_count = 1;
+        }
         float duration = 1f;
         float delta = 0f;
         var wait = new WaitForSeconds(0.01f);
@@ -73,7 +80,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         //  풀 차지 횟수
         while (loop_count < fullcharge_count)
         {
-            delta += Time.deltaTime;
+            delta += Time.deltaTime * 10f;
 
             Level_Exp_Slider.value = Mathf.Lerp(Level_Exp_Slider.value, 1f, delta / duration);
             if (delta > duration)
@@ -81,9 +88,11 @@ public class GameResultPlayerCharacterInfo : UIBase
                 delta = 0f;
                 Level_Exp_Slider.value = 0f;
                 ++loop_count;
-                Level_Text.text = (before_lv + loop_count).ToString();
+                //Level_Text.text = (before_lv + loop_count).ToString();
+                Level_Text.text = after_lv.ToString();
                 if (loop_count >= fullcharge_count)
                 {
+                    Lv_Up_Animator?.Play();
                     break;
                 }
             }
@@ -103,7 +112,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         {
             while (delta < duration)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Level_Exp_Slider.value = Mathf.Lerp(Level_Exp_Slider.value, after_xp_percent, delta / duration);
                 yield return wait;
             }
@@ -124,6 +133,10 @@ public class GameResultPlayerCharacterInfo : UIBase
         double after_remain_need_love_xp = User_Data.GetRemainNextLoveExp();
 
         int fullcharge_count = after_love_lv - before_love_lv;
+        if (fullcharge_count > 1)
+        {
+            fullcharge_count = 1;
+        }
         float duration = 1f;
         float delta = 0f;
         var wait = new WaitForSeconds(0.01f);
@@ -131,14 +144,15 @@ public class GameResultPlayerCharacterInfo : UIBase
         //  풀 챠치 횟수
         while (loop_count < fullcharge_count)
         {
-            delta += Time.deltaTime;
+            delta += Time.deltaTime * 10f;
             Love_Exp_Slider.value = Mathf.Lerp(Love_Exp_Slider.value, 1f, delta / duration);
             if (delta >= duration)
             {
                 delta = 0f;
                 Love_Exp_Slider.value = 0f;
                 ++loop_count;
-                Love_Level_Text.text = (before_love_lv + loop_count).ToString();
+                //Love_Level_Text.text = (before_love_lv + loop_count).ToString();
+                Love_Level_Text.text = after_love_lv.ToString();
                 if (loop_count >= fullcharge_count)
                 {
                     break;
@@ -159,7 +173,7 @@ public class GameResultPlayerCharacterInfo : UIBase
         {
             while (delta < duration)
             {
-                delta += Time.deltaTime;
+                delta += Time.deltaTime * 5f;
                 Love_Exp_Slider.value = Mathf.Lerp(Love_Exp_Slider.value, after_love_exp_per, delta / duration);
                 yield return wait;
             }

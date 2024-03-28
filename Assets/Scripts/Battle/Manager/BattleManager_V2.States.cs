@@ -673,10 +673,10 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  동작 정지
         TeamMembersChangeState(UNIT_STATES.TIME_OUT);
         
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/TimeOutInfoPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattleStartPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
         {
             popup.SetHideCompleteCallback(TimeOutInfoCloseCallback);
-            popup.ShowPopup(1f);
+            popup.ShowPopup(2);
         });
     }
     public virtual void GameStateTimeOut() { }

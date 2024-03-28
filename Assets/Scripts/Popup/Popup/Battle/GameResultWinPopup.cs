@@ -741,6 +741,7 @@ public class GameResultWinPopup : PopupBase
         var gd = GameData.Instance;
         var item_mng = gd.GetUserItemDataManager();     //  각종 아이템 및 조각 아이템
         var goods_mng = gd.GetUserGoodsDataManager();   //  재화
+        var hero_mng = gd.GetUserHeroDataManager();     //  영웅 리스트
         int item_count = 0;
         var m = MasterDataManager.Instance;
         switch (reward.reward_type)
@@ -766,7 +767,19 @@ public class GameResultWinPopup : PopupBase
                 Debug.Assert(false);
                 break;
             case REWARD_TYPE.CHARACTER:
-                Debug.Assert(false);
+                {
+                    //  캐릭터가 있는지 여부 판단(있으면 조각 60개로 변경)
+                    if (hero_mng.IsExistHeroData(reward.var1))
+                    {
+                        item_count = 60;
+                        item_mng.AddUserItemCount(ITEM_TYPE_V2.PIECE_CHARACTER, reward.var1, item_count);
+                    }
+                    else // 없으면 신규 추가
+                    {
+                        item_count = reward.var2;
+                        hero_mng.AddUserHeroData(reward.var1);
+                    }
+                }
                 break;
             case REWARD_TYPE.EQUIPMENT:
                 Debug.Assert(false);

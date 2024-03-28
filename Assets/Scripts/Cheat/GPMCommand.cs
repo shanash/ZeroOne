@@ -1,6 +1,7 @@
 using FluffyDuck.Util;
 using Gpm.LogViewer;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GPMCommand : MonoBehaviour
@@ -27,10 +28,10 @@ public class GPMCommand : MonoBehaviour
 
         func.AddCommand(this, "FullChargeBossStageEntranceCount", "보스전 입장 횟수 충전");
 
-        func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x10</color>", new object[] { 10 });
+        func.AddCommand(this, "CheatDefenceIncAccum", "전투 공격력 <color=#ff0000>x10</color> 누적", new object[] { 10 });
         func.AddCommand(this, "CheatAttackInc", "전투 공격력 <color=#ff0000>x50</color>", new object[] { 50 });
 
-        func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x10</color>", new object[] { 10 });
+        func.AddCommand(this, "CheatDefenceIncAccum", "전투 방어력 <color=#ffff00>x10</color> 누적", new object[] { 10 });
         func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x50</color>", new object[] { 50 });
         
         func.AddCommand(this, "CheatCriticalChanceInc", "크리티컬 확률 <color=#00ff00>x100</color>", new object[] { 100 });
@@ -137,6 +138,15 @@ public class GPMCommand : MonoBehaviour
         board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, multiple);
         CommonUtils.ShowToast($"전투 공격력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
     }
+
+    void CheatAttackIncAccum(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        int cheat_multiple = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, 0);
+        cheat_multiple += multiple;
+        board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_ATTACK_INC_MULTIPLE, cheat_multiple);
+        CommonUtils.ShowToast($"전투 공격력이 {cheat_multiple}배 누적 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
     /// <summary>
     /// 방어력 10배 증가
     /// </summary>
@@ -145,6 +155,14 @@ public class GPMCommand : MonoBehaviour
         var board = BlackBoard.Instance;
         board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, multiple);
         CommonUtils.ShowToast($"전투 방어력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
+    void CheatDefenceIncAccum(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        int cheat_multiple = board.GetBlackBoardData<int>(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, 0);
+        cheat_multiple += multiple;
+        board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, cheat_multiple);
+        CommonUtils.ShowToast($"전투 방어력이 {cheat_multiple}배 누적 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
     }
 
     void CheatCriticalChanceInc(int multiple)

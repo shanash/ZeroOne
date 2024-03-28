@@ -127,6 +127,16 @@ public class UserHeroDataManager : ManagerBase
         return hero;
     }
 
+    /// <summary>
+    /// 해당 영웅 보유 여부
+    /// </summary>
+    /// <param name="hero_data_id"></param>
+    /// <returns></returns>
+    public bool IsExistHeroData(int hero_data_id)
+    {
+        return FindUserHeroData(hero_data_id) != null;
+    }
+
     public override JsonData Serialized()
     {
         var json = base.Serialized();

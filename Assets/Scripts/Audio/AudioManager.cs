@@ -228,7 +228,6 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             foreach (var src in _FX_Srcs)
             {
                 src.pitch = _FXTimeStretch;
-                Audio_MIxer.SetFloat($"{FX_GROUP_NAME}_{PITCH_END}", 1f / _FXTimeStretch);
             }
         }
     }
@@ -393,6 +392,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     void PlayAudioSource(AudioSource src, AudioClip clip, bool loop)
     {
         SetAudioSource(src, clip, loop);
+        src.pitch = _FXTimeStretch;
         src.Play();
     }
 

@@ -196,7 +196,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         if (all_death_team != null)
         {
             //  wait and playing
-            StartCoroutine(DelayChangeStatePlaying(.4f / Battle_Speed_Multiple, caster));
+            //StartCoroutine(DelayChangeStatePlaying(.4f / Battle_Speed_Multiple, caster));
+            StartCoroutine(DelayChangeStatePlaying(.4f, caster));
         }
         else
         {
@@ -216,9 +217,9 @@ public partial class BattleManager_V2 : SceneControllerBase
     IEnumerator DelayChangeStatePlaying(float delay, HeroBase_V2 caster)
     {
         yield return new WaitForSeconds(delay);
-        caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
         AllResumeUnitWithoutHero(caster);
         GetEffectFactory().OnResumeAndShow();
+        caster.ChangeState(UNIT_STATES.ATTACK_READY_1);
         ChangeState(GAME_STATES.PLAYING);
     }
 

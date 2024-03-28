@@ -11,12 +11,16 @@ public class BattleStartPopup : PopupBase
     [SerializeField, Tooltip("Boss Dungeon Start")]
     RectTransform Boss_Start;
 
+    [SerializeField, Tooltip("Time Out Start")]
+    RectTransform Timeout_Start;
+
     float Delay_Time;
     bool Is_Action;
 
     /// <summary>
     /// 0 : normal start
     /// 1 : boss start
+    /// 2 : time out start
     /// </summary>
     int Start_Type;
     protected override bool Initialize(object[] data)
@@ -41,10 +45,15 @@ public class BattleStartPopup : PopupBase
             Delay_Time = 1.2f;
             Normal_Start.gameObject.SetActive(true);
         }
-        else 
+        else if(Start_Type == 1)
         {
             Delay_Time = 1.2f;
             Boss_Start.gameObject.SetActive(true);
+        }
+        else if (Start_Type == 2)
+        {
+            Delay_Time = 1.2f;
+            Timeout_Start.gameObject.SetActive(true);
         }
     }
 
@@ -60,10 +69,13 @@ public class BattleStartPopup : PopupBase
             }
         }
     }
+
+    
     public override void Despawned()
     {
         base.Despawned();
         Normal_Start.gameObject.SetActive(false);
         Boss_Start.gameObject.SetActive(false);
+        Timeout_Start.gameObject.SetActive(false);
     }
 }
