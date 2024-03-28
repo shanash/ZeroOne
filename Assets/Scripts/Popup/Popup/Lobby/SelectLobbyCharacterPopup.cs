@@ -92,7 +92,7 @@ public class SelectLobbyCharacterPopup : PopupBase
             {
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                 {
-                    popup.ShowPopup(3f, ConstString.Message.MIN);
+                    popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_robby_select_minimum"));
                 });
                 return;
             }
@@ -115,7 +115,7 @@ public class SelectLobbyCharacterPopup : PopupBase
             {
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                 {
-                    popup.ShowPopup(3f, ConstString.Message.MAX);
+                    popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_alert_robby_select_maximum"));
                 });
                 return;
             }

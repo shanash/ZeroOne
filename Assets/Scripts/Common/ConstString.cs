@@ -11,10 +11,4 @@ public static class ConstString
     {
         public static readonly string[] TAB_NAMES = { "system_base_information", "system_level_up", "system_growup" };
     }
-
-    public static class Message
-    {
-        public const string MAX = "최대치입니다";
-        public const string MIN = "최소치입니다";
-    }
 }

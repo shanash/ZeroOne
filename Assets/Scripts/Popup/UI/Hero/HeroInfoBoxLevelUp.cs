@@ -270,7 +270,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
                 //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
                 if (simulate.Over_Exp > 0)
                 {
-                    string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                    string msg = ZString.Format(GameDefine.GetLocalizeString("system_alert_exp_over"), simulate.Over_Exp.ToString("N0"));
                     ShowNoticePopup(msg, 1.5f);
                 }
 
@@ -338,7 +338,7 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             //  경험치가 최대 레벨이상으로 초과될 경우 알림을 해준다.
             if (simulate.Over_Exp > 0)
             {
-                string msg = $"경험치가 <color=#ff0000>{simulate.Over_Exp.ToString("N0")}</color> 초과되었습니다.";
+                string msg = ZString.Format(GameDefine.GetLocalizeString("system_alert_exp_over"), simulate.Over_Exp.ToString("N0"));
                 ShowNoticePopup(msg, 1.5f);
             }
 
