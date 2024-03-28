@@ -11,7 +11,10 @@ namespace FluffyDuck.EditorUtil.UpperMenu
     {
         const string ClassName = "FluffyDuck";
         const string TogglePlayFullscreen_MenuItemName = "/Toggle Play FullScreen";
+        const string ToggleShowSystemKey_MenuItemName = "/Toggle Show System Key";
+
         public const string TogglePlayFullscreen_PrefKey = "FullScreenChecked";
+        public const string ToggleShowSystemKey_PrefKey = "ShowSystemKey";
 
         /// <summary>
         /// 어드레서블 에셋을 포함한 뒤 실행해서 Refresh해야 합니다
@@ -194,7 +197,29 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         static bool ToggleActionValidate()
         {
             // 메뉴 아이템의 체크 상태를 EditorPrefs에서 가져온 값으로 설정합니다.
-            Menu.SetChecked(TogglePlayFullscreen_MenuItemName, EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false));
+            Menu.SetChecked(ClassName + TogglePlayFullscreen_MenuItemName, EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false));
+            return true; // 메뉴 아이템이 항상 활성화되어 있도록 true를 반환합니다.
+        }
+
+        /// <summary>
+        /// Text 정상 적용 확인을 위한 system String 체크
+        /// </summary>
+        [MenuItem(ClassName + ToggleShowSystemKey_MenuItemName, false, 300)]
+        static void ToggleShowSystemKey()
+        {
+            bool currentState = EditorPrefs.GetBool(ToggleShowSystemKey_PrefKey, false);
+            EditorPrefs.SetBool(ToggleShowSystemKey_PrefKey, !currentState);
+        }
+
+        /// <summary>
+        /// 메뉴 아이템의 체크 상태를 설정하는 validate 함수입니다.
+        /// </summary>
+        /// <returns></returns>
+        [MenuItem(ClassName + ToggleShowSystemKey_MenuItemName, true)]
+        static bool ToggleShowSystemKeyActionValidate()
+        {
+            // 메뉴 아이템의 체크 상태를 EditorPrefs에서 가져온 값으로 설정합니다.
+            Menu.SetChecked(ClassName + ToggleShowSystemKey_MenuItemName, EditorPrefs.GetBool(ToggleShowSystemKey_PrefKey, false));
             return true; // 메뉴 아이템이 항상 활성화되어 있도록 true를 반환합니다.
         }
 

@@ -190,20 +190,32 @@ public class GameDefine : MonoBehaviour
 
         if (table_name.Equals("system"))
         {
-            var lang_data = m.Get_SystemLangData(str_id);
-            if (lang_data == null) return str_id;
-            if (lang == SystemLanguage.Korean)
+#if UNITY_EDITOR
+            bool show_system_key = UnityEditor.EditorPrefs.GetBool("ShowSystemKey", false);
+            if (show_system_key)
             {
-                find_string = lang_data.kor;
-            }
-            else if (lang == SystemLanguage.Japanese)
-            {
-                find_string = lang_data.jpn;
+                find_string = str_id;
             }
             else
             {
-                find_string = lang_data.eng;
+#endif
+                var lang_data = m.Get_SystemLangData(str_id);
+                if (lang_data == null) return str_id;
+                if (lang == SystemLanguage.Korean)
+                {
+                    find_string = lang_data.kor;
+                }
+                else if (lang == SystemLanguage.Japanese)
+                {
+                    find_string = lang_data.jpn;
+                }
+                else
+                {
+                    find_string = lang_data.eng;
+                }
+#if UNITY_EDITOR
             }
+#endif
         }
         else if (table_name.Equals("character") || table_name.Equals("monster"))
         {
