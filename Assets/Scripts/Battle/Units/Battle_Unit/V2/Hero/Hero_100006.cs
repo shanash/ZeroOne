@@ -72,10 +72,6 @@ public class Hero_100006 : HeroBase_V2
             if (animation_name.Equals(skill_grp.GetSkillActionName()))
             {
                 var exec_list = skill_grp.GetExecutableCloneSkillDatas(evt_name);
-                if (evt_name.Equals("apply_3"))
-                {
-                    bool a = false;
-                }
                 if (exec_list.Count > 0)
                 {
                     int cnt = exec_list.Count;

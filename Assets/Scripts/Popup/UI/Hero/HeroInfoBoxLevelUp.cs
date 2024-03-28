@@ -353,8 +353,6 @@ public class HeroInfoBoxLevelUp : MonoBehaviour
             //  exp bar
             float per = (float)(lv_exp / need_exp);
             Result_Exp_Bar.value = per;
-
-
         }
         else
         {

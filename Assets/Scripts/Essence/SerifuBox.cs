@@ -25,9 +25,6 @@ public class SerifuBox : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI Serifu = null;
 
-    [SerializeField]
-    float wait_seconds = 2.0f;
-
     Coroutine Animate = null;
     RenderTexture Head_Texture = null;
 

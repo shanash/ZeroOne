@@ -1,8 +1,6 @@
-using FluffyDuck.Addressable;
 using FluffyDuck.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +14,6 @@ public class SceneLoad : SceneControllerBase
     /// </summary>
     const float SHOW_LOADINGPOPUP_MIN_DURATION = 8.0f;
 
-    [SerializeField]
-    TMP_Text _UI_Text = null;
     [SerializeField]
     Slider _UI_Progress = null;
 

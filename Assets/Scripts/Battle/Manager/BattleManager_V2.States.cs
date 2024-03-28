@@ -18,7 +18,6 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     IEnumerator InitAssets()
     {
-        bool is_set_scene = false;
         var handle = Addressables.InitializeAsync();
         yield return handle;
 
