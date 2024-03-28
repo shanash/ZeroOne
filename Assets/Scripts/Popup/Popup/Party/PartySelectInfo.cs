@@ -106,7 +106,7 @@ public class PartySelectInfo : MonoBehaviour
         {
             Role_Icon.sprite = spr;
         });
-        Role_Name.text = role_data.name_kr;
+        Role_Name.text = GameDefine.GetLocalizeString(role_data.name_kr);
 
         //  attribute icon
         var attr_data = m.Get_AttributeIconData(User_Data.GetAttributeType());

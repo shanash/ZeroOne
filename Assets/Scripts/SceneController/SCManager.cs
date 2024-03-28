@@ -14,6 +14,7 @@ public enum SceneName
     essence,
     dialogue_Intro,
     battle,
+    wholebody,
 }
 
 public class SCManager : Singleton<SCManager>

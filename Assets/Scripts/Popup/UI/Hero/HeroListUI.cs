@@ -290,7 +290,6 @@ public class HeroListUI : PopupBase
             Character_LIst_View.InsertData(new_data, false, true);
         }
 
-
         UpdateFilterType();
     }
 
@@ -310,6 +309,10 @@ public class HeroListUI : PopupBase
         if (hero.BattlePcData == null)
         {
             Debug.LogWarning("미보유 캐릭터 클릭" );
+
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/click_01");
+            SCManager.I.ChangeScene(SceneName.wholebody, hero.HeroDataInfo, 1, 1);
+
             return;
         }
 

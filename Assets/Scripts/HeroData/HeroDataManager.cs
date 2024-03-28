@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class HeroDataManager : MonoSingleton<HeroDataManager>
 {
     protected override bool Is_DontDestroyOnLoad => true;
-    
+
+    List<UserL2dData> Hero_L2d_Data_List = new List<UserL2dData>();
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void CallInstance()
     {
@@ -15,6 +17,16 @@ public class HeroDataManager : MonoSingleton<HeroDataManager>
     protected override void Initialize()
     {
         // 초기화
+    }
+
+    protected void OnDestroy()
+    {
+        foreach(UserL2dData item in Hero_L2d_Data_List)
+        {
+            item.Dispose();
+        }
+
+        Hero_L2d_Data_List.Clear();
     }
 
     public List<int> GetExpectHeroDataList()
@@ -46,5 +58,62 @@ public class HeroDataManager : MonoSingleton<HeroDataManager>
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 미보유 캐릭터의 L3dDataList 생성
+    /// </summary>
+    public void UpdateHeroL2dData()
+    {
+        var m = MasterDataManager.Instance;
+
+        var heroIDList = GetExpectHeroDataList();
+
+        foreach( var heroID in heroIDList)
+        {
+            int hero_id = heroID;
+            int l2d_id = m.Get_PlayerCharacterData(heroID).lobby_basic_id;
+            var data = AddUserL2dData(l2d_id, hero_id);
+        }
+
+
+    }
+
+    UserL2dData AddUserL2dData(int l2d_id, int hero_id = 0)
+    {
+        if (l2d_id == 0)
+        {
+            return null;
+        }
+
+        if (hero_id == 0)
+        {
+            var user_hero_list = GameData.I.GetUserHeroDataManager().GetUserHeroDataList();
+            foreach (var data in user_hero_list)
+            {
+                var hero_data = MasterDataManager.Instance.Get_PlayerCharacterData(data.GetPlayerCharacterID());
+                if (hero_data.lobby_basic_id.Equals(l2d_id))
+                {
+                    hero_id = hero_data.player_character_id;
+                }
+            }
+
+            Debug.Assert(hero_id != 0, $"입력한 L2d의 캐릭터id를 찾을 수 없습니다 : {l2d_id}");
+        }
+
+        var l2d_data = FindUserL2dData(l2d_id);
+        if (l2d_data == null)
+        {
+            l2d_data = new UserL2dData();
+            l2d_data.SetL2dDataID(l2d_id, hero_id);
+            Hero_L2d_Data_List.Add(l2d_data);
+            //Is_Update_Data = true;
+        }
+        return l2d_data;
+    }
+
+    public UserL2dData FindUserL2dData(int memorial_id)
+    {
+        return Hero_L2d_Data_List.Find(x => x.Skin_Id == memorial_id);
     }
 }
