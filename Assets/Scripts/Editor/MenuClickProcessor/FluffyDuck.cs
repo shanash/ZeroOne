@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Diagnostics;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -8,16 +9,21 @@ namespace FluffyDuck.EditorUtil.UpperMenu
 {
     public static class FluffyDuck
     {
+        const string ClassName = "FluffyDuck";
+        const string TogglePlayFullscreen_MenuItemName = "/Toggle Play FullScreen";
+        public const string TogglePlayFullscreen_PrefKey = "FullScreenChecked";
+
         /// <summary>
         /// 어드레서블 에셋을 포함한 뒤 실행해서 Refresh해야 합니다
         /// </summary>
-        [MenuItem("FluffyDuck/Build Launcher/Update Asset For Local Editor _%#/", false, 0)]
+        [MenuItem(ClassName + "/Build Launcher/Update Asset For Local Editor _%#/", false, 0)]
         static void BuildLauncher_UpdateAssetForLocalEditor()
         {
+            
             BuildLauncher.UpdateAsssetBundleForLocalEditor();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Validate Assets", false, 1)]
+        [MenuItem(ClassName + "/Build Launcher/Validate Assets", false, 1)]
         static void BuildLaucher_ValidateAssets()
         {
             var missing_asset_pathes = BuildLauncher.ValidateAssets();
@@ -35,7 +41,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             }
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Show Window", false, 2)]
+        [MenuItem(ClassName + "/Build Launcher/Show Window", false, 2)]
         static void BuildLauncher_ShowWindow()
         {
             // Unity의 Build Settings 윈도우를 엽니다.
@@ -44,7 +50,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             BuildLauncher.ShowWindow();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete All", false, 101)]
+        [MenuItem(ClassName + "/Build Launcher/Delete/Delete All", false, 101)]
         static void BuildLauncher_Delete_DeleteAll()
         {
             BuildLauncher_Delete_DeleteAddressableBuildData();
@@ -52,54 +58,54 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             BuildLauncher_Delete_DeleteAddressableBuildCache();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Data", false, 102)]
+        [MenuItem(ClassName + "/Build Launcher/Delete/Delete Addressable Build Data", false, 102)]
         static void BuildLauncher_Delete_DeleteAddressableBuildData()
         {
             BuildLauncher.DeleteAddressableBuildFolder();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressable Build Info", false, 103)]
+        [MenuItem(ClassName + "/Build Launcher/Delete/Delete Addressable Build Info", false, 103)]
         static void BuildLauncher_Delete_DeleteAddressableBuildInfo()
         {
             BuildLauncher.DeleteAddressableBuildInfo();
         }
 
-        [MenuItem("FluffyDuck/Build Launcher/Delete/Delete Addressables Cache", false, 104)]
+        [MenuItem(ClassName + "/Build Launcher/Delete/Delete Addressables Cache", false, 104)]
         static void BuildLauncher_Delete_DeleteAddressableBuildCache()
         {
             BuildLauncher.DeleteAddressableCache();
         }
 
-        [MenuItem("FluffyDuck/Skill/Preview _&9", false, 11)]
+        [MenuItem(ClassName + "/Skill/Preview _&9", false, 11)]
         static void Skill_PreviewOpen()
         {
             SkillPreview.ShowWindow();
         }
 
-        [MenuItem("FluffyDuck/Skill/Editor _&0", false, 12)]
+        [MenuItem(ClassName + "/Skill/Editor _&0", false, 12)]
         static void Skill_EditorOpen()
         {
             SkillEditor.ShowWindow();
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Title _&1", false, 31)]
+        [MenuItem(ClassName + "/Move Scene/Title _&1", false, 31)]
         static void MoveScene_Title()
         {
             MoveScene(SceneName.title);
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Lobby _&2", false, 32)]
+        [MenuItem(ClassName + "/Move Scene/Lobby _&2", false, 32)]
         static void MoveScene_Lobby()
         {
             MoveScene(SceneName.home);
         }
-        [MenuItem("FluffyDuck/Move Scene/Battle _&3", false, 33)]
+        [MenuItem(ClassName + "/Move Scene/Battle _&3", false, 33)]
         static void MoveScene_Battle()
         {
             MoveScene(SceneName.battle);
         }
 
-        [MenuItem("FluffyDuck/Move Scene/Essence _&4", false, 34)]
+        [MenuItem(ClassName + "/Move Scene/Essence _&4", false, 34)]
         static void MoveScene_Essence()
         {
             MoveScene(SceneName.essence);
@@ -115,7 +121,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             EditorSceneManager.OpenScene($"Assets/Scenes/{name}.unity");
         }
 
-        [MenuItem("FluffyDuck/Persistent/Open Folder _%#o", false, 50)]
+        [MenuItem(ClassName + "/Persistent/Open Folder _%#o", false, 50)]
         static void Persistent_OpenFolder()
         {
             string folder_path = $"{UnityEngine.Application.persistentDataPath}";
@@ -137,7 +143,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             }
         }
 
-        [MenuItem("FluffyDuck/Persistent/Clear Data _%#d", false, 51)]
+        [MenuItem(ClassName + "/Persistent/Clear Data _%#d", false, 51)]
         static void Persistent_ClearData()
         {
             try
@@ -159,7 +165,7 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             }
         }
 
-        [MenuItem("FluffyDuck/Convert Excel To Json _%#j", false, 200)]
+        [MenuItem(ClassName + "/Convert Excel To Json _%#j", false, 200)]
         static void ConvertExcelToJson()
         {
             Excel2Json.Program.Main(
@@ -170,13 +176,10 @@ namespace FluffyDuck.EditorUtil.UpperMenu
             AssetDatabase.Refresh();
         }
 
-        const string TogglePlayFullscreen_MenuItemName = "FluffyDuck/Toggle Play FullScreen";
-        public const string TogglePlayFullscreen_PrefKey = "FullScreenChecked";
-
         /// <summary>
         /// 풀스크린을 위한 값 저장만 합니다.
         /// </summary>
-        [MenuItem(TogglePlayFullscreen_MenuItemName, false, 300)]
+        [MenuItem(ClassName + TogglePlayFullscreen_MenuItemName, false, 300)]
         static void TogglePlayFullscreen()
         {
             bool currentState = EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false);
@@ -187,12 +190,18 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         /// 메뉴 아이템의 체크 상태를 설정하는 validate 함수입니다.
         /// </summary>
         /// <returns></returns>
-        [MenuItem(TogglePlayFullscreen_MenuItemName, true)]
+        [MenuItem(ClassName + TogglePlayFullscreen_MenuItemName, true)]
         static bool ToggleActionValidate()
         {
             // 메뉴 아이템의 체크 상태를 EditorPrefs에서 가져온 값으로 설정합니다.
             Menu.SetChecked(TogglePlayFullscreen_MenuItemName, EditorPrefs.GetBool(TogglePlayFullscreen_PrefKey, false));
             return true; // 메뉴 아이템이 항상 활성화되어 있도록 true를 반환합니다.
+        }
+
+        [MenuItem(ClassName + "/Go To Build Page", false, 400)]
+        static void GoToBuildPage()
+        {
+            Help.BrowseURL("http://10.10.0.3:18080");
         }
     }
 }
