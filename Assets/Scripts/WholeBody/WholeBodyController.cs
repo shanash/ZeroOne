@@ -164,7 +164,7 @@ public class WholeBodyController : SceneControllerBase
 
         if (L2d_List.Count == 0)
         {
-            string msg = "정상적으로 데이터가 설정되지 않았습니다.\nPersistent 데이터를 지워주세요";
+            string msg = GameDefine.GetLocalizeString("system_warning_not_exist_user_data");
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
             {
                 popup.ShowPopup(3f, msg);

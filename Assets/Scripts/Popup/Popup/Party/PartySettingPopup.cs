@@ -498,7 +498,7 @@ public class PartySettingPopup : PopupBase
             {
                 PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                 {
-                    popup.ShowPopup(2f, "파티 영웅을 지정해 주세요.");
+                    popup.ShowPopup(2f, GameDefine.GetLocalizeString("system_warning_select_party_member"));
                 });
                 return;
             }

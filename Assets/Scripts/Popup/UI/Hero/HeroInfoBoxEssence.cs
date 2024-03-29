@@ -302,7 +302,7 @@ public class HeroInfoBoxEssence : MonoBehaviour
         {
             PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
             {
-                popup.ShowPopup(3f, "오늘 횟수가 소진되어 더이상 근원전달을 할 수 없습니다.");
+                popup.ShowPopup(3f, GameDefine.GetLocalizeString("system_warning_no_more_send_essence"));
             });
 
             Refresh();
