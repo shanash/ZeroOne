@@ -78,6 +78,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         List<string> audio_clip_list = new List<string>();
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_Win");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_PlayerLvUp");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_CharLvUp");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/SE_star");
 

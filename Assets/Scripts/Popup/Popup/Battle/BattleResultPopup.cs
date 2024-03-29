@@ -107,6 +107,8 @@ public class BattleResultPopup : PopupBase
 
         SetEnableEscKeyExit(false);
         InitAssets();
+
+        AudioManager.Instance.FXTimeStretch = 1;
         return true;
     }
 
@@ -619,6 +621,7 @@ public class BattleResultPopup : PopupBase
                     AfterHeroLevelInfos();
                 });
                 popup.ShowPopup();
+                AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SFX_PlayerLvUp");
             });
             var stamina_mng = GameData.Instance.GetUserChargeItemDataManager();
             var stamina_item = stamina_mng.FindUserChargeItemData(REWARD_TYPE.STAMINA);
