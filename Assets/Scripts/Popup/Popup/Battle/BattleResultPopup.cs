@@ -169,6 +169,10 @@ public class BattleResultPopup : PopupBase
         {
             StartPlayerExpInfo();
         }
+        else if (evt_name.Equals("star_fx"))
+        {
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SE_star");
+        }
     }
 
     protected override void FixedUpdatePopup()

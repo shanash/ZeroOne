@@ -79,6 +79,7 @@ public partial class BattleManager_V2 : SceneControllerBase
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_Win");
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_CharLvUp");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/SE_star");
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");
@@ -435,7 +436,8 @@ public partial class BattleManager_V2 : SceneControllerBase
                         ChangeState(GAME_STATES.GAME_OVER_WIN_READY);
                     }
 
-                    AudioManager.Instance.StopBGM();
+                    //AudioManager.Instance.StopBGM();
+                    AudioManager.Instance.BGMVolume = 0.2f;
                 }
 
             }
@@ -576,7 +578,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         Game_Over_Delta = 1.5f;
         var audio = AudioManager.Instance;
-        audio.StopBGM();
+        //audio.StopBGM();
+        audio.BGMVolume = 0.2f;
         audio.StopAllFX();
         audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
     }
@@ -591,7 +594,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverWinReadyExit() { }
     public virtual void GameStateGameOverWinBegin()
     {
-        AudioManager.Instance.StopBGM();
+        //AudioManager.Instance.StopBGM();
+        AudioManager.Instance.BGMVolume = 0.2f;
 
         TooltipManager.I.CloseAll();
         GetEffectFactory().ClearAllEffects();
@@ -639,7 +643,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         Game_Over_Delta = 1.5f;
 
         var audio = AudioManager.Instance;
-        audio.StopBGM();
+        //audio.StopBGM();
+        audio.BGMVolume = 0.2f;
         audio.StopAllFX();
         audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
@@ -656,7 +661,8 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateGameOverLoseBegin()
     {
-        AudioManager.Instance.StopBGM();
+        //AudioManager.Instance.StopBGM();
+        AudioManager.Instance.BGMVolume = 0.2f;
         TooltipManager.I.CloseAll();
         GetEffectFactory().ClearAllEffects();
         var win_team = FindTeamManager(TEAM_TYPE.RIGHT);
@@ -706,7 +712,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     {
         GetEffectFactory().ClearAllEffects();
         var audio = AudioManager.Instance;
-        audio.StopBGM();
+        //audio.StopBGM();
+        audio.BGMVolume = 0.2f;
         audio.StopAllFX();
         audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
 
