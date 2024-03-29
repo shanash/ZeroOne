@@ -667,7 +667,6 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
                 {
                     AttackAnimationComplete();
                 }
-                return;
             }
         }
         else if (state == UNIT_STATES.SKILL_1)
