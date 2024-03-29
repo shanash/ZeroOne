@@ -384,7 +384,7 @@ public class PartySettingPopup : PopupBase
                 {
                     PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Noti/NotiTimerPopup", POPUP_TYPE.NOTI_TYPE, (popup) =>
                     {
-                        popup.ShowPopup(1.5f, "슬롯에 빈 자리가 없습니다.");
+                        popup.ShowPopup(1.5f, GameDefine.GetLocalizeString("system_warning_partysetting_not_enough_slot"));
                     });
                 }
                 return;
