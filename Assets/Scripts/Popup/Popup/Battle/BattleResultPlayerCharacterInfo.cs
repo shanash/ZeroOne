@@ -51,14 +51,14 @@ public class BattleResultPlayerCharacterInfo : UIBase
         //  exp per
         Level_Exp_Slider.value = before_xp_percent;
         //  need exp
-        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", before_remain_need_xp);
+        Level_Exp_Text.text = ZString.Format(GameDefine.GetLocalizeString("system_battleresult_next_remain_exp_format"), before_remain_need_xp.ToString("N0"));
 
         //  before love lv 
         Love_Level_Text.text = before_love_lv.ToString();
         //  before love exp
         Love_Exp_Slider.value = before_love_exp_per;
         //  before love need exp
-        Love_Exp_Text.text = ZString.Format("앞으로 {0:N0}", before_remain_need_love_xp);
+        Love_Exp_Text.text = ZString.Format(GameDefine.GetLocalizeString("system_battleresult_next_remain_exp_format"), before_remain_need_love_xp.ToString("N0"));
 
     }
 
@@ -117,7 +117,7 @@ public class BattleResultPlayerCharacterInfo : UIBase
             }
         }
         //  need exp
-        Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", after_remain_need_xp);
+        Level_Exp_Text.text = ZString.Format(GameDefine.GetLocalizeString("system_battleresult_next_remain_exp_format"), after_remain_need_xp.ToString("N0"));
 
         //  남은 경험치 게이지 이동
         duration = 1f;
@@ -182,7 +182,7 @@ public class BattleResultPlayerCharacterInfo : UIBase
         }
 
         //  before love need exp
-        Love_Exp_Text.text = ZString.Format("앞으로 {0:N0}", after_remain_need_love_xp);
+        Love_Exp_Text.text = ZString.Format(GameDefine.GetLocalizeString("system_battleresult_next_remain_exp_format"), after_remain_need_love_xp.ToString("N0"));
         //  남은 경험치 게이지 이동
         duration = 1f;
         delta = 0f;
