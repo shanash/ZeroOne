@@ -918,6 +918,7 @@ MonoBehaviour:
   Repeat_Reward_List_View: {fileID: 2191669983509658332}
   Current_Stamina: {fileID: 6576803288131597777}
   Used_Stamina: {fileID: 2407950495611650827}
+  Skip_Btn: {fileID: 0}
   Normal_Stage_Btn_Box: {fileID: 3006701574045190002}
   Normal_Stage_Btn_Text: {fileID: 7979026119386474358}
   Hard_Stage_Btn_Box: {fileID: 2344260738649171495}
@@ -1166,7 +1167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 223.89001, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6737545193065270648
@@ -1327,6 +1328,7 @@ GameObject:
   - component: {fileID: 9009820965105759511}
   - component: {fileID: 1572905705634431109}
   - component: {fileID: 7979026119386474358}
+  - component: {fileID: 7517573340556591805}
   m_Layer: 5
   m_Name: Entrance_Text
   m_TagString: Untagged
@@ -1450,6 +1452,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7517573340556591805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2690440504643191121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a4878113c34b74d91dab6edad45226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key_Of_StringTable: system_entrance
 --- !u!1 &2712001993951484725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1696,7 @@ GameObject:
   - component: {fileID: 219825213460685964}
   - component: {fileID: 5609795134523832771}
   - component: {fileID: 1488215443472726483}
+  - component: {fileID: 7732211175691213154}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1804,6 +1820,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7732211175691213154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2892057803210259312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a4878113c34b74d91dab6edad45226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key_Of_StringTable: system_stageinfo_auto_play
 --- !u!1 &3133114470443272646
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,7 +1946,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 107.345, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4096084946813889344
@@ -2042,6 +2071,7 @@ GameObject:
   - component: {fileID: 7411381607249701583}
   - component: {fileID: 5274686452167655792}
   - component: {fileID: 706716259831671893}
+  - component: {fileID: 532515810506902103}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -2165,6 +2195,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &532515810506902103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3392227623155476185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a4878113c34b74d91dab6edad45226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key_Of_StringTable: system_answer_cancel
 --- !u!1 &3505646398843369653
 GameObject:
   m_ObjectHideFlags: 0
@@ -3112,6 +3155,7 @@ GameObject:
   - component: {fileID: 2036746652771160897}
   - component: {fileID: 4753463796097426725}
   - component: {fileID: 4036097898373606397}
+  - component: {fileID: 6413016998497761351}
   m_Layer: 5
   m_Name: Entrance_Text
   m_TagString: Untagged
@@ -3235,6 +3279,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6413016998497761351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5328576335503805355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a4878113c34b74d91dab6edad45226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key_Of_StringTable: system_entrance
 --- !u!1 &5337924354531381449
 GameObject:
   m_ObjectHideFlags: 0

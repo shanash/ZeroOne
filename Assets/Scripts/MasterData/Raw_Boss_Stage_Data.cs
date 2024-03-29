@@ -15,6 +15,7 @@ public class Raw_Boss_Stage_Data : System.IDisposable
 	public int repeat_reward_group_id {get; set;}
 	public int first_reward_group_id {get; set;}
 	public int recomment_level {get; set;}
+	public string bgm_path {get; set;}
 
 	private bool disposed = false;
 
@@ -31,6 +32,7 @@ public class Raw_Boss_Stage_Data : System.IDisposable
 		repeat_reward_group_id = 0;
 		first_reward_group_id = 0;
 		recomment_level = 0;
+		bgm_path = string.Empty;
 	}
 
 	public void Dispose()

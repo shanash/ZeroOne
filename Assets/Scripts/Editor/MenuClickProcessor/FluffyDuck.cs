@@ -247,12 +247,14 @@ namespace FluffyDuck.EditorUtil.UpperMenu
                 if (matches.Count > 0)
                 {
                     UnityEngine.Debug.Log($"Korean Unicode String found in: {filePath.Replace(assetsPath, "Assets")}", AssetDatabase.LoadAssetAtPath<Object>(filePath.Replace(assetsPath, "Assets").Replace(@"\", "/")));
+                    var arr_filepath = filePath.Split('\\');
+                    var prefab_fname = arr_filepath[arr_filepath.Length - 1];
 
                     foreach (Match match in matches)
                     {
                         // 유니코드 이스케이프 시퀀스를 실제 한글 문자열로 변환
                         string decodedString = Regex.Unescape(match.Value);
-                        UnityEngine.Debug.Log($"Decoded String: {decodedString}");
+                        UnityEngine.Debug.Log($"{prefab_fname} Decoded String: {decodedString}");
                     }
                 }
             }

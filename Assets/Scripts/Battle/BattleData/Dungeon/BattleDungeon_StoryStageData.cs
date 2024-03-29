@@ -82,6 +82,14 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     public override void GetMonsterSkillVoiceAndFxSoundPath(ref List<string> list)
     {
         var m = MasterDataManager.Instance;
+
+        //  bgm 
+        string bgm_path = GetBGMPath();
+        if (!string.IsNullOrEmpty(bgm_path) && !list.Contains(bgm_path))
+        {
+            list.Add(bgm_path);
+        }
+
         int wave_cnt = Wave_Datas.Count;
         //  웨이브별 npc 프리팹
         for (int w = 0; w < wave_cnt; w++)
@@ -188,6 +196,11 @@ public class BattleDungeon_StoryStageData : BattleDungeonData
     public override int GetStarPointRewardGroupID()
     {
         return Stage.star_reward_group_id;
+    }
+
+    public override string GetBGMPath()
+    {
+        return Stage.bgm_path;
     }
 
     public override bool CalcDundeonLimitTime(float dt)

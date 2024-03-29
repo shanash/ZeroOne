@@ -263,17 +263,24 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateEnterStoryDialogue() { }
     public virtual void GameStateEnterStoryDialogueExit() { }
 
-    public virtual void GameStateFinishStoryDialogueBegin() { }
+    public virtual void GameStateFinishStoryDialogueBegin() 
+    {
+        
+    }
     public virtual void GameStateFinishStoryDialogue() { }
     public virtual void GameStateFinishStoryDialogueExit() { }
 
     public virtual void GameStateSpawnBegin()
     {
         SpawnUnits();
-        //MainThreadDispatcher.Instance.AddAction(() =>
-        //{
-        //    ChangeState(GAME_STATES.MOVE_IN);
-        //});
+        string bgm_path = Dungeon_Data.GetBGMPath();
+        if (!string.IsNullOrEmpty(bgm_path))
+        {
+            var audio = AudioManager.Instance;
+            audio.BGMVolume = 0.4f;
+            audio.PlayBGM(bgm_path);
+        }
+        
     }
     public virtual void GameStateSpawn()
     {
@@ -413,8 +420,8 @@ public partial class BattleManager_V2 : SceneControllerBase
                                 popup.ShowPopup(story_data.outrance_dialogue);
 
                             });
+                            
                             ChangeState(GAME_STATES.FINISH_STORY_DIALOGUE);
-
                         }
                         else
                         {
@@ -425,6 +432,8 @@ public partial class BattleManager_V2 : SceneControllerBase
                     {
                         ChangeState(GAME_STATES.GAME_OVER_WIN_READY);
                     }
+
+                    AudioManager.Instance.StopBGM();
                 }
 
             }
@@ -564,8 +573,10 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverWinReadyBegin() 
     {
         Game_Over_Delta = 1.5f;
-        AudioManager.Instance.StopAllFX();
-        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+        var audio = AudioManager.Instance;
+        audio.StopBGM();
+        audio.StopAllFX();
+        audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
     }
     public virtual void GameStateGameOverWinReady() 
     {
@@ -578,6 +589,8 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverWinReadyExit() { }
     public virtual void GameStateGameOverWinBegin()
     {
+        AudioManager.Instance.StopBGM();
+
         TooltipManager.I.CloseAll();
         GetEffectFactory().ClearAllEffects();
         var win_team = FindTeamManager(TEAM_TYPE.LEFT);
@@ -622,8 +635,12 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateGameOverLoseReadyBegin() 
     {
         Game_Over_Delta = 1.5f;
-        AudioManager.Instance.StopAllFX();
-        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+
+        var audio = AudioManager.Instance;
+        audio.StopBGM();
+        audio.StopAllFX();
+        audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+
     }
     public virtual void GameStateGameOverLoseReady() 
     {
@@ -637,6 +654,7 @@ public partial class BattleManager_V2 : SceneControllerBase
 
     public virtual void GameStateGameOverLoseBegin()
     {
+        AudioManager.Instance.StopBGM();
         TooltipManager.I.CloseAll();
         GetEffectFactory().ClearAllEffects();
         var win_team = FindTeamManager(TEAM_TYPE.RIGHT);
@@ -685,8 +703,11 @@ public partial class BattleManager_V2 : SceneControllerBase
     public virtual void GameStateTimeOutBegin() 
     {
         GetEffectFactory().ClearAllEffects();
-        AudioManager.Instance.StopAllFX();
-        AudioManager.Instance.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+        var audio = AudioManager.Instance;
+        audio.StopBGM();
+        audio.StopAllFX();
+        audio.FXTimeStretch = GameDefine.GAME_SPEEDS[BATTLE_SPEED_TYPE.NORMAL_TYPE];
+
         //  동작 정지
         TeamMembersChangeState(UNIT_STATES.TIME_OUT);
         

@@ -73,6 +73,12 @@ public class Boss_Stage_Data : System.IDisposable
 	public int recomment_level => _recomment_level;
 	int _recomment_level;
 
+	///	<summary>
+	///	스테이지 BGM
+	///	</summary>
+	public string bgm_path => _bgm_path;
+	string _bgm_path;
+
 	private bool disposed = false;
 
 	public Boss_Stage_Data(Raw_Boss_Stage_Data raw_data)
@@ -88,6 +94,7 @@ public class Boss_Stage_Data : System.IDisposable
 		_repeat_reward_group_id = raw_data.repeat_reward_group_id;
 		_first_reward_group_id = raw_data.first_reward_group_id;
 		_recomment_level = raw_data.recomment_level;
+		_bgm_path = raw_data.bgm_path;
 	}
 
 	public void Dispose()
@@ -120,6 +127,7 @@ public class Boss_Stage_Data : System.IDisposable
 		sb.AppendFormat("[repeat_reward_group_id] = <color=yellow>{0}</color>", repeat_reward_group_id).AppendLine();
 		sb.AppendFormat("[first_reward_group_id] = <color=yellow>{0}</color>", first_reward_group_id).AppendLine();
 		sb.AppendFormat("[recomment_level] = <color=yellow>{0}</color>", recomment_level).AppendLine();
+		sb.AppendFormat("[bgm_path] = <color=yellow>{0}</color>", bgm_path).AppendLine();
 		return sb.ToString();
 	}
 }

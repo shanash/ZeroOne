@@ -46,8 +46,9 @@ public class LobbyManager : SceneControllerBase
 
         List<string> audio_clip_list = new List<string>();
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
+        audio_clip_list.Add("Assets/AssetResources/Audio/BGM/BGM_Lobby01");
 
-        audio.PreloadAudioClipsAsync(audio_clip_list, null);
+        audio.PreloadAudioClipsAsync(audio_clip_list, PreloadAudioCallback);
 
         var l2d_list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
 
@@ -68,6 +69,16 @@ public class LobbyManager : SceneControllerBase
         SetLobbyChar(l2d_list);
 
         _ = InitializeAsync();
+    }
+
+    void PreloadAudioCallback(int load_cnt, int total_cnt)
+    {
+        if (load_cnt == total_cnt)
+        {
+            var audio = AudioManager.Instance;
+            audio.BGMVolume = 0.4f;
+            audio.PlayBGM("Assets/AssetResources/Audio/BGM/BGM_Lobby01");
+        }
     }
 
     async UniTask InitializeAsync()

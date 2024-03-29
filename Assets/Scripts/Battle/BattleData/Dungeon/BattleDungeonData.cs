@@ -329,4 +329,10 @@ public class BattleDungeonData : BattleDataBase
     /// </summary>
     /// <returns></returns>
     public virtual int GetStarPointRewardGroupID() { return 0; }    
+
+    /// <summary>
+    /// 던전 BGM 경로 반환
+    /// </summary>
+    /// <returns></returns>
+    public virtual string GetBGMPath() { return string.Empty; }
 }
