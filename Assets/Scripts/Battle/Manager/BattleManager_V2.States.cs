@@ -77,6 +77,8 @@ public partial class BattleManager_V2 : SceneControllerBase
         //  audio
         List<string> audio_clip_list = new List<string>();
         audio_clip_list.Add("Assets/AssetResources/Audio/FX/click_01");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_Win");
+        audio_clip_list.Add("Assets/AssetResources/Audio/FX/SFX_CharLvUp");
 
         List<string> list = new List<string>();
         list.Add("Assets/AssetResources/Prefabs/Fields/Battle_Field_01");

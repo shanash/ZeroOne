@@ -246,7 +246,7 @@ public partial class HeroBase_V2 : UnitBase_V2
             ChangeState(UNIT_STATES.DEATH);
             return;
         }
-        if (IsReservedState(UNIT_STATES.ULTIMATE_PAUSE))
+        if (IsReservedState(UNIT_STATES.ULTIMATE_PAUSE) && IsReservedState(UNIT_STATES.TIME_OUT))
         {
             return;
         }

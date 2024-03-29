@@ -140,7 +140,7 @@ public class BattleResultPopup : PopupBase
         //  애니메이션 종료 콜백 등록
         for (int i = 0; i < Anim_Event_Callback_List.Count; i++)
         {
-            Anim_Event_Callback_List[i].SetAnimEncCallback(AnimationEndCallback);
+            Anim_Event_Callback_List[i].SetAnimationEndEventCallback(AnimationEndCallback);
         }
 
         GameObjectPoolManager.Instance.PreloadGameObjectPrefabsAsync(asset_list, PreloadCallback);
@@ -155,22 +155,19 @@ public class BattleResultPopup : PopupBase
         }
     }
 
-    void AnimationEndCallback(BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE callback_type)
+    void AnimationEndCallback(string evt_name)
     {
-        switch (callback_type)
+        if (evt_name.Equals("victory_end") || evt_name.Equals("defeat_end"))
         {
-            case BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.VICTORY_END:
-                StartStarPointAnimation();
-                break;
-            case BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.DEFEAT_END:
-                StartStarPointAnimation();
-                break;
-            case BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.STAR_END:
-                Result_Exp.SetActive(true);
-                break;
-            case BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.EXP_END:
-                StartPlayerExpInfo();
-                break;
+            StartStarPointAnimation();
+        }
+        else if (evt_name.Equals("star_end"))
+        {
+            Result_Exp.SetActive(true);
+        }
+        else if (evt_name.Equals("exp_end"))
+        {
+            StartPlayerExpInfo();
         }
     }
 
@@ -202,6 +199,7 @@ public class BattleResultPopup : PopupBase
         if (Is_Win)
         {
             Title_Victory.SetActive(true);
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SFX_Win");
         }
         else
         {

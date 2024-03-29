@@ -63,18 +63,18 @@ public class BattleResultRewardPopup : PopupBase
 
         BG_Image.texture = BG_Texture;
 
-        End_Callback.SetAnimEncCallback(AnimationEndCallback);
+        End_Callback.SetAnimationEndEventCallback(AnimationEndCallback);
 
         SetEnableEscKeyExit(false);
         FixedUpdatePopup();
         return true;
     }
-    void AnimationEndCallback(BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE callback_type)
+    void AnimationEndCallback(string evt_name)
     {
-        if (callback_type == BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.REWARD_OPEN)
-        {
+        //if (callback_type == BattleResultAnimEventCallback.BATTLE_RESULT_ANIM_CALLBACK_TYPE.REWARD_OPEN)
+        //{
 
-        }
+        //}
     }
     protected override void FixedUpdatePopup()
     {

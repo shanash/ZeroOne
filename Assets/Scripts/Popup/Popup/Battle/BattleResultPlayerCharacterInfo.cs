@@ -107,6 +107,7 @@ public class BattleResultPlayerCharacterInfo : UIBase
                 if (loop_count >= fullcharge_count)
                 {
                     Lv_Up_Animator.SetActive(true);
+                    AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SFX_CharLvUp");
                     break;
                 }
             }
