@@ -173,7 +173,8 @@ public class BattleResultPopup : PopupBase
         }
         else if (evt_name.Equals("star_fx"))
         {
-            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SE_star");
+            //AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SE_star");
+            AudioManager.Instance.PlayFX("Assets/AssetResources/Audio/FX/SE_Star2");
         }
     }
 

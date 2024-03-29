@@ -62,6 +62,8 @@ public class WholeBodyController : SceneControllerBase
     [Header("Attribute")]
     [SerializeField, Tooltip("Attribute Tag View")]
     Image Attr_Tag;
+    [SerializeField, Tooltip("Attribute Icon View")]
+    Image Attr_Icon;
     [SerializeField, Tooltip("Attribute Text")]
     TMP_Text Attr_Text;
     [SerializeField, Tooltip("Attribute Tag Sprites Resources")]
@@ -279,6 +281,76 @@ public class WholeBodyController : SceneControllerBase
 
     void UpdateUI()
     {
+        if(Hero_Data == null)
+        {
+            Debug.LogWarning("미보유 캐릭터 Data 가 null 입니다.");
+            return;
+        }
+
+        var m = MasterDataManager.Instance;
+        Player_Character_Data hero = Hero_Data.Data;
+        Player_Character_Battle_Data battle = Hero_Data.Battle_Data;
+
+
+        // Level_Text
+        Level_Text.text = $"LV. 1";
+
+        // Name_Text
+        Name_Text.text = GameDefine.GetLocalizeString(hero.name_id);
+
+        // Star_Images
+        int star_grade = hero.default_star;
+        for (int i = 0; i < Star_Images.Count; ++i)
+        {
+            Star_Images[i].SetActive(i < star_grade);
+        }
+
+        // Position_Tag
+        var pos_data = m.Get_PositionIconData(battle.position_type);
+        //Position_Tag.sprite
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(pos_data.icon, (spr) =>
+        {
+            Position_Tag.sprite = spr;
+        });
+
+        // Tribe_Box
+
+        // Tribe_Tag
+
+        // Tribe_Text
+
+        //  role type
+        var role_data = m.Get_RoleIconData(hero.role_type);
+        // Role_Icon
+
+        Role_Icon.sprite = Role_Icon_Sprites[(int)role_data.role_type - 1];
+/*        CommonUtils.GetResourceFromAddressableAsset<Sprite>(role_data.card_icon, (spr) =>
+        {
+            Role_Icon.sprite = spr;
+        });*/
+
+        // Role_Text
+        Role_Text.text = GameDefine.GetLocalizeString(role_data.role_name_id);
+
+        // Attribute
+        var attr_data = m.Get_AttributeIconData(hero.attribute_type);
+
+        // Attr_Tag;
+        var color = CommonUtils.ToRGBFromHex(attr_data.color);
+        Attr_Tag.color = color;
+
+        // Attr_Icon
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(attr_data.icon, (spr) =>
+        {
+            Attr_Icon.sprite = spr;
+        });
+
+        // Attr_Text;
+        Attr_Text.text = GameDefine.GetLocalizeString(attr_data.name_id);
+
+        // Attr_Tag_Sprites;
+
+
         //Essence_Chance_Count.text = $"{GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE - Battle_Pc_Data.User_Data.Essence_Sended_Count_Of_Date}/{GameDefine.SENDING_ESSENCE_CHANCE_COUNT_OF_DATE}";
     }
 
@@ -287,10 +359,13 @@ public class WholeBodyController : SceneControllerBase
         ReleaseProducer();
 
         pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.LOBBY_EXPECT);
-        //pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO, Memorial_Parent);
-        //pd = Factory.Instantiate<Producer>(Hero_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE, Memorial_Parent);
 
         //SetRenderTextureAndCamera();
+
+        var hero_data = new HeroData();
+        hero_data.SetUnitID(Current_L2d_Data.Player_Character_ID);
+
+        Hero_Data = hero_data;
     }
 
     void ReleaseProducer()
@@ -383,6 +458,7 @@ public class WholeBodyController : SceneControllerBase
                     Current_L2d_Index = L2d_List.Count - 1;
                 }
                 UpdateLobbyChar();
+                UpdateUI();
                 break;
 
             case "RightMemorialBtn":
@@ -392,6 +468,7 @@ public class WholeBodyController : SceneControllerBase
                     Current_L2d_Index = 0;
                 }
                 UpdateLobbyChar();
+                UpdateUI();
                 break;
             case "VoiceBtn":
                 // todo : 로비터치 캐릭터 사운드 출력

@@ -586,9 +586,17 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
             if (tr != null)
             {
                 added_pos_x = -1.5f;
-                added_pos_y = 1.0f;
+                added_pos_y = 0.5f;
             }
+            else
+            {
+                // L2d 인 경우, 좌표 보정
+                added_pos_x = 0.5f;
+                added_pos_y = 3.0f;
+            }
+
             this.transform.position = new Vector3(added_pos_x, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
+
         }
 
         InitField();
