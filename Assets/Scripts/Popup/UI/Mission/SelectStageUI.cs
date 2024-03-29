@@ -162,7 +162,7 @@ public class SelectStageUI : PopupBase
         
         int gain_star = stage_mng.GetGainStarPoints(Zone.stage_group_id);
         int total_star = stage_mng.GetTotalStarCount(Zone.stage_group_id);
-        Zone_Star_Proceed_Text.text = ZString.Format("진행도({0}/{1})", gain_star, total_star);
+        Zone_Star_Proceed_Text.text = ZString.Format(GameDefine.GetLocalizeString("system_progress_format"), gain_star, total_star);
 
         float per = (float)gain_star / (float)total_star;
         Zone_Star_Gauge.value = Mathf.Clamp01(per);
