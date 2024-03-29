@@ -77,7 +77,7 @@ public class SelectLobbyCharacterPopup : PopupBase
     public override void UpdatePopup()
     {
         Current_Choice_Count = Character_List.OrderByDescending(x => x.Lobby_Choice_Number).Select(x => x.Lobby_Choice_Number).ToList()[0];
-        Select_Count.text = ZString.Format("선택 중   <color=#67afff>{0} / {1}</color>", Current_Choice_Count, GameDefine.MAX_LOBBY_CHARACTER_COUNT);
+        Select_Count.text = ZString.Format(GameDefine.GetLocalizeString("system_selecting_format"), Current_Choice_Count, GameDefine.MAX_LOBBY_CHARACTER_COUNT);
     }
 
     /// <summary>
