@@ -1,5 +1,7 @@
 
 
+using FluffyDuck.Util;
+
 public class BattleNpcData : BattleUnitData
 {
     protected override int Level { get; set; }
@@ -139,7 +141,15 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
+            double point = battle_data.physics_defend + (GetLevel() - 1) * Stat_Data.physics_defend;
+
+            //  치트(적 방어력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.ENEMY_DEFENSE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
+            return point;
         }
         return 0;
     }
@@ -149,7 +159,15 @@ public class BattleNpcData : BattleUnitData
     {
         if (battle_data != null)
         {
-            return battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
+            double point = battle_data.magic_defend + (GetLevel() - 1) * Stat_Data.magic_defend;
+            //  치트(적 방어력 증가)
+            double cheat_multiple = BlackBoard.Instance.GetBlackBoardData<int>(BLACK_BOARD_KEY.ENEMY_DEFENSE_INC_MULTIPLE, 1);
+            if (cheat_multiple > 1)
+            {
+                point *= cheat_multiple;
+            }
+
+            return point;
         }
         return 0;
     }

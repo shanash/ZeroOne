@@ -50,6 +50,12 @@ public class Boss_Data : System.IDisposable
 	string _prefab_path;
 
 	///	<summary>
+	///	보스 실루엣
+	///	</summary>
+	public string boss_silhouette_path => _boss_silhouette_path;
+	string _boss_silhouette_path;
+
+	///	<summary>
 	///	던전 오픈 게임 타입
 	///	</summary>
 	public GAME_TYPE open_game_type => _open_game_type;
@@ -72,6 +78,7 @@ public class Boss_Data : System.IDisposable
 		_boss_story_info = raw_data.boss_story_info;
 		_boss_skill_info = raw_data.boss_skill_info;
 		_prefab_path = raw_data.prefab_path;
+		_boss_silhouette_path = raw_data.boss_silhouette_path;
 		_open_game_type = raw_data.open_game_type;
 		_open_dungeon_id = raw_data.open_dungeon_id;
 	}
@@ -102,6 +109,7 @@ public class Boss_Data : System.IDisposable
 		sb.AppendFormat("[boss_story_info] = <color=yellow>{0}</color>", boss_story_info).AppendLine();
 		sb.AppendFormat("[boss_skill_info] = <color=yellow>{0}</color>", boss_skill_info).AppendLine();
 		sb.AppendFormat("[prefab_path] = <color=yellow>{0}</color>", prefab_path).AppendLine();
+		sb.AppendFormat("[boss_silhouette_path] = <color=yellow>{0}</color>", boss_silhouette_path).AppendLine();
 		sb.AppendFormat("[open_game_type] = <color=yellow>{0}</color>", open_game_type).AppendLine();
 		sb.AppendFormat("[open_dungeon_id] = <color=yellow>{0}</color>", open_dungeon_id).AppendLine();
 		return sb.ToString();

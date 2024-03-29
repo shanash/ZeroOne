@@ -21,6 +21,9 @@ public class BossStageEntrySlot : UIBase
     [SerializeField, Tooltip("Lock Cover")]
     RectTransform Lock_Cover;
 
+    [SerializeField, Tooltip("보스 실루엣")]
+    Image Boss_Silhouette;
+
     Boss_Data Boss;
     UserBossStageDataManager Boss_Mng;
 
@@ -35,13 +38,22 @@ public class BossStageEntrySlot : UIBase
     {
         if (!Boss_Mng.IsBossOpen(Boss.boss_id))
         {
-            Lock_Cover.gameObject.SetActive(true);
+            UpdateLockCover();
             return;
         }
         if (Lock_Cover.gameObject.activeSelf)
         {
             Lock_Cover.gameObject.SetActive(false);
         }
+    }
+
+    void UpdateLockCover()
+    {
+        Lock_Cover.gameObject.SetActive(true);
+        CommonUtils.GetResourceFromAddressableAsset<Sprite>(Boss.boss_silhouette_path, (spr) =>
+        {
+            Boss_Silhouette.sprite = spr;
+        });
     }
 
     public void OnClickChoiceBoss()

@@ -34,6 +34,10 @@ public class GPMCommand : MonoBehaviour
         func.AddCommand(this, "CheatDefenceIncAccum", "전투 방어력 <color=#ffff00>x10</color> 누적", new object[] { 10 });
         func.AddCommand(this, "CheatDefenseInc", "전투 방어력 <color=#ffff00>x50</color>", new object[] { 50 });
         
+        func.AddCommand(this, "CheatEnemyDefenseInc", "<color=#ff0000>적의 전투 방어력 x50</color>", new object[] { 50 });
+
+
+        
         func.AddCommand(this, "CheatCriticalChanceInc", "크리티컬 확률 <color=#00ff00>x100</color>", new object[] { 100 });
 
 
@@ -163,6 +167,13 @@ public class GPMCommand : MonoBehaviour
         cheat_multiple += multiple;
         board.SetBlackBoard(BLACK_BOARD_KEY.PLAYER_DEFENSE_INC_MULTIPLE, cheat_multiple);
         CommonUtils.ShowToast($"전투 방어력이 {cheat_multiple}배 누적 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
+    }
+
+    void CheatEnemyDefenseInc(int multiple)
+    {
+        var board = BlackBoard.Instance;
+        board.SetBlackBoard(BLACK_BOARD_KEY.ENEMY_DEFENSE_INC_MULTIPLE, multiple);
+        CommonUtils.ShowToast($"적의 전투 방어력이 {multiple}배 증가했습니다.", TOAST_BOX_LENGTH.SHORT);
     }
 
     void CheatCriticalChanceInc(int multiple)

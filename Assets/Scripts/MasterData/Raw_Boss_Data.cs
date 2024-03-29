@@ -11,6 +11,7 @@ public class Raw_Boss_Data : System.IDisposable
 	public string boss_story_info {get; set;}
 	public string boss_skill_info {get; set;}
 	public string prefab_path {get; set;}
+	public string boss_silhouette_path {get; set;}
 	public GAME_TYPE open_game_type {get; set;}
 	public int open_dungeon_id {get; set;}
 
@@ -25,6 +26,7 @@ public class Raw_Boss_Data : System.IDisposable
 		boss_story_info = string.Empty;
 		boss_skill_info = string.Empty;
 		prefab_path = string.Empty;
+		boss_silhouette_path = string.Empty;
 		open_game_type = GAME_TYPE.NONE;
 		open_dungeon_id = 0;
 	}
