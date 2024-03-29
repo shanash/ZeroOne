@@ -1,9 +1,11 @@
 #if UNITY_EDITOR
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 
 namespace FluffyDuck.EditorUtil.UpperMenu
 {
@@ -227,6 +229,33 @@ namespace FluffyDuck.EditorUtil.UpperMenu
         static void GoToBuildPage()
         {
             Help.BrowseURL("http://10.10.0.3:18080");
+        }
+
+        [MenuItem(ClassName + "/Find Korean in Prefabs", false, 500)]
+        static void FindKoreanStrings()
+        {
+            string assetsPath = Application.dataPath;
+            string[] prefabFiles = Directory.GetFiles(assetsPath, "*.prefab", SearchOption.AllDirectories);
+
+            Regex regex = new Regex("\"[^\"]*\\\\u([ACD][0-9A-F]{2}[0-9A-F]|[D][0-9A-F]{2}[0-9A][0-9A-F])[^\"\\\\]*\"");
+
+            foreach (string filePath in prefabFiles)
+            {
+                string content = File.ReadAllText(filePath);
+                MatchCollection matches = regex.Matches(content);
+
+                if (matches.Count > 0)
+                {
+                    UnityEngine.Debug.Log($"Korean Unicode String found in: {filePath.Replace(assetsPath, "Assets")}", AssetDatabase.LoadAssetAtPath<Object>(filePath.Replace(assetsPath, "Assets").Replace(@"\", "/")));
+
+                    foreach (Match match in matches)
+                    {
+                        // 유니코드 이스케이프 시퀀스를 실제 한글 문자열로 변환
+                        string decodedString = Regex.Unescape(match.Value);
+                        UnityEngine.Debug.Log($"Decoded String: {decodedString}");
+                    }
+                }
+            }
         }
     }
 }

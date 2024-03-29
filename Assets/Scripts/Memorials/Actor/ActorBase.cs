@@ -578,6 +578,18 @@ public abstract partial class ActorBase : MonoBehaviour, IActorPositionProvider,
         {
             this.transform.position = new Vector3(0, ESSENCE_POS_Y, this.transform.position.z);
         }
+        else if (type == SPINE_CHARA_LOCATION_TYPE.LOBBY_EXPECT)
+        {
+            // TODO: 로비에 배치되는 Sprite 스탠드를 임시로 입력했던 값(-2.2, 1.3)을 넣고 작업을 하고 계셨다
+            // M2 이후에 처리하는게 좋을 것 같습니다.
+            var tr = this.transform.Find("Sprite");
+            if (tr != null)
+            {
+                added_pos_x = -1.5f;
+                added_pos_y = 1.0f;
+            }
+            this.transform.position = new Vector3(added_pos_x, (y - height) * scale + CalculateTop(Vcam.transform.position, Vcam.m_Lens.FieldOfView, Vector3.zero) + added_pos_y, this.transform.position.z);
+        }
 
         InitField();
 

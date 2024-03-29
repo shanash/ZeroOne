@@ -1,6 +1,7 @@
 using UnityEngine;
 using FluffyDuck.Util;
 using System.Collections.Generic;
+using System.Linq;
 
 public class HeroDataManager : MonoSingleton<HeroDataManager>
 {
@@ -61,7 +62,7 @@ public class HeroDataManager : MonoSingleton<HeroDataManager>
     }
 
     /// <summary>
-    /// 미보유 캐릭터의 L3dDataList 생성
+    /// 미보유 캐릭터의 L2dDataList 생성
     /// </summary>
     public void UpdateHeroL2dData()
     {
@@ -101,7 +102,7 @@ public class HeroDataManager : MonoSingleton<HeroDataManager>
             Debug.Assert(hero_id != 0, $"입력한 L2d의 캐릭터id를 찾을 수 없습니다 : {l2d_id}");
         }
 
-        var l2d_data = FindUserL2dData(l2d_id);
+        var l2d_data = FindHeroL2dData(l2d_id);
         if (l2d_data == null)
         {
             l2d_data = new UserL2dData();
@@ -112,8 +113,15 @@ public class HeroDataManager : MonoSingleton<HeroDataManager>
         return l2d_data;
     }
 
-    public UserL2dData FindUserL2dData(int memorial_id)
+    public UserL2dData FindHeroL2dData(int memorial_id)
     {
         return Hero_L2d_Data_List.Find(x => x.Skin_Id == memorial_id);
+    }
+
+
+
+    public List<UserL2dData> GetHeroL2dDataList()
+    {
+        return Hero_L2d_Data_List.ToList();
     }
 }

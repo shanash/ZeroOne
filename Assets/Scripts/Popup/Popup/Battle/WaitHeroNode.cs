@@ -1,18 +1,26 @@
+using FluffyDuck.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaitHeroNode : MonoBehaviour
+public class WaitHeroNode : UIBase
 {
-    // Start is called before the first frame update
-    void Start()
+    UIHeroBase Hero;
+    UserHeroData User_Data;
+    public void SetUserHeroData(UserHeroData data)
     {
-        
+        User_Data = data;
+        SpawnUIHero();
     }
 
-    // Update is called once per frame
-    void Update()
+    void SpawnUIHero()
     {
-        
+        var obj = GameObjectPoolManager.Instance.GetGameObject(User_Data.GetPlayerCharacterData().sd_prefab_path, this.transform);
+        obj.transform.localPosition = Vector2.zero;
+        Hero = obj.GetComponent<UIHeroBase>();
+        MainThreadDispatcher.Instance.AddAction(() =>
+        {
+            Hero.PlayAnimation(HERO_PLAY_ANIMATION_TYPE.WIN_01);
+        });
     }
 }

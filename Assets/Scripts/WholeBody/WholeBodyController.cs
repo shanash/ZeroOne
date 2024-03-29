@@ -156,7 +156,11 @@ public class WholeBodyController : SceneControllerBase
 
         audio.PreloadAudioClipsAsync(audio_clip_list, null);
 
-        L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+        //L2d_List = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+
+        HeroDataManager.I.UpdateHeroL2dData();
+
+        L2d_List = HeroDataManager.I.GetHeroL2dDataList();
 
         if (L2d_List.Count == 0)
         {
@@ -191,7 +195,9 @@ public class WholeBodyController : SceneControllerBase
     /// <returns></returns>
     bool OnReceiveData(HeroData data, int index, int remain_count_of_chance_send_essence)
     {
-        var l2d_list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+        //var l2d_list = GameData.I.GetUserL2DDataManager().GetUserL2dDataListByChoice();
+        HeroDataManager.I.GetHeroL2dDataList();
+        var l2d_list = HeroDataManager.I.GetHeroL2dDataList();
 
         //Battle_Pc_Data = data;
         Hero_Data = data;
@@ -202,7 +208,6 @@ public class WholeBodyController : SceneControllerBase
         GestureManager.Instance.Enable = false;
         //InitCameraForL2dChar(Memorial_Camera);
         SetLobbyChar(l2d_list);
-
 
         Current_L2d_Index = 0;
         UpdateLobbyChar();
@@ -281,7 +286,7 @@ public class WholeBodyController : SceneControllerBase
     {
         ReleaseProducer();
 
-        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO);
+        pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.LOBBY_EXPECT);
         //pd = Factory.Instantiate<Producer>(Current_L2d_Data.Skin_Id, LOVE_LEVEL_TYPE.NORMAL, SPINE_CHARA_LOCATION_TYPE.HERO_INFO, Memorial_Parent);
         //pd = Factory.Instantiate<Producer>(Hero_Data.Data.essence_id, Selected_Relationship, SPINE_CHARA_LOCATION_TYPE.TRANSFER_ESSENCE, Memorial_Parent);
 
@@ -314,7 +319,7 @@ public class WholeBodyController : SceneControllerBase
         Left_UI.SetActive(L2d_List.Count > 1);
         Right_UI.SetActive(L2d_List.Count > 1);
         Current_L2d_Index = 0;
-        UpdateLobbyChar();
+        //UpdateLobbyChar();
     }
 
     async UniTask BlockInputWhenEndingClimaxEffect()

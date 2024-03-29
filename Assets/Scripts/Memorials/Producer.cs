@@ -54,6 +54,11 @@ public class Producer : FluffyDuck.Util.Factory.IProduct
         {
             GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
         }
+        else if( type == SPINE_CHARA_LOCATION_TYPE.LOBBY_EXPECT )
+        {
+            Stage.transform.localPosition  = new Vector3(0, 1, 0);
+            GameObjectUtils.ChangeLayersRecursively(Stage.transform, "OverlayObj");
+        }
 
         ScreenEffectManager.I.SetBlockInputUI(false);
     }

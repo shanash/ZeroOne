@@ -5,6 +5,7 @@
 public class Raw_Role_Icon_Data : System.IDisposable
 {
 	public ROLE_TYPE role_type {get; set;}
+	public string role_name_id {get; set;}
 	public string name_kr {get; set;}
 	public string icon {get; set;}
 	public string card_icon {get; set;}
@@ -15,6 +16,7 @@ public class Raw_Role_Icon_Data : System.IDisposable
 	public Raw_Role_Icon_Data()
 	{
 		role_type = ROLE_TYPE.NONE;
+		role_name_id = string.Empty;
 		name_kr = string.Empty;
 		icon = string.Empty;
 		card_icon = string.Empty;

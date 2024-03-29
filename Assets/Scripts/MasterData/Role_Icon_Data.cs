@@ -1,4 +1,4 @@
-#if UNITY_5_3_OR_NEWER
+﻿#if UNITY_5_3_OR_NEWER
 using FluffyDuck.Util;
 #endif
 using System.Linq;
@@ -12,6 +12,12 @@ public class Role_Icon_Data : System.IDisposable
 	///	</summary>
 	public ROLE_TYPE role_type => _role_type;
 	ROLE_TYPE _role_type;
+
+	///	<summary>
+	///	직업군 명칭
+	///	</summary>
+	public string role_name_id => _role_name_id;
+	string _role_name_id;
 
 	///	<summary>
 	///	이름
@@ -42,6 +48,7 @@ public class Role_Icon_Data : System.IDisposable
 	public Role_Icon_Data(Raw_Role_Icon_Data raw_data)
 	{
 		_role_type = raw_data.role_type;
+		_role_name_id = raw_data.role_name_id;
 		_name_kr = raw_data.name_kr;
 		_icon = raw_data.icon;
 		_card_icon = raw_data.card_icon;
@@ -68,6 +75,7 @@ public class Role_Icon_Data : System.IDisposable
 	{
 		System.Text.StringBuilder sb = new System.Text.StringBuilder();
 		sb.AppendFormat("[role_type] = <color=yellow>{0}</color>", role_type).AppendLine();
+		sb.AppendFormat("[role_name_id] = <color=yellow>{0}</color>", role_name_id).AppendLine();
 		sb.AppendFormat("[name_kr] = <color=yellow>{0}</color>", name_kr).AppendLine();
 		sb.AppendFormat("[icon] = <color=yellow>{0}</color>", icon).AppendLine();
 		sb.AppendFormat("[card_icon] = <color=yellow>{0}</color>", card_icon).AppendLine();

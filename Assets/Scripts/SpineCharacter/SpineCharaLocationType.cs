@@ -5,4 +5,5 @@ enum SPINE_CHARA_LOCATION_TYPE
     HERO_INFO,          // 정보창
     TRANSFER_ESSENCE,   // 근원 전달
     MERRY,              // 서약
+    LOBBY_EXPECT,       // 미 보유 캐릭터
 }

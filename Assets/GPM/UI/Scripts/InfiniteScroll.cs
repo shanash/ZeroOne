@@ -364,7 +364,7 @@ namespace Gpm.Ui
             float passingItemSize = GetItemSizeSumToIndex(dataIndex);
 
             DataContext dc = dataList[dataIndex];
-            var expectSize = dc.haveHero ? 200 : 0;
+            var expectSize = dc.haveHero ? 100 : 0;
 
             if (isVertical == true)
             {
@@ -651,7 +651,7 @@ namespace Gpm.Ui
             for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
             {
                 DataContext dc = dataList[lineIndex];
-                var expectSize = dc.haveHero ? 200 : 0;
+                var expectSize = dc.haveHero ? 100 : 0;
 
                 lastPosition += layout.GetLineSize(lineIndex);
                 //lastPosition += expectSize;

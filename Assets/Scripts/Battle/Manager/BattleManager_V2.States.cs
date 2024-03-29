@@ -87,11 +87,11 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         list.Add("Assets/AssetResources/Prefabs/UI/SkillTooltip");
         list.Add("Assets/AssetResources/Prefabs/Units/Life_Bar_Node_V2");
-        list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
-        list.Add("Assets/AssetResources/Prefabs/StageProceed/Death_Member_Flag_Node");
-        list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Start_Point");
-        list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Mid_Point");
-        list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Boss_Point");
+        //list.Add("Assets/AssetResources/Prefabs/StageProceed/Team_Flag_Node");
+        //list.Add("Assets/AssetResources/Prefabs/StageProceed/Death_Member_Flag_Node");
+        //list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Start_Point");
+        //list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Mid_Point");
+        //list.Add("Assets/AssetResources/Prefabs/StageProceed/Wave_Boss_Point");
 
         //  effect
         list.Add("Assets/AssetResources/Prefabs/Effects/Common/HealText_Effect");
@@ -597,9 +597,9 @@ public partial class BattleManager_V2 : SceneControllerBase
         var tp = Camera.main.GetComponent<TexturePhotographer>();
         tp.Capture((tex) =>
         {
-            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultWinPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattleResultPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
             {
-                popup.ShowPopup(this, Dungeon_Data, tex);
+                popup.ShowPopup(true, this, Dungeon_Data, tex);
             });
             Camera.main.AddLayerToCullingMask(12); // Unit
             Camera.main.AddLayerToCullingMask(13); // UnitEffect
@@ -649,10 +649,28 @@ public partial class BattleManager_V2 : SceneControllerBase
 
         Game_Over_Delta = 1f;
         UI_Mng.ShowBattleUI(false);
-        PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/GameResultLosePopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+
+
+        SetBlur(true);
+        Camera.main.RemoveLayerToCullingMask(12); // Unit
+        Camera.main.RemoveLayerToCullingMask(13); // UnitEffect
+        var tp = Camera.main.GetComponent<TexturePhotographer>();
+        tp.Capture((tex) =>
         {
-            popup.ShowPopup(this, Dungeon_Data);
+            PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattleResultPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+            {
+                popup.ShowPopup(false, this, Dungeon_Data, tex);
+            });
+            Camera.main.AddLayerToCullingMask(12); // Unit
+            Camera.main.AddLayerToCullingMask(13); // UnitEffect
+
+            SetBlur(false);
         });
+
+        //PopupManager.Instance.Add("Assets/AssetResources/Prefabs/Popup/Popup/Battle/BattleResultPopup", POPUP_TYPE.DIALOG_TYPE, (popup) =>
+        //{
+        //    popup.ShowPopup(this, Dungeon_Data);
+        //});
     }
     public virtual void GameStateGameOverLose() 
     {

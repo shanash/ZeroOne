@@ -62,14 +62,14 @@ public class BattleResultPlayerCharacterInfo : UIBase
 
     }
 
-    public void AfterAddExpHeroInfo(int hero_exp, int destiny_exp)
+    public void AfterAddExpHeroInfo(int hero_exp, int destiny_exp, System.Action end_callback)
     {
-        StartCoroutine(StartLevelUp(hero_exp));
+        StartCoroutine(StartLevelUp(hero_exp, end_callback));
 
         StartCoroutine(StartLoveLevelUp(destiny_exp));
     }
 
-    IEnumerator StartLevelUp(int char_exp)
+    IEnumerator StartLevelUp(int char_exp, System.Action end_callback)
     {
         int before_lv = User_Data.GetLevel();
 
@@ -103,11 +103,10 @@ public class BattleResultPlayerCharacterInfo : UIBase
                 delta = 0f;
                 Level_Exp_Slider.value = 0f;
                 ++loop_count;
-                //Level_Text.text = (before_lv + loop_count).ToString();
                 Level_Text.text = after_lv.ToString();
                 if (loop_count >= fullcharge_count)
                 {
-                    //Lv_Up_Animator?.Play();
+                    Lv_Up_Animator.SetActive(true);
                     break;
                 }
             }
@@ -118,7 +117,6 @@ public class BattleResultPlayerCharacterInfo : UIBase
         }
         //  need exp
         Level_Exp_Text.text = ZString.Format("앞으로 {0:N0}", after_remain_need_xp);
-
 
         //  남은 경험치 게이지 이동
         duration = 1f;
@@ -132,6 +130,8 @@ public class BattleResultPlayerCharacterInfo : UIBase
                 yield return wait;
             }
         }
+
+        end_callback?.Invoke();
     }
 
     IEnumerator StartLoveLevelUp(int destiny_exp)

@@ -585,6 +585,12 @@ public partial class HeroBase_V2 : UnitBase_V2, IEventTrigger
         string animation_name = entry.Animation.Name;
         entry.TimeScale = Battle_Speed_Multiple;
 
+        if (animation_name.Equals("<empty>"))
+        {
+            PlayAnimation(HERO_PLAY_ANIMATION_TYPE.IDLE_01);
+            return;
+        }
+
         UNIT_STATES state = GetCurrentState();
         if (state == UNIT_STATES.ATTACK_1)
         {

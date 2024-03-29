@@ -138,6 +138,12 @@ public record Total_Damage_Data
     }
 }
 
+public struct BATTLE_RESULT_REWARD_DATA
+{
+    public Reward_Set_Data Data;
+    public int Count;
+}
+
 [Serializable]
 public struct Start_Projectile_Pos_Data
 {
